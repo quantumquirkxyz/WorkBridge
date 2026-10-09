@@ -1,0 +1,31 @@
+{
+  "name": "graphic-design-project-management",
+  "description": "Manage graphic design projects — briefs, iterations, reviews, asset handoff, versioning, and delivery — with explicit scope, timelines, and quality gates.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/graphic-design/graphic-design-project-management/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "graphic-design/graphic-design-project-management",
+      "name": "graphic-design-project-management",
+      "description": "Manage graphic design projects — briefs, iterations, reviews, asset handoff, versioning, and delivery — with explicit scope, timelines, and quality gates.",
+      "tags": [
+        "\"graphic-design\""
+      ],
+      "parameters": {
+        "trustTier": "2",
+        "modelTier": "fast",
+        "artifactType": "plan"
+      }
+    }
+  ]
+}

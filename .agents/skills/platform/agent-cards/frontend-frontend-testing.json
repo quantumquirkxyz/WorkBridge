@@ -1,0 +1,31 @@
+{
+  "name": "frontend-testing",
+  "description": "Frontend testing (Vitest, Testing Library, Playwright, visual testing, Storybook).",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/frontend/frontend-testing/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "frontend/frontend-testing",
+      "name": "frontend-testing",
+      "description": "Frontend testing (Vitest, Testing Library, Playwright, visual testing, Storybook).",
+      "tags": [
+        "\"frontend\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "test-strategy"
+      }
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+.agents/skills/platform/runs/
+node_modules/
+.skill-sandbox/
+.opencode/goals/
+.DS_Store
+Thumbs.db

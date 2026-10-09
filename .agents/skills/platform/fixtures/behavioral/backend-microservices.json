@@ -1,0 +1,13 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-microservices",
+      "skill": "microservices",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": ["## Contract", "## Provenance", "## Artifact"],
+        "doesNotContain": ["## Operating Contract"]
+      }
+    }
+  ]
+}

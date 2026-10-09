@@ -1,0 +1,31 @@
+{
+  "name": "observability",
+  "description": "Define the logs, metrics, traces, and alerts needed to understand a system in production — with SLIs, SLOs, dashboards, alert rules, and incident runbooks.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/foundation/observability/SKILL.md",
+  "version": "2",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "foundation/observability",
+      "name": "observability",
+      "description": "Define the logs, metrics, traces, and alerts needed to understand a system in production — with SLIs, SLOs, dashboards, alert rules, and incident runbooks.",
+      "tags": [
+        "\"foundation\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "foundation"
+      }
+    }
+  ]
+}

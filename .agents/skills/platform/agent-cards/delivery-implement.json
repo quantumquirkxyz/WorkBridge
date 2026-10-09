@@ -1,0 +1,34 @@
+{
+  "name": "implement",
+  "description": "Implement a piece of work based on a spec or set of tickets, or build a scoped fix that can be handed off for publication. This skill stops at the implemented, validated branch.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/delivery/implement/SKILL.md",
+  "version": "2",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "delivery/implement",
+      "name": "implement",
+      "description": "Implement a piece of work based on a spec or set of tickets, or build a scoped fix that can be handed off for publication. This skill stops at the implemented, validated branch.",
+      "tags": [
+        "tdd",
+        "delivery",
+        "implementation",
+        "testing"
+      ],
+      "parameters": {
+        "trustTier": "3",
+        "modelTier": "code",
+        "artifactType": "implementation"
+      }
+    }
+  ]
+}

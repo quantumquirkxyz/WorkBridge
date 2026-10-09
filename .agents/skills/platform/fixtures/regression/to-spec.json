@@ -1,0 +1,15 @@
+{
+  "fixtures": [
+    {
+      "id": "regression-to-spec-body",
+      "skill": "to-spec",
+      "type": "regression",
+      "version": "1.0.0",
+      "input": "Turn this conversation into a published spec for the new auth flow",
+      "expectedOutput": {
+        "contains": ["contract", "provenance", "artifact", "specartifact", "spec", "acceptance criteria", "non-goals", "non-goals"],
+        "minLength": 500
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "caching-advanced",
+  "description": "Advanced caching strategies (Redis, Memcached, CDN, cache invalidation, stampede prevention).",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/backend/caching-advanced/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "backend/caching-advanced",
+      "name": "caching-advanced",
+      "description": "Advanced caching strategies (Redis, Memcached, CDN, cache invalidation, stampede prevention).",
+      "tags": [
+        "\"backend\""
+      ],
+      "parameters": {
+        "trustTier": "3",
+        "modelTier": "reasoning",
+        "artifactType": "backend"
+      }
+    }
+  ]
+}

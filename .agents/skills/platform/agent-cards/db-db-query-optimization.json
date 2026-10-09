@@ -1,0 +1,31 @@
+{
+  "name": "db-query-optimization",
+  "description": "Optimize database queries — indexing, query plans, cardinality, joins, and execution trade-offs — with explainable reasoning and measurement.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/db/db-query-optimization/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "db/db-query-optimization",
+      "name": "db-query-optimization",
+      "description": "Optimize database queries — indexing, query plans, cardinality, joins, and execution trade-offs — with explainable reasoning and measurement.",
+      "tags": [
+        "\"db\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "db"
+      }
+    }
+  ]
+}

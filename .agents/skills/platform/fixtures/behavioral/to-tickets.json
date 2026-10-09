@@ -1,0 +1,13 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-to-tickets",
+      "skill": "to-tickets",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": ["## Contract", "## Provenance", "## Artifact", "TicketArtifact", "tracer bullet"],
+        "doesNotContain": ["## Operating Contract"]
+      }
+    }
+  ]
+}

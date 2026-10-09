@@ -1,0 +1,29 @@
+{
+  "name": "mcp-server",
+  "description": "Define an MCP server to connect dynamic context (issues, PRs, traces, docs) to the quirk flow, enabling agent access to external data sources securely.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/foundation/mcp-server/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": false,
+    "workflowOrchestration": false
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "foundation/mcp-server",
+      "name": "mcp-server",
+      "description": "Define an MCP server to connect dynamic context (issues, PRs, traces, docs) to the quirk flow, enabling agent access to external data sources securely.",
+      "tags": [
+        "foundation"
+      ],
+      "parameters": {
+        "trustTier": "3"
+      }
+    }
+  ]
+}

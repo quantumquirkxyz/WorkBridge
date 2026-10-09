@@ -1,0 +1,41 @@
+{
+  "fixtures": [
+    {
+      "id": "code-review-body-completeness",
+      "skill": "code-review",
+      "type": "regression",
+      "version": "2.0.0",
+      "input": "Review the diff between main and HEAD",
+      "expectedOutput": {
+        "contains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "## Process",
+          "## Why",
+          "record-execution",
+          "traceId",
+          "Standards",
+          "Spec",
+          "parallel sub-agents"
+        ],
+        "minLength": 500
+      }
+    },
+    {
+      "id": "code-review-observability",
+      "skill": "code-review",
+      "type": "regression",
+      "version": "2.0.0",
+      "input": "Emit ReviewArtifact with traces",
+      "expectedOutput": {
+        "contains": [
+          "Traces record sub-agent parallelism",
+          "record-execution.mjs",
+          "ReviewArtifact"
+        ],
+        "minLength": 300
+      }
+    }
+  ]
+}

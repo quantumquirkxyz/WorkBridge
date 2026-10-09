@@ -1,0 +1,37 @@
+{
+  "fixtures": [
+    {
+      "id": "skill-creator-body",
+      "skill": "skill-creator",
+      "type": "regression",
+      "version": "1.0.0",
+      "input": "Create a skill for anything",
+      "expectedOutput": {
+        "contains": ["SKILL.md", "frontmatter", "Contract"],
+        "minLength": 150
+      }
+    },
+    {
+      "id": "code-review-body",
+      "skill": "code-review",
+      "type": "regression",
+      "version": "1.0.0",
+      "input": "Review changes since HEAD~1",
+      "expectedOutput": {
+        "contains": ["Standards", "Spec", "review"],
+        "minLength": 150
+      }
+    },
+    {
+      "id": "diagnosing-bugs-body",
+      "skill": "diagnosing-bugs",
+      "type": "regression",
+      "version": "1.0.0",
+      "input": "Diagnose a flaky test in CI",
+      "expectedOutput": {
+        "contains": ["Diagnos", "artifact", "completion criteria"],
+        "minLength": 150
+      }
+    }
+  ]
+}

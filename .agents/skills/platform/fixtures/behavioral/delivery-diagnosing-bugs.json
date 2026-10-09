@@ -1,0 +1,13 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-diagnosing-bugs",
+      "skill": "diagnosing-bugs",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": ["## Contract", "## Provenance", "## Artifact"],
+        "doesNotContain": ["## Operating Contract"]
+      }
+    }
+  ]
+}

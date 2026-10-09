@@ -1,0 +1,31 @@
+{
+  "name": "math-formal-proof",
+  "description": "Develop formal mathematical proofs in proof assistants (Lean 4, Coq, Isabelle, Agda) with literate programming, tactic-driven construction, and verification.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/math/math-formal-proof/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "math/math-formal-proof",
+      "name": "math-formal-proof",
+      "description": "Develop formal mathematical proofs in proof assistants (Lean 4, Coq, Isabelle, Agda) with literate programming, tactic-driven construction, and verification.",
+      "tags": [
+        "\"math\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "pull-request"
+      }
+    }
+  ]
+}

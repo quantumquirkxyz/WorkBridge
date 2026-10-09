@@ -1,0 +1,17 @@
+{
+  "traceId": "golden-feature-flag-001",
+  "spanId": "golden-span-011",
+  "parentSpanId": null,
+  "skill": "feature-flag",
+  "skillVersion": "2.0",
+  "promptVersion": "2.0",
+  "model": { "provider": "anthropic", "model": "claude-sonnet-4-20250514", "tier": "reasoning" },
+  "input": { "artifactType": "implementation", "sizeTokens": 3600, "contextRefs": ["issue-52"] },
+  "output": { "artifactType": "ImplementArtifact", "sizeTokens": 780, "schemaValid": true, "outputRef": "artifacts/feature-flag/issue-52.json" },
+  "execution": { "startedAt": "2026-10-01T13:00:00Z", "completedAt": "2026-10-01T13:00:16Z", "durationMs": 16000, "iterations": 3, "retries": 0 },
+  "tools": [{ "name": "read", "calls": 11 }, { "name": "grep", "calls": 5 }],
+  "quality": { "artifactPassedQualityBar": true, "artifactScore": 93, "evaluators": ["behavioral", "traceability", "quality-bar"], "findingsCount": 0 },
+  "result": "completed",
+  "blockedBy": [],
+  "nextConsumer": "publish-open-pr"
+}

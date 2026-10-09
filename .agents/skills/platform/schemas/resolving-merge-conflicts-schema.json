@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ResolvingMergeConflictsArtifact",
+  "type": "object",
+  "required": ["schemaVersion", "artifactType", "id", "skill", "skillVersion", "promptVersion", "createdAt", "updatedAt", "input", "output", "provenance", "evaluation"],
+  "properties": {
+    "schemaVersion": { "type": "string", "const": "2.0" },
+    "artifactType": { "type": "string", "const": "plan" },
+    "id": { "type": "string", "pattern": "^resolve-conflict-.+$" },
+    "skill": { "type": "string", "const": "resolving-merge-conflicts" },
+    "skillVersion": { "type": "string" },
+    "promptVersion": { "type": "string" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "input": {
+      "type": "object",
+      "required": ["branch", "conflictSource"],
+      "properties": {
+        "branch": { "type": "string" },
+        "conflictSource": { "type": "string", "enum": ["merge", "rebase"] },
+        "conflictingFiles": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "output": {
+      "type": "object",
+      "required": ["status", "resolution", "filesResolved", "branchClean"],
+      "properties": {
+        "status": { "type": "string", "enum": ["resolved", "blocked", "failed"] },
+        "resolution": { "type": "string" },
+        "filesResolved": { "type": "array", "items": { "type": "string" } },
+        "filesRemaining": { "type": "array", "items": { "type": "string" } },
+        "branchClean": { "type": "boolean" },
+        "nextConsumer": { "type": "string" }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["sourceOfTruth", "scope", "outOfScope", "nextConsumer"],
+      "properties": {
+        "sourceOfTruth": { "type": "string" },
+        "scope": { "type": "array", "items": { "type": "string" } },
+        "outOfScope": { "type": "array", "items": { "type": "string" } },
+        "nextConsumer": { "type": "string" },
+        "blockedBy": { "type": "array", "items": { "type": "string" } },
+        "evidence": { "type": "string" },
+        "riskRemaining": { "type": "string" }
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "required": ["qualityBarScore", "artifactPassedQualityBar", "evaluators"],
+      "properties": {
+        "qualityBarScore": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "artifactPassedQualityBar": { "type": "boolean" },
+        "evaluators": {
+          "type": "object",
+          "required": ["behavioral", "traceability", "quality-bar"],
+          "properties": {
+            "behavioral": {
+              "type": "object",
+              "required": ["passed", "score"],
+              "properties": {
+                "passed": { "type": "boolean" },
+                "score": { "type": "integer", "minimum": 0, "maximum": 100 },
+                "notes": { "type": "string" }
+              }
+            },
+            "traceability": {
+              "type": "object",
+              "required": ["passed", "score"],
+              "properties": {
+                "passed": { "type": "boolean" },
+                "score": { "type": "integer", "minimum": 0, "maximum": 100 },
+                "notes": { "type": "string" }
+              }
+            },
+            "quality-bar": {
+              "type": "object",
+              "required": ["passed", "score"],
+              "properties": {
+                "passed": { "type": "boolean" },
+                "score": { "type": "integer", "minimum": 0, "maximum": 100 },
+                "notes": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

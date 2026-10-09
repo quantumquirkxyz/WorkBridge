@@ -1,0 +1,27 @@
+Recycled Gray Board — Material Swatch Reference
+================================================
+
+Appearance
+----------
+Gray interior with recycled fiber visible. Typically has a lighter recycled liner.
+Subdued, natural tone with slightly textured surface. Communicates sustainability values.
+
+Color Values (print-ready)
+--------------------------
+CMYK:  C=15  M=10  Y=10  K=50  (approximate; varies by recycled content)
+RGB:   R=160 G=155 B=145  (screen preview only)
+Pantone: Close match to Pantone 7544 C or 7527 C (consult Pantone Solid Uncoated)
+
+Print Notes
+-----------
+- Ink holdout lower than coated board; expect slightly softer color.
+- Use higher ink density or darker Pantone solids for best results.
+- Flexo and offset work well; digital print may show more fiber texture.
+- Consider uncoated finish to keep the eco aesthetic consistent.
+
+Sustainability
+--------------
+- High post-consumer recycled content (often 50%–100%).
+- 100% recyclable and biodegradable under industrial composting.
+- FSC-certified recycled grades available.
+- Lower carbon footprint than virgin board.

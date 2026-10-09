@@ -1,0 +1,48 @@
+name: repair
+description: Review-repair cycle for PRs with findings
+entryPoint: plan-review-fixes
+version: "2.0"
+
+states:
+  plan-review-fixes:
+    type: planner
+    description: Convert review findings into concrete remediation plan
+    transitions:
+      PLANNED: implement-review-fixes
+      BLOCKED: escalate
+
+  implement-review-fixes:
+    type: executor
+    description: Apply planned corrections
+    modelTier: code
+    transitions:
+      FIXED: review-pr
+      FAILED: implement-review-fixes
+      BLOCKED: escalate
+
+  review-pr:
+    type: reviewer
+    axes: [Standards, Spec]
+    parallelSubAgents: true
+    transitions:
+      CLEAN: ship-subissue
+      FINDINGS: plan-review-fixes
+      CONFLICT: resolving-merge-conflicts
+
+  resolving-merge-conflicts:
+    type: resolver
+    transitions:
+      RESOLVED: review-pr
+      BLOCKED: escalate
+
+  ship-subissue:
+    type: publisher
+    transitions:
+      MERGED: done
+      FAILED: review-pr
+
+  escalate:
+    type: terminal
+
+  done:
+    type: terminal

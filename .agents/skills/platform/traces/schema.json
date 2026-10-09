@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ExecutionTrace",
+  "description": "Structured trace for a single skill invocation.",
+  "type": "object",
+  "required": ["traceId", "spanId", "skill", "skillVersion", "promptVersion", "model", "input", "output", "execution", "result"],
+  "properties": {
+    "traceId": { "type": "string", "format": "uuid" },
+    "spanId": { "type": "string", "format": "uuid" },
+    "parentSpanId": { "type": ["string", "null"] },
+    "skill": { "type": "string" },
+    "skillVersion": { "type": "string" },
+    "promptVersion": { "type": "string" },
+    "model": {
+      "type": "object",
+      "required": ["provider", "model", "tier"],
+      "properties": {
+        "provider": { "type": "string" },
+        "model": { "type": "string" },
+        "tier": { "type": "string", "enum": ["reasoning", "code", "fast", "router"] }
+      }
+    },
+    "input": {
+      "type": "object",
+      "required": ["artifactType", "sizeTokens"],
+      "properties": {
+        "artifactType": { "type": "string" },
+        "sizeTokens": { "type": "integer" },
+        "contextRefs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "output": {
+      "type": "object",
+      "required": ["artifactType", "sizeTokens", "schemaValid"],
+      "properties": {
+        "artifactType": { "type": "string" },
+        "sizeTokens": { "type": "integer" },
+        "schemaValid": { "type": "boolean" },
+        "outputRef": { "type": "string" }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "required": ["startedAt", "completedAt", "durationMs", "iterations", "retries"],
+      "properties": {
+        "startedAt": { "type": "string", "format": "date-time" },
+        "completedAt": { "type": "string", "format": "date-time" },
+        "durationMs": { "type": "integer" },
+        "iterations": { "type": "integer" },
+        "retries": { "type": "integer" }
+      }
+    },
+    "tools": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "calls"],
+        "properties": {
+          "name": { "type": "string" },
+          "calls": { "type": "integer" }
+        }
+      }
+    },
+    "quality": {
+      "type": "object",
+      "required": ["artifactPassedQualityBar", "artifactScore", "evaluators", "findingsCount"],
+      "properties": {
+        "artifactPassedQualityBar": { "type": "boolean" },
+        "artifactScore": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "evaluators": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "findingsCount": { "type": "integer" }
+      }
+    },
+    "result": {
+      "type": "string",
+      "enum": ["completed", "blocked", "failed", "escalated"]
+    },
+    "blockedBy": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "nextConsumer": { "type": "string" }
+  }
+}

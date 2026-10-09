@@ -1,0 +1,31 @@
+{
+  "name": "skill-dependency-graph",
+  "description": "Build a dependency graph that exposes central Skills, cycles, and unnecessary coupling — use when analyzing Skill modularity.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/skill-dev/skill-dependency-graph/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "skill-dev/skill-dependency-graph",
+      "name": "skill-dependency-graph",
+      "description": "Build a dependency graph that exposes central Skills, cycles, and unnecessary coupling — use when analyzing Skill modularity.",
+      "tags": [
+        "\"skill-dev\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "skill-dev"
+      }
+    }
+  ]
+}

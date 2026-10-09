@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="500" viewBox="0 0 600 500">
+  <title>Rigid Box Dieline - Set-up Box Base and Lid</title>
+  <desc>
+    Cut line (red solid), fold lines (blue dashed), glue areas (green solid),
+    bleed boundary (magenta long dashed), safety zone (orange dotted),
+    registration marks (black).
+  </desc>
+
+  <defs>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#f0f0f0" stroke-width="0.5"/>
+    </pattern>
+  </defs>
+
+  <!-- Background grid -->
+  <rect width="600" height="500" fill="url(#grid)"/>
+
+  <!-- Bleed boundary (outermost) -->
+  <rect x="40" y="40" width="520" height="420" fill="none" stroke="#ff00ff" stroke-width="0.5" stroke-dasharray="8 4"/>
+
+  <!-- Base dieline (bottom half) -->
+  <g id="base">
+    <!-- Cut line -->
+    <rect x="80" y="280" width="180" height="140" fill="none" stroke="#ff0000" stroke-width="1.5"/>
+
+    <!-- Safety zone -->
+    <rect x="85" y="285" width="170" height="130" fill="none" stroke="#ffaa00" stroke-width="0.75" stroke-dasharray="3 3"/>
+
+    <!-- Fold lines (internal walls) -->
+    <line x1="120" y1="280" x2="120" y2="420" stroke="#0066ff" stroke-width="0.75" stroke-dasharray="6 4"/>
+    <line x1="220" y1="280" x2="220" y2="420" stroke="#0066ff" stroke-width="0.75" stroke-dasharray="6 4"/>
+    <line x1="80" y1="350" x2="260" y2="350" stroke="#0066ff" stroke-width="0.75" stroke-dasharray="6 4"/>
+
+    <!-- Glue area (back panel glue tab) -->
+    <rect x="260" y="310" width="20" height="80" fill="none" stroke="#00aa00" stroke-width="1"/>
+  </g>
+
+  <!-- Lid dieline (top half) -->
+  <g id="lid">
+    <!-- Cut line -->
+    <rect x="340" y="80" width="180" height="140" fill="none" stroke="#ff0000" stroke-width="1.5"/>
+
+    <!-- Safety zone -->
+    <rect x="345" y="85" width="170" height="130" fill="none" stroke="#ffaa00" stroke-width="0.75" stroke-dasharray="3 3"/>
+
+    <!-- Fold lines (lid walls) -->
+    <line x1="380" y1="80" x2="380" y2="220" stroke="#0066ff" stroke-width="0.75" stroke-dasharray="6 4"/>
+    <line x1="480" y1="80" x2="480" y2="220" stroke="#0066ff" stroke-width="0.75" stroke-dasharray="6 4"/>
+    <line x1="340" y1="150" x2="520" y2="150" stroke="#0066ff" stroke-width="0.75" stroke-dasharray="6 4"/>
+
+    <!-- Glue area (lid back panel glue tab) -->
+    <rect x="320" y="110" width="20" height="80" fill="none" stroke="#00aa00" stroke-width="1"/>
+  </g>
+
+  <!-- Registration marks (outside bleed) -->
+  <g stroke="#000000" stroke-width="0.5">
+    <line x1="20" y1="20" x2="40" y2="20"/>
+    <line x1="20" y1="20" x2="20" y2="40"/>
+    <line x1="560" y1="20" x2="580" y2="20"/>
+    <line x1="580" y1="20" x2="580" y2="40"/>
+    <line x1="20" y1="460" x2="40" y2="460"/>
+    <line x1="20" y1="460" x2="20" y2="480"/>
+    <line x1="560" y1="460" x2="580" y2="460"/>
+    <line x1="580" y1="460" x2="580" y2="480"/>
+  </g>
+
+  <!-- Labels -->
+  <text x="95" y="270" font-family="Arial, sans-serif" font-size="12" fill="#333">BASE</text>
+  <text x="355" y="70" font-family="Arial, sans-serif" font-size="12" fill="#333">LID</text>
+
+  <!-- Legend -->
+  <g transform="translate(60, 460)">
+    <line x1="0" y1="0" x2="40" y2="0" stroke="#ff0000" stroke-width="1.5"/>
+    <text x="45" y="4" font-family="Arial, sans-serif" font-size="10" fill="#333">Cut line</text>
+
+    <line x1="0" y1="15" x2="40" y2="15" stroke="#0066ff" stroke-width="0.75" stroke-dasharray="6 4"/>
+    <text x="45" y="19" font-family="Arial, sans-serif" font-size="10" fill="#333">Fold line</text>
+
+    <line x1="0" y1="30" x2="40" y2="30" stroke="#00aa00" stroke-width="1"/>
+    <text x="45" y="34" font-family="Arial, sans-serif" font-size="10" fill="#333">Glue area</text>
+
+    <line x1="0" y1="45" x2="40" y2="45" stroke="#ff00ff" stroke-width="0.5" stroke-dasharray="8 4"/>
+    <text x="45" y="49" font-family="Arial, sans-serif" font-size="10" fill="#333">Bleed</text>
+
+    <line x1="0" y1="60" x2="40" y2="60" stroke="#ffaa00" stroke-width="0.75" stroke-dasharray="3 3"/>
+    <text x="45" y="64" font-family="Arial, sans-serif" font-size="10" fill="#333">Safety zone</text>
+  </g>
+</svg>

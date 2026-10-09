@@ -1,0 +1,10 @@
+{
+  "skill": "skill-creator",
+  "mode": "interactive-redesign",
+  "evidence": [
+    "Legacy worksheet flow preserved",
+    "Interactive discovery, design, research, naming, and generation phases added",
+    "Repository-root scripts kept as the reusable command surface"
+  ],
+  "adr": "adrs/0001-interactive-interview-redesign.md"
+}

@@ -1,0 +1,31 @@
+{
+  "name": "ai-time-series-forecasting",
+  "description": "Design and evaluate time-series forecasting — ARIMA, Prophet, NeuralProphet, LSTM, Transformer — with stationarity analysis, seasonality, exogenous variables, and backtest.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/ai/ai-time-series-forecasting/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "ai/ai-time-series-forecasting",
+      "name": "ai-time-series-forecasting",
+      "description": "Design and evaluate time-series forecasting — ARIMA, Prophet, NeuralProphet, LSTM, Transformer — with stationarity analysis, seasonality, exogenous variables, and backtest.",
+      "tags": [
+        "\"ai\""
+      ],
+      "parameters": {
+        "trustTier": "3",
+        "modelTier": "reasoning",
+        "artifactType": "ai"
+      }
+    }
+  ]
+}

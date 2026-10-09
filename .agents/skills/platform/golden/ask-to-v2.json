@@ -1,0 +1,17 @@
+{
+  "traceId": "golden-ask-to-001",
+  "spanId": "golden-span-008",
+  "parentSpanId": null,
+  "skill": "ask-to",
+  "skillVersion": "2.0",
+  "promptVersion": "2.0",
+  "model": { "provider": "anthropic", "model": "claude-sonnet-4-20250514", "tier": "reasoning" },
+  "input": { "artifactType": "routing", "sizeTokens": 2100, "contextRefs": ["conversation-ctx"] },
+  "output": { "artifactType": "RoutingArtifact", "sizeTokens": 720, "schemaValid": true, "outputRef": "artifacts/ask-to/routing-decision.json" },
+  "execution": { "startedAt": "2026-10-01T16:00:00Z", "completedAt": "2026-10-01T16:00:08Z", "durationMs": 8000, "iterations": 1, "retries": 0 },
+  "tools": [{ "name": "read", "calls": 4 }, { "name": "grep", "calls": 2 }],
+  "quality": { "artifactPassedQualityBar": true, "artifactScore": 99, "evaluators": ["behavioral", "traceability"], "findingsCount": 0 },
+  "result": "completed",
+  "blockedBy": [],
+  "nextConsumer": "context-pack"
+}

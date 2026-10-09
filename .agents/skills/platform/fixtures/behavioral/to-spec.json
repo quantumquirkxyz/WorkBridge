@@ -1,0 +1,13 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-to-spec",
+      "skill": "to-spec",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": ["## Contract", "## Provenance", "## Artifact", "SpecArtifact"],
+        "doesNotContain": ["## Operating Contract"]
+      }
+    }
+  ]
+}

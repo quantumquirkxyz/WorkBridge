@@ -1,0 +1,17 @@
+{
+  "traceId": "golden-trunk-based-workflow-001",
+  "spanId": "golden-span-012",
+  "parentSpanId": null,
+  "skill": "trunk-based-workflow",
+  "skillVersion": "2.0",
+  "promptVersion": "2.0",
+  "model": { "provider": "anthropic", "model": "claude-sonnet-4-20250514", "tier": "reasoning" },
+  "input": { "artifactType": "workflow", "sizeTokens": 2700, "contextRefs": ["repo-settings"] },
+  "output": { "artifactType": "WorkflowArtifact", "sizeTokens": 980, "schemaValid": true, "outputRef": "artifacts/trunk-based-workflow/workflow-plan.json" },
+  "execution": { "startedAt": "2026-10-01T12:00:00Z", "completedAt": "2026-10-01T12:00:21Z", "durationMs": 21000, "iterations": 2, "retries": 0 },
+  "tools": [{ "name": "read", "calls": 9 }, { "name": "grep", "calls": 4 }, { "name": "bash", "calls": 2 }],
+  "quality": { "artifactPassedQualityBar": true, "artifactScore": 92, "evaluators": ["behavioral", "review-effectiveness", "traceability"], "findingsCount": 0 },
+  "result": "completed",
+  "blockedBy": [],
+  "nextConsumer": "gate-ci"
+}

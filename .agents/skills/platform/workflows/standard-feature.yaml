@@ -1,0 +1,150 @@
+name: standard-feature
+description: Canonical flow for new feature work from clarification to validated delivery
+entryPoint: ask-to
+version: "2.0"
+
+states:
+  ask-to:
+    type: router
+    description: Route to the next correct step when routing is ambiguous
+    transitions:
+      AMBIGUOUS: grill-with-docs
+      CLEAR_SPEC: to-spec
+      BUG: bug-fix
+      NEW_PROJECT: project-development
+      VIABILITY_CHECK: project-viability
+      LARGE_EFFORT: wayfinder
+      MONITORING: observability
+
+  grill-with-docs:
+    type: interview
+    description: Sharpen plans through structured interview and update durable docs
+    maxIterations: 6
+    transitions:
+      SHARP_ENOUGH: to-spec
+      BLOCKED: escalate
+      AMBIGUOUS: ask-to
+
+  to-spec:
+    type: artifact-writer
+    description: Convert conversation into a published specification
+    artifactType: spec
+    transitions:
+      PUBLISHED: to-tickets
+      MISSING_INPUT: grill-with-docs
+      BLOCKED: escalate
+
+  to-tickets:
+    type: artifact-writer
+    description: Split spec into tracer-bullet tickets with blocking edges
+    artifactType: tickets
+    transitions:
+      APPROVED: frontier
+      NEEDS_SPLIT: to-tickets
+      BLOCKED: escalate
+
+  frontier:
+    type: dispatcher
+    description: Dispatch the next claimable ticket to implement
+    transitions:
+      NEXT_READY: implement
+      ALL_DONE: ship-subissue
+      BLOCKED: escalate
+
+  implement:
+    type: executor
+    description: Implement work from spec or ticket with TDD and quality gates
+    modelTier: code
+    transitions:
+      VALIDATED: publish-open-pr
+      FAILED: implement
+      BLOCKED: escalate
+
+  publish-open-pr:
+    type: artifact-writer
+    description: Open pull request from issue branch with validation evidence
+    artifactType: pull-request
+    transitions:
+      OPENED: review-pr
+      FAILED: implement
+
+  review-pr:
+    type: reviewer
+    description: Review PR against Standards and Spec axes via parallel sub-agents
+    axes: [Standards, Spec]
+    parallelSubAgents: true
+    transitions:
+      CLEAN: ship-subissue
+      FINDINGS: review-fix-loop
+      CONFLICT: resolving-merge-conflicts
+
+  review-fix-loop:
+    type: orchestrator
+    description: Orchestrate repair cycle until PR is clean or blocked
+    loop:
+      - plan-review-fixes
+      - implement-review-fixes
+      - review-pr
+    maxIterations: 5
+    transitions:
+      CLEAN: ship-subissue
+      BLOCKED: escalate
+      CONFLICT: resolving-merge-conflicts
+
+  resolving-merge-conflicts:
+    type: resolver
+    description: Resolve merge/rebase conflicts before continuing review
+    transitions:
+      RESOLVED: review-pr
+      BLOCKED: escalate
+
+  ship-subissue:
+    type: publisher
+    description: Merge clean PR, close linked issue, update tracker
+    transitions:
+      MERGED: done
+      FAILED: review-pr
+
+  escalate:
+    type: terminal
+    description: Stop with explicit escalation report
+
+  done:
+    type: terminal
+    description: Flow complete
+
+  bug-fix:
+    type: router
+    description: Entry point for bug fix flow
+    transitions:
+      DIAGNOSED: tdd
+      NEEDS_DIAGNOSIS: diagnosing-bugs
+      BLOCKED: escalate
+
+  project-development:
+    type: evaluator
+    description: Evaluate project shape, stack, and architectural starting point
+    transitions:
+      SHAPED: ask-to
+      BLOCKED: escalate
+
+  project-viability:
+    type: evaluator
+    description: Assess project health, architecture, and scalability
+    transitions:
+      VIABLE: ask-to
+      NOT_VIABLE: escalate
+
+  wayfinder:
+    type: planner
+    description: Plan large effort as map of decision tickets on issue tracker
+    transitions:
+      PLANNED: ask-to
+      BLOCKED: escalate
+
+  observability:
+    type: designer
+    description: Define logs, metrics, traces, alerts, SLIs, SLOs
+    transitions:
+      DEFINED: ask-to
+      BLOCKED: escalate

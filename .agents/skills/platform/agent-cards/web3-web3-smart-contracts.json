@@ -1,0 +1,31 @@
+{
+  "name": "web3-smart-contracts",
+  "description": "Design and review smart contracts — security, gas optimization, upgradeability, account abstraction, EIP-7702 — with an adversarial review step.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/web3/web3-smart-contracts/SKILL.md",
+  "version": "2",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "web3/web3-smart-contracts",
+      "name": "web3-smart-contracts",
+      "description": "Design and review smart contracts — security, gas optimization, upgradeability, account abstraction, EIP-7702 — with an adversarial review step.",
+      "tags": [
+        "\"web3\""
+      ],
+      "parameters": {
+        "trustTier": "3",
+        "modelTier": "reasoning",
+        "artifactType": "web3"
+      }
+    }
+  ]
+}

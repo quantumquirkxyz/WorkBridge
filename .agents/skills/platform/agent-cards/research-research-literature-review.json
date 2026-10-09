@@ -1,0 +1,31 @@
+{
+  "name": "research-literature-review",
+  "description": "Review research literature — search strategy, screening, synthesis, citation tracking, and evidence grading — with transparent inclusion criteria.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/research/research-literature-review/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "research/research-literature-review",
+      "name": "research-literature-review",
+      "description": "Review research literature — search strategy, screening, synthesis, citation tracking, and evidence grading — with transparent inclusion criteria.",
+      "tags": [
+        "\"research\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "review"
+      }
+    }
+  ]
+}

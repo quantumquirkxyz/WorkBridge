@@ -1,0 +1,31 @@
+{
+  "name": "ux-research",
+  "description": "Conduct user research — interviews, surveys, usability testing, personas, journey mapping — to ground design decisions in real user behavior.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/ux/ux-research/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "ux/ux-research",
+      "name": "ux-research",
+      "description": "Conduct user research — interviews, surveys, usability testing, personas, journey mapping — to ground design decisions in real user behavior.",
+      "tags": [
+        "\"ux\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "research"
+      }
+    }
+  ]
+}

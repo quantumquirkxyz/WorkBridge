@@ -1,0 +1,31 @@
+{
+  "name": "compiler-testing",
+  "description": "Test compilers and interpreters — parser tests, semantic tests, IR validation, golden tests, and regression checks — with explicit oracle design.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/compilers/compiler-testing/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "compilers/compiler-testing",
+      "name": "compiler-testing",
+      "description": "Test compilers and interpreters — parser tests, semantic tests, IR validation, golden tests, and regression checks — with explicit oracle design.",
+      "tags": [
+        "\"compilers\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "test-strategy"
+      }
+    }
+  ]
+}

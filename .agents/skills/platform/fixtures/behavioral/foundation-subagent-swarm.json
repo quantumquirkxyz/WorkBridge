@@ -1,0 +1,13 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-subagent-swarm",
+      "skill": "subagent-swarm",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": ["## Contract", "## Provenance", "## Artifact"],
+        "doesNotContain": ["## Operating Contract"]
+      }
+    }
+  ]
+}

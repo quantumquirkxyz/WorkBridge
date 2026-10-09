@@ -1,0 +1,13 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-plan-review-fixes",
+      "skill": "plan-review-fixes",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": ["## Contract", "## Provenance", "## Artifact"],
+        "doesNotContain": ["## Operating Contract"]
+      }
+    }
+  ]
+}

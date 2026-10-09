@@ -1,0 +1,31 @@
+{
+  "name": "physics-reproducibility-archive",
+  "description": "Make physics research reproducible and archive it — Zenodo DOI, GitHub + container (Docker/Apptainer), data preservation, code review, and open-science compliance for journals and funders.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/physics/physics-reproducibility-archive/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "physics/physics-reproducibility-archive",
+      "name": "physics-reproducibility-archive",
+      "description": "Make physics research reproducible and archive it — Zenodo DOI, GitHub + container (Docker/Apptainer), data preservation, code review, and open-science compliance for journals and funders.",
+      "tags": [
+        "\"physics\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "pull-request"
+      }
+    }
+  ]
+}

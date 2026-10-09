@@ -1,0 +1,31 @@
+{
+  "name": "cloud-security",
+  "description": "Cloud security (AWS, GCP, Azure, IAM, KMS, security groups, compliance, posture management)",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/sec/cloud-security/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "sec/cloud-security",
+      "name": "cloud-security",
+      "description": "Cloud security (AWS, GCP, Azure, IAM, KMS, security groups, compliance, posture management)",
+      "tags": [
+        "\"sec\""
+      ],
+      "parameters": {
+        "trustTier": "3",
+        "modelTier": "reasoning",
+        "artifactType": "security"
+      }
+    }
+  ]
+}

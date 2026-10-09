@@ -1,0 +1,13 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-project-viability",
+      "skill": "project-viability",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": ["## Contract", "## Provenance", "## Artifact"],
+        "doesNotContain": ["## Operating Contract"]
+      }
+    }
+  ]
+}

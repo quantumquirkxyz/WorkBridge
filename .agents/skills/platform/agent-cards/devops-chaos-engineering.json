@@ -1,0 +1,31 @@
+{
+  "name": "chaos-engineering",
+  "description": "Design chaos engineering — fault injection, GameDays, resilience validation — with explicit steady-state hypotheses, blast radius controls, and safety rails.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/devops/chaos-engineering/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "devops/chaos-engineering",
+      "name": "chaos-engineering",
+      "description": "Design chaos engineering — fault injection, GameDays, resilience validation — with explicit steady-state hypotheses, blast radius controls, and safety rails.",
+      "tags": [
+        "\"devops\""
+      ],
+      "parameters": {
+        "trustTier": "3",
+        "modelTier": "reasoning",
+        "artifactType": "devops"
+      }
+    }
+  ]
+}

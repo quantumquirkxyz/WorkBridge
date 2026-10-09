@@ -1,0 +1,49 @@
+name: operations
+description: Continuous release, deployment, and monitoring flow
+entryPoint: release-management
+version: "2.0"
+
+states:
+  release-management:
+    type: planner
+    description: Plan the release train and CI handoff
+    transitions:
+      PLANNED: deployment
+      BLOCKED: escalate
+
+  deployment:
+    type: executor
+    description: Define build, release, and rollback seam
+    modelTier: code
+    transitions:
+      DEPLOYED: observability
+      FAILED: deployment
+      ROLLED_BACK: release-management
+
+  observability:
+    type: designer
+    description: Define logs, metrics, traces, alerts, SLIs, SLOs
+    transitions:
+      DEFINED: monitoring-alerting
+      NEEDS_UPDATE: observability
+
+  monitoring-alerting:
+    type: monitor
+    description: Monitor production and manage alerts
+    transitions:
+      ALERT: incident-response
+      HEALTHY: observability
+      DEGRADED: incident-response
+
+  incident-response:
+    type: responder
+    description: Run incident response: war rooms, runbooks, postmortems
+    transitions:
+      RESOLVED: observability
+      ESCALATED: escalate
+
+  escalate:
+    type: terminal
+
+  done:
+    type: terminal

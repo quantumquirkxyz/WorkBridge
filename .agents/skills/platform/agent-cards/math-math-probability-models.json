@@ -1,0 +1,31 @@
+{
+  "name": "math-probability-models",
+  "description": "Build probability models — distributions, stochastic processes (Markov, Brownian, Poisson), inference — with explicit assumptions and sanity checks.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/math/math-probability-models/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "math/math-probability-models",
+      "name": "math-probability-models",
+      "description": "Build probability models — distributions, stochastic processes (Markov, Brownian, Poisson), inference — with explicit assumptions and sanity checks.",
+      "tags": [
+        "\"math\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "pull-request"
+      }
+    }
+  ]
+}

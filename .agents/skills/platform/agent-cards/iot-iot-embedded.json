@@ -1,0 +1,31 @@
+{
+  "name": "iot-embedded",
+  "description": "Design embedded/IoT systems — firmware, sensors, edge computing, device connectivity, OTA updates — with reliability, security, and constrained resource awareness.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/iot/iot-embedded/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "iot/iot-embedded",
+      "name": "iot-embedded",
+      "description": "Design embedded/IoT systems — firmware, sensors, edge computing, device connectivity, OTA updates — with reliability, security, and constrained resource awareness.",
+      "tags": [
+        "\"iot\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "iot"
+      }
+    }
+  ]
+}

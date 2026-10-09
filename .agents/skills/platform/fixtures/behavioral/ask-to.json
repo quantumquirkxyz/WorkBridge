@@ -1,0 +1,13 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-ask-to",
+      "skill": "ask-to",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": ["## Contract", "## Provenance", "routing", "state-machine"],
+        "doesNotContain": ["## Operating Contract"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-gate-pre-commit",
+      "skill": "gate-pre-commit",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": ["## Contract", "## Provenance", "## Artifact", "GatePreCommitArtifact", "10s", "lint", "unit tests"],
+        "doesNotContain": ["## Operating Contract"]
+      }
+    }
+  ]
+}

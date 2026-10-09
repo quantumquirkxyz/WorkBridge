@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accessible Infographic Example</title>
+  <style>
+    :root {
+      --color-black: #000000;
+      --color-orange: #E69F00;
+      --color-skyblue: #56B4E9;
+      --color-green: #009E73;
+      --color-yellow: #F0E442;
+      --color-blue: #0072B2;
+      --color-vermillion: #D55E00;
+      --color-purple: #CC79A7;
+      --color-white: #FFFFFF;
+      --color-lightgray: #F5F5F5;
+      --text-color: #000000;
+      --bg-color: #FFFFFF;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--text-color);
+      background-color: var(--bg-color);
+      padding: 2rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--color-blue);
+      background-color: var(--color-white);
+    }
+
+    h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      color: var(--color-black);
+      background-color: var(--color-white);
+    }
+
+    p {
+      margin-bottom: 1rem;
+      max-width: 70ch;
+      color: var(--color-black);
+      background-color: var(--color-white);
+    }
+
+    .infographic {
+      max-width: 900px;
+      margin: 0 auto;
+      border: 2px solid var(--color-black);
+      padding: 2rem;
+      background-color: var(--color-lightgray);
+    }
+
+    .chart-container {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      border: 2px solid var(--color-black);
+      background-color: var(--color-white);
+    }
+
+    .bar {
+      height: 40px;
+      margin: 0.5rem 0;
+      display: flex;
+      align-items: center;
+      padding-left: 1rem;
+      font-weight: 700;
+      border: 2px solid var(--color-black);
+    }
+
+    .bar-1 { width: 80%; background-color: var(--color-blue); color: var(--color-white); }
+    .bar-2 { width: 65%; background-color: var(--color-orange); color: var(--color-black); }
+    .bar-3 { width: 50%; background-color: var(--color-green); color: var(--color-black); }
+    .bar-4 { width: 35%; background-color: var(--color-purple); color: var(--color-black); }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .legend-color {
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--color-black);
+    }
+
+    .legend-text {
+      color: var(--color-black);
+      background-color: var(--color-white);
+    }
+
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: var(--color-black);
+      color: var(--color-white);
+      padding: 8px;
+      text-decoration: none;
+      z-index: 100;
+    }
+
+    .skip-link:focus {
+      top: 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <main id="main-content">
+    <article class="infographic" role="img" aria-labelledby="infographic-title">
+      <h1 id="infographic-title">Annual Accessibility Compliance Report 2024</h1>
+      <p>
+        This infographic presents the 2024 accessibility compliance metrics across
+        digital properties. All data is colorblind-safe and meets WCAG 2.1 Level AA
+        contrast requirements.
+      </p>
+
+      <section aria-labelledby="chart-heading">
+        <h2 id="chart-heading">Compliance by Category</h2>
+        <div class="chart-container">
+          <div class="bar bar-1" role="img" aria-label="Contrast Compliance: 80 percent">Contrast Compliance: 80%</div>
+          <div class="bar bar-2" role="img" aria-label="Keyboard Navigation: 65 percent">Keyboard Navigation: 65%</div>
+          <div class="bar bar-3" role="img" aria-label="Alt Text Coverage: 50 percent">Alt Text Coverage: 50%</div>
+          <div class="bar bar-4" role="img" aria-label="Heading Structure: 35 percent">Heading Structure: 35%</div>
+
+          <div class="legend" role="list" aria-label="Chart legend">
+            <div class="legend-item" role="listitem">
+              <div class="legend-color" style="background-color: #0072B2;" aria-hidden="true"></div>
+              <span class="legend-text">Contrast Compliance</span>
+            </div>
+            <div class="legend-item" role="listitem">
+              <div class="legend-color" style="background-color: #E69F00;" aria-hidden="true"></div>
+              <span class="legend-text">Keyboard Navigation</span>
+            </div>
+            <div class="legend-item" role="listitem">
+              <div class="legend-color" style="background-color: #009E73;" aria-hidden="true"></div>
+              <span class="legend-text">Alt Text Coverage</span>
+            </div>
+            <div class="legend-item" role="listitem">
+              <div class="legend-color" style="background-color: #CC79A7;" aria-hidden="true"></div>
+              <span class="legend-text">Heading Structure</span>
+            </div>
+          </div>
+        </div>
+
+        <p id="chart-description">
+          The bar chart shows four categories of accessibility compliance.
+          Contrast Compliance leads at 80 percent, followed by Keyboard Navigation at 65 percent,
+          Alt Text Coverage at 50 percent, and Heading Structure at 35 percent.
+        </p>
+      </section>
+
+      <section aria-labelledby="recommendations-heading">
+        <h2 id="recommendations-heading">Recommendations</h2>
+        <ul>
+          <li>Improve heading structure to reach 80 percent compliance</li>
+          <li>Increase alt text coverage on image-heavy pages</li>
+          <li>Continue maintaining contrast compliance above 75 percent</li>
+        </ul>
+      </section>
+    </article>
+  </main>
+</body>
+</html>

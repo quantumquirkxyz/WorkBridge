@@ -1,0 +1,31 @@
+{
+  "name": "xr-development",
+  "description": "Design and build extended reality (AR/VR/MR) experiences — 3D interaction, spatial computing, headset development, immersive UX — with performance, comfort, and accessibility as first-class concerns.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/xr/xr-development/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "xr/xr-development",
+      "name": "xr-development",
+      "description": "Design and build extended reality (AR/VR/MR) experiences — 3D interaction, spatial computing, headset development, immersive UX — with performance, comfort, and accessibility as first-class concerns.",
+      "tags": [
+        "\"xr\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "xr"
+      }
+    }
+  ]
+}

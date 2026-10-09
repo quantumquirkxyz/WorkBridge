@@ -1,0 +1,15 @@
+{
+  "fixtures": [
+    {
+      "id": "feature-flag-body",
+      "skill": "feature-flag",
+      "type": "regression",
+      "version": "1.0.0",
+      "input": "Design a release feature flag with targeting rules, rollout plan, and cleanup deadline",
+      "expectedOutput": {
+        "contains": ["FeatureFlagArtifact", "targetingRules", "rolloutPercentage", "cleanupDeadline", "traceId"],
+        "minLength": 200
+      }
+    }
+  ]
+}

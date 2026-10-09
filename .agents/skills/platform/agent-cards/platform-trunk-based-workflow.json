@@ -1,0 +1,35 @@
+{
+  "name": "trunk-based-workflow",
+  "description": "Orchestrate trunk-based development — short-lived branches, small PRs, CI gating, and merge-to-trunk discipline.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/platform/trunk-based-workflow/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "platform/trunk-based-workflow",
+      "name": "trunk-based-workflow",
+      "description": "Orchestrate trunk-based development — short-lived branches, small PRs, CI gating, and merge-to-trunk discipline.",
+      "tags": [
+        "git",
+        "trunk-based",
+        "branching",
+        "ci",
+        "workflow"
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "router",
+        "artifactType": "plan"
+      }
+    }
+  ]
+}

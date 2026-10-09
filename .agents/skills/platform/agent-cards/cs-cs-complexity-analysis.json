@@ -1,0 +1,31 @@
+{
+  "name": "cs-complexity-analysis",
+  "description": "Analyze algorithmic complexity — time, space, amortized cost, and lower bounds — with explicit assumptions and proof sketches.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/cs/cs-complexity-analysis/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "cs/cs-complexity-analysis",
+      "name": "cs-complexity-analysis",
+      "description": "Analyze algorithmic complexity — time, space, amortized cost, and lower bounds — with explicit assumptions and proof sketches.",
+      "tags": [
+        "\"cs\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "cs"
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "side-effect-auditor",
+  "description": "Audit skill side-effect, risk, trust tier, dependency, and boundary metadata against the actual workflow so mutating skills declare their operational authority honestly.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/skill-dev/side-effect-auditor/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "skill-dev/side-effect-auditor",
+      "name": "side-effect-auditor",
+      "description": "Audit skill side-effect, risk, trust tier, dependency, and boundary metadata against the actual workflow so mutating skills declare their operational authority honestly.",
+      "tags": [
+        "\"skill-dev\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "skill-dev"
+      }
+    }
+  ]
+}

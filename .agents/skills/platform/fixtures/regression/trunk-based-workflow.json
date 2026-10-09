@@ -1,0 +1,15 @@
+{
+  "fixtures": [
+    {
+      "id": "trunk-based-workflow-body",
+      "skill": "trunk-based-workflow",
+      "type": "regression",
+      "version": "1.0.0",
+      "input": "Validate branch age, PR size, CI status, and merge strategy for a trunk-based workflow",
+      "expectedOutput": {
+        "contains": ["TrunkBasedWorkflowArtifact", "branchAge", "prSize", "ciStatus", "mergeStrategy", "traceId"],
+        "minLength": 200
+      }
+    }
+  ]
+}

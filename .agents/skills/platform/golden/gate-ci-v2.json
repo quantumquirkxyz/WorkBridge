@@ -1,0 +1,17 @@
+{
+  "traceId": "golden-gate-ci-001",
+  "spanId": "golden-span-010",
+  "parentSpanId": null,
+  "skill": "gate-ci",
+  "skillVersion": "2.0",
+  "promptVersion": "2.0",
+  "model": { "provider": "anthropic", "model": "claude-sonnet-4-20250514", "tier": "code" },
+  "input": { "artifactType": "quality-gate", "sizeTokens": 2900, "contextRefs": ["pr-109"] },
+  "output": { "artifactType": "QualityGateArtifact", "sizeTokens": 1100, "schemaValid": true, "outputRef": "artifacts/gate-ci/pr-109.json" },
+  "execution": { "startedAt": "2026-10-01T14:00:00Z", "completedAt": "2026-10-01T14:00:22Z", "durationMs": 22000, "iterations": 1, "retries": 1 },
+  "tools": [{ "name": "read", "calls": 18 }, { "name": "grep", "calls": 8 }, { "name": "bash", "calls": 4 }],
+  "quality": { "artifactPassedQualityBar": true, "artifactScore": 86, "evaluators": ["behavioral", "regression", "review-effectiveness"], "findingsCount": 1 },
+  "result": "completed",
+  "blockedBy": [],
+  "nextConsumer": "ship-subissue"
+}

@@ -1,0 +1,34 @@
+{
+  "name": "codebase-design",
+  "description": "Shared vocabulary for designing deep modules. Use when the user wants to design or improve a module's interface, find depth, or define a clean seam.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/foundation/codebase-design/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "foundation/codebase-design",
+      "name": "codebase-design",
+      "description": "Shared vocabulary for designing deep modules. Use when the user wants to design or improve a module's interface, find depth, or define a clean seam.",
+      "tags": [
+        "architecture",
+        "design",
+        "modules",
+        "seams"
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "plan"
+      }
+    }
+  ]
+}

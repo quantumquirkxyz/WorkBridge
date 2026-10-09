@@ -1,0 +1,31 @@
+{
+  "name": "workflow-fixture-author",
+  "description": "Author deterministic scenario and behavioral fixtures for skills so routing, contracts, outputs, side effects, and refusal boundaries can be tested before promotion.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/skill-dev/workflow-fixture-author/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "skill-dev/workflow-fixture-author",
+      "name": "workflow-fixture-author",
+      "description": "Author deterministic scenario and behavioral fixtures for skills so routing, contracts, outputs, side effects, and refusal boundaries can be tested before promotion.",
+      "tags": [
+        "\"skill-dev\""
+      ],
+      "parameters": {
+        "trustTier": "2",
+        "modelTier": "fast",
+        "artifactType": "authentication"
+      }
+    }
+  ]
+}

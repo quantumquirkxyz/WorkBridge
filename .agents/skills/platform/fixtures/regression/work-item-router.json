@@ -1,0 +1,15 @@
+{
+  "fixtures": [
+    {
+      "id": "regression-work-item-router",
+      "skill": "work-item-router",
+      "type": "regression",
+      "version": "1.0.0",
+      "input": "Route a new spec issue through the governance flow",
+      "expectedOutput": {
+        "contains": ["governance", "index", "## Why", "record-execution", "Routing decision"],
+        "minLength": 200
+      }
+    }
+  ]
+}

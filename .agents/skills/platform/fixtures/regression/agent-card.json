@@ -1,0 +1,15 @@
+{
+  "fixtures": [
+    {
+      "id": "agent-card-body",
+      "skill": "agent-card",
+      "type": "regression",
+      "version": "1.0.0",
+      "input": "Generate and validate an Agent Card for a skill in the quirk bundle",
+      "expectedOutput": {
+        "contains": ["AgentCard", "agent-card-schema.json", "index.json", "traceId"],
+        "minLength": 150
+      }
+    }
+  ]
+}

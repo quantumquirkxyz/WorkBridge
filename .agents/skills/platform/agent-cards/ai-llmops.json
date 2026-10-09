@@ -1,0 +1,31 @@
+{
+  "name": "llmops",
+  "description": "LLMOps (deployment, monitoring, A/B testing, prompt management, cost optimization, evaluation pipelines)",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/ai/llmops/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "ai/llmops",
+      "name": "llmops",
+      "description": "LLMOps (deployment, monitoring, A/B testing, prompt management, cost optimization, evaluation pipelines)",
+      "tags": [
+        "\"ai\""
+      ],
+      "parameters": {
+        "trustTier": "3",
+        "modelTier": "reasoning",
+        "artifactType": "ai"
+      }
+    }
+  ]
+}

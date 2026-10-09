@@ -1,0 +1,15 @@
+{
+  "fixtures": [
+    {
+      "id": "mcp-server-body",
+      "skill": "mcp-server",
+      "type": "regression",
+      "version": "2.0.0",
+      "input": "Expose quirk Skills as MCP tools, resources, and prompts via stdio transport",
+      "expectedOutput": {
+        "contains": ["McpServerArtifact", "tools", "resources", "prompts", "transport", "skillsExposed", "traceId"],
+        "minLength": 200
+      }
+    }
+  ]
+}

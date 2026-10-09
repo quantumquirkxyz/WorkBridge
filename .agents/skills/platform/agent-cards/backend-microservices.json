@@ -1,0 +1,31 @@
+{
+  "name": "microservices",
+  "description": "Design microservice architectures — service decomposition, inter-service communication, data ownership, resilience patterns — with explicit boundaries and failure isolation.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/backend/microservices/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "backend/microservices",
+      "name": "microservices",
+      "description": "Design microservice architectures — service decomposition, inter-service communication, data ownership, resilience patterns — with explicit boundaries and failure isolation.",
+      "tags": [
+        "\"backend\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "backend"
+      }
+    }
+  ]
+}

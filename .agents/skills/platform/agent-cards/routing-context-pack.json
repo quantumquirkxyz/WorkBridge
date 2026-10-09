@@ -1,0 +1,31 @@
+{
+  "name": "context-pack",
+  "description": "Build a minimal fresh context pack with ordered reads and provenance — for scoped, high-signal handoff.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/routing/context-pack/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "routing/context-pack",
+      "name": "context-pack",
+      "description": "Build a minimal fresh context pack with ordered reads and provenance — for scoped, high-signal handoff.",
+      "tags": [
+        "\"routing\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "router",
+        "artifactType": "routing"
+      }
+    }
+  ]
+}

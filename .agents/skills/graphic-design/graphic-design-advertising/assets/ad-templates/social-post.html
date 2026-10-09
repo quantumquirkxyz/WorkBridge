@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Post Template</title>
+  <style>
+    :root {
+      --brand-primary: #2563eb;
+      --brand-secondary: #1e40af;
+      --brand-accent: #f59e0b;
+      --brand-neutral: #f8fafc;
+      --brand-text: #0f172a;
+      --brand-text-light: #475569;
+      --font-display: "Helvetica Neue", Arial, sans-serif;
+      --font-body: "Helvetica Neue", Arial, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-body);
+      background: #e2e8f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .creative {
+      width: 1080px;
+      height: 1080px;
+      background: #f8fafc;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      overflow: hidden;
+      position: relative;
+    }
+    .hero {
+      background: #2563eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 60px;
+      min-height: 420px;
+    }
+    .hero-text {
+      color: #ffffff;
+      font-family: var(--font-display);
+      font-size: 56px;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      max-width: 860px;
+    }
+    .body-block {
+      padding: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 24px;
+    }
+    .body-copy {
+      color: #475569;
+      font-size: 28px;
+      line-height: 1.45;
+      max-width: 780px;
+    }
+    .cta-block {
+      padding: 40px 60px 60px;
+      display: flex;
+      justify-content: center;
+    }
+    .cta-button {
+      background: #f59e0b;
+      color: #ffffff;
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 18px 48px;
+      border-radius: 8px;
+      display: inline-block;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+    }
+    .logo {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      width: 120px;
+      height: 40px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #2563eb;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+  </style>
+</head>
+<body>
+  <div class="creative">
+    <div class="logo">BRAND</div>
+    <div class="hero">
+      <div class="hero-text">Unlock Your Creative Potential</div>
+    </div>
+    <div class="body-block">
+      <div class="body-copy">Premium tools built for teams who design at scale. Launch faster with templates that ship.</div>
+    </div>
+    <div class="cta-block">
+      <a href="#" class="cta-button">Start Free Trial</a>
+    </div>
+  </div>
+</body>
+</html>

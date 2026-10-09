@@ -1,0 +1,31 @@
+{
+  "name": "backend-architecture",
+  "description": "Shape backend systems — REST/gRPC APIs, service contracts, data flow, state management, error handling — with explicit seams and caller responsibilities.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/backend/backend-architecture/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "backend/backend-architecture",
+      "name": "backend-architecture",
+      "description": "Shape backend systems — REST/gRPC APIs, service contracts, data flow, state management, error handling — with explicit seams and caller responsibilities.",
+      "tags": [
+        "\"backend\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "backend"
+      }
+    }
+  ]
+}

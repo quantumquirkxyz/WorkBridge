@@ -1,0 +1,31 @@
+{
+  "name": "finance-portfolio-theory",
+  "description": "Modern Portfolio Theory — efficient frontier, CAPM, APT, risk attribution, and performance measurement — with explicit assumptions and regime analysis.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/finance/finance-portfolio-theory/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "finance/finance-portfolio-theory",
+      "name": "finance-portfolio-theory",
+      "description": "Modern Portfolio Theory — efficient frontier, CAPM, APT, risk attribution, and performance measurement — with explicit assumptions and regime analysis.",
+      "tags": [
+        "\"finance\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "finance"
+      }
+    }
+  ]
+}

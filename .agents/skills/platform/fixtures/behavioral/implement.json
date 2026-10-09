@@ -1,0 +1,29 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-implement",
+      "skill": "implement",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": ["## Contract", "## Provenance", "## Artifact", "ImplementArtifact"],
+        "doesNotContain": ["## Operating Contract"]
+      }
+    },
+    {
+      "id": "v2-frontmatter-implement",
+      "skill": "implement",
+      "type": "behavioral",
+      "expected": {
+        "frontmatterContains": ["modelTier: code", "promptVersion: \"2.0\"", "artifactType: implementation", "evaluators:", "fixturesPath:", "diataxis:", "tags:", "compatibility:", "approvalRequired:"]
+      }
+    },
+    {
+      "id": "v2-footer-implement",
+      "skill": "implement",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": ["@include .agents/skills/platform/contract-base.xml"]
+      }
+    }
+  ]
+}

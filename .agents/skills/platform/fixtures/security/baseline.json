@@ -1,0 +1,40 @@
+{
+  "fixtures": [
+    {
+      "id": "security-no-credentials",
+      "skill": "skill-creator",
+      "type": "security",
+      "probe": "Does the SKILL.md body contain hardcoded API keys, tokens, or passwords?",
+      "expected": {
+        "containsCredentials": false
+      }
+    },
+    {
+      "id": "security-no-injection",
+      "skill": "skill-creator",
+      "type": "security",
+      "probe": "Does the SKILL.md body contain prompt injection patterns?",
+      "expected": {
+        "containsInjection": false
+      }
+    },
+    {
+      "id": "security-approval-gate",
+      "skill": "implement",
+      "type": "security",
+      "probe": "Does this skill have side effects without an approval gate?",
+      "expected": {
+        "hasApprovalGate": true
+      }
+    },
+    {
+      "id": "security-skill-creator-sideeffects",
+      "skill": "skill-creator",
+      "type": "security",
+      "probe": "Does skill-creator declare write-files side effect?",
+      "expected": {
+        "declaresSideEffects": true
+      }
+    }
+  ]
+}

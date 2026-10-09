@@ -1,0 +1,15 @@
+{
+  "fixtures": [
+    {
+      "id": "regression-ask-to-routing",
+      "skill": "ask-to",
+      "type": "regression",
+      "version": "1.0.0",
+      "input": "I have an idea for a new feature but I'm not sure where to start",
+      "expectedOutput": {
+        "contains": ["RoutingArtifact", "workflow", "state-machine", "## Why", "record-execution"],
+        "minLength": 200
+      }
+    }
+  ]
+}

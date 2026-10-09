@@ -1,0 +1,17 @@
+{
+  "traceId": "golden-tdd-001",
+  "spanId": "golden-span-006",
+  "parentSpanId": null,
+  "skill": "tdd",
+  "skillVersion": "2.0",
+  "promptVersion": "2.0",
+  "model": { "provider": "anthropic", "model": "claude-sonnet-4-20250514", "tier": "code" },
+  "input": { "artifactType": "implementation", "sizeTokens": 3800, "contextRefs": ["issue-45"] },
+  "output": { "artifactType": "ImplementArtifact", "sizeTokens": 960, "schemaValid": true, "outputRef": "artifacts/tdd/issue-45.json" },
+  "execution": { "startedAt": "2026-10-01T17:45:00Z", "completedAt": "2026-10-01T17:45:12Z", "durationMs": 12000, "iterations": 4, "retries": 0 },
+  "tools": [{ "name": "read", "calls": 14 }, { "name": "grep", "calls": 4 }, { "name": "bash", "calls": 1 }],
+  "quality": { "artifactPassedQualityBar": true, "artifactScore": 90, "evaluators": ["behavioral", "regression", "traceability"], "findingsCount": 0 },
+  "result": "completed",
+  "blockedBy": [],
+  "nextConsumer": "publish-open-pr"
+}

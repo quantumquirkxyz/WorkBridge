@@ -1,0 +1,31 @@
+{
+  "name": "ask-to",
+  "description": "Ask which skill or flow fits your situation. A router over the skills in this repo that recommends the next step after governance preflight.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/routing/ask-to/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": false
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "routing/ask-to",
+      "name": "ask-to",
+      "description": "Ask which skill or flow fits your situation. A router over the skills in this repo that recommends the next step after governance preflight.",
+      "tags": [
+        "routing"
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "router",
+        "artifactType": "plan"
+      }
+    }
+  ]
+}

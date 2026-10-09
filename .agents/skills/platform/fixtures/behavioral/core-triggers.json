@@ -1,0 +1,40 @@
+{
+  "fixtures": [
+    {
+      "id": "skill-creator-loads",
+      "skill": "skill-creator",
+      "type": "behavioral",
+      "description": "Skill loads and provides guidance for creating a new skill",
+      "input": "I want to create a skill for reviewing Dockerfiles",
+      "expected": {
+        "invokes": true,
+        "outputContains": ["SKILL.md", "frontmatter", "Contract"],
+        "doesNotContain": ["not found"]
+      }
+    },
+    {
+      "id": "code-review-triggers",
+      "skill": "code-review",
+      "type": "behavioral",
+      "description": "Code review skill triggers on PR review language",
+      "input": "Review the changes since the last commit",
+      "expected": {
+        "invokes": true,
+        "outputContains": ["Standards", "Spec", "review"],
+        "doesNotContain": ["not found"]
+      }
+    },
+    {
+      "id": "diagnosing-bugs-triggers",
+      "skill": "diagnosing-bugs",
+      "type": "behavioral",
+      "description": "Diagnosing bugs skill triggers on bug reports",
+      "input": "Debug why the login returns 500 intermittently",
+      "expected": {
+        "invokes": true,
+        "outputContains": ["Diagnos", "artifact"],
+        "doesNotContain": ["not found"]
+      }
+    }
+  ]
+}

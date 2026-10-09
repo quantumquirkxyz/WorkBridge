@@ -1,0 +1,31 @@
+{
+  "name": "incident-response",
+  "description": "Design incident response — runbooks, war rooms, postmortems, blameless culture — with explicit severity taxonomy, escalation paths, and communication rules.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/devops/incident-response/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "devops/incident-response",
+      "name": "incident-response",
+      "description": "Design incident response — runbooks, war rooms, postmortems, blameless culture — with explicit severity taxonomy, escalation paths, and communication rules.",
+      "tags": [
+        "\"devops\""
+      ],
+      "parameters": {
+        "trustTier": "3",
+        "modelTier": "reasoning",
+        "artifactType": "devops"
+      }
+    }
+  ]
+}

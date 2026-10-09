@@ -1,0 +1,17 @@
+{
+  "traceId": "golden-docs-adrs-001",
+  "spanId": "golden-span-013",
+  "parentSpanId": null,
+  "skill": "docs-adrs",
+  "skillVersion": "2.0",
+  "promptVersion": "2.0",
+  "model": { "provider": "anthropic", "model": "claude-sonnet-4-20250514", "tier": "reasoning" },
+  "input": { "artifactType": "documentation", "sizeTokens": 3000, "contextRefs": ["issue-60"] },
+  "output": { "artifactType": "DocumentationArtifact", "sizeTokens": 1300, "schemaValid": true, "outputRef": "artifacts/docs-adrs/issue-60.json" },
+  "execution": { "startedAt": "2026-10-01T11:00:00Z", "completedAt": "2026-10-01T11:00:29Z", "durationMs": 29000, "iterations": 2, "retries": 0 },
+  "tools": [{ "name": "read", "calls": 15 }, { "name": "grep", "calls": 7 }],
+  "quality": { "artifactPassedQualityBar": true, "artifactScore": 96, "evaluators": ["behavioral", "traceability", "quality-bar"], "findingsCount": 0 },
+  "result": "completed",
+  "blockedBy": [],
+  "nextConsumer": "code-review"
+}

@@ -1,0 +1,1262 @@
+{
+  "generatedAt": "2026-10-06T05:36:08.028Z",
+  "DRY_RUN": false,
+  "categoryFilter": "all",
+  "FORCE": false,
+  "summary": {
+    "total": 249,
+    "v2": 247,
+    "migrated": 2,
+    "skipped": 0,
+    "errors": 0
+  },
+  "skills": [
+    {
+      "category": "accessibility",
+      "name": "accessibility",
+      "status": "v2"
+    },
+    {
+      "category": "accessibility",
+      "name": "accessibility-design",
+      "status": "v2"
+    },
+    {
+      "category": "accessibility",
+      "name": "accessibility-testing",
+      "status": "v2"
+    },
+    {
+      "category": "ai",
+      "name": "agent-orchestration",
+      "status": "v2"
+    },
+    {
+      "category": "ai",
+      "name": "ai-ml-pipeline",
+      "status": "v2"
+    },
+    {
+      "category": "ai",
+      "name": "ai-model-evaluation",
+      "status": "v2"
+    },
+    {
+      "category": "ai",
+      "name": "ai-prompt-engineering",
+      "status": "v2"
+    },
+    {
+      "category": "ai",
+      "name": "ai-time-series-forecasting",
+      "status": "v2"
+    },
+    {
+      "category": "ai",
+      "name": "llm-eval",
+      "status": "v2"
+    },
+    {
+      "category": "ai",
+      "name": "llm-fine-tuning",
+      "status": "v2"
+    },
+    {
+      "category": "ai",
+      "name": "llmops",
+      "status": "v2"
+    },
+    {
+      "category": "ai",
+      "name": "mlops",
+      "status": "v2"
+    },
+    {
+      "category": "ai",
+      "name": "multimodal-prompting",
+      "status": "v2"
+    },
+    {
+      "category": "ai",
+      "name": "prompt-template-library",
+      "status": "v2"
+    },
+    {
+      "category": "ai",
+      "name": "rag-pipeline",
+      "status": "v2"
+    },
+    {
+      "category": "ai",
+      "name": "structured-output",
+      "status": "v2"
+    },
+    {
+      "category": "auxiliary",
+      "name": "execution-policy",
+      "status": "v2"
+    },
+    {
+      "category": "auxiliary",
+      "name": "integration-playground",
+      "status": "v2"
+    },
+    {
+      "category": "auxiliary",
+      "name": "interactive-tutorial-builder",
+      "status": "v2"
+    },
+    {
+      "category": "auxiliary",
+      "name": "setup-quirk-skills",
+      "status": "v2"
+    },
+    {
+      "category": "backend",
+      "name": "api-gateway",
+      "status": "v2"
+    },
+    {
+      "category": "backend",
+      "name": "backend-architecture",
+      "status": "v2"
+    },
+    {
+      "category": "backend",
+      "name": "backend-caching",
+      "status": "v2"
+    },
+    {
+      "category": "backend",
+      "name": "backend-queues",
+      "status": "v2"
+    },
+    {
+      "category": "backend",
+      "name": "caching-advanced",
+      "status": "v2"
+    },
+    {
+      "category": "backend",
+      "name": "distributed-tracing",
+      "status": "v2"
+    },
+    {
+      "category": "backend",
+      "name": "event-driven-architecture",
+      "status": "v2"
+    },
+    {
+      "category": "backend",
+      "name": "grpc-connect",
+      "status": "v2"
+    },
+    {
+      "category": "backend",
+      "name": "microservices",
+      "status": "v2"
+    },
+    {
+      "category": "backend",
+      "name": "rate-limiting",
+      "status": "v2"
+    },
+    {
+      "category": "backend",
+      "name": "serverless",
+      "status": "v2"
+    },
+    {
+      "category": "backend",
+      "name": "service-mesh",
+      "status": "v2"
+    },
+    {
+      "category": "backend",
+      "name": "websockets",
+      "status": "v2"
+    },
+    {
+      "category": "cms",
+      "name": "cms-access-control",
+      "status": "v2"
+    },
+    {
+      "category": "cms",
+      "name": "cms-architecture",
+      "status": "v2"
+    },
+    {
+      "category": "cms",
+      "name": "cms-content-strategy",
+      "status": "v2"
+    },
+    {
+      "category": "cms",
+      "name": "localization",
+      "status": "v2"
+    },
+    {
+      "category": "compilers",
+      "name": "compiler-design",
+      "status": "v2"
+    },
+    {
+      "category": "compilers",
+      "name": "compiler-testing",
+      "status": "v2"
+    },
+    {
+      "category": "compilers",
+      "name": "compilers",
+      "status": "v2"
+    },
+    {
+      "category": "cs",
+      "name": "cs-algorithms",
+      "status": "v2"
+    },
+    {
+      "category": "cs",
+      "name": "cs-complexity-analysis",
+      "status": "v2"
+    },
+    {
+      "category": "cs",
+      "name": "cs-computability",
+      "status": "v2"
+    },
+    {
+      "category": "cs",
+      "name": "cs-data-structures",
+      "status": "v2"
+    },
+    {
+      "category": "data",
+      "name": "data-catalog",
+      "status": "v2"
+    },
+    {
+      "category": "data",
+      "name": "data-contracts",
+      "status": "v2"
+    },
+    {
+      "category": "data",
+      "name": "data-etl-pipeline",
+      "status": "v2"
+    },
+    {
+      "category": "data",
+      "name": "data-lineage",
+      "status": "v2"
+    },
+    {
+      "category": "data",
+      "name": "data-quality",
+      "status": "v2"
+    },
+    {
+      "category": "data",
+      "name": "data-streaming",
+      "status": "v2"
+    },
+    {
+      "category": "data",
+      "name": "data-versioning",
+      "status": "v2"
+    },
+    {
+      "category": "data",
+      "name": "data-warehouse-modeling",
+      "status": "v2"
+    },
+    {
+      "category": "data",
+      "name": "feature-store",
+      "status": "v2"
+    },
+    {
+      "category": "data",
+      "name": "semantic-layer",
+      "status": "v2"
+    },
+    {
+      "category": "data",
+      "name": "stream-processing",
+      "status": "v2"
+    },
+    {
+      "category": "db",
+      "name": "db-migrations",
+      "status": "v2"
+    },
+    {
+      "category": "db",
+      "name": "db-nosql-modeling",
+      "status": "v2"
+    },
+    {
+      "category": "db",
+      "name": "db-query-optimization",
+      "status": "v2"
+    },
+    {
+      "category": "db",
+      "name": "db-relational-design",
+      "status": "v2"
+    },
+    {
+      "category": "delivery",
+      "name": "code-review",
+      "status": "v2"
+    },
+    {
+      "category": "delivery",
+      "name": "contribution-workflow-optimizer",
+      "status": "v2"
+    },
+    {
+      "category": "delivery",
+      "name": "diagnosing-bugs",
+      "status": "v2"
+    },
+    {
+      "category": "delivery",
+      "name": "implement",
+      "status": "v2"
+    },
+    {
+      "category": "delivery",
+      "name": "implement-review-fixes",
+      "status": "v2"
+    },
+    {
+      "category": "delivery",
+      "name": "plan-review-fixes",
+      "status": "v2"
+    },
+    {
+      "category": "delivery",
+      "name": "prototype",
+      "status": "v2"
+    },
+    {
+      "category": "delivery",
+      "name": "research",
+      "status": "v2"
+    },
+    {
+      "category": "delivery",
+      "name": "resolving-merge-conflicts",
+      "status": "v2"
+    },
+    {
+      "category": "delivery",
+      "name": "review-fix-loop",
+      "status": "v2"
+    },
+    {
+      "category": "delivery",
+      "name": "review-pr",
+      "status": "v2"
+    },
+    {
+      "category": "delivery",
+      "name": "tdd",
+      "status": "v2"
+    },
+    {
+      "category": "delivery",
+      "name": "testing",
+      "status": "v2"
+    },
+    {
+      "category": "delivery",
+      "name": "webapp-testing",
+      "status": "v2"
+    },
+    {
+      "category": "devops",
+      "name": "backup-disaster-recovery",
+      "status": "v2"
+    },
+    {
+      "category": "devops",
+      "name": "chaos-engineering",
+      "status": "v2"
+    },
+    {
+      "category": "devops",
+      "name": "cost-optimization",
+      "status": "v2"
+    },
+    {
+      "category": "devops",
+      "name": "devops-ci-cd-pipeline",
+      "status": "v2"
+    },
+    {
+      "category": "devops",
+      "name": "devops-feature-flags",
+      "status": "v2"
+    },
+    {
+      "category": "devops",
+      "name": "devops-k8s-orchestration",
+      "status": "v2"
+    },
+    {
+      "category": "devops",
+      "name": "devops-terraform-iac",
+      "status": "v2"
+    },
+    {
+      "category": "devops",
+      "name": "gitops",
+      "status": "v2"
+    },
+    {
+      "category": "devops",
+      "name": "incident-response",
+      "status": "v2"
+    },
+    {
+      "category": "devops",
+      "name": "secret-management",
+      "status": "v2"
+    },
+    {
+      "category": "docs",
+      "name": "docs-adrs",
+      "status": "v2"
+    },
+    {
+      "category": "docs",
+      "name": "docs-knowledge-base",
+      "status": "v2"
+    },
+    {
+      "category": "docs",
+      "name": "docs-technical-writing",
+      "status": "v2"
+    },
+    {
+      "category": "engineering",
+      "name": "improve-codebase-architecture",
+      "status": "v2"
+    },
+    {
+      "category": "finance",
+      "name": "finance-corporate-val",
+      "status": "v2"
+    },
+    {
+      "category": "finance",
+      "name": "finance-dcf",
+      "status": "v2"
+    },
+    {
+      "category": "finance",
+      "name": "finance-portfolio-theory",
+      "status": "v2"
+    },
+    {
+      "category": "foundation",
+      "name": "agent-canvas",
+      "status": "v2"
+    },
+    {
+      "category": "foundation",
+      "name": "agent-card",
+      "status": "v2"
+    },
+    {
+      "category": "foundation",
+      "name": "agent-observability",
+      "status": "v2"
+    },
+    {
+      "category": "foundation",
+      "name": "api-design",
+      "status": "v2"
+    },
+    {
+      "category": "foundation",
+      "name": "codebase-design",
+      "status": "v2"
+    },
+    {
+      "category": "foundation",
+      "name": "context-engine",
+      "status": "v2"
+    },
+    {
+      "category": "foundation",
+      "name": "domain-modeling",
+      "status": "v2"
+    },
+    {
+      "category": "foundation",
+      "name": "observability",
+      "status": "v2"
+    },
+    {
+      "category": "foundation",
+      "name": "subagent-swarm",
+      "status": "v2"
+    },
+    {
+      "category": "frontend",
+      "name": "astro",
+      "status": "v2"
+    },
+    {
+      "category": "frontend",
+      "name": "design-system",
+      "status": "v2"
+    },
+    {
+      "category": "frontend",
+      "name": "frontend-design",
+      "status": "v2"
+    },
+    {
+      "category": "frontend",
+      "name": "frontend-testing",
+      "status": "v2"
+    },
+    {
+      "category": "frontend",
+      "name": "mobile",
+      "status": "v2"
+    },
+    {
+      "category": "frontend",
+      "name": "nextjs",
+      "status": "v2"
+    },
+    {
+      "category": "frontend",
+      "name": "react",
+      "status": "v2"
+    },
+    {
+      "category": "frontend",
+      "name": "remix",
+      "status": "v2"
+    },
+    {
+      "category": "frontend",
+      "name": "state-management",
+      "status": "v2"
+    },
+    {
+      "category": "frontend",
+      "name": "styling",
+      "status": "v2"
+    },
+    {
+      "category": "graphic-design",
+      "name": "brand-identity",
+      "status": "v2"
+    },
+    {
+      "category": "graphic-design",
+      "name": "design-system-visual",
+      "status": "v2"
+    },
+    {
+      "category": "graphic-design",
+      "name": "graphic-design-accessibility",
+      "status": "v2"
+    },
+    {
+      "category": "graphic-design",
+      "name": "graphic-design-advertising",
+      "status": "v2"
+    },
+    {
+      "category": "graphic-design",
+      "name": "graphic-design-data-viz",
+      "status": "v2"
+    },
+    {
+      "category": "graphic-design",
+      "name": "graphic-design-editorial",
+      "status": "v2"
+    },
+    {
+      "category": "graphic-design",
+      "name": "graphic-design-foundations",
+      "status": "v2"
+    },
+    {
+      "category": "graphic-design",
+      "name": "graphic-design-motion",
+      "status": "v2"
+    },
+    {
+      "category": "graphic-design",
+      "name": "graphic-design-packaging",
+      "status": "v2"
+    },
+    {
+      "category": "graphic-design",
+      "name": "graphic-design-photo-direction",
+      "status": "v2"
+    },
+    {
+      "category": "graphic-design",
+      "name": "graphic-design-project-management",
+      "status": "v2"
+    },
+    {
+      "category": "graphic-design",
+      "name": "graphic-design-tools",
+      "status": "v2"
+    },
+    {
+      "category": "integrations",
+      "name": "api-contracts",
+      "status": "v2"
+    },
+    {
+      "category": "integrations",
+      "name": "auth",
+      "status": "v2"
+    },
+    {
+      "category": "integrations",
+      "name": "issue-operations",
+      "status": "v2"
+    },
+    {
+      "category": "integrations",
+      "name": "payments",
+      "status": "v2"
+    },
+    {
+      "category": "integrations",
+      "name": "pr-operations",
+      "status": "v2"
+    },
+    {
+      "category": "integrations",
+      "name": "search",
+      "status": "v2"
+    },
+    {
+      "category": "iot",
+      "name": "iot-embedded",
+      "status": "v2"
+    },
+    {
+      "category": "math",
+      "name": "math-computation-reproducible",
+      "status": "v2"
+    },
+    {
+      "category": "math",
+      "name": "math-computational",
+      "status": "v2"
+    },
+    {
+      "category": "math",
+      "name": "math-cryptography",
+      "status": "v2"
+    },
+    {
+      "category": "math",
+      "name": "math-formal-proof",
+      "status": "v2"
+    },
+    {
+      "category": "math",
+      "name": "math-grant-structure",
+      "status": "v2"
+    },
+    {
+      "category": "math",
+      "name": "math-linear-algebra",
+      "status": "v2"
+    },
+    {
+      "category": "math",
+      "name": "math-literature-track",
+      "status": "v2"
+    },
+    {
+      "category": "math",
+      "name": "math-optimization",
+      "status": "v2"
+    },
+    {
+      "category": "math",
+      "name": "math-paper-collaboration",
+      "status": "v2"
+    },
+    {
+      "category": "math",
+      "name": "math-presentation-beamer",
+      "status": "v2"
+    },
+    {
+      "category": "math",
+      "name": "math-probability-models",
+      "status": "v2"
+    },
+    {
+      "category": "math",
+      "name": "math-pure-proofs",
+      "status": "v2"
+    },
+    {
+      "category": "math",
+      "name": "math-teaching-problem-set",
+      "status": "v2"
+    },
+    {
+      "category": "networking",
+      "name": "networking",
+      "status": "v2"
+    },
+    {
+      "category": "networking",
+      "name": "networking-protocols",
+      "status": "v2"
+    },
+    {
+      "category": "networking",
+      "name": "networking-security",
+      "status": "v2"
+    },
+    {
+      "category": "os",
+      "name": "os-kernel",
+      "status": "v2"
+    },
+    {
+      "category": "os",
+      "name": "os-memory",
+      "status": "v2"
+    },
+    {
+      "category": "os",
+      "name": "os-processes",
+      "status": "v2"
+    },
+    {
+      "category": "physics",
+      "name": "physics-astro",
+      "status": "v2"
+    },
+    {
+      "category": "physics",
+      "name": "physics-career-postdoc",
+      "status": "v2"
+    },
+    {
+      "category": "physics",
+      "name": "physics-classical",
+      "status": "v2"
+    },
+    {
+      "category": "physics",
+      "name": "physics-data-analysis-root",
+      "status": "v2"
+    },
+    {
+      "category": "physics",
+      "name": "physics-experimental-notebook",
+      "status": "v2"
+    },
+    {
+      "category": "physics",
+      "name": "physics-literature-search",
+      "status": "v2"
+    },
+    {
+      "category": "physics",
+      "name": "physics-quantum",
+      "status": "v2"
+    },
+    {
+      "category": "physics",
+      "name": "physics-reproducibility-archive",
+      "status": "v2"
+    },
+    {
+      "category": "physics",
+      "name": "physics-simulation-setup",
+      "status": "v2"
+    },
+    {
+      "category": "physics",
+      "name": "physics-talk-design",
+      "status": "v2"
+    },
+    {
+      "category": "physics",
+      "name": "physics-thermo",
+      "status": "v2"
+    },
+    {
+      "category": "physics",
+      "name": "physics-writing-revtex",
+      "status": "v2"
+    },
+    {
+      "category": "platform",
+      "name": "deployment",
+      "status": "v2"
+    },
+    {
+      "category": "platform",
+      "name": "feature-flag",
+      "status": "v2"
+    },
+    {
+      "category": "platform",
+      "name": "postgres",
+      "status": "v2"
+    },
+    {
+      "category": "platform",
+      "name": "release-management",
+      "status": "v2"
+    },
+    {
+      "category": "platform",
+      "name": "trunk-based-workflow",
+      "status": "v2"
+    },
+    {
+      "category": "platform",
+      "name": "vercel",
+      "status": "v2"
+    },
+    {
+      "category": "product",
+      "name": "prod-ab-testing",
+      "status": "v2"
+    },
+    {
+      "category": "product",
+      "name": "prod-okr-planning",
+      "status": "v2"
+    },
+    {
+      "category": "product",
+      "name": "prod-prd-writing",
+      "status": "v2"
+    },
+    {
+      "category": "professional",
+      "name": "pro-market-analysis",
+      "status": "v2"
+    },
+    {
+      "category": "professional",
+      "name": "professional-communication",
+      "status": "v2"
+    },
+    {
+      "category": "professional",
+      "name": "professional-project-management",
+      "status": "v2"
+    },
+    {
+      "category": "project",
+      "name": "docs-management",
+      "status": "v2"
+    },
+    {
+      "category": "project",
+      "name": "make-project",
+      "status": "v2"
+    },
+    {
+      "category": "project",
+      "name": "project-development",
+      "status": "v2"
+    },
+    {
+      "category": "project",
+      "name": "project-viability",
+      "status": "v2"
+    },
+    {
+      "category": "project",
+      "name": "to-spec",
+      "status": "v2"
+    },
+    {
+      "category": "project",
+      "name": "to-tickets",
+      "status": "v2"
+    },
+    {
+      "category": "qa",
+      "name": "performance-testing",
+      "status": "v2"
+    },
+    {
+      "category": "qa",
+      "name": "qa-automation",
+      "status": "v2"
+    },
+    {
+      "category": "qa",
+      "name": "qa-manual-testing",
+      "status": "v2"
+    },
+    {
+      "category": "qa",
+      "name": "qa-security-testing",
+      "status": "v2"
+    },
+    {
+      "category": "quant",
+      "name": "quant-backtest",
+      "status": "v2"
+    },
+    {
+      "category": "quant",
+      "name": "quant-credit-risk",
+      "status": "v2"
+    },
+    {
+      "category": "quant",
+      "name": "quant-derivatives-pricing",
+      "status": "v2"
+    },
+    {
+      "category": "quant",
+      "name": "quant-factors",
+      "status": "v2"
+    },
+    {
+      "category": "quant",
+      "name": "quant-market-micro",
+      "status": "v2"
+    },
+    {
+      "category": "quant",
+      "name": "quant-portfolio-opt",
+      "status": "v2"
+    },
+    {
+      "category": "quant",
+      "name": "quant-risk-modeling",
+      "status": "v2"
+    },
+    {
+      "category": "research",
+      "name": "research-data-archiving",
+      "status": "v2"
+    },
+    {
+      "category": "research",
+      "name": "research-literature-review",
+      "status": "v2"
+    },
+    {
+      "category": "research",
+      "name": "scientific-hypothesis",
+      "status": "v2"
+    },
+    {
+      "category": "routing",
+      "name": "artifact-handoff",
+      "status": "v2"
+    },
+    {
+      "category": "routing",
+      "name": "ask-to",
+      "status": "v2"
+    },
+    {
+      "category": "routing",
+      "name": "capability-router",
+      "status": "v2"
+    },
+    {
+      "category": "routing",
+      "name": "context-pack",
+      "status": "v2"
+    },
+    {
+      "category": "routing",
+      "name": "grill",
+      "status": "v2"
+    },
+    {
+      "category": "routing",
+      "name": "grill-me",
+      "status": "v2"
+    },
+    {
+      "category": "routing",
+      "name": "grill-with-docs",
+      "status": "v2"
+    },
+    {
+      "category": "routing",
+      "name": "grilling",
+      "status": "v2"
+    },
+    {
+      "category": "routing",
+      "name": "handoff",
+      "status": "v2"
+    },
+    {
+      "category": "routing",
+      "name": "knowledge-curator",
+      "status": "v2"
+    },
+    {
+      "category": "routing",
+      "name": "publish-open-pr",
+      "status": "v2"
+    },
+    {
+      "category": "routing",
+      "name": "ship-subissue",
+      "status": "v2"
+    },
+    {
+      "category": "routing",
+      "name": "triage",
+      "status": "v2"
+    },
+    {
+      "category": "routing",
+      "name": "wayfinder",
+      "status": "v2"
+    },
+    {
+      "category": "routing",
+      "name": "work-item-router",
+      "status": "v2"
+    },
+    {
+      "category": "sec",
+      "name": "cloud-security",
+      "status": "v2"
+    },
+    {
+      "category": "sec",
+      "name": "compliance",
+      "status": "v2"
+    },
+    {
+      "category": "sec",
+      "name": "container-security",
+      "status": "v2"
+    },
+    {
+      "category": "sec",
+      "name": "incident-forensics",
+      "status": "v2"
+    },
+    {
+      "category": "sec",
+      "name": "sec-cryptography-applied",
+      "status": "v2"
+    },
+    {
+      "category": "sec",
+      "name": "sec-privacy-engineering",
+      "status": "v2"
+    },
+    {
+      "category": "sec",
+      "name": "sec-security-audit",
+      "status": "v2"
+    },
+    {
+      "category": "sec",
+      "name": "sec-threat-modeling",
+      "status": "v2"
+    },
+    {
+      "category": "sec",
+      "name": "secret-management-security",
+      "status": "v2"
+    },
+    {
+      "category": "sec",
+      "name": "supply-chain-security",
+      "status": "v2"
+    },
+    {
+      "category": "sec",
+      "name": "zero-trust",
+      "status": "v2"
+    },
+    {
+      "category": "skill-dev",
+      "name": "evaluate-skill",
+      "status": "v2"
+    },
+    {
+      "category": "skill-dev",
+      "name": "lockfile-maintenance",
+      "status": "v2"
+    },
+    {
+      "category": "skill-dev",
+      "name": "rule-cataloger",
+      "status": "v2"
+    },
+    {
+      "category": "skill-dev",
+      "name": "side-effect-auditor",
+      "status": "v2"
+    },
+    {
+      "category": "skill-dev",
+      "name": "skill-audit",
+      "status": "v2"
+    },
+    {
+      "category": "skill-dev",
+      "name": "skill-creator",
+      "status": "v2"
+    },
+    {
+      "category": "skill-dev",
+      "name": "skill-dependency-graph",
+      "status": "v2"
+    },
+    {
+      "category": "skill-dev",
+      "name": "skill-diff-analyzer",
+      "status": "v2"
+    },
+    {
+      "category": "skill-dev",
+      "name": "skill-performance-metrics",
+      "status": "v2"
+    },
+    {
+      "category": "skill-dev",
+      "name": "skill-promoter",
+      "status": "v2"
+    },
+    {
+      "category": "skill-dev",
+      "name": "skill-quality-gate",
+      "status": "v2"
+    },
+    {
+      "category": "skill-dev",
+      "name": "skill-sandbox",
+      "status": "v2"
+    },
+    {
+      "category": "skill-dev",
+      "name": "skill-template-generator",
+      "status": "v2"
+    },
+    {
+      "category": "skill-dev",
+      "name": "skill-testing-framework",
+      "status": "v2"
+    },
+    {
+      "category": "skill-dev",
+      "name": "skill-tutor",
+      "status": "v2"
+    },
+    {
+      "category": "skill-dev",
+      "name": "workflow-fixture-author",
+      "status": "v2"
+    },
+    {
+      "category": "skill-dev",
+      "name": "writing-great-skills",
+      "status": "v2"
+    },
+    {
+      "category": "ux",
+      "name": "interaction-design",
+      "status": "v2"
+    },
+    {
+      "category": "ux",
+      "name": "ux-accessibility",
+      "status": "v2"
+    },
+    {
+      "category": "ux",
+      "name": "ux-prototyping",
+      "status": "v2"
+    },
+    {
+      "category": "ux",
+      "name": "ux-research",
+      "status": "v2"
+    },
+    {
+      "category": "web3",
+      "name": "web3-consensus",
+      "status": "v2"
+    },
+    {
+      "category": "web3",
+      "name": "web3-defi",
+      "status": "v2"
+    },
+    {
+      "category": "web3",
+      "name": "web3-governance",
+      "status": "v2"
+    },
+    {
+      "category": "web3",
+      "name": "web3-l2-scaling",
+      "status": "v2"
+    },
+    {
+      "category": "web3",
+      "name": "web3-smart-contracts",
+      "status": "v2"
+    },
+    {
+      "category": "web3",
+      "name": "web3-tokenomics",
+      "status": "v2"
+    },
+    {
+      "category": "xr",
+      "name": "xr-development",
+      "status": "v2"
+    },
+    {
+      "category": "xr",
+      "name": "xr-interaction-design",
+      "status": "v2"
+    },
+    {
+      "category": "xr",
+      "name": "xr-performance",
+      "status": "v2"
+    },
+    {
+      "category": "platform/system-design",
+      "name": "system-design",
+      "status": "migrated",
+      "skill": "platform/system-design/system-design"
+    },
+    {
+      "category": "platform/performance",
+      "name": "performance",
+      "status": "migrated",
+      "skill": "platform/performance/performance"
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "structured-output",
+  "description": "Structured output for LLMs (JSON mode, function calling, constrained decoding, validation)",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/ai/structured-output/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "ai/structured-output",
+      "name": "structured-output",
+      "description": "Structured output for LLMs (JSON mode, function calling, constrained decoding, validation)",
+      "tags": [
+        "\"ai\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "ai"
+      }
+    }
+  ]
+}

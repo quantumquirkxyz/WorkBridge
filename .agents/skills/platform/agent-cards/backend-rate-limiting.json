@@ -1,0 +1,31 @@
+{
+  "name": "rate-limiting",
+  "description": "Rate limiting and throttling (token bucket, sliding window, distributed rate limiting, API protection).",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/backend/rate-limiting/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "backend/rate-limiting",
+      "name": "rate-limiting",
+      "description": "Rate limiting and throttling (token bucket, sliding window, distributed rate limiting, API protection).",
+      "tags": [
+        "\"backend\""
+      ],
+      "parameters": {
+        "trustTier": "3",
+        "modelTier": "reasoning",
+        "artifactType": "backend"
+      }
+    }
+  ]
+}

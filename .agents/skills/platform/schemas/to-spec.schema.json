@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SpecArtifact",
+  "description": "Durable spec artifact emitted by the to-spec skill. Typed, versioned, addressable.",
+  "type": "object",
+  "required": ["schemaVersion", "artifactType", "id", "skill", "skillVersion", "promptVersion", "createdAt", "updatedAt", "input", "output", "provenance", "evaluation"],
+  "properties": {
+    "schemaVersion": { "type": "string", "const": "2.0" },
+    "artifactType": { "type": "string", "const": "spec" },
+    "id": { "type": "string", "pattern": "^spec-.+$" },
+    "skill": { "type": "string", "const": "to-spec" },
+    "skillVersion": { "type": "string" },
+    "promptVersion": { "type": "string" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "input": {
+      "type": "object",
+      "required": ["source", "domainGlossary"],
+      "properties": {
+        "source": { "type": "string" },
+        "domainGlossary": { "type": "array", "items": { "type": "string" } },
+        "existingSpecs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "output": {
+      "type": "object",
+      "required": ["title", "goals", "nonGoals", "acceptanceCriteria"],
+      "properties": {
+        "title": { "type": "string" },
+        "goals": { "type": "array", "items": { "type": "string" } },
+        "nonGoals": { "type": "array", "items": { "type": "string" } },
+        "acceptanceCriteria": { "type": "array", "items": { "type": "string" } },
+        "risks": { "type": "array", "items": { "type": "string" } },
+        "decisions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["decision", "rationale"],
+            "properties": {
+              "decision": { "type": "string" },
+              "rationale": { "type": "string" }
+            }
+          }
+        },
+        "validationNotes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "traceId": { "type": "string" },
+        "source": { "type": "string" },
+        "publishedIssueNumber": { "type": "integer" }
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "properties": {
+        "completionCriteriaMet": { "type": "boolean" },
+        "validatorNotes": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "lockfile-maintenance",
+  "description": "Maintain the skills lockfile by detecting missing, stale, extra, or mismatched skill entries and updating hashes only after the corresponding SKILL.md files are resolved.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/skill-dev/lockfile-maintenance/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "skill-dev/lockfile-maintenance",
+      "name": "lockfile-maintenance",
+      "description": "Maintain the skills lockfile by detecting missing, stale, extra, or mismatched skill entries and updating hashes only after the corresponding SKILL.md files are resolved.",
+      "tags": [
+        "\"skill-dev\""
+      ],
+      "parameters": {
+        "trustTier": "2",
+        "modelTier": "fast",
+        "artifactType": "skill-dev"
+      }
+    }
+  ]
+}

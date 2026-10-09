@@ -1,0 +1,31 @@
+{
+  "name": "skill-sandbox",
+  "description": "Create, test, and iterate on experimental skills in an isolated environment without affecting the canonical skills bundle.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/skill-dev/skill-sandbox/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "skill-dev/skill-sandbox",
+      "name": "skill-sandbox",
+      "description": "Create, test, and iterate on experimental skills in an isolated environment without affecting the canonical skills bundle.",
+      "tags": [
+        "\"skill-dev\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "skill-dev"
+      }
+    }
+  ]
+}

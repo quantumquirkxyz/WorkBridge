@@ -1,0 +1,31 @@
+{
+  "name": "testing",
+  "description": "Shape the test strategy for a project so behavior is verified at the right seams and at the right level.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/delivery/testing/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "delivery/testing",
+      "name": "testing",
+      "description": "Shape the test strategy for a project so behavior is verified at the right seams and at the right level.",
+      "tags": [
+        "\"delivery\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "test-strategy"
+      }
+    }
+  ]
+}

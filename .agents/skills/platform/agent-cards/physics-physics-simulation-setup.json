@@ -1,0 +1,31 @@
+{
+  "name": "physics-simulation-setup",
+  "description": "Set up reproducible physics simulations — Monte Carlo (GEANT4), molecular dynamics (LAMMPS), DFT (VASP, Quantum ESPRESSO), quantum dynamics (QuTiP) — with containers, parameter files, and verification.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/physics/physics-simulation-setup/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "physics/physics-simulation-setup",
+      "name": "physics-simulation-setup",
+      "description": "Set up reproducible physics simulations — Monte Carlo (GEANT4), molecular dynamics (LAMMPS), DFT (VASP, Quantum ESPRESSO), quantum dynamics (QuTiP) — with containers, parameter files, and verification.",
+      "tags": [
+        "\"physics\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "physics"
+      }
+    }
+  ]
+}

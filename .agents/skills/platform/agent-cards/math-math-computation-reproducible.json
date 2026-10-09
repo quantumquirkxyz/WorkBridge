@@ -1,0 +1,31 @@
+{
+  "name": "math-computation-reproducible",
+  "description": "Make mathematical computations reproducible — SymPy, Mathematica, Magma, Sage, Julia — with versioned environments (Docker/Conda/Nix), scripts, and result archival.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/math/math-computation-reproducible/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "math/math-computation-reproducible",
+      "name": "math-computation-reproducible",
+      "description": "Make mathematical computations reproducible — SymPy, Mathematica, Magma, Sage, Julia — with versioned environments (Docker/Conda/Nix), scripts, and result archival.",
+      "tags": [
+        "\"math\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "pull-request"
+      }
+    }
+  ]
+}

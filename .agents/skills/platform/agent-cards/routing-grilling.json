@@ -1,0 +1,31 @@
+{
+  "name": "grilling",
+  "description": "Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or use docs to sharpen the premise before acting.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/routing/grilling/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "routing/grilling",
+      "name": "grilling",
+      "description": "Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or use docs to sharpen the premise before acting.",
+      "tags": [
+        "\"routing\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "router",
+        "artifactType": "routing"
+      }
+    }
+  ]
+}

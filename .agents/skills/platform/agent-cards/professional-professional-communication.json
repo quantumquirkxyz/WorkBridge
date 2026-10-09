@@ -1,0 +1,31 @@
+{
+  "name": "professional-communication",
+  "description": "Improve professional communication — status updates, stakeholder messages, expectations, and escalation — with clarity and precision.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/professional/professional-communication/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "professional/professional-communication",
+      "name": "professional-communication",
+      "description": "Improve professional communication — status updates, stakeholder messages, expectations, and escalation — with clarity and precision.",
+      "tags": [
+        "\"professional\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "pull-request"
+      }
+    }
+  ]
+}

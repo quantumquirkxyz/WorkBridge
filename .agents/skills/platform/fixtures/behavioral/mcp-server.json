@@ -1,0 +1,13 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-mcp-server",
+      "skill": "mcp-server",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": ["## Contract", "## Provenance", "## Artifact", "McpServerArtifact", "MCP", "tool definitions", "resource definitions"],
+        "doesNotContain": ["## Operating Contract"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,169 @@
+{
+  "category": "sec",
+  "generatedAt": "2026-10-03T05:53:47.300Z",
+  "totalSkills": 3,
+  "avgScore": 75,
+  "gradeDistribution": {
+    "A": 0,
+    "B": 0,
+    "C": 3,
+    "D": 0,
+    "F": 0
+  },
+  "skillsByScore": [
+    {
+      "skill": "cloud-security",
+      "path": ".agents/skills/sec/cloud-security",
+      "score": 74,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "secret-management-security",
+      "path": ".agents/skills/sec/secret-management-security",
+      "score": 74,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "container-security",
+      "path": ".agents/skills/sec/container-security",
+      "score": 77,
+      "grade": "C",
+      "tier": "BASIC"
+    }
+  ],
+  "recommendations": [],
+  "details": [
+    {
+      "skill": "cloud-security",
+      "path": ".agents/skills/sec/cloud-security",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 10,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 8,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 2,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 4
+      },
+      "total": 74,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/cloud-security.json"
+      ],
+      "metrics": {
+        "tokens": 898,
+        "lines": 113,
+        "headers": 15,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "cloud-security",
+        "description": "Cloud security (AWS, GCP, Azure, IAM, KMS, security groups, compliance, posture management)",
+        "category": "sec",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "security",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/cloud-security.json"
+      }
+    },
+    {
+      "skill": "container-security",
+      "path": ".agents/skills/sec/container-security",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 10,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 8,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 5,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 4
+      },
+      "total": 77,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/container-security.json"
+      ],
+      "metrics": {
+        "tokens": 949,
+        "lines": 114,
+        "headers": 15,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "container-security",
+        "description": "Container security (Docker, Kubernetes, image scanning, runtime security, pod security policies)",
+        "category": "sec",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "security",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/container-security.json"
+      }
+    },
+    {
+      "skill": "secret-management-security",
+      "path": ".agents/skills/sec/secret-management-security",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 10,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 8,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 2,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 4
+      },
+      "total": 74,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/secret-management-security.json"
+      ],
+      "metrics": {
+        "tokens": 1019,
+        "lines": 117,
+        "headers": 15,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "secret-management-security",
+        "description": "Secrets management (Vault, KMS, rotation, injection, external secrets operator)",
+        "category": "sec",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "security",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/secret-management-security.json"
+      }
+    }
+  ],
+  "errors": []
+}

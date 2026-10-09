@@ -1,0 +1,31 @@
+{
+  "name": "networking-protocols",
+  "description": "Analyze network protocols — packet formats, handshakes, congestion control, routing, and transport behavior — with explicit timing and failure assumptions.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/networking/networking-protocols/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "networking/networking-protocols",
+      "name": "networking-protocols",
+      "description": "Analyze network protocols — packet formats, handshakes, congestion control, routing, and transport behavior — with explicit timing and failure assumptions.",
+      "tags": [
+        "\"networking\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "pull-request"
+      }
+    }
+  ]
+}

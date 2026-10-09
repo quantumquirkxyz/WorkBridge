@@ -1,0 +1,31 @@
+{
+  "name": "ai-prompt-engineering",
+  "description": "Design, evaluate, and refine prompts for LLMs (GPT-4, Claude, Llama, Mistral) with chain-of-thought, few-shot, RAG, and evaluation metrics.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/ai/ai-prompt-engineering/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "ai/ai-prompt-engineering",
+      "name": "ai-prompt-engineering",
+      "description": "Design, evaluate, and refine prompts for LLMs (GPT-4, Claude, Llama, Mistral) with chain-of-thought, few-shot, RAG, and evaluation metrics.",
+      "tags": [
+        "\"ai\""
+      ],
+      "parameters": {
+        "trustTier": "3",
+        "modelTier": "reasoning",
+        "artifactType": "pull-request"
+      }
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "fixtures": [
+    {
+      "id": "implement-body-completeness",
+      "skill": "implement",
+      "type": "regression",
+      "version": "1.0.0",
+      "input": "Implement a scoped fix from a ticket",
+      "expectedOutput": {
+        "contains": [
+          "Contract",
+          "Provenance",
+          "Artifact",
+          "Completion Criteria",
+          "Why",
+          "Process",
+          "record-execution",
+          "traceId"
+        ],
+        "minLength": 500
+      }
+    },
+    {
+      "id": "implement-artifact-schema",
+      "skill": "implement",
+      "type": "regression",
+      "version": "1.0.0",
+      "input": "Emit ImplementArtifact for issue-1",
+      "expectedOutput": {
+        "contains": [
+          "ImplementArtifact",
+          "status",
+          "nextConsumer",
+          "qualityGateResults",
+          "record-execution.mjs"
+        ],
+        "minLength": 300
+      }
+    }
+  ]
+}

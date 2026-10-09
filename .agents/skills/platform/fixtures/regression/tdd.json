@@ -1,0 +1,15 @@
+{
+  "fixtures": [
+    {
+      "id": "regression-tdd-body",
+      "skill": "tdd",
+      "type": "regression",
+      "version": "1.0.0",
+      "input": "Implement a checkout price calculator using TDD",
+      "expectedOutput": {
+        "contains": ["contract", "provenance", "artifact", "red", "green", "refactor", "tddartifact", "tautological", "implementation-coupled"],
+        "minLength": 500
+      }
+    }
+  ]
+}

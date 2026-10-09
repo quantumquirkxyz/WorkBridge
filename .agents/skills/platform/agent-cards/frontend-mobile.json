@@ -1,0 +1,31 @@
+{
+  "name": "mobile",
+  "description": "Shape mobile projects around device constraints, platform seams, offline behavior, and push notifications — with explicit performance and resilience boundaries for React Native, Expo, and Capacitor.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/frontend/mobile/SKILL.md",
+  "version": "2",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "frontend/mobile",
+      "name": "mobile",
+      "description": "Shape mobile projects around device constraints, platform seams, offline behavior, and push notifications — with explicit performance and resilience boundaries for React Native, Expo, and Capacitor.",
+      "tags": [
+        "\"frontend\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "frontend"
+      }
+    }
+  ]
+}

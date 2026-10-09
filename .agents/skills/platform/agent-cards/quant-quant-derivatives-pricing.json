@@ -1,0 +1,31 @@
+{
+  "name": "quant-derivatives-pricing",
+  "description": "Price and calibrate derivatives (options, exotics, structured products) — Black-Scholes, trees, Monte Carlo — with Greeks, model risk, and calibration validation.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/quant/quant-derivatives-pricing/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "quant/quant-derivatives-pricing",
+      "name": "quant-derivatives-pricing",
+      "description": "Price and calibrate derivatives (options, exotics, structured products) — Black-Scholes, trees, Monte Carlo — with Greeks, model risk, and calibration validation.",
+      "tags": [
+        "\"quant\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "pull-request"
+      }
+    }
+  ]
+}

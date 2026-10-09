@@ -1,0 +1,31 @@
+{
+  "name": "frontend-design",
+  "description": "Shape frontend work into a clear visual system, interaction model, and implementation seam — with explicit state and motion boundaries.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/frontend/frontend-design/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "frontend/frontend-design",
+      "name": "frontend-design",
+      "description": "Shape frontend work into a clear visual system, interaction model, and implementation seam — with explicit state and motion boundaries.",
+      "tags": [
+        "\"frontend\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "plan"
+      }
+    }
+  ]
+}

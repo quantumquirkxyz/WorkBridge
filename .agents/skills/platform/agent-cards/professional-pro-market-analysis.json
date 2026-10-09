@@ -1,0 +1,31 @@
+{
+  "name": "pro-market-analysis",
+  "description": "Conduct professional market research — TAM/SAM/SOM, competitor analysis, pricing, and trend forecasting — with source citation, data quality checks, and decision framing.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/professional/pro-market-analysis/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "professional/pro-market-analysis",
+      "name": "pro-market-analysis",
+      "description": "Conduct professional market research — TAM/SAM/SOM, competitor analysis, pricing, and trend forecasting — with source citation, data quality checks, and decision framing.",
+      "tags": [
+        "\"professional\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "pull-request"
+      }
+    }
+  ]
+}

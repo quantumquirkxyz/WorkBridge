@@ -1,0 +1,31 @@
+{
+  "name": "research-data-archiving",
+  "description": "Archive research data — metadata, storage, preservation, provenance, and reuse planning — with reproducibility and access controls.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/research/research-data-archiving/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "research/research-data-archiving",
+      "name": "research-data-archiving",
+      "description": "Archive research data — metadata, storage, preservation, provenance, and reuse planning — with reproducibility and access controls.",
+      "tags": [
+        "\"research\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "research"
+      }
+    }
+  ]
+}

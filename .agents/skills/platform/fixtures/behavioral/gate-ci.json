@@ -1,0 +1,13 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-gate-ci",
+      "skill": "gate-ci",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": ["## Contract", "## Provenance", "## Artifact", "GateCiArtifact", "80%", "30min", "security scan"],
+        "doesNotContain": ["## Operating Contract"]
+      }
+    }
+  ]
+}

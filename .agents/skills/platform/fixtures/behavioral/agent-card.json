@@ -1,0 +1,13 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-agent-card",
+      "skill": "agent-card",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": ["## Contract", "## Provenance", "AgentCard JSON", "agent-card-schema.json"],
+        "doesNotContain": ["## Operating Contract"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "skill-template-generator",
+  "description": "Generate an interactive, contract-complete Skill template in the sandbox — use when starting a new Skill with the lab's scaffolding.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/skill-dev/skill-template-generator/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "skill-dev/skill-template-generator",
+      "name": "skill-template-generator",
+      "description": "Generate an interactive, contract-complete Skill template in the sandbox — use when starting a new Skill with the lab's scaffolding.",
+      "tags": [
+        "\"skill-dev\""
+      ],
+      "parameters": {
+        "trustTier": "2",
+        "modelTier": "fast",
+        "artifactType": "skill-dev"
+      }
+    }
+  ]
+}

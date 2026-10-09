@@ -1,0 +1,31 @@
+{
+  "name": "performance-testing",
+  "description": "Design and execute performance tests — load, stress, soak, spike — to validate latency, throughput, and resource consumption under realistic conditions.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/qa/performance-testing/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "qa/performance-testing",
+      "name": "performance-testing",
+      "description": "Design and execute performance tests — load, stress, soak, spike — to validate latency, throughput, and resource consumption under realistic conditions.",
+      "tags": [
+        "\"qa\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "test-strategy"
+      }
+    }
+  ]
+}

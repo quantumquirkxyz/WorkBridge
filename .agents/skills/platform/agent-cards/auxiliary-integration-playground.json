@@ -1,0 +1,31 @@
+{
+  "name": "integration-playground",
+  "description": "Create a disposable fixture environment for safely exercising Skills against local APIs, data, and files; use when testing a Skill with isolated local fixtures.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/auxiliary/integration-playground/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "auxiliary/integration-playground",
+      "name": "integration-playground",
+      "description": "Create a disposable fixture environment for safely exercising Skills against local APIs, data, and files; use when testing a Skill with isolated local fixtures.",
+      "tags": [
+        "\"auxiliary\""
+      ],
+      "parameters": {
+        "trustTier": "2",
+        "modelTier": "fast",
+        "artifactType": "auxiliary"
+      }
+    }
+  ]
+}

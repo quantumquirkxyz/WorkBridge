@@ -1,0 +1,31 @@
+{
+  "name": "compliance",
+  "description": "Compliance (SOC2, ISO27001, GDPR, HIPAA, PCI DSS, audits, evidence, remediation)",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/sec/compliance/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "sec/compliance",
+      "name": "compliance",
+      "description": "Compliance (SOC2, ISO27001, GDPR, HIPAA, PCI DSS, audits, evidence, remediation)",
+      "tags": [
+        "\"sec\""
+      ],
+      "parameters": {
+        "trustTier": "3",
+        "modelTier": "reasoning",
+        "artifactType": "sec"
+      }
+    }
+  ]
+}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Banner Template</title>
+  <style>
+    :root {
+      --brand-primary: #2563eb;
+      --brand-secondary: #1e40af;
+      --brand-accent: #f59e0b;
+      --brand-neutral: #ffffff;
+      --brand-text: #0f172a;
+      --brand-text-light: #475569;
+      --font-display: "Helvetica Neue", Arial, sans-serif;
+      --font-body: "Helvetica Neue", Arial, sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-body);
+      background: #e2e8f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .banner {
+      width: 600px;
+      height: 200px;
+      background: #2563eb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      border-radius: 6px;
+      position: relative;
+    }
+    .text-block {
+      color: #ffffff;
+      max-width: 360px;
+    }
+    .headline {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+      color: #ffffff;
+    }
+    .subhead {
+      font-size: 15px;
+      opacity: 0.95;
+      line-height: 1.4;
+    }
+    .cta-button {
+      background: #f59e0b;
+      color: #ffffff;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 12px 22px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .logo {
+      position: absolute;
+      top: 12px;
+      left: 16px;
+      width: 80px;
+      height: 24px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #2563eb;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+  </style>
+</head>
+<body>
+  <div class="banner">
+    <div class="logo">BRAND</div>
+    <div class="text-block">
+      <div class="headline">Design at Scale, Not at Risk</div>
+      <div class="subhead">Keep every campaign on-brand with shared templates and governance.</div>
+    </div>
+    <a href="#" class="cta-button">Explore Templates</a>
+  </div>
+</body>
+</html>

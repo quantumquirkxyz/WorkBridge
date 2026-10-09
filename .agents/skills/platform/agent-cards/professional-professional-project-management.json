@@ -1,0 +1,31 @@
+{
+  "name": "professional-project-management",
+  "description": "Manage professional projects — scope, milestones, risks, dependencies, and stakeholder alignment — with explicit planning and tracking artifacts.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/professional/professional-project-management/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "professional/professional-project-management",
+      "name": "professional-project-management",
+      "description": "Manage professional projects — scope, milestones, risks, dependencies, and stakeholder alignment — with explicit planning and tracking artifacts.",
+      "tags": [
+        "\"professional\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "pull-request"
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "react",
+  "description": "Design React component structure and state seams — with composability, testability, and clear data flow.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/frontend/react/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "frontend/react",
+      "name": "react",
+      "description": "Design React component structure and state seams — with composability, testability, and clear data flow.",
+      "tags": [
+        "\"frontend\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "frontend"
+      }
+    }
+  ]
+}

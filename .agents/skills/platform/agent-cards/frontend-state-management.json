@@ -1,0 +1,31 @@
+{
+  "name": "state-management",
+  "description": "Modern state management (Zustand, Jotai, signals, Redux Toolkit, server state).",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/frontend/state-management/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "frontend/state-management",
+      "name": "state-management",
+      "description": "Modern state management (Zustand, Jotai, signals, Redux Toolkit, server state).",
+      "tags": [
+        "\"frontend\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "frontend"
+      }
+    }
+  ]
+}

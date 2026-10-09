@@ -1,0 +1,13 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-publish-open-pr",
+      "skill": "publish-open-pr",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": ["## Contract", "## Provenance", "## Artifact", "PublishOpenPrArtifact", "gate-ci", "gh pr create"],
+        "doesNotContain": ["## Operating Contract"]
+      }
+    }
+  ]
+}

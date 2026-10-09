@@ -1,0 +1,17 @@
+{
+  "traceId": "golden-to-tickets-001",
+  "spanId": "golden-span-005",
+  "parentSpanId": null,
+  "skill": "to-tickets",
+  "skillVersion": "2.0",
+  "promptVersion": "2.0",
+  "model": { "provider": "anthropic", "model": "claude-sonnet-4-20250514", "tier": "reasoning" },
+  "input": { "artifactType": "ticket-set", "sizeTokens": 4200, "contextRefs": ["issue-28", "spec-issue-28"] },
+  "output": { "artifactType": "TicketArtifacts", "sizeTokens": 2100, "schemaValid": true, "outputRef": "artifacts/to-tickets/issue-28-tickets.json" },
+  "execution": { "startedAt": "2026-10-01T18:30:00Z", "completedAt": "2026-10-01T18:30:18Z", "durationMs": 18000, "iterations": 2, "retries": 0 },
+  "tools": [{ "name": "read", "calls": 10 }, { "name": "grep", "calls": 6 }],
+  "quality": { "artifactPassedQualityBar": true, "artifactScore": 94, "evaluators": ["behavioral", "traceability", "quality-bar"], "findingsCount": 0 },
+  "result": "completed",
+  "blockedBy": [],
+  "nextConsumer": "implement"
+}

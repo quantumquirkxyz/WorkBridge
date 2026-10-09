@@ -1,0 +1,31 @@
+{
+  "name": "domain-modeling",
+  "description": "Build and sharpen a project's domain model. Record the execution traceId and link the artifact to the originating issue for review replay. Use when the user wants to pin down domain terminology or a ubiquitous language boundary.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/foundation/domain-modeling/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "foundation/domain-modeling",
+      "name": "domain-modeling",
+      "description": "Build and sharpen a project's domain model. Record the execution traceId and link the artifact to the originating issue for review replay. Use when the user wants to pin down domain terminology or a ubiquitous language boundary.",
+      "tags": [
+        "\"foundation\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "model"
+      }
+    }
+  ]
+}

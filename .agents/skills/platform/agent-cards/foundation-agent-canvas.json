@@ -1,0 +1,31 @@
+{
+  "name": "agent-canvas",
+  "description": "Reference skill for agent workspace control — multi-agent session management, workspace persistence, and cross-device continuity, independent of any external framework.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/foundation/agent-canvas/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "foundation/agent-canvas",
+      "name": "agent-canvas",
+      "description": "Reference skill for agent workspace control — multi-agent session management, workspace persistence, and cross-device continuity, independent of any external framework.",
+      "tags": [
+        "\"foundation\""
+      ],
+      "parameters": {
+        "trustTier": "2",
+        "modelTier": "fast",
+        "artifactType": "agent"
+      }
+    }
+  ]
+}

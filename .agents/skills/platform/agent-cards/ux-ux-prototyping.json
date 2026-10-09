@@ -1,0 +1,31 @@
+{
+  "name": "ux-prototyping",
+  "description": "Prototype user experiences — wireframes, interactive mockups, and rapid validation — with explicit experiment goals and iteration criteria.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/ux/ux-prototyping/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "ux/ux-prototyping",
+      "name": "ux-prototyping",
+      "description": "Prototype user experiences — wireframes, interactive mockups, and rapid validation — with explicit experiment goals and iteration criteria.",
+      "tags": [
+        "\"ux\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "pull-request"
+      }
+    }
+  ]
+}

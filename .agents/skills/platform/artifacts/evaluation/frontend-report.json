@@ -1,0 +1,529 @@
+{
+  "category": "frontend",
+  "generatedAt": "2026-10-03T05:53:15.597Z",
+  "totalSkills": 10,
+  "avgScore": 75,
+  "gradeDistribution": {
+    "A": 0,
+    "B": 0,
+    "C": 10,
+    "D": 0,
+    "F": 0
+  },
+  "skillsByScore": [
+    {
+      "skill": "frontend-testing",
+      "path": ".agents/skills/frontend/frontend-testing",
+      "score": 70,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "state-management",
+      "path": ".agents/skills/frontend/state-management",
+      "score": 71,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "mobile",
+      "path": ".agents/skills/frontend/mobile",
+      "score": 72,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "design-system",
+      "path": ".agents/skills/frontend/design-system",
+      "score": 76,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "frontend-design",
+      "path": ".agents/skills/frontend/frontend-design",
+      "score": 76,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "nextjs",
+      "path": ".agents/skills/frontend/nextjs",
+      "score": 76,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "react",
+      "path": ".agents/skills/frontend/react",
+      "score": 76,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "astro",
+      "path": ".agents/skills/frontend/astro",
+      "score": 77,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "remix",
+      "path": ".agents/skills/frontend/remix",
+      "score": 77,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "styling",
+      "path": ".agents/skills/frontend/styling",
+      "score": 78,
+      "grade": "C",
+      "tier": "BASIC"
+    }
+  ],
+  "recommendations": [],
+  "details": [
+    {
+      "skill": "astro",
+      "path": ".agents/skills/frontend/astro",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 8,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 5,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 5,
+        "artifactSchema": 5,
+        "progressiveDisclosure": 8,
+        "observability": 5,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 4
+      },
+      "total": 77,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=reasoning",
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/astro.json"
+      ],
+      "metrics": {
+        "tokens": 528,
+        "lines": 88,
+        "headers": 13,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "astro",
+        "description": "Astro framework (islands architecture, content-focused sites, SSR/SSG, view transitions).",
+        "category": "frontend",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "frontend",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/astro.json"
+      }
+    },
+    {
+      "skill": "design-system",
+      "path": ".agents/skills/frontend/design-system",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 6,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 5,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 5,
+        "artifactSchema": 5,
+        "progressiveDisclosure": 8,
+        "observability": 5,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 5
+      },
+      "total": 76,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=reasoning",
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/design-system.json"
+      ],
+      "metrics": {
+        "tokens": 345,
+        "lines": 53,
+        "headers": 8,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "design-system",
+        "description": "Define and evolve reusable UI tokens, components, and usage rules as a coherent system.",
+        "category": "frontend",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "plan",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/design-system.json"
+      }
+    },
+    {
+      "skill": "frontend-design",
+      "path": ".agents/skills/frontend/frontend-design",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 6,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 5,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 5,
+        "artifactSchema": 5,
+        "progressiveDisclosure": 8,
+        "observability": 5,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 5
+      },
+      "total": 76,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=reasoning",
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/frontend-design.json"
+      ],
+      "metrics": {
+        "tokens": 341,
+        "lines": 53,
+        "headers": 8,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "frontend-design",
+        "description": "Shape frontend work into a clear visual system, interaction model, and implementation seam — with explicit state and motion boundaries.",
+        "category": "frontend",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "plan",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/frontend-design.json"
+      }
+    },
+    {
+      "skill": "frontend-testing",
+      "path": ".agents/skills/frontend/frontend-testing",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 8,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 5,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 3,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 4
+      },
+      "total": 70,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=reasoning",
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/frontend-testing.json"
+      ],
+      "metrics": {
+        "tokens": 572,
+        "lines": 89,
+        "headers": 13,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "frontend-testing",
+        "description": "Frontend testing (Vitest, Testing Library, Playwright, visual testing, Storybook).",
+        "category": "frontend",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "test-strategy",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/frontend-testing.json"
+      }
+    },
+    {
+      "skill": "mobile",
+      "path": ".agents/skills/frontend/mobile",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 10,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 5,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 3,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 4
+      },
+      "total": 72,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=reasoning",
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/mobile.json"
+      ],
+      "metrics": {
+        "tokens": 648,
+        "lines": 106,
+        "headers": 14,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "mobile",
+        "description": "Shape mobile projects around device constraints, platform seams, offline behavior, and push notifications — with explicit performance and resilience boundaries for React Native, Expo, and Capacitor.",
+        "category": "frontend",
+        "version": "2",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "frontend",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/mobile.json"
+      }
+    },
+    {
+      "skill": "nextjs",
+      "path": ".agents/skills/frontend/nextjs",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 6,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 5,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 5,
+        "artifactSchema": 5,
+        "progressiveDisclosure": 8,
+        "observability": 5,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 5
+      },
+      "total": 76,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=reasoning",
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/nextjs.json"
+      ],
+      "metrics": {
+        "tokens": 338,
+        "lines": 53,
+        "headers": 8,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "nextjs",
+        "description": "Shape Next.js projects around routes, server/client seams, and data flow that stay deep rather than tangled.",
+        "category": "frontend",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "frontend",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/nextjs.json"
+      }
+    },
+    {
+      "skill": "react",
+      "path": ".agents/skills/frontend/react",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 6,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 5,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 5,
+        "artifactSchema": 5,
+        "progressiveDisclosure": 8,
+        "observability": 5,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 5
+      },
+      "total": 76,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=reasoning",
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/react.json"
+      ],
+      "metrics": {
+        "tokens": 326,
+        "lines": 53,
+        "headers": 8,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "react",
+        "description": "Design React component structure and state seams — with composability, testability, and clear data flow.",
+        "category": "frontend",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "frontend",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/react.json"
+      }
+    },
+    {
+      "skill": "remix",
+      "path": ".agents/skills/frontend/remix",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 8,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 5,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 5,
+        "artifactSchema": 5,
+        "progressiveDisclosure": 8,
+        "observability": 5,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 4
+      },
+      "total": 77,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=reasoning",
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/remix.json"
+      ],
+      "metrics": {
+        "tokens": 544,
+        "lines": 88,
+        "headers": 13,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "remix",
+        "description": "Remix framework (loaders, actions, nested routes, progressive enhancement).",
+        "category": "frontend",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "frontend",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/remix.json"
+      }
+    },
+    {
+      "skill": "state-management",
+      "path": ".agents/skills/frontend/state-management",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 8,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 5,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 4,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 4
+      },
+      "total": 71,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=reasoning",
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/state-management.json"
+      ],
+      "metrics": {
+        "tokens": 543,
+        "lines": 87,
+        "headers": 13,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "state-management",
+        "description": "Modern state management (Zustand, Jotai, signals, Redux Toolkit, server state).",
+        "category": "frontend",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "frontend",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/state-management.json"
+      }
+    },
+    {
+      "skill": "styling",
+      "path": ".agents/skills/frontend/styling",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 8,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 5,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 5,
+        "artifactSchema": 5,
+        "progressiveDisclosure": 8,
+        "observability": 5,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 5
+      },
+      "total": 78,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=reasoning",
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/styling.json"
+      ],
+      "metrics": {
+        "tokens": 585,
+        "lines": 92,
+        "headers": 14,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "styling",
+        "description": "Modern CSS (Tailwind v4, Panda CSS, CSS modules, CVA, design tokens).",
+        "category": "frontend",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "frontend",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/styling.json"
+      }
+    }
+  ],
+  "errors": []
+}

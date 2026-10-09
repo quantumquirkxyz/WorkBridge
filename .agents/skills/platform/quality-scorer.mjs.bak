@@ -1,0 +1,336 @@
+#!/usr/bin/env node
+// quality-scorer.mjs - Scores a skill 0-100 with tier classification
+// Usage: node quality-scorer.mjs <skill-path> [--json] [--minimum-score N]
+
+import fs from 'node:fs/promises';
+import path from 'node:path';
+
+const root = process.cwd();
+const agentsSkillsDir = path.join(root, '.agents', 'skills');
+
+function parseFrontmatter(text) {
+  if (!text.startsWith('---')) return {};
+  const end = text.indexOf('\n---', 3);
+  if (end === -1) return {};
+  const out = {};
+  let active = null;
+  for (const line of text.slice(4, end).split(/\r?\n/)) {
+    const key = line.match(/^([A-Za-z][A-Za-z0-9-]*):\s*(.*)$/);
+    if (key) {
+      active = key[1];
+      out[active] = key[2] === '' || key[2] === '[]' ? [] : key[2].replace(/^["']|["']$/g, '');
+      continue;
+    }
+    const item = line.match(/^\s+-\s+(.+)$/);
+    if (item && active) {
+      if (!Array.isArray(out[active])) out[active] = [];
+      out[active].push(item[1].replace(/^["']|["']$/g, ''));
+    }
+  }
+  return out;
+}
+
+function wordCount(text) {
+  return (text.match(/[A-Za-z0-9_'-]+/g) ?? []).length;
+}
+
+function countHeaders(text) {
+  return (text.match(/^#{1,6}\s+.+$/gm) ?? []).length;
+}
+
+async function getScriptLoc(skillDir) {
+  let loc = 0;
+  try {
+    const files = await fs.readdir(skillDir);
+    for (const f of files) {
+      if (f.endsWith('.mjs') || f.endsWith('.js')) {
+        const content = await fs.readFile(path.join(skillDir, f), 'utf8').catch(() => null);
+        if (content) loc += content.split(/\r?\n/).length;
+      }
+    }
+  } catch {}
+  return loc;
+}
+
+async function getScriptCount(skillDir) {
+  let count = 0;
+  try {
+    const files = await fs.readdir(skillDir);
+    for (const f of files) {
+      if (f.endsWith('.mjs') || f.endsWith('.js')) count++;
+    }
+  } catch {}
+  return count;
+}
+
+function inferSkillTier(name, category, fm) {
+  const n = (name || '').toLowerCase();
+  const c = (category || '').toLowerCase();
+  const sideEffects = (fm.sideEffects || []).map(s => s.toLowerCase());
+  if (c === 'routing' || n.includes('router') || n.includes('wayfinder') || n.includes('triage') || n.includes('ask-to')) return 1;
+  if (c === 'docs' || c === 'research' || c === 'analysis' || c === 'foundation' || c === 'auxiliary') return 2;
+  if (sideEffects.includes('writes') || c === 'delivery' || c === 'project') return 3;
+  if (sideEffects.includes('mutation') || sideEffects.includes('execution') || fm.risk === 'high') return 4;
+  return 2;
+}
+
+function tierFor(score, lines, scripts, scriptLoc) {
+  if (score >= 80 && lines >= 300 && scripts >= 2 && scriptLoc >= 500) return 'POWERFUL';
+  if (score >= 60 && lines >= 200 && scripts >= 1) return 'STANDARD';
+  return 'BASIC';
+}
+
+async function scoreSkill(skillPath) {
+  const skillFile = path.join(root, skillPath, 'SKILL.md');
+  if (!await fs.access(skillFile).then(() => true).catch(() => false)) {
+    return { error: `Skill not found: ${skillPath}` };
+  }
+
+  const text = await fs.readFile(skillFile, 'utf8');
+  const fm = parseFrontmatter(text);
+  const body = text.replace(/^---[\s\S]*?---\s*/, '');
+  const lines = body.split(/\r?\n/).length;
+  const tokens = wordCount(body);
+  const headers = countHeaders(body);
+
+  const scores = {
+    frontmatterCompleteness: 0,
+    bodyDepth: 0,
+    sections: 0,
+    assets: 0,
+    behavioralSpec: 0,
+    safety: 0,
+    promptVersioning: 0,
+    modelTierAlignment: 0,
+    artifactSchema: 0,
+    progressiveDisclosure: 0,
+    observability: 0,
+    regressionCoverage: 0,
+    diataxisCompleteness: 0,
+  };
+  const issues = [];
+  const warnings = [];
+
+  // 1. Frontmatter completeness (max 10)
+  const requiredFields = ['name', 'description', 'category'];
+  const recommendedFields = ['version', 'maturity', 'capabilities', 'inputs', 'outputs', 'sideEffects', 'dependencies', 'stopCondition', 'risk', 'trustTier', 'maxIterations', 'promptVersion', 'modelTier', 'artifactType', 'fixturesPath'];
+  let fmScore = 0;
+  for (const f of requiredFields) {
+    if (fm[f] !== undefined && fm[f] !== '' && fm[f] !== []) fmScore += 3;
+    else issues.push(`missing required frontmatter field: ${f}`);
+  }
+  for (const f of recommendedFields) {
+    if (fm[f] !== undefined && fm[f] !== '' && fm[f] !== []) fmScore += 1;
+  }
+  scores.frontmatterCompleteness = Math.min(10, fmScore);
+
+  // 2. Body depth (max 10)
+  let bodyScore = 0;
+  if (tokens >= 500) bodyScore += 4;
+  else if (tokens >= 300) bodyScore += 2;
+  else if (tokens >= 180) bodyScore += 1;
+  else warnings.push(`short body (${tokens} tokens)`);
+
+  if (headers >= 10) bodyScore += 4;
+  else if (headers >= 5) bodyScore += 2;
+  else if (headers >= 3) bodyScore += 1;
+
+  if (lines >= 100) bodyScore += 2;
+  scores.bodyDepth = Math.min(10, bodyScore);
+
+  // 3. Required sections (max 10)
+  const requiredSections = ['Contract', 'Process', 'Guardrails', 'Completion'];
+  let secScore = 0;
+  for (const sec of requiredSections) {
+    if (body.includes(`## ${sec}`) || body.includes(`## ${sec} Criteria`)) secScore += 2.5;
+    else issues.push(`missing ## ${sec} section`);
+  }
+  scores.sections = Math.min(10, secScore);
+
+  // 4. Assets presence (max 5)
+  const skillDir = path.join(root, skillPath);
+  let assetScore = 0;
+  const dirs = ['scripts', 'references', 'assets', 'behavioral-fixtures', 'evals'];
+  for (const dir of dirs) {
+    if (await fs.access(path.join(skillDir, dir)).then(() => true).catch(() => false)) {
+      assetScore += 1;
+    }
+  }
+  scores.assets = Math.min(5, assetScore);
+
+  // 5. Behavioral spec (max 5)
+  let behScore = 0;
+  if (fm.stopCondition && fm.stopCondition !== '') behScore += 2;
+  else issues.push('missing stopCondition');
+  if (fm.maxIterations && Number(fm.maxIterations) > 0) behScore += 1;
+  if (fm.inputs && fm.inputs.length > 0) behScore += 1;
+  if (fm.outputs && fm.outputs.length > 0) behScore += 2;
+  scores.behavioralSpec = Math.min(5, behScore);
+
+  // 6. Safety (max 5)
+  let safetyScore = 5;
+  const riskyPatterns = [
+    { pattern: /rm\s+-rf\s+\//, label: 'dangerous rm -rf /' },
+    { pattern: /curl\s*\|?\s*bash/, label: 'curl | bash pattern' },
+    { pattern: /eval\s*\(/, label: 'eval() usage' },
+    { pattern: /chmod\s+777/, label: 'chmod 777' },
+  ];
+  for (const { pattern, label } of riskyPatterns) {
+    if (pattern.test(body)) {
+      safetyScore -= 2;
+      issues.push(`risky pattern: ${label}`);
+    }
+  }
+  if (fm.risk === 'high' && !fm.sideEffects?.length) {
+    safetyScore -= 1;
+    warnings.push('high risk skill without declared sideEffects');
+  }
+  scores.safety = Math.max(0, safetyScore);
+
+  // 7. Prompt versioning (max 10)
+  let pvScore = 0;
+  if (fm.promptVersion && fm.promptVersion !== '') pvScore += 5;
+  const skillName = path.basename(skillPath);
+  const promptsDir = path.join(agentsSkillsDir, 'prompts');
+  try {
+    const promptFiles = await fs.readdir(promptsDir);
+    const hasVersionedPrompt = promptFiles.some(f => f.startsWith(skillName + '-') || f.startsWith(skillName + '.'));
+    if (hasVersionedPrompt) pvScore += 3;
+  } catch {}
+  const changelogPatterns = ['CHANGELOG', 'HISTORY', 'version history', 'prompt changelog'];
+  const hasChangelog = changelogPatterns.some(p => body.toLowerCase().includes(p.toLowerCase()));
+  if (hasChangelog) pvScore += 2;
+  scores.promptVersioning = Math.min(10, pvScore);
+
+  // 8. Model tier alignment (max 10)
+  let mtScore = 0;
+  const validTiers = ['reasoning', 'code', 'fast', 'router'];
+  if (fm.modelTier && validTiers.includes(fm.modelTier)) mtScore += 5;
+  const skillTier = inferSkillTier(skillName, fm.category, fm);
+  let alignmentBonus = 0;
+  if (skillTier === 1 && fm.modelTier === 'router') alignmentBonus = 3;
+  else if (skillTier === 2 && (fm.modelTier === 'fast' || fm.modelTier === 'reasoning')) alignmentBonus = 2;
+  else if (skillTier === 3 && fm.modelTier === 'code') alignmentBonus = 2;
+  else if (skillTier === 4 && (fm.modelTier === 'code' || fm.modelTier === 'reasoning')) alignmentBonus = 2;
+  else if (fm.modelTier && validTiers.includes(fm.modelTier)) alignmentBonus = 1;
+  if (alignmentBonus > 0) mtScore += alignmentBonus;
+  else if (fm.modelTier && validTiers.includes(fm.modelTier)) mtScore -= 5;
+  scores.modelTierAlignment = Math.max(0, Math.min(10, mtScore));
+
+  // 9. Artifact schema (max 10)
+  let asScore = 0;
+  const outputs = fm.outputs || [];
+  const hasStructuredOutputs = outputs.some(o => typeof o === 'object' ? (o.type && o.properties) : false) ||
+    (typeof fm.outputs === 'string' && fm.outputs.includes('type') && fm.outputs.includes('properties'));
+  if (hasStructuredOutputs) asScore += 5;
+  const schemaRef = body.includes('.agents/skills/platform/schemas/') || body.includes('schemas/');
+  if (schemaRef) asScore += 3;
+  if (fm.artifactType && fm.artifactType !== '') asScore += 2;
+  scores.artifactSchema = Math.min(10, asScore);
+
+  // 10. Progressive disclosure (max 10)
+  let pdScore = 0;
+  const hasOperatingContract = /##\s+Operating\s+Contract/i.test(body) || /##\s+Contract/i.test(body);
+  if (!hasOperatingContract) pdScore += 5;
+  const hasInclude = body.includes('@include') || body.includes('include::') || (body.includes('contract') && body.includes('external'));
+  if (hasInclude) pdScore += 3;
+  const firstHeaderMatch = body.match(/^#{1,6}\s+.+$/m);
+  const firstHeader = firstHeaderMatch ? firstHeaderMatch[0].toLowerCase() : '';
+  const startsWithPurpose = firstHeader.includes('purpose') || firstHeader.includes('about') || firstHeader.includes('overview') || firstHeader.includes('introduction');
+  if (startsWithPurpose) pdScore += 2;
+  scores.progressiveDisclosure = Math.min(10, pdScore);
+
+  // 11. Observability (max 5)
+  let obScore = 0;
+  if (body.includes('record-execution.mjs') || body.includes('execution tracing') || body.includes('trace') || body.includes('observability')) obScore += 2;
+  const hasTraceSection = body.toLowerCase().includes('trace') && (body.includes('## Completion') || body.includes('## Criteria'));
+  if (hasTraceSection) obScore += 1;
+  if (fm.promptVersion && fm.promptVersion !== '') obScore += 2;
+  scores.observability = Math.min(5, obScore);
+
+  // 12. Regression coverage (max 10)
+  let rcScore = 0;
+  if (fm.fixturesPath && fm.fixturesPath !== '') {
+    const fixturesFile = path.join(root, skillPath, fm.fixturesPath);
+    if (await fs.access(fixturesFile).then(() => true).catch(() => false)) {
+      rcScore += 5;
+      const content = await fs.readFile(fixturesFile, 'utf8').catch(() => '');
+      if (content.trim().length > 0) rcScore += 3;
+      if (content.toLowerCase().includes('regression')) rcScore += 2;
+    }
+  }
+  scores.regressionCoverage = Math.min(10, rcScore);
+
+  // 13. Diataxis completeness (max 5)
+  let dtScore = 0;
+  const hasHowTo = body.includes('## Process') || body.includes('## Steps') || body.includes('## Procedure') || body.includes('How to');
+  if (hasHowTo) dtScore += 2;
+  const hasReference = body.includes('## Contract') || body.includes('## Schema') || body.includes('## Reference') || (body.includes('type:') && body.includes('properties:'));
+  if (hasReference) dtScore += 2;
+  const hasExplanation = body.includes('## Why') || body.includes('## Principles') || body.includes('## Rationale') || body.includes('because');
+  if (hasExplanation) dtScore += 1;
+  scores.diataxisCompleteness = Math.min(5, dtScore);
+
+  const total = Object.values(scores).reduce((a, b) => a + b, 0);
+  const scripts = await getScriptCount(skillDir);
+  const scriptLoc = await getScriptLoc(skillDir);
+  const tier = tierFor(total, lines, scripts, scriptLoc);
+
+  const grade = total >= 90 ? 'A' : total >= 80 ? 'B' : total >= 70 ? 'C' : total >= 60 ? 'D' : 'F';
+
+  return {
+    skill: path.basename(skillPath),
+    path: skillPath,
+    scores,
+    total,
+    grade,
+    tier,
+    issues,
+    warnings,
+    metrics: { tokens, lines, headers, scripts, scriptLoc },
+  };
+}
+
+async function main() {
+  const args = process.argv.slice(2);
+  const skillPath = args.find(a => !a.startsWith('--'));
+  const json = args.includes('--json');
+  const minScore = parseInt(args.find(a => a.startsWith('--minimum-score='))?.split('=')[1]);
+
+  if (!skillPath) {
+    console.error('Usage: node quality-scorer.mjs <skill-path> [--json] [--minimum-score=N]');
+    process.exit(1);
+  }
+
+  const result = await scoreSkill(skillPath);
+
+  if (json) {
+    console.log(JSON.stringify(result, null, 2));
+  } else {
+    console.log(`\nSkill: ${result.skill}`);
+    console.log(`Score: ${result.total}/100 (Grade ${result.grade}, Tier: ${result.tier})`);
+    console.log(`Metrics: ${result.metrics.tokens} tokens, ${result.metrics.lines} lines, ${result.metrics.headers} headers, ${result.metrics.scripts} scripts, ${result.metrics.scriptLoc} LOC`);
+    if (result.issues.length) {
+      console.log('\nIssues:');
+      for (const i of result.issues) console.log(`  - ${i}`);
+    }
+    if (result.warnings.length) {
+      console.log('\nWarnings:');
+      for (const w of result.warnings) console.log(`  - ${w}`);
+    }
+    console.log('\nBreakdown:');
+    for (const [key, value] of Object.entries(result.scores)) {
+      console.log(`  ${key}: ${value}`);
+    }
+  }
+
+  if (minScore !== undefined && result.total < minScore) {
+    console.error(`\nScore ${result.total} is below minimum ${minScore}`);
+    process.exit(1);
+  }
+}
+
+main().catch(err => {
+  console.error('Error:', err);
+  process.exit(1);
+});

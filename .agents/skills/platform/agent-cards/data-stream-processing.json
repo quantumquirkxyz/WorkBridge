@@ -1,0 +1,31 @@
+{
+  "name": "stream-processing",
+  "description": "Stream processing (Flink, Kafka Streams, RisingWave, windowing, state, exactly-once).",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/data/stream-processing/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "data/stream-processing",
+      "name": "stream-processing",
+      "description": "Stream processing (Flink, Kafka Streams, RisingWave, windowing, state, exactly-once).",
+      "tags": [
+        "\"data\""
+      ],
+      "parameters": {
+        "trustTier": "3",
+        "modelTier": "reasoning",
+        "artifactType": "pull-request"
+      }
+    }
+  ]
+}

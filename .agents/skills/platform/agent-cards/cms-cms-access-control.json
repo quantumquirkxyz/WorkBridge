@@ -1,0 +1,31 @@
+{
+  "name": "cms-access-control",
+  "description": "Design CMS access control — roles, permissions, editorial workflows, and publishing boundaries — with explicit least-privilege and auditability.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/cms/cms-access-control/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "cms/cms-access-control",
+      "name": "cms-access-control",
+      "description": "Design CMS access control — roles, permissions, editorial workflows, and publishing boundaries — with explicit least-privilege and auditability.",
+      "tags": [
+        "\"cms\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "cms"
+      }
+    }
+  ]
+}

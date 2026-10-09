@@ -1,0 +1,31 @@
+{
+  "name": "devops-terraform-iac",
+  "description": "Design infrastructure as code — Terraform / Pulumi / CloudFormation — for reproducible, version-controlled, auditable cloud infrastructure.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/devops/devops-terraform-iac/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "devops/devops-terraform-iac",
+      "name": "devops-terraform-iac",
+      "description": "Design infrastructure as code — Terraform / Pulumi / CloudFormation — for reproducible, version-controlled, auditable cloud infrastructure.",
+      "tags": [
+        "\"devops\""
+      ],
+      "parameters": {
+        "trustTier": "3",
+        "modelTier": "reasoning",
+        "artifactType": "devops"
+      }
+    }
+  ]
+}

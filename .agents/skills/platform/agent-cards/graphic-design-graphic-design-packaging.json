@@ -1,0 +1,30 @@
+{
+  "name": "graphic-design-packaging",
+  "description": "Design physical packaging — dielines, structure, materials, regulatory labels — with production-ready specifications.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/graphic-design/graphic-design-packaging/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "graphic-design/graphic-design-packaging",
+      "name": "graphic-design-packaging",
+      "description": "Design physical packaging — dielines, structure, materials, regulatory labels — with production-ready specifications.",
+      "tags": [
+        "\"graphic-design\""
+      ],
+      "parameters": {
+        "modelTier": "reasoning",
+        "artifactType": "plan"
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "llm-fine-tuning",
+  "description": "Fine-tune LLMs — LoRA, QLoRA, full fine-tuning, data preparation, evaluation, deployment — with reproducibility, efficiency, and safety controls.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/ai/llm-fine-tuning/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "ai/llm-fine-tuning",
+      "name": "llm-fine-tuning",
+      "description": "Fine-tune LLMs — LoRA, QLoRA, full fine-tuning, data preparation, evaluation, deployment — with reproducibility, efficiency, and safety controls.",
+      "tags": [
+        "\"ai\""
+      ],
+      "parameters": {
+        "trustTier": "3",
+        "modelTier": "reasoning",
+        "artifactType": "ai"
+      }
+    }
+  ]
+}

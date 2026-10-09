@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Chapter</title>
+<style>
+  :root {
+    --page-width: 148mm;
+    --page-height: 210mm;
+    --margin-outer: 20mm;
+    --margin-inner: 24mm;
+    --margin-top: 22mm;
+    --margin-bottom: 18mm;
+    --baseline: 5.5mm;
+    --font-body: "Georgia", "Times New Roman", serif;
+    --font-sans: "Helvetica Neue", "Arial", sans-serif;
+    --color-text: #1a1a1a;
+    --color-muted: #555555;
+    --color-rule: #bbbbbb;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 24px;
+    background: #e5e5e5;
+    font-family: var(--font-body);
+    color: var(--color-text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .chapter {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 6mm;
+    width: var(--page-width);
+    max-width: 100%;
+    margin: 0 auto;
+    background: #ffffff;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    padding: var(--margin-top) var(--margin-outer) var(--margin-bottom) var(--margin-inner);
+  }
+
+  /* Running header */
+  .running-header {
+    grid-column: span 12;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: var(--font-sans);
+    font-size: 8.5pt;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--color-muted);
+    border-bottom: 0.5pt solid var(--color-rule);
+    padding-bottom: calc(var(--baseline) * 0.5);
+    margin-bottom: calc(var(--baseline) * 2);
+  }
+
+  .running-header .chapter-title { font-weight: 600; color: var(--color-text); }
+
+  /* Chapter opener */
+  .chapter-title {
+    grid-column: span 12;
+    font-family: var(--font-body);
+    font-size: 26pt;
+    line-height: 1.15;
+    font-weight: 700;
+    margin: 0 0 calc(var(--baseline) * 1.2) 0;
+  }
+
+  .chapter-subtitle {
+    grid-column: span 12;
+    font-family: var(--font-body);
+    font-size: 13pt;
+    line-height: 1.3;
+    font-style: italic;
+    color: var(--color-muted);
+    margin-bottom: calc(var(--baseline) * 2);
+  }
+
+  /* Body text */
+  .body {
+    grid-column: span 12;
+    font-size: 11pt;
+    line-height: 1.55;
+    text-align: justify;
+    hyphens: auto;
+  }
+
+  .body p { margin: 0 0 var(--baseline) 0; text-indent: 1.5em; }
+  .body p.no-indent { text-indent: 0; }
+
+  /* Drop cap */
+  .drop-cap::first-letter {
+    float: left;
+    font-size: 48pt;
+    line-height: 0.85;
+    padding-right: 3pt;
+    padding-top: 2pt;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  /* Footnotes */
+  .footnote {
+    grid-column: span 12;
+    font-size: 8.5pt;
+    line-height: 1.45;
+    color: var(--color-muted);
+    border-top: 0.5pt solid var(--color-rule);
+    padding-top: calc(var(--baseline) * 0.75);
+    margin-top: calc(var(--baseline) * 3);
+  }
+
+  .footnote ol { margin: 0; padding-left: 1.2em; }
+  .footnote li { margin-bottom: calc(var(--baseline) * 0.5); }
+
+  /* Page number */
+  .page-number {
+    grid-column: span 12;
+    text-align: center;
+    font-family: var(--font-sans);
+    font-size: 9pt;
+    color: var(--color-muted);
+    margin-top: calc(var(--baseline) * 2);
+  }
+
+  @media (max-width: 900px) {
+    .chapter { width: 100%; }
+    .chapter-title { font-size: 20pt; }
+  }
+</style>
+</head>
+<body>
+  <article class="chapter">
+    <header class="running-header">
+      <span class="chapter-title">Chapter Three</span>
+      <span class="publication-title">The Weight of Pages</span>
+    </header>
+
+    <h1 class="chapter-title">The Weight of Pages</h1>
+    <p class="chapter-subtitle">On materiality, memory, and the books we keep.</p>
+
+    <div class="body">
+      <p class="drop-cap">Every book is an argument for its own physical existence. In an age of infinite scroll and disposable screens, the act of printing a page becomes a quiet assertion: this sequence of words matters enough to occupy space.</p>
+
+      <p>Type has weight. Not only the mass of paper and ink, but the rhythmic weight of justified lines, the visual weight of a well-set chapter opener, and the editorial weight of deciding what stays and what is cut.</p>
+
+      <p>Consider the footnote. It is a form of editorial conscience — a place for qualifications, sources, and small corrections that do not belong in the main flow but cannot be omitted entirely.<span class="footnote-marker">*</span> In a well-designed book, footnotes do not distract; they recede with smaller type and tighter leading, available when needed and invisible when not.</p>
+
+      <p>Similarly, the drop cap marks a threshold. It tells the reader that a new section begins, not through words alone but through a shift in visual rhythm. The best drop caps are unobtrusive: they belong to the same typeface as the body, scaled rather than substituted, aligned so that the first line reads as naturally as any other.</p>
+
+      <p class="no-indent">When designers treat these elements as structural rather than decorative, the result is a book that feels inevitable — as though every page could not have been any other way.</p>
+    </div>
+
+    <div class="footnote">
+      <ol>
+        <li id="fn-1">See G. S. Hart, <em>Material Typography</em> (London: Reaktion Books, 2018), 42–58.</li>
+        <li id="fn-2">On the relationship between page proportions and reading speed, see T. Bringhurst, <em>The Elements of Typographic Style</em>, 4th ed. (Point Roberts, WA: Hartley & Marks, 2012), 158–165.</li>
+      </ol>
+    </div>
+
+    <div class="page-number">47</div>
+  </article>
+</body>
+</html>

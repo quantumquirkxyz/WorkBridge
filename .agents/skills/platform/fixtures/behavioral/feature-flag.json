@@ -1,0 +1,13 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-feature-flag",
+      "skill": "feature-flag",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": ["## Contract", "## Provenance", "## Artifact", "FeatureFlagArtifact", "4 weeks", "rollout"],
+        "doesNotContain": ["## Operating Contract"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+# Model routing rules for quirk Skills
+# Determines which model tier to use for each skill based on task complexity
+
+version: "1.0"
+description: Model tier routing rules for quirk Skills
+
+defaultTier: standard
+
+rules:
+  # Router tier - fast, lightweight routing decisions
+  - match:
+      trustTier: [1]
+      category: [routing, platform]
+    assign: router
+    fallback: fast
+
+  # Fast tier - read-only analysis, simple tasks
+  - match:
+      trustTier: [2]
+      artifactType: [plan, review]
+    assign: fast
+    fallback: standard
+
+  # Code tier - implementation, testing, file manipulation
+  - match:
+      trustTier: [3]
+      artifactType: [implementation, spec, ticket]
+      modelTier: [code]
+    assign: code
+    fallback: standard
+
+  # Reasoning tier - complex analysis, architecture, research
+  - match:
+      trustTier: [3]
+      artifactType: [spec, adr, plan]
+      modelTier: [reasoning]
+    assign: reasoning
+    fallback: code
+
+  # High trust + autonomous = code or reasoning
+  - match:
+      trustTier: [4]
+    assign: code
+    fallback: reasoning
+
+# Model tier definitions
+tiers:
+  router:
+    description: Fast, lightweight models for routing and simple lookups
+    examples: [haiku, flash, gpt-4o-mini]
+    maxLatencyMs: 500
+    maxTokens: 4096
+
+  fast:
+    description: Fast models for read-only analysis and simple generation
+    examples: [sonnet, gpt-4o, gemini-1.5-flash]
+    maxLatencyMs: 2000
+    maxTokens: 8192
+
+  standard:
+    description: Balanced models for general-purpose work
+    examples: [sonnet, gpt-4.1, gemini-1.5-pro]
+    maxLatencyMs: 5000
+    maxTokens: 16384
+
+  code:
+    description: Code-specialized models for implementation and testing
+    examples: [codex, gpt-4.1-codex, claude-code]
+    maxLatencyMs: 10000
+    maxTokens: 32768
+
+  reasoning:
+    description: High-capability models for complex reasoning and analysis
+    examples: [opus, o3, gpt-4.1-thinking]
+    maxLatencyMs: 30000
+    maxTokens: 65536
+
+# Validation rules
+validation:
+  trustTier1:
+    allowedModelTiers: [router, fast]
+    requiresApproval: false
+    maxAutonomy: low
+
+  trustTier2:
+    allowedModelTiers: [fast, standard]
+    requiresApproval: false
+    maxAutonomy: medium
+
+  trustTier3:
+    allowedModelTiers: [standard, code, reasoning]
+    requiresApproval: true
+    maxAutonomy: high
+
+  trustTier4:
+    allowedModelTiers: [code, reasoning]
+    requiresApproval: true
+    maxAutonomy: full

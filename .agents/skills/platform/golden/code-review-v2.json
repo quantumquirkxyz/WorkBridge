@@ -1,0 +1,17 @@
+{
+  "traceId": "golden-code-review-001",
+  "spanId": "golden-span-002",
+  "parentSpanId": null,
+  "skill": "code-review",
+  "skillVersion": "2.0",
+  "promptVersion": "2.0",
+  "model": { "provider": "anthropic", "model": "claude-sonnet-4-20250514", "tier": "reasoning" },
+  "input": { "artifactType": "review", "sizeTokens": 5000, "contextRefs": ["branch-feat-28"] },
+  "output": { "artifactType": "ReviewArtifact", "sizeTokens": 2200, "schemaValid": true, "outputRef": "artifacts/code-review/pr-42.json" },
+  "execution": { "startedAt": "2026-10-01T21:00:00Z", "completedAt": "2026-10-01T21:00:22Z", "durationMs": 22000, "iterations": 1, "retries": 0 },
+  "tools": [{ "name": "read", "calls": 20 }, { "name": "grep", "calls": 10 }, { "name": "bash", "calls": 2 }],
+  "quality": { "artifactPassedQualityBar": true, "artifactScore": 88, "evaluators": ["behavioral", "review-effectiveness"], "findingsCount": 2 },
+  "result": "completed",
+  "blockedBy": [],
+  "nextConsumer": "plan-review-fixes"
+}

@@ -1,0 +1,31 @@
+{
+  "name": "remix",
+  "description": "Remix framework (loaders, actions, nested routes, progressive enhancement).",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/frontend/remix/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "frontend/remix",
+      "name": "remix",
+      "description": "Remix framework (loaders, actions, nested routes, progressive enhancement).",
+      "tags": [
+        "\"frontend\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "frontend"
+      }
+    }
+  ]
+}

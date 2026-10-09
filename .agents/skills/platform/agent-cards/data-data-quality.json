@@ -1,0 +1,31 @@
+{
+  "name": "data-quality",
+  "description": "Design data quality frameworks — Great Expectations, Soda, checks, observability, contracts — with explicit SLAs, freshness rules, and incident response for bad data.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/data/data-quality/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "data/data-quality",
+      "name": "data-quality",
+      "description": "Design data quality frameworks — Great Expectations, Soda, checks, observability, contracts — with explicit SLAs, freshness rules, and incident response for bad data.",
+      "tags": [
+        "\"data\""
+      ],
+      "parameters": {
+        "trustTier": "3",
+        "modelTier": "reasoning",
+        "artifactType": "data"
+      }
+    }
+  ]
+}

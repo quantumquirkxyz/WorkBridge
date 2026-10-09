@@ -1,0 +1,69 @@
+name: bug-fix
+description: Diagnosis loop for hard bugs and regressions
+entryPoint: diagnosing-bugs
+version: "2.0"
+
+states:
+  diagnosing-bugs:
+    type: investigator
+    description: Tight reproduction loop for intermittent or ambiguous failures
+    maxIterations: 6
+    transitions:
+      REPRODUCED: tdd
+      NEEDS_MORE_INFO: escalate
+      NOT_A_BUG: escalate
+
+  tdd:
+    type: executor
+    description: Test-driven development for the fix
+    modelTier: code
+    transitions:
+      GREEN: publish-open-pr
+      RED: tdd
+      BLOCKED: escalate
+
+  publish-open-pr:
+    type: artifact-writer
+    artifactType: pull-request
+    transitions:
+      OPENED: review-pr
+      FAILED: tdd
+
+  review-pr:
+    type: reviewer
+    axes: [Standards, Spec]
+    parallelSubAgents: true
+    transitions:
+      CLEAN: ship-subissue
+      FINDINGS: review-fix-loop
+      CONFLICT: resolving-merge-conflicts
+
+  review-fix-loop:
+    type: orchestrator
+    loop:
+      - plan-review-fixes
+      - implement-review-fixes
+      - review-pr
+    maxIterations: 5
+    transitions:
+      CLEAN: ship-subissue
+      BLOCKED: escalate
+      CONFLICT: resolving-merge-conflicts
+
+  resolving-merge-conflicts:
+    type: resolver
+    transitions:
+      RESOLVED: review-pr
+      BLOCKED: escalate
+
+  ship-subissue:
+    type: publisher
+    transitions:
+      MERGED: done
+      FAILED: review-pr
+
+  escalate:
+    type: terminal
+
+  done:
+    type: terminal

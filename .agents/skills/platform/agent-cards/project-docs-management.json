@@ -1,0 +1,31 @@
+{
+  "name": "docs-management",
+  "description": "Keep repository documentation, ADRs, and durable context aligned with the current project shape — with explicit consumer rules.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/project/docs-management/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "project/docs-management",
+      "name": "docs-management",
+      "description": "Keep repository documentation, ADRs, and durable context aligned with the current project shape — with explicit consumer rules.",
+      "tags": [
+        "\"project\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "adr"
+      }
+    }
+  ]
+}

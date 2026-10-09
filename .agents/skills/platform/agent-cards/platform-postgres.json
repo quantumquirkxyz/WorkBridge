@@ -1,0 +1,29 @@
+{
+  "name": "postgres",
+  "description": "Shape PostgreSQL schema and query decisions — so the data model stays durable and reviewable.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/platform/postgres/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": false,
+    "workflowOrchestration": false
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "platform/postgres",
+      "name": "postgres",
+      "description": "Shape PostgreSQL schema and query decisions — so the data model stays durable and reviewable.",
+      "tags": [
+        "platform"
+      ],
+      "parameters": {
+        "trustTier": "1"
+      }
+    }
+  ]
+}

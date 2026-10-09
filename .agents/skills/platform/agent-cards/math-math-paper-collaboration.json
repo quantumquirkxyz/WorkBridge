@@ -1,0 +1,31 @@
+{
+  "name": "math-paper-collaboration",
+  "description": "Manage mathematical paper collaboration — Overleaf / GitHub / arXiv integration, citation tracking, version control, reproducible computation links, and co-author coordination.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/math/math-paper-collaboration/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "math/math-paper-collaboration",
+      "name": "math-paper-collaboration",
+      "description": "Manage mathematical paper collaboration — Overleaf / GitHub / arXiv integration, citation tracking, version control, reproducible computation links, and co-author coordination.",
+      "tags": [
+        "\"math\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "math"
+      }
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+Coated White Board — Material Swatch Reference
+===============================================
+
+Appearance
+----------
+Bright, smooth, opaque paperboard with a clay coating on one side (C1S) or both sides (C2S).
+Excellent ink holdout and color vibrancy. Preferred for high-graphic folding cartons and luxury packaging.
+
+Color Values (print-ready)
+--------------------------
+CMYK:  C=0  M=0  Y=0  K=0  (pure white substrate)
+RGB:   R=255 G=255 B=255  (screen preview only)
+Pantone: White (Pantone 11-0601 TCX for screen; for print, use uncoated/coated white stock)
+
+Print Notes
+-----------
+- Offset, digital offset, flexo, and gravure all perform well.
+- Solids appear crisp and saturated.
+- Can be flood-coated or spot-varnished for premium tactile effects.
+- UV coatings add high-gloss or soft-touch finishes.
+
+Sustainability
+--------------
+- Recyclable if de-inking facilities are available.
+- Coating additives may reduce recyclability; check with mill.
+- Recycled coated white board available in 10%–100% post-consumer content.
+- FSC-certified coated stocks widely available.

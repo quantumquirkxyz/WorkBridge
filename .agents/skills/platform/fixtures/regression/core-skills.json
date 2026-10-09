@@ -1,0 +1,25 @@
+{
+  "fixtures": [
+    {
+      "id": "regression-validate-skill",
+      "skill": "skill-creator",
+      "version": "1.0.0",
+      "input": "Create a skill for PostgreSQL query optimization",
+      "expectedOutput": {
+        "contains": ["SKILL.md", "interactive interview", "validation-only mode", "## Contract"],
+        "minLength": 200,
+        "maxLength": 10000
+      }
+    },
+    {
+      "id": "regression-diagnose-bug",
+      "skill": "diagnosing-bugs",
+      "version": "1.0.0",
+      "input": "Diagnose why the login flow returns 500 intermittently",
+      "expectedOutput": {
+        "contains": ["diagnosis", "root cause", "repro", "fix"],
+        "minLength": 300
+      }
+    }
+  ]
+}

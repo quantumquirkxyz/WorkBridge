@@ -1,0 +1,31 @@
+{
+  "name": "devops-ci-cd-pipeline",
+  "description": "Design CI/CD pipelines — build, test, security scan, deploy, rollback — with reproducible steps, environment parity, and deployment gates.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/devops/devops-ci-cd-pipeline/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "devops/devops-ci-cd-pipeline",
+      "name": "devops-ci-cd-pipeline",
+      "description": "Design CI/CD pipelines — build, test, security scan, deploy, rollback — with reproducible steps, environment parity, and deployment gates.",
+      "tags": [
+        "\"devops\""
+      ],
+      "parameters": {
+        "trustTier": "3",
+        "modelTier": "reasoning",
+        "artifactType": "devops"
+      }
+    }
+  ]
+}

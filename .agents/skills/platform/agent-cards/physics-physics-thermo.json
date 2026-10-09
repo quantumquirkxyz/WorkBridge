@@ -1,0 +1,31 @@
+{
+  "name": "physics-thermo",
+  "description": "Model thermodynamic systems — first and second law, heat engines, entropy, phase transitions — with energy accounting and efficiency bounds.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/physics/physics-thermo/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "physics/physics-thermo",
+      "name": "physics-thermo",
+      "description": "Model thermodynamic systems — first and second law, heat engines, entropy, phase transitions — with energy accounting and efficiency bounds.",
+      "tags": [
+        "\"physics\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "physics"
+      }
+    }
+  ]
+}

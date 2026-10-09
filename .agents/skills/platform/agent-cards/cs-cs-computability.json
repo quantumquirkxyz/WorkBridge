@@ -1,0 +1,31 @@
+{
+  "name": "cs-computability",
+  "description": "Analyze computability questions — decidability, reductions, recognizability, and undecidability proofs — with formal problem transformations.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/cs/cs-computability/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "cs/cs-computability",
+      "name": "cs-computability",
+      "description": "Analyze computability questions — decidability, reductions, recognizability, and undecidability proofs — with formal problem transformations.",
+      "tags": [
+        "\"cs\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "cs"
+      }
+    }
+  ]
+}

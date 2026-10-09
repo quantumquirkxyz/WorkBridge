@@ -1,0 +1,31 @@
+{
+  "name": "improve-codebase-architecture",
+  "description": "Scan a codebase for deepening opportunities and present candidates as a visual HTML report, then grill through the selected one.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/engineering/improve-codebase-architecture/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "engineering/improve-codebase-architecture",
+      "name": "improve-codebase-architecture",
+      "description": "Scan a codebase for deepening opportunities and present candidates as a visual HTML report, then grill through the selected one.",
+      "tags": [
+        "\"engineering\""
+      ],
+      "parameters": {
+        "trustTier": "2",
+        "modelTier": "fast",
+        "artifactType": "pull-request"
+      }
+    }
+  ]
+}

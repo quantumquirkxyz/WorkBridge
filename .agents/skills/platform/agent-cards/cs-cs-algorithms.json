@@ -1,0 +1,31 @@
+{
+  "name": "cs-algorithms",
+  "description": "Design and analyse algorithms — correctness proof, complexity analysis (time and space), and stability — with explicit proof of invariants and termination.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/cs/cs-algorithms/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "cs/cs-algorithms",
+      "name": "cs-algorithms",
+      "description": "Design and analyse algorithms — correctness proof, complexity analysis (time and space), and stability — with explicit proof of invariants and termination.",
+      "tags": [
+        "\"cs\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "cs"
+      }
+    }
+  ]
+}

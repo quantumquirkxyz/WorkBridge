@@ -1,0 +1,31 @@
+{
+  "name": "xr-performance",
+  "description": "Optimize XR performance — frame rate, motion-to-photon latency, asset budgets, and thermal constraints — with comfort-aware trade-offs.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/xr/xr-performance/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "xr/xr-performance",
+      "name": "xr-performance",
+      "description": "Optimize XR performance — frame rate, motion-to-photon latency, asset budgets, and thermal constraints — with comfort-aware trade-offs.",
+      "tags": [
+        "\"xr\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "xr"
+      }
+    }
+  ]
+}

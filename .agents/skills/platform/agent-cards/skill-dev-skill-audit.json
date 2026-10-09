@@ -1,0 +1,31 @@
+{
+  "name": "skill-audit",
+  "description": "Audit the Skills bundle, lockfile, symlink parity, and contract drift — with actionable maintenance output.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/skill-dev/skill-audit/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "skill-dev/skill-audit",
+      "name": "skill-audit",
+      "description": "Audit the Skills bundle, lockfile, symlink parity, and contract drift — with actionable maintenance output.",
+      "tags": [
+        "\"skill-dev\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "skill-dev"
+      }
+    }
+  ]
+}

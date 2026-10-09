@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stat Card — Monthly Revenue</title>
+<style>
+  :root {
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --text: #1a1a2e;
+    --text-secondary: #475569;
+    --accent: #0072B2;
+    --sparkline: #56B4E9;
+    --border: #e2e8f0;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+  }
+  .stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 320px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .stat-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+  }
+  .stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .stat-trend {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #009E73;
+    margin-top: 0.25rem;
+  }
+  .sparkline-container {
+    margin-top: 1rem;
+  }
+  .sparkline-container svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+</style>
+</head>
+<body>
+  <article class="stat-card" aria-labelledby="card-title">
+    <p class="stat-label" id="card-label">Monthly Revenue</p>
+    <p class="stat-value" id="card-title">$48.2K</p>
+    <p class="stat-trend">+12.4% vs last month</p>
+    <div class="sparkline-container" aria-label="Sparkline showing revenue trend over the last 6 months">
+      <svg viewBox="0 0 268 60" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="spark-title spark-desc">
+        <title id="spark-title">Revenue trend sparkline</title>
+        <desc id="spark-desc">A line chart showing monthly revenue from January to June 2024. Values: 18K, 22K, 31K, 27K, 42K, 48.2K. Overall trend is upward.</desc>
+        <polyline
+          fill="none"
+          stroke="#0072B2"
+          stroke-width="2"
+          points="0,50 44,40 89,22 134,28 178,10 223,4 268,0"
+          aria-label="Revenue trend sparkline: 18K, 22K, 31K, 27K, 42K, 48.2K"
+        />
+        <circle cx="268" cy="0" r="3" fill="#0072B2" aria-label="Current value: $48.2K"/>
+      </svg>
+    </div>
+  </article>
+</body>
+</html>

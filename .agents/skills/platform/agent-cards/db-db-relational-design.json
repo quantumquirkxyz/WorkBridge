@@ -1,0 +1,31 @@
+{
+  "name": "db-relational-design",
+  "description": "Design relational schemas — entities, relations, keys, indexes, constraints — with normalisation, performance, and migration planning.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/db/db-relational-design/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "db/db-relational-design",
+      "name": "db-relational-design",
+      "description": "Design relational schemas — entities, relations, keys, indexes, constraints — with normalisation, performance, and migration planning.",
+      "tags": [
+        "\"db\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "plan"
+      }
+    }
+  ]
+}

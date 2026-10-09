@@ -1,0 +1,17 @@
+{
+  "traceId": "golden-work-item-router-001",
+  "spanId": "golden-span-009",
+  "parentSpanId": null,
+  "skill": "work-item-router",
+  "skillVersion": "2.0",
+  "promptVersion": "2.0",
+  "model": { "provider": "anthropic", "model": "claude-sonnet-4-20250514", "tier": "reasoning" },
+  "input": { "artifactType": "routing", "sizeTokens": 1800, "contextRefs": ["governance-index"] },
+  "output": { "artifactType": "RoutingArtifact", "sizeTokens": 540, "schemaValid": true, "outputRef": "artifacts/work-item-router/route-decision.json" },
+  "execution": { "startedAt": "2026-10-01T15:45:00Z", "completedAt": "2026-10-01T15:45:07Z", "durationMs": 7000, "iterations": 1, "retries": 0 },
+  "tools": [{ "name": "read", "calls": 5 }, { "name": "grep", "calls": 1 }],
+  "quality": { "artifactPassedQualityBar": true, "artifactScore": 100, "evaluators": ["behavioral", "traceability"], "findingsCount": 0 },
+  "result": "completed",
+  "blockedBy": [],
+  "nextConsumer": "ask-to"
+}

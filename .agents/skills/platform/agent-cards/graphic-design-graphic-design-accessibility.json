@@ -1,0 +1,30 @@
+{
+  "name": "graphic-design-accessibility",
+  "description": "Design inclusive graphic artifacts — WCAG-compliant visuals, colorblind-safe palettes, readable typography, and assistive-technology-compatible layouts for print and digital.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/graphic-design/graphic-design-accessibility/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "graphic-design/graphic-design-accessibility",
+      "name": "graphic-design-accessibility",
+      "description": "Design inclusive graphic artifacts — WCAG-compliant visuals, colorblind-safe palettes, readable typography, and assistive-technology-compatible layouts for print and digital.",
+      "tags": [
+        "\"graphic-design\""
+      ],
+      "parameters": {
+        "modelTier": "reasoning",
+        "artifactType": "plan"
+      }
+    }
+  ]
+}

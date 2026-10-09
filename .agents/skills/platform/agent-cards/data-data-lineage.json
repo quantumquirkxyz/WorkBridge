@@ -1,0 +1,31 @@
+{
+  "name": "data-lineage",
+  "description": "Data lineage (end-to-end tracing, impact analysis, column-level lineage, governance).",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/data/data-lineage/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "data/data-lineage",
+      "name": "data-lineage",
+      "description": "Data lineage (end-to-end tracing, impact analysis, column-level lineage, governance).",
+      "tags": [
+        "\"data\""
+      ],
+      "parameters": {
+        "trustTier": "3",
+        "modelTier": "reasoning",
+        "artifactType": "data"
+      }
+    }
+  ]
+}

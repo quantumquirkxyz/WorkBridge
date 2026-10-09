@@ -1,0 +1,31 @@
+{
+  "name": "web3-consensus",
+  "description": "Analyse and compare consensus mechanisms — PoW, PoS, BFT, DA, based sequencing — with security properties, finality guarantees, MEV, and economic incentive alignment.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/web3/web3-consensus/SKILL.md",
+  "version": "2",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "web3/web3-consensus",
+      "name": "web3-consensus",
+      "description": "Analyse and compare consensus mechanisms — PoW, PoS, BFT, DA, based sequencing — with security properties, finality guarantees, MEV, and economic incentive alignment.",
+      "tags": [
+        "\"web3\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "web3"
+      }
+    }
+  ]
+}

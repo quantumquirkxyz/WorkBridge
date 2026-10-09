@@ -1,0 +1,31 @@
+{
+  "name": "qa-manual-testing",
+  "description": "Perform manual test sessions — exploratory checks, edge cases, accessibility, and user-visible regressions — with explicit reproduction notes.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/qa/qa-manual-testing/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "qa/qa-manual-testing",
+      "name": "qa-manual-testing",
+      "description": "Perform manual test sessions — exploratory checks, edge cases, accessibility, and user-visible regressions — with explicit reproduction notes.",
+      "tags": [
+        "\"qa\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "test-strategy"
+      }
+    }
+  ]
+}

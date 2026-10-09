@@ -1,0 +1,13 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-docs-adrs",
+      "skill": "docs-adrs",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": ["## Contract", "## Provenance", "Architecture Decision Record", "status", "alternatives"],
+        "doesNotContain": ["## Operating Contract"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "compilers",
+  "description": "Design and implement compilers and interpreters — lexer, parser, AST, type checking, code generation, optimization — with correctness and modularity.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/compilers/compilers/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "compilers/compilers",
+      "name": "compilers",
+      "description": "Design and implement compilers and interpreters — lexer, parser, AST, type checking, code generation, optimization — with correctness and modularity.",
+      "tags": [
+        "\"compilers\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "compilers"
+      }
+    }
+  ]
+}

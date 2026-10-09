@@ -1,0 +1,41 @@
+{
+  "fixtures": [
+    {
+      "id": "review-pr-body-completeness",
+      "skill": "review-pr",
+      "type": "regression",
+      "version": "1.0.0",
+      "input": "Review PR #123 against main",
+      "expectedOutput": {
+        "contains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "## Completion",
+          "## Why",
+          "record-execution",
+          "traceId",
+          "Standards",
+          "Spec",
+          "parallel sub-agents"
+        ],
+        "minLength": 500
+      }
+    },
+    {
+      "id": "review-pr-observability",
+      "skill": "review-pr",
+      "type": "regression",
+      "version": "1.0.0",
+      "input": "Publish review findings on a GitHub PR",
+      "expectedOutput": {
+        "contains": [
+          "Traces record sub-agent parallelism",
+          "record-execution.mjs",
+          "ReviewArtifact"
+        ],
+        "minLength": 300
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "skill-creator",
+  "description": "Interactive interview and collaborative design tool that helps users define, research, name, generate, and validate complete Codex skills with SKILL.md, scripts, references, assets, ADRs, and traceability.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/skill-dev/skill-creator/SKILL.md",
+  "version": "4",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "skill-dev/skill-creator",
+      "name": "skill-creator",
+      "description": "Interactive interview and collaborative design tool that helps users define, research, name, generate, and validate complete Codex skills with SKILL.md, scripts, references, assets, ADRs, and traceability.",
+      "tags": [
+        "\"skill-dev\""
+      ],
+      "parameters": {
+        "trustTier": "3",
+        "modelTier": "reasoning",
+        "artifactType": "skill-dev"
+      }
+    }
+  ]
+}

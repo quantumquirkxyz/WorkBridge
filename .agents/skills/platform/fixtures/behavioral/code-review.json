@@ -1,0 +1,21 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-code-review",
+      "skill": "code-review",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": ["## Contract", "## Provenance", "## Artifact", "ReviewArtifact", "Standards and Spec"],
+        "doesNotContain": ["## Operating Contract"]
+      }
+    },
+    {
+      "id": "v2-frontmatter-code-review",
+      "skill": "code-review",
+      "type": "behavioral",
+      "expected": {
+        "frontmatterContains": ["modelTier: reasoning", "promptVersion: \"2.0\"", "artifactType: review"]
+      }
+    }
+  ]
+}

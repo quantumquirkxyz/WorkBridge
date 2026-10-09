@@ -1,0 +1,31 @@
+{
+  "name": "devops-feature-flags",
+  "description": "Design feature flag systems — gradual rollouts, A/B experiments, kill switches, targeting rules — with lifecycle management and operational runbooks.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/devops/devops-feature-flags/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "devops/devops-feature-flags",
+      "name": "devops-feature-flags",
+      "description": "Design feature flag systems — gradual rollouts, A/B experiments, kill switches, targeting rules — with lifecycle management and operational runbooks.",
+      "tags": [
+        "\"devops\""
+      ],
+      "parameters": {
+        "trustTier": "3",
+        "modelTier": "reasoning",
+        "artifactType": "feature-flag"
+      }
+    }
+  ]
+}

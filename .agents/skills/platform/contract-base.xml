@@ -1,0 +1,13 @@
+<contract>
+  <input>{{inputs}}</input>
+  <output>{{outputs}}</output>
+  <side-effects>{{sideEffects}}</side-effects>
+  <dependencies>{{dependencies}}</dependencies>
+  <stop-condition>{{stopCondition}}</stop-condition>
+  <risk>{{risk}}</risk>
+  <trust-tier>{{trustTier}}</trust-tier>
+  <boundary>
+    Stay within the skill's declared scope, trust tier, and side-effect policy.
+    Do not broaden scope without explicit user direction.
+  </boundary>
+</contract>

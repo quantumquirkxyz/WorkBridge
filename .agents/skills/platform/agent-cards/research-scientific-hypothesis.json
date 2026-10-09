@@ -1,0 +1,31 @@
+{
+  "name": "scientific-hypothesis",
+  "description": "Formulate testable scientific hypotheses — null/alternative, variables, controls, falsifiability — with explicit variables and statistical plan.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/research/scientific-hypothesis/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "research/scientific-hypothesis",
+      "name": "scientific-hypothesis",
+      "description": "Formulate testable scientific hypotheses — null/alternative, variables, controls, falsifiability — with explicit variables and statistical plan.",
+      "tags": [
+        "\"research\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "research"
+      }
+    }
+  ]
+}

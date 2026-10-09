@@ -1,0 +1,729 @@
+{
+  "category": "delivery",
+  "generatedAt": "2026-10-03T06:04:57.596Z",
+  "totalSkills": 14,
+  "avgScore": 72,
+  "gradeDistribution": {
+    "A": 0,
+    "B": 3,
+    "C": 5,
+    "D": 6,
+    "F": 0
+  },
+  "skillsByScore": [
+    {
+      "skill": "testing",
+      "path": ".agents/skills/delivery/testing",
+      "score": 65,
+      "grade": "D",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "webapp-testing",
+      "path": ".agents/skills/delivery/webapp-testing",
+      "score": 65,
+      "grade": "D",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "prototype",
+      "path": ".agents/skills/delivery/prototype",
+      "score": 66,
+      "grade": "D",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "research",
+      "path": ".agents/skills/delivery/research",
+      "score": 66,
+      "grade": "D",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "contribution-workflow-optimizer",
+      "path": ".agents/skills/delivery/contribution-workflow-optimizer",
+      "score": 67,
+      "grade": "D",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "implement-review-fixes",
+      "path": ".agents/skills/delivery/implement-review-fixes",
+      "score": 69,
+      "grade": "D",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "review-fix-loop",
+      "path": ".agents/skills/delivery/review-fix-loop",
+      "score": 70,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "diagnosing-bugs",
+      "path": ".agents/skills/delivery/diagnosing-bugs",
+      "score": 72,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "plan-review-fixes",
+      "path": ".agents/skills/delivery/plan-review-fixes",
+      "score": 72,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "resolving-merge-conflicts",
+      "path": ".agents/skills/delivery/resolving-merge-conflicts",
+      "score": 72,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "tdd",
+      "path": ".agents/skills/delivery/tdd",
+      "score": 78,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "code-review",
+      "path": ".agents/skills/delivery/code-review",
+      "score": 80,
+      "grade": "B",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "implement",
+      "path": ".agents/skills/delivery/implement",
+      "score": 82,
+      "grade": "B",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "review-pr",
+      "path": ".agents/skills/delivery/review-pr",
+      "score": 84,
+      "grade": "B",
+      "tier": "BASIC"
+    }
+  ],
+  "recommendations": [
+    {
+      "priority": "HIGH",
+      "dimension": "Completion section",
+      "finding": "1 skill(s) missing Completion section",
+      "action": "Add \"## Completion\" section with explicit completion criteria and stop conditions."
+    }
+  ],
+  "details": [
+    {
+      "skill": "code-review",
+      "path": ".agents/skills/delivery/code-review",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 10,
+        "sections": 8,
+        "assets": 2,
+        "behavioralSpec": 4,
+        "safety": 5,
+        "promptVersioning": 8,
+        "modelTierAlignment": 5,
+        "artifactSchema": 5,
+        "progressiveDisclosure": 8,
+        "observability": 2,
+        "regressionCoverage": 8,
+        "diataxisCompleteness": 5
+      },
+      "total": 80,
+      "grade": "B",
+      "tier": "BASIC",
+      "issues": [
+        "missing ## Completion section"
+      ],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=reasoning"
+      ],
+      "metrics": {
+        "tokens": 1259,
+        "lines": 119,
+        "headers": 10,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "code-review",
+        "description": "Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes - Standards and Spec - and publish findings only.",
+        "category": "delivery",
+        "version": "2",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "review",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/code-review.json"
+      }
+    },
+    {
+      "skill": "contribution-workflow-optimizer",
+      "path": ".agents/skills/delivery/contribution-workflow-optimizer",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 6,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 5,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 2,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 4
+      },
+      "total": 67,
+      "grade": "D",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=reasoning",
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/contribution-workflow-optimizer.json"
+      ],
+      "metrics": {
+        "tokens": 345,
+        "lines": 57,
+        "headers": 8,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "contribution-workflow-optimizer",
+        "description": "Inspect changed Skills and recommend contribution improvements across standards, docs, tests, and examples; use when eva",
+        "category": "delivery",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "workflow",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/contribution-workflow-optimizer.json"
+      }
+    },
+    {
+      "skill": "diagnosing-bugs",
+      "path": ".agents/skills/delivery/diagnosing-bugs",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 10,
+        "sections": 10,
+        "assets": 3,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 5,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 4,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 2
+      },
+      "total": 72,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=reasoning",
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/diagnosing-bugs.json"
+      ],
+      "metrics": {
+        "tokens": 1530,
+        "lines": 166,
+        "headers": 18,
+        "scripts": 1,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "diagnosing-bugs",
+        "description": "Diagnosis loop for hard bugs and performance regressions. Use when the user says \"diagnose\"/\"debug this\", or reports something intermittent, ambiguous, or hard to reproduce.",
+        "category": "delivery",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "diagnosis",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/diagnosing-bugs.json"
+      }
+    },
+    {
+      "skill": "implement",
+      "path": ".agents/skills/delivery/implement",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 5,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 4,
+        "safety": 5,
+        "promptVersioning": 8,
+        "modelTierAlignment": 8,
+        "artifactSchema": 8,
+        "progressiveDisclosure": 8,
+        "observability": 4,
+        "regressionCoverage": 8,
+        "diataxisCompleteness": 2
+      },
+      "total": 82,
+      "grade": "B",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [],
+      "metrics": {
+        "tokens": 527,
+        "lines": 63,
+        "headers": 4,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "implement",
+        "description": "Implement a piece of work based on a spec or set of tickets, or build a scoped fix that can be handed off for publication. This skill stops at the implemented, validated branch.",
+        "category": "delivery",
+        "version": "2",
+        "promptVersion": "2.0",
+        "modelTier": "code",
+        "artifactType": "implementation",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/implement.json"
+      }
+    },
+    {
+      "skill": "implement-review-fixes",
+      "path": ".agents/skills/delivery/implement-review-fixes",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 7,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 8,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 2,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 2
+      },
+      "total": 69,
+      "grade": "D",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/implement-review-fixes.json"
+      ],
+      "metrics": {
+        "tokens": 661,
+        "lines": 86,
+        "headers": 8,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "implement-review-fixes",
+        "description": "Read a GitHub PR remediation plan produced by plan-review-fixes, implement the planned corrections through the repositor",
+        "category": "delivery",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "code",
+        "artifactType": "review",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/implement-review-fixes.json"
+      }
+    },
+    {
+      "skill": "plan-review-fixes",
+      "path": ".agents/skills/delivery/plan-review-fixes",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 8,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 8,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 4,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 2
+      },
+      "total": 72,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/plan-review-fixes.json"
+      ],
+      "metrics": {
+        "tokens": 739,
+        "lines": 95,
+        "headers": 10,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "plan-review-fixes",
+        "description": "Convert review-pr findings on a GitHub PR into a concrete remediation plan and post that plan as PR comments. Use after",
+        "category": "delivery",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "review",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/plan-review-fixes.json"
+      }
+    },
+    {
+      "skill": "prototype",
+      "path": ".agents/skills/delivery/prototype",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 7,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 5,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 2,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 2
+      },
+      "total": 66,
+      "grade": "D",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=reasoning",
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/prototype.json"
+      ],
+      "metrics": {
+        "tokens": 629,
+        "lines": 58,
+        "headers": 8,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "prototype",
+        "description": "Build a throwaway prototype to answer a design question. Use when the user wants to sanity-check whether a state model or interaction shape actually works.",
+        "category": "delivery",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "pull-request",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/prototype.json"
+      }
+    },
+    {
+      "skill": "research",
+      "path": ".agents/skills/delivery/research",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 4,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 8,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 2,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 2
+      },
+      "total": 66,
+      "grade": "D",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/research.json"
+      ],
+      "metrics": {
+        "tokens": 268,
+        "lines": 44,
+        "headers": 6,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "research",
+        "description": "Investigate a question against high-trust primary sources and capture the findings as a Markdown file in the repo. Use w",
+        "category": "delivery",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "fast",
+        "artifactType": "research",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/research.json"
+      }
+    },
+    {
+      "skill": "resolving-merge-conflicts",
+      "path": ".agents/skills/delivery/resolving-merge-conflicts",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 4,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 8,
+        "artifactSchema": 5,
+        "progressiveDisclosure": 8,
+        "observability": 2,
+        "regressionCoverage": 8,
+        "diataxisCompleteness": 2
+      },
+      "total": 72,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [],
+      "metrics": {
+        "tokens": 269,
+        "lines": 44,
+        "headers": 6,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "resolving-merge-conflicts",
+        "description": "Use when you need to resolve a conflicted or blocked branch state: in-progress git merge/rebase conflicts, PR branch corrections, or other branch-state blockers that need deliberate resolution.",
+        "category": "delivery",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "delivery",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/resolving-merge-conflicts.json"
+      }
+    },
+    {
+      "skill": "review-fix-loop",
+      "path": ".agents/skills/delivery/review-fix-loop",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 8,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 8,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 2,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 2
+      },
+      "total": 70,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/review-fix-loop.json"
+      ],
+      "metrics": {
+        "tokens": 745,
+        "lines": 99,
+        "headers": 11,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "review-fix-loop",
+        "description": "Orchestrate the PR repair loop: run review-pr, use plan-review-fixes when findings exist, use implement-review-fixes to apply them, and repeat until the PR is clean or blocked. This skill coordinates the loop only.",
+        "category": "delivery",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "review",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/review-fix-loop.json"
+      }
+    },
+    {
+      "skill": "review-pr",
+      "path": ".agents/skills/delivery/review-pr",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 10,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 4,
+        "safety": 5,
+        "promptVersioning": 8,
+        "modelTierAlignment": 5,
+        "artifactSchema": 5,
+        "progressiveDisclosure": 8,
+        "observability": 4,
+        "regressionCoverage": 8,
+        "diataxisCompleteness": 5
+      },
+      "total": 84,
+      "grade": "B",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=reasoning"
+      ],
+      "metrics": {
+        "tokens": 1780,
+        "lines": 155,
+        "headers": 13,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "review-pr",
+        "description": "Review a pull request against the fixed point the user supplies, separating Standards and Spec findings into distinct ax",
+        "category": "delivery",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "review",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/review-pr.json"
+      }
+    },
+    {
+      "skill": "tdd",
+      "path": ".agents/skills/delivery/tdd",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 7,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 4,
+        "safety": 5,
+        "promptVersioning": 8,
+        "modelTierAlignment": 5,
+        "artifactSchema": 5,
+        "progressiveDisclosure": 8,
+        "observability": 4,
+        "regressionCoverage": 8,
+        "diataxisCompleteness": 2
+      },
+      "total": 78,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=code"
+      ],
+      "metrics": {
+        "tokens": 734,
+        "lines": 67,
+        "headers": 9,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "tdd",
+        "description": "Test-driven development. Use when the user wants to build features or fix bugs test-first, mentions \"red-green-refactor",
+        "category": "delivery",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "code",
+        "artifactType": "implementation",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/tdd.json"
+      }
+    },
+    {
+      "skill": "testing",
+      "path": ".agents/skills/delivery/testing",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 4,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 5,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 2,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 4
+      },
+      "total": 65,
+      "grade": "D",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=reasoning",
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/testing.json"
+      ],
+      "metrics": {
+        "tokens": 283,
+        "lines": 49,
+        "headers": 7,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "testing",
+        "description": "Shape the test strategy for a project so behavior is verified at the right seams and at the right level.",
+        "category": "delivery",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "test-strategy",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/testing.json"
+      }
+    },
+    {
+      "skill": "webapp-testing",
+      "path": ".agents/skills/delivery/webapp-testing",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 4,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 5,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 2,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 4
+      },
+      "total": 65,
+      "grade": "D",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=reasoning",
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/webapp-testing.json"
+      ],
+      "metrics": {
+        "tokens": 297,
+        "lines": 49,
+        "headers": 7,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "webapp-testing",
+        "description": "Choose the right test seam for a web app and describe how to verify it at unit, integration, and end-to-end levels.",
+        "category": "delivery",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "test-strategy",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/webapp-testing.json"
+      }
+    }
+  ],
+  "errors": []
+}

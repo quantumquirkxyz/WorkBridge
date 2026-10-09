@@ -1,0 +1,31 @@
+{
+  "name": "issue-operations",
+  "description": "Manage issue tracker operations with scoped target resolution, duplicate checks, mutation evidence, and rollback notes for create, update, comment, label, link, assign, and close actions.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/integrations/issue-operations/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "integrations/issue-operations",
+      "name": "issue-operations",
+      "description": "Manage issue tracker operations with scoped target resolution, duplicate checks, mutation evidence, and rollback notes for create, update, comment, label, link, assign, and close actions.",
+      "tags": [
+        "\"integrations\""
+      ],
+      "parameters": {
+        "trustTier": "3",
+        "modelTier": "reasoning",
+        "artifactType": "integrations"
+      }
+    }
+  ]
+}

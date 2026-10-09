@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TddArtifact",
+  "description": "Durable TDD implementation artifact emitted by the tdd skill. Typed, versioned, addressable.",
+  "type": "object",
+  "required": ["schemaVersion", "artifactType", "id", "skill", "skillVersion", "promptVersion", "createdAt", "updatedAt", "input", "output", "provenance", "evaluation"],
+  "properties": {
+    "schemaVersion": { "type": "string", "const": "2.0" },
+    "artifactType": { "type": "string", "const": "implementation" },
+    "id": { "type": "string", "pattern": "^tdd-.+$" },
+    "skill": { "type": "string", "const": "tdd" },
+    "skillVersion": { "type": "string" },
+    "promptVersion": { "type": "string" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "input": {
+      "type": "object",
+      "required": ["request", "seams"],
+      "properties": {
+        "request": { "type": "string" },
+        "seams": { "type": "array", "items": { "type": "string" } },
+        "codebaseState": { "type": "string" }
+      }
+    },
+    "output": {
+      "type": "object",
+      "required": ["tests", "implementation"],
+      "properties": {
+        "tests": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "seam", "status", "assertionCount"],
+            "properties": {
+              "name": { "type": "string" },
+              "seam": { "type": "string" },
+              "status": { "type": "string", "enum": ["red", "green"] },
+              "assertionCount": { "type": "integer" },
+              "traceId": { "type": "string" }
+            }
+          }
+        },
+        "implementation": {
+          "type": "object",
+          "required": ["seam", "changes"],
+          "properties": {
+            "seam": { "type": "string" },
+            "changes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["file", "changeType"],
+                "properties": {
+                  "file": { "type": "string" },
+                  "changeType": { "type": "string", "enum": ["added", "modified"] }
+                }
+              }
+            }
+          }
+        },
+        "validationNotes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "traceId": { "type": "string" },
+        "commitHashes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "properties": {
+        "completionCriteriaMet": { "type": "boolean" },
+        "redGreenCycles": { "type": "integer" },
+        "refactorPassed": { "type": "boolean" }
+      }
+    }
+  }
+}

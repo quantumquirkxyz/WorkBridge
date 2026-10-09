@@ -1,0 +1,31 @@
+{
+  "name": "physics-talk-design",
+  "description": "Design physics talks — seminars, conference presentations, posters, public outreach — with audience-level adjustments, timing, visual conventions, and accessibility.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/physics/physics-talk-design/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "physics/physics-talk-design",
+      "name": "physics-talk-design",
+      "description": "Design physics talks — seminars, conference presentations, posters, public outreach — with audience-level adjustments, timing, visual conventions, and accessibility.",
+      "tags": [
+        "\"physics\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "plan"
+      }
+    }
+  ]
+}

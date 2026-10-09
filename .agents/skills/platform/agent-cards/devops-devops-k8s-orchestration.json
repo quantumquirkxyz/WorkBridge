@@ -1,0 +1,31 @@
+{
+  "name": "devops-k8s-orchestration",
+  "description": "Design and configure Kubernetes orchestration — cluster architecture, deployment strategies, service mesh, observability, auto-scaling, security policies — with reproducible infrastructure.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/devops/devops-k8s-orchestration/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "devops/devops-k8s-orchestration",
+      "name": "devops-k8s-orchestration",
+      "description": "Design and configure Kubernetes orchestration — cluster architecture, deployment strategies, service mesh, observability, auto-scaling, security policies — with reproducible infrastructure.",
+      "tags": [
+        "\"devops\""
+      ],
+      "parameters": {
+        "trustTier": "3",
+        "modelTier": "reasoning",
+        "artifactType": "devops"
+      }
+    }
+  ]
+}

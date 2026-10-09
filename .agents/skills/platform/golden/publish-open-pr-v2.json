@@ -1,0 +1,17 @@
+{
+  "traceId": "golden-publish-open-pr-001",
+  "spanId": "golden-span-007",
+  "parentSpanId": null,
+  "skill": "publish-open-pr",
+  "skillVersion": "2.0",
+  "promptVersion": "2.0",
+  "model": { "provider": "anthropic", "model": "claude-sonnet-4-20250514", "tier": "code" },
+  "input": { "artifactType": "publication", "sizeTokens": 1600, "contextRefs": ["issue-28", "branch-issue-28"] },
+  "output": { "artifactType": "PublicationArtifact", "sizeTokens": 640, "schemaValid": true, "outputRef": "artifacts/publish-open-pr/issue-28.json" },
+  "execution": { "startedAt": "2026-10-01T23:15:00Z", "completedAt": "2026-10-01T23:15:09Z", "durationMs": 9000, "iterations": 1, "retries": 0 },
+  "tools": [{ "name": "read", "calls": 6 }, { "name": "bash", "calls": 2 }],
+  "quality": { "artifactPassedQualityBar": true, "artifactScore": 97, "evaluators": ["behavioral", "traceability"], "findingsCount": 0 },
+  "result": "completed",
+  "blockedBy": [],
+  "nextConsumer": "ship-subissue"
+}

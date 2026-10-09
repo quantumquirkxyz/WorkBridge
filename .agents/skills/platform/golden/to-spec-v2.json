@@ -1,0 +1,17 @@
+{
+  "traceId": "golden-to-spec-001",
+  "spanId": "golden-span-003",
+  "parentSpanId": null,
+  "skill": "to-spec",
+  "skillVersion": "2.0",
+  "promptVersion": "2.0",
+  "model": { "provider": "anthropic", "model": "claude-sonnet-4-20250514", "tier": "reasoning" },
+  "input": { "artifactType": "spec", "sizeTokens": 2500, "contextRefs": ["conversation-ctx"] },
+  "output": { "artifactType": "SpecArtifact", "sizeTokens": 1800, "schemaValid": true, "outputRef": "artifacts/to-spec/issue-28.json" },
+  "execution": { "startedAt": "2026-10-01T19:00:00Z", "completedAt": "2026-10-01T19:00:30Z", "durationMs": 30000, "iterations": 2, "retries": 0 },
+  "tools": [{ "name": "read", "calls": 8 }, { "name": "grep", "calls": 3 }],
+  "quality": { "artifactPassedQualityBar": true, "artifactScore": 95, "evaluators": ["behavioral", "traceability", "quality-bar"], "findingsCount": 0 },
+  "result": "completed",
+  "blockedBy": [],
+  "nextConsumer": "to-tickets"
+}

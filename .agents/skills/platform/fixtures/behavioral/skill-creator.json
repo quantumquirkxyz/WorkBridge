@@ -1,0 +1,28 @@
+{
+  "fixtures": [
+    {
+      "id": "skill-load-basic",
+      "skill": "skill-creator",
+      "type": "behavioral",
+      "description": "Skill loads and provides guidance for creating a new skill",
+      "input": "I want to create a skill for reviewing Dockerfiles",
+      "expected": {
+        "invokes": true,
+        "outputContains": ["SKILL.md", "frontmatter", "Contract"],
+        "doesNotContain": ["error", "not found"]
+      }
+    },
+    {
+      "id": "skill-load-with-dependencies",
+      "skill": "code-review",
+      "type": "behavioral",
+      "description": "Skill loads with its declared dependencies available",
+      "input": "Review the changes since v1.2.0",
+      "expected": {
+        "invokes": true,
+        "usesTools": ["Read", "Grep", "Bash"],
+        "outputContains": ["Standards", "Spec"]
+      }
+    }
+  ]
+}

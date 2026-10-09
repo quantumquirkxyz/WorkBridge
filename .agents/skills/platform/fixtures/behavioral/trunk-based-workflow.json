@@ -1,0 +1,13 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-trunk-based-workflow",
+      "skill": "trunk-based-workflow",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": ["## Contract", "## Provenance", "## Artifact", "TrunkBasedWorkflowArtifact", "24h", "400 lines"],
+        "doesNotContain": ["## Operating Contract"]
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "ai-model-evaluation",
+  "description": "Evaluate ML / LLM models — accuracy, fairness, robustness, explainability, drift — with explicit metrics, subgroup analysis, and failure-mode reporting.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/ai/ai-model-evaluation/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "ai/ai-model-evaluation",
+      "name": "ai-model-evaluation",
+      "description": "Evaluate ML / LLM models — accuracy, fairness, robustness, explainability, drift — with explicit metrics, subgroup analysis, and failure-mode reporting.",
+      "tags": [
+        "\"ai\""
+      ],
+      "parameters": {
+        "trustTier": "3",
+        "modelTier": "reasoning",
+        "artifactType": "model"
+      }
+    }
+  ]
+}

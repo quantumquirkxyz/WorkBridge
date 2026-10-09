@@ -1,0 +1,517 @@
+{
+  "category": "foundation",
+  "generatedAt": "2026-10-03T05:53:32.752Z",
+  "totalSkills": 10,
+  "avgScore": 76,
+  "gradeDistribution": {
+    "A": 0,
+    "B": 2,
+    "C": 8,
+    "D": 0,
+    "F": 0
+  },
+  "skillsByScore": [
+    {
+      "skill": "agent-canvas",
+      "path": ".agents/skills/foundation/agent-canvas",
+      "score": 70,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "context-engine",
+      "path": ".agents/skills/foundation/context-engine",
+      "score": 72,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "observability",
+      "path": ".agents/skills/foundation/observability",
+      "score": 72,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "subagent-swarm",
+      "path": ".agents/skills/foundation/subagent-swarm",
+      "score": 72,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "agent-observability",
+      "path": ".agents/skills/foundation/agent-observability",
+      "score": 74,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "domain-modeling",
+      "path": ".agents/skills/foundation/domain-modeling",
+      "score": 74,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "api-design",
+      "path": ".agents/skills/foundation/api-design",
+      "score": 75,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "agent-card",
+      "path": ".agents/skills/foundation/agent-card",
+      "score": 79,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "codebase-design",
+      "path": ".agents/skills/foundation/codebase-design",
+      "score": 83,
+      "grade": "B",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "mcp-server",
+      "path": ".agents/skills/foundation/mcp-server",
+      "score": 86,
+      "grade": "B",
+      "tier": "BASIC"
+    }
+  ],
+  "recommendations": [],
+  "details": [
+    {
+      "skill": "agent-canvas",
+      "path": ".agents/skills/foundation/agent-canvas",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 6,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 8,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 2,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 4
+      },
+      "total": 70,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/agent-canvas.json"
+      ],
+      "metrics": {
+        "tokens": 397,
+        "lines": 63,
+        "headers": 9,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "agent-canvas",
+        "description": "Reference skill for agent workspace control — multi-agent session management, workspace persistence, and cross-device continuity, independent of any external framework.",
+        "category": "foundation",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "fast",
+        "artifactType": "agent",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/agent-canvas.json"
+      }
+    },
+    {
+      "skill": "agent-card",
+      "path": ".agents/skills/foundation/agent-card",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 4,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 5,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 8,
+        "artifactSchema": 8,
+        "progressiveDisclosure": 8,
+        "observability": 2,
+        "regressionCoverage": 8,
+        "diataxisCompleteness": 4
+      },
+      "total": 79,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [],
+      "metrics": {
+        "tokens": 258,
+        "lines": 42,
+        "headers": 5,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "agent-card",
+        "description": "Generates and maintains Agent Cards for A2A (Agent-to-Agent) discovery.",
+        "category": "foundation",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "router",
+        "artifactType": "plan",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/agent-card.json"
+      }
+    },
+    {
+      "skill": "agent-observability",
+      "path": ".agents/skills/foundation/agent-observability",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 7,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 8,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 5,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 4
+      },
+      "total": 74,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/agent-observability.json"
+      ],
+      "metrics": {
+        "tokens": 434,
+        "lines": 72,
+        "headers": 11,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "agent-observability",
+        "description": "Capture redacted execution records, traces, and quality signals for skill runs with structured data for analysis. Enables full audit of decisions made during agent execution.",
+        "category": "foundation",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "fast",
+        "artifactType": "agent",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/agent-observability.json"
+      }
+    },
+    {
+      "skill": "api-design",
+      "path": ".agents/skills/foundation/api-design",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 4,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 4,
+        "safety": 5,
+        "promptVersioning": 8,
+        "modelTierAlignment": 5,
+        "artifactSchema": 5,
+        "progressiveDisclosure": 8,
+        "observability": 2,
+        "regressionCoverage": 8,
+        "diataxisCompleteness": 4
+      },
+      "total": 75,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=reasoning"
+      ],
+      "metrics": {
+        "tokens": 288,
+        "lines": 45,
+        "headers": 6,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "api-design",
+        "description": "Design a small, durable API seam — with a deep backend and explicit caller contract boundaries.",
+        "category": "foundation",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "plan",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/api-design.json"
+      }
+    },
+    {
+      "skill": "codebase-design",
+      "path": ".agents/skills/foundation/codebase-design",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 10,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 4,
+        "safety": 5,
+        "promptVersioning": 8,
+        "modelTierAlignment": 5,
+        "artifactSchema": 5,
+        "progressiveDisclosure": 8,
+        "observability": 5,
+        "regressionCoverage": 8,
+        "diataxisCompleteness": 3
+      },
+      "total": 83,
+      "grade": "B",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=reasoning"
+      ],
+      "metrics": {
+        "tokens": 1085,
+        "lines": 146,
+        "headers": 12,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "codebase-design",
+        "description": "Shared vocabulary for designing deep modules. Use when the user wants to design or improve a module's interface, find depth, or define a clean seam.",
+        "category": "foundation",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "plan",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/codebase-design.json"
+      }
+    },
+    {
+      "skill": "context-engine",
+      "path": ".agents/skills/foundation/context-engine",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 6,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 8,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 4,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 4
+      },
+      "total": 72,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/context-engine.json"
+      ],
+      "metrics": {
+        "tokens": 376,
+        "lines": 64,
+        "headers": 9,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "context-engine",
+        "description": "Manage dynamic context for agent execution using retrieval-augmented generation patterns, updating the working context from sources beyond static CONTEXT.md (issues, PRs, docs, execution traces).",
+        "category": "foundation",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "fast",
+        "artifactType": "foundation",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/context-engine.json"
+      }
+    },
+    {
+      "skill": "domain-modeling",
+      "path": ".agents/skills/foundation/domain-modeling",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 10,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 5,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 5,
+        "artifactSchema": 5,
+        "progressiveDisclosure": 8,
+        "observability": 2,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 2
+      },
+      "total": 74,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=reasoning",
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/domain-modeling.json"
+      ],
+      "metrics": {
+        "tokens": 670,
+        "lines": 108,
+        "headers": 14,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "domain-modeling",
+        "description": "Build and sharpen a project's domain model. Record the execution traceId and link the artifact to the originating issue for review replay. Use when the user wants to pin down domain terminology or a ubiquitous language boundary.",
+        "category": "foundation",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "model",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/domain-modeling.json"
+      }
+    },
+    {
+      "skill": "mcp-server",
+      "path": ".agents/skills/foundation/mcp-server",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 8,
+        "sections": 10,
+        "assets": 3,
+        "behavioralSpec": 5,
+        "safety": 5,
+        "promptVersioning": 7,
+        "modelTierAlignment": 8,
+        "artifactSchema": 5,
+        "progressiveDisclosure": 10,
+        "observability": 3,
+        "regressionCoverage": 8,
+        "diataxisCompleteness": 4
+      },
+      "total": 86,
+      "grade": "B",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [],
+      "metrics": {
+        "tokens": 689,
+        "lines": 80,
+        "headers": 11,
+        "scripts": 1,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "mcp-server",
+        "description": "Define an MCP server that exposes quirk Skills as tools, resources, and prompts to external LLM agents via the Model Context Protocol.",
+        "category": "foundation",
+        "version": "2",
+        "promptVersion": "2.0",
+        "modelTier": "router",
+        "artifactType": "plan",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/mcp-server.json"
+      }
+    },
+    {
+      "skill": "observability",
+      "path": ".agents/skills/foundation/observability",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 8,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 5,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 5,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 4
+      },
+      "total": 72,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=reasoning",
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/observability.json"
+      ],
+      "metrics": {
+        "tokens": 552,
+        "lines": 94,
+        "headers": 14,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "observability",
+        "description": "Define the logs, metrics, traces, and alerts needed to understand a system in production — with SLIs, SLOs, dashboards, alert rules, and incident runbooks.",
+        "category": "foundation",
+        "version": "2",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "foundation",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/observability.json"
+      }
+    },
+    {
+      "skill": "subagent-swarm",
+      "path": ".agents/skills/foundation/subagent-swarm",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 7,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 8,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 3,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 4
+      },
+      "total": 72,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/subagent-swarm.json"
+      ],
+      "metrics": {
+        "tokens": 466,
+        "lines": 82,
+        "headers": 13,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "subagent-swarm",
+        "description": "Coordinate multiple agent sub-roles (architect, implementer, reviewer, tester) in parallel or sequential swarm mode, with clear handoff contracts and evidence recording.",
+        "category": "foundation",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "agent",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/subagent-swarm.json"
+      }
+    }
+  ],
+  "errors": []
+}

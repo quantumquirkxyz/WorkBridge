@@ -1,0 +1,31 @@
+{
+  "name": "wayfinder",
+  "description": "Plan a huge chunk of work — more than one agent session can hold — as a map of decision tickets on your issue tracker, with staged decomposition and durable scope boundaries.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/routing/wayfinder/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "routing/wayfinder",
+      "name": "wayfinder",
+      "description": "Plan a huge chunk of work — more than one agent session can hold — as a map of decision tickets on your issue tracker, with staged decomposition and durable scope boundaries.",
+      "tags": [
+        "\"routing\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "router",
+        "artifactType": "routing"
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "physics-career-postdoc",
+  "description": "Navigate physics career transitions — postdoc applications, faculty applications, letters of recommendation, research statements, teaching statements, grant applications (NSF CAREER, DOE, ERC, Simons), and negotiation.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/physics/physics-career-postdoc/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "physics/physics-career-postdoc",
+      "name": "physics-career-postdoc",
+      "description": "Navigate physics career transitions — postdoc applications, faculty applications, letters of recommendation, research statements, teaching statements, grant applications (NSF CAREER, DOE, ERC, Simons), and negotiation.",
+      "tags": [
+        "\"physics\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "physics"
+      }
+    }
+  ]
+}

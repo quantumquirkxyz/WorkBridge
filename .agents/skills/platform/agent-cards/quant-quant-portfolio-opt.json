@@ -1,0 +1,31 @@
+{
+  "name": "quant-portfolio-opt",
+  "description": "Construct and optimise portfolios — mean-variance, Black-Litterman, risk-parity, factor — with explicit objectives, constraints, and robustness checks.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/quant/quant-portfolio-opt/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "quant/quant-portfolio-opt",
+      "name": "quant-portfolio-opt",
+      "description": "Construct and optimise portfolios — mean-variance, Black-Litterman, risk-parity, factor — with explicit objectives, constraints, and robustness checks.",
+      "tags": [
+        "\"quant\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "quant"
+      }
+    }
+  ]
+}

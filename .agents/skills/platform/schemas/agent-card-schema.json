@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AgentCard",
+  "description": "Agent Card for A2A protocol discovery (Google/Linux Foundation A2A v1)",
+  "type": "object",
+  "required": ["name", "description", "url", "capabilities", "authentication"],
+  "properties": {
+    "name": { "type": "string" },
+    "description": { "type": "string" },
+    "url": { "type": "string", "format": "uri" },
+    "version": { "type": "string" },
+    "capabilities": {
+      "type": "object",
+      "required": ["skillInvocation"],
+      "properties": {
+        "skillInvocation": { "type": "boolean" },
+        "artifactProduction": { "type": "boolean" },
+        "workflowOrchestration": { "type": "boolean" }
+      }
+    },
+    "authentication": {
+      "type": "object",
+      "required": ["schemes"],
+      "properties": {
+        "schemes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "description"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "parameters": { "type": "object" }
+        }
+      }
+    }
+  }
+}

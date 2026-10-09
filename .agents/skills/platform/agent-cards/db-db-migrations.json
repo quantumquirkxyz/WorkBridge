@@ -1,0 +1,31 @@
+{
+  "name": "db-migrations",
+  "description": "Plan database migrations — schema changes, backfills, compatibility windows, and rollback strategy — with explicit application and data safety checks.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/db/db-migrations/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "db/db-migrations",
+      "name": "db-migrations",
+      "description": "Plan database migrations — schema changes, backfills, compatibility windows, and rollback strategy — with explicit application and data safety checks.",
+      "tags": [
+        "\"db\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "db"
+      }
+    }
+  ]
+}

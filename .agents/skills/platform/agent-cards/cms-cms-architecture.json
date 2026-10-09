@@ -1,0 +1,31 @@
+{
+  "name": "cms-architecture",
+  "description": "Design content management systems — content models, editorial workflows, publishing pipelines, localization — with schema evolution and multi-channel delivery.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/cms/cms-architecture/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "cms/cms-architecture",
+      "name": "cms-architecture",
+      "description": "Design content management systems — content models, editorial workflows, publishing pipelines, localization — with schema evolution and multi-channel delivery.",
+      "tags": [
+        "\"cms\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "cms"
+      }
+    }
+  ]
+}

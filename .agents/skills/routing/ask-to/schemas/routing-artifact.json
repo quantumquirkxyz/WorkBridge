@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RoutingArtifact",
+  "type": "object",
+  "required": ["currentState", "selectedTransition", "nextSkill", "workflow"],
+  "properties": {
+    "currentState": { "type": "string" },
+    "availableTransitions": { "type": "array", "items": { "type": "string" } },
+    "selectedTransition": { "type": "string" },
+    "nextSkill": { "type": "string" },
+    "workflow": { "type": "string" },
+    "context": { "type": "object" }
+  }
+}

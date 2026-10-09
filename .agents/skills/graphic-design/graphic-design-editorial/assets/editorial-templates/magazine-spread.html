@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Magazine Spread</title>
+<style>
+  :root {
+    --baseline: 6mm;
+    --gutter: 8mm;
+    --margin: 18mm;
+    --page-width: 210mm;
+    --page-height: 297mm;
+    --font-body: "Georgia", "Times New Roman", serif;
+    --font-sans: "Helvetica Neue", "Arial", sans-serif;
+    --color-text: #1a1a1a;
+    --color-muted: #555555;
+    --color-rule: #cccccc;
+    --color-accent: #b22222;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background: #e5e5e5;
+    font-family: var(--font-body);
+    color: var(--color-text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .spread {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--gutter);
+    width: calc(var(--page-width) * 2 + var(--gutter));
+    max-width: 100%;
+    margin: 24px auto;
+    background: #ffffff;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  }
+
+  .page {
+    position: relative;
+    padding: var(--margin);
+    min-height: var(--page-height);
+  }
+
+  .page-left { border-right: 1px solid var(--color-rule); }
+
+  /* Header */
+  .mag-header {
+    grid-column: span 12;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 1px solid var(--color-rule);
+    padding-bottom: calc(var(--baseline) * 0.5);
+    margin-bottom: calc(var(--baseline) * 2);
+    font-family: var(--font-sans);
+    font-size: 10pt;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  /* Feature Headline */
+  .feature-headline {
+    grid-column: span 12;
+    font-family: var(--font-body);
+    font-size: 42pt;
+    line-height: 1.05;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 calc(var(--baseline) * 1.5) 0;
+  }
+
+  .feature-deck {
+    grid-column: span 12;
+    font-family: var(--font-body);
+    font-size: 14pt;
+    line-height: 1.35;
+    font-style: italic;
+    color: var(--color-muted);
+    max-width: 28em;
+    margin-bottom: calc(var(--baseline) * 2);
+  }
+
+  /* Columns */
+  .column {
+    grid-column: span 4;
+    font-size: 10.5pt;
+    line-height: 1.55;
+    text-align: justify;
+    hyphens: auto;
+  }
+
+  .column p { margin: 0 0 calc(var(--baseline) * 1.2) 0; }
+
+  /* Image */
+  .figure {
+    grid-column: span 12;
+    margin: 0 0 calc(var(--baseline) * 1.5) 0;
+  }
+
+  .figure-placeholder {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: linear-gradient(135deg, #d0d0d0 0%, #a0a0a0 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #777;
+    font-family: var(--font-sans);
+    font-size: 10pt;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .figure-caption {
+    margin-top: calc(var(--baseline) * 0.75);
+    font-family: var(--font-sans);
+    font-size: 8.5pt;
+    line-height: 1.4;
+    color: var(--color-muted);
+  }
+
+  .figure-credit {
+    font-size: 7.5pt;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 2px;
+  }
+
+  /* Pull quote */
+  .pull-quote {
+    grid-column: span 12;
+    font-family: var(--font-body);
+    font-size: 18pt;
+    line-height: 1.25;
+    font-style: italic;
+    padding: calc(var(--baseline) * 1.5) 0;
+    border-top: 1px solid var(--color-rule);
+    border-bottom: 1px solid var(--color-rule);
+    margin: calc(var(--baseline) * 2) 0;
+    color: var(--color-accent);
+  }
+
+  /* Page number */
+  .page-number {
+    position: absolute;
+    bottom: var(--margin);
+    font-family: var(--font-sans);
+    font-size: 9pt;
+    color: var(--color-muted);
+  }
+  .page-left .page-number { left: var(--margin); }
+  .page-right .page-number { right: var(--margin); }
+
+  @media (max-width: 900px) {
+    .spread { grid-template-columns: 1fr; width: 100%; }
+    .column { grid-column: span 1; }
+    .feature-headline { font-size: 28pt; }
+  }
+</style>
+</head>
+<body>
+  <article class="spread">
+    <!-- Left page -->
+    <section class="page page-left">
+      <header class="mag-header">
+        <span>Vol. 42</span>
+        <span>The Editorial Review</span>
+        <span>September 2026</span>
+      </header>
+
+      <h1 class="feature-headline">The Architecture of White Space</h1>
+      <p class="feature-deck">How margins, gutters, and silence on the page shape the way we read — and why restraint is the loudest design choice.</p>
+
+      <div class="figure">
+        <div class="figure-placeholder">Image Placeholder — 16 × 9</div>
+        <p class="figure-caption">A carefully composed spread relies as much on empty space as on filled space.</p>
+        <p class="figure-credit">Photo: Studio Archive</p>
+      </div>
+
+      <div class="column">
+        <p>White space is not nothing. It is a structural material, as real as lead type or ink. In editorial design, the decisions about what to leave out are as important as the decisions about what to put in.</p>
+        <p>When margins tighten, the page feels claustrophobic. When gutters widen, the reader’s eye travels with more ease between columns. The best designers treat space as a compositional element with its own weight and rhythm.</p>
+      </div>
+
+      <div class="column">
+        <p>Consider the double-page spread. The gutter becomes a spine line — a moment of tension and release. Images that break across it gain energy. Text that stays within one column gains clarity.</p>
+        <p>This issue explores how contemporary studios are redefining editorial proportions for digital and print simultaneously.</p>
+      </div>
+
+      <span class="page-number">14</span>
+    </section>
+
+    <!-- Right page -->
+    <section class="page page-right">
+      <div class="pull-quote">“The grid is a framework, not a cage.”</div>
+
+      <div class="column">
+        <p>Grid systems give editorial projects a shared language. Reporters, designers, and editors can all anticipate where a headline will sit, how wide a caption will run, and whether a photograph has room to breathe.</p>
+        <p>Still, the best grids are invisible to the casual reader. Their presence is felt only when something misaligns — a caption that crowds an image, a headline that feels off-center, a page that feels dense rather than open.</p>
+      </div>
+
+      <div class="column">
+        <p>Digital publications face a different challenge. Fluid widths mean the grid must bend without breaking. Breakpoints become new page sizes, and responsive typography must maintain its hierarchy from phone to desktop.</p>
+        <p>The principles remain the same: consistent rhythm, deliberate hierarchy, and generous space.</p>
+      </div>
+
+      <div class="figure">
+        <div class="figure-placeholder">Image Placeholder — 4 × 3</div>
+        <p class="figure-caption">Modular grids allow repeated patterns to create a coherent reading experience across hundreds of pages.</p>
+        <p class="figure-credit">Illustration: Design Team</p>
+      </div>
+
+      <span class="page-number">15</span>
+    </section>
+  </article>
+</body>
+</html>

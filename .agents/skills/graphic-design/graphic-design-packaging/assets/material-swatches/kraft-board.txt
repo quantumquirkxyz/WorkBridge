@@ -1,0 +1,27 @@
+Kraft Board — Material Swatch Reference
+========================================
+
+Appearance
+----------
+Natural uncoated paperboard with visible fibers. Warm, earthy brown tone.
+Surface is slightly rough, absorbs ink readily. Creates organic, eco-conscious aesthetic.
+
+Color Values (print-ready)
+--------------------------
+CMYK:  C=20  M=40  Y=60  K=40  (approximate; varies by stock)
+RGB:   R=140 G=100 B=60  (screen preview only)
+Pantone: Close match to Pantone 7518 C or 7728 C (consult Pantone Solid Uncoated for closest)
+
+Print Notes
+-----------
+- Works well with uncoated flexo and gravure.
+- Ink holdout is low; expect dot gain and less vibrant solids compared to coated.
+- Use dark or earthy ink colors to complement the natural substrate.
+- Consider varnish or aqueous coating to protect the surface without hiding the texture.
+
+Sustainability
+--------------
+- Made from virgin or recycled wood pulp.
+- 100% recyclable and biodegradable under industrial composting conditions.
+- FSC-certified kraft available for certified supply chains.
+- Low-energy manufacturing relative to coated board.

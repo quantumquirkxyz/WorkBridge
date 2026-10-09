@@ -1,0 +1,20 @@
+{
+  "id": "skill-creator-basic-routing",
+  "expectedRoute": ["skill-creator"],
+  "checks": [
+    {
+      "skill": "skill-creator",
+      "mustMention": [
+        "Modo de Entrevista Interactiva",
+        "Modo Tradicional",
+        "Modo de Script No Interactivo"
+      ],
+      "expectedSideEffects": ["write-files"],
+      "requiredReferences": [
+        "references/skill_design_principles.md",
+        "scripts/README.md",
+        "assets/README.md"
+      ]
+    }
+  ]
+}

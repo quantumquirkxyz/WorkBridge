@@ -1,0 +1,23 @@
+{
+  "id": "example-scenario-id",
+  "expectedRoute": [
+    "category/skill-name"
+  ],
+  "checks": [
+    {
+      "skill": "category/skill-name",
+      "mustMention": [
+        "specific phrase that proves the contract is present"
+      ],
+      "expectedSideEffects": [
+        "declared-side-effect"
+      ],
+      "requiredReferences": [
+        "references/example.md"
+      ],
+      "forbid": [
+        "placeholder or forbidden phrase"
+      ]
+    }
+  ]
+}

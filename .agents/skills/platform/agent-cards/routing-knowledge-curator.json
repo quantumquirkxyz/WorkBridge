@@ -1,0 +1,31 @@
+{
+  "name": "knowledge-curator",
+  "description": "Keep context, ADRs, registry entries, and research coherent over time — with refresh and provenance discipline.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/routing/knowledge-curator/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "routing/knowledge-curator",
+      "name": "knowledge-curator",
+      "description": "Keep context, ADRs, registry entries, and research coherent over time — with refresh and provenance discipline.",
+      "tags": [
+        "\"routing\""
+      ],
+      "parameters": {
+        "trustTier": "2",
+        "modelTier": "router",
+        "artifactType": "routing"
+      }
+    }
+  ]
+}

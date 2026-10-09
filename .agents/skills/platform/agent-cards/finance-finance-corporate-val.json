@@ -1,0 +1,31 @@
+{
+  "name": "finance-corporate-val",
+  "description": "Corporate valuation — DCF, multiples, sum-of-parts, scenario analysis — with explicit assumptions, sensitivity, and cross-checks.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/finance/finance-corporate-val/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "finance/finance-corporate-val",
+      "name": "finance-corporate-val",
+      "description": "Corporate valuation — DCF, multiples, sum-of-parts, scenario analysis — with explicit assumptions, sensitivity, and cross-checks.",
+      "tags": [
+        "\"finance\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "finance"
+      }
+    }
+  ]
+}

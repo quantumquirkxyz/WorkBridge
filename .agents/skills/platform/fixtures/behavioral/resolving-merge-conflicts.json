@@ -1,0 +1,13 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-resolving-merge-conflicts",
+      "skill": "resolving-merge-conflicts",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": ["## Contract", "## Provenance", "## Artifact", "ResolvingMergeConflictsArtifact", "merge", "rebase", "conflict"],
+        "doesNotContain": ["## Operating Contract"]
+      }
+    }
+  ]
+}

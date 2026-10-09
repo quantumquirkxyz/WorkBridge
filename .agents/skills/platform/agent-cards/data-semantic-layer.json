@@ -1,0 +1,31 @@
+{
+  "name": "semantic-layer",
+  "description": "Design a semantic layer — dbt, Cube, metrics, dimensions, measures, self-service analytics — with explicit business logic, governance, and query optimization.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/data/semantic-layer/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "data/semantic-layer",
+      "name": "semantic-layer",
+      "description": "Design a semantic layer — dbt, Cube, metrics, dimensions, measures, self-service analytics — with explicit business logic, governance, and query optimization.",
+      "tags": [
+        "\"data\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "data"
+      }
+    }
+  ]
+}

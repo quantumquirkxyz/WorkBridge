@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TrunkBasedWorkflowArtifact",
+  "type": "object",
+  "required": ["schemaVersion", "artifactType", "id", "skill", "skillVersion", "promptVersion", "createdAt", "updatedAt", "input", "output", "provenance", "evaluation"],
+  "properties": {
+    "schemaVersion": { "type": "string", "const": "2.0" },
+    "artifactType": { "type": "string", "const": "plan" },
+    "id": { "type": "string", "pattern": "^trunk-workflow-.+$" },
+    "skill": { "type": "string", "const": "trunk-based-workflow" },
+    "skillVersion": { "type": "string" },
+    "promptVersion": { "type": "string" },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "input": {
+      "type": "object",
+      "required": ["branchName", "prNumber"],
+      "properties": {
+        "branchName": { "type": "string" },
+        "prNumber": { "type": "integer" },
+        "branchAgeHours": { "type": "number" },
+        "diffSizeLines": { "type": "integer" }
+      }
+    },
+    "output": {
+      "type": "object",
+      "required": ["branchValid", "prSizeValid", "ciStatus", "mergeStrategy"],
+      "properties": {
+        "branchValid": { "type": "boolean" },
+        "branchAgeHours": { "type": "number" },
+        "prSizeValid": { "type": "boolean" },
+        "diffSizeLines": { "type": "integer" },
+        "ciStatus": { "type": "string", "enum": ["green", "red", "pending"] },
+        "mergeStrategy": { "type": "string", "enum": ["squash", "merge-commit", "rebase"] },
+        "branchDeleted": { "type": "boolean" }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["sourceOfTruth", "scope", "outOfScope", "nextConsumer"],
+      "properties": {
+        "sourceOfTruth": { "type": "string" },
+        "scope": { "type": "array", "items": { "type": "string" } },
+        "outOfScope": { "type": "array", "items": { "type": "string" } },
+        "nextConsumer": { "type": "string" },
+        "blockedBy": { "type": "array", "items": { "type": "string" } },
+        "evidence": { "type": "string" },
+        "riskRemaining": { "type": "string" }
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "required": ["qualityBarScore", "artifactPassedQualityBar", "evaluators"],
+      "properties": {
+        "qualityBarScore": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "artifactPassedQualityBar": { "type": "boolean" },
+        "evaluators": {
+          "type": "object",
+          "required": ["behavioral", "traceability", "quality-bar"],
+          "properties": {
+            "behavioral": { "type": "object", "required": ["passed", "score"], "properties": { "passed": { "type": "boolean" }, "score": { "type": "integer", "minimum": 0, "maximum": 100 }, "notes": { "type": "string" } } },
+            "traceability": { "type": "object", "required": ["passed", "score"], "properties": { "passed": { "type": "boolean" }, "score": { "type": "integer", "minimum": 0, "maximum": 100 }, "notes": { "type": "string" } } },
+            "quality-bar": { "type": "object", "required": ["passed", "score"], "properties": { "passed": { "type": "boolean" }, "score": { "type": "integer", "minimum": 0, "maximum": 100 }, "notes": { "type": "string" } } }
+          }
+        }
+      }
+    }
+  }
+}

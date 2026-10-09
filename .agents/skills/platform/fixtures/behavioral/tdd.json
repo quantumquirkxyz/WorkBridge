@@ -1,0 +1,13 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-tdd",
+      "skill": "tdd",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": ["## Contract", "## Provenance", "## Artifact", "red", "green", "refactor"],
+        "doesNotContain": ["## Operating Contract"]
+      }
+    }
+  ]
+}

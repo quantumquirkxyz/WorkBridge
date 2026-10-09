@@ -1,0 +1,31 @@
+{
+  "name": "nextjs",
+  "description": "Shape Next.js projects around routes, server/client seams, and data flow that stay deep rather than tangled.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/frontend/nextjs/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "frontend/nextjs",
+      "name": "nextjs",
+      "description": "Shape Next.js projects around routes, server/client seams, and data flow that stay deep rather than tangled.",
+      "tags": [
+        "\"frontend\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "frontend"
+      }
+    }
+  ]
+}

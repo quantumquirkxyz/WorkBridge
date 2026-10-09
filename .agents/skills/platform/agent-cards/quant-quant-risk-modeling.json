@@ -1,0 +1,31 @@
+{
+  "name": "quant-risk-modeling",
+  "description": "Model market/portfolio/credit risk (VaR, CVaR, drawdown, stress) with explicit distributions, assumptions, and validation against historical stress events.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/quant/quant-risk-modeling/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "quant/quant-risk-modeling",
+      "name": "quant-risk-modeling",
+      "description": "Model market/portfolio/credit risk (VaR, CVaR, drawdown, stress) with explicit distributions, assumptions, and validation against historical stress events.",
+      "tags": [
+        "\"quant\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "model"
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "math-optimization",
+  "description": "Formulate and solve optimization problems (linear, convex, non-convex, combinatorial) — model, choose solver, verify optimality, report sensitivity.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/math/math-optimization/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "math/math-optimization",
+      "name": "math-optimization",
+      "description": "Formulate and solve optimization problems (linear, convex, non-convex, combinatorial) — model, choose solver, verify optimality, report sensitivity.",
+      "tags": [
+        "\"math\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "math"
+      }
+    }
+  ]
+}

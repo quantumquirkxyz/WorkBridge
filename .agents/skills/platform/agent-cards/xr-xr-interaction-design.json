@@ -1,0 +1,31 @@
+{
+  "name": "xr-interaction-design",
+  "description": "Design XR interactions — spatial input, comfort, locomotion, hand tracking, and feedback — with clear constraints on immersion and usability.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/xr/xr-interaction-design/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "xr/xr-interaction-design",
+      "name": "xr-interaction-design",
+      "description": "Design XR interactions — spatial input, comfort, locomotion, hand tracking, and feedback — with clear constraints on immersion and usability.",
+      "tags": [
+        "\"xr\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "plan"
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "ship-subissue",
+  "description": "Use when a finished subissue already has a clean PR and you need to merge it, mark it as completed, and close the linked issue — with release discipline.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/routing/ship-subissue/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "routing/ship-subissue",
+      "name": "ship-subissue",
+      "description": "Use when a finished subissue already has a clean PR and you need to merge it, mark it as completed, and close the linked issue — with release discipline.",
+      "tags": [
+        "\"routing\""
+      ],
+      "parameters": {
+        "trustTier": "4",
+        "modelTier": "router",
+        "artifactType": "routing"
+      }
+    }
+  ]
+}

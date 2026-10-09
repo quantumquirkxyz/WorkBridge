@@ -1,0 +1,31 @@
+{
+  "name": "data-contracts",
+  "description": "Design data contracts — schema evolution, producer-consumer agreements, schema registry, breaking change detection — with explicit compatibility rules and versioning.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/data/data-contracts/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "data/data-contracts",
+      "name": "data-contracts",
+      "description": "Design data contracts — schema evolution, producer-consumer agreements, schema registry, breaking change detection — with explicit compatibility rules and versioning.",
+      "tags": [
+        "\"data\""
+      ],
+      "parameters": {
+        "trustTier": "3",
+        "modelTier": "reasoning",
+        "artifactType": "data"
+      }
+    }
+  ]
+}

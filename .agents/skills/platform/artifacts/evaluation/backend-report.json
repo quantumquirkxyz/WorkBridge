@@ -1,0 +1,673 @@
+{
+  "category": "backend",
+  "generatedAt": "2026-10-03T05:53:32.863Z",
+  "totalSkills": 13,
+  "avgScore": 73,
+  "gradeDistribution": {
+    "A": 0,
+    "B": 0,
+    "C": 13,
+    "D": 0,
+    "F": 0
+  },
+  "skillsByScore": [
+    {
+      "skill": "grpc-connect",
+      "path": ".agents/skills/backend/grpc-connect",
+      "score": 72,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "serverless",
+      "path": ".agents/skills/backend/serverless",
+      "score": 72,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "api-gateway",
+      "path": ".agents/skills/backend/api-gateway",
+      "score": 73,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "backend-caching",
+      "path": ".agents/skills/backend/backend-caching",
+      "score": 73,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "caching-advanced",
+      "path": ".agents/skills/backend/caching-advanced",
+      "score": 73,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "event-driven-architecture",
+      "path": ".agents/skills/backend/event-driven-architecture",
+      "score": 73,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "rate-limiting",
+      "path": ".agents/skills/backend/rate-limiting",
+      "score": 73,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "service-mesh",
+      "path": ".agents/skills/backend/service-mesh",
+      "score": 73,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "websockets",
+      "path": ".agents/skills/backend/websockets",
+      "score": 73,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "backend-architecture",
+      "path": ".agents/skills/backend/backend-architecture",
+      "score": 74,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "backend-queues",
+      "path": ".agents/skills/backend/backend-queues",
+      "score": 74,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "distributed-tracing",
+      "path": ".agents/skills/backend/distributed-tracing",
+      "score": 74,
+      "grade": "C",
+      "tier": "BASIC"
+    },
+    {
+      "skill": "microservices",
+      "path": ".agents/skills/backend/microservices",
+      "score": 74,
+      "grade": "C",
+      "tier": "BASIC"
+    }
+  ],
+  "recommendations": [],
+  "details": [
+    {
+      "skill": "api-gateway",
+      "path": ".agents/skills/backend/api-gateway",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 8,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 8,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 3,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 4
+      },
+      "total": 73,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/api-gateway.json"
+      ],
+      "metrics": {
+        "tokens": 580,
+        "lines": 95,
+        "headers": 14,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "api-gateway",
+        "description": "API gateway (Kong, Envoy, AWS API Gateway, rate limiting, auth, routing).",
+        "category": "backend",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "plan",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/api-gateway.json"
+      }
+    },
+    {
+      "skill": "backend-architecture",
+      "path": ".agents/skills/backend/backend-architecture",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 7,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 5,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 5,
+        "artifactSchema": 5,
+        "progressiveDisclosure": 8,
+        "observability": 2,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 5
+      },
+      "total": 74,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=reasoning",
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/backend-architecture.json"
+      ],
+      "metrics": {
+        "tokens": 404,
+        "lines": 69,
+        "headers": 10,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "backend-architecture",
+        "description": "Shape backend systems — REST/gRPC APIs, service contracts, data flow, state management, error handling — with explicit seams and caller responsibilities.",
+        "category": "backend",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "backend",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/backend-architecture.json"
+      }
+    },
+    {
+      "skill": "backend-caching",
+      "path": ".agents/skills/backend/backend-caching",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 6,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 5,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 5,
+        "artifactSchema": 5,
+        "progressiveDisclosure": 8,
+        "observability": 2,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 5
+      },
+      "total": 73,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=reasoning",
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/backend-caching.json"
+      ],
+      "metrics": {
+        "tokens": 405,
+        "lines": 64,
+        "headers": 9,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "backend-caching",
+        "description": "Design backend caching strategies — cache keys, TTLs, invalidation, stale-while-revalidate, and cache coherence — with explicit consistency and failure trade-offs.",
+        "category": "backend",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "backend",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/backend-caching.json"
+      }
+    },
+    {
+      "skill": "backend-queues",
+      "path": ".agents/skills/backend/backend-queues",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 6,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 5,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 5,
+        "artifactSchema": 5,
+        "progressiveDisclosure": 8,
+        "observability": 3,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 5
+      },
+      "total": 74,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=reasoning",
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/backend-queues.json"
+      ],
+      "metrics": {
+        "tokens": 390,
+        "lines": 64,
+        "headers": 9,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "backend-queues",
+        "description": "Design backend queues and background job systems — durability, retries, ordering, idempotency, and backpressure — with explicit delivery guarantees.",
+        "category": "backend",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "queue-design",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/backend-queues.json"
+      }
+    },
+    {
+      "skill": "caching-advanced",
+      "path": ".agents/skills/backend/caching-advanced",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 8,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 8,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 3,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 4
+      },
+      "total": 73,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/caching-advanced.json"
+      ],
+      "metrics": {
+        "tokens": 627,
+        "lines": 95,
+        "headers": 14,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "caching-advanced",
+        "description": "Advanced caching strategies (Redis, Memcached, CDN, cache invalidation, stampede prevention).",
+        "category": "backend",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "backend",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/caching-advanced.json"
+      }
+    },
+    {
+      "skill": "distributed-tracing",
+      "path": ".agents/skills/backend/distributed-tracing",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 8,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 8,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 4,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 4
+      },
+      "total": 74,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/distributed-tracing.json"
+      ],
+      "metrics": {
+        "tokens": 638,
+        "lines": 95,
+        "headers": 14,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "distributed-tracing",
+        "description": "Distributed tracing (OpenTelemetry, W3C TraceContext, sampling, instrumentation).",
+        "category": "backend",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "backend",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/distributed-tracing.json"
+      }
+    },
+    {
+      "skill": "event-driven-architecture",
+      "path": ".agents/skills/backend/event-driven-architecture",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 8,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 8,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 3,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 4
+      },
+      "total": 73,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/event-driven-architecture.json"
+      ],
+      "metrics": {
+        "tokens": 614,
+        "lines": 95,
+        "headers": 14,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "event-driven-architecture",
+        "description": "Event-driven architecture (Kafka, NATS, EventBridge, choreography vs orchestration).",
+        "category": "backend",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "backend",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/event-driven-architecture.json"
+      }
+    },
+    {
+      "skill": "grpc-connect",
+      "path": ".agents/skills/backend/grpc-connect",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 8,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 8,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 2,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 4
+      },
+      "total": 72,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/grpc-connect.json"
+      ],
+      "metrics": {
+        "tokens": 608,
+        "lines": 95,
+        "headers": 14,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "grpc-connect",
+        "description": "gRPC and Connect (protobuf, ConnectRPC, grpc-gateway, streaming, code generation).",
+        "category": "backend",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "backend",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/grpc-connect.json"
+      }
+    },
+    {
+      "skill": "microservices",
+      "path": ".agents/skills/backend/microservices",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 7,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 5,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 5,
+        "artifactSchema": 5,
+        "progressiveDisclosure": 8,
+        "observability": 2,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 5
+      },
+      "total": 74,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "modelTier mismatch: trustTier=1, modelTier=reasoning",
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/microservices.json"
+      ],
+      "metrics": {
+        "tokens": 402,
+        "lines": 69,
+        "headers": 10,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "microservices",
+        "description": "Design microservice architectures — service decomposition, inter-service communication, data ownership, resilience patterns — with explicit boundaries and failure isolation.",
+        "category": "backend",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "backend",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/microservices.json"
+      }
+    },
+    {
+      "skill": "rate-limiting",
+      "path": ".agents/skills/backend/rate-limiting",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 8,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 8,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 3,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 4
+      },
+      "total": 73,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/rate-limiting.json"
+      ],
+      "metrics": {
+        "tokens": 655,
+        "lines": 95,
+        "headers": 14,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "rate-limiting",
+        "description": "Rate limiting and throttling (token bucket, sliding window, distributed rate limiting, API protection).",
+        "category": "backend",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "backend",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/rate-limiting.json"
+      }
+    },
+    {
+      "skill": "serverless",
+      "path": ".agents/skills/backend/serverless",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 8,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 8,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 2,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 4
+      },
+      "total": 72,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/serverless.json"
+      ],
+      "metrics": {
+        "tokens": 607,
+        "lines": 95,
+        "headers": 14,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "serverless",
+        "description": "Serverless architecture (Lambda, Functions, FaaS, event-driven, cold starts, scaling, cost).",
+        "category": "backend",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "backend",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/serverless.json"
+      }
+    },
+    {
+      "skill": "service-mesh",
+      "path": ".agents/skills/backend/service-mesh",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 8,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 8,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 3,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 4
+      },
+      "total": 73,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/service-mesh.json"
+      ],
+      "metrics": {
+        "tokens": 594,
+        "lines": 95,
+        "headers": 14,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "service-mesh",
+        "description": "Service mesh (Istio, Linkerd, Cilium, mTLS, traffic splitting, observability).",
+        "category": "backend",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "backend",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/service-mesh.json"
+      }
+    },
+    {
+      "skill": "websockets",
+      "path": ".agents/skills/backend/websockets",
+      "scores": {
+        "frontmatterCompleteness": 10,
+        "bodyDepth": 8,
+        "sections": 10,
+        "assets": 2,
+        "behavioralSpec": 3,
+        "safety": 5,
+        "promptVersioning": 5,
+        "modelTierAlignment": 8,
+        "artifactSchema": 2,
+        "progressiveDisclosure": 8,
+        "observability": 3,
+        "regressionCoverage": 5,
+        "diataxisCompleteness": 4
+      },
+      "total": 73,
+      "grade": "C",
+      "tier": "BASIC",
+      "issues": [],
+      "warnings": [
+        "fixturesPath declared but file missing: .agents/skills/platform/fixtures/behavioral/websockets.json"
+      ],
+      "metrics": {
+        "tokens": 618,
+        "lines": 95,
+        "headers": 14,
+        "scripts": 0,
+        "scriptLoc": 0
+      },
+      "frontmatter": {
+        "name": "websockets",
+        "description": "WebSockets and real-time (Socket.IO, WS, SSE, pub/sub, scaling, reconnection, backpressure).",
+        "category": "backend",
+        "version": "1",
+        "promptVersion": "2.0",
+        "modelTier": "reasoning",
+        "artifactType": "backend",
+        "fixturesPath": ".agents/skills/platform/fixtures/behavioral/websockets.json"
+      }
+    }
+  ],
+  "errors": []
+}

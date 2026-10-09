@@ -1,0 +1,13 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-gate-post-merge",
+      "skill": "gate-post-merge",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": ["## Contract", "## Provenance", "## Artifact", "GatePostMergeArtifact", "canary", "alert"],
+        "doesNotContain": ["## Operating Contract"]
+      }
+    }
+  ]
+}

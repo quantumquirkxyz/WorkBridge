@@ -1,0 +1,31 @@
+{
+  "name": "webapp-testing",
+  "description": "Choose the right test seam for a web app and describe how to verify it at unit, integration, and end-to-end levels.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/delivery/webapp-testing/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "delivery/webapp-testing",
+      "name": "webapp-testing",
+      "description": "Choose the right test seam for a web app and describe how to verify it at unit, integration, and end-to-end levels.",
+      "tags": [
+        "\"delivery\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "test-strategy"
+      }
+    }
+  ]
+}

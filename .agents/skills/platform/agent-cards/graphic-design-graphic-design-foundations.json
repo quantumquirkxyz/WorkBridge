@@ -1,0 +1,31 @@
+{
+  "name": "graphic-design-foundations",
+  "description": "Design graphic artifacts — posters, social graphics, editorial layouts, packaging, signage — with explicit composition, color, typography, and production constraints.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/graphic-design/graphic-design-foundations/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "graphic-design/graphic-design-foundations",
+      "name": "graphic-design-foundations",
+      "description": "Design graphic artifacts — posters, social graphics, editorial layouts, packaging, signage — with explicit composition, color, typography, and production constraints.",
+      "tags": [
+        "\"graphic-design\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "plan"
+      }
+    }
+  ]
+}

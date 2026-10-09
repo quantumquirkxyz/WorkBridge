@@ -1,0 +1,92 @@
+{
+  "name": "quirk-skills",
+  "displayName": "Quirk Skills",
+  "description": "Portable, validated skills bundle for AI coding agents with quality gates, MCP runtime, and multi-agent orchestration.",
+  "version": "1.0.0",
+  "bundleVersion": "1.0.0",
+  "author": "quantumquirkxyz",
+  "repository": "https://github.com/quantumquirkxyz/skills-quirk",
+  "skillsDir": ".agents/skills",
+  "installCommand": "bash scripts/setup-quirk-skills.sh .",
+  "pluginName": "quirk-skills",
+  "categories": [
+    "accessibility",
+    "ai",
+    "auxiliary",
+    "backend",
+    "cms",
+    "compilers",
+    "cs",
+    "data",
+    "db",
+    "delivery",
+    "devops",
+    "docs",
+    "engineering",
+    "finance",
+    "foundation",
+    "frontend",
+    "integrations",
+    "iot",
+    "math",
+    "networking",
+    "os",
+    "physics",
+    "platform",
+    "prod",
+    "professional",
+    "project",
+    "qa",
+    "quant",
+    "research",
+    "routing",
+    "sec",
+    "skill-dev",
+    "ux",
+    "web3",
+    "xr"
+  ],
+  "supportsAgents": [
+    "claude-code",
+    "codex",
+    "cursor",
+    "openai",
+    "gemini"
+  ],
+  "license": "MIT",
+  "agents_compatible": [
+    "claude-code",
+    "codex",
+    "opencode",
+    "gemini",
+    "openhands",
+    "warp"
+  ],
+  "standards": [
+    "quirk",
+    "agentskills.io"
+  ],
+  "session_memory": ".agents/skills/session/",
+  "mcp_support": true,
+  "quality": {
+    "scoringEnabled": true,
+    "minScore": 60,
+    "tiers": ["BASIC", "STANDARD", "POWERFUL"],
+    "securityScanEnabled": true,
+    "mutationTesting": false
+  },
+  "distribution": {
+    "npmPackage": "@quirk/skills",
+    "npxCommand": "npx skills-quirk",
+    "marketplaces": {
+      "claudeCode": true,
+      "opencode": true,
+      "codex": true
+    }
+  },
+  "lifecycle": {
+    "channels": ["stable", "beta", "canary"],
+    "defaultChannel": "stable",
+    "evidenceGatedUpdates": true
+  }
+}

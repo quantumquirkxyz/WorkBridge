@@ -1,0 +1,17 @@
+{
+  "traceId": "golden-review-pr-001",
+  "spanId": "golden-span-004",
+  "parentSpanId": null,
+  "skill": "review-pr",
+  "skillVersion": "2.0",
+  "promptVersion": "2.0",
+  "model": { "provider": "anthropic", "model": "claude-sonnet-4-20250514", "tier": "reasoning" },
+  "input": { "artifactType": "pull-request-review", "sizeTokens": 7800, "contextRefs": ["pr-108"] },
+  "output": { "artifactType": "ReviewArtifact", "sizeTokens": 3200, "schemaValid": true, "outputRef": "artifacts/review-pr/pr-108.json" },
+  "execution": { "startedAt": "2026-10-01T22:00:00Z", "completedAt": "2026-10-01T22:00:26Z", "durationMs": 26000, "iterations": 1, "retries": 0 },
+  "tools": [{ "name": "read", "calls": 28 }, { "name": "grep", "calls": 14 }, { "name": "bash", "calls": 3 }],
+  "quality": { "artifactPassedQualityBar": true, "artifactScore": 91, "evaluators": ["behavioral", "review-effectiveness", "spec-compliance"], "findingsCount": 3 },
+  "result": "completed",
+  "blockedBy": [],
+  "nextConsumer": "plan-review-fixes"
+}

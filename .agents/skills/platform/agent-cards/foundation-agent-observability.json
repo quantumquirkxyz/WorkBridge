@@ -1,0 +1,31 @@
+{
+  "name": "agent-observability",
+  "description": "Capture redacted execution records, traces, and quality signals for skill runs with structured data for analysis. Enables full audit of decisions made during agent execution.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/foundation/agent-observability/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "foundation/agent-observability",
+      "name": "agent-observability",
+      "description": "Capture redacted execution records, traces, and quality signals for skill runs with structured data for analysis. Enables full audit of decisions made during agent execution.",
+      "tags": [
+        "\"foundation\""
+      ],
+      "parameters": {
+        "trustTier": "2",
+        "modelTier": "fast",
+        "artifactType": "agent"
+      }
+    }
+  ]
+}

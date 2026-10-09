@@ -1,0 +1,29 @@
+{
+  "name": "release-management",
+  "description": "Plan the release train, CI handoff, and rollback posture for a project — so shipping stays controlled.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/platform/release-management/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": false,
+    "workflowOrchestration": false
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "platform/release-management",
+      "name": "release-management",
+      "description": "Plan the release train, CI handoff, and rollback posture for a project — so shipping stays controlled.",
+      "tags": [
+        "platform"
+      ],
+      "parameters": {
+        "trustTier": "1"
+      }
+    }
+  ]
+}

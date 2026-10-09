@@ -1,0 +1,15 @@
+{
+  "fixtures": [
+    {
+      "id": "regression-to-tickets-body",
+      "skill": "to-tickets",
+      "type": "regression",
+      "version": "1.0.0",
+      "input": "Break the new auth spec into tracer-bullet tickets",
+      "expectedOutput": {
+        "contains": ["contract", "provenance", "artifact", "ticketartifact", "tracer bullet", "vertical slice", "blocked by", "blocking edge"],
+        "minLength": 500
+      }
+    }
+  ]
+}

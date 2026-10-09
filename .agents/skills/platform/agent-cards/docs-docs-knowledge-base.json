@@ -1,0 +1,31 @@
+{
+  "name": "docs-knowledge-base",
+  "description": "Maintain a repository knowledge base — glossary, durable references, indexed guidance, and consumer-oriented navigation — with explicit update rules.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/docs/docs-knowledge-base/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "docs/docs-knowledge-base",
+      "name": "docs-knowledge-base",
+      "description": "Maintain a repository knowledge base — glossary, durable references, indexed guidance, and consumer-oriented navigation — with explicit update rules.",
+      "tags": [
+        "\"docs\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "adr"
+      }
+    }
+  ]
+}
