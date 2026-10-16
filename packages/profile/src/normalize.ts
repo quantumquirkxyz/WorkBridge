@@ -61,10 +61,6 @@ export function strongestProvenance(records: readonly Evidence[]): Provenance {
   return strongest;
 }
 
-function defaultConfidence(provenance: Provenance): number {
-  return CONFIDENCE_BY_PROVENANCE[provenance];
-}
-
 function slugify(value: string): string {
   const slug = normalizeTerm(value).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
   return slug || 'unknown';
@@ -87,7 +83,7 @@ class EvidenceFactory {
     const existing = this.byKey.get(key);
     if (existing) return existing.id;
 
-    const confidence = draft?.confidence ?? defaultConfidence(source);
+    const confidence = draft?.confidence ?? CONFIDENCE_BY_PROVENANCE[source];
     const id = makeId('ev', key);
     const record: Evidence = {
       id,
@@ -287,7 +283,7 @@ function buildEducation(
     program: draft.program.trim(),
     source: strongestProvenance(records),
     evidence_ids: [...new Set(evidenceIds)],
-    confidence: Number((draft.confidence ?? defaultConfidence(strongestProvenance(records))).toFixed(2)),
+    confidence: Number((draft.confidence ?? CONFIDENCE_BY_PROVENANCE[strongestProvenance(records)]).toFixed(2)),
   };
   if (draft.level) education.level = draft.level;
   if (draft.started_at) education.started_at = draft.started_at;
@@ -310,7 +306,7 @@ function buildCertification(
     status: strongest === 'verified' ? 'verified' : 'declared',
     source: strongest,
     evidence_ids: [...new Set(evidenceIds)],
-    confidence: Number((draft.confidence ?? defaultConfidence(strongest)).toFixed(2)),
+    confidence: Number((draft.confidence ?? CONFIDENCE_BY_PROVENANCE[strongest]).toFixed(2)),
   };
   if (draft.issuer) certification.issuer = draft.issuer;
   if (draft.issued_at) certification.issued_at = draft.issued_at;

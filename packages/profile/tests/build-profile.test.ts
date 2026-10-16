@@ -150,4 +150,19 @@ describe('buildProfile end to end', () => {
     expect(byDescription('puesto en la empresa')?.experience_type).toBe('formal_employment');
     expect(byDescription('Tesis')?.experience_type).toBe('academic');
   });
+
+  it('recognises family work named by venue and relation (puesto / comercio)', async () => {
+    const text = [
+      'Ayudaba en el puesto de mi mamá los sábados.',
+      'Atendía el comercio familiar en las tardes.',
+    ].join('\n');
+    const result = await buildProfile(
+      { text, source: source('text'), provenance: 'declared', traceId: 'trace_family_phrases' },
+      { now: fixedNow },
+    );
+    const familyWork = result.profile.experiences.filter(
+      (experience) => experience.experience_type === 'family_business',
+    );
+    expect(familyWork).toHaveLength(2);
+  });
 });

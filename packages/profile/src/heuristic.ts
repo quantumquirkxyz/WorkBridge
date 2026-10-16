@@ -9,7 +9,7 @@ import {
   type Provenance,
   type ProfileDraft,
 } from '@puente/domain';
-import { inferExperienceType } from './experience-type';
+import { ACADEMIC_WORK_TERMS, inferExperienceType } from './experience-type';
 
 export interface ExtractionInput {
   text: string;
@@ -64,8 +64,7 @@ const EXPERIENCE_SIGNALS = [
   'mantenimiento',
   'soporte',
   'servicio al cliente',
-  'tesis',
-  'trabajo academico',
+  ...ACADEMIC_WORK_TERMS,
 ];
 
 const EDUCATION_SIGNALS = ['bachiller', 'licenciatura', 'universidad', 'colegio', 'instituto', 'escuela', 'tecnico', 'técnico', 'secundaria', 'primaria'];
