@@ -7,7 +7,11 @@ export interface FairnessRule {
   /** Regex sources applied to accent-free, lowercase wording. */
   patterns: readonly string[];
   reason: string;
-  /** When true, a documented justification suppresses the alert. */
+  /**
+   * When true, the rule can record whether a justification was supplied.
+   * A justification is audited but never suppresses the alert: the
+   * requirement is still routed to human review.
+   */
   requiresJustification?: boolean;
 }
 

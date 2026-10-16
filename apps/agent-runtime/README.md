@@ -64,7 +64,7 @@ if (document.status === "accepted") {
 ```bash
 npm run lint          # eslint
 npm run typecheck     # tsc --noEmit
-npm test              # vitest (64 tests)
+npm test              # vitest (72 tests)
 npm run test:coverage # vitest + v8 coverage (80% line threshold)
 ```
 
