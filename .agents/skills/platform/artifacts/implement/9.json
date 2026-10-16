@@ -1,0 +1,35 @@
+{
+  "status": "completed",
+  "changes": [
+    "packages/domain: AgentEnvelope and WorkflowRunRequest JSON Schema 2020-12 contracts requiring trace_id and idempotency_key, validated with Ajv.",
+    "apps/agent-runtime/src/workflow/guardrails.ts: input, tool-result, permission, and output guardrails that block prompt injection, PII leakage, invalid schemas, invented credentials, and unauthorized tools. Ten fixtures in fixtures/guardrails/cases.json.",
+    "apps/agent-runtime/src/workflow/models.ts: OpenRouter capability chains for extraction, matching, and planning, with token budgets, catalog preflight, and ordered fallback.",
+    "apps/agent-runtime/src/workflow/observability.ts: in-memory Langfuse ingestion batches, append-only audit_events, and a DQL store with pending, success, failed, rejected, retrying, and dead_letter.",
+    "apps/agent-runtime/src/workflow/graph.ts: Mastra workflow coordinating Exploration, Profile and Evidence, Market and Matching, and Training. REST/SSE adapter at POST /internal/workflow/runs."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npm run lint",
+      "npm run typecheck",
+      "npm test",
+      "npm run test:coverage",
+      "npm audit"
+    ],
+    "skipped": [
+      "semgrep, snyk, and k6 are not installed in this repository; gate-ci used the repo verify path (eslint, tsc, vitest, v8 coverage) plus npm audit.",
+      "No spellchecker is configured. Changed files were scanned for committed secrets; none were added."
+    ],
+    "notes": "113/113 tests pass. Coverage 93.64% lines / 79.03% branches (gate-ci line threshold is 80%). npm audit reports 5 moderate transitive advisories via @mastra/core -> gray-matter/js-yaml/sprintf-js. The suggested fix downgrades Mastra to 1.0.4, which is a different major API, so it was not applied. This plane does not parse untrusted markdown front matter. Issues #4 and #6 remain open: candidate text and declared credential claims are ports, not CandidateProfile or CredentialVerification."
+  },
+  "commitSha": "4cb417c",
+  "branch": "feat/issue-9-build-multi-agent-workflow-safety-observability",
+  "nextConsumer": "publish-open-pr",
+  "blockedBy": [],
+  "riskRemaining": "Issues #4 and #6 are still open, so this plane does not persist a CandidateProfile or verify credentials with Certo. @mastra/core 1.78.0 pulls moderate transitive advisories in gray-matter. Live OpenRouter and Langfuse calls are behind injected ports and are not exercised against the network.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  }
+}
