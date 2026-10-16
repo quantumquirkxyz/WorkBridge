@@ -3,9 +3,9 @@ import {
   type JobRequirements,
   type Requirement,
   type ReviewItem,
-  type VacancyStatus,
 } from "@puente/domain";
 import { InvalidJobRequirementsError, ReviewNotFoundError } from "./errors";
+import { resolveStatus } from "./status";
 import type { ReviewDecision } from "./types";
 
 /**
@@ -27,15 +27,6 @@ export function getPendingReviews(document: JobRequirements): ReviewItem[] {
 /** A blocked vacancy cannot be ranked at all until the blocker is resolved. */
 export function isVacancyRankable(document: JobRequirements): boolean {
   return document.status !== "blocked";
-}
-
-function resolveStatus(
-  blockingReasons: string[],
-  reviewQueue: ReviewItem[],
-): VacancyStatus {
-  if (blockingReasons.length > 0) return "blocked";
-  if (reviewQueue.length > 0) return "requires_human_review";
-  return "accepted";
 }
 
 function revalidate(document: JobRequirements): JobRequirements {

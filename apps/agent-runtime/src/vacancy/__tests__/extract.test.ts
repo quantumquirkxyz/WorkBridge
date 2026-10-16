@@ -1,7 +1,10 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { ExtractionUnavailableError, VacancyInputError } from "../errors";
 import { extractJson, extractStructured, normalizeLocation } from "../extract";
 import { defaultImageExtractor, defaultPdfExtractor } from "../extract/adapters";
+
+const { recognize } = vi.hoisted(() => ({ recognize: vi.fn() }));
+vi.mock("tesseract.js", () => ({ recognize }));
 
 describe("extractStructured", () => {
   it("coerces string requirements and infers kind and level", () => {
@@ -92,6 +95,36 @@ describe("default adapters", () => {
   it("wrap an unreadable PDF as an ExtractionUnavailableError", async () => {
     await expect(
       defaultPdfExtractor(new Uint8Array([1, 2, 3, 4])),
+    ).rejects.toBeInstanceOf(ExtractionUnavailableError);
+  });
+});
+
+describe("defaultImageExtractor", () => {
+  afterEach(() => {
+    recognize.mockReset();
+  });
+
+  it("runs OCR and returns the recognized text", async () => {
+    recognize.mockResolvedValue({
+      data: { text: "Recepcionista\nRequisitos:\n- Atención al cliente" },
+    });
+
+    const result = await defaultImageExtractor(
+      new Uint8Array([1, 2, 3]),
+      "image/png",
+      "cv.png",
+    );
+
+    expect(recognize).toHaveBeenCalledOnce();
+    expect(result.extractor).toBe("tesseract.js");
+    expect(result.text).toContain("Atención al cliente");
+  });
+
+  it("wraps an OCR failure as an ExtractionUnavailableError", async () => {
+    recognize.mockRejectedValue(new Error("tesseract unavailable"));
+
+    await expect(
+      defaultImageExtractor(new Uint8Array([9])),
     ).rejects.toBeInstanceOf(ExtractionUnavailableError);
   });
 });

@@ -105,6 +105,67 @@ describe("normalizeVacancy — potentially discriminatory requirements", () => {
     const age = result.requirements.find((r) => r.originalWording === "Edad: entre 20 y 25 años");
     expect(age?.excludedFromRanking).toBe(true);
   });
+
+  it("still routes a justified age limit to human review", async () => {
+    const result = await normalizeVacancy(
+      {
+        kind: "manual",
+        vacancy: {
+          title: "Bodeguero",
+          mandatory: [
+            {
+              text: "Mayor de 18 años",
+              justification: "Requisito legal para venta de alcohol",
+            },
+          ],
+        },
+      },
+      options,
+    );
+
+    expect(result.status).toBe("requires_human_review");
+    expect(result.alerts).toHaveLength(1);
+    expect(result.alerts[0]?.ruleId).toBe("fairness.age");
+    expect(result.alerts[0]?.reason).toContain("justification");
+    expect(result.reviewQueue).toHaveLength(1);
+    expect(result.requirements[0]?.excludedFromRanking).toBe(true);
+    expect(validateJobRequirements(result)).toBe(true);
+  });
+});
+
+describe("normalizeVacancy — order independence", () => {
+  it("classifies each requirement the same regardless of its position", async () => {
+    const forward = await normalizeVacancy(
+      {
+        kind: "manual",
+        vacancy: {
+          title: "Vendedor",
+          mandatory: ["Buena presencia", "Manejo de Excel a nivel intermedio"],
+        },
+      },
+      options,
+    );
+    const reversed = await normalizeVacancy(
+      {
+        kind: "manual",
+        vacancy: {
+          title: "Vendedor",
+          mandatory: ["Manejo de Excel a nivel intermedio", "Buena presencia"],
+        },
+      },
+      options,
+    );
+
+    const excluded = (document: typeof forward) =>
+      document.requirements
+        .filter((requirement) => requirement.excludedFromRanking)
+        .map((requirement) => requirement.originalWording);
+
+    expect(forward.status).toBe("blocked");
+    expect(reversed.status).toBe("blocked");
+    expect(excluded(reversed)).toEqual(excluded(forward));
+    expect(excluded(forward)).toEqual(["Buena presencia"]);
+  });
 });
 
 describe("normalizeVacancy — mixed severities", () => {

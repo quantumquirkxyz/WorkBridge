@@ -163,11 +163,22 @@ export interface FairnessClassification {
   ruleId: string;
   reason: string;
   matchedText: string;
+  /**
+   * True when the matched rule requires a justification and one was supplied.
+   * A justification never suppresses the alert: it is evidence the reviewer
+   * must verify, so the requirement is still flagged and excluded from ranking
+   * until a human resolves it.
+   */
+  justified: boolean;
 }
 
 /**
  * Classify a requirement's wording. Returns `null` when the wording is
  * objective and carries no fairness concern.
+ *
+ * A supplied `justification` does not bypass classification. When a rule
+ * requires a justification, the match is returned with `justified: true` so the
+ * caller can keep routing it to human review and record the justification.
  */
 export function classifyRequirement(
   wording: string,
@@ -179,7 +190,6 @@ export function classifyRequirement(
     typeof justification === "string" && justification.trim().length > 0;
 
   for (const rule of FAIRNESS_RULES) {
-    if (rule.requiresJustification && hasJustification) continue;
     for (const pattern of rule.patterns) {
       const match = new RegExp(pattern).exec(normalized);
       if (match?.[0]) {
@@ -188,6 +198,7 @@ export function classifyRequirement(
           ruleId: rule.id,
           reason: rule.reason,
           matchedText: match[0],
+          justified: rule.requiresJustification === true && hasJustification,
         };
       }
     }

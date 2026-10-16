@@ -27,10 +27,19 @@ describe("classifyRequirement", () => {
     );
   });
 
-  it("does not flag age when a documented justification exists", () => {
-    expect(
-      classifyRequirement("Mayor de 18 años", "Requisito legal para venta de alcohol"),
-    ).toBeNull();
+  it("still flags a justified requirement so a reviewer can verify it", () => {
+    const result = classifyRequirement(
+      "Mayor de 18 años",
+      "Requisito legal para venta de alcohol",
+    );
+    expect(result?.classification).toBe("potentially_discriminatory");
+    expect(result?.ruleId).toBe("fairness.age");
+    expect(result?.justified).toBe(true);
+  });
+
+  it("marks a classification justified only for rules that require one", () => {
+    expect(classifyRequirement("Buena presencia")?.justified).toBe(false);
+    expect(classifyRequirement("Persona dinámica")?.justified).toBe(false);
   });
 
   it("flags vague subjective traits as ambiguous", () => {
@@ -62,5 +71,34 @@ describe("classifyRequirement", () => {
 
   it("returns null for empty wording", () => {
     expect(classifyRequirement("   ")).toBeNull();
+  });
+
+  it("is idempotent for the same wording", () => {
+    const first = classifyRequirement("Edad: entre 20 y 25 años");
+    const second = classifyRequirement("Edad: entre 20 y 25 años");
+    expect(second).toEqual(first);
+  });
+
+  it("applies the most severe rule when several rules match", () => {
+    expect(classifyRequirement("Persona joven y dinámica")?.classification).toBe(
+      "potentially_discriminatory",
+    );
+    expect(
+      classifyRequirement("Buena presencia y buena actitud")?.classification,
+    ).toBe("prohibited");
+  });
+
+  it("classifies each wording independently of its neighbours", () => {
+    const wordings = [
+      "Buena presencia",
+      "Manejo de Excel a nivel intermedio",
+      "Persona proactiva",
+    ];
+    const forward = wordings.map((w) => classifyRequirement(w)?.ruleId ?? null);
+    const reversed = [...wordings]
+      .reverse()
+      .map((w) => classifyRequirement(w)?.ruleId ?? null)
+      .reverse();
+    expect(reversed).toEqual(forward);
   });
 });

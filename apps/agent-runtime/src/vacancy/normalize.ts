@@ -4,17 +4,16 @@ import {
   normalizeText,
   validateJobRequirements,
   type Alert,
-  type CanonicalSkill,
   type JobRequirements,
   type Requirement,
   type RequirementCategory,
   type ReviewItem,
   type SkillTaxonomy,
-  type VacancyStatus,
 } from "@puente/domain";
 import { InvalidJobRequirementsError, VacancyInputError } from "./errors";
 import { extractVacancy } from "./extract";
 import { classifyRequirement } from "./fairness";
+import { resolveStatus } from "./status";
 import { inferKind, parseLevel, slugify } from "./text";
 import type {
   ExtractedVacancy,
@@ -26,10 +25,6 @@ import type {
 interface FlatRequirement {
   category: RequirementCategory;
   raw: RawRequirementInput;
-}
-
-function buildCanonical(text: string, taxonomy: SkillTaxonomy): CanonicalSkill {
-  return matchSkill(text, taxonomy);
 }
 
 function buildRequirements(
@@ -50,7 +45,7 @@ function buildRequirements(
       category: entry.category,
       originalWording,
       normalizedWording,
-      canonical: buildCanonical(originalWording, taxonomy),
+      canonical: matchSkill(originalWording, taxonomy),
       level: entry.raw.level ?? parseLevel(normalizedWording),
       justification: entry.raw.justification ?? null,
       alertId: null,
@@ -71,7 +66,9 @@ interface AppliedFairness {
  * Apply fairness checks to every requirement. Prohibited requirements are
  * blocked; ambiguous and potentially discriminatory requirements are routed to
  * human review. Every flagged requirement is excluded from ranking until a
- * reviewer resolves it (see `resolveReview`).
+ * reviewer resolves it (see `resolveReview`). A supplied justification never
+ * bypasses the check: it is carried into the alert reason so the reviewer can
+ * verify it.
  */
 function applyFairness(requirements: Requirement[]): AppliedFairness {
   const alerts: Alert[] = [];
@@ -86,16 +83,19 @@ function applyFairness(requirements: Requirement[]): AppliedFairness {
     if (classification === null) continue;
 
     const alertId = `alert-${alerts.length + 1}`;
-    const kind = classification.classification;
+    const alertClassification = classification.classification;
+    const reason = classification.justified
+      ? `${classification.reason} A justification was supplied and must be verified by a reviewer before this requirement can be ranked.`
+      : classification.reason;
 
     alerts.push({
       id: alertId,
       requirementId: requirement.id,
-      classification: kind,
+      classification: alertClassification,
       ruleId: classification.ruleId,
-      reason: classification.reason,
+      reason,
       matchedText: classification.matchedText,
-      disposition: kind === "prohibited" ? "blocked" : "human_review",
+      disposition: alertClassification === "prohibited" ? "blocked" : "human_review",
       resolved: false,
       resolution: null,
     });
@@ -104,7 +104,7 @@ function applyFairness(requirements: Requirement[]): AppliedFairness {
     requirement.rankingEligible = false;
     requirement.excludedFromRanking = true;
 
-    if (kind === "prohibited") {
+    if (alertClassification === "prohibited") {
       blockingReasons.push(
         `Prohibited requirement blocked (rule ${classification.ruleId}): "${requirement.originalWording}"`,
       );
@@ -113,23 +113,14 @@ function applyFairness(requirements: Requirement[]): AppliedFairness {
         reviewId: `review-${reviewQueue.length + 1}`,
         requirementId: requirement.id,
         alertId,
-        classification: kind,
+        classification: alertClassification,
         status: "pending_human_review",
-        reason: classification.reason,
+        reason,
       });
     }
   }
 
   return { alerts, reviewQueue, blockingReasons };
-}
-
-function resolveStatus(
-  blockingReasons: string[],
-  reviewQueue: ReviewItem[],
-): VacancyStatus {
-  if (blockingReasons.length > 0) return "blocked";
-  if (reviewQueue.length > 0) return "requires_human_review";
-  return "accepted";
 }
 
 function buildDocument(
