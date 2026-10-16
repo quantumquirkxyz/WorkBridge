@@ -45,9 +45,9 @@ describe('createLlmProfileExtractor', () => {
       model: 'test-model',
     });
     const extractor = createLlmProfileExtractor({ chat });
-    const draft = await extractor.extract({ text: CV, sourceRef: 'x', provenance: 'extracted' });
-    expect(extractor.kind).toBe('llm');
-    expect(draft.skills?.[0]?.original_term).toBe('Excel');
+    const outcome = await extractor.extract({ text: CV, sourceRef: 'x', provenance: 'extracted' });
+    expect(outcome.kind).toBe('llm');
+    expect(outcome.draft.skills?.[0]?.original_term).toBe('Excel');
   });
 
   it('redacts PII before sending text to the model', async () => {
@@ -92,10 +92,29 @@ describe('createResilientExtractor', () => {
     };
     const onFallback = vi.fn();
     const extractor = createResilientExtractor({ primary: failing, fallback: heuristicProfileExtractor, onFallback });
-    const draft = await extractor.extract({ text: CV, sourceRef: 'x', provenance: 'declared' });
-    expect(extractor.kind).toBe('heuristic-fallback');
+    const outcome = await extractor.extract({ text: CV, sourceRef: 'x', provenance: 'declared' });
+    expect(outcome.kind).toBe('heuristic-fallback');
     expect(onFallback).toHaveBeenCalledOnce();
-    expect(draft.skills?.length).toBeGreaterThan(0);
+    expect(outcome.draft.skills?.length).toBeGreaterThan(0);
+  });
+
+  it('reports the strategy per call, not via shared state, under concurrency', async () => {
+    let calls = 0;
+    const primary: ProfileExtractor = {
+      kind: 'llm',
+      async extract() {
+        const n = calls++;
+        await new Promise((resolve) => setTimeout(resolve, n === 0 ? 20 : 0));
+        if (n === 1) throw new Error('provider down');
+        return { draft: { skills: [{ original_term: 'Excel' }] }, kind: 'llm' };
+      },
+    };
+    const extractor = createResilientExtractor({ primary, fallback: heuristicProfileExtractor });
+    const [a, b] = await Promise.all([
+      extractor.extract({ text: CV, sourceRef: 'x', provenance: 'declared' }),
+      extractor.extract({ text: CV, sourceRef: 'x', provenance: 'declared' }),
+    ]);
+    expect([a.kind, b.kind].sort()).toEqual(['heuristic-fallback', 'llm']);
   });
 });
 

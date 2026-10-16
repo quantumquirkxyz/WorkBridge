@@ -1,8 +1,12 @@
 import {
   assertCandidateProfile,
   DECLARED_ONLY_MAX_LEVEL,
+  DEFAULT_LOCALE,
   LEVEL_BEYOND_BASIC_PROVENANCE,
+  PROFILE_SCHEMA_VERSION,
   PROVENANCE_RANK,
+  SKILL_LEVEL_MAX,
+  SKILL_LEVEL_MIN,
   makeId,
   matchMentions,
   matchSkill,
@@ -38,7 +42,7 @@ export interface NormalizeOptions {
 }
 
 function clampLevel(value: number): SkillLevel {
-  const bounded = Math.max(0, Math.min(4, Math.round(value)));
+  const bounded = Math.max(SKILL_LEVEL_MIN, Math.min(SKILL_LEVEL_MAX, Math.round(value)));
   return bounded as SkillLevel;
 }
 
@@ -78,7 +82,7 @@ class EvidenceFactory {
 
   add(draft: DraftEvidence | undefined, fallbackClaim: string): string {
     const claim = (draft?.claim?.trim() || fallbackClaim).trim();
-    const source = draft?.source ?? this.provenance;
+    const source = this.resolveSource(draft?.source);
     const key = [this.sourceRef, source, normalizeTerm(claim)].join('|');
     const existing = this.byKey.get(key);
     if (existing) return existing.id;
@@ -98,6 +102,35 @@ class EvidenceFactory {
     this.records.push(record);
     return id;
   }
+
+  /**
+   * Clamp a draft-supplied evidence source so it never claims document-level or
+   * verified evidence the intake source itself could not produce. This keeps
+   * provenance honest and stops a model from raising a declared fact above
+   * level 1 by relabelling its own evidence as `extracted`.
+   */
+  private resolveSource(requested: Provenance | undefined): Provenance {
+    const candidate = requested ?? this.provenance;
+    if (
+      LEVEL_BEYOND_BASIC_PROVENANCE.includes(candidate) &&
+      provenanceRank(candidate) > provenanceRank(this.provenance)
+    ) {
+      return this.provenance;
+    }
+    return candidate;
+  }
+}
+
+/** Attach a draft's evidence (or one fallback record) and return the evidence ids. */
+function collectEvidence(
+  evidence: EvidenceFactory,
+  draftEvidence: readonly DraftEvidence[] | undefined,
+  fallbackClaim: string,
+): string[] {
+  const items = draftEvidence ?? [];
+  return items.length > 0
+    ? items.map((item) => evidence.add(item, fallbackClaim))
+    : [evidence.add(undefined, fallbackClaim)];
 }
 
 function resolveTaxonomy(draft: {
@@ -128,21 +161,22 @@ function buildSkill(
 
   const taxonomy = resolveTaxonomy(draft);
   const notes: string[] = [];
-  const draftEvidence = draft.evidence ?? [];
-  const evidenceIds =
-    draftEvidence.length > 0
-      ? draftEvidence.map((item) => evidence.add(item, original))
-      : [evidence.add(undefined, original)];
+  const evidenceIds = collectEvidence(evidence, draft.evidence, original);
 
   const records = evidence.records.filter((record) => evidenceIds.includes(record.id));
   const strongest = strongestProvenance(records);
 
+  // A skill may exceed level 1 only when both the intake provenance and its own
+  // evidence are strong enough (extracted/verified). Declared-only evidence caps
+  // it at level 1 regardless of what the draft asked for.
+  const beyondBasic =
+    LEVEL_BEYOND_BASIC_PROVENANCE.includes(provenance) &&
+    LEVEL_BEYOND_BASIC_PROVENANCE.includes(strongest);
+
   let level = clampLevel(draft.level_hint ?? (provenance === 'declared' ? 1 : 2));
-  if (level > 0 && provenanceRank(strongest) < provenanceRank('extracted')) {
-    if (level > DECLARED_ONLY_MAX_LEVEL) {
-      level = DECLARED_ONLY_MAX_LEVEL;
-      notes.push('Declared-only skill capped at level 1 until stronger evidence is provided.');
-    }
+  if (level > 0 && !beyondBasic && level > DECLARED_ONLY_MAX_LEVEL) {
+    level = DECLARED_ONLY_MAX_LEVEL;
+    notes.push('Declared-only skill capped at level 1 until stronger evidence is provided.');
   }
 
   let skillId: string;
@@ -201,20 +235,17 @@ function buildExperience(
   provenance: Provenance,
   roles: ReturnType<typeof resolveTargetRoles>,
 ): CandidateExperience {
-  const draftEvidence = draft.evidence ?? [];
-  const evidenceIds =
-    draftEvidence.length > 0
-      ? draftEvidence.map((item) => evidence.add(item, draft.description || draft.title))
-      : [evidence.add(undefined, draft.description || draft.title)];
+  const evidenceIds = collectEvidence(evidence, draft.evidence, draft.description || draft.title);
 
   const detected = matchMentions([draft.title, draft.organization ?? '', draft.description].join(' ')).map(
     (match) => match.skill.skill_id,
   );
   const skillIds = [...new Set(detected)].sort();
 
+  const experienceType = draft.experience_type ?? inferExperienceType(draft.description);
   const classification = classifyExperience({
     description: draft.description,
-    experienceType: draft.experience_type ?? inferExperienceType(draft.description),
+    experienceType,
     roles,
     skillIds,
   });
@@ -224,7 +255,7 @@ function buildExperience(
 
   const experience: CandidateExperience = {
     id: makeId('exp', [draft.experience_type, draft.title, draft.organization ?? '', draft.description].join('|')),
-    experience_type: draft.experience_type ?? inferExperienceType(draft.description),
+    experience_type: experienceType,
     title: draft.title.trim(),
     description: draft.description.trim(),
     source: strongestProvenance(records),
@@ -247,11 +278,7 @@ function buildEducation(
   evidence: EvidenceFactory,
 ): CandidateEducation {
   const claim = `${draft.program} — ${draft.institution}`;
-  const draftEvidence = draft.evidence ?? [];
-  const evidenceIds =
-    draftEvidence.length > 0
-      ? draftEvidence.map((item) => evidence.add(item, claim))
-      : [evidence.add(undefined, claim)];
+  const evidenceIds = collectEvidence(evidence, draft.evidence, claim);
   const records = evidence.records.filter((record) => evidenceIds.includes(record.id));
 
   const education: CandidateEducation = {
@@ -273,11 +300,7 @@ function buildCertification(
   draft: NonNullable<ProfileDraft['certifications']>[number],
   evidence: EvidenceFactory,
 ): CandidateCertification {
-  const draftEvidence = draft.evidence ?? [];
-  const evidenceIds =
-    draftEvidence.length > 0
-      ? draftEvidence.map((item) => evidence.add(item, draft.name))
-      : [evidence.add(undefined, draft.name)];
+  const evidenceIds = collectEvidence(evidence, draft.evidence, draft.name);
   const records = evidence.records.filter((record) => evidenceIds.includes(record.id));
   const strongest = strongestProvenance(records);
 
@@ -334,9 +357,9 @@ export function normalizeProfileDraft(draft: ProfileDraft, options: NormalizeOpt
   const warnings = [...(options.warnings ?? []), ...(draft.notes ?? [])];
 
   const profile: CandidateProfile = {
-    schema_version: '1.0.0',
+    schema_version: PROFILE_SCHEMA_VERSION,
     candidate_id: makeId('candidate', candidateSeed),
-    locale: options.locale ?? draft.locale ?? 'es-PA',
+    locale: options.locale ?? draft.locale ?? DEFAULT_LOCALE,
     created_at: timestamp,
     updated_at: timestamp,
     sources: [...options.sources],

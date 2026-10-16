@@ -96,7 +96,7 @@ describe('buildProfile end to end', () => {
             },
           ],
         };
-        return draft;
+        return { draft, kind: 'llm' };
       },
     };
 
@@ -104,7 +104,6 @@ describe('buildProfile end to end', () => {
       { text: 'placeholder', source: source('text'), provenance: 'declared', traceId: 'trace_llm' },
       { extractor: llmExtractor, now: fixedNow },
     );
-
     expect(result.extraction.extractor).toBe('llm');
     // The LLM asked for level 4 but declared-only evidence caps it at 1.
     expect(result.profile.skills[0]?.level).toBe(1);
@@ -121,5 +120,19 @@ describe('buildProfile end to end', () => {
     const a = await buildProfile(args, { now: fixedNow });
     const b = await buildProfile(args, { now: fixedNow });
     expect(JSON.stringify(a.profile)).toBe(JSON.stringify(b.profile));
+  });
+
+  it("extracts academic work and family work phrased in the candidate's own words", async () => {
+    const text = [
+      'Trabajé como asistente de laboratorio en la universidad.',
+      'Ayudaba en la tienda de mi mamá los fines de semana.',
+    ].join('\n');
+    const result = await buildProfile(
+      { text, source: source('text'), provenance: 'declared', traceId: 'trace_academic' },
+      { now: fixedNow },
+    );
+    const types = result.profile.experiences.map((experience) => experience.experience_type);
+    expect(types).toContain('academic');
+    expect(types).toContain('family_business');
   });
 });

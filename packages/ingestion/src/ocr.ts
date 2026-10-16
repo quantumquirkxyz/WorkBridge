@@ -87,17 +87,19 @@ export function chainedOcrAdapter(adapters: readonly OcrAdapter[]): OcrAdapter {
   return {
     name: adapters.map((adapter) => adapter.name).join('+'),
     async extract(request) {
-      let lastError: unknown;
+      const errors: unknown[] = [];
       for (const adapter of adapters) {
         try {
           const result = await adapter.extract(request);
           if (result.text) return result;
         } catch (error) {
-          lastError = error;
+          errors.push(error);
         }
       }
-      if (lastError instanceof OcrUnavailableError) throw lastError;
-      throw new OcrUnavailableError();
+      // Surface the first real failure (e.g. a vision-model error) instead of
+      // masking it behind a later "OCR unavailable" result.
+      const firstRealError = errors.find((error) => !(error instanceof OcrUnavailableError));
+      throw firstRealError ?? new OcrUnavailableError();
     },
   };
 }

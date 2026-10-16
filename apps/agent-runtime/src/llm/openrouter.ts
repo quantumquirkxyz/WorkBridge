@@ -52,11 +52,39 @@ export class OpenRouterError extends Error {
 interface OpenRouterChoice {
   message?: { content?: string };
 }
-interface OpenRouterResponse {
+interface OpenRouterErrorBody {
+  error?: { message?: string };
+}
+interface OpenRouterResponse extends OpenRouterErrorBody {
   model?: string;
   choices?: OpenRouterChoice[];
   usage?: { prompt_tokens?: number; completion_tokens?: number };
-  error?: { message?: string };
+}
+
+/** Shared auth/attribution headers for every OpenRouter call. */
+function authHeaders(options: OpenRouterOptions): Record<string, string> {
+  return {
+    'content-type': 'application/json',
+    authorization: `Bearer ${options.apiKey}`,
+    ...(options.referer ? { 'HTTP-Referer': options.referer } : {}),
+    ...(options.title ? { 'X-Title': options.title } : {}),
+  };
+}
+
+/** POST a JSON body and surface OpenRouter errors as typed `OpenRouterError`s. */
+async function postJson<T extends OpenRouterErrorBody>(
+  doFetch: typeof fetch,
+  url: string,
+  headers: Record<string, string>,
+  body: unknown,
+  errorLabel: string,
+): Promise<T> {
+  const response = await doFetch(url, { method: 'POST', headers, body: JSON.stringify(body) });
+  const parsed = (await response.json()) as T;
+  if (!response.ok) {
+    throw new OpenRouterError(parsed.error?.message ?? `${errorLabel} (${response.status})`, response.status);
+  }
+  return parsed;
 }
 
 export function createOpenRouterChat(options: OpenRouterOptions): ChatFn {
@@ -81,21 +109,14 @@ export function createOpenRouterChat(options: OpenRouterOptions): ChatFn {
       };
     }
 
-    const response = await doFetch(`${baseUrl}/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        authorization: `Bearer ${options.apiKey}`,
-        ...(options.referer ? { 'HTTP-Referer': options.referer } : {}),
-        ...(options.title ? { 'X-Title': options.title } : {}),
-      },
-      body: JSON.stringify(body),
-    });
+    const parsed = await postJson<OpenRouterResponse>(
+      doFetch,
+      `${baseUrl}/chat/completions`,
+      authHeaders(options),
+      body,
+      'OpenRouter request failed',
+    );
 
-    const parsed = (await response.json()) as OpenRouterResponse;
-    if (!response.ok) {
-      throw new OpenRouterError(parsed.error?.message ?? `OpenRouter request failed (${response.status})`, response.status);
-    }
     const content = parsed.choices?.[0]?.message?.content;
     if (typeof content !== 'string' || content.length === 0) {
       throw new OpenRouterError('OpenRouter returned no message content');
@@ -111,29 +132,22 @@ export function createOpenRouterChat(options: OpenRouterOptions): ChatFn {
   };
 }
 
-export interface VisionOptions extends OpenRouterOptions {}
-
-interface VisionResponse {
+interface VisionResponse extends OpenRouterErrorBody {
   choices?: Array<{ message?: { content?: string } }>;
-  error?: { message?: string };
 }
 
 /** Describe/transcribe an image through an OpenRouter vision model. */
-export function createOpenRouterVision(options: VisionOptions): (input: { bytes: Uint8Array; mimeType?: string }) => Promise<{ text: string }> {
+export function createOpenRouterVision(options: OpenRouterOptions): (input: { bytes: Uint8Array; mimeType?: string }) => Promise<{ text: string }> {
   const baseUrl = (options.baseUrl ?? 'https://openrouter.ai/api/v1').replace(/\/$/, '');
   const doFetch = options.fetchImpl ?? fetch;
 
   return async ({ bytes, mimeType }) => {
     const dataUrl = `data:${mimeType ?? 'image/png'};base64,${Buffer.from(bytes).toString('base64')}`;
-    const response = await doFetch(`${baseUrl}/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        authorization: `Bearer ${options.apiKey}`,
-        ...(options.referer ? { 'HTTP-Referer': options.referer } : {}),
-        ...(options.title ? { 'X-Title': options.title } : {}),
-      },
-      body: JSON.stringify({
+    const parsed = await postJson<VisionResponse>(
+      doFetch,
+      `${baseUrl}/chat/completions`,
+      authHeaders(options),
+      {
         model: options.model,
         messages: [
           {
@@ -147,12 +161,9 @@ export function createOpenRouterVision(options: VisionOptions): (input: { bytes:
             ],
           },
         ],
-      }),
-    });
-    const parsed = (await response.json()) as VisionResponse;
-    if (!response.ok) {
-      throw new OpenRouterError(parsed.error?.message ?? `OpenRouter vision request failed (${response.status})`, response.status);
-    }
+      },
+      'OpenRouter vision request failed',
+    );
     const text = parsed.choices?.[0]?.message?.content;
     if (typeof text !== 'string' || text.length === 0) {
       throw new OpenRouterError('OpenRouter vision returned no content');

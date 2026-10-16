@@ -1,7 +1,7 @@
 import type { IntakeSource, IntakeSourceKind } from '@puente/domain';
 import { MAX_SOURCE_BYTES, MAX_TEXT_CHARS } from './kinds';
 import { SourceTooLargeError, UnsupportedSourceError } from './errors';
-import { altTextOcrAdapter, type OcrAdapter, tesseractOcrAdapter } from './ocr';
+import { altTextOcrAdapter, chainedOcrAdapter, type OcrAdapter, tesseractOcrAdapter } from './ocr';
 import { unpdfExtractor, type PdfExtractor } from './pdf';
 
 export interface RawIntake {
@@ -82,9 +82,13 @@ export async function extractText(raw: RawIntake, deps: ExtractionDeps = {}): Pr
     case 'image': {
       const bytes = requireBytes(raw, raw.kind, maxBytes);
       byteLength = bytes.byteLength;
-      const adapter = raw.altText?.trim()
-        ? altTextOcrAdapter
-        : (deps.ocr ?? tesseractOcrAdapter());
+      // Vision first (when configured), then human alt text, then offline
+      // tesseract. The chained adapter stops at the first non-empty result.
+      const adapters: OcrAdapter[] = [];
+      if (deps.ocr) adapters.push(deps.ocr);
+      if (raw.altText?.trim()) adapters.push(altTextOcrAdapter);
+      adapters.push(tesseractOcrAdapter());
+      const adapter = chainedOcrAdapter(adapters);
       const result = await adapter.extract({ bytes, mimeType: raw.mimeType, altText: raw.altText });
       text = result.text.trim();
       method = result.method;

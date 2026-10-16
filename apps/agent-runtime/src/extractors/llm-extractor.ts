@@ -1,5 +1,5 @@
 import { validateProfileDraft, type ProfileDraft } from '@puente/domain';
-import type { ExtractionInput, ProfileExtractor } from '@puente/profile';
+import type { ExtractionInput, ExtractionOutcome, ProfileExtractor } from '@puente/profile';
 import type { ChatFn } from '../llm/openrouter';
 import { redactPii } from '../pii';
 
@@ -123,7 +123,7 @@ export function createLlmProfileExtractor(options: LlmExtractorOptions): Profile
 
   return {
     kind: 'llm',
-    async extract(input: ExtractionInput): Promise<ProfileDraft> {
+    async extract(input: ExtractionInput): Promise<ExtractionOutcome> {
       const redaction = shouldRedact ? redactPii(input.text) : { text: input.text, replacements: 0, kinds: [] };
       const clipped = redaction.text.slice(0, maxTextChars);
 
@@ -155,7 +155,7 @@ export function createLlmProfileExtractor(options: LlmExtractorOptions): Profile
       if (!validation.valid) {
         throw new Error(`LLM draft failed contract validation: ${validation.errors.join('; ')}`);
       }
-      return parsed as ProfileDraft;
+      return { draft: parsed as ProfileDraft, kind: 'llm' };
     },
   };
 }

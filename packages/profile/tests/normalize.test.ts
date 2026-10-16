@@ -74,6 +74,26 @@ describe('normalizeProfileDraft', () => {
     expect(profile.skills[0]?.level).toBe(1);
   });
 
+  it('caps a declared intake even when the draft labels its evidence extracted', () => {
+    const profile = normalizeProfileDraft(
+      {
+        skills: [
+          {
+            original_term: 'Excel',
+            canonical_hint: 'plp:excel',
+            level_hint: 3,
+            evidence: [{ claim: 'Excel avanzado', source: 'extracted' }],
+          },
+        ],
+      },
+      { traceId: 'trace_1', sources: [source('text')], provenance: 'declared', now: fixedNow },
+    );
+    const excel = profile.skills.find((skill) => skill.skill_id === 'plp:excel');
+    expect(excel?.level).toBe(1);
+    // The evidence source is clamped to the intake provenance, not the draft's claim.
+    expect(excel?.source).toBe('declared');
+  });
+
   it('merges duplicate skills and keeps the highest level and all evidence', () => {
     const profile = normalizeProfileDraft(
       {

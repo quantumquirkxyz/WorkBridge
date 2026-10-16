@@ -21,13 +21,16 @@ export interface ExtractionInput {
 }
 
 export interface ProfileExtractor {
-  /**
-   * The strategy that produced the last draft. A resilient extractor reports
-   * `heuristic-fallback` after a failed primary attempt, so the emitted
-   * `IntakeResult` records the truth rather than the intent.
-   */
+  /** The strategy this extractor is configured to run. */
   readonly kind: ExtractorKind;
-  extract(input: ExtractionInput): Promise<ProfileDraft>;
+  /** Extract a draft and report the strategy that actually produced it. */
+  extract(input: ExtractionInput): Promise<ExtractionOutcome>;
+}
+
+/** A draft plus the strategy that actually produced it (reported per call). */
+export interface ExtractionOutcome {
+  draft: ProfileDraft;
+  kind: ExtractorKind;
 }
 
 const EXPERIENCE_SIGNALS = [
@@ -141,6 +144,16 @@ export const heuristicProfileExtractor: ProfileExtractor = {
             evidence: [{ claim: statement, source: input.provenance, excerpt: statement }],
           });
         }
+        // A statement can be both academic and experiential ("trabajé en la
+        // universidad…"); the spec asks for academic work as an experience too.
+        if (containsAny(statement, EXPERIENCE_SIGNALS) && experiences.length < MAX_EXPERIENCES) {
+          experiences.push({
+            experience_type: inferExperienceType(statement),
+            title: firstWords(statement, 8),
+            description: statement,
+            evidence: [{ claim: statement, source: input.provenance, excerpt: statement }],
+          });
+        }
         continue;
       }
       if (containsAny(statement, EXPERIENCE_SIGNALS) && experiences.length < MAX_EXPERIENCES) {
@@ -177,6 +190,6 @@ export const heuristicProfileExtractor: ProfileExtractor = {
     if (experiences.length === MAX_EXPERIENCES) {
       draft.notes.push('Experience list was truncated to the first 8 entries.');
     }
-    return draft;
+    return { draft, kind: 'heuristic' };
   },
 };

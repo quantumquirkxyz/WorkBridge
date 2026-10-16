@@ -18,8 +18,33 @@ const EXPERIENCE_TYPE_RULES: ReadonlyArray<{ type: ExperienceType; keywords: str
   { type: 'informal_work', keywords: ['trabaje', 'trabajé', 'trabajo informal', 'ayudaba', 'vendia', 'vendía', 'atendia', 'atendía', 'sin contrato', 'medio tiempo'] },
 ];
 
+/** A venue paired with a family relation signals a family-run business. */
+const FAMILY_VENUES = ['tienda', 'fonda', 'kiosco', 'minisuper', 'abarroteria', 'puesto', 'negocio', 'comercio'];
+const FAMILY_RELATIONS = [
+  'familia',
+  'familiar',
+  'mi mama',
+  'mi papa',
+  'mi madre',
+  'mi padre',
+  'mis padres',
+  'mi hermana',
+  'mi hermano',
+  'mi tia',
+  'mi tio',
+];
+
+function isFamilyBusiness(haystack: string): boolean {
+  const hasVenue = FAMILY_VENUES.some((venue) => haystack.includes(venue));
+  const hasRelation = FAMILY_RELATIONS.some((relation) => haystack.includes(relation));
+  return hasVenue && hasRelation;
+}
+
 export function inferExperienceType(text: string): ExperienceType {
   const haystack = normalizeTerm(text);
+  // Keyword combinations catch family work phrased in the candidate's own words
+  // ("tienda de mi mamá"), not just the exact phrases in the rules below.
+  if (isFamilyBusiness(haystack)) return 'family_business';
   for (const rule of EXPERIENCE_TYPE_RULES) {
     if (rule.keywords.some((keyword) => haystack.includes(normalizeTerm(keyword)))) return rule.type;
   }

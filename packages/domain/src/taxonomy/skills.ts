@@ -17,8 +17,6 @@ export interface SkillDefinition {
   esco_reference?: string;
 }
 
-export const TAXONOMY_VERSION = '1.0.0';
-
 export const SKILL_TAXONOMY: readonly SkillDefinition[] = [
   {
     skill_id: 'plp:excel',

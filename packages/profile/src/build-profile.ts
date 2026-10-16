@@ -37,13 +37,14 @@ export async function buildProfile(
   deps: BuildProfileDeps = {},
 ): Promise<IntakeResult> {
   const extractor = deps.extractor ?? heuristicProfileExtractor;
-  const draft = await extractor.extract({
+  const outcome = await extractor.extract({
     text: input.text,
     sourceRef: input.source.ref,
     provenance: input.provenance,
     targetRoles: input.targetRoles,
     locale: input.locale,
   });
+  const draft = outcome.draft;
 
   const warnings = [...(input.warnings ?? []), ...(input.source.warnings ?? [])];
   const profile = normalizeProfileDraft(draft, {
@@ -66,7 +67,7 @@ export async function buildProfile(
     trace_id: input.traceId,
     profile,
     extraction: {
-      extractor: extractor.kind,
+      extractor: outcome.kind,
       needs_review: needsReview,
       warnings: profile.warnings ?? [],
     },

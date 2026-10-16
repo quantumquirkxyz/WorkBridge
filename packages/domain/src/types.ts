@@ -2,7 +2,7 @@
  * TypeScript mirror of the JSON Schema 2020-12 contracts in `./schemas`.
  *
  * The JSON Schemas remain the single source of truth; these types exist so
- * application code gets compile-time safety. `tests/contract/types.test.ts`
+ * application code gets compile-time safety. `tests/contracts.test.ts`
  * guards the two against drift.
  */
 
