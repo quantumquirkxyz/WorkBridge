@@ -54,6 +54,10 @@ export function signalsFromCerto(
     expired: expiration?.result === "error",
     unsupportedFormat: format?.result === "error",
     inconsistent: issuerIdentityInconsistent(checks),
+    reused: checks.some(
+      (check) =>
+        check.result === "error" && /reuse|duplicate/.test(check.check.toLowerCase()),
+    ),
   };
 }
 

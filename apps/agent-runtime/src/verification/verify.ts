@@ -50,6 +50,21 @@ export async function verifyCredential(
   input: CredentialInput,
   deps: VerifyDeps,
 ): Promise<CredentialVerification> {
+  if (input.declaredOnly) {
+    return normalizeVerification({
+      signals: {
+        documentIntegrity: null,
+        cryptographicProof: null,
+        issuerTrust: null,
+        revocationStatus: "unknown",
+        holderBinding: "unknown",
+        declaredOnly: true,
+      },
+      provider: "mock",
+      evidence: [],
+    });
+  }
+
   const breaker = breakerFor(deps);
   const reasons: string[] = [];
 
