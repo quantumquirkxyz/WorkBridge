@@ -165,4 +165,19 @@ describe('buildProfile end to end', () => {
     );
     expect(familyWork).toHaveLength(2);
   });
+
+  it('does not treat an unrelated possessive venue as family work', async () => {
+    const text = [
+      'Trabajé en el comercio de mi ciudad durante un año.',
+      'Trabajé en el negocio de mi abuelo los fines de semana.',
+    ].join('\n');
+    const result = await buildProfile(
+      { text, source: source('text'), provenance: 'declared', traceId: 'trace_possessive' },
+      { now: fixedNow },
+    );
+    const byDescription = (fragment: string) =>
+      result.profile.experiences.find((experience) => experience.description.includes(fragment));
+    expect(byDescription('comercio de mi ciudad')?.experience_type).not.toBe('family_business');
+    expect(byDescription('negocio de mi abuelo')?.experience_type).toBe('family_business');
+  });
 });
