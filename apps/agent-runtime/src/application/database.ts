@@ -15,3 +15,17 @@ export function resolveDatabaseMode(env: {
   }
   return "memory";
 }
+
+export function createPgQuery(connectionString: string): import("./store").SqlQuery {
+  let pool:
+    | { query: (sql: string, params: unknown[]) => Promise<{ rows: Array<Record<string, unknown>> }> }
+    | undefined;
+  return async (sql, params) => {
+    if (!pool) {
+      const { Pool } = await import("pg");
+      pool = new Pool({ connectionString, max: 2 });
+    }
+    const result = await pool.query(sql, [...params]);
+    return { rows: result.rows };
+  };
+}

@@ -1,17 +1,33 @@
 import { describe, expect, it } from "vitest";
 import type { MatchDecision } from "@puente/domain";
 import { assertDocumentsGrounded, gapLine, vacancyIntro } from "../draft";
+import { signBetterAuthSession, sessionSignature } from "../roles";
 import { ApplicationService } from "../service";
 import type { EvidenceItem } from "../evidence";
 
 const NOW = "2026-10-16T18:00:00.000Z";
 const TOKEN = "certo-token-value-123456";
+const SESSION_SECRET = "better-auth-test-secret";
+
+function envelope(traceId: string, idempotencyKey: string) {
+  return {
+    traceId,
+    idempotencyKey,
+    agent: "market_and_matching" as const,
+    schemaId: "https://puentelaboral.pa/schemas/match-decision.schema.json",
+    guardrails: [{ stage: "output" as const, allowed: true, code: "ok" as const }],
+    dqlState: "validated" as const,
+  };
+}
 
 function session(role: "candidate" | "employer" | "counselor", id: string = role) {
-  return {
-    session: { id: `sess-${id}`, userId: id, expiresAt: "2027-01-01T00:00:00.000Z" },
-    user: { id, email: `${id}@puente.pa`, role },
-  };
+  return signBetterAuthSession(
+    {
+      session: { id: `sess-${id}`, userId: id, expiresAt: "2027-01-01T00:00:00.000Z" },
+      user: { id, email: `${id}@puente.pa`, role },
+    },
+    SESSION_SECRET,
+  );
 }
 
 function evidence(): EvidenceItem[] {
@@ -68,20 +84,23 @@ function gatedMatch(): MatchDecision {
 }
 
 function draftInput(overrides: Record<string, unknown> = {}) {
+  const traceId = typeof overrides.traceId === "string" ? overrides.traceId : "trace-1";
+  const idempotencyKey = typeof overrides.idempotencyKey === "string" ? overrides.idempotencyKey : "idem-draft";
   return {
-    traceId: "trace-1",
-    idempotencyKey: "idem-draft",
+    traceId,
+    idempotencyKey,
     candidateId: "candidate",
     vacancyId: "vac-1",
     vacancyTitle: "Auxiliar administrativo",
     evidence: evidence(),
     match: match(),
     ...overrides,
+    envelope: overrides.envelope ?? envelope(traceId, idempotencyKey),
   };
 }
 
-function action(reason: string, idempotencyKey = "idem-action") {
-  return { traceId: "trace-1", idempotencyKey, reason };
+function action(reason: string, idempotencyKey = "idem-action", traceId = "trace-1") {
+  return { traceId, idempotencyKey, reason, envelope: envelope(traceId, idempotencyKey) };
 }
 
 function service(secrets: string[] = []) {
@@ -92,6 +111,7 @@ function service(secrets: string[] = []) {
       return () => `id-${n++}`;
     })(),
     secrets,
+    sessionSecret: SESSION_SECRET,
   });
 }
 
@@ -276,24 +296,23 @@ describe("application approval and submission", () => {
 
   it("rejects expired sessions, unknown roles, and secret material", () => {
     const app = service([TOKEN]);
+    const expired = {
+      session: { id: "s", userId: "candidate", expiresAt: "2020-01-01T00:00:00.000Z" },
+      user: { id: "candidate", email: "a@puente.pa", role: "candidate" as const },
+    };
     expect(() =>
-      app.createDraft(
-        {
-          session: { id: "s", userId: "candidate", expiresAt: "2020-01-01T00:00:00.000Z" },
-          user: { id: "candidate", email: "a@puente.pa", role: "candidate" },
-        },
-        draftInput(),
-      ),
+      app.createDraft({ ...expired, signature: sessionSignature(expired, SESSION_SECRET) }, draftInput()),
     ).toThrow(/expired/);
+    const unknownRole = {
+      session: { id: "s", userId: "candidate", expiresAt: "2027-01-01T00:00:00.000Z" },
+      user: { id: "candidate", email: "a@puente.pa", role: "admin" },
+    };
     expect(() =>
-      app.createDraft(
-        {
-          session: { id: "s", userId: "candidate", expiresAt: "2027-01-01T00:00:00.000Z" },
-          user: { id: "candidate", email: "a@puente.pa", role: "admin" },
-        },
-        draftInput(),
-      ),
+      app.createDraft({ ...unknownRole, signature: sessionSignature(unknownRole, SESSION_SECRET) }, draftInput()),
     ).toThrow(/candidate, employer, or counselor/);
+    const forged = session("employer");
+    forged.user.role = "candidate";
+    expect(() => app.createDraft(forged, draftInput())).toThrow(/signature/);
     expect(() =>
       app.createDraft(session("candidate"), draftInput({ vacancyTitle: `Puesto ${TOKEN}` })),
     ).toThrow(/secret/i);
@@ -322,8 +341,6 @@ describe("application approval and submission", () => {
       app.correctDraft(session("candidate", "other"), created.draftId, { ...action("no"), includeEvidenceIds: [] }),
     ).toThrow(/own draft/);
     expect(() => app.approveDraft(session("employer"), created.draftId, action("no"))).toThrow(/cannot approve/);
-    expect(() => app.approveDraft(session("counselor"), created.draftId, action("no"))).toThrow(/not required/);
-    expect(() => app.rejectDraft(session("counselor"), created.draftId, action("no"))).toThrow(/not required/);
     expect(() => app.rejectDraft(session("employer"), created.draftId, action("no"))).toThrow(/cannot reject/);
     app.approveDraft(session("candidate"), created.draftId, action("apruebo"));
     await app.submit(session("candidate"), created.draftId, action("envío", "idem-once"));
@@ -350,5 +367,58 @@ describe("application approval and submission", () => {
         match: match(),
       }),
     ).toThrow(/not grounded/);
+  });
+
+  it("drops approvals when a correction changes the evidence subset", async () => {
+    const app = service();
+    const created = app.createDraft(session("candidate"), draftInput());
+    app.approveDraft(session("candidate"), created.draftId, action("apruebo", "idem-keep"));
+    app.correctDraft(session("candidate"), created.draftId, {
+      ...action("quito la evidencia", "idem-clear"),
+      includeEvidenceIds: [],
+    });
+    await expect(app.submit(session("candidate"), created.draftId, action("envío", "idem-after"))).rejects.toThrow(
+      /Candidate approval/,
+    );
+    app.approveDraft(session("candidate"), created.draftId, action("apruebo el texto vacío", "idem-again"));
+    const submitted = await app.submit(session("candidate"), created.draftId, action("envío", "idem-after"));
+    expect(submitted.replayed).toBe(false);
+  });
+
+  it("rejects an action whose trace does not match the draft and a blocked guardrail", () => {
+    const app = service();
+    const created = app.createDraft(session("candidate"), draftInput());
+    expect(() => app.approveDraft(session("candidate"), created.draftId, action("otra traza", "idem-x", "trace-other"))).toThrow(
+      /draft traceId/,
+    );
+    expect(app.auditTrail(session("candidate"), "trace-other")).toEqual([]);
+    expect(() =>
+      app.createDraft(session("candidate"), draftInput({ envelope: { traceId: "trace-1" } })),
+    ).toThrow(/envelope|traceId|idempotencyKey/i);
+    expect(() =>
+      app.approveDraft(session("candidate"), created.draftId, {
+        ...action("bloqueado", "idem-block"),
+        envelope: {
+          ...envelope("trace-1", "idem-block"),
+          guardrails: [{ stage: "output", allowed: false, code: "prompt_injection" }],
+        },
+      }),
+    ).toThrow(/guardrail/);
+  });
+
+  it("lets a counselor review a clean draft without making that approval mandatory", async () => {
+    const app = service();
+    const created = app.createDraft(session("candidate"), draftInput());
+    const reviewed = app.approveDraft(session("counselor"), created.draftId, action("sin brecha crítica", "idem-clean"));
+    expect(reviewed.counselorApproved).toBe(true);
+    const another = app.createDraft(session("candidate"), draftInput({ idempotencyKey: "idem-draft-clean" }));
+    app.approveDraft(session("candidate"), another.draftId, action("apruebo", "idem-clean-2"));
+    const submitted = await app.submit(session("candidate"), another.draftId, action("envío", "idem-clean-3"));
+    expect(submitted.interview).toBe("pending_employer_approval");
+  });
+
+  it("rejects a short Certo token", () => {
+    const app = service(["xy"]);
+    expect(() => app.createDraft(session("candidate"), draftInput({ vacancyTitle: "Puesto xy" }))).toThrow(/secret/i);
   });
 });

@@ -18,8 +18,9 @@ in memory and `GET /health` returns `"databaseMode": "memory"`.
 
 `vercel.json` routes every request to `apps/agent-runtime/src/application/vercel.ts`.
 Set `DATABASE_URL` for the primary Postgres connection. When that variable is
-empty, the process selects `NEON_DATABASE_URL` and health reports
-`"databaseMode": "neon-backup"`.
+empty and `NEON_DATABASE_URL` is set, idempotency uses the SQL store for that
+URL and health reports `"databaseMode": "neon-backup"` with `"persistence": "sql"`.
+The connection string is not returned. `BETTER_AUTH_SECRET` signs session roles.
 
 The SQL idempotency table is `submission_idempotency` (`idempotency_key`,
 `fingerprint`, `response`). Connection strings stay in the host environment.

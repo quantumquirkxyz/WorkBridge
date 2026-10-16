@@ -9,13 +9,14 @@ export const SECRET_ENV_NAMES = [
   "CREDLY_API_KEY",
   "DATABASE_URL",
   "NEON_DATABASE_URL",
+  "BETTER_AUTH_SECRET",
 ] as const;
 
 export function collectSecretValues(env: Record<string, string | undefined>): string[] {
   const values: string[] = [];
   for (const name of SECRET_ENV_NAMES) {
     const value = env[name];
-    if (typeof value === "string" && value.length >= 8) values.push(value);
+    if (typeof value === "string" && value.length > 0) values.push(value);
   }
   return values;
 }

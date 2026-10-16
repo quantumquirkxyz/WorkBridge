@@ -1,33 +1,41 @@
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
-import { resolveDatabaseMode, type DatabaseMode } from "./database";
+import { createPgQuery, resolveDatabaseMode, type DatabaseMode } from "./database";
 import { ApplicationError } from "./errors";
 import { assertNoSecrets, collectSecretValues } from "./secrets";
 import { ApplicationService } from "./service";
+import { createSqlIdempotencyStore, type SqlQuery } from "./store";
 
 export interface ServerOptions {
   env?: Record<string, string | undefined>;
   service?: ApplicationService;
   clock?: () => string;
   databaseMode?: DatabaseMode;
+  query?: SqlQuery;
 }
 
 interface RequestContext {
   service: ApplicationService;
   secrets: readonly string[];
   databaseMode: DatabaseMode;
+  persistence: "memory" | "sql";
 }
 
 export function createApplicationServer(options: ServerOptions = {}) {
   const env = options.env ?? process.env;
   const secrets = collectSecretValues(env);
   const databaseMode = options.databaseMode ?? resolveDatabaseMode(env);
+  const databaseUrl = env.DATABASE_URL || env.NEON_DATABASE_URL || "";
+  const useSql = databaseMode !== "memory" && databaseUrl.length > 0;
+  const persistence = useSql ? "sql" : "memory";
   const service =
     options.service ??
     new ApplicationService({
       secrets,
       clock: options.clock,
+      sessionSecret: env.BETTER_AUTH_SECRET ?? "",
+      idempotency: useSql ? createSqlIdempotencyStore(options.query ?? createPgQuery(databaseUrl)) : undefined,
     });
-  const context: RequestContext = { service, secrets, databaseMode };
+  const context: RequestContext = { service, secrets, databaseMode, persistence };
   return createServer((req, res) => {
     void dispatch(req, res, context).catch((error: unknown) => {
       writeError(res, error, secrets);
@@ -39,7 +47,12 @@ async function dispatch(req: IncomingMessage, res: ServerResponse, context: Requ
   const url = new URL(req.url ?? "/", "http://127.0.0.1");
   const path = url.pathname;
   if (req.method === "GET" && path === "/health") {
-    writeJson(res, 200, { ok: true, databaseMode: context.databaseMode, persistence: "memory" }, context.secrets);
+    writeJson(
+      res,
+      200,
+      { ok: true, databaseMode: context.databaseMode, persistence: context.persistence },
+      context.secrets,
+    );
     return;
   }
   const body = req.method === "GET" ? {} : await readBody(req);

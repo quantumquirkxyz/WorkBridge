@@ -1,10 +1,27 @@
 import { expect, test } from "@playwright/test";
+import { signBetterAuthSession } from "../src/application/roles";
+
+const SESSION_SECRET = "better-auth-test-secret";
+
+function envelope(traceId: string, idempotencyKey: string) {
+  return {
+    traceId,
+    idempotencyKey,
+    agent: "market_and_matching" as const,
+    schemaId: "https://puentelaboral.pa/schemas/match-decision.schema.json",
+    guardrails: [{ stage: "output" as const, allowed: true, code: "ok" as const }],
+    dqlState: "validated" as const,
+  };
+}
 
 function session(role: "candidate" | "employer" | "counselor", id = role) {
-  return {
-    session: { id: `sess-${id}`, userId: id, expiresAt: "2027-01-01T00:00:00.000Z" },
-    user: { id, email: `${id}@puente.pa`, role },
-  };
+  return signBetterAuthSession(
+    {
+      session: { id: `sess-${id}`, userId: id, expiresAt: "2027-01-01T00:00:00.000Z" },
+      user: { id, email: `${id}@puente.pa`, role },
+    },
+    SESSION_SECRET,
+  );
 }
 
 function match(traceId: string, extras: Record<string, unknown> = {}) {
@@ -58,6 +75,7 @@ function draftBody(traceId: string, extras: Record<string, unknown> = {}) {
       },
     ],
     match: match(traceId),
+    envelope: envelope(traceId, `${traceId}-draft`),
     ...extras,
   };
 }
@@ -78,6 +96,7 @@ test("candidate drafts, corrects, approves, retries, and submits", async ({ requ
       session: session("candidate"),
       traceId,
       idempotencyKey: `${traceId}-correct`,
+      envelope: envelope(traceId, `${traceId}-correct`),
       reason: "mantengo solo la experiencia declarada",
       includeEvidenceIds: ["ev-1"],
     },
@@ -89,6 +108,7 @@ test("candidate drafts, corrects, approves, retries, and submits", async ({ requ
       session: session("candidate"),
       traceId,
       idempotencyKey: `${traceId}-approve`,
+      envelope: envelope(traceId, `${traceId}-approve`),
       reason: "apruebo mi postulación",
     },
   });
@@ -99,6 +119,7 @@ test("candidate drafts, corrects, approves, retries, and submits", async ({ requ
       session: session("employer"),
       traceId,
       idempotencyKey: `${traceId}-blocked`,
+      envelope: envelope(traceId, `${traceId}-blocked`),
       reason: "un empleador no envía la postulación",
     },
   });
@@ -108,6 +129,7 @@ test("candidate drafts, corrects, approves, retries, and submits", async ({ requ
     session: session("candidate"),
     traceId,
     idempotencyKey: `${traceId}-submit`,
+    envelope: envelope(traceId, `${traceId}-submit`),
     reason: "envío la postulación",
   };
   const submitted = await request.post(`/drafts/${draft.draftId}/submissions`, { data: submitData });
@@ -123,6 +145,7 @@ test("candidate drafts, corrects, approves, retries, and submits", async ({ requ
       session: session("employer"),
       traceId,
       idempotencyKey: `${traceId}-employer`,
+      envelope: envelope(traceId, `${traceId}-employer`),
       reason: "aprobamos pasar a entrevista",
     },
   });
@@ -132,6 +155,7 @@ test("candidate drafts, corrects, approves, retries, and submits", async ({ requ
       session: session("employer"),
       traceId,
       idempotencyKey: `${traceId}-interview`,
+      envelope: envelope(traceId, `${traceId}-interview`),
       reason: "la entrevista queda habilitada",
       decision: "approved",
     },
@@ -149,6 +173,7 @@ test("candidate, counselor, and employer can each reject", async ({ request }) =
       session: session("candidate"),
       traceId: candidateTrace,
       idempotencyKey: `${candidateTrace}-reject`,
+      envelope: envelope(candidateTrace, `${candidateTrace}-reject`),
       reason: "retiro la postulación",
     },
   });
@@ -185,6 +210,7 @@ test("candidate, counselor, and employer can each reject", async ({ request }) =
       session: session("counselor"),
       traceId: counselorTrace,
       idempotencyKey: `${counselorTrace}-reject`,
+      envelope: envelope(counselorTrace, `${counselorTrace}-reject`),
       reason: "la credencial sigue sin verificar",
     },
   });
@@ -198,6 +224,7 @@ test("candidate, counselor, and employer can each reject", async ({ request }) =
       session: session("candidate"),
       traceId: employerTrace,
       idempotencyKey: `${employerTrace}-approve`,
+      envelope: envelope(employerTrace, `${employerTrace}-approve`),
       reason: "apruebo el borrador",
     },
   });
@@ -206,6 +233,7 @@ test("candidate, counselor, and employer can each reject", async ({ request }) =
       session: session("candidate"),
       traceId: employerTrace,
       idempotencyKey: `${employerTrace}-submit`,
+      envelope: envelope(employerTrace, `${employerTrace}-submit`),
       reason: "envío para revisión del empleador",
     },
   });
@@ -215,10 +243,79 @@ test("candidate, counselor, and employer can each reject", async ({ request }) =
       session: session("employer"),
       traceId: employerTrace,
       idempotencyKey: `${employerTrace}-reject`,
+      envelope: envelope(employerTrace, `${employerTrace}-reject`),
       reason: "no avanzamos a entrevista",
       decision: "rejected",
     },
   });
   expect(employerRejection.ok()).toBe(true);
   expect(((await employerRejection.json()) as { interview: string }).interview).toBe("rejected");
+});
+
+test("counselor approval allows a gated draft to be submitted and retried", async ({ request }) => {
+  const traceId = "trace-playwright-gated";
+  const created = await request.post("/drafts", {
+    data: draftBody(traceId, {
+      evidence: [
+        {
+          id: "cert-1",
+          kind: "certification",
+          text: "Curso declarado por el candidato, todavía sin verificar.",
+          credentialStatus: "unverified",
+        },
+      ],
+      match: match(traceId, {
+        aptitude: "apt_with_gaps",
+        gaps: [{ id: "gap-1", severity: "critical", description: "Falta disponibilidad de sábado." }],
+        score: {
+          technicalRequirements: 60,
+          experienceEvidence: 60,
+          availability: 60,
+          transportAccessibility: 60,
+          salaryConditions: 60,
+          weightedTotal: 60,
+        },
+      }),
+    }),
+  });
+  expect(created.status()).toBe(201);
+  const draft = (await created.json()) as { draftId: string; counselorGate: unknown[] };
+  expect(draft.counselorGate.length).toBeGreaterThan(0);
+
+  const candidateApproval = await request.post(`/drafts/${draft.draftId}/approvals`, {
+    data: {
+      session: session("candidate"),
+      traceId,
+      idempotencyKey: `${traceId}-candidate`,
+      envelope: envelope(traceId, `${traceId}-candidate`),
+      reason: "apruebo mi postulación con la brecha visible",
+    },
+  });
+  expect(candidateApproval.ok()).toBe(true);
+
+  const counselorApproval = await request.post(`/drafts/${draft.draftId}/approvals`, {
+    data: {
+      session: session("counselor"),
+      traceId,
+      idempotencyKey: `${traceId}-counselor`,
+      envelope: envelope(traceId, `${traceId}-counselor`),
+      reason: "la credencial no verificada queda explícita",
+    },
+  });
+  expect(counselorApproval.ok()).toBe(true);
+
+  const submitData = {
+    session: session("candidate"),
+    traceId,
+    idempotencyKey: `${traceId}-submit`,
+    envelope: envelope(traceId, `${traceId}-submit`),
+    reason: "envío después de la revisión",
+  };
+  const submitted = await request.post(`/drafts/${draft.draftId}/submissions`, { data: submitData });
+  expect(submitted.ok()).toBe(true);
+  const first = (await submitted.json()) as { submissionId: string; replayed: boolean };
+  const retry = await request.post(`/drafts/${draft.draftId}/submissions`, { data: submitData });
+  const replay = (await retry.json()) as { submissionId: string; replayed: boolean };
+  expect(replay.submissionId).toBe(first.submissionId);
+  expect(replay.replayed).toBe(true);
 });

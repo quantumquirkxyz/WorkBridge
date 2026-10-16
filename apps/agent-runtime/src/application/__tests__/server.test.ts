@@ -2,18 +2,34 @@ import { once } from "node:events";
 import type { AddressInfo } from "node:net";
 import { describe, expect, it } from "vitest";
 import { resolveDatabaseMode } from "../database";
+import { signBetterAuthSession } from "../roles";
 import { createApplicationServer } from "../server";
-import { createSqlIdempotencyStore, ENSURE_IDEMPOTENCY_TABLE_SQL } from "../store";
+import { createSqlIdempotencyStore, ENSURE_IDEMPOTENCY_TABLE_SQL, type SqlQuery } from "../store";
 import { startApplicationServer } from "../main";
 import handler from "../vercel";
 
 const TOKEN = "certo-token-value-123456";
+const SESSION_SECRET = "better-auth-test-secret";
+
+function envelope(traceId: string, idempotencyKey: string) {
+  return {
+    traceId,
+    idempotencyKey,
+    agent: "market_and_matching" as const,
+    schemaId: "https://puentelaboral.pa/schemas/match-decision.schema.json",
+    guardrails: [{ stage: "output" as const, allowed: true, code: "ok" as const }],
+    dqlState: "validated" as const,
+  };
+}
 
 function session(role: "candidate" | "employer" | "counselor", id = role) {
-  return {
-    session: { id: `sess-${id}`, userId: id, expiresAt: "2027-01-01T00:00:00.000Z" },
-    user: { id, email: `${id}@puente.pa`, role },
-  };
+  return signBetterAuthSession(
+    {
+      session: { id: `sess-${id}`, userId: id, expiresAt: "2027-01-01T00:00:00.000Z" },
+      user: { id, email: `${id}@puente.pa`, role },
+    },
+    SESSION_SECRET,
+  );
 }
 
 function payload(extra: Record<string, unknown> = {}) {
@@ -62,6 +78,7 @@ function payload(extra: Record<string, unknown> = {}) {
       tieBreak: { deterministic: true, usedProtectedAttributes: false, usedRandomness: false },
       reasons: [{ code: "score", message: "apto" }],
     },
+    envelope: envelope("trace-http", "idem-http"),
     ...extra,
   };
 }
@@ -69,10 +86,12 @@ function payload(extra: Record<string, unknown> = {}) {
 async function withServer(
   env: Record<string, string | undefined>,
   run: (base: string) => Promise<void>,
+  query?: SqlQuery,
 ) {
   const server = createApplicationServer({
-    env,
+    env: { BETTER_AUTH_SECRET: SESSION_SECRET, ...env },
     clock: () => "2026-10-16T18:00:00.000Z",
+    query,
   });
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
@@ -90,12 +109,48 @@ describe("application HTTP surface", () => {
     expect(resolveDatabaseMode({})).toBe("memory");
     expect(resolveDatabaseMode({ DATABASE_URL: "postgres://primary" })).toBe("primary");
     expect(resolveDatabaseMode({ NEON_DATABASE_URL: "postgres://neon" })).toBe("neon-backup");
+    const calls: string[] = [];
+    const query: SqlQuery = async (sql) => {
+      calls.push(sql);
+      return { rows: [] };
+    };
     await withServer({ NEON_DATABASE_URL: "postgres://user:secret-pass@neon/db" }, async (base) => {
       const health = await fetch(`${base}/health`);
       const body = (await health.json()) as { databaseMode: string; ok: boolean };
-      expect(body).toEqual({ ok: true, databaseMode: "neon-backup", persistence: "memory" });
+      expect(body).toEqual({ ok: true, databaseMode: "neon-backup", persistence: "sql" });
       expect(JSON.stringify(body)).not.toContain("secret-pass");
-    });
+      expect(calls).toEqual([]);
+      const created = await fetch(`${base}/drafts`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload()),
+      });
+      const draft = (await created.json()) as { draftId: string };
+      await fetch(`${base}/drafts/${draft.draftId}/approvals`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          session: session("candidate"),
+          traceId: "trace-http",
+          idempotencyKey: "idem-sql-approve",
+          envelope: envelope("trace-http", "idem-sql-approve"),
+          reason: "apruebo",
+        }),
+      });
+      const submitted = await fetch(`${base}/drafts/${draft.draftId}/submissions`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          session: session("candidate"),
+          traceId: "trace-http",
+          idempotencyKey: "idem-sql-submit",
+          envelope: envelope("trace-http", "idem-sql-submit"),
+          reason: "envío",
+        }),
+      });
+      expect(submitted.status).toBe(200);
+      expect(calls.some((sql) => sql.includes("INSERT"))).toBe(true);
+    }, query);
   });
 
   it("runs draft, correction, approval, rejection, retry, and submission", async () => {
@@ -116,6 +171,7 @@ describe("application HTTP surface", () => {
           session: session("candidate"),
           traceId: "trace-http",
           idempotencyKey: "idem-correct",
+          envelope: envelope("trace-http", "idem-correct"),
           reason: "dejo solo la experiencia declarada",
           includeEvidenceIds: ["ev-1"],
         }),
@@ -129,6 +185,7 @@ describe("application HTTP surface", () => {
           session: session("candidate"),
           traceId: "trace-http",
           idempotencyKey: "idem-approve",
+          envelope: envelope("trace-http", "idem-approve"),
           reason: "apruebo el envío",
         }),
       });
@@ -141,6 +198,7 @@ describe("application HTTP surface", () => {
           session: session("employer"),
           traceId: "trace-http",
           idempotencyKey: "idem-submit",
+          envelope: envelope("trace-http", "idem-submit"),
           reason: "intento de un empleador",
         }),
       });
@@ -150,6 +208,7 @@ describe("application HTTP surface", () => {
         session: session("candidate"),
         traceId: "trace-http",
         idempotencyKey: "idem-submit",
+        envelope: envelope("trace-http", "idem-submit"),
         reason: "envío confirmado",
       };
       const submitted = await fetch(`${base}/drafts/${draft.draftId}/submissions`, {
@@ -174,6 +233,7 @@ describe("application HTTP surface", () => {
           session: session("employer"),
           traceId: "trace-http",
           idempotencyKey: "idem-interview",
+          envelope: envelope("trace-http", "idem-interview"),
           reason: "todavía no hay aprobación",
           decision: "approved",
         }),
@@ -187,6 +247,7 @@ describe("application HTTP surface", () => {
           session: session("employer"),
           traceId: "trace-http",
           idempotencyKey: "idem-employer",
+          envelope: envelope("trace-http", "idem-employer"),
           reason: "aprobamos entrevista",
         }),
       });

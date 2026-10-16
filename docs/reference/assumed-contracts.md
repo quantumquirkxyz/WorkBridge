@@ -144,8 +144,11 @@ export interface BetterAuthSession {
     email: string;
     role: "candidate" | "employer" | "counselor";
   };
+  signature: string;
 }
 ```
 
-The server reads the role only from `session.user.role`. `session.userId`
-must equal `user.id`. An `expiresAt` in the past is rejected.
+The server reads the role only from `session.user.role` after `signature`
+matches an HMAC of the session fields with `BETTER_AUTH_SECRET`. `session.userId`
+must equal `user.id`. An `expiresAt` in the past is rejected. A client cannot
+change the role without invalidating the signature.

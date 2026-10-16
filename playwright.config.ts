@@ -10,6 +10,6 @@ export default defineConfig({
     command: "npx tsx apps/agent-runtime/src/application/main.ts",
     url: `http://127.0.0.1:${port}/health`,
     reuseExistingServer: false,
-    env: { PORT: String(port) },
+    env: { PORT: String(port), BETTER_AUTH_SECRET: "better-auth-test-secret" },
   },
 });

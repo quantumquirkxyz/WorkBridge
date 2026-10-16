@@ -1,5 +1,11 @@
 import { createHash, randomUUID } from "node:crypto";
-import { assertAuditEvent, assertMatchDecision, type AuditEvent, type MatchDecision } from "@puente/domain";
+import {
+  assertAuditEvent,
+  assertMatchDecision,
+  assertWorkflowEnvelope,
+  type AuditEvent,
+  type MatchDecision,
+} from "@puente/domain";
 import { generateDocuments, type ApplicationDocuments } from "./draft";
 import { ApplicationError } from "./errors";
 import { parseEvidence, type EvidenceItem } from "./evidence";
@@ -44,6 +50,7 @@ interface Decision {
   actorId: string;
   reason: string;
   timestamp: string;
+  evidenceIds: string[];
 }
 
 interface StoredDraft {
@@ -69,6 +76,7 @@ export interface ApplicationServiceOptions {
   clock?: () => string;
   ids?: () => string;
   secrets?: readonly string[];
+  sessionSecret?: string;
   idempotency?: IdempotencyStore<SubmitView>;
 }
 
@@ -76,6 +84,7 @@ export class ApplicationService {
   private readonly clock: () => string;
   private readonly ids: () => string;
   private readonly secrets: readonly string[];
+  private readonly sessionSecret: string;
   private readonly idempotency: IdempotencyStore<SubmitView>;
   private readonly drafts = new Map<string, StoredDraft>();
   private readonly submissions = new Map<string, StoredSubmission>();
@@ -85,6 +94,7 @@ export class ApplicationService {
     this.clock = options.clock ?? (() => new Date().toISOString());
     this.ids = options.ids ?? (() => randomUUID());
     this.secrets = options.secrets ?? [];
+    this.sessionSecret = options.sessionSecret ?? "";
     this.idempotency = options.idempotency ?? createMemoryIdempotencyStore<SubmitView>();
   }
 
@@ -109,14 +119,19 @@ export class ApplicationService {
   correctDraft(session: unknown, draftId: string, raw: unknown): DraftView {
     const actor = this.actor(session);
     const draft = this.ownedOpenDraft(actor, draftId);
-    const action = this.parseAction(raw);
+    const action = this.parseAction(raw, draft.input.traceId);
     const includeEvidenceIds = this.stringArray(raw, "includeEvidenceIds");
     const selected = new Set(includeEvidenceIds);
     if ([...selected].some((id) => !draft.input.evidence.some((item) => item.id === id))) {
       throw new ApplicationError("Correction references evidence that was not declared.", 422, "unknown_evidence");
     }
     this.guard({ ...action, includeEvidenceIds });
+    const previousKey = evidenceKey(draft.selectedEvidenceIds);
     draft.selectedEvidenceIds = [...selected];
+    if (evidenceKey(draft.selectedEvidenceIds) !== previousKey) {
+      delete draft.candidateApproval;
+      delete draft.counselorApproval;
+    }
     this.audit(actor, "correction", action);
     return this.draftView(draft);
   }
@@ -124,18 +139,15 @@ export class ApplicationService {
   approveDraft(session: unknown, draftId: string, raw: unknown): DraftView {
     const actor = this.actor(session);
     const draft = this.openDraft(draftId);
-    const action = this.parseAction(raw);
+    const action = this.parseAction(raw, draft.input.traceId);
     this.guard(action);
     if (actor.role === "candidate") {
       if (actor.id !== draft.ownerId) {
         throw new ApplicationError("A candidate can only approve their own draft.", 403, "forbidden");
       }
-      draft.candidateApproval = this.decision(actor, action.reason);
+      draft.candidateApproval = this.decision(actor, action.reason, draft.selectedEvidenceIds);
     } else if (actor.role === "counselor") {
-      if (counselorGateReasons(draft.input.match, draft.input.evidence).length === 0) {
-        throw new ApplicationError("Counselor approval is not required for this draft.", 403, "forbidden");
-      }
-      draft.counselorApproval = this.decision(actor, action.reason);
+      draft.counselorApproval = this.decision(actor, action.reason, draft.selectedEvidenceIds);
     } else {
       throw new ApplicationError("An employer cannot approve an application draft.", 403, "forbidden");
     }
@@ -146,17 +158,13 @@ export class ApplicationService {
   rejectDraft(session: unknown, draftId: string, raw: unknown): DraftView {
     const actor = this.actor(session);
     const draft = this.openDraft(draftId);
-    const action = this.parseAction(raw);
+    const action = this.parseAction(raw, draft.input.traceId);
     this.guard(action);
     if (actor.role === "candidate") {
       if (actor.id !== draft.ownerId) {
         throw new ApplicationError("A candidate can only reject their own draft.", 403, "forbidden");
       }
-    } else if (actor.role === "counselor") {
-      if (counselorGateReasons(draft.input.match, draft.input.evidence).length === 0) {
-        throw new ApplicationError("Counselor rejection is not required for this draft.", 403, "forbidden");
-      }
-    } else {
+    } else if (actor.role !== "counselor") {
       throw new ApplicationError("An employer cannot reject an application draft.", 403, "forbidden");
     }
     draft.status = "rejected";
@@ -171,7 +179,7 @@ export class ApplicationService {
     if (actor.id !== draft.ownerId) {
       throw new ApplicationError("A candidate can only submit their own application.", 403, "forbidden");
     }
-    const action = this.parseAction(raw);
+    const action = this.parseAction(raw, draft.input.traceId);
     this.guard(action);
     if (draft.status === "rejected") {
       throw new ApplicationError("A rejected draft cannot be submitted.", 422, "draft_rejected");
@@ -191,10 +199,13 @@ export class ApplicationService {
     if (draft.status === "submitted") {
       throw new ApplicationError("This draft was already submitted.", 409, "already_submitted");
     }
-    if (!draft.candidateApproval) {
+    if (!this.approvalCovers(draft.candidateApproval, draft.selectedEvidenceIds)) {
       throw new ApplicationError("Candidate approval is required before submission.", 422, "candidate_approval_required");
     }
-    if (counselorGateReasons(draft.input.match, draft.input.evidence).length > 0 && !draft.counselorApproval) {
+    if (
+      counselorGateReasons(draft.input.match, draft.input.evidence).length > 0 &&
+      !this.approvalCovers(draft.counselorApproval, draft.selectedEvidenceIds)
+    ) {
       throw new ApplicationError("Counselor approval is required before submission.", 422, "counselor_approval_required");
     }
     const submission: StoredSubmission = {
@@ -221,14 +232,15 @@ export class ApplicationService {
     const actor = this.actor(session);
     this.requireRole(actor, "employer", "Only an employer can decide interview progression.");
     const submission = this.submissionById(submissionId);
-    const action = this.parseAction(raw);
+    const draft = this.draftById(submission.draftId);
+    const action = this.parseAction(raw, draft.input.traceId);
     const decision = this.decisionValue(raw);
     this.guard(action);
     if (submission.interview !== "pending_employer_approval") {
       throw new ApplicationError("Interview progression was already decided.", 409, "interview_decided");
     }
     if (decision === "rejected") {
-      submission.employerRejection = this.decision(actor, action.reason);
+      submission.employerRejection = this.decision(actor, action.reason, []);
       submission.interview = "rejected";
       this.audit(actor, "rejection", action);
     } else if (!submission.employerApproval) {
@@ -248,12 +260,13 @@ export class ApplicationService {
     const actor = this.actor(session);
     this.requireRole(actor, "employer", "Only an employer can approve interview progression.");
     const submission = this.submissionById(submissionId);
-    const action = this.parseAction(raw);
+    const draft = this.draftById(submission.draftId);
+    const action = this.parseAction(raw, draft.input.traceId);
     this.guard(action);
     if (submission.employerRejection || submission.interview === "rejected") {
       throw new ApplicationError("A rejected interview cannot be approved.", 409, "interview_decided");
     }
-    submission.employerApproval = this.decision(actor, action.reason);
+    submission.employerApproval = this.decision(actor, action.reason, []);
     this.audit(actor, "approval", action);
     return this.submitView(submission, false);
   }
@@ -267,7 +280,7 @@ export class ApplicationService {
   }
 
   private actor(session: unknown): Actor {
-    return actorFromBetterAuthSession(session, this.clock());
+    return actorFromBetterAuthSession(session, this.clock(), this.sessionSecret);
   }
 
   private requireRole(actor: Actor, role: Actor["role"], message: string): void {
@@ -318,6 +331,7 @@ export class ApplicationService {
     if (body.match.traceId !== traceId) {
       throw new ApplicationError("Match decision traceId must equal the workflow traceId.", 422, "trace_mismatch");
     }
+    this.assertEnvelope(body.envelope, traceId, idempotencyKey);
     const input: DraftInput = {
       traceId,
       idempotencyKey,
@@ -331,13 +345,41 @@ export class ApplicationService {
     return input;
   }
 
-  private parseAction(raw: unknown): ActionInput {
+  private parseAction(raw: unknown, expectedTraceId: string): ActionInput {
     const body = this.objectBody(raw);
+    const traceId = this.requiredString(body.traceId, "traceId");
+    const idempotencyKey = this.requiredString(body.idempotencyKey, "idempotencyKey");
+    if (traceId !== expectedTraceId) {
+      throw new ApplicationError("Action traceId must equal the draft traceId.", 422, "trace_mismatch");
+    }
+    this.assertEnvelope(body.envelope, traceId, idempotencyKey);
     return {
-      traceId: this.requiredString(body.traceId, "traceId"),
-      idempotencyKey: this.requiredString(body.idempotencyKey, "idempotencyKey"),
+      traceId,
+      idempotencyKey,
       reason: this.requiredString(body.reason, "reason"),
     };
+  }
+
+  private assertEnvelope(value: unknown, traceId: string, idempotencyKey: string): void {
+    try {
+      assertWorkflowEnvelope(value);
+    } catch (error) {
+      throw new ApplicationError(
+        error instanceof Error ? error.message : "Workflow envelope is invalid.",
+        422,
+        "invalid_envelope",
+      );
+    }
+    if (value.traceId !== traceId || value.idempotencyKey !== idempotencyKey) {
+      throw new ApplicationError(
+        "Workflow envelope does not match traceId and idempotencyKey.",
+        422,
+        "trace_mismatch",
+      );
+    }
+    if (value.guardrails.some((verdict) => !verdict.allowed)) {
+      throw new ApplicationError("A workflow guardrail blocked this request.", 422, "guardrail_blocked");
+    }
   }
 
   private decisionValue(raw: unknown): "approved" | "rejected" {
@@ -371,8 +413,12 @@ export class ApplicationService {
     return value;
   }
 
-  private decision(actor: Actor, reason: string): Decision {
-    return { actorId: actor.id, reason, timestamp: this.clock() };
+  private decision(actor: Actor, reason: string, evidenceIds: readonly string[]): Decision {
+    return { actorId: actor.id, reason, timestamp: this.clock(), evidenceIds: [...evidenceIds] };
+  }
+
+  private approvalCovers(decision: Decision | undefined, evidenceIds: readonly string[]): boolean {
+    return decision !== undefined && evidenceKey(decision.evidenceIds) === evidenceKey(evidenceIds);
   }
 
   private draftView(draft: StoredDraft): DraftView {
@@ -437,4 +483,8 @@ export class ApplicationService {
   private guard(value: unknown): void {
     assertNoSecrets(value, this.secrets);
   }
+}
+
+function evidenceKey(ids: readonly string[]): string {
+  return [...ids].sort().join("\n");
 }
