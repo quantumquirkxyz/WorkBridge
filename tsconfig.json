@@ -16,7 +16,8 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "@puente/domain": ["packages/domain/src/index.ts"]
+      "@puente/domain": ["packages/domain/src/index.ts"],
+      "@puente/solver": ["packages/solver/src/index.ts"]
     }
   },
   "include": [

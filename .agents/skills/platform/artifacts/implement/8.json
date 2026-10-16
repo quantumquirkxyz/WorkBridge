@@ -1,0 +1,39 @@
+{
+  "status": "completed",
+  "changes": [
+    "Added packages/solver, the deterministic matching seam from spec #2, with its own SolverCandidate/SolverVacancy input projections so ticket #4's CandidateProfile can adapt onto it later.",
+    "Implemented the weighted score (technical 30%, experience/evidence 25%, availability 15%, transport/accessibility 20%, salary/conditions 10%) with a per-dimension score breakdown and reasons.",
+    "Enforced the mandatory-skill, schedule, salary, capacity, and geographic (commute and accessibility) hard constraints; a failed constraint overrides the score and forces not_currently_apt.",
+    "Mapped scores to apt (75-100), apt_with_gaps (50-74), and not_currently_apt (0-49) via classifyAptitude.",
+    "Implemented the one-point promotion rule: it is only eligible with peer evidence that no better eligible candidate exists, and only applied with explicit human approval.",
+    "Made tie-breaking deterministic (score, failed-constraint count, vacancyId, candidateId) and independent of protected attributes and randomness.",
+    "Added a Google Maps Distance Matrix routing adapter that falls back to an offline local matrix and records why; all geographic reasons are surfaced.",
+    "Implemented the capacity-constrained assignment as a HiGHS MILP with a deterministic greedy fallback, wired into nominate().",
+    "Emitted MatchDecision as a JSON Schema 2020-12 contract validated with the shared Ajv instance from @puente/domain.",
+    "Added solver fixtures (metro-support, desirable-only, strong, mid, weak, credential-gap, infeasible-transport, schedule-conflict) and 76 Vitest tests."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npm run lint",
+      "npm run typecheck",
+      "npm test",
+      "npm run test:coverage",
+      "npm audit"
+    ],
+    "skipped": [],
+    "notes": "148/148 tests pass (76 new solver tests). Coverage 94.16% lines / 78.83% branches (gate-ci threshold is 80% lines / 70% branches). npm audit reports 0 vulnerabilities. HiGHS runs in-process from a Wasm build; the real solver is exercised by an integration test and the greedy fallback by injected-failure tests."
+  },
+  "commitSha": "18f7a66",
+  "branch": "feat/issue-8-build-deterministic-geographic-matching",
+  "nextConsumer": "publish-open-pr",
+  "blockedBy": [
+    "#4 is not merged into main; the solver defines its own SolverCandidate input projection and provides the adaptation boundary instead of consuming CandidateProfile directly."
+  ],
+  "riskRemaining": "Ticket #4 (CandidateProfile) is still unmerged, so the adapter from a candidate profile to SolverCandidate is not yet implemented; this is the explicit seam the profile ticket must satisfy. The default routing port uses the local matrix until GOOGLE_MAPS_API_KEY is configured, and the Google adapter is tested with an injected fetch rather than live calls. Protected attributes are structurally absent from the solver input; the invariance test only proves that extra fields do not affect the decision.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  }
+}
