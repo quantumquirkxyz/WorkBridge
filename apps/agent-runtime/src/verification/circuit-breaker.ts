@@ -1,7 +1,9 @@
+import type { ProviderName } from "./status.js";
+
 export interface CircuitBreaker {
-  isOpen(provider: string): boolean;
-  recordSuccess(provider: string): void;
-  recordFailure(provider: string): void;
+  isOpen(provider: ProviderName): boolean;
+  recordSuccess(provider: ProviderName): void;
+  recordFailure(provider: ProviderName): void;
 }
 
 export function createCircuitBreaker(threshold = 3): CircuitBreaker {

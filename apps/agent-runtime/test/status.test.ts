@@ -83,23 +83,23 @@ describe("verification status", () => {
     expect(mandatoryCredentialSatisfied(verification)).toBe(false);
   });
 
-  it("returns partially_verified when the holder cannot be established", () => {
+  it("returns unverified when the holder cannot be established", () => {
     const verification = normalizeVerification({
       signals: { ...trustedBound, holderBinding: "unknown" },
       provider: "certo",
     });
 
-    expect(verification.status).toBe("partially_verified");
+    expect(verification.status).toBe("unverified");
     expect(mandatoryCredentialSatisfied(verification)).toBe(false);
   });
 
-  it("returns partially_verified when the proof passes but the issuer is not trusted", () => {
+  it("returns unverified when the proof passes but the issuer is not trusted", () => {
     const verification = normalizeVerification({
       signals: { ...trustedBound, issuerTrust: false },
       provider: "certo",
     });
 
-    expect(verification.status).toBe("partially_verified");
+    expect(verification.status).toBe("unverified");
     expect(verification.issuer_trust).toBe(false);
   });
 

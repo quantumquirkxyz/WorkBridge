@@ -1,14 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import { verifyCredential } from "../src/verification/index.js";
+import { jsonResponse } from "./json-response.js";
 
 const TRACE = "trace-fallback-1";
-
-function jsonResponse(body: unknown, status = 200): Response {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { "content-type": "application/json" },
-  });
-}
 
 const accredibleCredential = {
   credential: {

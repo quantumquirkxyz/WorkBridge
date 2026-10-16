@@ -1,3 +1,5 @@
+import type { ProviderName } from "./status.js";
+
 export interface HttpSuccess {
   kind: "response";
   status: number;
@@ -14,7 +16,7 @@ const DEFAULT_TIMEOUT_MS = 5_000;
 
 export async function fetchJsonWithRetry(
   fetchImpl: (input: string, init?: RequestInit) => Promise<Response>,
-  provider: string,
+  provider: ProviderName,
   url: string,
   init: { method: "GET" | "POST"; headers: Headers; body?: string },
   timeoutMs = DEFAULT_TIMEOUT_MS,

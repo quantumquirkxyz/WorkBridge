@@ -4,7 +4,12 @@ import { createCircuitBreaker, type CircuitBreaker } from "./circuit-breaker.js"
 import { credlyEvidence, parseCredlyAssertion, signalsFromCredly } from "./credly.js";
 import { fetchJsonWithRetry, traceHeaders } from "./http.js";
 import { mockSignalsFor } from "./mock-fixtures.js";
-import { normalizeVerification, type CredentialVerification } from "./status.js";
+import {
+  normalizeVerification,
+  type CredentialVerification,
+  type EvidenceItem,
+  type VerificationSignals,
+} from "./status.js";
 
 export interface CredentialInput {
   credentialId?: string;
@@ -149,50 +154,61 @@ async function queryAccredible(input: CredentialInput, deps: VerifyDeps): Promis
   if (!input.credentialId) return { kind: "skipped" };
   const token = deps.config.accredibleApiToken;
   if (!token) return { kind: "unavailable", reason: "accredible_unavailable", outage: false };
-  const response = await fetchJsonWithRetry(
-    deps.fetch,
-    "accredible",
-    `https://api.accredible.com/v1/credentials/${encodeURIComponent(input.credentialId)}`,
-    {
-      method: "GET",
-      headers: traceHeaders(input.traceId, { name: "authorization", value: `Token token=${token}` }),
-    },
-    deps.config.timeoutMs,
-  );
-  if (response.kind === "unavailable") return response;
-  const parsed = parseAccredibleCredential(response.body);
-  if (!parsed) return { kind: "unavailable", reason: "accredible_invalid_response", outage: false };
-  return {
-    kind: "result",
-    verification: normalizeVerification({
-      signals: signalsFromAccredible(parsed, input.holderId),
-      provider: "accredible",
-      evidence: accredibleEvidence(),
-    }),
-  };
+  return queryCredentialGet(input, deps, {
+    provider: "accredible",
+    url: `https://api.accredible.com/v1/credentials/${encodeURIComponent(input.credentialId)}`,
+    authorization: { name: "authorization", value: `Token token=${token}` },
+    invalidReason: "accredible_invalid_response",
+    parse: parseAccredibleCredential,
+    signals: (parsed) => signalsFromAccredible(parsed, input.holderId),
+    evidence: accredibleEvidence,
+  });
 }
 
 async function queryCredly(input: CredentialInput, deps: VerifyDeps): Promise<ProviderAttempt> {
   if (!input.credentialId) return { kind: "skipped" };
+  return queryCredentialGet(input, deps, {
+    provider: "credly",
+    url: `https://api.credly.com/v1/obi/v2/badge_assertions/${encodeURIComponent(input.credentialId)}`,
+    invalidReason: "credly_invalid_response",
+    parse: parseCredlyAssertion,
+    signals: (parsed) => signalsFromCredly(parsed, input.holderId),
+    evidence: credlyEvidence,
+  });
+}
+
+async function queryCredentialGet<T>(
+  input: CredentialInput,
+  deps: VerifyDeps,
+  options: {
+    provider: "accredible" | "credly";
+    url: string;
+    authorization?: { name: "authorization"; value: string };
+    invalidReason: string;
+    parse: (body: unknown) => T | undefined;
+    signals: (parsed: T) => VerificationSignals;
+    evidence: () => EvidenceItem[];
+  },
+): Promise<ProviderAttempt> {
   const response = await fetchJsonWithRetry(
     deps.fetch,
-    "credly",
-    `https://api.credly.com/v1/obi/v2/badge_assertions/${encodeURIComponent(input.credentialId)}`,
+    options.provider,
+    options.url,
     {
       method: "GET",
-      headers: traceHeaders(input.traceId),
+      headers: traceHeaders(input.traceId, options.authorization),
     },
     deps.config.timeoutMs,
   );
   if (response.kind === "unavailable") return response;
-  const parsed = parseCredlyAssertion(response.body);
-  if (!parsed) return { kind: "unavailable", reason: "credly_invalid_response", outage: false };
+  const parsed = options.parse(response.body);
+  if (!parsed) return { kind: "unavailable", reason: options.invalidReason, outage: false };
   return {
     kind: "result",
     verification: normalizeVerification({
-      signals: signalsFromCredly(parsed, input.holderId),
-      provider: "credly",
-      evidence: credlyEvidence(),
+      signals: options.signals(parsed),
+      provider: options.provider,
+      evidence: options.evidence(),
     }),
   };
 }

@@ -12,3 +12,4 @@ export {
 export { validateCredentialVerification } from "./schema.js";
 export { confusionMatrix, type ConfusionMatrix } from "./metrics.js";
 export { verifyCredential, type CredentialInput, type VerifyDeps } from "./verify.js";
+export { verificationConfigFromEnv } from "./config.js";

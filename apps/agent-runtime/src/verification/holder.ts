@@ -1,3 +1,5 @@
+import type { HolderBinding } from "./status.js";
+
 export function normalizeHolderId(value: string): string {
   return value.trim().toLowerCase().replace(/^mailto:/, "");
 }
@@ -5,7 +7,7 @@ export function normalizeHolderId(value: string): string {
 export function holderBindingFor(
   credential: unknown,
   holderId: string | undefined,
-): "bound" | "unbound" | "unknown" {
+): HolderBinding {
   if (!holderId) return "unknown";
   const subject = readSubject(credential);
   if (!subject) return "unknown";

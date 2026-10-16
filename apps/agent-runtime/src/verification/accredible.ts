@@ -1,5 +1,6 @@
 import { Ajv2020 } from "ajv/dist/2020.js";
 import { holderBindingFor } from "./holder.js";
+import { isPast, optionalBoolean, revocationFrom } from "./payload-fields.js";
 import type { EvidenceItem, VerificationSignals } from "./status.js";
 
 const schema = {
@@ -69,20 +70,4 @@ export function signalsFromAccredible(
 
 export function accredibleEvidence(): EvidenceItem[] {
   return [{ check: "accredible_credential", result: "success" }];
-}
-
-function isPast(value: string | null | undefined, now: Date): boolean {
-  if (!value) return false;
-  const time = Date.parse(value);
-  return Number.isFinite(time) && time <= now.getTime();
-}
-
-function optionalBoolean(value: boolean | undefined): boolean | null {
-  return typeof value === "boolean" ? value : null;
-}
-
-function revocationFrom(revoked: boolean | undefined): "not_revoked" | "revoked" | "unknown" {
-  if (revoked === true) return "revoked";
-  if (revoked === false) return "not_revoked";
-  return "unknown";
 }

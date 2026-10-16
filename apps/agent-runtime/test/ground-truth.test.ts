@@ -7,16 +7,10 @@ import {
   type CredentialVerification,
   type VerificationStatus,
 } from "../src/verification/index.js";
+import { jsonResponse } from "./json-response.js";
 
 const HOLDER = "candidate@example.com";
 const TRACE = "trace-ground-truth";
-
-function jsonResponse(body: unknown, status = 200): Response {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { "content-type": "application/json" },
-  });
-}
 
 function certo(checks: Array<{ check: string; result: "success" | "error" | "warning"; message?: string }>, verified: boolean) {
   return jsonResponse({
@@ -116,7 +110,7 @@ const cases: GroundTruthCase[] = [
   {
     id: 6,
     name: "unknown signer",
-    groundTruth: "partially_verified",
+    groundTruth: "unverified",
     provider: "certo",
     externallyVerified: true,
     credentialId: "case-06",

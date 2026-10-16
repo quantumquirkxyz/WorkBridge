@@ -1,10 +1,4 @@
-export const VERIFICATION_STATUSES = [
-  "verified",
-  "partially_verified",
-  "declared",
-  "unverified",
-  "rejected",
-] as const;
+export const VERIFICATION_STATUSES = ["verified", "declared", "unverified", "rejected"] as const;
 
 export type VerificationStatus = (typeof VERIFICATION_STATUSES)[number];
 
@@ -67,7 +61,7 @@ export function deriveStatus(signals: VerificationSignals): VerificationStatus {
     signals.issuerTrust === true && signals.revocationStatus === "not_revoked";
   const holderBound = signals.holderBinding === "bound";
   if (trustComplete && holderBound) return "verified";
-  return "partially_verified";
+  return "unverified";
 }
 
 export function mandatoryCredentialSatisfied(
