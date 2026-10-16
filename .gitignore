@@ -1,6 +1,10 @@
 .agents/skills/platform/runs/
 node_modules/
+.env
 coverage/
+test-results/
+playwright-report/
+blob-report/
 .skill-sandbox/
 .opencode/goals/
 .DS_Store

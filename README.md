@@ -31,8 +31,17 @@ Ajv, HiGHS, Google Maps, Apify LinkedIn Jobs scraper, Langfuse, Vitest, and Play
 
 ## Instalación y ejecución
 
-Installation and demo instructions will be added with the implementation. Use `.env.example`; never
-commit real credentials.
+```bash
+npm ci
+npm test
+npm run test:e2e
+npm start
+```
+
+Role-gated drafts and submissions are documented in `docs/how-to/application-runtime.md`.
+Assumed signatures for matching (#8) and the workflow plane (#9) are in
+`docs/reference/assumed-contracts.md`. Copy `.env.example` to `.env` for local
+runs; never commit real credentials.
 
 ## Evals
 
