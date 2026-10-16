@@ -19,7 +19,10 @@ Verify credentials in this order:
 3. Credly when the previous providers cannot verify.
 
 The system records provider, evidence, status, and fallback reason. It uses `verified`,
-`declared`, `unverified`, and `rejected` states. If the real Certo deployment or contract is
+`partially_verified`, `declared`, `unverified`, and `rejected` states. `partially_verified`,
+recorded for issue #6, means the proof passed while issuer trust, revocation, or holder
+binding is incomplete. A holder id that does not match is `rejected`, not `partially_verified`.
+If the real Certo deployment or contract is
 unavailable, the system uses a common adapter and a deterministic mock without claiming external verification.
 
 Applications move through `draft`, `pending_human_approval`, `approved`, or `rejected`.

@@ -13,6 +13,8 @@ const schema = {
       properties: {
         expired_on: { type: ["string", "null"] },
         revoked: { type: "boolean" },
+        document_integrity: { type: "boolean" },
+        cryptographic_proof: { type: "boolean" },
         recipient: {
           type: "object",
           additionalProperties: true,
@@ -34,6 +36,8 @@ export interface AccredibleCredentialBody {
   credential: {
     expired_on?: string | null;
     revoked?: boolean;
+    document_integrity?: boolean;
+    cryptographic_proof?: boolean;
     recipient?: { email?: string };
     issuer?: { name?: string };
   };
@@ -51,10 +55,10 @@ export function signalsFromAccredible(
 ): VerificationSignals {
   const credential = body.credential;
   return {
-    documentIntegrity: true,
-    cryptographicProof: true,
-    issuerTrust: Boolean(credential.issuer?.name),
-    revocationStatus: credential.revoked ? "revoked" : "not_revoked",
+    documentIntegrity: optionalBoolean(credential.document_integrity),
+    cryptographicProof: optionalBoolean(credential.cryptographic_proof),
+    issuerTrust: credential.issuer?.name ? true : null,
+    revocationStatus: revocationFrom(credential.revoked),
     holderBinding: holderBindingFor(
       { recipient: { email: credential.recipient?.email } },
       holderId,
@@ -71,4 +75,14 @@ function isPast(value: string | null | undefined, now: Date): boolean {
   if (!value) return false;
   const time = Date.parse(value);
   return Number.isFinite(time) && time <= now.getTime();
+}
+
+function optionalBoolean(value: boolean | undefined): boolean | null {
+  return typeof value === "boolean" ? value : null;
+}
+
+function revocationFrom(revoked: boolean | undefined): "not_revoked" | "revoked" | "unknown" {
+  if (revoked === true) return "revoked";
+  if (revoked === false) return "not_revoked";
+  return "unknown";
 }

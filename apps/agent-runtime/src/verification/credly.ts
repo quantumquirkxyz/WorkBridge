@@ -8,6 +8,8 @@ const schema = {
   required: ["recipient"],
   properties: {
     revoked: { type: "boolean" },
+    document_integrity: { type: "boolean" },
+    cryptographic_proof: { type: "boolean" },
     expires: { type: ["string", "null"] },
     recipient: {
       type: "object",
@@ -26,6 +28,8 @@ const validate = new Ajv2020({ allErrors: true, strict: false }).compile(schema)
 
 export interface CredlyAssertion {
   revoked?: boolean;
+  document_integrity?: boolean;
+  cryptographic_proof?: boolean;
   expires?: string | null;
   recipient: { identity: string; hashed?: boolean };
   badge?: { issuer?: { name?: string } };
@@ -43,10 +47,10 @@ export function signalsFromCredly(
 ): VerificationSignals {
   const hashed = assertion.recipient.hashed === true;
   return {
-    documentIntegrity: true,
-    cryptographicProof: true,
-    issuerTrust: Boolean(assertion.badge?.issuer?.name),
-    revocationStatus: assertion.revoked ? "revoked" : "not_revoked",
+    documentIntegrity: optionalBoolean(assertion.document_integrity),
+    cryptographicProof: optionalBoolean(assertion.cryptographic_proof),
+    issuerTrust: assertion.badge?.issuer?.name ? true : null,
+    revocationStatus: revocationFrom(assertion.revoked),
     holderBinding: hashed
       ? "unknown"
       : holderBindingFor({ recipient: { email: assertion.recipient.identity } }, holderId),
@@ -62,4 +66,14 @@ function isPast(value: string | null | undefined, now: Date): boolean {
   if (!value) return false;
   const time = Date.parse(value);
   return Number.isFinite(time) && time <= now.getTime();
+}
+
+function optionalBoolean(value: boolean | undefined): boolean | null {
+  return typeof value === "boolean" ? value : null;
+}
+
+function revocationFrom(revoked: boolean | undefined): "not_revoked" | "revoked" | "unknown" {
+  if (revoked === true) return "revoked";
+  if (revoked === false) return "not_revoked";
+  return "unknown";
 }

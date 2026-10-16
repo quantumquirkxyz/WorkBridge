@@ -73,9 +73,19 @@ describe("verification status", () => {
     expect(mandatoryCredentialSatisfied(verification)).toBe(true);
   });
 
-  it("returns partially_verified when the proof passes but the holder is unbound", () => {
+  it("returns rejected when the holder does not match", () => {
     const verification = normalizeVerification({
       signals: { ...trustedBound, holderBinding: "unbound" },
+      provider: "certo",
+    });
+
+    expect(verification.status).toBe("rejected");
+    expect(mandatoryCredentialSatisfied(verification)).toBe(false);
+  });
+
+  it("returns partially_verified when the holder cannot be established", () => {
+    const verification = normalizeVerification({
+      signals: { ...trustedBound, holderBinding: "unknown" },
       provider: "certo",
     });
 

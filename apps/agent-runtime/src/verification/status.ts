@@ -55,7 +55,8 @@ export function deriveStatus(signals: VerificationSignals): VerificationStatus {
     signals.revocationStatus === "revoked" ||
     signals.expired === true ||
     signals.inconsistent === true ||
-    signals.reused === true
+    signals.reused === true ||
+    signals.holderBinding === "unbound"
   ) {
     return "rejected";
   }

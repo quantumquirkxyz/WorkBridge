@@ -43,13 +43,12 @@ export function signalsFromCerto(
   const revocation = findCheck(checks, ["revocation", "revoked"]);
   const expiration = findCheck(checks, ["expiration", "expiry", "expired"]);
   const format = findCheck(checks, ["format"]);
-  const fallback = result.verified ? true : null;
 
   return {
-    documentIntegrity: flag(integrity, fallback),
-    cryptographicProof: flag(proof, fallback),
-    issuerTrust: flag(issuer, fallback),
-    revocationStatus: revocationStatus(revocation, result.verified),
+    documentIntegrity: flag(integrity, null),
+    cryptographicProof: flag(proof, null),
+    issuerTrust: flag(issuer, null),
+    revocationStatus: revocationStatus(revocation),
     holderBinding: holderBindingFor(result.credential, holderId),
     expired: expiration?.result === "error",
     unsupportedFormat: format?.result === "error",
@@ -94,9 +93,8 @@ function flag(check: CertoCheck | undefined, fallback: boolean | null): boolean 
 
 function revocationStatus(
   check: CertoCheck | undefined,
-  verified: boolean,
 ): VerificationSignals["revocationStatus"] {
-  if (!check) return verified ? "not_revoked" : "unknown";
+  if (!check) return "unknown";
   if (check.result === "error") return "revoked";
   if (check.result === "success") return "not_revoked";
   return "unknown";

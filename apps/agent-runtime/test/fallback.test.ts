@@ -14,6 +14,9 @@ const accredibleCredential = {
   credential: {
     id: "acc-1",
     expired_on: null,
+    revoked: false,
+    document_integrity: true,
+    cryptographic_proof: true,
     recipient: { email: "candidate@example.com" },
     issuer: { name: "Accredible Issuer" },
   },
@@ -21,6 +24,8 @@ const accredibleCredential = {
 
 const credlyAssertion = {
   revoked: false,
+  document_integrity: true,
+  cryptographic_proof: true,
   recipient: { identity: "candidate@example.com", hashed: false, type: "email" },
   badge: { issuer: { name: "Credly Issuer" } },
 };
@@ -92,7 +97,7 @@ describe("provider fallback chain", () => {
       String(call[0]).includes("credly.com"),
     ) as unknown as [string, RequestInit] | undefined;
     const headers = new Headers(credlyCall?.[1]?.headers);
-    expect(headers.get("authorization")).toBe("Bearer credly-token");
+    expect(headers.get("authorization")).toBeNull();
     expect(result.provider).toBe("credly");
     expect(result.status).toBe("verified");
     expect(result.externally_verified).toBe(true);
@@ -162,5 +167,61 @@ describe("provider fallback chain", () => {
     expect(result.provider).toBe("mock");
     expect(result.externally_verified).toBe(false);
     expect(result.status).toBe("unverified");
+  });
+
+  it("does not call Accredible when its token is missing", async () => {
+    const fetchMock = vi.fn(async (url: string) => {
+      if (url.includes("credly.com")) return jsonResponse(credlyAssertion);
+      if (url.includes("certo.example")) return jsonResponse({ error: "missing" }, 404);
+      throw new Error("accredible should not be called");
+    });
+
+    const result = await verifyCredential(
+      {
+        credentialId: "badge-1",
+        holderId: "candidate@example.com",
+        traceId: TRACE,
+      },
+      {
+        fetch: fetchMock,
+        config: { certoBaseUrl: "https://certo.example", certoApiToken: "certo-token" },
+      },
+    );
+
+    const urls = fetchMock.mock.calls.map((call) => String(call[0]));
+    expect(urls.some((url) => url.includes("accredible.com"))).toBe(false);
+    expect(result.provider).toBe("credly");
+    expect(result.fallback_reason).toContain("accredible_unavailable");
+  });
+
+  it("does not verify an Accredible payload that omits revocation and proof", async () => {
+    const fetchMock = vi.fn(async (url: string) => {
+      if (url.includes("certo.example")) return jsonResponse({ error: "missing" }, 404);
+      return jsonResponse({
+        credential: {
+          recipient: { email: "candidate@example.com" },
+          issuer: { name: "Accredible Issuer" },
+        },
+      });
+    });
+
+    const result = await verifyCredential(
+      {
+        credentialId: "acc-sparse",
+        holderId: "candidate@example.com",
+        traceId: TRACE,
+      },
+      {
+        fetch: fetchMock,
+        config: {
+          certoBaseUrl: "https://certo.example",
+          certoApiToken: "certo-token",
+          accredibleApiToken: "accredible-token",
+        },
+      },
+    );
+
+    expect(result.provider).toBe("accredible");
+    expect(result.status).not.toBe("verified");
   });
 });

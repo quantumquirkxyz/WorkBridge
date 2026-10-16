@@ -83,7 +83,7 @@ export async function verifyCredential(
   }
 
   return normalizeVerification({
-    signals: mockSignalsFor(input.credentialId),
+    signals: mockSignalsFor(input.credentialId, input.holderId),
     provider: "mock",
     fallbackReason: reasons.join(",") || "providers_unavailable",
     evidence: [
@@ -113,7 +113,9 @@ async function attemptProvider(
 
 async function queryCerto(input: CredentialInput, deps: VerifyDeps): Promise<ProviderAttempt> {
   const baseUrl = deps.config.certoBaseUrl?.replace(/\/$/, "");
-  if (!baseUrl) return { kind: "unavailable", reason: "certo_unavailable", outage: false };
+  if (!baseUrl || !deps.config.certoApiToken) {
+    return { kind: "unavailable", reason: "certo_unavailable", outage: false };
+  }
   if (!input.credentialId && !input.document) {
     return { kind: "unavailable", reason: "certo_not_found", outage: false };
   }
@@ -144,8 +146,9 @@ async function queryCerto(input: CredentialInput, deps: VerifyDeps): Promise<Pro
 }
 
 async function queryAccredible(input: CredentialInput, deps: VerifyDeps): Promise<ProviderAttempt> {
+  if (!input.credentialId) return { kind: "skipped" };
   const token = deps.config.accredibleApiToken;
-  if (!token || !input.credentialId) return { kind: "skipped" };
+  if (!token) return { kind: "unavailable", reason: "accredible_unavailable", outage: false };
   const response = await fetchJsonWithRetry(
     deps.fetch,
     "accredible",
@@ -170,15 +173,14 @@ async function queryAccredible(input: CredentialInput, deps: VerifyDeps): Promis
 }
 
 async function queryCredly(input: CredentialInput, deps: VerifyDeps): Promise<ProviderAttempt> {
-  const token = deps.config.credlyApiToken;
-  if (!token || !input.credentialId) return { kind: "skipped" };
+  if (!input.credentialId) return { kind: "skipped" };
   const response = await fetchJsonWithRetry(
     deps.fetch,
     "credly",
     `https://api.credly.com/v1/obi/v2/badge_assertions/${encodeURIComponent(input.credentialId)}`,
     {
       method: "GET",
-      headers: traceHeaders(input.traceId, { name: "authorization", value: `Bearer ${token}` }),
+      headers: traceHeaders(input.traceId),
     },
     deps.config.timeoutMs,
   );

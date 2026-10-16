@@ -166,10 +166,57 @@ describe("CertoVerifier", () => {
       { fetch: fetchMock, config: {} },
     );
 
-    expect(fetchMock).not.toHaveBeenCalled();
+    expect(fetchMock.mock.calls.some((call) => String(call[0]).includes("certo.example"))).toBe(
+      false,
+    );
     expect(result.provider).toBe("mock");
     expect(result.externally_verified).toBe(false);
     expect(result.status).toBe("unverified");
+  });
+
+  it("does not call Certo when the API token is missing", async () => {
+    const fetchMock = vi.fn();
+
+    const result = await verifyCredential(
+      {
+        credentialId: "fixture-valid",
+        holderId: "candidate@example.com",
+        traceId: TRACE,
+      },
+      { fetch: fetchMock, config: { certoBaseUrl: "https://certo.example" } },
+    );
+
+    expect(fetchMock.mock.calls.some((call) => String(call[0]).includes("certo.example"))).toBe(
+      false,
+    );
+    expect(result.provider).toBe("mock");
+    expect(result.externally_verified).toBe(false);
+  });
+
+  it("does not treat an aggregate Certo verified flag as separate checks", async () => {
+    const fetchMock = vi.fn(async () =>
+      jsonResponse({
+        verified: true,
+        credential: { credentialSubject: { id: "mailto:candidate@example.com" } },
+      }),
+    );
+
+    const result = await verifyCredential(
+      {
+        credentialId: "urn:uuid:aggregate",
+        holderId: "candidate@example.com",
+        traceId: TRACE,
+      },
+      {
+        fetch: fetchMock,
+        config: { certoBaseUrl: "https://certo.example", certoApiToken: TOKEN },
+      },
+    );
+
+    expect(result.provider).toBe("certo");
+    expect(result.status).not.toBe("verified");
+    expect(result.document_integrity).toBeNull();
+    expect(result.cryptographic_proof).toBeNull();
   });
 
   it("opens the circuit after repeated Certo failures", async () => {

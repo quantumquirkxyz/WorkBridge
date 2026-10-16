@@ -194,6 +194,9 @@ const cases: GroundTruthCase[] = [
           credential: {
             recipient: { email: HOLDER },
             issuer: { name: "Accredible Issuer" },
+            revoked: false,
+            document_integrity: true,
+            cryptographic_proof: true,
           },
         });
       }
@@ -212,6 +215,8 @@ const cases: GroundTruthCase[] = [
       if (url.includes("credly.com")) {
         return jsonResponse({
           revoked: false,
+          document_integrity: true,
+          cryptographic_proof: true,
           recipient: { identity: HOLDER, hashed: false },
           badge: { issuer: { name: "Credly Issuer" } },
         });
@@ -332,7 +337,7 @@ describe("holder binding", () => {
       },
     );
 
-    expect(result.status).toBe("partially_verified");
+    expect(result.status).toBe("rejected");
     expect(result.holder_binding).toBe("unbound");
     expect(mandatoryCredentialSatisfied(result)).toBe(false);
   });

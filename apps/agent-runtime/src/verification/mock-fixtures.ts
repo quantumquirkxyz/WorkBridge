@@ -1,19 +1,30 @@
+import { holderBindingFor } from "./holder.js";
 import type { VerificationSignals } from "./status.js";
 
-export const MOCK_FIXTURES: Record<string, VerificationSignals> = {
+interface MockFixture {
+  subjectId?: string;
+  signals: VerificationSignals;
+}
+
+export const MOCK_FIXTURES: Record<string, MockFixture> = {
   "fixture-valid": {
-    documentIntegrity: true,
-    cryptographicProof: true,
-    issuerTrust: true,
-    revocationStatus: "not_revoked",
-    holderBinding: "bound",
+    subjectId: "candidate@example.com",
+    signals: {
+      documentIntegrity: true,
+      cryptographicProof: true,
+      issuerTrust: true,
+      revocationStatus: "not_revoked",
+      holderBinding: "unknown",
+    },
   },
   "fixture-missing-key": {
-    documentIntegrity: true,
-    cryptographicProof: null,
-    issuerTrust: null,
-    revocationStatus: "unknown",
-    holderBinding: "unknown",
+    signals: {
+      documentIntegrity: true,
+      cryptographicProof: null,
+      issuerTrust: null,
+      revocationStatus: "unknown",
+      holderBinding: "unknown",
+    },
   },
 };
 
@@ -25,7 +36,18 @@ const UNVERIFIED: VerificationSignals = {
   holderBinding: "unknown",
 };
 
-export function mockSignalsFor(credentialId: string | undefined): VerificationSignals {
-  if (!credentialId) return UNVERIFIED;
-  return MOCK_FIXTURES[credentialId] ?? UNVERIFIED;
+export function mockSignalsFor(
+  credentialId: string | undefined,
+  holderId?: string,
+): VerificationSignals {
+  const fixture = credentialId ? MOCK_FIXTURES[credentialId] : undefined;
+  if (!fixture) return { ...UNVERIFIED };
+  const signals = { ...fixture.signals };
+  if (fixture.subjectId) {
+    signals.holderBinding = holderBindingFor(
+      { recipient: { email: fixture.subjectId } },
+      holderId,
+    );
+  }
+  return signals;
 }
