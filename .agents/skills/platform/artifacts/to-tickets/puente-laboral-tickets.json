@@ -1,0 +1,19 @@
+{
+  "artifactType": "TicketArtifact",
+  "schemaVersion": "1.0",
+  "traceId": "to-tickets-20261016-puente-laboral",
+  "parentSpecs": [1,2,3],
+  "tickets": [
+    {"id":4,"title":"Build candidate intake and profile","owner":"MateoDG2006","parentSpec":1,"wave":0,"blockedBy":[]},
+    {"id":5,"title":"Build vacancy normalization and fairness checks","owner":"KerubeDev","parentSpec":2,"wave":0,"blockedBy":[]},
+    {"id":6,"title":"Build normalized credential verification","owner":"quantumquirkxyz","parentSpec":3,"wave":0,"blockedBy":[]},
+    {"id":7,"title":"Build candidate preferences and vacancy exploration","owner":"MateoDG2006","parentSpec":1,"wave":1,"blockedBy":[4]},
+    {"id":8,"title":"Build deterministic geographic matching","owner":"KerubeDev","parentSpec":2,"wave":1,"blockedBy":[4,5]},
+    {"id":9,"title":"Build the multi-agent workflow, safety, and observability plane","owner":"quantumquirkxyz","parentSpec":3,"wave":1,"blockedBy":[4,5,6],"intentionalFanIn":true},
+    {"id":10,"title":"Build no-match exploration and saved alerts","owner":"MateoDG2006","parentSpec":1,"wave":2,"blockedBy":[7]},
+    {"id":11,"title":"Build specialization-aware training roadmap","owner":"KerubeDev","parentSpec":2,"wave":2,"blockedBy":[8]},
+    {"id":12,"title":"Build role-based approval and safe application submission","owner":"quantumquirkxyz","parentSpec":3,"wave":2,"blockedBy":[8,9]}
+  ],
+  "waves": {"0":[4,5,6],"1":[7,8,9],"2":[10,11,12]},
+  "validationNotes": {"granularity":"Approved by user; three tickets per parent spec.","overCoupling":"Ticket 9 has three intentional blockers because it integrates all shared contracts.","parentIssuesUnmodified":true,"subissuesLinked":true,"parentMapping":{"1":[4,7,10],"2":[5,8,11],"3":[6,9,12]}}
+}

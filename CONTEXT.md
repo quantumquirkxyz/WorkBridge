@@ -1,6 +1,6 @@
 # Context
 
-This repository (`Agent-Hackathon`) uses the repository-local quirk Skills bundle
+This repository (`equipo-02`) uses the repository-local quirk Skills bundle
 installed under `.agents/skills/`. Durability rules and vocabulary for the workflow
 itself live in `docs/explanation/quirk-method.md`; this file records the *project's own*
 domain vocabulary and boundaries only.
@@ -13,16 +13,24 @@ domain vocabulary and boundaries only.
 - The canonical skills are `.agents/skills/`; `.claude/skills/` is a symlink compatibility view.
 - Durable design decisions are recorded as ADRs under `.agents/adr/`.
 
-## Project vocabulary
+## Project brief
 
-> Status: **bootstrap**. The project brief has not been captured yet. This table is the
-> single source of truth for the project's ubiquitous language and must be completed during
-> the first `grill-with-docs` session before any spec is written. Do not invent terms here —
-> every entry must be agreed with the owner.
+**Puente Laboral Panamá** is a multi-agent employability system for young people. It evaluates
+readiness for a job, recognizes formal and informal experience, identifies skill gaps, recommends
+training or internships, and prepares applications for human approval.
+
+## Project vocabulary
 
 | Term | Meaning |
 |---|---|
-| _pending_ | _To be defined in the first clarification session_ |
+| Apt | Meets mandatory requirements and practical constraints. |
+| Apt with gaps | Can progress after addressing identified gaps. |
+| Not currently apt | Fails a hard constraint at the current time. |
+| Evidence | A declared, extracted, verified, or inferred fact supporting a claim. |
+| Informal experience | Experience from family businesses, volunteering, projects, academic work, or unregistered work. |
+| Roadmap | Ranked actions that address a candidate's gaps. |
+| Workflow graph | Explicit states, agent transitions, tools, fallbacks, and human approval points. |
+| Ground truth | Known expected result used to measure verification errors. |
 
 ## Boundaries
 
@@ -37,7 +45,7 @@ domain vocabulary and boundaries only.
 |---|---|
 | Language / runtime | _to confirm with project brief_ |
 | Package manager | _to confirm_ |
-| Issue tracker | GitHub Issues in `quantumquirkxyz/Agent-Hackathon` |
+| Issue tracker | GitHub Issues in `HackathonFISC/equipo-02` |
 | Docs surface | `docs/reference/agents/`, `docs/how-to/`, `docs/explanation/` |
 | ADRs | `.agents/adr/` |
 

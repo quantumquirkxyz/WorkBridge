@@ -1,4 +1,4 @@
-# Nombre del proyecto
+# Puente Laboral Panamá
 
 <!-- Cambia el 0 por el número de su reto y deja la línea tal cual ("Reto: N"):
        1 = Agua · 2 = Educación · 3 = Empleabilidad
@@ -13,17 +13,26 @@ Reto: 3
 
 ## Problema
 
-Qué problema resuelve el proyecto, para quién y con qué datos.
+La transición de los estudios al primer empleo es difícil para jóvenes panameños. Puente Laboral
+Panamá conecta perfiles, vacantes y rutas de formación considerando habilidades técnicas y blandas,
+experiencia informal, certificaciones, transporte, horario, salario y equidad.
 
 ## Arquitectura de agentes
 
-Agentes, herramientas, flujos y punto de intervención humana (incluir el diagrama).
+The system uses four agents: Exploration, Profile and Evidence, Market and Matching, and Training.
+Mastra coordinates them through a workflow graph. Deterministic matching uses HiGHS; Google Maps
+handles routing; Certo is a separately deployed credential verifier with Accredible, Credly, and
+transparent mock fallbacks. Human approval is required before application submission.
 
 ## Tecnologías y fuentes de datos
 
+TypeScript, Next.js, Mastra, OpenRouter, PostgreSQL, Prisma, Better Auth, JSON Schema 2020-12,
+Ajv, HiGHS, Google Maps, Apify LinkedIn Jobs scraper, Langfuse, Vitest, and Playwright.
+
 ## Instalación y ejecución
 
-Pasos para instalar y correr el proyecto. Credenciales de demo sin claves reales (usar `.env.example`).
+Installation and demo instructions will be added with the implementation. Use `.env.example`; never
+commit real credentials.
 
 ## Evals
 

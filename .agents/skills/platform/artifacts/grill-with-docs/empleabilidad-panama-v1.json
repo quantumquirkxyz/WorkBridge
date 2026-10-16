@@ -1,0 +1,662 @@
+{
+  "artifactType": "GrillWithDocsArtifact",
+  "identifier": "empleabilidad-panama-v1",
+  "status": "completed",
+  "sourceOfTruth": "Reto oficial de Empleabilidad, brainstorm del equipo y decisiones confirmadas durante grill-with-docs",
+  "designUnderReview": {
+    "name": "Puente Laboral Panamá",
+    "goal": "Evaluar la aptitud de un joven para una vacante, reconocer experiencia formal e informal, identificar brechas y proponer una ruta accionable antes de postular.",
+    "primaryFlow": [
+      "capturar CV, certificaciones, proyectos y experiencias descritas por el usuario",
+      "normalizar el perfil y evidencias",
+      "analizar los requisitos de una oferta",
+      "calcular aptitud con reglas y restricciones determinísticas",
+      "explicar aptitud, brechas y riesgos",
+      "proponer cursos, certificaciones o pasantías como roadmap",
+      "generar CV y postulación adaptados",
+      "solicitar aprobación humana antes de ejecutar una acción externa"
+    ]
+  },
+  "primaryUseCase": {
+    "name": "What jobs can I apply to?",
+    "actor": "Young candidate without a strong CV or with informal experience.",
+    "flow": [
+      "upload a CV photo/PDF or describe experiences",
+      "describe projects, family work, volunteering or previous employment",
+      "Profile Agent identifies technical skills, soft skills, estimated level and missing evidence",
+      "candidate selects work preferences",
+      "Exploration Agent finds compatible vacancies",
+      "Market Agent analyzes requirements",
+      "Google Maps validates transport and location",
+      "solver ranks the best vacancies",
+      "Training Agent recommends courses, projects or internships",
+      "system generates a personalized roadmap"
+    ]
+  },
+  "candidatePreferences": {
+    "confirmed": true,
+    "solverInputs": ["target_areas_or_roles", "work_modality", "maximum_location", "maximum_travel_time", "maximum_daily_transport_cost", "minimum_salary", "availability_schedule", "contract_type", "available_transport_modes", "willingness_for_courses_or_internships"],
+    "rule": "Preferences are explicitly selected by the candidate and are not inferred by the LLM."
+  },
+  "skillsTaxonomy": {
+    "confirmed": true,
+    "base": "ESCO",
+    "localExtension": "Panamanian Spanish occupation and skills dictionary",
+    "synonyms": ["Spanish", "English", "local job titles", "local tools"],
+    "skillRecordFields": ["skill_id", "canonical_name", "synonyms", "level", "evidence", "source", "confidence"],
+    "llmBoundary": "LLM proposes mappings; canonical skills are validated before solver use and the original term is preserved."
+  },
+  "skillLevels": {
+    "confirmed": true,
+    "scale": {"0": "not_evidenced", "1": "basic", "2": "functional", "3": "advanced", "4": "expert_or_can_teach"},
+    "rules": ["LLM may propose a level", "level requires evidence", "declared-only skill cannot exceed 1", "verified credential does not automatically imply expert", "compare candidate and job levels deterministically", "candidate may correct proposed level", "counselor reviews material discrepancies"]
+  },
+  "vacancySources": {
+    "confirmed": true,
+    "primaryUpdateSource": "Apify Actor API: bebity/linkedin-jobs-scraper",
+    "role": "Update the cached vacancy catalog; never become a critical live dependency.",
+    "limits": ["public vacancies only", "Panama Metro and Panama Oeste", "15-30 results per run", "configured Apify cost cap"],
+    "pipeline": ["candidate preferences", "Apify Actor API", "Ajv response validation", "remove recruiter/personal data", "normalize requirements", "deduplicate", "cache snapshot", "Exploration Agent"],
+    "rules": ["disable enrichCompany", "ignore closed vacancies", "retain jobUrl, query date and scrapingInfo", "record provider, cost, timestamp and errors", "manual vacancy import is the fallback", "confirm competition and applicable terms before use"],
+    "deduplicationKey": ["jobUrl", "jobId"],
+    "sourceUrl": "https://apify.com/bebity/linkedin-jobs-scraper",
+    "freshnessPolicy": {
+      "fresh": "less_than_24_hours",
+      "stale": "24_to_72_hours; usable with warning",
+      "expired": "more_than_72_hours; excluded from automatic recommendation",
+      "closedOrRemoved": "remove immediately when detected",
+      "uiRequirement": "Show last-updated timestamp for every vacancy."
+    },
+    "noMatchPolicy": {
+      "confirmed": true,
+      "response": "No viable vacancy found currently.",
+      "explainCauses": ["insufficient_skills", "incompatible_salary", "infeasible_transport", "incompatible_schedule", "missing_credential"],
+      "rules": ["relax only soft preferences", "never relax hard constraints silently", "show near matches with warnings", "activate Training Agent for a roadmap", "allow a future-search alert", "never invent vacancies or hide constraints"]
+    },
+  "alertPolicy": {
+      "confirmed": true,
+      "scope": "saved search and preferences",
+      "execution": "manual or scheduled catalog refresh",
+      "delivery": "new matches shown in the candidate dashboard",
+      "audit": "record alert and match events in the event store",
+      "excludedForMvp": ["email", "WhatsApp", "SMS"]
+    },
+    "languagePolicy": {
+      "confirmed": true,
+      "userInterface": "Spanish",
+      "internalContractsAndEvents": "English",
+      "technicalDocumentation": "English",
+      "explanationRule": "Show evidence, applied rules and verifiable decisions; never expose private chain-of-thought."
+    },
+    "accessibilityPolicy": {
+      "confirmed": true,
+      "requirements": ["keyboard navigation", "accessible form labels", "sufficient contrast", "text resizing", "clear error messages", "not color-only", "text alternatives for images and audio", "basic screen-reader support", "mobile usability"]
+    },
+    "readinessCriteria": {
+      "confirmed": true,
+      "criteria": [
+        "complete primary flow in under 3 minutes",
+        "four agents communicate through the workflow graph",
+        "at least one real tool executes: Google Maps, Apify, PostgreSQL write or HiGHS",
+        "15 certificate verification cases pass",
+        "10 guardrail cases execute",
+        "100 percent of hard constraints are enforced",
+        "zero submissions without human approval",
+        "complete trace_id is visible for each demo",
+        "show apt, apt_with_gaps and not_currently_apt outcomes",
+        "OpenRouter fallback executes correctly",
+        "Docker Alpine local demo and Vercel/Neon backup work",
+        "no real secrets in repository"
+      ]
+    }
+  },
+  "proposedAgents": [
+    {
+      "name": "Agente de Exploración",
+      "purpose": "Permitir tantear oportunidades, describir experiencias y descubrir qué empleos son plausibles sin postular automáticamente."
+    },
+    {
+      "name": "Agente de Perfil y Evidencia",
+      "purpose": "Interpretar CV, certificaciones, cursos, proyectos y experiencia informal; clasificar evidencia útil y detectar información faltante."
+    },
+      {
+        "name": "Agente de Mercado y Matching",
+        "purpose": "Normalizar requisitos empresariales, invocar el evaluador determinístico, medir brechas, construir el roadmap y preparar la postulación."
+      },
+      {
+        "name": "Agente de Formación",
+        "purpose": "Buscar y normalizar oportunidades públicas de formación, mantener el catálogo cacheado y entregar opciones al solver."
+      }
+  ],
+  "deterministicComponents": [
+    "evaluación de requisitos obligatorios y deseables",
+    "comparación de habilidades y niveles",
+    "validación de certificaciones contra evidencia disponible",
+    "restricciones de transporte, horario y salario",
+    "ranking de cursos/pasantías por cobertura de brecha, costo, cupo y accesibilidad",
+    "pruebas de estabilidad ante cambios de nombre, género o corregimiento",
+    "clasificación de resultados de verificación como verdadero positivo, verdadero negativo, falso positivo y falso negativo"
+  ],
+  "certificateVerificationPolicy": {
+    "userConfirmed": true,
+    "orderedProviders": [
+      {
+        "priority": 1,
+        "provider": "certo",
+        "purpose": "primera opción de verificación",
+        "status": "open-source-verifier-identified; deployment-and-api-contract-to-confirm",
+        "verificationStages": [
+          "extract certificate document and issuer identity",
+          "verify issuer signature using the public key",
+          "validate document integrity",
+          "validate cryptographic signer identity",
+          "check certificate trust and revocation status"
+        ],
+        "evidence": [
+          "document_integrity",
+          "signer_identity",
+          "certificate_status"
+        ],
+      "source": "https://github.com/Schroedinger-Hat/certo",
+        "capabilities": ["Open Badges 3.0", "W3C Verifiable Credentials", "cryptographic verification", "tamper evidence", "revocation lists", "public verification", "evidence attachments", "endorsements"],
+        "integrationBoundary": "Use a separately deployed Certo instance and its documented public verification/API surface; do not place Certo source code inside the application monorepo.",
+        "deployment": "separate service/repository outside the application monorepo",
+        "licenseReview": "Certo is AGPL-3.0; preserve attribution and review obligations before deployment or modification.",
+        "clientIntegration": {
+          "transport": "private HTTPS API",
+          "configuration": ["CERTO_BASE_URL", "CERTO_API_TOKEN"],
+          "controls": ["timeout", "idempotent retries", "Ajv response validation", "trace_id", "circuit breaker", "automatic mock fallback"],
+          "rule": "Never expose the Certo token to the browser."
+        },
+        "limitations": ["Certo is an open-source credential platform, not proof that every external certificate is supported", "deployment and API contract must be confirmed", "issuer trust and revocation data must be available for a positive verification"]
+      },
+      {
+        "priority": 2,
+        "provider": "Accredible",
+        "purpose": "verificación alternativa para certificados no verificados por certo",
+        "status": "candidate-integration"
+      },
+      {
+        "priority": 3,
+        "provider": "Credly",
+        "purpose": "verificación alternativa para certificados no verificados por certo",
+        "status": "candidate-integration"
+      }
+    ],
+    "fallbackRule": "Solo se consulta el siguiente proveedor cuando certo no puede verificar el certificado; se conserva la evidencia y el motivo de cada resultado.",
+        "verificationLabels": ["verified", "partially_verified", "declared", "unverified", "rejected"],
+        "verificationDimensions": ["document_integrity", "cryptographic_proof", "issuer_trust_and_revocation"],
+        "mandatoryCredentialRule": "A mandatory credential counts as satisfied only when status is verified.",
+        "canonicalContract": {
+          "requiredFields": ["status", "document_integrity", "cryptographic_proof", "issuer_trust", "revocation_status", "provider", "evidence"],
+          "providerAgnostic": true,
+          "rule": "Certo, Accredible and Credly adapters must emit the same normalized contract before matching."
+        },
+        "holderBinding": {
+          "confirmed": true,
+          "dimensions": ["credential_validity", "holder_binding"],
+          "rule": "A credential is verified only when authenticity/revocation and candidate identity binding both pass.",
+          "unboundResult": "partially_verified",
+          "exception": "Candidate may provide additional evidence; only a counselor may approve an exception.",
+          "privacy": "Compare pseudonymized identifiers in the backend; never send full identity data to the LLM."
+        },
+    "classificationLabels": ["true_positive", "true_negative", "false_positive", "false_negative"],
+    "safetyRule": "No afirmar autenticidad cuando la fuente no entrega evidencia verificable."
+  },
+  "applicationPolicy": {
+    "confirmed": true,
+    "states": ["draft", "pending_human_approval", "approved", "rejected"],
+    "humanGate": "El envío requiere aprobación humana explícita después de revisar CV, carta, datos y destinatario.",
+    "agentResponsibilities": ["preparar CV y carta adaptados", "completar borrador", "mostrar cambios y razones", "esperar aprobación", "ejecutar envío autorizado", "persistir trazabilidad"],
+    "prohibited": ["auto_submit_without_approval", "invent_candidate_credentials", "modify_verified_evidence"]
+  },
+  "experiencePolicy": {
+    "confirmed": true,
+    "acceptedSources": ["formal_employment", "informal_employment", "family_business", "project", "volunteering", "academic_work"],
+    "classifications": ["relevant", "partially_relevant", "not_relevant", "requires_additional_evidence"],
+    "evidenceRule": "La experiencia declarada puede aportar evidencia de una habilidad, pero nunca se convierte automáticamente en una certificación.",
+    "normalization": "El agente traduce la descripción a habilidades, contexto, nivel estimado y evidencia; el solver decide su peso según la vacante."
+  },
+  "privacyPolicy": {
+    "confirmed": true,
+    "rules": ["obtain explicit consent before storing or submitting data", "separate identifying data from ranking features", "exclude name, gender, age, photo and nationality from ranking", "retain protected attributes only when necessary for bias audits", "allow correction and deletion", "record provenance as declared, extracted, verified or inferred"]
+  },
+  "geographicPolicy": {
+    "confirmed": true,
+    "inPersonRule": "Una vacante presencial debe ser compatible con la ubicación geográfica, tiempo máximo de traslado y costo máximo de transporte aceptados por el usuario.",
+    "requiredInputs": ["user_location", "job_location", "transport_mode", "max_travel_time", "max_transport_cost"],
+    "deterministicTreatment": "La compatibilidad geográfica se evalúa como restricción dura o advertencia explícita según los límites declarados por el usuario.",
+    "routingProvider": "Google Maps API",
+    "routingFallback": "Matriz local determinística de zonas, tiempos y costos estimados.",
+    "routingRule": "La API calcula rutas; el código aplica los límites y decide compatibilidad. El LLM no decide tiempos ni costos.",
+    "transportModes": ["public_transit", "driving", "walking", "bicycling"],
+    "costRule": "Usar costo de Google Maps cuando esté disponible; de lo contrario, usar presupuesto declarado y tabla local de tarifas estimadas.",
+    "remoteAndHybrid": "Las vacantes remotas o híbridas se evalúan con sus días presenciales y restricciones correspondientes."
+  },
+  "inputPolicy": {
+    "confirmed": true,
+    "acceptedFormats": ["pdf", "image_with_ocr", "pasted_text", "pretranscribed_audio"],
+    "scopeLimit": "No se requiere audio en vivo para el MVP; el audio debe llegar como transcripción o convertirse previamente a texto.",
+    "sharedPipeline": "Todas las entradas se convierten a texto con provenance antes de la extracción estructurada."
+  },
+  "trainingCatalogPolicy": {
+    "confirmed": true,
+    "initialCatalogSize": "15-30 curated opportunities",
+    "specializationScope": "El catálogo se filtra y pondera según el área de especialización y las brechas del candidato.",
+    "catalogAgent": {
+      "name": "Agente de Formación",
+      "responsibilities": ["buscar oportunidades públicas", "extraer datos estructurados", "normalizar habilidades y requisitos", "detectar duplicados y cambios", "registrar fuente y fecha", "entregar opciones al solver"]
+    },
+    "candidateSources": ["Coursera", "Cisco", "Edutin", "edX", "Udemy"],
+    "requiredFields": ["name", "provider", "type", "url", "cost", "modality", "duration", "location", "prerequisites", "covered_skills", "schedule", "availability", "source_date"],
+    "rankingInputs": ["skill_gap_coverage", "specialization_fit", "cost", "duration", "modality", "geographic_accessibility", "schedule_compatibility", "availability", "credential_relevance"],
+    "catalogMode": "cached_catalog_with_agent_refresh",
+    "availabilityRule": "El flujo principal usa el último snapshot válido; el agente puede actualizarlo y registrar cambios sin bloquear matching.",
+    "safetyBoundary": "Solo consultar contenido público permitido; respetar términos, límites y robots de cada plataforma; no evadir controles ni inventar datos.",
+    "humanReview": "Las oportunidades extraídas deben poder ser revisadas antes de entrar al catálogo recomendado."
+  },
+  "agentArchitecture": {
+    "confirmed": true,
+    "agents": ["exploration", "profile_and_evidence", "market_and_matching", "training"],
+    "coordination": "central_deterministic_workflow",
+    "graphEngineeringAssessment": {
+      "workflowGraph": true,
+      "knowledgeGraph": false,
+      "explanation": "El MVP usa un grafo de estados y transiciones entre agentes; un grafo de conocimiento de habilidades puede agregarse como componente de datos, pero no es obligatorio para la primera demo."
+    },
+    "sharedState": ["candidate_profile", "job_requirements", "evidence", "verification_results", "constraints", "matches", "roadmap", "human_decisions", "trace_events"]
+  },
+  "stackDecisions": {
+    "language": "TypeScript",
+    "agentFramework": {
+      "value": "Mastra",
+      "confirmed": true,
+      "rationale": "TypeScript-native agents, graph workflows with suspend/resume for human approval, built-in evals, guardrails, Langfuse tracing and a local Studio for the live demo.",
+      "alternatives": ["LangGraph.js"],
+      "rejectedFor": "Requires assembling evals, guardrails and UI separately within the 24-hour window.",
+      "source": "https://mastra.ai/",
+      "runtimeBase": "Vercel AI SDK",
+      "stillToConfirm": ["solver", "ocr", "llm_models", "deployment"]
+    },
+    "ui": {
+      "value": "Next.js (App Router) + shadcn/ui",
+      "confirmed": true,
+      "rationale": "Shares the Mastra/Vercel AI SDK runtime and enables a credible reviewer dashboard quickly."
+    },
+    "persistence": {
+      "value": "PostgreSQL + Prisma",
+      "confirmed": true,
+      "rationale": "Typed models, migrations and a real database-write action; supports audit and traceability.",
+      "fallback": "SQLite with Prisma if Docker is unavailable during the event.",
+      "coreModels": ["candidates", "jobs", "matches", "human_reviews", "audit_events"]
+    },
+    "solver": {
+      "value": "highs-js",
+      "confirmed": true,
+      "rationale": "Genuine MILP (branch-and-cut), MIT, WebAssembly, no native add-ons; models capacities and hard constraints declaratively.",
+      "fallback": "Deterministic greedy heuristic in pure TypeScript so the live demo never fails.",
+      "planB": "javascript-lp-solver (pure TypeScript, zero dependencies, MIP).",
+      "models": {
+        "matching": "binary x[candidate, job]; maximize weighted compatibility; hard constraints on slots, transport, schedule, salary and mandatory requirements",
+        "roadmap": "binary y[course]; maximize gap coverage subject to budget, duration and availability"
+      }
+    },
+    "documentIntake": {
+      "value": "unpdf -> vision model -> tesseract.js",
+      "confirmed": true,
+      "rationale": "Native PDF text extraction first, a vision model for messy photos and handwriting, and a local OCR fallback for offline demos.",
+      "provenancePreserved": true
+    },
+    "llmProvider": {
+      "value": "OpenRouter",
+      "confirmed": true,
+      "integration": "@openrouter/ai-sdk-provider inside the Mastra model router (Vercel AI SDK)",
+      "failoverLayers": {
+        "provider": "OpenRouter is automatic by default (allow_fallbacks: true); shape with only, ignore, order, preferred_max_latency.",
+        "model": "Opt-in ordered models array; triggers on rate limit, context-length errors, moderation flags and downtime; failed requests are not billed."
+      },
+      "piInspiredOrchestration": [
+        "same provider first, then other providers for the same model",
+        "next_key_then_provider strategy",
+        "sticky swap per session, restored on reset",
+        "forward-only fallback pointer, never retry a failed fallback in the same session",
+        "compact context before switching to a smaller-context model",
+        "terminal floor model at the end of every chain"
+      ],
+      "perAgentChains": {
+        "vision_extraction": ["strong_multimodal", "alternate_multimodal", "small_multimodal"],
+        "interview": ["strong_conversational", "same_provider_alternate", "economical"],
+        "normalization_classification": ["fast_small_1", "fast_small_2", "fast_small_3"],
+        "explanation": ["economical_1", "economical_2"]
+      },
+      "budgetRule": "Per-agent token budgets because the OpenRouter quota is shared across agents.",
+      "sources": [
+        "https://openrouter.ai/docs/guides/routing/model-fallbacks",
+        "https://pi.dev/packages/pi-provider-fallback",
+        "https://pi.dev/packages/pi-high-availability"
+      ]
+    },
+    "observability": {
+      "confirmed": true,
+      "layers": {
+        "langfuse": "LLM traces via OpenTelemetry from Mastra: prompts, tools, tokens, latency, retries and model fallbacks.",
+        "audit_events": "Append-only PostgreSQL record of system decisions: matching, applied constraints, certificate verification and human approval.",
+        "event_store_dql": "Queryable event store with explicit lifecycle states for failed, successful and pending events."
+      },
+      "rules": [
+        "a trace_id propagates to profiles, matches, roadmap and decisions",
+        "each decision records agent, tool, applied constraint and supporting evidence",
+        "model fallback is logged with attempted model and reason",
+        "Mastra Studio is used as the local viewer during the demo"
+      ]
+    },
+    "eventStore": {
+      "confirmed_intent": true,
+      "dql_semantics_to_confirm": false,
+      "dqlValue": "Domain Query Language (option 1) plus Dead-letter Queue Log (option 3)",
+      "states": ["pending", "success", "failed"],
+      "fields": ["id", "trace_id", "agent", "tool", "type", "payload", "status", "attempts", "error", "created_at", "updated_at", "next_retry_at"],
+      "pendingMeaning": "Esperando aprobación humana o reintento programado.",
+      "failedMeaning": "Agotó reintentos; queda en vista dead-letter para revisión.",
+      "queryInterface": "Capa DQL de solo lectura sobre el event store con vistas derivadas: events.failed, events.pending, events.by_trace(trace_id).",
+      "deadLetterQueue": "Vista y flujo dedicado para eventos fallidos: reintento manual o programado, inspección de error y trazabilidad.",
+      "relationshipToAuditEvents": "audit_events conserva la verdad append-only; el event store modela transiciones de estado."
+    },
+    "deployment": {
+      "confirmed": true,
+      "localPrimary": "Docker Compose using Alpine-based images",
+      "services": ["nextjs_mastra_app", "postgresql_alpine", "optional_langfuse"],
+      "cloudBackup": "Vercel frontend plus Neon PostgreSQL",
+      "configuration": ".env.example without real credentials",
+      "compatibilityNote": "Validate Prisma, native OCR dependencies and any Node modules against Alpine; use a compatible libc strategy or switch only the affected service to a Debian-based image if required.",
+      "rationale": "Reproducible offline-first local demo with a cloud fallback."
+    },
+    "packageManager": {
+      "value": "npm workspaces",
+      "confirmed": true,
+      "rationale": "Keeps the recommended monorepo boundaries while using the team's requested standard npm tooling.",
+      "workspaceLayout": ["apps/web", "apps/agent-runtime", "packages/domain", "packages/solver", "packages/ingestion", "packages/db", "packages/observability"]
+    },
+    "contracts": {
+      "value": "JSON Schema only",
+      "confirmed": true,
+      "schemaVersion": "2020-12",
+      "runtimeValidation": "Ajv validating JSON Schema 2020-12; no Zod runtime or source schemas.",
+      "schemas": ["CandidateProfile", "JobRequirements", "CredentialVerification", "MatchDecision", "TrainingOpportunity", "Roadmap", "ApplicationDraft", "HumanApproval", "EventRecord"]
+    },
+    "authentication": {
+      "value": "Better Auth",
+      "confirmed": true,
+      "adapter": "Prisma adapter with PostgreSQL/Neon",
+      "roles": ["candidate", "employer", "counselor"],
+      "demoMode": "Pre-seeded demo accounts plus normal session validation",
+      "rules": ["explicit consent before persistence or submission", "role-based route protection", "server-side session validation", "no real credentials in repository"],
+      "nextJsNote": "Use Node.js runtime for middleware session validation and configure Better Auth as a server external package.",
+      "source": "https://www.better-auth.com/"
+    },
+    "runtimeBoundaries": {
+      "confirmed": true,
+      "web": "Next.js UI, sessions and backend-for-frontend API",
+      "agentRuntime": "Mastra agents, workflows and tools",
+      "domain": "JSON Schemas and contracts",
+      "solver": "HiGHS and deterministic fallback",
+      "db": "Prisma and repositories",
+      "rule": "The frontend does not directly control agents or the solver."
+    },
+    "serviceCommunication": {
+      "confirmed": true,
+      "transport": "internal HTTP",
+      "rest": "Start workflows and fetch results.",
+      "sse": "Stream progress, state and event updates.",
+      "validation": "JSON Schema 2020-12 with Ajv for every request and response.",
+      "requiredHeaders": ["trace_id", "idempotency_key"],
+      "security": "Service-to-service secret.",
+      "reliability": "Retries with idempotency for sensitive actions.",
+      "excludedForMvp": ["Kafka", "WebSockets", "gRPC"]
+    },
+    "secretManagement": {
+      "confirmed": true,
+      "rules": [
+        "document names only in .env.example with fake values",
+        "store real secrets only in local environment files or deployment secret stores",
+        "never expose provider keys to the browser",
+        "restrict Google Maps keys by domain or IP and quota",
+        "use a separate secret for web-to-agent-runtime communication",
+        "validate required variables at startup",
+        "support mocks for external services in development and tests"
+      ],
+      "providers": ["OPENROUTER_API_KEY", "GOOGLE_MAPS_API_KEY", "BETTER_AUTH_SECRET", "DATABASE_URL", "AGENT_RUNTIME_SECRET"]
+    },
+    "guardrails": {
+      "confirmed": true,
+      "layers": ["input_processors", "tool_result_processors", "permissioned_tools", "output_schema_and_policy_validation"],
+      "untrustedInputs": ["cvs", "job_posts", "pdfs", "ocr_images", "transcripts", "scraped_results", "credentials", "agent_outputs", "external_tool_results"],
+      "inputChecks": ["MIME and size", "unsafe content", "PII detection and provenance", "prompt injection", "domain scope", "JSON Schema"],
+      "toolResultChecks": ["prompt injection", "provenance", "schema", "credential integrity"],
+      "toolPolicy": "Each tool declares authorized agents, authorized roles, read/write permissions, input/output schemas, rate limits, trace_id and risk level.",
+      "riskLevels": {
+        "low": "Read cached catalog",
+        "medium": "Query Google Maps",
+        "high": "Write match or roadmap",
+        "critical": "Submit application; requires human approval"
+      },
+      "llmBoundary": "LLMs may interpret, extract and explain; they may not authenticate credentials, calculate aptitude, alter ranking, override constraints, approve submissions, or invent opportunities.",
+      "failureLifecycle": ["pending", "success", "failed", "rejected", "retrying", "dead_letter"],
+      "guardrailEvalCases": 10,
+      "mastraCompatibility": "Use Mastra processors while keeping JSON Schema 2020-12 and Ajv as the contract source of truth; validate the adapter in an early spike."
+    },
+    "modelPolicy": {
+      "confirmed": true,
+      "routing": "configuration-driven capability registry per agent",
+      "noAutoRouterForCriticalPaths": true,
+      "registryFields": ["model_id", "provider", "capabilities", "context_window", "max_output_tokens", "cost_tier", "supports_tools", "supports_structured_output", "supports_vision", "enabled"],
+      "agentProfiles": {
+        "vision_extraction": {"required": ["vision", "structured_output"], "tier": "strong"},
+        "interview": {"required": ["conversation", "tools"], "tier": "strong"},
+        "normalization_classification": {"required": ["structured_output"], "tier": "economy"},
+        "explanation": {"required": ["structured_output"], "tier": "economy"}
+      },
+      "fallbackRules": [
+        "fallback must satisfy the same required capabilities",
+        "fallback list is ordered and forward-only per run",
+        "do not retry a failed model in the same run",
+        "compact context before selecting a smaller context window",
+        "preserve structured output contract across fallbacks",
+        "use a low-cost floor model only when it satisfies the contract"
+      ],
+      "budgets": ["max_tokens_per_call", "max_calls_per_agent", "max_total_tokens_per_workflow", "max_cost_per_workflow", "timeout_ms"],
+      "criticalPathRule": "Aptitude, matching, credential verification and authorization never depend on LLM output; model failure routes to a deterministic fallback or human review.",
+      "observability": ["model_id", "fallback_reason", "attempt_number", "input_tokens", "output_tokens", "estimated_cost", "latency_ms"],
+      "deploymentRule": "Model IDs are selected at deployment from an allowlisted, versioned configuration and can change without code changes.",
+      "validation": "Startup rejects a registry entry that lacks required capabilities or exceeds configured budget."
+    },
+    "modelPreflight": {
+      "confirmed": true,
+      "runs": "before demo and deployment",
+      "checks": ["availability", "structured_output", "tool_calling", "vision_when_required", "context_window", "latency", "estimated_cost", "fallback_chain"],
+      "failureBehavior": "Disable the failing model before workflow execution and promote the next compatible fallback.",
+      "evidence": "Store a preflight report with model IDs, capabilities, timestamps, results and disabled entries."
+    },
+    "piiProtection": {
+      "confirmed": true,
+      "architecture": "local PII vault with pseudonymized LLM context",
+      "flow": ["detect PII", "replace with internal tokens", "send pseudonymized context to OpenRouter", "store token map in PostgreSQL", "rehydrate only after approved application", "record redacted fields"],
+      "neverSendToLlm": ["identity_documents", "secrets", "raw_sensitive_identifiers"],
+      "exampleToken": "CANDIDATE_001",
+      "rule": "Only the approved application-generation step may rehydrate authorized fields."
+    },
+    "retentionPolicy": {
+      "confirmed": true,
+      "demoData": "Delete at the end of the demo session.",
+      "originalDocuments": "Retain only while the workflow requires them.",
+      "profilesAndMatches": "Retain through the demo for traceability.",
+      "technicalTraces": "Retain with PII redacted.",
+      "auditEvents": "Retain through evaluation closeout.",
+      "userControl": "Candidate can request manual deletion from the dashboard."
+    },
+    "authorization": {
+      "confirmed": true,
+      "candidate": "Must approve submission of their own application.",
+      "counselor": "Must approve critical gaps, unverified credentials, bias alerts or infeasible transport; may correct agent decisions.",
+      "employer": "Must approve the shortlist before interview progression.",
+      "agentBoundary": "Agents may prepare, explain and route decisions, but cannot bypass role-based approval gates.",
+      "auditRequirement": "Every approval, correction and rejection records actor, role, timestamp, trace_id and reason."
+    },
+    "testing": {
+      "confirmed": true,
+      "unit": "Vitest",
+      "e2e": "Playwright",
+      "contracts": "Ajv contract tests",
+      "fixtures": "JSON fixtures",
+      "suitePaths": ["tests/unit", "tests/contracts", "tests/e2e", "tests/evals", "tests/fixtures"],
+      "coverage": ["15 credential ground-truth cases", "matching solver", "bias invariance", "guardrails", "fallbacks", "geographic constraints"]
+    }
+  },
+  "verificationGroundTruth": {
+    "confirmed": true,
+    "minimumCases": 15,
+    "purpose": "Medir verdaderos positivos, verdaderos negativos, falsos positivos y falsos negativos contra resultados conocidos.",
+    "caseCategories": [
+      "valid_signature_and_trusted_issuer",
+      "valid_signature_but_revoked_certificate",
+      "valid_signature_but_expired_certificate",
+      "tampered_document",
+      "invalid_signature",
+      "unknown_signer",
+      "issuer_identity_mismatch",
+      "certificate_data_mismatch",
+      "missing_public_key",
+      "unsupported_credential_format",
+      "certo_unavailable_accredited_fallback",
+      "accredible_unavailable_credly_fallback",
+      "all_providers_unavailable",
+      "declared_certificate_without_evidence",
+      "duplicate_or_replayed_credential"
+    ],
+    "requiredLabels": ["ground_truth", "predicted_label", "provider_used", "evidence", "error_or_fallback_reason"],
+    "metrics": ["confusion_matrix", "precision", "recall", "false_positive_rate", "false_negative_rate", "fallback_rate"]
+  },
+  "aptitudePolicy": {
+    "confirmed": true,
+    "outcomes": [
+      {
+        "status": "apt",
+        "meaning": "Cumple los requisitos obligatorios y las restricciones prácticas de la vacante."
+      },
+      {
+        "status": "apt_with_gaps",
+        "meaning": "Puede avanzar, pero tiene brechas accionables de cursos, certificaciones, experiencia o preparación."
+      },
+      {
+        "status": "not_currently_apt",
+        "meaning": "Incumple una restricción dura, como una certificación obligatoria no verificada, horario incompatible o transporte inviable."
+      }
+    ],
+    "rule": "El estado nunca se determina solo por el LLM; se calcula a partir de requisitos normalizados, evidencia y restricciones determinísticas.",
+    "explanationRequired": true,
+    "roadmapRequiredFor": ["apt_with_gaps", "not_currently_apt"]
+  },
+  "matchingWeights": {
+    "confirmed": true,
+    "weights": {
+      "technical_skills_and_requirements": 30,
+      "experience_and_evidence": 25,
+      "availability_and_schedule": 15,
+      "transport_and_accessibility": 20,
+      "salary_and_conditions": 10
+    },
+    "hardConstraintPrecedence": true,
+    "softSkillsPolicy": {
+      "includedWithin": "experience_and_evidence",
+      "examples": ["communication", "teamwork", "problem_solving", "responsibility", "adaptability", "leadership", "organization"],
+      "evidenceFactors": ["job_relevance", "evidence_quality", "recency", "responsibility_level", "transferability"],
+      "declaredOnlyRule": "Self-declared soft skills receive limited weight and may require interview or additional evidence.",
+      "doubleCountingRule": "Soft skills demonstrated through experience are not counted again in technical requirements."
+    }
+  },
+  "aptitudeThresholds": {
+    "confirmed": true,
+    "ranges": {
+      "apt": {"min": 75, "max": 100},
+      "apt_with_gaps": {"min": 50, "max": 74},
+      "not_currently_apt": {"min": 0, "max": 49}
+    },
+    "hardConstraintOverride": "Any failed hard constraint can produce not_currently_apt regardless of score.",
+    "borderlineTolerance": {
+      "confirmed": true,
+      "range": "plus_or_minus_one_point",
+      "promotionOnly": true,
+      "conditions": [
+        "candidate is adjacent to the next higher tier",
+        "no better eligible candidate exists in the current proposal or shortlist",
+        "no hard constraint is violated",
+        "human reviewer approves the exception"
+      ],
+      "notAllowed": ["automatic rounding", "bypassing hard constraints", "displacing a better eligible candidate"],
+      "audit": "Record original score, target tier, comparison set, reason, reviewer and final decision."
+    },
+    "explanationRequired": true
+  },
+  "tieBreakPolicy": {
+    "confirmed": true,
+    "order": ["fewest_hard_constraints_or_warnings", "highest_mandatory_requirement_compliance", "strongest_relevant_experience_evidence", "lowest_travel_time_and_cost", "best_schedule_compatibility", "least_reliance_on_unverified_credentials", "stable_candidate_id"],
+    "excludedFeatures": ["name", "gender", "age", "photo", "nationality", "randomness"],
+    "deterministic": true,
+    "audit": "Record the first criterion that resolved the tie."
+  },
+  "jobFairnessPolicy": {
+    "confirmed": true,
+    "alertLabels": ["ambiguous", "potentially_discriminatory", "prohibited"],
+    "examples": ["good appearance", "unjustified age limits", "gender requirement", "mandatory photo", "marital status"],
+    "rules": [
+      "block clearly prohibited requirements",
+      "send ambiguous or potentially discriminatory requirements to human review",
+      "request objective reformulation from the employer",
+      "exclude flagged criteria from ranking while under review",
+      "record alert and correction in audit_events"
+    ],
+    "override": "Only an authorized human reviewer may resolve a flagged requirement; agents cannot silently override it."
+  },
+  "roadmapPolicy": {
+    "confirmed": true,
+    "source": "curated_catalog",
+    "catalogItemFields": [
+      "name",
+      "provider",
+      "type",
+      "cost",
+      "modality",
+      "duration",
+      "location",
+      "prerequisites",
+      "covered_skills",
+      "available_slots",
+      "schedule"
+    ],
+    "allowedTypes": ["course", "certification", "project", "internship"],
+    "selectionMethod": "deterministic ranking by gap coverage, constraints, accessibility and expected effort",
+    "llmBoundary": "El LLM puede explicar y personalizar la ruta, pero no inventar oportunidades ni alterar el ranking determinístico."
+  },
+  "requiredActions": [
+    "persistir perfil, evaluación y decisión humana",
+    "generar CV adaptado a una oferta",
+    "preparar una postulación o shortlist para aprobación humana"
+  ],
+  "documentationCandidates": [
+    "glossary: aptitud, evidencia, brecha, roadmap, experiencia informal, postulación adaptada",
+    "ADR: alcance y nivel de verificación de certificaciones",
+    "ADR: límites de autonomía y aprobación humana",
+    "CONTEXT.md: actores, vocabulario y fronteras del dominio"
+  ],
+  "unresolved": [
+    {
+      "id": "certo-integration-contract",
+      "question": "Is the separate Certo deployment and API contract available and authorized before the competition?",
+      "recommendation": "Run a pre-event integration check; use the transparent mock adapter if unavailable. This is an implementation validation, not a design blocker."
+    }
+  ],
+  "skippedValidations": [
+    "Certo deployment, API contract and authorization still require a pre-event validation; the adapter and mock are the accepted fallback."
+  ],
+  "nextConsumer": "to-spec: convert the accepted context into a typed project specification"
+}
