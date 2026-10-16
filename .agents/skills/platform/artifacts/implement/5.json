@@ -1,0 +1,33 @@
+{
+  "status": "completed",
+  "changes": [
+    "Bootstrapped an npm-workspaces TypeScript monorepo (strict tsconfig, Vitest, ESLint) for the application packages.",
+    "packages/domain: JobRequirements JSON Schema 2020-12 contract, Ajv 2020-12 validator and error types, and the ESCO-based Panamanian skills taxonomy with exact/alias/fuzzy matching.",
+    "apps/agent-runtime: vacancy normalization pipeline accepting manual, JSON, PDF, and image inputs through an injectable extraction port.",
+    "Separated mandatory and desirable requirements and mapped them to canonical taxonomy skills while preserving original wording.",
+    "Classified fairness alerts as ambiguous, potentially_discriminatory, or prohibited; blocked prohibited requirements; routed ambiguous and potentially discriminatory requirements to human review; excluded flagged requirements from ranking with reviewer resolution.",
+    "Added fixtures (objective, good appearance, unjustified age limit, mixed, free-text, real PDF) and 64 Vitest tests."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npm run lint",
+      "npm run typecheck",
+      "npm test",
+      "npm run test:coverage",
+      "npm audit"
+    ],
+    "skipped": [],
+    "notes": "64/64 tests pass. Coverage 92.64% lines / 82.65% branches (gate-ci threshold is 80% lines). npm audit reports 0 vulnerabilities. A committed real PDF fixture exercises the default unpdf adapter; image OCR is exercised through an injected port so CI stays offline."
+  },
+  "commitSha": "8f6bbe5",
+  "branch": "feat/issue-5-build-vacancy-normalization-and-fairness-checks",
+  "nextConsumer": "publish-open-pr",
+  "blockedBy": [],
+  "riskRemaining": "The seed taxonomy keeps ESCO concept URIs null because they must be verified against the ESCO API before production use. Image OCR default (tesseract.js) is wired but not executed in CI. Integration into the Mastra workflow graph is out of scope for this ticket and belongs to spec #3.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  }
+}
