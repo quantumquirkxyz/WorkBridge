@@ -1,0 +1,15 @@
+{
+  "vacancyId": "vac-objective-001",
+  "title": "Soporte Técnico Junior",
+  "employer": "Tienda Tecnológica PA",
+  "location": { "province": "Panamá", "district": "Panamá" },
+  "mandatory": [
+    { "text": "Experiencia mínima de 6 meses en soporte técnico" },
+    { "text": "Manejo de Excel a nivel intermedio" },
+    { "text": "Inglés B2", "level": 3 }
+  ],
+  "desirable": [
+    "Conocimiento de redes y conectividad básica",
+    "Atención al cliente"
+  ]
+}

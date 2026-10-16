@@ -1,0 +1,6 @@
+{
+  "vacancyId": "vac-age-001",
+  "title": "Asistente Administrativo",
+  "mandatory": ["Edad: entre 20 y 25 años", "Manejo de Excel"],
+  "desirable": ["Atención al cliente"]
+}
