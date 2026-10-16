@@ -3,3 +3,4 @@ export * from './classify';
 export * from './experience-type';
 export * from './heuristic';
 export * from './normalize';
+export * from './resilient';

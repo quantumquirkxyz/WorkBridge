@@ -6,6 +6,7 @@ import {
   type DraftExperience,
   type DraftSkill,
   type ExperienceType,
+  type ExtractorKind,
   type Provenance,
   type ProfileDraft,
 } from '@puente/domain';
@@ -20,7 +21,12 @@ export interface ExtractionInput {
 }
 
 export interface ProfileExtractor {
-  kind: 'heuristic' | 'llm';
+  /**
+   * The strategy that produced the last draft. A resilient extractor reports
+   * `heuristic-fallback` after a failed primary attempt, so the emitted
+   * `IntakeResult` records the truth rather than the intent.
+   */
+  readonly kind: ExtractorKind;
   extract(input: ExtractionInput): Promise<ProfileDraft>;
 }
 
