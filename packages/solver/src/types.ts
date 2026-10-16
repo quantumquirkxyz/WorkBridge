@@ -119,14 +119,17 @@ export interface ScoreBreakdownItem {
 }
 
 /** The exhaustive set of hard constraints the solver can report. */
-export type HardConstraintId =
-  | "mandatory_skills"
-  | "mandatory_requirements_mapped"
-  | "schedule"
-  | "salary"
-  | "capacity"
-  | "geographic_commute"
-  | "geographic_accessibility";
+export const HARD_CONSTRAINT_IDS = [
+  "mandatory_skills",
+  "mandatory_requirements_mapped",
+  "schedule",
+  "salary",
+  "capacity",
+  "geographic_commute",
+  "geographic_accessibility",
+] as const;
+
+export type HardConstraintId = (typeof HARD_CONSTRAINT_IDS)[number];
 
 export interface HardConstraintResult {
   id: HardConstraintId;

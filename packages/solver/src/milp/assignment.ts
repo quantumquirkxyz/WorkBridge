@@ -117,8 +117,16 @@ export async function solveAssignment(
         model,
         solver,
       );
-      const selected = canonical ?? baseSelected;
-      return { solver: solver.name, selected, objectiveValue: sumScores(selected) };
+      if (canonical === null) {
+        return {
+          solver: solver.name,
+          selected: baseSelected,
+          objectiveValue,
+          fallbackReason:
+            "Deterministic tie-break canonicalization failed; used the MILP optimum.",
+        };
+      }
+      return { solver: solver.name, selected: canonical, objectiveValue: sumScores(canonical) };
     }
 
     const greedy = greedyAssignment(pairs, capacities);

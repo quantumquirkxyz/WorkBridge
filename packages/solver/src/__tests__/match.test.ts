@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { buildBaseDecision, evaluateMatch } from "../match";
 import { compareDecisions } from "../ties";
-import type { MatchDecision, SolverCandidate, SolverVacancy } from "../types";
+import { HARD_CONSTRAINT_IDS, type MatchDecision, type SolverCandidate, type SolverVacancy } from "../types";
 import { validateMatchDecision } from "../validate";
 import { MATCH_WEIGHTS } from "../weights";
+import matchDecisionSchema from "../schemas/match-decision.schema.json";
 import { loadFixture } from "../../test/load-fixture";
 import { constantRouter } from "../../test/routing";
 
@@ -145,5 +146,12 @@ describe("deterministic tie-breaking and protected-attribute invariance", () => 
     const first: MatchDecision = await evaluateMatch(mid, metro, options(route40));
     const second = await evaluateMatch(mid, metro, options(route40));
     expect(second).toEqual(first);
+  });
+
+  it("keeps the schema constraint enum aligned with the TS union", () => {
+    const schema = matchDecisionSchema as {
+      $defs: { HardConstraintId: { enum: string[] } };
+    };
+    expect(schema.$defs.HardConstraintId.enum).toEqual([...HARD_CONSTRAINT_IDS]);
   });
 });

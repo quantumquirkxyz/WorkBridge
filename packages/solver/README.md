@@ -82,7 +82,9 @@ silently.
 - The MILP maximizes total score; the optimal solution is then canonicalized to
   the documented order by walking the pairs in that order and including each one
   whenever a completion still reaches the optimal score. Equal-score assignment
-  conflicts therefore do not depend on solver internals. The reported
+  conflicts therefore do not depend on solver internals. This uses up to one extra
+  MILP solve per eligible pair; if a refinement solve fails, the raw optimum is
+  used and the reason is recorded in `fallbackReason`. The reported
   `objectiveValue` stays the sum of the selected scores so the MILP and greedy
   paths agree.
 - The greedy fallback sorts eligible pairs by score then vacancy/candidate id.

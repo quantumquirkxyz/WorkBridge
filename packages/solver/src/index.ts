@@ -24,6 +24,8 @@ export type {
   VacancySchedule,
 } from "./types";
 
+export { HARD_CONSTRAINT_IDS } from "./types";
+
 export {
   APT_THRESHOLD,
   APT_WITH_GAPS_THRESHOLD,
@@ -53,6 +55,7 @@ export {
   evaluateHardConstraints,
   failedConstraintIds,
   salaryFloor,
+  type AccessibilityStatus,
   type ConstraintInput,
 } from "./constraints";
 
