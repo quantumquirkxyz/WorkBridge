@@ -1,0 +1,215 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://puentelaboral.pa/schemas/job-requirements.schema.json",
+  "title": "JobRequirements",
+  "description": "Normalized vacancy requirements with mandatory/desirable separation, ESCO-based skill mapping, fairness alerts, and ranking eligibility. Emitted by the Market and Matching slice after vacancy normalization.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "vacancyId",
+    "title",
+    "source",
+    "capturedAt",
+    "taxonomyVersion",
+    "status",
+    "requirements",
+    "alerts",
+    "reviewQueue",
+    "blockingReasons",
+    "metadata"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "vacancyId": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "employer": { "type": ["string", "null"] },
+    "source": { "enum": ["manual", "json", "pdf", "image"] },
+    "capturedAt": { "type": "string", "format": "date-time" },
+    "locale": { "type": "string", "minLength": 2 },
+    "taxonomyVersion": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["accepted", "requires_human_review", "blocked"] },
+    "location": { "$ref": "#/$defs/Location" },
+    "requirements": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Requirement" }
+    },
+    "alerts": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Alert" }
+    },
+    "reviewQueue": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ReviewItem" }
+    },
+    "blockingReasons": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "metadata": { "$ref": "#/$defs/Metadata" }
+  },
+  "$defs": {
+    "Location": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["country", "province", "district", "raw"],
+      "properties": {
+        "country": { "type": "string", "minLength": 2 },
+        "province": { "type": ["string", "null"] },
+        "district": { "type": ["string", "null"] },
+        "raw": { "type": ["string", "null"] }
+      }
+    },
+    "CanonicalSkill": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Mapping of a requirement to the ESCO-based Panamanian skills taxonomy. The original wording is never discarded; this is the canonical view beside it.",
+      "required": [
+        "matched",
+        "skillId",
+        "labelEs",
+        "labelEn",
+        "escoLabel",
+        "escoUri",
+        "taxonomyVersion",
+        "matchConfidence",
+        "matchStrategy"
+      ],
+      "properties": {
+        "matched": { "type": "boolean" },
+        "skillId": { "type": ["string", "null"] },
+        "labelEs": { "type": ["string", "null"] },
+        "labelEn": { "type": ["string", "null"] },
+        "escoLabel": { "type": ["string", "null"] },
+        "escoUri": { "type": ["string", "null"] },
+        "taxonomyVersion": { "type": "string", "minLength": 1 },
+        "matchConfidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "matchStrategy": { "enum": ["exact", "alias", "fuzzy", "none"] }
+      }
+    },
+    "Requirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "category",
+        "originalWording",
+        "normalizedWording",
+        "canonical",
+        "level",
+        "justification",
+        "alertId",
+        "rankingEligible",
+        "excludedFromRanking"
+      ],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "kind": {
+          "enum": [
+            "skill",
+            "experience",
+            "education",
+            "certification",
+            "language",
+            "physical",
+            "other"
+          ]
+        },
+        "category": { "enum": ["mandatory", "desirable"] },
+        "originalWording": { "type": "string", "minLength": 1 },
+        "normalizedWording": { "type": "string" },
+        "canonical": { "$ref": "#/$defs/CanonicalSkill" },
+        "level": { "type": ["integer", "null"], "minimum": 0, "maximum": 4 },
+        "justification": { "type": ["string", "null"] },
+        "alertId": { "type": ["string", "null"] },
+        "rankingEligible": { "type": "boolean" },
+        "excludedFromRanking": { "type": "boolean" }
+      }
+    },
+    "Alert": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "requirementId",
+        "classification",
+        "ruleId",
+        "reason",
+        "matchedText",
+        "disposition",
+        "resolved"
+      ],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "requirementId": { "type": "string", "minLength": 1 },
+        "classification": {
+          "enum": ["ambiguous", "potentially_discriminatory", "prohibited"]
+        },
+        "ruleId": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 },
+        "matchedText": { "type": "string", "minLength": 1 },
+        "disposition": { "enum": ["blocked", "human_review"] },
+        "resolved": { "type": "boolean" },
+        "resolution": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["decision", "reviewer", "resolvedAt"],
+          "properties": {
+            "decision": { "enum": ["approved", "rejected"] },
+            "reviewer": { "type": "string", "minLength": 1 },
+            "resolvedAt": { "type": "string", "format": "date-time" }
+          }
+        }
+      }
+    },
+    "ReviewItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reviewId",
+        "requirementId",
+        "alertId",
+        "classification",
+        "status",
+        "reason"
+      ],
+      "properties": {
+        "reviewId": { "type": "string", "minLength": 1 },
+        "requirementId": { "type": "string", "minLength": 1 },
+        "alertId": { "type": "string", "minLength": 1 },
+        "classification": {
+          "enum": ["ambiguous", "potentially_discriminatory"]
+        },
+        "status": { "enum": ["pending_human_review"] },
+        "reason": { "type": "string", "minLength": 1 }
+      }
+    },
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "inputKind",
+        "extractor",
+        "extractedAt",
+        "rawText",
+        "requirementCount",
+        "mandatoryCount",
+        "desirableCount",
+        "alertCount",
+        "excludedCount"
+      ],
+      "properties": {
+        "inputKind": { "enum": ["manual", "json", "pdf", "image"] },
+        "extractor": { "type": "string", "minLength": 1 },
+        "extractedAt": { "type": "string", "format": "date-time" },
+        "rawText": { "type": ["string", "null"] },
+        "requirementCount": { "type": "integer", "minimum": 0 },
+        "mandatoryCount": { "type": "integer", "minimum": 0 },
+        "desirableCount": { "type": "integer", "minimum": 0 },
+        "alertCount": { "type": "integer", "minimum": 0 },
+        "excludedCount": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}
