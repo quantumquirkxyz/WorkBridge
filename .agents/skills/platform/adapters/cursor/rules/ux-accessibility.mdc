@@ -1,0 +1,13 @@
+---
+description: "Design accessible UX — keyboard navigation, focus order, semantics, contrast, and assistive-technology support — with inclusive interaction patterns."
+globs: []
+alwaysApply: false
+---
+# ux-accessibility
+
+Apply the ux-accessibility skill when the request matches its scope.
+
+Capabilities:
+- apply the ux-accessibility workflow
+
+Stop when: Task-level accessibility barriers and flow-level remediations are explicit.

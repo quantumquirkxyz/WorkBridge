@@ -4,6 +4,7 @@ category: "qa"
 maturity: "stable"
 version: "1"
 description: "Design and execute performance tests — load, stress, soak, spike — to validate latency, throughput, and resource consumption under realistic conditions."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "test-strategy"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/performance-testing.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["qa"]
 compatibility: []

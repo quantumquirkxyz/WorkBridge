@@ -1,0 +1,15 @@
+name: cost-optimization
+description: "Design FinOps strategies — rightsizing, spot instances, committed use, budgets, showback/chargeback — with cost visibility and optimisation guardrails."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/devops-cost-optimization
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: true
+  sideEffects: []

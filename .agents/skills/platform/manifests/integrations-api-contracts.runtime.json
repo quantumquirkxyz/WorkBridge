@@ -1,0 +1,46 @@
+{
+  "skill": "integrations/api-contracts",
+  "version": 1,
+  "generatedFrom": "frontmatter",
+  "frontmatterHash": "bb18d3ea7165530489c48c9cd4b499a608a9873f1c09acb036c6dabe5a528746",
+  "role": "workflow",
+  "router": {
+    "positive": [],
+    "negative": [],
+    "requiredSignals": []
+  },
+  "execution": {
+    "defaultAgent": "explore",
+    "isolation": "none",
+    "maxTurns": 6,
+    "modelTier": "reasoning",
+    "tools": {
+      "allow": [
+        "Read",
+        "Grep",
+        "Glob",
+        "WebFetch",
+        "WebSearch"
+      ],
+      "deny": []
+    }
+  },
+  "guardrails": {
+    "sideEffects": [],
+    "approvalRequired": false,
+    "approvalFor": [],
+    "risk": "low",
+    "trustTier": 1
+  },
+  "verification": {
+    "commands": [],
+    "artifactSchema": null
+  },
+  "observability": {
+    "traceEvents": [
+      "skill.route",
+      "skill.execute",
+      "skill.verify"
+    ]
+  }
+}

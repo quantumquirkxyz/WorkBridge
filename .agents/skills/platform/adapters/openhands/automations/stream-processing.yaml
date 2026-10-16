@@ -1,0 +1,15 @@
+name: stream-processing
+description: "Stream processing (Flink, Kafka Streams, RisingWave, windowing, state, exactly-once)."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/data-stream-processing
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: true
+  sideEffects: []

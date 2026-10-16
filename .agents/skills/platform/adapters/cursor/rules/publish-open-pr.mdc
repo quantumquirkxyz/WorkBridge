@@ -1,0 +1,15 @@
+---
+description: "Use when the user wants to publish a finished subissue as an open GitHub pull request from an already-prepared issue branch — with scoped, auditable publication."
+globs: []
+alwaysApply: false
+---
+# publish-open-pr
+
+Apply the publish-open-pr skill when the request matches its scope.
+
+Capabilities:
+- apply publish open pr workflow
+- produce publish open pr artifact
+- validate publish open pr completion criteria
+
+Stop when: Use when the user wants to publish a finished subissue as an open GitHub pull request from an already-prepared issue branch complete; structured result returned; completion criteria checked.

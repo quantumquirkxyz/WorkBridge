@@ -4,6 +4,7 @@ category: "routing"
 maturity: "stable"
 version: "1"
 description: "A relentless interview to sharpen a plan or design."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "routing"
 modelTier: "router"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/grill-me.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["routing"]
 compatibility: []

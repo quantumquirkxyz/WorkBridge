@@ -1,0 +1,16 @@
+{
+  "name": "ux-prototyping",
+  "instructions": "Prototype user experiences — wireframes, interactive mockups, and rapid validation — with explicit experiment goals and iteration criteria.\n\nCapabilities:\n- apply the ux-prototyping workflow\n\nCanonical skill: .agents/skills/ux/ux-prototyping/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Prototype goal, fidelity, validation method, and iteration criteria are explicit.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "devops-k8s-orchestration",
+  "instructions": "Design and configure Kubernetes orchestration — cluster architecture, deployment strategies, service mesh, observability, auto-scaling, security policies — with reproducible infrastructure.\n\nCapabilities:\n- apply the devops-k8s-orchestration workflow\n\nCanonical skill: .agents/skills/devops/devops-k8s-orchestration/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Manifests saved; architecture documented; monitoring rules defined.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

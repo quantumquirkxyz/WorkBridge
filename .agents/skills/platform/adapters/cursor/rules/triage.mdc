@@ -1,0 +1,13 @@
+---
+description: "Move issues and external PRs through a state machine of triage roles — categorise, verify, grill if needed, and write ag"
+globs: []
+alwaysApply: false
+---
+# triage
+
+Apply the triage skill when the request matches its scope.
+
+Capabilities:
+- apply the triage workflow
+
+Stop when: Move issues and external PRs through a state machine of triage roles complete; artifact saved; completion criteria checked.

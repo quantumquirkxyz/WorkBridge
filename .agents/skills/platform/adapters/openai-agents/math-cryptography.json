@@ -1,0 +1,16 @@
+{
+  "name": "math-cryptography",
+  "instructions": "Analyse cryptographic constructions — symmetric, asymmetric, hashing, MACs, zero-knowledge — with security reductions, hardness assumptions, and attack analysis.\n\nCapabilities:\n- apply the math-cryptography workflow\n\nCanonical skill: .agents/skills/math/math-cryptography/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Analyse cryptographic constructions complete; required sections present; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

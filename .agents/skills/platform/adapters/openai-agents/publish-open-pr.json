@@ -1,0 +1,16 @@
+{
+  "name": "publish-open-pr",
+  "instructions": "Use when the user wants to publish a finished subissue as an open GitHub pull request from an already-prepared issue branch — with scoped, auditable publication.\n\nCapabilities:\n- apply publish open pr workflow\n- produce publish open pr artifact\n- validate publish open pr completion criteria\n\nCanonical skill: .agents/skills/routing/publish-open-pr/SKILL.md",
+  "model": "gpt-5.1",
+  "tools": [],
+  "handoff_description": "Use when the user wants to publish a finished subissue as an open GitHub pull request from an already-prepared issue branch complete; structured result returned; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

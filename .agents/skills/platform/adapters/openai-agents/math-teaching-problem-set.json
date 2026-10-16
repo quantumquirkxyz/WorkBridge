@@ -1,0 +1,16 @@
+{
+  "name": "math-teaching-problem-set",
+  "instructions": "Design and grade math problem sets and exams — difficulty progression, rubric, anti-cheating variants, accessibility, and LaTeX layout.\n\nCapabilities:\n- apply the math-teaching-problem-set workflow\n\nCanonical skill: .agents/skills/math/math-teaching-problem-set/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Problem-set + rubric + variants saved; difficulty progression documented.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 5,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

@@ -1,0 +1,306 @@
+{
+  "generatedAt": "2026-10-11T05:21:13.959Z",
+  "tool": "evaluate-routing.mjs",
+  "skills": 246,
+  "totalRows": 203,
+  "evaluatedRows": 203,
+  "thresholds": {
+    "minTop1": 0.6,
+    "maxFp": 0.25
+  },
+  "global": {
+    "rows": 203,
+    "evaluated": 203,
+    "positiveRows": 143,
+    "negativeRows": 60,
+    "top1Hits": 109,
+    "top3Hits": 137,
+    "top1Accuracy": 0.5369,
+    "top3Recall": 0.6749,
+    "falsePositives": 2,
+    "falsePositiveRate": 0.0333,
+    "negativeRejections": 46,
+    "negativeRejectionRate": 0.7667,
+    "adjacentCaptures": 43,
+    "adjacentCaptureRate": 0.7167,
+    "noAnswer": 0,
+    "coverage": 1
+  },
+  "perSkill": [
+    {
+      "skill": "delivery/code-review",
+      "metrics": {
+        "rows": 16,
+        "evaluated": 16,
+        "positiveRows": 11,
+        "negativeRows": 5,
+        "top1Hits": 10,
+        "top3Hits": 12,
+        "top1Accuracy": 0.625,
+        "top3Recall": 0.75,
+        "falsePositives": 0,
+        "falsePositiveRate": 0,
+        "negativeRejections": 4,
+        "negativeRejectionRate": 0.8,
+        "adjacentCaptures": 3,
+        "adjacentCaptureRate": 0.6,
+        "noAnswer": 0,
+        "coverage": null
+      }
+    },
+    {
+      "skill": "delivery/implement",
+      "metrics": {
+        "rows": 16,
+        "evaluated": 16,
+        "positiveRows": 11,
+        "negativeRows": 5,
+        "top1Hits": 5,
+        "top3Hits": 8,
+        "top1Accuracy": 0.3125,
+        "top3Recall": 0.5,
+        "falsePositives": 0,
+        "falsePositiveRate": 0,
+        "negativeRejections": 5,
+        "negativeRejectionRate": 1,
+        "adjacentCaptures": 5,
+        "adjacentCaptureRate": 1,
+        "noAnswer": 0,
+        "coverage": null
+      }
+    },
+    {
+      "skill": "delivery/review-fix-loop",
+      "metrics": {
+        "rows": 18,
+        "evaluated": 18,
+        "positiveRows": 11,
+        "negativeRows": 7,
+        "top1Hits": 14,
+        "top3Hits": 17,
+        "top1Accuracy": 0.7778,
+        "top3Recall": 0.9444,
+        "falsePositives": 0,
+        "falsePositiveRate": 0,
+        "negativeRejections": 2,
+        "negativeRejectionRate": 0.2857,
+        "adjacentCaptures": 6,
+        "adjacentCaptureRate": 0.8571,
+        "noAnswer": 0,
+        "coverage": null
+      }
+    },
+    {
+      "skill": "delivery/review-pr",
+      "metrics": {
+        "rows": 15,
+        "evaluated": 15,
+        "positiveRows": 11,
+        "negativeRows": 4,
+        "top1Hits": 4,
+        "top3Hits": 9,
+        "top1Accuracy": 0.2667,
+        "top3Recall": 0.6,
+        "falsePositives": 0,
+        "falsePositiveRate": 0,
+        "negativeRejections": 4,
+        "negativeRejectionRate": 1,
+        "adjacentCaptures": 3,
+        "adjacentCaptureRate": 0.75,
+        "noAnswer": 0,
+        "coverage": null
+      }
+    },
+    {
+      "skill": "delivery/tdd",
+      "metrics": {
+        "rows": 17,
+        "evaluated": 17,
+        "positiveRows": 11,
+        "negativeRows": 6,
+        "top1Hits": 13,
+        "top3Hits": 14,
+        "top1Accuracy": 0.7647,
+        "top3Recall": 0.8235,
+        "falsePositives": 0,
+        "falsePositiveRate": 0,
+        "negativeRejections": 5,
+        "negativeRejectionRate": 0.8333,
+        "adjacentCaptures": 5,
+        "adjacentCaptureRate": 0.8333,
+        "noAnswer": 0,
+        "coverage": null
+      }
+    },
+    {
+      "skill": "project/to-spec",
+      "metrics": {
+        "rows": 15,
+        "evaluated": 15,
+        "positiveRows": 11,
+        "negativeRows": 4,
+        "top1Hits": 7,
+        "top3Hits": 8,
+        "top1Accuracy": 0.4667,
+        "top3Recall": 0.5333,
+        "falsePositives": 0,
+        "falsePositiveRate": 0,
+        "negativeRejections": 4,
+        "negativeRejectionRate": 1,
+        "adjacentCaptures": 1,
+        "adjacentCaptureRate": 0.25,
+        "noAnswer": 0,
+        "coverage": null
+      }
+    },
+    {
+      "skill": "project/to-tickets",
+      "metrics": {
+        "rows": 15,
+        "evaluated": 15,
+        "positiveRows": 11,
+        "negativeRows": 4,
+        "top1Hits": 5,
+        "top3Hits": 7,
+        "top1Accuracy": 0.3333,
+        "top3Recall": 0.4667,
+        "falsePositives": 0,
+        "falsePositiveRate": 0,
+        "negativeRejections": 2,
+        "negativeRejectionRate": 0.5,
+        "adjacentCaptures": 1,
+        "adjacentCaptureRate": 0.25,
+        "noAnswer": 0,
+        "coverage": null
+      }
+    },
+    {
+      "skill": "routing/ask-to",
+      "metrics": {
+        "rows": 17,
+        "evaluated": 17,
+        "positiveRows": 11,
+        "negativeRows": 6,
+        "top1Hits": 14,
+        "top3Hits": 16,
+        "top1Accuracy": 0.8235,
+        "top3Recall": 0.9412,
+        "falsePositives": 0,
+        "falsePositiveRate": 0,
+        "negativeRejections": 6,
+        "negativeRejectionRate": 1,
+        "adjacentCaptures": 5,
+        "adjacentCaptureRate": 0.8333,
+        "noAnswer": 0,
+        "coverage": null
+      }
+    },
+    {
+      "skill": "routing/capability-router",
+      "metrics": {
+        "rows": 14,
+        "evaluated": 14,
+        "positiveRows": 11,
+        "negativeRows": 3,
+        "top1Hits": 8,
+        "top3Hits": 8,
+        "top1Accuracy": 0.5714,
+        "top3Recall": 0.5714,
+        "falsePositives": 0,
+        "falsePositiveRate": 0,
+        "negativeRejections": 3,
+        "negativeRejectionRate": 1,
+        "adjacentCaptures": 2,
+        "adjacentCaptureRate": 0.6667,
+        "noAnswer": 0,
+        "coverage": null
+      }
+    },
+    {
+      "skill": "routing/ship-subissue",
+      "metrics": {
+        "rows": 15,
+        "evaluated": 15,
+        "positiveRows": 11,
+        "negativeRows": 4,
+        "top1Hits": 9,
+        "top3Hits": 12,
+        "top1Accuracy": 0.6,
+        "top3Recall": 0.8,
+        "falsePositives": 1,
+        "falsePositiveRate": 0.25,
+        "negativeRejections": 2,
+        "negativeRejectionRate": 0.5,
+        "adjacentCaptures": 2,
+        "adjacentCaptureRate": 0.5,
+        "noAnswer": 0,
+        "coverage": null
+      }
+    },
+    {
+      "skill": "routing/work-item-router",
+      "metrics": {
+        "rows": 14,
+        "evaluated": 14,
+        "positiveRows": 11,
+        "negativeRows": 3,
+        "top1Hits": 5,
+        "top3Hits": 9,
+        "top1Accuracy": 0.3571,
+        "top3Recall": 0.6429,
+        "falsePositives": 1,
+        "falsePositiveRate": 0.3333,
+        "negativeRejections": 1,
+        "negativeRejectionRate": 0.3333,
+        "adjacentCaptures": 1,
+        "adjacentCaptureRate": 0.3333,
+        "noAnswer": 0,
+        "coverage": null
+      }
+    },
+    {
+      "skill": "skill-dev/evaluate-skill",
+      "metrics": {
+        "rows": 16,
+        "evaluated": 16,
+        "positiveRows": 11,
+        "negativeRows": 5,
+        "top1Hits": 8,
+        "top3Hits": 8,
+        "top1Accuracy": 0.5,
+        "top3Recall": 0.5,
+        "falsePositives": 0,
+        "falsePositiveRate": 0,
+        "negativeRejections": 5,
+        "negativeRejectionRate": 1,
+        "adjacentCaptures": 5,
+        "adjacentCaptureRate": 1,
+        "noAnswer": 0,
+        "coverage": null
+      }
+    },
+    {
+      "skill": "skill-dev/skill-audit",
+      "metrics": {
+        "rows": 15,
+        "evaluated": 15,
+        "positiveRows": 11,
+        "negativeRows": 4,
+        "top1Hits": 7,
+        "top3Hits": 9,
+        "top1Accuracy": 0.4667,
+        "top3Recall": 0.6,
+        "falsePositives": 0,
+        "falsePositiveRate": 0,
+        "negativeRejections": 3,
+        "negativeRejectionRate": 0.75,
+        "adjacentCaptures": 4,
+        "adjacentCaptureRate": 1,
+        "noAnswer": 0,
+        "coverage": null
+      }
+    }
+  ],
+  "regressions": [],
+  "status": "fail"
+}

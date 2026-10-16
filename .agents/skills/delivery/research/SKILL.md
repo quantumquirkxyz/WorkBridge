@@ -4,6 +4,7 @@ category: "delivery"
 maturity: "stable"
 version: "1"
 description: "Investigate a question against high-trust primary sources and capture the findings as a Markdown file in the repo. Use w"
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects:
@@ -18,7 +19,7 @@ promptVersion: "2.0"
 artifactType: "research"
 modelTier: "fast"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/research.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["delivery"]
 compatibility: []

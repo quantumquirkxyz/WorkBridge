@@ -4,6 +4,7 @@ category: "delivery"
 maturity: "stable"
 version: "1"
 description: "Diagnosis loop for hard bugs and performance regressions. Use when the user says "diagnose"/"debug this", or reports something intermittent, ambiguous, or hard to reproduce."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "diagnosis"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/diagnosing-bugs.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["delivery"]
 compatibility: []

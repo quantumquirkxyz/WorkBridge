@@ -1,0 +1,45 @@
+{
+  "skill": "sec/container-security",
+  "version": 1,
+  "generatedFrom": "frontmatter",
+  "frontmatterHash": "b920f2ddbe0b18d5f108d2e0165a2b2c1bdca4ec0403eb19343e3f0ca4c656cd",
+  "role": "workflow",
+  "router": {
+    "positive": [],
+    "negative": [],
+    "requiredSignals": []
+  },
+  "execution": {
+    "defaultAgent": "general",
+    "isolation": "none",
+    "maxTurns": 6,
+    "modelTier": "reasoning",
+    "tools": {
+      "allow": [
+        "Read",
+        "Grep",
+        "Glob",
+        "Bash"
+      ],
+      "deny": []
+    }
+  },
+  "guardrails": {
+    "sideEffects": [],
+    "approvalRequired": true,
+    "approvalFor": [],
+    "risk": "medium",
+    "trustTier": 3
+  },
+  "verification": {
+    "commands": [],
+    "artifactSchema": null
+  },
+  "observability": {
+    "traceEvents": [
+      "skill.route",
+      "skill.execute",
+      "skill.verify"
+    ]
+  }
+}

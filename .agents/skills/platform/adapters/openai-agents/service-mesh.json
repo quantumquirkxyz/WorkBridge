@@ -1,0 +1,16 @@
+{
+  "name": "service-mesh",
+  "instructions": "Service mesh (Istio, Linkerd, Cilium, mTLS, traffic splitting, observability).\n\nCapabilities:\n- apply the service-mesh workflow\n\nCanonical skill: .agents/skills/backend/service-mesh/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Service mesh design complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

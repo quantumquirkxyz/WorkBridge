@@ -1,0 +1,15 @@
+---
+description: "Implement a piece of work based on a spec or set of tickets, or build a scoped fix that can be handed off for publication. This skill stops at the implemented, validated branch."
+globs: []
+alwaysApply: false
+---
+# implement
+
+Apply the implement skill when the request matches its scope.
+
+Capabilities:
+- apply implement workflow
+- produce implement artifact
+- validate implement completion criteria
+
+Stop when: Implement a piece of work based on a spec or set of tickets, or build a scoped fix that can be handed off for publication complete; artifact saved; completion criteria checked.

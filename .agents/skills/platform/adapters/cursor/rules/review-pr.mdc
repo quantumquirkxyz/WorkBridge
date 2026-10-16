@@ -1,0 +1,15 @@
+---
+description: "Review a pull request against the fixed point the user supplies, separating Standards and Spec findings into distinct ax"
+globs: []
+alwaysApply: false
+---
+# review-pr
+
+Apply the review-pr skill when the request matches its scope.
+
+Capabilities:
+- apply review pr workflow
+- produce review pr artifact
+- validate review pr completion criteria
+
+Stop when: Review a pull request against the fixed point the user supplies, separating Standards and Spec findings into distinct ax complete; structured result returned; completion criteria checked.

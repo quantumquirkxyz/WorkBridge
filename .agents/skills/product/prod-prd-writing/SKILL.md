@@ -4,6 +4,7 @@ category: "product"
 maturity: "stable"
 version: "1"
 description: "Write Product Requirement Documents (PRDs) — problem statement, goals, user stories, acceptance criteria, success metrics, timeline — with stakeholder alignment."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "pull-request"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/prod-prd-writing.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["product"]
 compatibility: []

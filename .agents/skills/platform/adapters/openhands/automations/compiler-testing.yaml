@@ -1,0 +1,15 @@
+name: compiler-testing
+description: "Test compilers and interpreters — parser tests, semantic tests, IR validation, golden tests, and regression checks — with explicit oracle design."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/compilers-compiler-testing
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

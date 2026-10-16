@@ -1,0 +1,66 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-supply-chain-security",
+      "skill": "supply-chain-security",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "## Completion",
+          "## Process",
+          "## Rules",
+          "SupplyChainSecurityArtifact",
+          "generate SBOM for every artifact; never ship without it.",
+          "verify signatures at every stage: build, registry, deploy, runtime.",
+          "target SLSA L3 for production artifacts; document exceptions with risk acceptance.",
+          "automate dependency updates and vulnerability scanning; manual review only for exceptions."
+        ],
+        "doesNotContain": [
+          "## Operating Contract",
+          "ask-matt",
+          "ship-review-fix-loop",
+          "doc-draft-pr",
+          "frontend-development",
+          "Matt",
+          "TODO",
+          "point 1",
+          "Criterion 1",
+          "Acceptance criterion 1",
+          "BE-2",
+          "OpenAPI spec",
+          "localhost:3000",
+          "extremely extensive"
+        ]
+      }
+    },
+    {
+      "id": "v2-frontmatter-supply-chain-security",
+      "skill": "supply-chain-security",
+      "type": "behavioral",
+      "expected": {
+        "frontmatterContains": [
+          "name: \"supply-chain-security\"",
+          "risk: \"medium\"",
+          "trustTier: \"3\"",
+          "modelTier: \"reasoning\"",
+          "promptVersion: \"2.0\"",
+          "artifactType: \"security\"",
+          "diataxis: \"how-to\""
+        ]
+      }
+    },
+    {
+      "id": "v2-footer-supply-chain-security",
+      "skill": "supply-chain-security",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "@include .agents/skills/platform/contract-base.xml"
+        ]
+      }
+    }
+  ]
+}

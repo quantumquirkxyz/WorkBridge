@@ -1,0 +1,13 @@
+---
+description: "Design and evaluate time-series forecasting — ARIMA, Prophet, NeuralProphet, LSTM, Transformer — with stationarity analysis, seasonality, exogenous variables, and backtest."
+globs: []
+alwaysApply: false
+---
+# ai-time-series-forecasting
+
+Apply the ai-time-series-forecasting skill when the request matches its scope.
+
+Capabilities:
+- apply the ai-time-series-forecasting workflow
+
+Stop when: Forecast plot saved; backtest complete; best model recommendation made.

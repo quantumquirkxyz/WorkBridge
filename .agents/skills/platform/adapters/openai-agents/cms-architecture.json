@@ -1,0 +1,16 @@
+{
+  "name": "cms-architecture",
+  "instructions": "Design content management systems — content models, editorial workflows, publishing pipelines, localization — with schema evolution and multi-channel delivery.\n\nCapabilities:\n- apply the cms-architecture workflow\n\nCanonical skill: .agents/skills/cms/cms-architecture/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Design content management systems complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

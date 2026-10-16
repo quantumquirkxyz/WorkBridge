@@ -1,0 +1,13 @@
+---
+description: "Model thermodynamic systems — first and second law, heat engines, entropy, phase transitions — with energy accounting and efficiency bounds."
+globs: []
+alwaysApply: false
+---
+# physics-thermo
+
+Apply the physics-thermo skill when the request matches its scope.
+
+Capabilities:
+- apply the physics-thermo workflow
+
+Stop when: Model thermodynamic systems complete; required sections present; completion criteria checked.

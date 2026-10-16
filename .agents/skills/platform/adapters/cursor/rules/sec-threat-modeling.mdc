@@ -1,0 +1,13 @@
+---
+description: "Design and document threat models for software / systems — assets, threats, vulnerabilities, mitigations — using STRIDE or ATT&CK frameworks."
+globs: []
+alwaysApply: false
+---
+# sec-threat-modeling
+
+Apply the sec-threat-modeling skill when the request matches its scope.
+
+Capabilities:
+- apply the sec-threat-modeling workflow
+
+Stop when: Threat model saved; all assets mapped; risk register complete.

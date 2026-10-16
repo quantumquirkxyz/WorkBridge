@@ -1,0 +1,16 @@
+{
+  "name": "zero-trust",
+  "instructions": "Design zero trust architecture — identity, per-request auth, microsegmentation, policy — with explicit trust tiers, continuous verification, and least-privilege enforcement.\n\nCapabilities:\n- apply the zero-trust workflow\n\nCanonical skill: .agents/skills/sec/zero-trust/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Architecture documented; identity model defined; segmentation and policy rules documented.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

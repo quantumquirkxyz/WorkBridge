@@ -1,0 +1,15 @@
+name: data-versioning
+description: "Data versioning (DVC, lakeFS, delta tables, snapshotting, reproducibility)."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/data-data-versioning
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: true
+  sideEffects: []

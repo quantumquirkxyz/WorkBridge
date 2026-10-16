@@ -1,0 +1,15 @@
+name: data-catalog
+description: "Data catalog (metadata management, discovery, classification, data mesh, governance)."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/data-data-catalog
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

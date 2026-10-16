@@ -1,0 +1,16 @@
+{
+  "name": "domain-modeling",
+  "instructions": "Build and sharpen a project's domain model. Record the execution traceId and link the artifact to the originating issue for review replay. Use when the user wants to pin down domain terminology or a ubiquitous language boundary.\n\nCapabilities:\n- apply the domain-modeling workflow\n\nCanonical skill: .agents/skills/foundation/domain-modeling/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Build and sharpen a project's domain model complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

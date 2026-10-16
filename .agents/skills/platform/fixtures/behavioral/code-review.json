@@ -5,8 +5,16 @@
       "skill": "code-review",
       "type": "behavioral",
       "expected": {
-        "outputContains": ["## Contract", "## Provenance", "## Artifact", "ReviewArtifact", "Standards and Spec"],
-        "doesNotContain": ["## Operating Contract"]
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "ReviewArtifact",
+          "Standards and Spec"
+        ],
+        "doesNotContain": [
+          "## Operating Contract"
+        ]
       }
     },
     {
@@ -14,7 +22,48 @@
       "skill": "code-review",
       "type": "behavioral",
       "expected": {
-        "frontmatterContains": ["modelTier: reasoning", "promptVersion: \"2.0\"", "artifactType: review"]
+        "frontmatterContains": [
+          "modelTier: reasoning",
+          "promptVersion: \"2.0\"",
+          "artifactType: review"
+        ]
+      }
+    },
+    {
+      "id": "code-review-triggers",
+      "skill": "code-review",
+      "type": "behavioral",
+      "description": "Code review skill triggers on PR review language",
+      "input": "Review the changes since the last commit",
+      "expected": {
+        "invokes": true,
+        "outputContains": [
+          "Standards",
+          "Spec",
+          "review"
+        ],
+        "doesNotContain": [
+          "not found"
+        ]
+      }
+    },
+    {
+      "id": "skill-load-with-dependencies",
+      "skill": "code-review",
+      "type": "behavioral",
+      "description": "Skill loads with its declared dependencies available",
+      "input": "Review the changes since v1.2.0",
+      "expected": {
+        "invokes": true,
+        "usesTools": [
+          "Read",
+          "Grep",
+          "Bash"
+        ],
+        "outputContains": [
+          "Standards",
+          "Spec"
+        ]
       }
     }
   ]

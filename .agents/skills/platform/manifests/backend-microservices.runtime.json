@@ -1,0 +1,44 @@
+{
+  "skill": "backend/microservices",
+  "version": 1,
+  "generatedFrom": "frontmatter",
+  "frontmatterHash": "0e335c0dc0386d74ee4e674eb6f841cfcbf8536c64df6867ce996ef7ba182f4f",
+  "role": "workflow",
+  "router": {
+    "positive": [],
+    "negative": [],
+    "requiredSignals": []
+  },
+  "execution": {
+    "defaultAgent": "explore",
+    "isolation": "none",
+    "maxTurns": 6,
+    "modelTier": "reasoning",
+    "tools": {
+      "allow": [
+        "Read",
+        "Grep",
+        "Glob"
+      ],
+      "deny": []
+    }
+  },
+  "guardrails": {
+    "sideEffects": [],
+    "approvalRequired": false,
+    "approvalFor": [],
+    "risk": "low",
+    "trustTier": 1
+  },
+  "verification": {
+    "commands": [],
+    "artifactSchema": null
+  },
+  "observability": {
+    "traceEvents": [
+      "skill.route",
+      "skill.execute",
+      "skill.verify"
+    ]
+  }
+}

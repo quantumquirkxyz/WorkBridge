@@ -1,0 +1,16 @@
+{
+  "name": "math-pure-proofs",
+  "instructions": "Write and verify pure-math proofs (number theory, algebra, analysis, combinatorics) with rigorous step-by-step reasoning and explicit proof strategies.\n\nCapabilities:\n- apply the math-pure-proofs workflow\n\nCanonical skill: .agents/skills/math/math-pure-proofs/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Markdown artifact exists with all five sections (statement, strategy, steps, verification, cited theorems); every proof step is justified with a named rule.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 5,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

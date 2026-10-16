@@ -1,0 +1,16 @@
+{
+  "name": "knowledge-curator",
+  "instructions": "Keep context, ADRs, registry entries, and research coherent over time — with refresh and provenance discipline.\n\nCapabilities:\n- apply the knowledge-curator workflow\n\nCanonical skill: .agents/skills/routing/knowledge-curator/SKILL.md",
+  "model": "gpt-5.1",
+  "tools": [],
+  "handoff_description": "Keep context, ADRs, registry entries, and research coherent over time complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

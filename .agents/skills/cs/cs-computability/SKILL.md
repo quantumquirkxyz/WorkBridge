@@ -4,6 +4,7 @@ category: "cs"
 maturity: "stable"
 version: "1"
 description: "Analyze computability questions — decidability, reductions, recognizability, and undecidability proofs — with formal problem transformations."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "cs"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/cs-computability.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["cs"]
 compatibility: []

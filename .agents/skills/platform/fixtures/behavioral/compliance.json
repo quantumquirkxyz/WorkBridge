@@ -1,0 +1,65 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-compliance",
+      "skill": "compliance",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "## Completion",
+          "## Process",
+          "## Rules",
+          "ComplianceArtifact",
+          "treat evidence as immutable once collected; version and timestamp all artifacts.",
+          "assign a single owner to every remediation item; no unowned items in the roadmap.",
+          "Frameworks and scope"
+        ],
+        "doesNotContain": [
+          "## Operating Contract",
+          "ask-matt",
+          "ship-review-fix-loop",
+          "doc-draft-pr",
+          "frontend-development",
+          "Matt",
+          "TODO",
+          "point 1",
+          "Criterion 1",
+          "Acceptance criterion 1",
+          "BE-2",
+          "OpenAPI spec",
+          "localhost:3000",
+          "extremely extensive"
+        ]
+      }
+    },
+    {
+      "id": "v2-frontmatter-compliance",
+      "skill": "compliance",
+      "type": "behavioral",
+      "expected": {
+        "frontmatterContains": [
+          "name: \"compliance\"",
+          "risk: \"medium\"",
+          "trustTier: \"3\"",
+          "modelTier: \"reasoning\"",
+          "promptVersion: \"2.0\"",
+          "artifactType: \"sec\"",
+          "diataxis: \"how-to\""
+        ]
+      }
+    },
+    {
+      "id": "v2-footer-compliance",
+      "skill": "compliance",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "@include .agents/skills/platform/contract-base.xml"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "physics-thermo",
+  "instructions": "Model thermodynamic systems — first and second law, heat engines, entropy, phase transitions — with energy accounting and efficiency bounds.\n\nCapabilities:\n- apply the physics-thermo workflow\n\nCanonical skill: .agents/skills/physics/physics-thermo/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Model thermodynamic systems complete; required sections present; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

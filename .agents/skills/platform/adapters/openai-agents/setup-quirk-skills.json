@@ -1,0 +1,16 @@
+{
+  "name": "setup-quirk-skills",
+  "instructions": "Configure this repo for the engineering skills — set up its issue tracker, triage label vocabulary, and domain doc layout. Run once before first use of the other engineering skills.\n\nCapabilities:\n- apply the setup-quirk-skills workflow\n\nCanonical skill: .agents/skills/auxiliary/setup-quirk-skills/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "The repo-specific skill configuration is written and consistent.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

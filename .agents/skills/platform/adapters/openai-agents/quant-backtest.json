@@ -1,0 +1,16 @@
+{
+  "name": "quant-backtest",
+  "instructions": "Run a backtest with full audit hygiene — biases, costs, out-of-sample, regime splits — and produce a verdict on whether a strategy is robust.\n\nCapabilities:\n- apply the quant-backtest workflow\n\nCanonical skill: .agents/skills/quant/quant-backtest/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Audit report complete with strategy spec, data audit, statistics, stress tests, and verdict.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

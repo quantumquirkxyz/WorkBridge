@@ -1,0 +1,15 @@
+name: sec-threat-modeling
+description: "Design and document threat models for software / systems — assets, threats, vulnerabilities, mitigations — using STRIDE or ATT&CK frameworks."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/sec-sec-threat-modeling
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

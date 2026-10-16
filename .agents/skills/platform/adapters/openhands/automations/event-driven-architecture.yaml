@@ -1,0 +1,15 @@
+name: event-driven-architecture
+description: "Event-driven architecture (Kafka, NATS, EventBridge, choreography vs orchestration)."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/backend-event-driven-architecture
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: true
+  sideEffects: []

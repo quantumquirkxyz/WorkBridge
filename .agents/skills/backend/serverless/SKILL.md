@@ -4,6 +4,7 @@ category: "backend"
 maturity: "stable"
 version: "1"
 description: "Serverless architecture (Lambda, Functions, FaaS, event-driven, cold starts, scaling, cost)."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,11 +17,11 @@ promptVersion: "2.0"
 artifactType: "backend"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/serverless.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/serverless.json
 diataxis: "how-to"
 tags: ["backend"]
 compatibility: []
-approvalRequired: "false"
+approvalRequired: "true"
 approvalFor: []
 ---
 

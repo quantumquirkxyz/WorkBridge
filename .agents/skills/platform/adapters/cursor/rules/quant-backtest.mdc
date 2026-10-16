@@ -1,0 +1,13 @@
+---
+description: "Run a backtest with full audit hygiene — biases, costs, out-of-sample, regime splits — and produce a verdict on whether a strategy is robust."
+globs: []
+alwaysApply: false
+---
+# quant-backtest
+
+Apply the quant-backtest skill when the request matches its scope.
+
+Capabilities:
+- apply the quant-backtest workflow
+
+Stop when: Audit report complete with strategy spec, data audit, statistics, stress tests, and verdict.

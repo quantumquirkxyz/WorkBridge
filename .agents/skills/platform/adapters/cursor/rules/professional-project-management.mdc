@@ -1,0 +1,13 @@
+---
+description: "Manage professional projects — scope, milestones, risks, dependencies, and stakeholder alignment — with explicit planning and tracking artifacts."
+globs: []
+alwaysApply: false
+---
+# professional-project-management
+
+Apply the professional-project-management skill when the request matches its scope.
+
+Capabilities:
+- apply the professional-project-management workflow
+
+Stop when: Scope, ownership, milestones, risks, and tracking cadence are explicit.

@@ -4,6 +4,7 @@ category: "ux"
 maturity: "stable"
 version: "1"
 description: "Conduct user research — interviews, surveys, usability testing, personas, journey mapping — to ground design decisions in real user behavior."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "research"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/ux-research.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["ux"]
 compatibility: []

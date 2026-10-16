@@ -1,0 +1,16 @@
+{
+  "name": "physics-simulation-setup",
+  "instructions": "Set up reproducible physics simulations — Monte Carlo (GEANT4), molecular dynamics (LAMMPS), DFT (VASP, Quantum ESPRESSO), quantum dynamics (QuTiP) — with containers, parameter files, and verification.\n\nCapabilities:\n- apply the physics-simulation-setup workflow\n\nCanonical skill: .agents/skills/physics/physics-simulation-setup/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Container builds; parameters saved; verification report shows agreement with benchmark.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

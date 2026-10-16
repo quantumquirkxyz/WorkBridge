@@ -1,0 +1,16 @@
+{
+  "name": "observability",
+  "instructions": "Define the logs, metrics, traces, and alerts needed to understand a system in production — with SLIs, SLOs, dashboards, alert rules, and incident runbooks.\n\nCapabilities:\n- apply the observability workflow\n\nCanonical skill: .agents/skills/foundation/observability/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Observability design complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

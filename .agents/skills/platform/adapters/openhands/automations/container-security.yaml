@@ -1,0 +1,15 @@
+name: container-security
+description: "Container security (Docker, Kubernetes, image scanning, runtime security, pod security policies)"
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/sec-container-security
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: true
+  sideEffects: []

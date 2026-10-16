@@ -1,0 +1,15 @@
+---
+description: "Keep an agent loop inside its declared budget and end it with a typed verdict instead of a runaway process. Use when a repair, polling, or fan-out loop must declare step/cost/wall-time budgets up front, detect degenerate repetition and ping-pong, and exit with {exitStatus, submission, budgetSpent, nudges}."
+globs: []
+alwaysApply: false
+---
+# loop-budget
+
+Apply the loop-budget skill when the request matches its scope.
+
+Capabilities:
+- declare loop budgets up front
+- detect degenerate loops (repeats, ping-pong, format errors)
+- record an append-only loop ledger and route on the typed verdict
+
+Stop when: Budget declared, loop executed, and the run ended with a typed LoopBudgetVerdict plus an append-only ledger; the caller routes on exitStatus.

@@ -3,6 +3,7 @@ name: "rule-cataloger"
 category: "skill-dev"
 maturity: "stable"
 description: "Extract and classify rules across Skills by type, frequency, and application area; use when auditing the repository's shared guidance."
+license: "MIT"
 version: "1"
 capabilities: ""
 inputs: ""
@@ -17,7 +18,7 @@ promptVersion: "2.0"
 artifactType: "skill-dev"
 modelTier: "fast"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/rule-cataloger.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["skill-dev"]
 compatibility: []

@@ -1,9 +1,10 @@
 ---
 name: "finance-portfolio-theory"
-category: "skill-dev/sandbox"
+category: "finance"
 maturity: "stable"
 version: "1"
 description: "Modern Portfolio Theory — efficient frontier, CAPM, APT, risk attribution, and performance measurement — with explicit assumptions and regime analysis."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "finance"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/finance-portfolio-theory.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["finance"]
 compatibility: []

@@ -1,0 +1,13 @@
+---
+description: "Design backend queues and background job systems — durability, retries, ordering, idempotency, and backpressure — with explicit delivery guarantees."
+globs: []
+alwaysApply: false
+---
+# backend-queues
+
+Apply the backend-queues skill when the request matches its scope.
+
+Capabilities:
+- apply the backend-queues workflow
+
+Stop when: Queue behavior, recovery paths, and operator signals are explicit.

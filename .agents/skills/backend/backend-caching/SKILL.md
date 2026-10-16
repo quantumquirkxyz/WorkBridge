@@ -4,6 +4,7 @@ category: "backend"
 maturity: "stable"
 version: "1"
 description: "Design backend caching strategies — cache keys, TTLs, invalidation, stale-while-revalidate, and cache coherence — with explicit consistency and failure trade-offs."
+license: "MIT"
 capabilities: ""
 inputs:
   - type: object
@@ -21,7 +22,7 @@ promptVersion: "2.0"
 artifactType: "backend"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/backend-caching.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["backend"]
 compatibility: []

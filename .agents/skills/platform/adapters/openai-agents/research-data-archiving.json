@@ -1,0 +1,16 @@
+{
+  "name": "research-data-archiving",
+  "instructions": "Archive research data — metadata, storage, preservation, provenance, and reuse planning — with reproducibility and access controls.\n\nCapabilities:\n- apply the research-data-archiving workflow\n\nCanonical skill: .agents/skills/research/research-data-archiving/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Data, metadata, provenance, access controls, and preservation plan are explicit.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

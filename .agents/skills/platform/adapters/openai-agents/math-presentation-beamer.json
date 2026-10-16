@@ -1,0 +1,16 @@
+{
+  "name": "math-presentation-beamer",
+  "instructions": "Design mathematics presentations — Beamer slides with TikZ diagrams, colour accessibility, speaker notes, and audience-level adjustments — for seminars, conferences, or lectures.\n\nCapabilities:\n- apply the math-presentation-beamer workflow\n\nCanonical skill: .agents/skills/math/math-presentation-beamer/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Source compiles; speaker notes saved; accessibility checklist completed; audience-level stated.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 5,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

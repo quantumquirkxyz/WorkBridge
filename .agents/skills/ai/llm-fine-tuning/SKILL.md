@@ -1,9 +1,10 @@
 ---
 name: "llm-fine-tuning"
-category: "skill-dev/sandbox"
+category: "ai"
 maturity: "stable"
 version: "1"
 description: "Fine-tune LLMs — LoRA, QLoRA, full fine-tuning, data preparation, evaluation, deployment — with reproducibility, efficiency, and safety controls."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,11 +17,11 @@ promptVersion: "2.0"
 artifactType: "ai"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/llm-fine-tuning.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/llm-fine-tuning.json
 diataxis: "how-to"
 tags: ["ai"]
 compatibility: []
-approvalRequired: "false"
+approvalRequired: "true"
 approvalFor: []
 ---
 

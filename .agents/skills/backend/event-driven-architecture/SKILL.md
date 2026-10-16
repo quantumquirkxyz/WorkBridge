@@ -4,6 +4,7 @@ category: "backend"
 maturity: "stable"
 version: "1"
 description: "Event-driven architecture (Kafka, NATS, EventBridge, choreography vs orchestration)."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,11 +17,11 @@ promptVersion: "2.0"
 artifactType: "backend"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/event-driven-architecture.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/event-driven-architecture.json
 diataxis: "how-to"
 tags: ["backend"]
 compatibility: []
-approvalRequired: "false"
+approvalRequired: "true"
 approvalFor: []
 ---
 

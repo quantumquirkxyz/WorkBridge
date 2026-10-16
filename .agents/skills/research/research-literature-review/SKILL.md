@@ -4,6 +4,7 @@ category: "research"
 maturity: "stable"
 version: "1"
 description: "Review research literature — search strategy, screening, synthesis, citation tracking, and evidence grading — with transparent inclusion criteria."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "review"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/research-literature-review.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["research"]
 compatibility: []

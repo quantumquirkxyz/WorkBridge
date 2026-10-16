@@ -1,0 +1,13 @@
+---
+description: "Build and sharpen a project's domain model. Record the execution traceId and link the artifact to the originating issue for review replay. Use when the user wants to pin down domain terminology or a ubiquitous language boundary."
+globs: []
+alwaysApply: false
+---
+# domain-modeling
+
+Apply the domain-modeling skill when the request matches its scope.
+
+Capabilities:
+- apply the domain-modeling workflow
+
+Stop when: Build and sharpen a project's domain model complete; artifact saved; completion criteria checked.

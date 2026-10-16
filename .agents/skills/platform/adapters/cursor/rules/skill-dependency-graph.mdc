@@ -1,0 +1,13 @@
+---
+description: "Build a dependency graph that exposes central Skills, cycles, and unnecessary coupling — use when analyzing Skill modularity."
+globs: []
+alwaysApply: false
+---
+# skill-dependency-graph
+
+Apply the skill-dependency-graph skill when the request matches its scope.
+
+Capabilities:
+- apply the skill-dependency-graph workflow
+
+Stop when: Build a dependency graph that exposes central Skills, cycles, and unnecessary coupling complete; artifact saved; completion criteria checked.

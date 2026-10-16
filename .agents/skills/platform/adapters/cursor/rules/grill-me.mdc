@@ -1,0 +1,13 @@
+---
+description: A relentless interview to sharpen a plan or design.
+globs: []
+alwaysApply: false
+---
+# grill-me
+
+Apply the grill-me skill when the request matches its scope.
+
+Capabilities:
+- apply the grill-me workflow
+
+Stop when: A relentless interview to sharpen a plan or design complete; structured result returned; completion criteria checked.

@@ -1,11 +1,12 @@
 ---
 name: "graphic-design-advertising"
 description: "Design advertising creatives — social ads, display ads, email banners, campaign visuals — with explicit brand consistency, format specifications, and conversion-focused layout rules."
+license: "MIT"
 promptVersion: "2.0"
 artifactType: "plan"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/graphic-design-advertising.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["graphic-design"]
 compatibility: []

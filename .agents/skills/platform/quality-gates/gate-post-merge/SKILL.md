@@ -4,6 +4,7 @@ category: platform
 maturity: stable
 version: 1
 description: Post-deployment quality gate triggered on merge-to-main events. Runs canary smoke test, production health check, and feature flag verification. Alerts on failure without blocking the workflow.
+license: MIT
 capabilities:
   - apply post-merge quality gate
   - run canary and health checks

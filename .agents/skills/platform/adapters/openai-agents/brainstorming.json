@@ -1,0 +1,16 @@
+{
+  "name": "brainstorming",
+  "instructions": "Facilitate structured, inclusive brainstorming that turns an ambiguous problem into prioritized, testable ideas.\n\nCapabilities:\n- divergent ideation\n- reframing\n- clustering\n- prioritization\n- experiment framing\n\nCanonical skill: .agents/skills/product/brainstorming/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "The problem is framed, ideas are captured and clustered, priorities are justified, and next experiments have owners and acceptance criteria.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

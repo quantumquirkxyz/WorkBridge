@@ -1,0 +1,16 @@
+{
+  "name": "context-engine",
+  "instructions": "Manage dynamic context for agent execution using retrieval-augmented generation patterns, updating the working context from sources beyond static CONTEXT.md (issues, PRs, docs, execution traces).\n\nCapabilities:\n- apply the context-engine workflow\n\nCanonical skill: .agents/skills/foundation/context-engine/SKILL.md",
+  "model": "gpt-5-mini",
+  "tools": [],
+  "handoff_description": "Context retrieved, indexed, and answer provided with explicit source attribution.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 5,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

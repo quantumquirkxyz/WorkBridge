@@ -1,0 +1,13 @@
+---
+description: "Summarize Skill execution duration, success rate, and available run evidence — use when measuring Skill performance from logs and records."
+globs: []
+alwaysApply: false
+---
+# skill-performance-metrics
+
+Apply the skill-performance-metrics skill when the request matches its scope.
+
+Capabilities:
+- apply the skill-performance-metrics workflow
+
+Stop when: Summarize Skill execution duration, success rate, and available run evidence complete; artifact saved; completion criteria checked.

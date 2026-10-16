@@ -1,0 +1,16 @@
+{
+  "name": "agent-orchestration",
+  "instructions": "Design agent orchestration — multi-agent patterns, tool use, memory, handoffs, evaluation — with explicit coordination boundaries and observability.\n\nCapabilities:\n- apply the agent-orchestration workflow\n\nCanonical skill: .agents/skills/ai/agent-orchestration/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Architecture diagram saved; capability matrix complete; handoff contracts defined; evaluation rubric present.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

@@ -4,6 +4,7 @@ category: "graphic-design"
 maturity: "stable"
 version: "1"
 description: "Design visual design systems — tokens, components, patterns, and documentation — with explicit hierarchy, accessibility, and cross-channel consistency."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "plan"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/design-system-visual.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["graphic-design"]
 compatibility: []

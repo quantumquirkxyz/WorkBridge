@@ -1,0 +1,13 @@
+---
+description: "Audit skill side-effect, risk, trust tier, dependency, and boundary metadata against the actual workflow so mutating skills declare their operational authority honestly."
+globs: []
+alwaysApply: false
+---
+# side-effect-auditor
+
+Apply the side-effect-auditor skill when the request matches its scope.
+
+Capabilities:
+- apply the side-effect-auditor workflow
+
+Stop when: Side-effect mismatches are classified with recommended frontmatter changes or the audited skills are confirmed consistent.

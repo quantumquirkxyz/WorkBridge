@@ -1,0 +1,13 @@
+---
+description: "Maintain a repository knowledge base — glossary, durable references, indexed guidance, and consumer-oriented navigation — with explicit update rules."
+globs: []
+alwaysApply: false
+---
+# docs-knowledge-base
+
+Apply the docs-knowledge-base skill when the request matches its scope.
+
+Capabilities:
+- apply the docs-knowledge-base workflow
+
+Stop when: Knowledge-base entries are findable, scoped, owned, and linked to durable sources.

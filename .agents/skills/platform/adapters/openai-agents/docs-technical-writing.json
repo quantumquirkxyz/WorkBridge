@@ -1,0 +1,16 @@
+{
+  "name": "docs-technical-writing",
+  "instructions": "Write technical documentation — clear explanations, examples, warnings, and procedural guidance — with audience-aware structure and maintenance rules.\n\nCapabilities:\n- apply the docs-technical-writing workflow\n\nCanonical skill: .agents/skills/docs/docs-technical-writing/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "The document is clear for its audience, complete for its scope, and maintainable.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

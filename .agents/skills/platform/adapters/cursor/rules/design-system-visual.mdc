@@ -1,0 +1,13 @@
+---
+description: "Design visual design systems — tokens, components, patterns, and documentation — with explicit hierarchy, accessibility, and cross-channel consistency."
+globs: []
+alwaysApply: false
+---
+# design-system-visual
+
+Apply the design-system-visual skill when the request matches its scope.
+
+Capabilities:
+- apply the design-system-visual workflow
+
+Stop when: Visual design system design complete; tokens, components, accessibility, and adaptation rules explicit.

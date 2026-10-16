@@ -4,6 +4,7 @@ category: "qa"
 maturity: "stable"
 version: "1"
 description: "Design and implement automated test suites — unit, integration, e2e — with proper coverage, maintainability, and CI integration."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "qa"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/qa-automation.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["qa"]
 compatibility: []

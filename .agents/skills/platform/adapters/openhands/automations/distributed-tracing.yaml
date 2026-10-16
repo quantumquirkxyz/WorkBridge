@@ -1,0 +1,15 @@
+name: distributed-tracing
+description: "Distributed tracing (OpenTelemetry, W3C TraceContext, sampling, instrumentation)."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/backend-distributed-tracing
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: true
+  sideEffects: []

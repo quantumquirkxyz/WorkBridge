@@ -1,0 +1,13 @@
+---
+description: "Design chaos engineering — fault injection, GameDays, resilience validation — with explicit steady-state hypotheses, blast radius controls, and safety rails."
+globs: []
+alwaysApply: false
+---
+# chaos-engineering
+
+Apply the chaos-engineering skill when the request matches its scope.
+
+Capabilities:
+- apply the chaos-engineering workflow
+
+Stop when: Experiment plan defined; fault injection config documented; resilience report produced.

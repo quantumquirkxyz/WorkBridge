@@ -4,6 +4,7 @@ category: "integrations"
 maturity: "stable"
 version: "1"
 description: "Manage issue tracker operations with scoped target resolution, duplicate checks, mutation evidence, and rollback notes for create, update, comment, label, link, assign, and close actions."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: ""
@@ -16,11 +17,11 @@ promptVersion: "2.0"
 artifactType: "integrations"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/issue-operations.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/issue-operations.json
 diataxis: "how-to"
 tags: ["integrations"]
 compatibility: []
-approvalRequired: "false"
+approvalRequired: "true"
 approvalFor: []
 ---
 

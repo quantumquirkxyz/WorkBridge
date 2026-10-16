@@ -1,0 +1,13 @@
+---
+description: "Decide whether a Skill action is allowed, requires approval, or must stop."
+globs: []
+alwaysApply: false
+---
+# execution-policy
+
+Apply the execution-policy skill when the request matches its scope.
+
+Capabilities:
+- apply the execution-policy workflow
+
+Stop when: The action is allowed or blocked with reason, approval requirement is clear, and rollback is named.

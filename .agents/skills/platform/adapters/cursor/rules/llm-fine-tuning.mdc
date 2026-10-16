@@ -1,0 +1,13 @@
+---
+description: "Fine-tune LLMs — LoRA, QLoRA, full fine-tuning, data preparation, evaluation, deployment — with reproducibility, efficiency, and safety controls."
+globs: []
+alwaysApply: false
+---
+# llm-fine-tuning
+
+Apply the llm-fine-tuning skill when the request matches its scope.
+
+Capabilities:
+- apply the llm-fine-tuning workflow
+
+Stop when: Fine-tuning plan saved; dataset report complete; evaluation report generated; deployment manifest filled.

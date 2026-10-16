@@ -1,0 +1,59 @@
+{
+  "skill": "skill-dev/skill-promoter",
+  "version": 1,
+  "generatedFrom": "frontmatter",
+  "frontmatterHash": "1d41203b2a3d7d840600b0f4705d79b6b8ca1f4a192d4ba5d016024420d3098c",
+  "role": "workflow",
+  "router": {
+    "positive": [],
+    "negative": [],
+    "requiredSignals": []
+  },
+  "execution": {
+    "defaultAgent": "general",
+    "isolation": "worktree",
+    "maxTurns": 6,
+    "modelTier": "reasoning",
+    "tools": {
+      "allow": [
+        "Read",
+        "Grep",
+        "Glob",
+        "Bash",
+        "Edit",
+        "Write",
+        "WebFetch",
+        "WebSearch"
+      ],
+      "deny": []
+    }
+  },
+  "guardrails": {
+    "sideEffects": [
+      "write-files",
+      "create-symlink",
+      "update-lockfile"
+    ],
+    "approvalRequired": true,
+    "approvalFor": [
+      "write-files",
+      "create-symlink",
+      "update-lockfile"
+    ],
+    "risk": "medium",
+    "trustTier": 3
+  },
+  "verification": {
+    "commands": [
+      "node .agents/skills/platform/check-all.mjs"
+    ],
+    "artifactSchema": null
+  },
+  "observability": {
+    "traceEvents": [
+      "skill.route",
+      "skill.execute",
+      "skill.verify"
+    ]
+  }
+}

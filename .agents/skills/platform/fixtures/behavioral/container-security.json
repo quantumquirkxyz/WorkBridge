@@ -1,0 +1,66 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-container-security",
+      "skill": "container-security",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "## Completion",
+          "## Process",
+          "## Rules",
+          "ContainerSecurityArtifact",
+          "never run containers as root; enforce non-root in Pod Security Standards and Dockerfile.",
+          "container workloads",
+          "Non-root"
+        ],
+        "doesNotContain": [
+          "## Operating Contract",
+          "ask-matt",
+          "ship-review-fix-loop",
+          "doc-draft-pr",
+          "frontend-development",
+          "ARIES",
+          "Matt",
+          "TODO",
+          "point 1",
+          "Criterion 1",
+          "Acceptance criterion 1",
+          "BE-2",
+          "OpenAPI spec",
+          "localhost:3000",
+          "extremely extensive"
+        ]
+      }
+    },
+    {
+      "id": "v2-frontmatter-container-security",
+      "skill": "container-security",
+      "type": "behavioral",
+      "expected": {
+        "frontmatterContains": [
+          "name: \"container-security\"",
+          "risk: \"medium\"",
+          "trustTier: \"3\"",
+          "modelTier: \"reasoning\"",
+          "promptVersion: \"2.0\"",
+          "artifactType: \"security\"",
+          "diataxis: \"how-to\""
+        ]
+      }
+    },
+    {
+      "id": "v2-footer-container-security",
+      "skill": "container-security",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "@include .agents/skills/platform/contract-base.xml"
+        ]
+      }
+    }
+  ]
+}

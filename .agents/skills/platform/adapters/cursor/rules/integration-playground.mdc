@@ -1,0 +1,13 @@
+---
+description: "Create a disposable fixture environment for safely exercising Skills against local APIs, data, and files; use when testing a Skill with isolated local fixtures."
+globs: []
+alwaysApply: false
+---
+# integration-playground
+
+Apply the integration-playground skill when the request matches its scope.
+
+Capabilities:
+- apply the integration-playground workflow
+
+Stop when: The command ran in the disposable fixture directory and its exit status and output are recorded.

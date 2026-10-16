@@ -1,0 +1,15 @@
+name: api-gateway
+description: "API gateway (Kong, Envoy, AWS API Gateway, rate limiting, auth, routing)."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/backend-api-gateway
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: true
+  sideEffects: []

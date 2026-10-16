@@ -1,0 +1,13 @@
+---
+description: "Generate a focused tutorial with goals, exercise inputs, expected outputs, and checkpoints for any Skill; use when teaching or onboarding someone to a Skill."
+globs: []
+alwaysApply: false
+---
+# interactive-tutorial-builder
+
+Apply the interactive-tutorial-builder skill when the request matches its scope.
+
+Capabilities:
+- apply the interactive-tutorial-builder workflow
+
+Stop when: The learner has a runnable exercise and a checkable checkpoint derived from the target Skill contract.

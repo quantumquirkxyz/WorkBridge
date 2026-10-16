@@ -17,8 +17,11 @@ const targetRoot = path.resolve(targetArg);
 const copyEntries = [
   '.agents/AGENTS.md',
   '.agents/skills',
-  'docs/agents',
-  'docs/adr/README.md',
+  'docs/reference/agents',
+  'docs/reference/adr/README.md',
+  'docs/how-to',
+  'docs/explanation',
+  'hooks/hooks.json',
   'tooling/case-studies/README.md',
   'tooling/case-studies/template.md',
   'AUTHORSHIP.md',
@@ -28,6 +31,8 @@ const copyEntries = [
   'VERSION',
   'CHANGELOG.md',
   'skills-lock.json',
+  'skills.json',
+  '.env.template',
 ];
 
 async function exists(filePath) {

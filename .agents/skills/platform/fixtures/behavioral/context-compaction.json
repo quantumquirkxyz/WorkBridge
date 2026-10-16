@@ -1,0 +1,43 @@
+{
+  "fixtures": [
+    {
+      "id": "v1-contract-context-compaction",
+      "skill": "context-compaction",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "CompactionReport"
+        ],
+        "doesNotContain": [
+          "## Operating Contract"
+        ]
+      }
+    },
+    {
+      "id": "v1-footer-context-compaction",
+      "skill": "context-compaction",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "@include .agents/skills/platform/contract-base.xml"
+        ]
+      }
+    },
+    {
+      "id": "v1-description-context-compaction",
+      "skill": "context-compaction",
+      "type": "regression",
+      "expectedOutput": {
+        "contains": [
+          "context-compaction",
+          "CompactionReport",
+          "re-derivable",
+          "record-execution"
+        ]
+      }
+    }
+  ]
+}

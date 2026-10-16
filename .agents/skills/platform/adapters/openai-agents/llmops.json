@@ -1,0 +1,16 @@
+{
+  "name": "llmops",
+  "instructions": "LLMOps (deployment, monitoring, A/B testing, prompt management, cost optimization, evaluation pipelines)\n\nCapabilities:\n- apply the llmops workflow\n\nCanonical skill: .agents/skills/ai/llmops/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Deployment published; monitoring active; evaluation pipeline green.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 8,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

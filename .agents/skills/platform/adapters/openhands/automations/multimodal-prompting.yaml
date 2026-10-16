@@ -1,0 +1,15 @@
+name: multimodal-prompting
+description: "Multimodal prompting (vision, audio, video, image generation, vision-language models)"
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/ai-multimodal-prompting
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

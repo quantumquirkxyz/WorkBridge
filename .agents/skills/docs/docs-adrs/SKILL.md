@@ -1,9 +1,10 @@
 ---
 name: docs-adrs
-category: skill-dev/sandbox
+category: "docs"
 maturity: stable
 version: 1
 description: Create and maintain Architecture Decision Records — context, decision, consequences, alternatives, status — with periodic review.
+license: MIT
 capabilities:
   - apply docs adrs workflow
   - produce docs adrs analysis artifact

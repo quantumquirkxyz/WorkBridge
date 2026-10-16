@@ -1,0 +1,66 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-rate-limiting",
+      "skill": "rate-limiting",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "## Completion",
+          "## Process",
+          "## Rules",
+          "RateLimitingArtifact",
+          "set limits conservatively above normal traffic with headroom for legitimate bursts.",
+          "log limit breach events with client identity and endpoint for audit and tuning.",
+          "test limit enforcement under load with production-like traffic patterns before deploy.",
+          "document emergency override procedures for false positives or incidents."
+        ],
+        "doesNotContain": [
+          "## Operating Contract",
+          "ask-matt",
+          "ship-review-fix-loop",
+          "doc-draft-pr",
+          "frontend-development",
+          "Matt",
+          "TODO",
+          "point 1",
+          "Criterion 1",
+          "Acceptance criterion 1",
+          "BE-2",
+          "OpenAPI spec",
+          "localhost:3000",
+          "extremely extensive"
+        ]
+      }
+    },
+    {
+      "id": "v2-frontmatter-rate-limiting",
+      "skill": "rate-limiting",
+      "type": "behavioral",
+      "expected": {
+        "frontmatterContains": [
+          "name: \"rate-limiting\"",
+          "risk: \"medium\"",
+          "trustTier: \"3\"",
+          "modelTier: \"reasoning\"",
+          "promptVersion: \"2.0\"",
+          "artifactType: \"backend\"",
+          "diataxis: \"how-to\""
+        ]
+      }
+    },
+    {
+      "id": "v2-footer-rate-limiting",
+      "skill": "rate-limiting",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "@include .agents/skills/platform/contract-base.xml"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "to-tickets",
+  "instructions": "Break a plan, spec, or the current conversation into a set of tracer-bullet tickets, each declaring its blocking edges, and publish the smallest claimable slices.\n\nCapabilities:\n- apply to tickets workflow\n- produce to tickets artifact\n- validate to tickets completion criteria\n\nCanonical skill: .agents/skills/project/to-tickets/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Break a plan, spec, or the current conversation into a set of tracer-bullet tickets, each declaring its blocking edges, and publish the smallest claimable slices complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "worktree"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

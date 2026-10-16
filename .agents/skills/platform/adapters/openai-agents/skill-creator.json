@@ -1,0 +1,16 @@
+{
+  "name": "skill-creator",
+  "instructions": "Interactive interview and collaborative design tool that helps users define, research, name, generate, and validate complete Codex skills with SKILL.md, scripts, references, assets, ADRs, and traceability.\n\nCapabilities:\n- apply the skill-creator workflow\n\nCanonical skill: .agents/skills/skill-dev/skill-creator/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "The user has completed the interview and generated a valid skill structure, or an existing skill has been validated with the supported tooling.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 10,
+    "isolation": "worktree"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

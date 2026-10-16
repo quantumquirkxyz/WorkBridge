@@ -1,0 +1,13 @@
+---
+description: "Price and calibrate derivatives (options, exotics, structured products) — Black-Scholes, trees, Monte Carlo — with Greeks, model risk, and calibration validation."
+globs: []
+alwaysApply: false
+---
+# quant-derivatives-pricing
+
+Apply the quant-derivatives-pricing skill when the request matches its scope.
+
+Capabilities:
+- apply the quant-derivatives-pricing workflow
+
+Stop when: Price and calibrate derivatives (options, exotics, structured products) complete; required sections present; completion criteria checked.

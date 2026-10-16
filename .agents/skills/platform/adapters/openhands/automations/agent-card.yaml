@@ -1,0 +1,15 @@
+name: agent-card
+description: "Generates and maintains Agent Cards for A2A (Agent-to-Agent) discovery."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/foundation-agent-card
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: [write-files]

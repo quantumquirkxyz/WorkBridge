@@ -1,0 +1,16 @@
+{
+  "name": "integration-playground",
+  "instructions": "Create a disposable fixture environment for safely exercising Skills against local APIs, data, and files; use when testing a Skill with isolated local fixtures.\n\nCapabilities:\n- apply the integration-playground workflow\n\nCanonical skill: .agents/skills/auxiliary/integration-playground/SKILL.md",
+  "model": "gpt-5-mini",
+  "tools": [],
+  "handoff_description": "The command ran in the disposable fixture directory and its exit status and output are recorded.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

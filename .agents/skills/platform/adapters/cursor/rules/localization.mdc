@@ -1,0 +1,13 @@
+---
+description: "Design internationalization (i18n) and localization (l10n) — string management, locale handling, RTL support, cultural adaptation — so the product works across languages and regions."
+globs: []
+alwaysApply: false
+---
+# localization
+
+Apply the localization skill when the request matches its scope.
+
+Capabilities:
+- apply the localization workflow
+
+Stop when: Design internationalization (i18n) and localization (l10n) complete; artifact saved; completion criteria checked.

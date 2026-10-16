@@ -1,0 +1,16 @@
+{
+  "name": "implement",
+  "instructions": "Implement a piece of work based on a spec or set of tickets, or build a scoped fix that can be handed off for publication. This skill stops at the implemented, validated branch.\n\nCapabilities:\n- apply implement workflow\n- produce implement artifact\n- validate implement completion criteria\n\nCanonical skill: .agents/skills/delivery/implement/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Implement a piece of work based on a spec or set of tickets, or build a scoped fix that can be handed off for publication complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "worktree"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

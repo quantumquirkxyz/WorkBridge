@@ -1,0 +1,15 @@
+name: triage
+description: "Move issues and external PRs through a state machine of triage roles — categorise, verify, grill if needed, and write ag"
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/routing-triage
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: true
+  sideEffects: [label-issue, post-comment, close-issue, write-files]

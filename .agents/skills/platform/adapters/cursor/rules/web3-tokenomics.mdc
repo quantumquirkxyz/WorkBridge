@@ -1,0 +1,13 @@
+---
+description: "Design token economics — supply, emission, incentives, governance, LST/LRT, restaking, points systems — with economic sustainability checks and adversarial stress tests."
+globs: []
+alwaysApply: false
+---
+# web3-tokenomics
+
+Apply the web3-tokenomics skill when the request matches its scope.
+
+Capabilities:
+- apply the web3-tokenomics workflow
+
+Stop when: Tokenomics designed; stress tests completed; sustainability verdict explicit.

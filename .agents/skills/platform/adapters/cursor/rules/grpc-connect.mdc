@@ -1,0 +1,13 @@
+---
+description: "gRPC and Connect (protobuf, ConnectRPC, grpc-gateway, streaming, code generation)."
+globs: []
+alwaysApply: false
+---
+# grpc-connect
+
+Apply the grpc-connect skill when the request matches its scope.
+
+Capabilities:
+- apply the grpc-connect workflow
+
+Stop when: gRPC/Connect design complete; artifact saved; completion criteria checked.

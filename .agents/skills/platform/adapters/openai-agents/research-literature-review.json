@@ -1,0 +1,16 @@
+{
+  "name": "research-literature-review",
+  "instructions": "Review research literature — search strategy, screening, synthesis, citation tracking, and evidence grading — with transparent inclusion criteria.\n\nCapabilities:\n- apply the research-literature-review workflow\n\nCanonical skill: .agents/skills/research/research-literature-review/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Search strategy, screening criteria, synthesis, and evidence limitations are explicit.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

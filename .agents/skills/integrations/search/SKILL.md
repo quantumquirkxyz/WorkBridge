@@ -4,6 +4,7 @@ category: "integrations"
 maturity: "stable"
 version: "2"
 description: "Design search behavior, indexing, relevance, and retrieval seams — with Elasticsearch, Algolia, Meilisearch, OpenSearch, synonyms, ranking, analytics, and autocomplete."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "integrations"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/search.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["integrations"]
 compatibility: []

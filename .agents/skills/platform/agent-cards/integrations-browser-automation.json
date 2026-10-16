@@ -1,0 +1,34 @@
+{
+  "name": "browser-automation",
+  "description": "Automate browser and computer-use tasks with a safety rail: declarative page objectives, Playwright-based execution, human review gates for irreversible actions, and screenshots as verifiable evidence.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/integrations/browser-automation/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": false
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "integrations/browser-automation",
+      "name": "browser-automation",
+      "description": "Automate browser and computer-use tasks with a safety rail: declarative page objectives, Playwright-based execution, human review gates for irreversible actions, and screenshots as verifiable evidence.",
+      "tags": [
+        "\"browser\"",
+        "\"computer-use\"",
+        "\"automation\"",
+        "\"playwright\""
+      ],
+      "parameters": {
+        "trustTier": "3",
+        "modelTier": "code",
+        "artifactType": "browser-task-report"
+      }
+    }
+  ]
+}

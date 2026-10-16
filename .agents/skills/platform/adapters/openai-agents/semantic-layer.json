@@ -1,0 +1,16 @@
+{
+  "name": "semantic-layer",
+  "instructions": "Design a semantic layer — dbt, Cube, metrics, dimensions, measures, self-service analytics — with explicit business logic, governance, and query optimization.\n\nCapabilities:\n- apply the semantic-layer workflow\n\nCanonical skill: .agents/skills/data/semantic-layer/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Semantic layer specification saved; dbt/Cube structure defined; governance rules documented.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 5,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

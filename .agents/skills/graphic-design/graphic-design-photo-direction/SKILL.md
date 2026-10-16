@@ -1,11 +1,12 @@
 ---
 name: "graphic-design-photo-direction"
 description: "Direct photography and image retouching — art direction, lighting, composition, color grading, and post-production workflows for brand and product imagery."
+license: "MIT"
 promptVersion: "2.0"
 artifactType: "plan"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/graphic-design-photo-direction.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["graphic-design"]
 compatibility: []

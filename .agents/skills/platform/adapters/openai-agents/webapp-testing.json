@@ -1,0 +1,16 @@
+{
+  "name": "webapp-testing",
+  "instructions": "Choose the right test seam for a web app and describe how to verify it at unit, integration, and end-to-end levels.\n\nCapabilities:\n- apply the webapp-testing workflow\n\nCanonical skill: .agents/skills/delivery/webapp-testing/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Choose the right test seam for a web app and describe how to verify it at unit, integration, and end-to-end levels complete; structured result returned; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

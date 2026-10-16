@@ -1,0 +1,16 @@
+{
+  "name": "supply-chain-security",
+  "instructions": "Design supply chain security — SBOM, Sigstore, SLSA, provenance, signing — with explicit trust tiers, artifact verification, and incident response for compromised dependencies.\n\nCapabilities:\n- apply the supply-chain-security workflow\n\nCanonical skill: .agents/skills/sec/supply-chain-security/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "SBOM policy defined; signing policy defined; SLSA target and attestation documented.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

@@ -1,9 +1,10 @@
 ---
 name: "incident-forensics"
-category: "skill-dev/sandbox"
+category: "sec"
 maturity: "stable"
 version: "1"
 description: "Incident forensics (evidence collection, timeline reconstruction, root cause, reporting)"
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,11 +17,11 @@ promptVersion: "2.0"
 artifactType: "sec"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/incident-forensics.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/incident-forensics.json
 diataxis: "how-to"
 tags: ["sec"]
 compatibility: []
-approvalRequired: "false"
+approvalRequired: "true"
 approvalFor: []
 ---
 

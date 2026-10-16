@@ -3,6 +3,7 @@ name: "context-engine"
 category: "foundation"
 maturity: "stable"
 description: "Manage dynamic context for agent execution using retrieval-augmented generation patterns, updating the working context from sources beyond static CONTEXT.md (issues, PRs, docs, execution traces)."
+license: "MIT"
 version: "1"
 capabilities: ""
 inputs: ""
@@ -17,7 +18,7 @@ promptVersion: "2.0"
 artifactType: "foundation"
 modelTier: "fast"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/context-engine.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/context-engine.json
 diataxis: "how-to"
 tags: ["foundation"]
 compatibility: []

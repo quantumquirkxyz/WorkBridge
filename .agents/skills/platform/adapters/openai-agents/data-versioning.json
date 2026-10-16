@@ -1,0 +1,16 @@
+{
+  "name": "data-versioning",
+  "instructions": "Data versioning (DVC, lakeFS, delta tables, snapshotting, reproducibility).\n\nCapabilities:\n- apply the data-versioning workflow\n\nCanonical skill: .agents/skills/data/data-versioning/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Versioning strategy saved; branching workflow defined; reproducibility plan documented.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

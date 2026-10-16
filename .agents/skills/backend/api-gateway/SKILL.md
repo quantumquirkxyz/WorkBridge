@@ -4,6 +4,7 @@ category: "backend"
 maturity: "stable"
 version: "1"
 description: "API gateway (Kong, Envoy, AWS API Gateway, rate limiting, auth, routing)."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,11 +17,11 @@ promptVersion: "2.0"
 artifactType: "plan"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/api-gateway.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/api-gateway.json
 diataxis: "how-to"
 tags: ["backend"]
 compatibility: []
-approvalRequired: "false"
+approvalRequired: "true"
 approvalFor: []
 ---
 

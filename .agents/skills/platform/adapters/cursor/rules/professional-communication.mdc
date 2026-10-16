@@ -1,0 +1,13 @@
+---
+description: "Improve professional communication — status updates, stakeholder messages, expectations, and escalation — with clarity and precision."
+globs: []
+alwaysApply: false
+---
+# professional-communication
+
+Apply the professional-communication skill when the request matches its scope.
+
+Capabilities:
+- apply the professional-communication workflow
+
+Stop when: The message has a clear audience, ask, status, tone, and next step.

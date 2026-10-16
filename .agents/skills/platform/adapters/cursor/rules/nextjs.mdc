@@ -1,0 +1,13 @@
+---
+description: "Shape Next.js projects around routes, server/client seams, and data flow that stay deep rather than tangled."
+globs: []
+alwaysApply: false
+---
+# nextjs
+
+Apply the nextjs skill when the request matches its scope.
+
+Capabilities:
+- apply the nextjs workflow
+
+Stop when: Shape Next complete; artifact saved; completion criteria checked.

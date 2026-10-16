@@ -2,6 +2,20 @@
   <input>{{inputs}}</input>
   <output>{{outputs}}</output>
   <side-effects>{{sideEffects}}</side-effects>
+  <!-- Idempotency clause (wave 2 item 2.2). Research basis: Temporal - "write
+       intent before executing the effect" (effect sandwich: record claim ->
+       execute -> commit outcome; a retry finding only a claim reports
+       outcome-unknown instead of re-running). LangGraph HITL semantics -
+       resume re-executes the whole node from its start, so side effects
+       before an interrupt must be safe to re-run. Ledger implementation:
+       platform/idempotency.mjs (.scratch/intents/<key>.json). -->
+  <idempotency>
+    Every skill that mutates external state (issue, pull request, merge,
+    label, comment) MUST record its intent before executing the effect and
+    MUST check the prior intent after a retry: when the outcome is unknown,
+    report "outcome unknown" and never silently re-execute. Side effects
+    performed before an interrupt or pause must be safe to re-run.
+  </idempotency>
   <dependencies>{{dependencies}}</dependencies>
   <stop-condition>{{stopCondition}}</stop-condition>
   <risk>{{risk}}</risk>
@@ -10,4 +24,14 @@
     Stay within the skill's declared scope, trust tier, and side-effect policy.
     Do not broaden scope without explicit user direction.
   </boundary>
+  <rejection-policy>
+    Validate every artifact against its declared JSON schema before emission.
+    An invalid artifact is rejected and never passed downstream; record the
+    rejection as a structured reason: {artifactType, schemaErrors[], attempt}.
+    Retry a rejected artifact at most 3 attempts. The retry prompt keeps only
+    the first format-error message and omits all prior format errors
+    (SWE-agent ACI retry guardrail).
+    Never drop a result silently: narrate an empty result explicitly
+    ("ran successfully, no output") instead of emitting nothing.
+  </rejection-policy>
 </contract>

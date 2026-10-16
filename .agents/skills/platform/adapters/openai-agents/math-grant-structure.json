@@ -1,0 +1,16 @@
+{
+  "name": "math-grant-structure",
+  "instructions": "Structure mathematics grant proposals (NSF, ERC, Simons, MSCA) — aims, broader impacts, budget, timeline, reviewer expectations — with concrete templates.\n\nCapabilities:\n- apply the math-grant-structure workflow\n\nCanonical skill: .agents/skills/math/math-grant-structure/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "All sections drafted; reviewer-perspective critique complete; submission checklist filled.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 5,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

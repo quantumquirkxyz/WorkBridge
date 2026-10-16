@@ -1,0 +1,58 @@
+{
+  "skill": "routing/triage",
+  "version": 1,
+  "generatedFrom": "frontmatter",
+  "frontmatterHash": "bea717741ffec53461948a55b91784758d010286da4d830d37a8860d12099a28",
+  "role": "workflow",
+  "router": {
+    "positive": [],
+    "negative": [],
+    "requiredSignals": []
+  },
+  "execution": {
+    "defaultAgent": "general",
+    "isolation": "worktree",
+    "maxTurns": 6,
+    "modelTier": "router",
+    "tools": {
+      "allow": [
+        "Read",
+        "Grep",
+        "Glob",
+        "Edit",
+        "Write",
+        "WebFetch",
+        "WebSearch"
+      ],
+      "deny": []
+    }
+  },
+  "guardrails": {
+    "sideEffects": [
+      "label-issue",
+      "post-comment",
+      "close-issue",
+      "write-files"
+    ],
+    "approvalRequired": true,
+    "approvalFor": [
+      "label-issue",
+      "post-comment",
+      "close-issue",
+      "write-files"
+    ],
+    "risk": "medium",
+    "trustTier": 3
+  },
+  "verification": {
+    "commands": [],
+    "artifactSchema": null
+  },
+  "observability": {
+    "traceEvents": [
+      "skill.route",
+      "skill.execute",
+      "skill.verify"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+---
+description: "Design and configure Kubernetes orchestration — cluster architecture, deployment strategies, service mesh, observability, auto-scaling, security policies — with reproducible infrastructure."
+globs: []
+alwaysApply: false
+---
+# devops-k8s-orchestration
+
+Apply the devops-k8s-orchestration skill when the request matches its scope.
+
+Capabilities:
+- apply the devops-k8s-orchestration workflow
+
+Stop when: Manifests saved; architecture documented; monitoring rules defined.

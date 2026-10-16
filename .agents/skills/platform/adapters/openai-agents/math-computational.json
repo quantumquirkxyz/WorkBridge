@@ -1,0 +1,16 @@
+{
+  "name": "math-computational",
+  "instructions": "Solve numerical and symbolic math problems (root finding, integration, ODEs, symbolic manipulation) with stable algorithms and explicit error analysis.\n\nCapabilities:\n- apply the math-computational workflow\n\nCanonical skill: .agents/skills/math/math-computational/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Artifact contains algorithm, error bounds, verification, and final answer; solution is reproducible from the code shown.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

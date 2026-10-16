@@ -1,0 +1,16 @@
+{
+  "name": "cs-computability",
+  "instructions": "Analyze computability questions — decidability, reductions, recognizability, and undecidability proofs — with formal problem transformations.\n\nCapabilities:\n- apply the cs-computability workflow\n\nCanonical skill: .agents/skills/cs/cs-computability/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "The problem class, proof strategy, and reduction obligations are explicit and checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

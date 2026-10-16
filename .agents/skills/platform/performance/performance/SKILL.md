@@ -4,6 +4,7 @@ category: "platform"
 maturity: "stable"
 version: "1"
 description: "Measure and improve system performance — latency, throughput, resource usage, bottlenecks, and capacity planning — with reproducible profiling."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []

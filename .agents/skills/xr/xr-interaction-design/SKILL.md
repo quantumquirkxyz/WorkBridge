@@ -4,6 +4,7 @@ category: "xr"
 maturity: "stable"
 version: "1"
 description: "Design XR interactions — spatial input, comfort, locomotion, hand tracking, and feedback — with clear constraints on immersion and usability."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "plan"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/xr-interaction-design.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["xr"]
 compatibility: []

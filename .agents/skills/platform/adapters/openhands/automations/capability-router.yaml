@@ -1,0 +1,15 @@
+name: capability-router
+description: "Route work to the best matching Skill using declared capabilities and compatibility — with explicit selection rules."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/routing-capability-router
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

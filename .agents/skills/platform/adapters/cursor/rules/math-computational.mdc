@@ -1,0 +1,13 @@
+---
+description: "Solve numerical and symbolic math problems (root finding, integration, ODEs, symbolic manipulation) with stable algorithms and explicit error analysis."
+globs: []
+alwaysApply: false
+---
+# math-computational
+
+Apply the math-computational skill when the request matches its scope.
+
+Capabilities:
+- apply the math-computational workflow
+
+Stop when: Artifact contains algorithm, error bounds, verification, and final answer; solution is reproducible from the code shown.

@@ -1,0 +1,13 @@
+---
+description: "Make physics research reproducible and archive it — Zenodo DOI, GitHub + container (Docker/Apptainer), data preservation, code review, and open-science compliance for journals and funders."
+globs: []
+alwaysApply: false
+---
+# physics-reproducibility-archive
+
+Apply the physics-reproducibility-archive skill when the request matches its scope.
+
+Capabilities:
+- apply the physics-reproducibility-archive workflow
+
+Stop when: Zenodo DOI assigned; GitHub tag created; checklist complete.

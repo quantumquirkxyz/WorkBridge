@@ -4,6 +4,7 @@ category: "ux"
 maturity: "stable"
 version: "1"
 description: "Design accessible UX — keyboard navigation, focus order, semantics, contrast, and assistive-technology support — with inclusive interaction patterns."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "ux"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/ux-accessibility.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["ux"]
 compatibility: []

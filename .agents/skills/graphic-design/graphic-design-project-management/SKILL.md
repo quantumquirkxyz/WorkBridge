@@ -4,6 +4,7 @@ category: "graphic-design"
 maturity: "experimental"
 version: "1"
 description: "Manage graphic design projects — briefs, iterations, reviews, asset handoff, versioning, and delivery — with explicit scope, timelines, and quality gates."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: ""
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "plan"
 modelTier: "fast"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/graphic-design-project-management.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["graphic-design"]
 compatibility: []

@@ -1,0 +1,13 @@
+---
+description: "Design RAG pipelines — retrieval, chunking, embedding, reranking, generation — with explicit data flow, latency budgets, and evaluation seams."
+globs: []
+alwaysApply: false
+---
+# rag-pipeline
+
+Apply the rag-pipeline skill when the request matches its scope.
+
+Capabilities:
+- apply the rag-pipeline workflow
+
+Stop when: Architecture documented; chunking and embedding config defined; evaluation plan complete.

@@ -1,0 +1,2597 @@
+{
+  "version": 1,
+  "root": ".",
+  "damping": 0.85,
+  "edgeTypeWeights": {
+    "depends-on": 1,
+    "compatible": 0.4,
+    "handoff": 0.8,
+    "capability": 0.2
+  },
+  "nodes": {
+    "accessibility-design": {
+      "domain": "accessibility",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [],
+      "description": "Design accessible interfaces — semantics, focus management, keyboard flows, contrast, and assistive-technology compatibility — with inclusive interaction patterns.",
+      "path": ".agents/skills/accessibility/accessibility-design"
+    },
+    "accessibility-testing": {
+      "domain": "accessibility",
+      "tier": "1",
+      "artifactType": "test-strategy",
+      "capabilities": [],
+      "description": "Test web interfaces for accessibility compliance — automated scans, manual keyboard navigation, screen reader validation — with explicit barrier detection and remediation evidence.",
+      "path": ".agents/skills/accessibility/accessibility-testing"
+    },
+    "accessibility": {
+      "domain": "accessibility",
+      "tier": "1",
+      "artifactType": "accessibility",
+      "capabilities": [],
+      "description": "Design inclusive products — WCAG compliance, assistive technology support, keyboard navigation, color contrast — with explicit user access guarantees.",
+      "path": ".agents/skills/accessibility/accessibility"
+    },
+    "agent-orchestration": {
+      "domain": "ai",
+      "tier": "1",
+      "artifactType": "agent",
+      "capabilities": [],
+      "description": "Design agent orchestration — multi-agent patterns, tool use, memory, handoffs, evaluation — with explicit coordination boundaries and observability.",
+      "path": ".agents/skills/ai/agent-orchestration"
+    },
+    "ai-ml-pipeline": {
+      "domain": "ai",
+      "tier": "3",
+      "artifactType": "ai",
+      "capabilities": [],
+      "description": "Design ML pipelines — data ingestion, preprocessing, training, evaluation, deployment, monitoring — with reproducibility, fairness, and version control.",
+      "path": ".agents/skills/ai/ai-ml-pipeline"
+    },
+    "ai-model-evaluation": {
+      "domain": "ai",
+      "tier": "3",
+      "artifactType": "model",
+      "capabilities": [],
+      "description": "Evaluate ML / LLM models — accuracy, fairness, robustness, explainability, drift — with explicit metrics, subgroup analysis, and failure-mode reporting.",
+      "path": ".agents/skills/ai/ai-model-evaluation"
+    },
+    "ai-prompt-engineering": {
+      "domain": "ai",
+      "tier": "3",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Design, evaluate, and refine prompts for LLMs (GPT-4, Claude, Llama, Mistral) with chain-of-thought, few-shot, RAG, and evaluation metrics.",
+      "path": ".agents/skills/ai/ai-prompt-engineering"
+    },
+    "ai-time-series-forecasting": {
+      "domain": "ai",
+      "tier": "3",
+      "artifactType": "ai",
+      "capabilities": [],
+      "description": "Design and evaluate time-series forecasting — ARIMA, Prophet, NeuralProphet, LSTM, Transformer — with stationarity analysis, seasonality, exogenous variables, and backtest.",
+      "path": ".agents/skills/ai/ai-time-series-forecasting"
+    },
+    "llm-eval": {
+      "domain": "ai",
+      "tier": "3",
+      "artifactType": "ai",
+      "capabilities": [],
+      "description": "Design LLM evaluation harnesses — benchmark design, model comparison, automated evals — with reproducible scoring, confidence intervals, and regression detection.",
+      "path": ".agents/skills/ai/llm-eval"
+    },
+    "llm-fine-tuning": {
+      "domain": "ai",
+      "tier": "3",
+      "artifactType": "ai",
+      "capabilities": [],
+      "description": "Fine-tune LLMs — LoRA, QLoRA, full fine-tuning, data preparation, evaluation, deployment — with reproducibility, efficiency, and safety controls.",
+      "path": ".agents/skills/ai/llm-fine-tuning"
+    },
+    "llmops": {
+      "domain": "ai",
+      "tier": "3",
+      "artifactType": "ai",
+      "capabilities": [],
+      "description": "LLMOps (deployment, monitoring, A/B testing, prompt management, cost optimization, evaluation pipelines)",
+      "path": ".agents/skills/ai/llmops"
+    },
+    "mlops": {
+      "domain": "ai",
+      "tier": "3",
+      "artifactType": "ai",
+      "capabilities": [],
+      "description": "MLOps (feature stores, model registry, data versioning, pipeline orchestration, monitoring, retraining)",
+      "path": ".agents/skills/ai/mlops"
+    },
+    "multimodal-prompting": {
+      "domain": "ai",
+      "tier": "1",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Multimodal prompting (vision, audio, video, image generation, vision-language models)",
+      "path": ".agents/skills/ai/multimodal-prompting"
+    },
+    "prompt-template-library": {
+      "domain": "ai",
+      "tier": "1",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Prompt template library (versioned templates, A/B testing, composition, evaluation)",
+      "path": ".agents/skills/ai/prompt-template-library"
+    },
+    "rag-pipeline": {
+      "domain": "ai",
+      "tier": "3",
+      "artifactType": "ai",
+      "capabilities": [],
+      "description": "Design RAG pipelines — retrieval, chunking, embedding, reranking, generation — with explicit data flow, latency budgets, and evaluation seams.",
+      "path": ".agents/skills/ai/rag-pipeline"
+    },
+    "structured-output": {
+      "domain": "ai",
+      "tier": "1",
+      "artifactType": "ai",
+      "capabilities": [],
+      "description": "Structured output for LLMs (JSON mode, function calling, constrained decoding, validation)",
+      "path": ".agents/skills/ai/structured-output"
+    },
+    "execution-policy": {
+      "domain": "auxiliary",
+      "tier": "1",
+      "artifactType": "auxiliary",
+      "capabilities": [],
+      "description": "Decide whether a Skill action is allowed, requires approval, or must stop.",
+      "path": ".agents/skills/auxiliary/execution-policy"
+    },
+    "integration-playground": {
+      "domain": "auxiliary",
+      "tier": "2",
+      "artifactType": "auxiliary",
+      "capabilities": [],
+      "description": "Create a disposable fixture environment for safely exercising Skills against local APIs, data, and files; use when testing a Skill with isolated local fixtures.",
+      "path": ".agents/skills/auxiliary/integration-playground"
+    },
+    "interactive-tutorial-builder": {
+      "domain": "auxiliary",
+      "tier": "2",
+      "artifactType": "auxiliary",
+      "capabilities": [],
+      "description": "Generate a focused tutorial with goals, exercise inputs, expected outputs, and checkpoints for any Skill; use when teaching or onboarding someone to a Skill.",
+      "path": ".agents/skills/auxiliary/interactive-tutorial-builder"
+    },
+    "setup-quirk-skills": {
+      "domain": "auxiliary",
+      "tier": "3",
+      "artifactType": "auxiliary",
+      "capabilities": [],
+      "description": "Configure this repo for the engineering skills — set up its issue tracker, triage label vocabulary, and domain doc layout. Run once before first use of the other engineering skills.",
+      "path": ".agents/skills/auxiliary/setup-quirk-skills"
+    },
+    "api-gateway": {
+      "domain": "backend",
+      "tier": "3",
+      "artifactType": "plan",
+      "capabilities": [],
+      "description": "API gateway (Kong, Envoy, AWS API Gateway, rate limiting, auth, routing).",
+      "path": ".agents/skills/backend/api-gateway"
+    },
+    "backend-architecture": {
+      "domain": "backend",
+      "tier": "1",
+      "artifactType": "backend",
+      "capabilities": [],
+      "description": "Shape backend systems — REST/gRPC APIs, service contracts, data flow, state management, error handling — with explicit seams and caller responsibilities.",
+      "path": ".agents/skills/backend/backend-architecture"
+    },
+    "backend-caching": {
+      "domain": "backend",
+      "tier": "1",
+      "artifactType": "backend",
+      "capabilities": [],
+      "description": "Design backend caching strategies — cache keys, TTLs, invalidation, stale-while-revalidate, and cache coherence — with explicit consistency and failure trade-offs.",
+      "path": ".agents/skills/backend/backend-caching"
+    },
+    "backend-queues": {
+      "domain": "backend",
+      "tier": "1",
+      "artifactType": "queue-design",
+      "capabilities": [],
+      "description": "Design backend queues and background job systems — durability, retries, ordering, idempotency, and backpressure — with explicit delivery guarantees.",
+      "path": ".agents/skills/backend/backend-queues"
+    },
+    "caching-advanced": {
+      "domain": "backend",
+      "tier": "3",
+      "artifactType": "backend",
+      "capabilities": [],
+      "description": "Advanced caching strategies (Redis, Memcached, CDN, cache invalidation, stampede prevention).",
+      "path": ".agents/skills/backend/caching-advanced"
+    },
+    "distributed-tracing": {
+      "domain": "backend",
+      "tier": "3",
+      "artifactType": "backend",
+      "capabilities": [],
+      "description": "Distributed tracing (OpenTelemetry, W3C TraceContext, sampling, instrumentation).",
+      "path": ".agents/skills/backend/distributed-tracing"
+    },
+    "event-driven-architecture": {
+      "domain": "backend",
+      "tier": "3",
+      "artifactType": "backend",
+      "capabilities": [],
+      "description": "Event-driven architecture (Kafka, NATS, EventBridge, choreography vs orchestration).",
+      "path": ".agents/skills/backend/event-driven-architecture"
+    },
+    "grpc-connect": {
+      "domain": "backend",
+      "tier": "3",
+      "artifactType": "backend",
+      "capabilities": [],
+      "description": "gRPC and Connect (protobuf, ConnectRPC, grpc-gateway, streaming, code generation).",
+      "path": ".agents/skills/backend/grpc-connect"
+    },
+    "microservices": {
+      "domain": "backend",
+      "tier": "1",
+      "artifactType": "backend",
+      "capabilities": [],
+      "description": "Design microservice architectures — service decomposition, inter-service communication, data ownership, resilience patterns — with explicit boundaries and failure isolation.",
+      "path": ".agents/skills/backend/microservices"
+    },
+    "rate-limiting": {
+      "domain": "backend",
+      "tier": "3",
+      "artifactType": "backend",
+      "capabilities": [],
+      "description": "Rate limiting and throttling (token bucket, sliding window, distributed rate limiting, API protection).",
+      "path": ".agents/skills/backend/rate-limiting"
+    },
+    "serverless": {
+      "domain": "backend",
+      "tier": "3",
+      "artifactType": "backend",
+      "capabilities": [],
+      "description": "Serverless architecture (Lambda, Functions, FaaS, event-driven, cold starts, scaling, cost).",
+      "path": ".agents/skills/backend/serverless"
+    },
+    "service-mesh": {
+      "domain": "backend",
+      "tier": "3",
+      "artifactType": "backend",
+      "capabilities": [],
+      "description": "Service mesh (Istio, Linkerd, Cilium, mTLS, traffic splitting, observability).",
+      "path": ".agents/skills/backend/service-mesh"
+    },
+    "websockets": {
+      "domain": "backend",
+      "tier": "3",
+      "artifactType": "backend",
+      "capabilities": [],
+      "description": "WebSockets and real-time (Socket.IO, WS, SSE, pub/sub, scaling, reconnection, backpressure).",
+      "path": ".agents/skills/backend/websockets"
+    },
+    "cms-access-control": {
+      "domain": "cms",
+      "tier": "1",
+      "artifactType": "cms",
+      "capabilities": [],
+      "description": "Design CMS access control — roles, permissions, editorial workflows, and publishing boundaries — with explicit least-privilege and auditability.",
+      "path": ".agents/skills/cms/cms-access-control"
+    },
+    "cms-architecture": {
+      "domain": "cms",
+      "tier": "1",
+      "artifactType": "cms",
+      "capabilities": [],
+      "description": "Design content management systems — content models, editorial workflows, publishing pipelines, localization — with schema evolution and multi-channel delivery.",
+      "path": ".agents/skills/cms/cms-architecture"
+    },
+    "cms-content-strategy": {
+      "domain": "cms",
+      "tier": "1",
+      "artifactType": "cms",
+      "capabilities": [],
+      "description": "Design CMS content strategy — content models, taxonomy, governance, lifecycle, and multi-channel publishing — with explicit editorial ownership.",
+      "path": ".agents/skills/cms/cms-content-strategy"
+    },
+    "localization": {
+      "domain": "cms",
+      "tier": "1",
+      "artifactType": "cms",
+      "capabilities": [],
+      "description": "Design internationalization (i18n) and localization (l10n) — string management, locale handling, RTL support, cultural adaptation — so the product works across languages and regions.",
+      "path": ".agents/skills/cms/localization"
+    },
+    "compiler-design": {
+      "domain": "compilers",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [],
+      "description": "Design compiler pipelines — lexing, parsing, ASTs, type checking, IR, optimization, and code generation — with correctness and modularity.",
+      "path": ".agents/skills/compilers/compiler-design"
+    },
+    "compiler-testing": {
+      "domain": "compilers",
+      "tier": "1",
+      "artifactType": "test-strategy",
+      "capabilities": [],
+      "description": "Test compilers and interpreters — parser tests, semantic tests, IR validation, golden tests, and regression checks — with explicit oracle design.",
+      "path": ".agents/skills/compilers/compiler-testing"
+    },
+    "compilers": {
+      "domain": "compilers",
+      "tier": "1",
+      "artifactType": "compilers",
+      "capabilities": [],
+      "description": "Design and implement compilers and interpreters — lexer, parser, AST, type checking, code generation, optimization — with correctness and modularity.",
+      "path": ".agents/skills/compilers/compilers"
+    },
+    "cs-algorithms": {
+      "domain": "cs",
+      "tier": "1",
+      "artifactType": "cs",
+      "capabilities": [],
+      "description": "Design and analyse algorithms — correctness proof, complexity analysis (time and space), and stability — with explicit proof of invariants and termination.",
+      "path": ".agents/skills/cs/cs-algorithms"
+    },
+    "cs-complexity-analysis": {
+      "domain": "cs",
+      "tier": "1",
+      "artifactType": "cs",
+      "capabilities": [],
+      "description": "Analyze algorithmic complexity — time, space, amortized cost, and lower bounds — with explicit assumptions and proof sketches.",
+      "path": ".agents/skills/cs/cs-complexity-analysis"
+    },
+    "cs-computability": {
+      "domain": "cs",
+      "tier": "1",
+      "artifactType": "cs",
+      "capabilities": [],
+      "description": "Analyze computability questions — decidability, reductions, recognizability, and undecidability proofs — with formal problem transformations.",
+      "path": ".agents/skills/cs/cs-computability"
+    },
+    "cs-data-structures": {
+      "domain": "cs",
+      "tier": "1",
+      "artifactType": "data",
+      "capabilities": [],
+      "description": "Design and analyze data structures — arrays, trees, heaps, hash tables, graphs, and balanced variants — with operation costs and invariants.",
+      "path": ".agents/skills/cs/cs-data-structures"
+    },
+    "data-catalog": {
+      "domain": "data",
+      "tier": "1",
+      "artifactType": "data",
+      "capabilities": [],
+      "description": "Data catalog (metadata management, discovery, classification, data mesh, governance).",
+      "path": ".agents/skills/data/data-catalog"
+    },
+    "data-contracts": {
+      "domain": "data",
+      "tier": "3",
+      "artifactType": "data",
+      "capabilities": [],
+      "description": "Design data contracts — schema evolution, producer-consumer agreements, schema registry, breaking change detection — with explicit compatibility rules and versioning.",
+      "path": ".agents/skills/data/data-contracts"
+    },
+    "data-etl-pipeline": {
+      "domain": "data",
+      "tier": "3",
+      "artifactType": "data",
+      "capabilities": [],
+      "description": "Design ETL / ELT pipelines — extraction, transformation, load — with reproducible steps, schema evolution, quality checks, and observability.",
+      "path": ".agents/skills/data/data-etl-pipeline"
+    },
+    "data-lineage": {
+      "domain": "data",
+      "tier": "3",
+      "artifactType": "data",
+      "capabilities": [],
+      "description": "Data lineage (end-to-end tracing, impact analysis, column-level lineage, governance).",
+      "path": ".agents/skills/data/data-lineage"
+    },
+    "data-quality": {
+      "domain": "data",
+      "tier": "3",
+      "artifactType": "data",
+      "capabilities": [],
+      "description": "Design data quality frameworks — Great Expectations, Soda, checks, observability, contracts — with explicit SLAs, freshness rules, and incident response for bad data.",
+      "path": ".agents/skills/data/data-quality"
+    },
+    "data-streaming": {
+      "domain": "data",
+      "tier": "3",
+      "artifactType": "data",
+      "capabilities": [],
+      "description": "Design streaming data pipelines — Kafka, Kinesis, Pub/Sub, Flink — with event schemas, stream processing, and real-time analytics.",
+      "path": ".agents/skills/data/data-streaming"
+    },
+    "data-versioning": {
+      "domain": "data",
+      "tier": "3",
+      "artifactType": "data",
+      "capabilities": [],
+      "description": "Data versioning (DVC, lakeFS, delta tables, snapshotting, reproducibility).",
+      "path": ".agents/skills/data/data-versioning"
+    },
+    "data-warehouse-modeling": {
+      "domain": "data",
+      "tier": "1",
+      "artifactType": "data",
+      "capabilities": [],
+      "description": "Design analytical warehouse schemas — star / snowflake / OBT — with dimension, fact, and bridge tables; partitioning; indexing; and query optimization.",
+      "path": ".agents/skills/data/data-warehouse-modeling"
+    },
+    "feature-store": {
+      "domain": "data",
+      "tier": "3",
+      "artifactType": "data",
+      "capabilities": [],
+      "description": "Feature store (online/offline, feature engineering, serving, monitoring, drift).",
+      "path": ".agents/skills/data/feature-store"
+    },
+    "semantic-layer": {
+      "domain": "data",
+      "tier": "1",
+      "artifactType": "data",
+      "capabilities": [],
+      "description": "Design a semantic layer — dbt, Cube, metrics, dimensions, measures, self-service analytics — with explicit business logic, governance, and query optimization.",
+      "path": ".agents/skills/data/semantic-layer"
+    },
+    "stream-processing": {
+      "domain": "data",
+      "tier": "3",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Stream processing (Flink, Kafka Streams, RisingWave, windowing, state, exactly-once).",
+      "path": ".agents/skills/data/stream-processing"
+    },
+    "db-migrations": {
+      "domain": "db",
+      "tier": "1",
+      "artifactType": "db",
+      "capabilities": [],
+      "description": "Plan database migrations — schema changes, backfills, compatibility windows, and rollback strategy — with explicit application and data safety checks.",
+      "path": ".agents/skills/db/db-migrations"
+    },
+    "db-nosql-modeling": {
+      "domain": "db",
+      "tier": "1",
+      "artifactType": "model",
+      "capabilities": [],
+      "description": "Design NoSQL data models — document, key-value, wide-column, graph, time-series — with access pattern analysis, consistency requirements, and schema evolution.",
+      "path": ".agents/skills/db/db-nosql-modeling"
+    },
+    "db-query-optimization": {
+      "domain": "db",
+      "tier": "1",
+      "artifactType": "db",
+      "capabilities": [],
+      "description": "Optimize database queries — indexing, query plans, cardinality, joins, and execution trade-offs — with explainable reasoning and measurement.",
+      "path": ".agents/skills/db/db-query-optimization"
+    },
+    "db-relational-design": {
+      "domain": "db",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [],
+      "description": "Design relational schemas — entities, relations, keys, indexes, constraints — with normalisation, performance, and migration planning.",
+      "path": ".agents/skills/db/db-relational-design"
+    },
+    "code-review": {
+      "domain": "delivery",
+      "tier": "3",
+      "artifactType": "review",
+      "capabilities": [
+        "apply code review workflow",
+        "produce code review artifact",
+        "validate code review completion criteria"
+      ],
+      "description": "Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes - Standards and Spec - and publish findings only.",
+      "path": ".agents/skills/delivery/code-review"
+    },
+    "contribution-workflow-optimizer": {
+      "domain": "delivery",
+      "tier": "1",
+      "artifactType": "workflow",
+      "capabilities": [],
+      "description": "Inspect changed Skills and recommend contribution improvements across standards, docs, tests, and examples; use when eva",
+      "path": ".agents/skills/delivery/contribution-workflow-optimizer"
+    },
+    "diagnosing-bugs": {
+      "domain": "delivery",
+      "tier": "1",
+      "artifactType": "diagnosis",
+      "capabilities": [],
+      "description": "Diagnosis loop for hard bugs and performance regressions. Use when the user says \"diagnose\"/\"debug this\", or reports something intermittent, ambiguous, or hard to reproduce.",
+      "path": ".agents/skills/delivery/diagnosing-bugs"
+    },
+    "implement-review-fixes": {
+      "domain": "delivery",
+      "tier": "3",
+      "artifactType": "review",
+      "capabilities": [],
+      "description": "Read a GitHub PR remediation plan produced by plan-review-fixes, implement the planned corrections through the repositor",
+      "path": ".agents/skills/delivery/implement-review-fixes"
+    },
+    "implement": {
+      "domain": "delivery",
+      "tier": "3",
+      "artifactType": "implementation",
+      "capabilities": [
+        "apply implement workflow",
+        "produce implement artifact",
+        "validate implement completion criteria"
+      ],
+      "description": "Implement a piece of work based on a spec or set of tickets, or build a scoped fix that can be handed off for publication. This skill stops at the implemented, validated branch.",
+      "path": ".agents/skills/delivery/implement"
+    },
+    "loop-budget": {
+      "domain": "delivery",
+      "tier": "2",
+      "artifactType": "loop-budget",
+      "capabilities": [
+        "declare loop budgets up front",
+        "detect degenerate loops (repeats, ping-pong, format errors)",
+        "record an append-only loop ledger and route on the typed verdict"
+      ],
+      "description": "Keep an agent loop inside its declared budget and end it with a typed verdict instead of a runaway process. Use when a repair, polling, or fan-out loop must declare step/cost/wall-time budgets up front, detect degenerate repetition and ping-pong, and exit with {exitStatus, submission, budgetSpent, nudges}.",
+      "path": ".agents/skills/delivery/loop-budget"
+    },
+    "plan-review-fixes": {
+      "domain": "delivery",
+      "tier": "3",
+      "artifactType": "review",
+      "capabilities": [],
+      "description": "Convert review-pr findings on a GitHub PR into a concrete remediation plan and post that plan as PR comments. Use after",
+      "path": ".agents/skills/delivery/plan-review-fixes"
+    },
+    "prototype": {
+      "domain": "delivery",
+      "tier": "1",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Build a throwaway prototype to answer a design question. Use when the user wants to sanity-check whether a state model or interaction shape actually works.",
+      "path": ".agents/skills/delivery/prototype"
+    },
+    "research": {
+      "domain": "delivery",
+      "tier": "2",
+      "artifactType": "research",
+      "capabilities": [],
+      "description": "Investigate a question against high-trust primary sources and capture the findings as a Markdown file in the repo. Use w",
+      "path": ".agents/skills/delivery/research"
+    },
+    "resolving-merge-conflicts": {
+      "domain": "delivery",
+      "tier": "3",
+      "artifactType": "delivery",
+      "capabilities": [],
+      "description": "Use when you need to resolve a conflicted or blocked branch state: in-progress git merge/rebase conflicts, PR branch corrections, or other branch-state blockers that need deliberate resolution.",
+      "path": ".agents/skills/delivery/resolving-merge-conflicts"
+    },
+    "review-fix-loop": {
+      "domain": "delivery",
+      "tier": "3",
+      "artifactType": "review",
+      "capabilities": [],
+      "description": "Orchestrate the PR repair loop: run review-pr, use plan-review-fixes when findings exist, use implement-review-fixes to apply them, and repeat until the PR is clean or blocked. This skill coordinates the loop only.",
+      "path": ".agents/skills/delivery/review-fix-loop"
+    },
+    "review-pr": {
+      "domain": "delivery",
+      "tier": "3",
+      "artifactType": "review",
+      "capabilities": [
+        "apply review pr workflow",
+        "produce review pr artifact",
+        "validate review pr completion criteria"
+      ],
+      "description": "Review a pull request against the fixed point the user supplies, separating Standards and Spec findings into distinct ax",
+      "path": ".agents/skills/delivery/review-pr"
+    },
+    "tdd": {
+      "domain": "delivery",
+      "tier": "1",
+      "artifactType": "implementation",
+      "capabilities": [
+        "apply tdd workflow",
+        "produce tdd artifact",
+        "validate tdd completion criteria"
+      ],
+      "description": "Test-driven development. Use when the user wants to build features or fix bugs test-first, mentions \"red-green-refactor",
+      "path": ".agents/skills/delivery/tdd"
+    },
+    "testing": {
+      "domain": "delivery",
+      "tier": "1",
+      "artifactType": "test-strategy",
+      "capabilities": [],
+      "description": "Shape the test strategy for a project so behavior is verified at the right seams and at the right level.",
+      "path": ".agents/skills/delivery/testing"
+    },
+    "webapp-testing": {
+      "domain": "delivery",
+      "tier": "1",
+      "artifactType": "test-strategy",
+      "capabilities": [],
+      "description": "Choose the right test seam for a web app and describe how to verify it at unit, integration, and end-to-end levels.",
+      "path": ".agents/skills/delivery/webapp-testing"
+    },
+    "backup-disaster-recovery": {
+      "domain": "devops",
+      "tier": "3",
+      "artifactType": "devops",
+      "capabilities": [],
+      "description": "Design backup and disaster recovery — RPO/RTO, backup strategies, restore testing, cross-region — with explicit recovery objectives and validation.",
+      "path": ".agents/skills/devops/backup-disaster-recovery"
+    },
+    "chaos-engineering": {
+      "domain": "devops",
+      "tier": "3",
+      "artifactType": "devops",
+      "capabilities": [],
+      "description": "Design chaos engineering — fault injection, GameDays, resilience validation — with explicit steady-state hypotheses, blast radius controls, and safety rails.",
+      "path": ".agents/skills/devops/chaos-engineering"
+    },
+    "cost-optimization": {
+      "domain": "devops",
+      "tier": "3",
+      "artifactType": "devops",
+      "capabilities": [],
+      "description": "Design FinOps strategies — rightsizing, spot instances, committed use, budgets, showback/chargeback — with cost visibility and optimisation guardrails.",
+      "path": ".agents/skills/devops/cost-optimization"
+    },
+    "devops-ci-cd-pipeline": {
+      "domain": "devops",
+      "tier": "3",
+      "artifactType": "devops",
+      "capabilities": [],
+      "description": "Design CI/CD pipelines — build, test, security scan, deploy, rollback — with reproducible steps, environment parity, and deployment gates.",
+      "path": ".agents/skills/devops/devops-ci-cd-pipeline"
+    },
+    "devops-feature-flags": {
+      "domain": "devops",
+      "tier": "3",
+      "artifactType": "feature-flag",
+      "capabilities": [],
+      "description": "Design feature flag systems — gradual rollouts, A/B experiments, kill switches, targeting rules — with lifecycle management and operational runbooks.",
+      "path": ".agents/skills/devops/devops-feature-flags"
+    },
+    "devops-k8s-orchestration": {
+      "domain": "devops",
+      "tier": "3",
+      "artifactType": "devops",
+      "capabilities": [],
+      "description": "Design and configure Kubernetes orchestration — cluster architecture, deployment strategies, service mesh, observability, auto-scaling, security policies — with reproducible infrastructure.",
+      "path": ".agents/skills/devops/devops-k8s-orchestration"
+    },
+    "devops-terraform-iac": {
+      "domain": "devops",
+      "tier": "3",
+      "artifactType": "devops",
+      "capabilities": [],
+      "description": "Design infrastructure as code — Terraform / Pulumi / CloudFormation — for reproducible, version-controlled, auditable cloud infrastructure.",
+      "path": ".agents/skills/devops/devops-terraform-iac"
+    },
+    "gitops": {
+      "domain": "devops",
+      "tier": "3",
+      "artifactType": "devops",
+      "capabilities": [],
+      "description": "Design GitOps workflows — ArgoCD, Flux, declarative sync, drift detection, progressive delivery — with explicit reconciliation and safety boundaries.",
+      "path": ".agents/skills/devops/gitops"
+    },
+    "incident-response": {
+      "domain": "devops",
+      "tier": "3",
+      "artifactType": "devops",
+      "capabilities": [],
+      "description": "Design incident response — runbooks, war rooms, postmortems, blameless culture — with explicit severity taxonomy, escalation paths, and communication rules.",
+      "path": ".agents/skills/devops/incident-response"
+    },
+    "secret-management": {
+      "domain": "devops",
+      "tier": "3",
+      "artifactType": "devops",
+      "capabilities": [],
+      "description": "Design secret management — Vault, SOPS, SealedSecrets, rotation, external secrets — with encryption, access control, and auditability.",
+      "path": ".agents/skills/devops/secret-management"
+    },
+    "docs-adrs": {
+      "domain": "docs",
+      "tier": "1",
+      "artifactType": "adr",
+      "capabilities": [
+        "apply docs adrs workflow",
+        "produce docs adrs analysis artifact",
+        "validate docs adrs completion criteria"
+      ],
+      "description": "Create and maintain Architecture Decision Records — context, decision, consequences, alternatives, status — with periodic review.",
+      "path": ".agents/skills/docs/docs-adrs"
+    },
+    "docs-knowledge-base": {
+      "domain": "docs",
+      "tier": "1",
+      "artifactType": "adr",
+      "capabilities": [],
+      "description": "Maintain a repository knowledge base — glossary, durable references, indexed guidance, and consumer-oriented navigation — with explicit update rules.",
+      "path": ".agents/skills/docs/docs-knowledge-base"
+    },
+    "docs-technical-writing": {
+      "domain": "docs",
+      "tier": "1",
+      "artifactType": "adr",
+      "capabilities": [],
+      "description": "Write technical documentation — clear explanations, examples, warnings, and procedural guidance — with audience-aware structure and maintenance rules.",
+      "path": ".agents/skills/docs/docs-technical-writing"
+    },
+    "improve-codebase-architecture": {
+      "domain": "engineering",
+      "tier": "2",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Scan a codebase for deepening opportunities and present candidates as a visual HTML report, then grill through the selected one.",
+      "path": ".agents/skills/engineering/improve-codebase-architecture"
+    },
+    "finance-corporate-val": {
+      "domain": "finance",
+      "tier": "1",
+      "artifactType": "finance",
+      "capabilities": [],
+      "description": "Corporate valuation — DCF, multiples, sum-of-parts, scenario analysis — with explicit assumptions, sensitivity, and cross-checks.",
+      "path": ".agents/skills/finance/finance-corporate-val"
+    },
+    "finance-dcf": {
+      "domain": "finance",
+      "tier": "1",
+      "artifactType": "finance",
+      "capabilities": [],
+      "description": "Discounted Cash Flow — forecast, WACC, terminal value, sensitivity — with explicit assumptions, cross-check against multiples, and a valuation range.",
+      "path": ".agents/skills/finance/finance-dcf"
+    },
+    "finance-portfolio-theory": {
+      "domain": "finance",
+      "tier": "1",
+      "artifactType": "finance",
+      "capabilities": [],
+      "description": "Modern Portfolio Theory — efficient frontier, CAPM, APT, risk attribution, and performance measurement — with explicit assumptions and regime analysis.",
+      "path": ".agents/skills/finance/finance-portfolio-theory"
+    },
+    "agent-canvas": {
+      "domain": "foundation",
+      "tier": "2",
+      "artifactType": "agent",
+      "capabilities": [],
+      "description": "Reference skill for agent workspace control — multi-agent session management, workspace persistence, and cross-device continuity, independent of any external framework.",
+      "path": ".agents/skills/foundation/agent-canvas"
+    },
+    "agent-card": {
+      "domain": "foundation",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [
+        "generate-agent-card",
+        "validate-agent-card",
+        "emit-agent-card-json",
+        "update-agent-card-index"
+      ],
+      "description": "Generates and maintains Agent Cards for A2A (Agent-to-Agent) discovery.",
+      "path": ".agents/skills/foundation/agent-card"
+    },
+    "agent-memory": {
+      "domain": "foundation",
+      "tier": "2",
+      "artifactType": "memory-state",
+      "capabilities": [
+        "maintain a NOW.md working thread for the active task",
+        "maintain a MEMORY.md of durable, cross-session facts",
+        "decide what belongs in memory versus in an artifact",
+        "recall memory into a fresh context pack with provenance"
+      ],
+      "description": "Maintain external agent memory: structured notes persisted outside the context window (NOW.md for the working thread, MEMORY.md for durable facts) so context can compact or reset while knowledge survives across sessions.",
+      "path": ".agents/skills/foundation/agent-memory"
+    },
+    "agent-observability": {
+      "domain": "foundation",
+      "tier": "2",
+      "artifactType": "agent",
+      "capabilities": [],
+      "description": "Capture redacted execution records, traces, and quality signals for skill runs with structured data for analysis. Enables full audit of decisions made during agent execution.",
+      "path": ".agents/skills/foundation/agent-observability"
+    },
+    "api-design": {
+      "domain": "foundation",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [
+        "apply api design workflow",
+        "produce api design artifact",
+        "validate api design completion criteria"
+      ],
+      "description": "Design a small, durable API seam — with a deep backend and explicit caller contract boundaries.",
+      "path": ".agents/skills/foundation/api-design"
+    },
+    "codebase-design": {
+      "domain": "foundation",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [
+        "apply codebase design workflow",
+        "produce codebase design artifact",
+        "validate codebase design completion criteria"
+      ],
+      "description": "Shared vocabulary for designing deep modules. Use when the user wants to design or improve a module's interface, find depth, or define a clean seam.",
+      "path": ".agents/skills/foundation/codebase-design"
+    },
+    "context-compaction": {
+      "domain": "foundation",
+      "tier": "2",
+      "artifactType": "compaction-report",
+      "capabilities": [
+        "diagnose context pressure in a running session",
+        "compact a conversation window with a structured summary",
+        "clear stale tool results and re-derive them on demand",
+        "hand off a session across a compaction boundary"
+      ],
+      "description": "Run the context compaction discipline for long agent sessions: summarize the working set, clear stale tool results, and re-initiate a fresh window without losing the thread or the durable artifacts.",
+      "path": ".agents/skills/foundation/context-compaction"
+    },
+    "context-engine": {
+      "domain": "foundation",
+      "tier": "2",
+      "artifactType": "foundation",
+      "capabilities": [],
+      "description": "Manage dynamic context for agent execution using retrieval-augmented generation patterns, updating the working context from sources beyond static CONTEXT.md (issues, PRs, docs, execution traces).",
+      "path": ".agents/skills/foundation/context-engine"
+    },
+    "domain-modeling": {
+      "domain": "foundation",
+      "tier": "1",
+      "artifactType": "model",
+      "capabilities": [],
+      "description": "Build and sharpen a project's domain model. Record the execution traceId and link the artifact to the originating issue for review replay. Use when the user wants to pin down domain terminology or a ubiquitous language boundary.",
+      "path": ".agents/skills/foundation/domain-modeling"
+    },
+    "mcp-server": {
+      "domain": "foundation",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [
+        "expose-skills-as-mcp-tools",
+        "generate-skill-resources",
+        "generate-workflow-prompts",
+        "configure-transport"
+      ],
+      "description": "Define an MCP server that exposes quirk Skills as tools, resources, and prompts to external LLM agents via the Model Context Protocol.",
+      "path": ".agents/skills/foundation/mcp-server"
+    },
+    "observability": {
+      "domain": "foundation",
+      "tier": "1",
+      "artifactType": "foundation",
+      "capabilities": [],
+      "description": "Define the logs, metrics, traces, and alerts needed to understand a system in production — with SLIs, SLOs, dashboards, alert rules, and incident runbooks.",
+      "path": ".agents/skills/foundation/observability"
+    },
+    "skill-composition": {
+      "domain": "foundation",
+      "tier": "3",
+      "artifactType": "skill-chain-report",
+      "capabilities": [
+        "declare a skill chain as producer-consumer edges",
+        "verify artifact compatibility at each edge before execution",
+        "run a chain inside a declared iteration and cost budget",
+        "report per-edge handoff evidence for the chain"
+      ],
+      "description": "Compose skills into chains and workflows with explicit contracts: declare the producer-consumer edges between skills, verify artifact compatibility at each edge, and keep the chain inside a declared budget.",
+      "path": ".agents/skills/foundation/skill-composition"
+    },
+    "subagent-swarm": {
+      "domain": "foundation",
+      "tier": "3",
+      "artifactType": "agent",
+      "capabilities": [],
+      "description": "Coordinate multiple agent sub-roles (architect, implementer, reviewer, tester) in parallel or sequential swarm mode, with clear handoff contracts and evidence recording.",
+      "path": ".agents/skills/foundation/subagent-swarm"
+    },
+    "verify-delegation": {
+      "domain": "foundation",
+      "tier": "2",
+      "artifactType": "agent",
+      "capabilities": [
+        "decompose delegated work into a canonical delegation brief",
+        "verify a delegated artifact against its success criteria without implementation context",
+        "return a bounded DelegationVerdict with evidence, negative tests, and suite status"
+      ],
+      "description": "Blackbox-verify a delegated worker's claim before it is accepted, using the artifact, the declared success criteria, and the tools needed to re-check them - never the worker's implementation narrative.",
+      "path": ".agents/skills/foundation/verify-delegation"
+    },
+    "astro": {
+      "domain": "frontend",
+      "tier": "1",
+      "artifactType": "frontend",
+      "capabilities": [],
+      "description": "Astro framework (islands architecture, content-focused sites, SSR/SSG, view transitions).",
+      "path": ".agents/skills/frontend/astro"
+    },
+    "design-system": {
+      "domain": "frontend",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [],
+      "description": "Define and evolve reusable UI tokens, components, and usage rules as a coherent system.",
+      "path": ".agents/skills/frontend/design-system"
+    },
+    "frontend-design": {
+      "domain": "frontend",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [],
+      "description": "Shape frontend work into a clear visual system, interaction model, and implementation seam — with explicit state and motion boundaries.",
+      "path": ".agents/skills/frontend/frontend-design"
+    },
+    "frontend-testing": {
+      "domain": "frontend",
+      "tier": "1",
+      "artifactType": "test-strategy",
+      "capabilities": [],
+      "description": "Frontend testing (Vitest, Testing Library, Playwright, visual testing, Storybook).",
+      "path": ".agents/skills/frontend/frontend-testing"
+    },
+    "mobile": {
+      "domain": "frontend",
+      "tier": "1",
+      "artifactType": "frontend",
+      "capabilities": [],
+      "description": "Shape mobile projects around device constraints, platform seams, offline behavior, and push notifications — with explicit performance and resilience boundaries for React Native, Expo, and Capacitor.",
+      "path": ".agents/skills/frontend/mobile"
+    },
+    "nextjs": {
+      "domain": "frontend",
+      "tier": "1",
+      "artifactType": "frontend",
+      "capabilities": [],
+      "description": "Shape Next.js projects around routes, server/client seams, and data flow that stay deep rather than tangled.",
+      "path": ".agents/skills/frontend/nextjs"
+    },
+    "react": {
+      "domain": "frontend",
+      "tier": "1",
+      "artifactType": "frontend",
+      "capabilities": [],
+      "description": "Design React component structure and state seams — with composability, testability, and clear data flow.",
+      "path": ".agents/skills/frontend/react"
+    },
+    "remix": {
+      "domain": "frontend",
+      "tier": "1",
+      "artifactType": "frontend",
+      "capabilities": [],
+      "description": "Remix framework (loaders, actions, nested routes, progressive enhancement).",
+      "path": ".agents/skills/frontend/remix"
+    },
+    "state-management": {
+      "domain": "frontend",
+      "tier": "1",
+      "artifactType": "frontend",
+      "capabilities": [],
+      "description": "Modern state management (Zustand, Jotai, signals, Redux Toolkit, server state).",
+      "path": ".agents/skills/frontend/state-management"
+    },
+    "styling": {
+      "domain": "frontend",
+      "tier": "1",
+      "artifactType": "frontend",
+      "capabilities": [],
+      "description": "Modern CSS (Tailwind v4, Panda CSS, CSS modules, CVA, design tokens).",
+      "path": ".agents/skills/frontend/styling"
+    },
+    "brand-identity": {
+      "domain": "graphic-design",
+      "tier": "1",
+      "artifactType": "graphic-design",
+      "capabilities": [],
+      "description": "Design brand identity systems — logo, color, typography, imagery, iconography, voice, and usage rules — with explicit consistency, scalability, and governance.",
+      "path": ".agents/skills/graphic-design/brand-identity"
+    },
+    "design-system-visual": {
+      "domain": "graphic-design",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [],
+      "description": "Design visual design systems — tokens, components, patterns, and documentation — with explicit hierarchy, accessibility, and cross-channel consistency.",
+      "path": ".agents/skills/graphic-design/design-system-visual"
+    },
+    "graphic-design-accessibility": {
+      "domain": "graphic-design",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [],
+      "description": "Design inclusive graphic artifacts — WCAG-compliant visuals, colorblind-safe palettes, readable typography, and assistive-technology-compatible layouts for print and digital.",
+      "path": ".agents/skills/graphic-design/graphic-design-accessibility"
+    },
+    "graphic-design-advertising": {
+      "domain": "graphic-design",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [],
+      "description": "Design advertising creatives — social ads, display ads, email banners, campaign visuals — with explicit brand consistency, format specifications, and conversion-focused layout rules.",
+      "path": ".agents/skills/graphic-design/graphic-design-advertising"
+    },
+    "graphic-design-data-viz": {
+      "domain": "graphic-design",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [],
+      "description": "Design data visualizations — charts, infographics, dashboards — with explicit readability, accessibility, color, typography, and production rules.",
+      "path": ".agents/skills/graphic-design/graphic-design-data-viz"
+    },
+    "graphic-design-editorial": {
+      "domain": "graphic-design",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [],
+      "description": "Design editorial layouts — magazines, books, reports, long-form content — with explicit grid systems, typography hierarchy, and production-ready pagination.",
+      "path": ".agents/skills/graphic-design/graphic-design-editorial"
+    },
+    "graphic-design-foundations": {
+      "domain": "graphic-design",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [],
+      "description": "Design graphic artifacts — posters, social graphics, editorial layouts, packaging, signage — with explicit composition, color, typography, and production constraints.",
+      "path": ".agents/skills/graphic-design/graphic-design-foundations"
+    },
+    "graphic-design-motion": {
+      "domain": "graphic-design",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [],
+      "description": "Design motion graphics and UI animations — microinteractions, transitions, Lottie, CSS animations — with explicit timing, easing, choreography, and performance rules.",
+      "path": ".agents/skills/graphic-design/graphic-design-motion"
+    },
+    "graphic-design-packaging": {
+      "domain": "graphic-design",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [],
+      "description": "Design physical packaging — dielines, structure, materials, regulatory labels — with production-ready specifications.",
+      "path": ".agents/skills/graphic-design/graphic-design-packaging"
+    },
+    "graphic-design-photo-direction": {
+      "domain": "graphic-design",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [],
+      "description": "Direct photography and image retouching — art direction, lighting, composition, color grading, and post-production workflows for brand and product imagery.",
+      "path": ".agents/skills/graphic-design/graphic-design-photo-direction"
+    },
+    "graphic-design-project-management": {
+      "domain": "graphic-design",
+      "tier": "2",
+      "artifactType": "plan",
+      "capabilities": [],
+      "description": "Manage graphic design projects — briefs, iterations, reviews, asset handoff, versioning, and delivery — with explicit scope, timelines, and quality gates.",
+      "path": ".agents/skills/graphic-design/graphic-design-project-management"
+    },
+    "graphic-design-tools": {
+      "domain": "graphic-design",
+      "tier": "3",
+      "artifactType": "plan",
+      "capabilities": [],
+      "description": "Connect graphic design tools — Figma, Adobe Creative Cloud, Canva, and local production tools — to agent workflows with explicit authentication, scopes, and safety boundaries.",
+      "path": ".agents/skills/graphic-design/graphic-design-tools"
+    },
+    "api-contracts": {
+      "domain": "integrations",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [],
+      "description": "Define the request and response contracts, versioning rules, compatibility boundaries, OpenAPI/JSON Schema, and breaking change detection for APIs — with explicit consumer obligations.",
+      "path": ".agents/skills/integrations/api-contracts"
+    },
+    "auth": {
+      "domain": "integrations",
+      "tier": "3",
+      "artifactType": "authentication",
+      "capabilities": [],
+      "description": "Design authentication and authorization as a small, explicit seam — with OAuth2/OIDC, MFA, passkeys, JWT, session management, and clear caller and operator responsibilities.",
+      "path": ".agents/skills/integrations/auth"
+    },
+    "browser-automation": {
+      "domain": "integrations",
+      "tier": "3",
+      "artifactType": "browser-task-report",
+      "capabilities": [
+        "turn a page objective into a declarative browser task",
+        "execute browser tasks with Playwright in a sandboxed context",
+        "gate irreversible or account-affecting actions behind approval",
+        "capture screenshots and DOM evidence as verifiable artifacts"
+      ],
+      "description": "Automate browser and computer-use tasks with a safety rail: declarative page objectives, Playwright-based execution, human review gates for irreversible actions, and screenshots as verifiable evidence.",
+      "path": ".agents/skills/integrations/browser-automation"
+    },
+    "issue-operations": {
+      "domain": "integrations",
+      "tier": "3",
+      "artifactType": "integrations",
+      "capabilities": [],
+      "description": "Manage issue tracker operations with scoped target resolution, duplicate checks, mutation evidence, and rollback notes for create, update, comment, label, link, assign, and close actions.",
+      "path": ".agents/skills/integrations/issue-operations"
+    },
+    "payments": {
+      "domain": "integrations",
+      "tier": "3",
+      "artifactType": "payment",
+      "capabilities": [],
+      "description": "Design payment flows as a high-trust seam with explicit failure, reconciliation, webhooks, idempotency, PCI DSS, and rollback posture — with Stripe, Adyen, or equivalent.",
+      "path": ".agents/skills/integrations/payments"
+    },
+    "pr-operations": {
+      "domain": "integrations",
+      "tier": "3",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Manage pull request operations with branch, diff, validation, reviewer, label, comment, and publication evidence while keeping merge decisions explicit.",
+      "path": ".agents/skills/integrations/pr-operations"
+    },
+    "search": {
+      "domain": "integrations",
+      "tier": "1",
+      "artifactType": "integrations",
+      "capabilities": [],
+      "description": "Design search behavior, indexing, relevance, and retrieval seams — with Elasticsearch, Algolia, Meilisearch, OpenSearch, synonyms, ranking, analytics, and autocomplete.",
+      "path": ".agents/skills/integrations/search"
+    },
+    "iot-embedded": {
+      "domain": "iot",
+      "tier": "1",
+      "artifactType": "iot",
+      "capabilities": [],
+      "description": "Design embedded/IoT systems — firmware, sensors, edge computing, device connectivity, OTA updates — with reliability, security, and constrained resource awareness.",
+      "path": ".agents/skills/iot/iot-embedded"
+    },
+    "math-computation-reproducible": {
+      "domain": "math",
+      "tier": "1",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Make mathematical computations reproducible — SymPy, Mathematica, Magma, Sage, Julia — with versioned environments (Docker/Conda/Nix), scripts, and result archival.",
+      "path": ".agents/skills/math/math-computation-reproducible"
+    },
+    "math-computational": {
+      "domain": "math",
+      "tier": "1",
+      "artifactType": "math",
+      "capabilities": [],
+      "description": "Solve numerical and symbolic math problems (root finding, integration, ODEs, symbolic manipulation) with stable algorithms and explicit error analysis.",
+      "path": ".agents/skills/math/math-computational"
+    },
+    "math-cryptography": {
+      "domain": "math",
+      "tier": "1",
+      "artifactType": "math",
+      "capabilities": [],
+      "description": "Analyse cryptographic constructions — symmetric, asymmetric, hashing, MACs, zero-knowledge — with security reductions, hardness assumptions, and attack analysis.",
+      "path": ".agents/skills/math/math-cryptography"
+    },
+    "math-formal-proof": {
+      "domain": "math",
+      "tier": "1",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Develop formal mathematical proofs in proof assistants (Lean 4, Coq, Isabelle, Agda) with literate programming, tactic-driven construction, and verification.",
+      "path": ".agents/skills/math/math-formal-proof"
+    },
+    "math-grant-structure": {
+      "domain": "math",
+      "tier": "1",
+      "artifactType": "math",
+      "capabilities": [],
+      "description": "Structure mathematics grant proposals (NSF, ERC, Simons, MSCA) — aims, broader impacts, budget, timeline, reviewer expectations — with concrete templates.",
+      "path": ".agents/skills/math/math-grant-structure"
+    },
+    "math-linear-algebra": {
+      "domain": "math",
+      "tier": "1",
+      "artifactType": "math",
+      "capabilities": [],
+      "description": "Solve and analyse linear algebra problems — matrix decompositions (LU, QR, SVD, eigendecomposition), linear systems, and applications in ML, graphics, and optimisation.",
+      "path": ".agents/skills/math/math-linear-algebra"
+    },
+    "math-literature-track": {
+      "domain": "math",
+      "tier": "1",
+      "artifactType": "math",
+      "capabilities": [],
+      "description": "Track mathematics literature across arXiv, MathSciNet, zbMATH, journal alerts, and citation graphs to keep a researcher current without drowning in papers.",
+      "path": ".agents/skills/math/math-literature-track"
+    },
+    "math-optimization": {
+      "domain": "math",
+      "tier": "1",
+      "artifactType": "math",
+      "capabilities": [],
+      "description": "Formulate and solve optimization problems (linear, convex, non-convex, combinatorial) — model, choose solver, verify optimality, report sensitivity.",
+      "path": ".agents/skills/math/math-optimization"
+    },
+    "math-paper-collaboration": {
+      "domain": "math",
+      "tier": "1",
+      "artifactType": "math",
+      "capabilities": [],
+      "description": "Manage mathematical paper collaboration — Overleaf / GitHub / arXiv integration, citation tracking, version control, reproducible computation links, and co-author coordination.",
+      "path": ".agents/skills/math/math-paper-collaboration"
+    },
+    "math-presentation-beamer": {
+      "domain": "math",
+      "tier": "1",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Design mathematics presentations — Beamer slides with TikZ diagrams, colour accessibility, speaker notes, and audience-level adjustments — for seminars, conferences, or lectures.",
+      "path": ".agents/skills/math/math-presentation-beamer"
+    },
+    "math-probability-models": {
+      "domain": "math",
+      "tier": "1",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Build probability models — distributions, stochastic processes (Markov, Brownian, Poisson), inference — with explicit assumptions and sanity checks.",
+      "path": ".agents/skills/math/math-probability-models"
+    },
+    "math-pure-proofs": {
+      "domain": "math",
+      "tier": "1",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Write and verify pure-math proofs (number theory, algebra, analysis, combinatorics) with rigorous step-by-step reasoning and explicit proof strategies.",
+      "path": ".agents/skills/math/math-pure-proofs"
+    },
+    "math-teaching-problem-set": {
+      "domain": "math",
+      "tier": "1",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Design and grade math problem sets and exams — difficulty progression, rubric, anti-cheating variants, accessibility, and LaTeX layout.",
+      "path": ".agents/skills/math/math-teaching-problem-set"
+    },
+    "networking-protocols": {
+      "domain": "networking",
+      "tier": "1",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Analyze network protocols — packet formats, handshakes, congestion control, routing, and transport behavior — with explicit timing and failure assumptions.",
+      "path": ".agents/skills/networking/networking-protocols"
+    },
+    "networking-security": {
+      "domain": "networking",
+      "tier": "1",
+      "artifactType": "security",
+      "capabilities": [],
+      "description": "Design network security — segmentation, firewalls, VPNs, TLS, authentication, and threat boundaries — with explicit trust zones.",
+      "path": ".agents/skills/networking/networking-security"
+    },
+    "networking": {
+      "domain": "networking",
+      "tier": "1",
+      "artifactType": "networking",
+      "capabilities": [],
+      "description": "Design and analyze network infrastructure — TCP/IP, routing, DNS, load balancing, firewalls, VPNs, network security — with explicit assumptions about latency, bandwidth, and failure modes.",
+      "path": ".agents/skills/networking/networking"
+    },
+    "os-kernel": {
+      "domain": "os",
+      "tier": "1",
+      "artifactType": "os",
+      "capabilities": [],
+      "description": "Design and analyze operating system internals — process management, memory management, file systems, scheduling, system calls, concurrency — with explicit resource accounting and failure boundaries.",
+      "path": ".agents/skills/os/os-kernel"
+    },
+    "os-memory": {
+      "domain": "os",
+      "tier": "1",
+      "artifactType": "os",
+      "capabilities": [],
+      "description": "Design operating system memory systems — virtual memory, paging, allocation, swapping, and protection — with explicit resource accounting and locality assumptions.",
+      "path": ".agents/skills/os/os-memory"
+    },
+    "os-processes": {
+      "domain": "os",
+      "tier": "1",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Design operating system process management — scheduling, signals, process states, concurrency, and inter-process communication — with explicit isolation boundaries.",
+      "path": ".agents/skills/os/os-processes"
+    },
+    "physics-astro": {
+      "domain": "physics",
+      "tier": "1",
+      "artifactType": "physics",
+      "capabilities": [],
+      "description": "Model astrophysical systems — stellar structure, orbital dynamics, cosmology, gravitational waves — with physical scales, order-of-magnitude estimates, and scaling laws.",
+      "path": ".agents/skills/physics/physics-astro"
+    },
+    "physics-career-postdoc": {
+      "domain": "physics",
+      "tier": "1",
+      "artifactType": "physics",
+      "capabilities": [],
+      "description": "Navigate physics career transitions — postdoc applications, faculty applications, letters of recommendation, research statements, teaching statements, grant applications (NSF CAREER, DOE, ERC, Simons), and negotiation.",
+      "path": ".agents/skills/physics/physics-career-postdoc"
+    },
+    "physics-classical": {
+      "domain": "physics",
+      "tier": "1",
+      "artifactType": "physics",
+      "capabilities": [],
+      "description": "Solve classical mechanics problems — Newton's laws, Lagrangian, Hamiltonian, rigid body, orbital — with free-body diagrams, energy accounting, and dimensional checks.",
+      "path": ".agents/skills/physics/physics-classical"
+    },
+    "physics-data-analysis-root": {
+      "domain": "physics",
+      "tier": "1",
+      "artifactType": "data",
+      "capabilities": [],
+      "description": "Analyse experimental physics data with ROOT, pandas, uproot, NumPy — calibration, systematic errors, statistical inference, result archival — with reproducible scripts.",
+      "path": ".agents/skills/physics/physics-data-analysis-root"
+    },
+    "physics-experimental-notebook": {
+      "domain": "physics",
+      "tier": "1",
+      "artifactType": "physics",
+      "capabilities": [],
+      "description": "Maintain experimental physics lab notebooks — measurements, calibration, error analysis, FAIR data principles, reproducibility — with digital and physical structure.",
+      "path": ".agents/skills/physics/physics-experimental-notebook"
+    },
+    "physics-literature-search": {
+      "domain": "physics",
+      "tier": "1",
+      "artifactType": "physics",
+      "capabilities": [],
+      "description": "Track physics literature — arXiv (hep-th, cond-mat, astro-ph, gr-qc, quant-ph, nucl-th, physics.*), INSPIRE-HEP, NASA ADS, Web of Science, citation alerts — with domain filters.",
+      "path": ".agents/skills/physics/physics-literature-search"
+    },
+    "physics-quantum": {
+      "domain": "physics",
+      "tier": "1",
+      "artifactType": "physics",
+      "capabilities": [],
+      "description": "Model quantum systems (states, operators, measurement, entanglement) and perform calculations using Dirac notation, with checks against limits and known results.",
+      "path": ".agents/skills/physics/physics-quantum"
+    },
+    "physics-reproducibility-archive": {
+      "domain": "physics",
+      "tier": "1",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Make physics research reproducible and archive it — Zenodo DOI, GitHub + container (Docker/Apptainer), data preservation, code review, and open-science compliance for journals and funders.",
+      "path": ".agents/skills/physics/physics-reproducibility-archive"
+    },
+    "physics-simulation-setup": {
+      "domain": "physics",
+      "tier": "1",
+      "artifactType": "physics",
+      "capabilities": [],
+      "description": "Set up reproducible physics simulations — Monte Carlo (GEANT4), molecular dynamics (LAMMPS), DFT (VASP, Quantum ESPRESSO), quantum dynamics (QuTiP) — with containers, parameter files, and verification.",
+      "path": ".agents/skills/physics/physics-simulation-setup"
+    },
+    "physics-talk-design": {
+      "domain": "physics",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [],
+      "description": "Design physics talks — seminars, conference presentations, posters, public outreach — with audience-level adjustments, timing, visual conventions, and accessibility.",
+      "path": ".agents/skills/physics/physics-talk-design"
+    },
+    "physics-thermo": {
+      "domain": "physics",
+      "tier": "1",
+      "artifactType": "physics",
+      "capabilities": [],
+      "description": "Model thermodynamic systems — first and second law, heat engines, entropy, phase transitions — with energy accounting and efficiency bounds.",
+      "path": ".agents/skills/physics/physics-thermo"
+    },
+    "physics-writing-revtex": {
+      "domain": "physics",
+      "tier": "1",
+      "artifactType": "physics",
+      "capabilities": [],
+      "description": "Write physics papers using RevTeX / APS / IOP / AIP formatting, with figure conventions, citation styles, and submission package preparation.",
+      "path": ".agents/skills/physics/physics-writing-revtex"
+    },
+    "prod-ab-testing": {
+      "domain": "product",
+      "tier": "3",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Design A/B tests — hypothesis, control/treatment, randomization, metrics, statistical power, duration — with valid inference and rollback rules.",
+      "path": ".agents/skills/product/prod-ab-testing"
+    },
+    "prod-okr-planning": {
+      "domain": "product",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [],
+      "description": "Design OKR cycles — Objectives, Key Results, initiatives — with measurable outcomes, quarterly cadences, and team alignment.",
+      "path": ".agents/skills/product/prod-okr-planning"
+    },
+    "prod-prd-writing": {
+      "domain": "product",
+      "tier": "1",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Write Product Requirement Documents (PRDs) — problem statement, goals, user stories, acceptance criteria, success metrics, timeline — with stakeholder alignment.",
+      "path": ".agents/skills/product/prod-prd-writing"
+    },
+    "pro-market-analysis": {
+      "domain": "professional",
+      "tier": "1",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Conduct professional market research — TAM/SAM/SOM, competitor analysis, pricing, and trend forecasting — with source citation, data quality checks, and decision framing.",
+      "path": ".agents/skills/professional/pro-market-analysis"
+    },
+    "professional-communication": {
+      "domain": "professional",
+      "tier": "1",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Improve professional communication — status updates, stakeholder messages, expectations, and escalation — with clarity and precision.",
+      "path": ".agents/skills/professional/professional-communication"
+    },
+    "professional-project-management": {
+      "domain": "professional",
+      "tier": "1",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Manage professional projects — scope, milestones, risks, dependencies, and stakeholder alignment — with explicit planning and tracking artifacts.",
+      "path": ".agents/skills/professional/professional-project-management"
+    },
+    "analyze-artifacts": {
+      "domain": "project",
+      "tier": "2",
+      "artifactType": "project",
+      "capabilities": [
+        "index requirements across spec plan and ticket artifacts",
+        "classify consistency findings by evidence",
+        "emit a read-only artifact consistency report"
+      ],
+      "description": "Analyze the spec, plan, and ticket artifacts of one work item for consistency: conflicts, gaps, ambiguities, and dead references, each marked [NEEDS CLARIFICATION] when the artifacts cannot resolve it. Use when a spec and its tickets drifted apart, before to-tickets slices work, or when review-pr needs a spec-side verdict. Never edits the artifacts it reads.",
+      "path": ".agents/skills/project/analyze-artifacts"
+    },
+    "docs-management": {
+      "domain": "project",
+      "tier": "1",
+      "artifactType": "adr",
+      "capabilities": [],
+      "description": "Keep repository documentation, ADRs, and durable context aligned with the current project shape — with explicit consumer rules.",
+      "path": ".agents/skills/project/docs-management"
+    },
+    "make-project": {
+      "domain": "project",
+      "tier": "3",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Use when the user wants a new board in GitHub Projects, or another skill needs one — create the project, wire its fields, and preserve tracker semantics.",
+      "path": ".agents/skills/project/make-project"
+    },
+    "project-development": {
+      "domain": "project",
+      "tier": "1",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Evaluate a project's shape, agent fit, and architectural starting point — before the main workflow begins.",
+      "path": ".agents/skills/project/project-development"
+    },
+    "project-viability": {
+      "domain": "project",
+      "tier": "1",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Evaluate whether a project is viable, functional, and scalable by analyzing its codebase against CONTEXT.md and ADRs. Use when the user wants a structured assessment of project health, architectural soundness, and growth boundaries before committing to further work.",
+      "path": ".agents/skills/project/project-viability"
+    },
+    "spec-driven-development": {
+      "domain": "project",
+      "tier": "3",
+      "artifactType": "spec-driven-artifacts",
+      "capabilities": [
+        "author and maintain a repository constitution",
+        "produce a spec artifact from intent (specify phase)",
+        "produce a plan artifact with architecture and seams (plan phase)",
+        "decompose the plan into tracer-bullet tasks (tasks phase)",
+        "verify implementation against the spec and plan"
+      ],
+      "description": "Run spec-driven development (SDD): a constitution for repo-local rules, then specify, plan, and tasks as durable artifacts, then implement against them - compatible with GitHub Spec Kit's /specify, /plan, /tasks workflow.",
+      "path": ".agents/skills/project/spec-driven-development"
+    },
+    "to-spec": {
+      "domain": "project",
+      "tier": "3",
+      "artifactType": "spec",
+      "capabilities": [
+        "apply to spec workflow",
+        "produce to spec artifact",
+        "validate to spec completion criteria"
+      ],
+      "description": "Turn the current conversation into a spec and publish it to the project issue tracker - no interview, just synthesis of what is already known.",
+      "path": ".agents/skills/project/to-spec"
+    },
+    "to-tickets": {
+      "domain": "project",
+      "tier": "3",
+      "artifactType": "ticket",
+      "capabilities": [
+        "apply to tickets workflow",
+        "produce to tickets artifact",
+        "validate to tickets completion criteria"
+      ],
+      "description": "Break a plan, spec, or the current conversation into a set of tracer-bullet tickets, each declaring its blocking edges, and publish the smallest claimable slices.",
+      "path": ".agents/skills/project/to-tickets"
+    },
+    "performance-testing": {
+      "domain": "qa",
+      "tier": "1",
+      "artifactType": "test-strategy",
+      "capabilities": [],
+      "description": "Design and execute performance tests — load, stress, soak, spike — to validate latency, throughput, and resource consumption under realistic conditions.",
+      "path": ".agents/skills/qa/performance-testing"
+    },
+    "qa-automation": {
+      "domain": "qa",
+      "tier": "1",
+      "artifactType": "qa",
+      "capabilities": [],
+      "description": "Design and implement automated test suites — unit, integration, e2e — with proper coverage, maintainability, and CI integration.",
+      "path": ".agents/skills/qa/qa-automation"
+    },
+    "qa-manual-testing": {
+      "domain": "qa",
+      "tier": "1",
+      "artifactType": "test-strategy",
+      "capabilities": [],
+      "description": "Perform manual test sessions — exploratory checks, edge cases, accessibility, and user-visible regressions — with explicit reproduction notes.",
+      "path": ".agents/skills/qa/qa-manual-testing"
+    },
+    "qa-security-testing": {
+      "domain": "qa",
+      "tier": "1",
+      "artifactType": "test-strategy",
+      "capabilities": [],
+      "description": "Test security posture — auth flows, authorization boundaries, injection paths, session handling, and misconfiguration checks — with adversarial scenarios.",
+      "path": ".agents/skills/qa/qa-security-testing"
+    },
+    "quant-backtest": {
+      "domain": "quant",
+      "tier": "1",
+      "artifactType": "test-strategy",
+      "capabilities": [],
+      "description": "Run a backtest with full audit hygiene — biases, costs, out-of-sample, regime splits — and produce a verdict on whether a strategy is robust.",
+      "path": ".agents/skills/quant/quant-backtest"
+    },
+    "quant-credit-risk": {
+      "domain": "quant",
+      "tier": "1",
+      "artifactType": "quant",
+      "capabilities": [],
+      "description": "Model credit risk — PD, LGD, EAD, expected loss, loss distribution, credit VaR — with default correlation and portfolio-level risk aggregation.",
+      "path": ".agents/skills/quant/quant-credit-risk"
+    },
+    "quant-derivatives-pricing": {
+      "domain": "quant",
+      "tier": "1",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Price and calibrate derivatives (options, exotics, structured products) — Black-Scholes, trees, Monte Carlo — with Greeks, model risk, and calibration validation.",
+      "path": ".agents/skills/quant/quant-derivatives-pricing"
+    },
+    "quant-factors": {
+      "domain": "quant",
+      "tier": "1",
+      "artifactType": "quant",
+      "capabilities": [],
+      "description": "Define, test, and stress-test a quantitative factor (momentum, value, carry, quality) with explicit universe, signal, weighting, and statistical checks.",
+      "path": ".agents/skills/quant/quant-factors"
+    },
+    "quant-market-micro": {
+      "domain": "quant",
+      "tier": "1",
+      "artifactType": "quant",
+      "capabilities": [],
+      "description": "Analyse market microstructure — order book dynamics, price formation, execution costs (slippage, spread, impact), and optimal execution strategies.",
+      "path": ".agents/skills/quant/quant-market-micro"
+    },
+    "quant-portfolio-opt": {
+      "domain": "quant",
+      "tier": "1",
+      "artifactType": "quant",
+      "capabilities": [],
+      "description": "Construct and optimise portfolios — mean-variance, Black-Litterman, risk-parity, factor — with explicit objectives, constraints, and robustness checks.",
+      "path": ".agents/skills/quant/quant-portfolio-opt"
+    },
+    "quant-risk-modeling": {
+      "domain": "quant",
+      "tier": "1",
+      "artifactType": "model",
+      "capabilities": [],
+      "description": "Model market/portfolio/credit risk (VaR, CVaR, drawdown, stress) with explicit distributions, assumptions, and validation against historical stress events.",
+      "path": ".agents/skills/quant/quant-risk-modeling"
+    },
+    "research-data-archiving": {
+      "domain": "research",
+      "tier": "1",
+      "artifactType": "research",
+      "capabilities": [],
+      "description": "Archive research data — metadata, storage, preservation, provenance, and reuse planning — with reproducibility and access controls.",
+      "path": ".agents/skills/research/research-data-archiving"
+    },
+    "research-literature-review": {
+      "domain": "research",
+      "tier": "1",
+      "artifactType": "review",
+      "capabilities": [],
+      "description": "Review research literature — search strategy, screening, synthesis, citation tracking, and evidence grading — with transparent inclusion criteria.",
+      "path": ".agents/skills/research/research-literature-review"
+    },
+    "scientific-hypothesis": {
+      "domain": "research",
+      "tier": "1",
+      "artifactType": "research",
+      "capabilities": [],
+      "description": "Formulate testable scientific hypotheses — null/alternative, variables, controls, falsifiability — with explicit variables and statistical plan.",
+      "path": ".agents/skills/research/scientific-hypothesis"
+    },
+    "artifact-handoff": {
+      "domain": "routing",
+      "tier": "1",
+      "artifactType": "routing",
+      "capabilities": [],
+      "description": "Transfer structured artifacts between Skills and sessions — with explicit provenance and consumer expectations.",
+      "path": ".agents/skills/routing/artifact-handoff"
+    },
+    "ask-to": {
+      "domain": "routing",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [
+        "apply ask to workflow",
+        "produce ask to artifact",
+        "validate ask to completion criteria"
+      ],
+      "description": "Ask which skill or flow fits your situation. A router over the skills in this repo that recommends the next step after governance preflight.",
+      "path": ".agents/skills/routing/ask-to"
+    },
+    "capability-router": {
+      "domain": "routing",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [],
+      "description": "Route work to the best matching Skill using declared capabilities and compatibility — with explicit selection rules.",
+      "path": ".agents/skills/routing/capability-router"
+    },
+    "context-pack": {
+      "domain": "routing",
+      "tier": "1",
+      "artifactType": "routing",
+      "capabilities": [],
+      "description": "Build a minimal fresh context pack with ordered reads and provenance — for scoped, high-signal handoff.",
+      "path": ".agents/skills/routing/context-pack"
+    },
+    "grill-me": {
+      "domain": "routing",
+      "tier": "1",
+      "artifactType": "routing",
+      "capabilities": [],
+      "description": "A relentless interview to sharpen a plan or design.",
+      "path": ".agents/skills/routing/grill-me"
+    },
+    "grill-with-docs": {
+      "domain": "routing",
+      "tier": "2",
+      "artifactType": "adr",
+      "capabilities": [],
+      "description": "A relentless interview to sharpen a plan or design, while creating docs (ADRs and glossary) as we go.",
+      "path": ".agents/skills/routing/grill-with-docs"
+    },
+    "grill": {
+      "domain": "routing",
+      "tier": "1",
+      "artifactType": "routing",
+      "capabilities": [],
+      "description": "Alias for the quirk grilling flow. Use when the user says \"grill\" and wants a relentless interview to sharpen a plan, decision, or design.",
+      "path": ".agents/skills/routing/grill"
+    },
+    "grilling": {
+      "domain": "routing",
+      "tier": "1",
+      "artifactType": "routing",
+      "capabilities": [],
+      "description": "Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or use docs to sharpen the premise before acting.",
+      "path": ".agents/skills/routing/grilling"
+    },
+    "handoff": {
+      "domain": "routing",
+      "tier": "2",
+      "artifactType": "routing",
+      "capabilities": [],
+      "description": "Compact the current conversation into a handoff document for another agent to pick up — with explicit continuity and ownership notes.",
+      "path": ".agents/skills/routing/handoff"
+    },
+    "knowledge-curator": {
+      "domain": "routing",
+      "tier": "2",
+      "artifactType": "routing",
+      "capabilities": [],
+      "description": "Keep context, ADRs, registry entries, and research coherent over time — with refresh and provenance discipline.",
+      "path": ".agents/skills/routing/knowledge-curator"
+    },
+    "publish-open-pr": {
+      "domain": "routing",
+      "tier": "3",
+      "artifactType": "pull-request",
+      "capabilities": [
+        "apply publish open pr workflow",
+        "produce publish open pr artifact",
+        "validate publish open pr completion criteria"
+      ],
+      "description": "Use when the user wants to publish a finished subissue as an open GitHub pull request from an already-prepared issue branch — with scoped, auditable publication.",
+      "path": ".agents/skills/routing/publish-open-pr"
+    },
+    "ship-subissue": {
+      "domain": "routing",
+      "tier": "4",
+      "artifactType": "routing",
+      "capabilities": [],
+      "description": "Use when a finished subissue already has a clean PR and you need to merge it, mark it as completed, and close the linked issue — with release discipline.",
+      "path": ".agents/skills/routing/ship-subissue"
+    },
+    "triage": {
+      "domain": "routing",
+      "tier": "3",
+      "artifactType": "routing",
+      "capabilities": [],
+      "description": "Move issues and external PRs through a state machine of triage roles — categorise, verify, grill if needed, and write ag",
+      "path": ".agents/skills/routing/triage"
+    },
+    "wayfinder": {
+      "domain": "routing",
+      "tier": "1",
+      "artifactType": "routing",
+      "capabilities": [],
+      "description": "Plan a huge chunk of work — more than one agent session can hold — as a map of decision tickets on your issue tracker, with staged decomposition and durable scope boundaries.",
+      "path": ".agents/skills/routing/wayfinder"
+    },
+    "work-item-router": {
+      "domain": "routing",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [
+        "apply work item router workflow",
+        "produce work item router artifact",
+        "validate work item router completion criteria"
+      ],
+      "description": "Force reading the canonical work-item governance index before routing specs, tickets, project boards, or publication flows.",
+      "path": ".agents/skills/routing/work-item-router"
+    },
+    "cloud-security": {
+      "domain": "sec",
+      "tier": "3",
+      "artifactType": "security",
+      "capabilities": [],
+      "description": "Cloud security (AWS, GCP, Azure, IAM, KMS, security groups, compliance, posture management)",
+      "path": ".agents/skills/sec/cloud-security"
+    },
+    "compliance": {
+      "domain": "sec",
+      "tier": "3",
+      "artifactType": "sec",
+      "capabilities": [],
+      "description": "Compliance (SOC2, ISO27001, GDPR, HIPAA, PCI DSS, audits, evidence, remediation)",
+      "path": ".agents/skills/sec/compliance"
+    },
+    "container-security": {
+      "domain": "sec",
+      "tier": "3",
+      "artifactType": "security",
+      "capabilities": [],
+      "description": "Container security (Docker, Kubernetes, image scanning, runtime security, pod security policies)",
+      "path": ".agents/skills/sec/container-security"
+    },
+    "incident-forensics": {
+      "domain": "sec",
+      "tier": "3",
+      "artifactType": "sec",
+      "capabilities": [],
+      "description": "Incident forensics (evidence collection, timeline reconstruction, root cause, reporting)",
+      "path": ".agents/skills/sec/incident-forensics"
+    },
+    "sec-cryptography-applied": {
+      "domain": "sec",
+      "tier": "3",
+      "artifactType": "sec",
+      "capabilities": [],
+      "description": "Apply cryptography — encryption at rest / in transit, digital signatures, key management, MACs, TLS/PKI, HSM, secure enclaves — with implementation guidance and anti-patterns.",
+      "path": ".agents/skills/sec/sec-cryptography-applied"
+    },
+    "sec-privacy-engineering": {
+      "domain": "sec",
+      "tier": "3",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Design privacy-protecting systems — GDPR / CCPA / HIPAA compliance, data minimisation, anonymisation, consent management, data retention, breach notification — with explicit privacy impact assessments.",
+      "path": ".agents/skills/sec/sec-privacy-engineering"
+    },
+    "sec-security-audit": {
+      "domain": "sec",
+      "tier": "3",
+      "artifactType": "security",
+      "capabilities": [],
+      "description": "Audit software/security posture — code review, dependency scanning, secret detection, access control, audit logging — with explicit findings and remediation priorities.",
+      "path": ".agents/skills/sec/sec-security-audit"
+    },
+    "sec-threat-modeling": {
+      "domain": "sec",
+      "tier": "1",
+      "artifactType": "model",
+      "capabilities": [],
+      "description": "Design and document threat models for software / systems — assets, threats, vulnerabilities, mitigations — using STRIDE or ATT&CK frameworks.",
+      "path": ".agents/skills/sec/sec-threat-modeling"
+    },
+    "secret-management-security": {
+      "domain": "sec",
+      "tier": "3",
+      "artifactType": "security",
+      "capabilities": [],
+      "description": "Secrets management (Vault, KMS, rotation, injection, external secrets operator)",
+      "path": ".agents/skills/sec/secret-management-security"
+    },
+    "supply-chain-security": {
+      "domain": "sec",
+      "tier": "3",
+      "artifactType": "security",
+      "capabilities": [],
+      "description": "Design supply chain security — SBOM, Sigstore, SLSA, provenance, signing — with explicit trust tiers, artifact verification, and incident response for compromised dependencies.",
+      "path": ".agents/skills/sec/supply-chain-security"
+    },
+    "zero-trust": {
+      "domain": "sec",
+      "tier": "3",
+      "artifactType": "sec",
+      "capabilities": [],
+      "description": "Design zero trust architecture — identity, per-request auth, microsegmentation, policy — with explicit trust tiers, continuous verification, and least-privilege enforcement.",
+      "path": ".agents/skills/sec/zero-trust"
+    },
+    "evaluate-skill": {
+      "domain": "skill-dev",
+      "tier": "1",
+      "artifactType": "skill-dev",
+      "capabilities": [],
+      "description": "Evaluate a Skill against fixed scenarios for routing, completion, and artifact validity.",
+      "path": ".agents/skills/skill-dev/evaluate-skill"
+    },
+    "lockfile-maintenance": {
+      "domain": "skill-dev",
+      "tier": "2",
+      "artifactType": "skill-dev",
+      "capabilities": [],
+      "description": "Maintain the skills lockfile by detecting missing, stale, extra, or mismatched skill entries and updating hashes only after the corresponding SKILL.md files are resolved.",
+      "path": ".agents/skills/skill-dev/lockfile-maintenance"
+    },
+    "rule-cataloger": {
+      "domain": "skill-dev",
+      "tier": "2",
+      "artifactType": "skill-dev",
+      "capabilities": [],
+      "description": "Extract and classify rules across Skills by type, frequency, and application area; use when auditing the repository's shared guidance.",
+      "path": ".agents/skills/skill-dev/rule-cataloger"
+    },
+    "side-effect-auditor": {
+      "domain": "skill-dev",
+      "tier": "1",
+      "artifactType": "skill-dev",
+      "capabilities": [],
+      "description": "Audit skill side-effect, risk, trust tier, dependency, and boundary metadata against the actual workflow so mutating skills declare their operational authority honestly.",
+      "path": ".agents/skills/skill-dev/side-effect-auditor"
+    },
+    "skill-audit": {
+      "domain": "skill-dev",
+      "tier": "1",
+      "artifactType": "skill-dev",
+      "capabilities": [],
+      "description": "Audit the Skills bundle, lockfile, symlink parity, and contract drift — with actionable maintenance output.",
+      "path": ".agents/skills/skill-dev/skill-audit"
+    },
+    "skill-creator": {
+      "domain": "skill-dev",
+      "tier": "3",
+      "artifactType": "skill-dev",
+      "capabilities": [],
+      "description": "Interactive interview and collaborative design tool that helps users define, research, name, generate, and validate complete Codex skills with SKILL.md, scripts, references, assets, ADRs, and traceability.",
+      "path": ".agents/skills/skill-dev/skill-creator"
+    },
+    "skill-dependency-graph": {
+      "domain": "skill-dev",
+      "tier": "1",
+      "artifactType": "skill-dev",
+      "capabilities": [],
+      "description": "Build a dependency graph that exposes central Skills, cycles, and unnecessary coupling — use when analyzing Skill modularity.",
+      "path": ".agents/skills/skill-dev/skill-dependency-graph"
+    },
+    "skill-diff-analyzer": {
+      "domain": "skill-dev",
+      "tier": "1",
+      "artifactType": "skill-dev",
+      "capabilities": [],
+      "description": "Compare Skill versions and explain contract, dependency, and behavior impact — use when assessing changes between two Skills.",
+      "path": ".agents/skills/skill-dev/skill-diff-analyzer"
+    },
+    "skill-optimizer": {
+      "domain": "skill-dev",
+      "tier": "2",
+      "artifactType": "skill-dev",
+      "capabilities": [
+        "score skill description routing evidence",
+        "evolve description candidates reflectively",
+        "emit an apply-ready description proposal"
+      ],
+      "description": "Optimize a quirk Skill's model-facing description against routing fixtures with a propose-only reflective loop. Use when a Skill routes wrong, fires too rarely or too often, or when evaluate-skill or skill-quality-gate reports a routing regression. Emits a diff-shaped proposal with (skill, version, fixture) evidence; the human applies it. Not for body edits or metadata repair.",
+      "path": ".agents/skills/skill-dev/skill-optimizer"
+    },
+    "skill-performance-metrics": {
+      "domain": "skill-dev",
+      "tier": "1",
+      "artifactType": "skill-dev",
+      "capabilities": [],
+      "description": "Summarize Skill execution duration, success rate, and available run evidence — use when measuring Skill performance from logs and records.",
+      "path": ".agents/skills/skill-dev/skill-performance-metrics"
+    },
+    "skill-promoter": {
+      "domain": "skill-dev",
+      "tier": "3",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Promote validated experimental skills from the sandbox to the canonical skills bundle.",
+      "path": ".agents/skills/skill-dev/skill-promoter"
+    },
+    "skill-quality-gate": {
+      "domain": "skill-dev",
+      "tier": "1",
+      "artifactType": "skill-dev",
+      "capabilities": [],
+      "description": "Run and interpret the skill bundle quality gate across schema, lockfile, semantic, routing, placeholder, rule, metadata, and side-effect checks before promotion or publication.",
+      "path": ".agents/skills/skill-dev/skill-quality-gate"
+    },
+    "skill-sandbox": {
+      "domain": "skill-dev",
+      "tier": "1",
+      "artifactType": "skill-dev",
+      "capabilities": [],
+      "description": "Create, test, and iterate on experimental skills in an isolated environment without affecting the canonical skills bundle.",
+      "path": ".agents/skills/skill-dev/skill-sandbox"
+    },
+    "skill-template-generator": {
+      "domain": "skill-dev",
+      "tier": "2",
+      "artifactType": "skill-dev",
+      "capabilities": [],
+      "description": "Generate an interactive, contract-complete Skill template in the sandbox — use when starting a new Skill with the lab's scaffolding.",
+      "path": ".agents/skills/skill-dev/skill-template-generator"
+    },
+    "skill-testing-framework": {
+      "domain": "skill-dev",
+      "tier": "1",
+      "artifactType": "test-strategy",
+      "capabilities": [],
+      "description": "Validate Skill structure, contracts, dependencies, anti-patterns, and isolated execution — use when checking a Skill before promotion.",
+      "path": ".agents/skills/skill-dev/skill-testing-framework"
+    },
+    "skill-tutor": {
+      "domain": "skill-dev",
+      "tier": "2",
+      "artifactType": "skill-dev",
+      "capabilities": [],
+      "description": "Interactive tutorial that guides users through creating their first quirk skill using structured worksheets and hands-on",
+      "path": ".agents/skills/skill-dev/skill-tutor"
+    },
+    "workflow-fixture-author": {
+      "domain": "skill-dev",
+      "tier": "2",
+      "artifactType": "authentication",
+      "capabilities": [],
+      "description": "Author deterministic scenario and behavioral fixtures for skills so routing, contracts, outputs, side effects, and refusal boundaries can be tested before promotion.",
+      "path": ".agents/skills/skill-dev/workflow-fixture-author"
+    },
+    "writing-great-skills": {
+      "domain": "skill-dev",
+      "tier": "1",
+      "artifactType": "skill-dev",
+      "capabilities": [],
+      "description": "Reference for writing and editing skills well — the vocabulary and principles that make a skill predictable.",
+      "path": ".agents/skills/skill-dev/writing-great-skills"
+    },
+    "interaction-design": {
+      "domain": "ux",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [],
+      "description": "Design user interactions — task flows, screen states, transitions, error states, feedback patterns — so the interface guides users predictably.",
+      "path": ".agents/skills/ux/interaction-design"
+    },
+    "ux-accessibility": {
+      "domain": "ux",
+      "tier": "1",
+      "artifactType": "ux",
+      "capabilities": [],
+      "description": "Design accessible UX — keyboard navigation, focus order, semantics, contrast, and assistive-technology support — with inclusive interaction patterns.",
+      "path": ".agents/skills/ux/ux-accessibility"
+    },
+    "ux-prototyping": {
+      "domain": "ux",
+      "tier": "1",
+      "artifactType": "pull-request",
+      "capabilities": [],
+      "description": "Prototype user experiences — wireframes, interactive mockups, and rapid validation — with explicit experiment goals and iteration criteria.",
+      "path": ".agents/skills/ux/ux-prototyping"
+    },
+    "ux-research": {
+      "domain": "ux",
+      "tier": "1",
+      "artifactType": "research",
+      "capabilities": [],
+      "description": "Conduct user research — interviews, surveys, usability testing, personas, journey mapping — to ground design decisions in real user behavior.",
+      "path": ".agents/skills/ux/ux-research"
+    },
+    "web3-consensus": {
+      "domain": "web3",
+      "tier": "1",
+      "artifactType": "web3",
+      "capabilities": [],
+      "description": "Analyse and compare consensus mechanisms — PoW, PoS, BFT, DA, based sequencing — with security properties, finality guarantees, MEV, and economic incentive alignment.",
+      "path": ".agents/skills/web3/web3-consensus"
+    },
+    "web3-defi": {
+      "domain": "web3",
+      "tier": "1",
+      "artifactType": "web3",
+      "capabilities": [],
+      "description": "Analyse DeFi protocols — AMMs, lending, stablecoins, derivatives, intents, solver networks — across protocol mechanics, economic security, MEV protection, and composability risks.",
+      "path": ".agents/skills/web3/web3-defi"
+    },
+    "web3-governance": {
+      "domain": "web3",
+      "tier": "1",
+      "artifactType": "web3",
+      "capabilities": [],
+      "description": "Design and audit on-chain and off-chain governance — token voting, delegation, quadratic voting, timelock, multisig, oSnap, Zodiac, EIP-7702 delegation — with attack vectors and resilience analysis.",
+      "path": ".agents/skills/web3/web3-governance"
+    },
+    "web3-l2-scaling": {
+      "domain": "web3",
+      "tier": "1",
+      "artifactType": "web3",
+      "capabilities": [],
+      "description": "Analyse Layer-2 scaling solutions — Rollups (optimistic, ZK), validiums, based sequencing, shared sequencing — with security assumptions, data availability, and cost trade-offs.",
+      "path": ".agents/skills/web3/web3-l2-scaling"
+    },
+    "web3-smart-contracts": {
+      "domain": "web3",
+      "tier": "3",
+      "artifactType": "web3",
+      "capabilities": [],
+      "description": "Design and review smart contracts — security, gas optimization, upgradeability, account abstraction, EIP-7702 — with an adversarial review step.",
+      "path": ".agents/skills/web3/web3-smart-contracts"
+    },
+    "web3-tokenomics": {
+      "domain": "web3",
+      "tier": "1",
+      "artifactType": "web3",
+      "capabilities": [],
+      "description": "Design token economics — supply, emission, incentives, governance, LST/LRT, restaking, points systems — with economic sustainability checks and adversarial stress tests.",
+      "path": ".agents/skills/web3/web3-tokenomics"
+    },
+    "xr-development": {
+      "domain": "xr",
+      "tier": "1",
+      "artifactType": "xr",
+      "capabilities": [],
+      "description": "Design and build extended reality (AR/VR/MR) experiences — 3D interaction, spatial computing, headset development, immersive UX — with performance, comfort, and accessibility as first-class concerns.",
+      "path": ".agents/skills/xr/xr-development"
+    },
+    "xr-interaction-design": {
+      "domain": "xr",
+      "tier": "1",
+      "artifactType": "plan",
+      "capabilities": [],
+      "description": "Design XR interactions — spatial input, comfort, locomotion, hand tracking, and feedback — with clear constraints on immersion and usability.",
+      "path": ".agents/skills/xr/xr-interaction-design"
+    },
+    "xr-performance": {
+      "domain": "xr",
+      "tier": "1",
+      "artifactType": "xr",
+      "capabilities": [],
+      "description": "Optimize XR performance — frame rate, motion-to-photon latency, asset budgets, and thermal constraints — with comfort-aware trade-offs.",
+      "path": ".agents/skills/xr/xr-performance"
+    }
+  },
+  "edges": [
+    {
+      "from": "agent-memory",
+      "to": "context-pack",
+      "type": "depends-on",
+      "weight": 1
+    },
+    {
+      "from": "agent-memory",
+      "to": "context-compaction",
+      "type": "depends-on",
+      "weight": 1
+    },
+    {
+      "from": "agent-memory",
+      "to": "handoff",
+      "type": "depends-on",
+      "weight": 1
+    },
+    {
+      "from": "agent-memory",
+      "to": "docs-knowledge-base",
+      "type": "depends-on",
+      "weight": 1
+    },
+    {
+      "from": "context-compaction",
+      "to": "context-pack",
+      "type": "depends-on",
+      "weight": 1
+    },
+    {
+      "from": "context-compaction",
+      "to": "handoff",
+      "type": "depends-on",
+      "weight": 1
+    },
+    {
+      "from": "context-compaction",
+      "to": "loop-budget",
+      "type": "depends-on",
+      "weight": 1
+    },
+    {
+      "from": "skill-composition",
+      "to": "artifact-handoff",
+      "type": "depends-on",
+      "weight": 1
+    },
+    {
+      "from": "skill-composition",
+      "to": "loop-budget",
+      "type": "depends-on",
+      "weight": 1
+    },
+    {
+      "from": "skill-composition",
+      "to": "analyze-artifacts",
+      "type": "depends-on",
+      "weight": 1
+    },
+    {
+      "from": "skill-composition",
+      "to": "work-item-router",
+      "type": "depends-on",
+      "weight": 1
+    },
+    {
+      "from": "verify-delegation",
+      "to": "subagent-swarm",
+      "type": "depends-on",
+      "weight": 1
+    },
+    {
+      "from": "browser-automation",
+      "to": "webapp-testing",
+      "type": "depends-on",
+      "weight": 1
+    },
+    {
+      "from": "browser-automation",
+      "to": "qa-security-testing",
+      "type": "depends-on",
+      "weight": 1
+    },
+    {
+      "from": "spec-driven-development",
+      "to": "to-spec",
+      "type": "depends-on",
+      "weight": 1
+    },
+    {
+      "from": "spec-driven-development",
+      "to": "to-tickets",
+      "type": "depends-on",
+      "weight": 1
+    },
+    {
+      "from": "spec-driven-development",
+      "to": "grill-with-docs",
+      "type": "depends-on",
+      "weight": 1
+    },
+    {
+      "from": "spec-driven-development",
+      "to": "implement",
+      "type": "depends-on",
+      "weight": 1
+    },
+    {
+      "from": "spec-driven-development",
+      "to": "analyze-artifacts",
+      "type": "depends-on",
+      "weight": 1
+    },
+    {
+      "from": "spec-driven-development",
+      "to": "docs-adrs",
+      "type": "depends-on",
+      "weight": 1
+    },
+    {
+      "from": "code-review",
+      "to": "review-pr",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "code-review",
+      "to": "plan-review-fixes",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "code-review",
+      "to": "ship-subissue",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "implement",
+      "to": "to-tickets",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "implement",
+      "to": "publish-open-pr",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "implement",
+      "to": "tdd",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "loop-budget",
+      "to": "implement",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "loop-budget",
+      "to": "review-fix-loop",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "review-pr",
+      "to": "plan-review-fixes",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "review-pr",
+      "to": "ship-subissue",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "review-pr",
+      "to": "resolving-merge-conflicts",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "tdd",
+      "to": "implement",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "tdd",
+      "to": "code-review",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "docs-adrs",
+      "to": "codebase-design",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "docs-adrs",
+      "to": "docs-management",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "docs-adrs",
+      "to": "grill-with-docs",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "agent-card",
+      "to": "mcp-server",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "agent-card",
+      "to": "skill-audit",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "agent-card",
+      "to": "skill-dependency-graph",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "api-design",
+      "to": "codebase-design",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "api-design",
+      "to": "implement",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "api-design",
+      "to": "api-contracts",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "codebase-design",
+      "to": "api-design",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "codebase-design",
+      "to": "implement",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "codebase-design",
+      "to": "improve-codebase-architecture",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "verify-delegation",
+      "to": "subagent-swarm",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "verify-delegation",
+      "to": "code-review",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "analyze-artifacts",
+      "to": "to-spec",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "analyze-artifacts",
+      "to": "to-tickets",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "analyze-artifacts",
+      "to": "review-pr",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "to-spec",
+      "to": "to-tickets",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "to-spec",
+      "to": "grill-with-docs",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "to-tickets",
+      "to": "implement",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "to-tickets",
+      "to": "to-spec",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "ask-to",
+      "to": "grill-with-docs",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "ask-to",
+      "to": "to-spec",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "ask-to",
+      "to": "diagnosing-bugs",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "ask-to",
+      "to": "project-development",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "ask-to",
+      "to": "project-viability",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "ask-to",
+      "to": "wayfinder",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "ask-to",
+      "to": "observability",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "publish-open-pr",
+      "to": "review-pr",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "publish-open-pr",
+      "to": "ship-subissue",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "work-item-router",
+      "to": "ask-to",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "work-item-router",
+      "to": "to-spec",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "work-item-router",
+      "to": "to-tickets",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "work-item-router",
+      "to": "make-project",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "skill-optimizer",
+      "to": "evaluate-skill",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "skill-optimizer",
+      "to": "skill-quality-gate",
+      "type": "compatible",
+      "weight": 0.4
+    },
+    {
+      "from": "code-review",
+      "to": "plan-review-fixes",
+      "type": "handoff",
+      "weight": 0.8
+    },
+    {
+      "from": "code-review",
+      "to": "ship-subissue",
+      "type": "handoff",
+      "weight": 0.8
+    },
+    {
+      "from": "implement-review-fixes",
+      "to": "resolving-merge-conflicts",
+      "type": "handoff",
+      "weight": 0.8
+    },
+    {
+      "from": "implement",
+      "to": "publish-open-pr",
+      "type": "handoff",
+      "weight": 0.8
+    },
+    {
+      "from": "implement",
+      "to": "tdd",
+      "type": "handoff",
+      "weight": 0.8
+    },
+    {
+      "from": "plan-review-fixes",
+      "to": "resolving-merge-conflicts",
+      "type": "handoff",
+      "weight": 0.8
+    },
+    {
+      "from": "review-fix-loop",
+      "to": "ship-subissue",
+      "type": "handoff",
+      "weight": 0.8
+    },
+    {
+      "from": "improve-codebase-architecture",
+      "to": "grill-me",
+      "type": "handoff",
+      "weight": 0.8
+    },
+    {
+      "from": "publish-open-pr",
+      "to": "review-fix-loop",
+      "type": "handoff",
+      "weight": 0.8
+    },
+    {
+      "from": "publish-open-pr",
+      "to": "ship-subissue",
+      "type": "handoff",
+      "weight": 0.8
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+---
+description: "Data catalog (metadata management, discovery, classification, data mesh, governance)."
+globs: []
+alwaysApply: false
+---
+# data-catalog
+
+Apply the data-catalog skill when the request matches its scope.
+
+Capabilities:
+- apply the data-catalog workflow
+
+Stop when: Catalog schema saved; discovery interface designed; governance policy defined.

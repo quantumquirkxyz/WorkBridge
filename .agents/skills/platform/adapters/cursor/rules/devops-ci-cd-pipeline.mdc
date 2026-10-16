@@ -1,0 +1,13 @@
+---
+description: "Design CI/CD pipelines — build, test, security scan, deploy, rollback — with reproducible steps, environment parity, and deployment gates."
+globs: []
+alwaysApply: false
+---
+# devops-ci-cd-pipeline
+
+Apply the devops-ci-cd-pipeline skill when the request matches its scope.
+
+Capabilities:
+- apply the devops-ci-cd-pipeline workflow
+
+Stop when: Pipeline file saved; gate rules documented; rollback plan present.

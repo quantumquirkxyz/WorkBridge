@@ -1,0 +1,13 @@
+---
+description: "Test web interfaces for accessibility compliance — automated scans, manual keyboard navigation, screen reader validation — with explicit barrier detection and remediation evidence."
+globs: []
+alwaysApply: false
+---
+# accessibility-testing
+
+Apply the accessibility-testing skill when the request matches its scope.
+
+Capabilities:
+- apply the accessibility-testing workflow
+
+Stop when: Test web interfaces for accessibility compliance complete; artifact saved; completion criteria checked.

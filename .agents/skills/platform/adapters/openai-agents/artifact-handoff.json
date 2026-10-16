@@ -1,0 +1,16 @@
+{
+  "name": "artifact-handoff",
+  "instructions": "Transfer structured artifacts between Skills and sessions — with explicit provenance and consumer expectations.\n\nCapabilities:\n- apply the artifact-handoff workflow\n\nCanonical skill: .agents/skills/routing/artifact-handoff/SKILL.md",
+  "model": "gpt-5.1",
+  "tools": [],
+  "handoff_description": "Transfer structured artifacts between Skills and sessions complete; structured result returned; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "structured-output",
+  "instructions": "Structured output for LLMs (JSON mode, function calling, constrained decoding, validation)\n\nCapabilities:\n- apply the structured-output workflow\n\nCanonical skill: .agents/skills/ai/structured-output/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Structured output green on acceptance suite with validation harness.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

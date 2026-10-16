@@ -1,0 +1,13 @@
+---
+description: "Design LLM evaluation harnesses — benchmark design, model comparison, automated evals — with reproducible scoring, confidence intervals, and regression detection."
+globs: []
+alwaysApply: false
+---
+# llm-eval
+
+Apply the llm-eval skill when the request matches its scope.
+
+Capabilities:
+- apply the llm-eval workflow
+
+Stop when: Benchmark suite defined; comparison protocol documented; harness configuration complete.

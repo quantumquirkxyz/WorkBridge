@@ -1,9 +1,10 @@
 ---
 name: "quant-credit-risk"
-category: "skill-dev/sandbox"
+category: "quant"
 maturity: "stable"
 version: "1"
 description: "Model credit risk — PD, LGD, EAD, expected loss, loss distribution, credit VaR — with default correlation and portfolio-level risk aggregation."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "quant"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/quant-credit-risk.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["quant"]
 compatibility: []

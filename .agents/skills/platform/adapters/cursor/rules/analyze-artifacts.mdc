@@ -1,0 +1,15 @@
+---
+description: "Analyze the spec, plan, and ticket artifacts of one work item for consistency: conflicts, gaps, ambiguities, and dead references, each marked [NEEDS CLARIFICATION] when the artifacts cannot resolve it. Use when a spec and its tickets drifted apart, before to-tickets slices work, or when review-pr needs a spec-side verdict. Never edits the artifacts it reads."
+globs: []
+alwaysApply: false
+---
+# analyze-artifacts
+
+Apply the analyze-artifacts skill when the request matches its scope.
+
+Capabilities:
+- index requirements across spec plan and ticket artifacts
+- classify consistency findings by evidence
+- emit a read-only artifact consistency report
+
+Stop when: Artifact consistency analysis complete; every finding classified with evidence; clarification markers carry an owner; report returned read-only; completion criteria checked.

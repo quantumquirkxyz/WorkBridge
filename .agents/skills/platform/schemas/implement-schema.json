@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ImplementArtifact",
+  "description": "Durable implementation artifact emitted by the implement skill at the validated branch, before publication.",
+  "type": "object",
+  "required": ["status", "nextConsumer", "validation", "qualityGateResults"],
+  "properties": {
+    "status": { "type": "string", "enum": ["completed", "blocked", "partial"] },
+    "changes": { "type": "array", "items": { "type": "string" } },
+    "validation": {
+      "type": "object",
+      "required": ["acceptanceCriteriaMet"],
+      "properties": {
+        "acceptanceCriteriaMet": { "type": "boolean" },
+        "commands": { "type": "array", "items": { "type": "string" } },
+        "skipped": { "type": "array", "items": { "type": "string" } },
+        "notes": { "type": "string" }
+      }
+    },
+    "commitSha": { "type": "string" },
+    "branch": { "type": "string" },
+    "nextConsumer": { "type": "string" },
+    "blockedBy": { "type": "array", "items": { "type": "string" } },
+    "riskRemaining": { "type": "string" },
+    "qualityGateResults": {
+      "type": "object",
+      "required": ["gateIde", "gatePreCommit", "gateCi"],
+      "properties": {
+        "gateIde": { "type": "string", "enum": ["pass", "fail", "skipped"] },
+        "gatePreCommit": { "type": "string", "enum": ["pass", "fail", "skipped"] },
+        "gateCi": { "type": "string", "enum": ["pass", "fail", "skipped"] }
+      }
+    }
+  }
+}

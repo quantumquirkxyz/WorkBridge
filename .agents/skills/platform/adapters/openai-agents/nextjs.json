@@ -1,0 +1,16 @@
+{
+  "name": "nextjs",
+  "instructions": "Shape Next.js projects around routes, server/client seams, and data flow that stay deep rather than tangled.\n\nCapabilities:\n- apply the nextjs workflow\n\nCanonical skill: .agents/skills/frontend/nextjs/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Shape Next complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

@@ -1,9 +1,10 @@
 ---
 name: "scientific-hypothesis"
-category: "skill-dev/sandbox"
+category: "research"
 maturity: "stable"
 version: "1"
 description: "Formulate testable scientific hypotheses — null/alternative, variables, controls, falsifiability — with explicit variables and statistical plan."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "research"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/scientific-hypothesis.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["research"]
 compatibility: []

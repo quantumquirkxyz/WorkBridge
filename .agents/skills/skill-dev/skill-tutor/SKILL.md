@@ -4,6 +4,7 @@ category: "skill-dev"
 maturity: "stable"
 version: "1"
 description: "Interactive tutorial that guides users through creating their first quirk skill using structured worksheets and hands-on"
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: ""
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "skill-dev"
 modelTier: "fast"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/skill-tutor.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["skill-dev"]
 compatibility: []
@@ -248,7 +249,7 @@ This tutorial connects to the broader quirk learning ecosystem:
 
 ### Recommended Next Steps:
 1. **Use skill-creator for your next skill**: Try the guided interview, or fall back to worksheets when you want a slower written pass
-2. **Explore the learning path**: Review `docs/agents/learning-path/01-fundamentals.md` and `02-writing-effective-skills.md`
+2. **Explore the skill map and style guide**: Review `docs/reference/agents/skills-map.md` and `docs/how-to/skill-style.md`
 3. **Try creating a skill that solves a real problem**: Apply what you learned to an actual need in your workflow
 4. **Learn about skill composition**: Study how skills work together in workflows (see wayfinder, to-spec, to-tickets, etc.)
 

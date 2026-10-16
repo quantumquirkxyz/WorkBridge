@@ -1,0 +1,13 @@
+---
+description: "Orchestrate the PR repair loop: run review-pr, use plan-review-fixes when findings exist, use implement-review-fixes to apply them, and repeat until the PR is clean or blocked. This skill coordinates the loop only."
+globs: []
+alwaysApply: false
+---
+# review-fix-loop
+
+Apply the review-fix-loop skill when the request matches its scope.
+
+Capabilities:
+- apply the review-fix-loop workflow
+
+Stop when: Orchestrate the PR repair loop: run review-pr, use plan-review-fixes when findings exist, use implement-review-fixes to apply them, and repeat until the PR is clean or blocked complete; artifact saved; completion criteria checked.

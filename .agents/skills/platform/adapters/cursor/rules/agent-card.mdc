@@ -1,0 +1,16 @@
+---
+description: "Generates and maintains Agent Cards for A2A (Agent-to-Agent) discovery."
+globs: []
+alwaysApply: false
+---
+# agent-card
+
+Apply the agent-card skill when the request matches its scope.
+
+Capabilities:
+- generate-agent-card
+- validate-agent-card
+- emit-agent-card-json
+- update-agent-card-index
+
+Stop when: Agent Card JSON emitted to platform/agent-cards, index updated, and completion criteria checked.

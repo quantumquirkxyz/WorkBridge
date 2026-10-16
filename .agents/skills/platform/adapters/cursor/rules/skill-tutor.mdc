@@ -1,0 +1,13 @@
+---
+description: Interactive tutorial that guides users through creating their first quirk skill using structured worksheets and hands-on
+globs: []
+alwaysApply: false
+---
+# skill-tutor
+
+Apply the skill-tutor skill when the request matches its scope.
+
+Capabilities:
+- apply the skill-tutor workflow
+
+Stop when: The learner has created a valid sandbox skill, reflected on the process, and identified next steps.

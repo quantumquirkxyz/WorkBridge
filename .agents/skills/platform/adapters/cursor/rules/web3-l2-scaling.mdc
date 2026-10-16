@@ -1,0 +1,13 @@
+---
+description: "Analyse Layer-2 scaling solutions — Rollups (optimistic, ZK), validiums, based sequencing, shared sequencing — with security assumptions, data availability, and cost trade-offs."
+globs: []
+alwaysApply: false
+---
+# web3-l2-scaling
+
+Apply the web3-l2-scaling skill when the request matches its scope.
+
+Capabilities:
+- apply the web3-l2-scaling workflow
+
+Stop when: L2 type classified; security assumptions explicit; recommendation tied to use case.

@@ -1,0 +1,13 @@
+---
+description: "Optimize database queries — indexing, query plans, cardinality, joins, and execution trade-offs — with explainable reasoning and measurement."
+globs: []
+alwaysApply: false
+---
+# db-query-optimization
+
+Apply the db-query-optimization skill when the request matches its scope.
+
+Capabilities:
+- apply the db-query-optimization workflow
+
+Stop when: The bottleneck, proposed change, and validation plan are explicit.

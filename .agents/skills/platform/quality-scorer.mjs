@@ -282,11 +282,21 @@ async function scoreSkill(skillPath) {
 
 async function main() {
   const args = process.argv.slice(2);
-  const skillPath = args.find(a => !a.startsWith('--')) ?? DEFAULT_SKILL_PATH;
+  const minScoreEq = args.find(a => a.startsWith('--minimum-score='))?.split('=')[1];
+  let minScoreValue = minScoreEq;
+  const flagIdx = args.indexOf('--minimum-score');
+  if (minScoreValue === undefined && flagIdx !== -1 && args[flagIdx + 1] && !args[flagIdx + 1].startsWith('--')) {
+    minScoreValue = args[flagIdx + 1];
+  }
+  const minScore = minScoreValue === undefined ? undefined : parseInt(minScoreValue);
+  const skillPath = args.find(a => !a.startsWith('--') && a !== minScoreValue) ?? DEFAULT_SKILL_PATH;
   const json = args.includes('--json');
-  const minScore = parseInt(args.find(a => a.startsWith('--minimum-score='))?.split('=')[1]);
 
   const result = await scoreSkill(skillPath);
+  if (result.error) {
+    console.error('Error:', result.error);
+    process.exit(1);
+  }
 
   if (json) {
     console.log(JSON.stringify(result, null, 2));

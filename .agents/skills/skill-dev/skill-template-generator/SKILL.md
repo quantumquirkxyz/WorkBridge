@@ -4,6 +4,7 @@ category: "skill-dev"
 maturity: "stable"
 version: "1"
 description: "Generate an interactive, contract-complete Skill template in the sandbox — use when starting a new Skill with the lab's scaffolding."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects:
@@ -18,7 +19,7 @@ promptVersion: "2.0"
 artifactType: "skill-dev"
 modelTier: "fast"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/skill-template-generator.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["skill-dev"]
 compatibility: []

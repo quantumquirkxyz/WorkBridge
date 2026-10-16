@@ -1,0 +1,66 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-llm-eval",
+      "skill": "llm-eval",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "## Completion",
+          "## Process",
+          "## Rules",
+          "LlmEvalArtifact",
+          "separate test set from development set; never tune prompts on test data.",
+          "report variance across runs (temperature, sampling, seeds) alongside point estimates.",
+          "track cost and latency as first-class metrics, not afterthoughts.",
+          "version prompts, datasets, and model snapshots together for reproducibility."
+        ],
+        "doesNotContain": [
+          "## Operating Contract",
+          "ask-matt",
+          "ship-review-fix-loop",
+          "doc-draft-pr",
+          "frontend-development",
+          "ARIES",
+          "TODO",
+          "point 1",
+          "Criterion 1",
+          "Acceptance criterion 1",
+          "BE-2",
+          "OpenAPI spec",
+          "localhost:3000",
+          "extremely extensive"
+        ]
+      }
+    },
+    {
+      "id": "v2-frontmatter-llm-eval",
+      "skill": "llm-eval",
+      "type": "behavioral",
+      "expected": {
+        "frontmatterContains": [
+          "name: \"llm-eval\"",
+          "risk: \"medium\"",
+          "trustTier: \"3\"",
+          "modelTier: \"reasoning\"",
+          "promptVersion: \"2.0\"",
+          "artifactType: \"ai\"",
+          "diataxis: \"how-to\""
+        ]
+      }
+    },
+    {
+      "id": "v2-footer-llm-eval",
+      "skill": "llm-eval",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "@include .agents/skills/platform/contract-base.xml"
+        ]
+      }
+    }
+  ]
+}

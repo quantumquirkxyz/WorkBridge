@@ -3,6 +3,7 @@ name: "agent-canvas"
 category: "foundation"
 maturity: "stable"
 description: "Reference skill for agent workspace control — multi-agent session management, workspace persistence, and cross-device continuity, independent of any external framework."
+license: "MIT"
 version: "1"
 capabilities: ""
 inputs: ""
@@ -17,7 +18,7 @@ promptVersion: "2.0"
 artifactType: "agent"
 modelTier: "fast"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/agent-canvas.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/agent-canvas.json
 diataxis: "how-to"
 tags: ["foundation"]
 compatibility: []

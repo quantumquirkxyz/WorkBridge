@@ -1,0 +1,13 @@
+---
+description: "Design brand identity systems — logo, color, typography, imagery, iconography, voice, and usage rules — with explicit consistency, scalability, and governance."
+globs: []
+alwaysApply: false
+---
+# brand-identity
+
+Apply the brand-identity skill when the request matches its scope.
+
+Capabilities:
+- apply the brand-identity workflow
+
+Stop when: Brand identity design complete; strategy, visual system, and usage rules explicit; governance named.

@@ -1,0 +1,13 @@
+---
+description: "Perform manual test sessions — exploratory checks, edge cases, accessibility, and user-visible regressions — with explicit reproduction notes."
+globs: []
+alwaysApply: false
+---
+# qa-manual-testing
+
+Apply the qa-manual-testing skill when the request matches its scope.
+
+Capabilities:
+- apply the qa-manual-testing workflow
+
+Stop when: Tested paths, environment, findings, and residual risks are documented.

@@ -4,6 +4,7 @@ category: delivery
 maturity: stable
 version: 2
 description: Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes - Standards and Spec - and publish findings only.
+license: MIT
 capabilities:
   - apply code review workflow
   - produce code review artifact
@@ -40,8 +41,22 @@ fixturesPath: .agents/skills/platform/fixtures/regression/code-review.json
 diataxis: how-to
 tags: [delivery, review, standards, spec, quality]
 compatibility: [review-pr, plan-review-fixes, ship-subissue]
-approvalRequired: false
-approvalFor: []
+approvalRequired: true
+approvalFor: ["post-pr-comment"]
+clauses:
+  - id: CODE-REVIEW-1
+    text: "Always use the three-dot diff (git diff <fixed-point>...HEAD) so the comparison is against the merge-base."
+    check: "evals/behavioral/code-review.json#CODE-REVIEW-1"
+  - id: CODE-REVIEW-2
+    text: "Publish findings only: never edit source files, fix the PR, rewrite history, or merge it."
+    check: "evals/behavioral/code-review.json#CODE-REVIEW-2"
+  - id: CODE-REVIEW-3
+    text: "Run Standards and Spec as parallel sub-agents and never merge or rerank findings across axes."
+    check: "evals/behavioral/code-review.json#CODE-REVIEW-3"
+  - id: CODE-REVIEW-4
+    text: "Documented repo standards override the smell baseline; every baseline smell stays a labelled judgement call."
+    check: "evals/behavioral/code-review.json#CODE-REVIEW-4"
+reloadPolicy: on-trigger
 ---
 
 ## Contract
@@ -78,7 +93,9 @@ Two-axis review of the diff between `HEAD` and a fixed point the user supplies:
 
 Both axes run as **parallel sub-agents** so they don't pollute each other's context, then this skill aggregates their findings.
 
-The issue tracker should have been provided to you — run `/setup-quirk-skills` if `docs/agents/issue-tracker.md` is missing.
+Each spawned prompt is a full delegation brief — objective, output format, tool guidance, boundaries, stop condition, and an effort budget — so a sub-agent never has to invent its scope. Sub-agents are read-only: they run no repairs and write no files. Their findings return as bounded summaries that reference the review artifact and the file-plus-line evidence they stand on — never as pasted transcripts, and never as the sub-agent's reasoning, which is context the review does not need and cannot audit.
+
+The issue tracker should have been provided to you — run `/setup-quirk-skills` if `docs/reference/agents/issue-tracker.md` is missing.
 Traces record sub-agent parallelism and finding counts via `record-execution.mjs`; include the resulting `traceId` in the `ReviewArtifact` metadata and Markdown review footer.
 
 
@@ -104,7 +121,7 @@ Before going further, confirm the fixed point resolves (`git rev-parse <fixed-po
 
 Look for the originating spec, in this order:
 
-1. Issue references in the commit messages (`#123`, `Closes #45`, GitLab `!67`, etc.) — fetch via the workflow in `docs/agents/issue-tracker.md`.
+1. Issue references in the commit messages (`#123`, `Closes #45`, GitLab `!67`, etc.) — fetch via the workflow in `docs/reference/agents/issue-tracker.md`.
 2. A path the user passed as an argument.
 3. A PRD/spec file under `docs/`, `specs/`, or `.scratch/` matching the branch name or feature.
 4. If nothing is found, ask the user where the spec is. If they say there isn't one, the **Spec** sub-agent will skip and report "no spec available".
@@ -142,18 +159,25 @@ Send a single message with two `Agent` tool calls. Use the `general-purpose` sub
 - The full diff command and commit list.
 - The list of standards-source files you found in step 3, **plus the smell baseline from step 3** pasted in full — the sub-agent has no other access to it.
 - The brief: "Report — per file/hunk where relevant — (a) every place the diff violates a documented standard: cite the standard (file + the rule); and (b) any baseline smell you spot: name it and quote the hunk. Distinguish hard violations from judgement calls — documented-standard breaches can be hard, but baseline smells are always judgement calls, and a documented repo standard overrides the baseline. Skip anything tooling enforces. Under 400 words."
+- The boundaries: "Judge coding standards only. Do NOT judge spec fidelity, requirements coverage, scope creep, or whether the change was asked for — that is the Spec axis's job, and this review's separation exists so neither axis masks the other. Do NOT propose code changes or repair the branch."
+- The stop condition: "Stop when every hunk of the supplied diff has been judged, or when a source you need is missing — then say so and stop, instead of guessing."
+- The effort budget: "Read-only tools only; at most 20 tool calls. Do not edit source, do not run the suite."
 
 **Spec sub-agent prompt** — include:
 
 - The diff command and commit list.
 - The path or fetched contents of the spec.
 - The brief: "Report: (a) requirements the spec asked for that are missing or partial; (b) behaviour in the diff that wasn't asked for (scope creep); (c) requirements that look implemented but where the implementation looks wrong. Quote the spec line for each finding. Under 400 words."
+- The boundaries: "Judge spec fidelity only. Do NOT judge coding standards, smells, naming, or repo conventions — that is the Standards axis's job. Do NOT propose code changes or repair the branch."
+- The stop condition: "Stop when every requirement in the supplied spec has a verdict, or when the spec is unusable — then report 'no spec available' for the missing part and stop."
+- The effort budget: "Read-only tools only; at most 20 tool calls. Do not edit source, do not run the suite."
+- The output format: `findings-only` — a list of findings, each with a citation and severity, plus a one-line axis summary. Nothing else.
 
 If the spec is missing, skip the Spec sub-agent and note this in the final report.
 
 ### 5. Aggregate
 
-Present the two reports under `## Standards` and `## Spec` headings, verbatim or lightly cleaned. Do **not** merge or rerank findings — the two axes are deliberately separate (see _Why two axes_).
+Present the two reports under `## Standards` and `## Spec` headings, verbatim or lightly cleaned. Do **not** merge or rerank findings — the two axes are deliberately separate (see _Why two axes_). Where a finding needs more detail than the bounded summary carries, reference the evidence (file, hunk, spec line) in place instead of expanding the report.
 
 End with a one-line summary: total findings per axis, and the worst issue _within each axis_ (if any). Don't pick a single winner across axes — that's the reranking the separation exists to prevent.
 

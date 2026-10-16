@@ -1,0 +1,16 @@
+{
+  "name": "backend-queues",
+  "instructions": "Design backend queues and background job systems — durability, retries, ordering, idempotency, and backpressure — with explicit delivery guarantees.\n\nCapabilities:\n- apply the backend-queues workflow\n\nCanonical skill: .agents/skills/backend/backend-queues/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Queue behavior, recovery paths, and operator signals are explicit.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

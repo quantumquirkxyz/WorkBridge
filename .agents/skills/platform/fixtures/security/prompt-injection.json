@@ -1,0 +1,113 @@
+{
+  "fixtureSet": "prompt-injection-resistance",
+  "item": "security",
+  "purpose": "Prove that the shipped skill bundle is not vulnerable to prompt-override, credential, or operator-payload attacks. Each entry is consumed by evaluate-fixtures.mjs, which resolves the named skill from the bundle and evaluates the machine-checkable keys of `expected`. Keys that the evaluator does not implement are carried as inert contract fields for future runners; `notes` records what is verified today.",
+  "evaluatorContract": {
+    "implementedExpectedKeys": ["containsCredentials", "containsInjection", "declaresSideEffects"],
+    "inertContractKeys": ["documentsUntrustedInputHandling", "exposedOverMcp", "instructsOperatorToPasteRemoteCommand", "pinsVulnerableDependency"],
+    "bundleWideSweep": "evaluate-fixtures.mjs resolves one skill per entry, so the bundle-wide sweeps below are sampled over the highest-risk surfaces (operator-facing routing, external MCP surface, mutating delivery skill, external issue intake). The exhaustive sweep runs in check-tool-risk-policy.mjs, which evaluates every skill in the bundle."
+  },
+  "fixtures": [
+    {
+      "id": "prompt-injection-no-override-routing",
+      "skill": "grill-me",
+      "type": "security",
+      "probe": "Does an operator-facing routing skill contain a prompt-override phrase that would replace the agent instruction stack?",
+      "expected": {
+        "containsInjection": false
+      },
+      "notes": "Machine-checked by the evaluator over the whole SKILL.md. grill-me interviews the operator, which makes it a prime target for injected operator text."
+    },
+    {
+      "id": "prompt-injection-no-override-mcp-surface",
+      "skill": "mcp-server",
+      "type": "security",
+      "probe": "Does the skill that defines the external MCP surface contain a prompt-override phrase?",
+      "expected": {
+        "containsInjection": false
+      },
+      "notes": "Machine-checked. This skill generates the tool descriptions an external agent reads, so an override phrase here would reach every consumer."
+    },
+    {
+      "id": "prompt-injection-no-override-delivery",
+      "skill": "implement",
+      "type": "security",
+      "probe": "Does the mutating delivery skill contain a prompt-override phrase?",
+      "expected": {
+        "containsInjection": false
+      },
+      "notes": "Machine-checked. A skill that writes code and commits must never carry an instruction-stack override."
+    },
+    {
+      "id": "prompt-injection-no-override-external-intake",
+      "skill": "triage",
+      "type": "security",
+      "probe": "Does a skill that ingests external issue and pull-request bodies contain a prompt-override phrase?",
+      "expected": {
+        "containsInjection": false
+      },
+      "notes": "Machine-checked. triage is the intake surface for third-party text; see prompt-injection-corpus.json for the attack strings it must survive."
+    },
+    {
+      "id": "prompt-injection-no-hardcoded-credentials-mcp",
+      "skill": "mcp-server",
+      "type": "security",
+      "probe": "Does the MCP surface skill hardcode an API key, token, or password?",
+      "expected": {
+        "containsCredentials": false
+      },
+      "notes": "Machine-checked. mcp-server handles credentials at runtime and must not carry any literal value."
+    },
+    {
+      "id": "prompt-injection-no-hardcoded-credentials-creator",
+      "skill": "skill-creator",
+      "type": "security",
+      "probe": "Does the skill that scaffolds new skills hardcode an API key, token, or password?",
+      "expected": {
+        "containsCredentials": false
+      },
+      "notes": "Machine-checked. skill-creator writes the template every new skill starts from, so a literal credential would propagate."
+    },
+    {
+      "id": "prompt-injection-network-skill-declares-side-effects",
+      "skill": "research",
+      "type": "security",
+      "probe": "Does a skill that reaches remote sources declare its side effects, and does its body document how fetched content is treated?",
+      "expected": {
+        "declaresSideEffects": true,
+        "documentsUntrustedInputHandling": false
+      },
+      "notes": "declaresSideEffects is machine-checked. documentsUntrustedInputHandling is inert today and records the known gap: check-tool-risk-policy.mjs reports this skill as allowing WebFetch and WebSearch without documenting untrusted handling. This entry is the forward-looking contract; a runner that implements the key fails until the body documents the handling."
+    },
+    {
+      "id": "prompt-injection-trust-tier-four-not-mcp-exposed",
+      "skill": "ship-subissue",
+      "type": "security",
+      "probe": "Is the only trustTier 4 skill in the bundle kept out of the MCP tool surface?",
+      "expected": {
+        "exposedOverMcp": false
+      },
+      "notes": "Inert key today. check-tool-risk-policy.mjs reports that ship-subissue carries no note (body or compatibility) recording non-exposure, so this entry also serves as the remediation contract for that finding."
+    },
+    {
+      "id": "prompt-injection-no-remote-command-paste",
+      "skill": "implement",
+      "type": "security",
+      "probe": "Does any skill instruct the operator to paste or run a shell command obtained from remote content?",
+      "expected": {
+        "instructsOperatorToPasteRemoteCommand": false
+      },
+      "notes": "Inert key today. The equivalent bundle-wide sweep is the operator-payload-execution rule of security-scan-skills.mjs, which reports zero findings repository-wide."
+    },
+    {
+      "id": "prompt-injection-no-vulnerable-dependency-pins",
+      "skill": "skill-creator",
+      "type": "security",
+      "probe": "Does a skill pin a dependency version that carries a known vulnerability?",
+      "expected": {
+        "pinsVulnerableDependency": false
+      },
+      "notes": "Inert key today. The equivalent bundle-wide sweep is the vulnerable-pinned-dependency rule of security-scan-skills.mjs, which reports zero findings repository-wide."
+    }
+  ]
+}

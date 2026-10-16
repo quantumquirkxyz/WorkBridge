@@ -1,0 +1,15 @@
+name: skill-sandbox
+description: "Create, test, and iterate on experimental skills in an isolated environment without affecting the canonical skills bundle."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/skill-dev-skill-sandbox
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

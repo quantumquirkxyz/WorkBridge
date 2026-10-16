@@ -1,0 +1,16 @@
+{
+  "name": "accessibility-testing",
+  "instructions": "Test web interfaces for accessibility compliance — automated scans, manual keyboard navigation, screen reader validation — with explicit barrier detection and remediation evidence.\n\nCapabilities:\n- apply the accessibility-testing workflow\n\nCanonical skill: .agents/skills/accessibility/accessibility-testing/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Test web interfaces for accessibility compliance complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

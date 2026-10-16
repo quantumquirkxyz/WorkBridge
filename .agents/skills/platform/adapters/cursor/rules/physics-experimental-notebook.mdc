@@ -1,0 +1,13 @@
+---
+description: "Maintain experimental physics lab notebooks — measurements, calibration, error analysis, FAIR data principles, reproducibility — with digital and physical structure."
+globs: []
+alwaysApply: false
+---
+# physics-experimental-notebook
+
+Apply the physics-experimental-notebook skill when the request matches its scope.
+
+Capabilities:
+- apply the physics-experimental-notebook workflow
+
+Stop when: Notebook entry saved with all sections; calibration and error analysis complete; FAIR checklist filled.

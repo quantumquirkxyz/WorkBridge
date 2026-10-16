@@ -1,0 +1,16 @@
+{
+  "name": "quant-factors",
+  "instructions": "Define, test, and stress-test a quantitative factor (momentum, value, carry, quality) with explicit universe, signal, weighting, and statistical checks.\n\nCapabilities:\n- apply the quant-factors workflow\n\nCanonical skill: .agents/skills/quant/quant-factors/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Artifact present with all six sections; verdict is honest and grounded.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

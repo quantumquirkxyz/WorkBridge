@@ -1,0 +1,16 @@
+{
+  "name": "math-paper-collaboration",
+  "instructions": "Manage mathematical paper collaboration — Overleaf / GitHub / arXiv integration, citation tracking, version control, reproducible computation links, and co-author coordination.\n\nCapabilities:\n- apply the math-paper-collaboration workflow\n\nCanonical skill: .agents/skills/math/math-paper-collaboration/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Source repository has version tags; collaboration rules saved; arXiv package complete.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

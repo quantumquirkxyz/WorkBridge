@@ -4,6 +4,7 @@ category: platform
 maturity: stable
 version: 1
 description: Shift-left quality gate triggered on file-save events. Runs lint, format, typecheck, spellcheck, and lightweight secret scan. Blocks on failure and reports results to agent context.
+license: MIT
 capabilities:
   - apply shift-left quality gate
   - run ide-level checks

@@ -1,0 +1,16 @@
+{
+  "name": "devops-ci-cd-pipeline",
+  "instructions": "Design CI/CD pipelines — build, test, security scan, deploy, rollback — with reproducible steps, environment parity, and deployment gates.\n\nCapabilities:\n- apply the devops-ci-cd-pipeline workflow\n\nCanonical skill: .agents/skills/devops/devops-ci-cd-pipeline/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Pipeline file saved; gate rules documented; rollback plan present.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 5,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

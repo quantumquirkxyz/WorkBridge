@@ -1,9 +1,10 @@
 ---
 name: "sec-security-audit"
-category: "skill-dev/sandbox"
+category: "sec"
 maturity: "stable"
 version: "1"
 description: "Audit software/security posture — code review, dependency scanning, secret detection, access control, audit logging — with explicit findings and remediation priorities."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,11 +17,11 @@ promptVersion: "2.0"
 artifactType: "security"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/sec-security-audit.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/sec-security-audit.json
 diataxis: "how-to"
 tags: ["sec"]
 compatibility: []
-approvalRequired: "false"
+approvalRequired: "true"
 approvalFor: []
 ---
 

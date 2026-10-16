@@ -4,6 +4,7 @@ category: "backend"
 maturity: "stable"
 version: "1"
 description: "Advanced caching strategies (Redis, Memcached, CDN, cache invalidation, stampede prevention)."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,11 +17,11 @@ promptVersion: "2.0"
 artifactType: "backend"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/caching-advanced.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/caching-advanced.json
 diataxis: "how-to"
 tags: ["backend"]
 compatibility: []
-approvalRequired: "false"
+approvalRequired: "true"
 approvalFor: []
 ---
 

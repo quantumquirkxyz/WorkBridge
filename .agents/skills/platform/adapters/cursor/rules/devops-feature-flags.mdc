@@ -1,0 +1,13 @@
+---
+description: "Design feature flag systems — gradual rollouts, A/B experiments, kill switches, targeting rules — with lifecycle management and operational runbooks."
+globs: []
+alwaysApply: false
+---
+# devops-feature-flags
+
+Apply the devops-feature-flags skill when the request matches its scope.
+
+Capabilities:
+- apply the devops-feature-flags workflow
+
+Stop when: Lifecycle documented; targeting rules defined; flag inventory saved.

@@ -1,0 +1,13 @@
+---
+description: "Compact the current conversation into a handoff document for another agent to pick up — with explicit continuity and ownership notes."
+globs: []
+alwaysApply: false
+---
+# handoff
+
+Apply the handoff skill when the request matches its scope.
+
+Capabilities:
+- apply the handoff workflow
+
+Stop when: Compact the current conversation into a handoff document for another agent to pick up complete; artifact saved; completion criteria checked.

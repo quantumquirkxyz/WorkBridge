@@ -1,0 +1,15 @@
+name: frontend-testing
+description: "Frontend testing (Vitest, Testing Library, Playwright, visual testing, Storybook)."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/frontend-frontend-testing
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

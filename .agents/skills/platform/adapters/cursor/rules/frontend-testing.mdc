@@ -1,0 +1,13 @@
+---
+description: "Frontend testing (Vitest, Testing Library, Playwright, visual testing, Storybook)."
+globs: []
+alwaysApply: false
+---
+# frontend-testing
+
+Apply the frontend-testing skill when the request matches its scope.
+
+Capabilities:
+- apply the frontend-testing workflow
+
+Stop when: Frontend testing design complete; artifact saved; completion criteria checked.

@@ -4,6 +4,7 @@ category: "delivery"
 maturity: "stable"
 version: "1"
 description: "Read a GitHub PR remediation plan produced by plan-review-fixes, implement the planned corrections through the repositor"
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects:
@@ -19,12 +20,12 @@ promptVersion: "2.0"
 artifactType: "review"
 modelTier: "code"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/implement-review-fixes.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/implement-review-fixes.json
 diataxis: "how-to"
 tags: ["delivery"]
 compatibility: []
-approvalRequired: "false"
-approvalFor: []
+approvalRequired: "true"
+approvalFor: ["write-code", "commit-git", "push-branch"]
 ---
 
 ## Contract

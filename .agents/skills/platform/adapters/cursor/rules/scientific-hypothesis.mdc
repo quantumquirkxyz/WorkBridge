@@ -1,0 +1,13 @@
+---
+description: "Formulate testable scientific hypotheses — null/alternative, variables, controls, falsifiability — with explicit variables and statistical plan."
+globs: []
+alwaysApply: false
+---
+# scientific-hypothesis
+
+Apply the scientific-hypothesis skill when the request matches its scope.
+
+Capabilities:
+- apply the scientific-hypothesis workflow
+
+Stop when: Formulate testable scientific hypotheses complete; required sections present; completion criteria checked.

@@ -1,0 +1,13 @@
+---
+description: "Design, evaluate, and refine prompts for LLMs (GPT-4, Claude, Llama, Mistral) with chain-of-thought, few-shot, RAG, and evaluation metrics."
+globs: []
+alwaysApply: false
+---
+# ai-prompt-engineering
+
+Apply the ai-prompt-engineering skill when the request matches its scope.
+
+Capabilities:
+- apply the ai-prompt-engineering workflow
+
+Stop when: Best prompt identified with evaluation report; failure modes documented.

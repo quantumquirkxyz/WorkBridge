@@ -1,0 +1,16 @@
+{
+  "name": "qa-manual-testing",
+  "instructions": "Perform manual test sessions — exploratory checks, edge cases, accessibility, and user-visible regressions — with explicit reproduction notes.\n\nCapabilities:\n- apply the qa-manual-testing workflow\n\nCanonical skill: .agents/skills/qa/qa-manual-testing/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Tested paths, environment, findings, and residual risks are documented.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

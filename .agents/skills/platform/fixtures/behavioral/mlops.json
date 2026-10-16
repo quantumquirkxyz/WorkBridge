@@ -1,0 +1,67 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-mlops",
+      "skill": "mlops",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "## Completion",
+          "## Process",
+          "## Rules",
+          "MlopsArtifact",
+          "No deploy without acceptance suite green.",
+          "No retrain without data QA and model QA green.",
+          "No backfill without lineage preserved and validation green.",
+          "No drift ignored without regression gate and rollback tested."
+        ],
+        "doesNotContain": [
+          "## Operating Contract",
+          "ask-matt",
+          "ship-review-fix-loop",
+          "doc-draft-pr",
+          "frontend-development",
+          "ARIES",
+          "Matt",
+          "TODO",
+          "point 1",
+          "Criterion 1",
+          "Acceptance criterion 1",
+          "BE-2",
+          "OpenAPI spec",
+          "localhost:3000",
+          "extremely extensive"
+        ]
+      }
+    },
+    {
+      "id": "v2-frontmatter-mlops",
+      "skill": "mlops",
+      "type": "behavioral",
+      "expected": {
+        "frontmatterContains": [
+          "name: \"mlops\"",
+          "risk: \"medium\"",
+          "trustTier: \"3\"",
+          "modelTier: \"reasoning\"",
+          "promptVersion: \"2.0\"",
+          "artifactType: \"ai\"",
+          "diataxis: \"how-to\""
+        ]
+      }
+    },
+    {
+      "id": "v2-footer-mlops",
+      "skill": "mlops",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "@include .agents/skills/platform/contract-base.xml"
+        ]
+      }
+    }
+  ]
+}

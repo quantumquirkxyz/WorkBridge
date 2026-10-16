@@ -1,0 +1,17 @@
+---
+description: "Facilitate structured, inclusive brainstorming that turns an ambiguous problem into prioritized, testable ideas."
+globs: []
+alwaysApply: false
+---
+# brainstorming
+
+Apply the brainstorming skill when the request matches its scope.
+
+Capabilities:
+- divergent ideation
+- reframing
+- clustering
+- prioritization
+- experiment framing
+
+Stop when: The problem is framed, ideas are captured and clustered, priorities are justified, and next experiments have owners and acceptance criteria.

@@ -1,9 +1,10 @@
 ---
 name: "data-quality"
-category: "skill-dev/sandbox"
+category: "data"
 maturity: "stable"
 version: "1"
 description: "Design data quality frameworks — Great Expectations, Soda, checks, observability, contracts — with explicit SLAs, freshness rules, and incident response for bad data."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,11 +17,11 @@ promptVersion: "2.0"
 artifactType: "data"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/data-quality.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/data-quality.json
 diataxis: "how-to"
 tags: ["data"]
 compatibility: []
-approvalRequired: "false"
+approvalRequired: "true"
 approvalFor: []
 ---
 

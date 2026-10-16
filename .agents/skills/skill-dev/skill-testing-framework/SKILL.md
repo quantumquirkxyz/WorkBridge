@@ -4,9 +4,11 @@ category: "skill-dev"
 maturity: "stable"
 version: "1"
 description: "Validate Skill structure, contracts, dependencies, anti-patterns, and isolated execution — use when checking a Skill before promotion."
+license: "MIT"
 capabilities: ""
 outputs: ""
-sideEffects: []
+sideEffects:
+  - write-files
 dependencies: []
 stopCondition: "Validate Skill structure, contracts, dependencies, anti-patterns, and isolated execution complete; artifact saved; completion criteria checked."
 risk: "low"
@@ -16,7 +18,7 @@ promptVersion: "2.0"
 artifactType: "test-strategy"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/skill-testing-framework.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["skill-dev"]
 compatibility: []
@@ -70,5 +72,6 @@ Emit `SkillTestingFrameworkArtifact` as both:
 - the artifact is saved and validated
 - any blockers or skipped validations are documented
 - the next consumer is identified or the work is handed off
+- no approval is required for test writes: the framework only writes sandbox and fixture files inside the repository, reversible via git
 ---
 @include .agents/skills/platform/contract-base.xml

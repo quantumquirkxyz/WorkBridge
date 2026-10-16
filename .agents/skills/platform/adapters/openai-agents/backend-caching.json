@@ -1,0 +1,16 @@
+{
+  "name": "backend-caching",
+  "instructions": "Design backend caching strategies — cache keys, TTLs, invalidation, stale-while-revalidate, and cache coherence — with explicit consistency and failure trade-offs.\n\nCapabilities:\n- apply the backend-caching workflow\n\nCanonical skill: .agents/skills/backend/backend-caching/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Cache purpose, freshness, invalidation, and failure behavior are explicit.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

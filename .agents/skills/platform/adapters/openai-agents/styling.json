@@ -1,0 +1,16 @@
+{
+  "name": "styling",
+  "instructions": "Modern CSS (Tailwind v4, Panda CSS, CSS modules, CVA, design tokens).\n\nCapabilities:\n- apply the styling workflow\n\nCanonical skill: .agents/skills/frontend/styling/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Styling design complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

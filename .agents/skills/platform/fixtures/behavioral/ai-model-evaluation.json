@@ -1,0 +1,65 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-ai-model-evaluation",
+      "skill": "ai-model-evaluation",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "## Completion",
+          "## Process",
+          "AiModelEvaluationArtifact",
+          "machine-learning or LLM model",
+          "Subgroup / fairness analysis",
+          "Explainability"
+        ],
+        "doesNotContain": [
+          "## Operating Contract",
+          "ask-matt",
+          "ship-review-fix-loop",
+          "doc-draft-pr",
+          "frontend-development",
+          "ARIES",
+          "Matt",
+          "TODO",
+          "point 1",
+          "Criterion 1",
+          "Acceptance criterion 1",
+          "BE-2",
+          "OpenAPI spec",
+          "localhost:3000",
+          "extremely extensive"
+        ]
+      }
+    },
+    {
+      "id": "v2-frontmatter-ai-model-evaluation",
+      "skill": "ai-model-evaluation",
+      "type": "behavioral",
+      "expected": {
+        "frontmatterContains": [
+          "name: \"ai-model-evaluation\"",
+          "risk: \"medium\"",
+          "trustTier: \"3\"",
+          "modelTier: \"reasoning\"",
+          "promptVersion: \"2.0\"",
+          "artifactType: \"model\"",
+          "diataxis: \"how-to\""
+        ]
+      }
+    },
+    {
+      "id": "v2-footer-ai-model-evaluation",
+      "skill": "ai-model-evaluation",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "@include .agents/skills/platform/contract-base.xml"
+        ]
+      }
+    }
+  ]
+}

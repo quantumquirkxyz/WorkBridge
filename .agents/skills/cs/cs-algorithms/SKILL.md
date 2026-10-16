@@ -1,9 +1,10 @@
 ---
 name: "cs-algorithms"
-category: "skill-dev/sandbox"
+category: "cs"
 maturity: "stable"
 version: "1"
 description: "Design and analyse algorithms — correctness proof, complexity analysis (time and space), and stability — with explicit proof of invariants and termination."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "cs"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/cs-algorithms.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["cs"]
 compatibility: []

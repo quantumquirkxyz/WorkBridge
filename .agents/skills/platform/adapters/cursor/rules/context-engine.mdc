@@ -1,0 +1,13 @@
+---
+description: "Manage dynamic context for agent execution using retrieval-augmented generation patterns, updating the working context from sources beyond static CONTEXT.md (issues, PRs, docs, execution traces)."
+globs: []
+alwaysApply: false
+---
+# context-engine
+
+Apply the context-engine skill when the request matches its scope.
+
+Capabilities:
+- apply the context-engine workflow
+
+Stop when: Context retrieved, indexed, and answer provided with explicit source attribution.

@@ -1,0 +1,15 @@
+name: grpc-connect
+description: "gRPC and Connect (protobuf, ConnectRPC, grpc-gateway, streaming, code generation)."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/backend-grpc-connect
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: true
+  sideEffects: []

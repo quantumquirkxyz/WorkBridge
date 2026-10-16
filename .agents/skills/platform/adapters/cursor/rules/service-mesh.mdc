@@ -1,0 +1,13 @@
+---
+description: "Service mesh (Istio, Linkerd, Cilium, mTLS, traffic splitting, observability)."
+globs: []
+alwaysApply: false
+---
+# service-mesh
+
+Apply the service-mesh skill when the request matches its scope.
+
+Capabilities:
+- apply the service-mesh workflow
+
+Stop when: Service mesh design complete; artifact saved; completion criteria checked.

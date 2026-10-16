@@ -1,0 +1,16 @@
+{
+  "name": "interactive-tutorial-builder",
+  "instructions": "Generate a focused tutorial with goals, exercise inputs, expected outputs, and checkpoints for any Skill; use when teaching or onboarding someone to a Skill.\n\nCapabilities:\n- apply the interactive-tutorial-builder workflow\n\nCanonical skill: .agents/skills/auxiliary/interactive-tutorial-builder/SKILL.md",
+  "model": "gpt-5-mini",
+  "tools": [],
+  "handoff_description": "The learner has a runnable exercise and a checkable checkpoint derived from the target Skill contract.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

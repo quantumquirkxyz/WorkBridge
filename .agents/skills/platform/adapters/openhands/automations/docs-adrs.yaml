@@ -1,0 +1,15 @@
+name: docs-adrs
+description: "Create and maintain Architecture Decision Records — context, decision, consequences, alternatives, status — with periodic review."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/docs-docs-adrs
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

@@ -1,0 +1,16 @@
+{
+  "name": "caching-advanced",
+  "instructions": "Advanced caching strategies (Redis, Memcached, CDN, cache invalidation, stampede prevention).\n\nCapabilities:\n- apply the caching-advanced workflow\n\nCanonical skill: .agents/skills/backend/caching-advanced/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Cache architecture, invalidation strategy, stampede prevention, and consistency model are explicit.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

@@ -1,0 +1,13 @@
+---
+description: "Design XR interactions — spatial input, comfort, locomotion, hand tracking, and feedback — with clear constraints on immersion and usability."
+globs: []
+alwaysApply: false
+---
+# xr-interaction-design
+
+Apply the xr-interaction-design skill when the request matches its scope.
+
+Capabilities:
+- apply the xr-interaction-design workflow
+
+Stop when: Spatial input, feedback, comfort constraints, and validation tasks are explicit.

@@ -1,0 +1,16 @@
+{
+  "name": "math-literature-track",
+  "instructions": "Track mathematics literature across arXiv, MathSciNet, zbMATH, journal alerts, and citation graphs to keep a researcher current without drowning in papers.\n\nCapabilities:\n- apply the math-literature-track workflow\n\nCanonical skill: .agents/skills/math/math-literature-track/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "digest artifact saved with grouped papers and relevance scores; all sources cited.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

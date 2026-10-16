@@ -1,0 +1,13 @@
+---
+description: "Design and review smart contracts — security, gas optimization, upgradeability, account abstraction, EIP-7702 — with an adversarial review step."
+globs: []
+alwaysApply: false
+---
+# web3-smart-contracts
+
+Apply the web3-smart-contracts skill when the request matches its scope.
+
+Capabilities:
+- apply the web3-smart-contracts workflow
+
+Stop when: Artifact present with deployment recommendation.

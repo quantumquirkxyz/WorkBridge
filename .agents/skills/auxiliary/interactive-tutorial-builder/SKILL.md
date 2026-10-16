@@ -3,6 +3,7 @@ name: "interactive-tutorial-builder"
 category: "auxiliary"
 maturity: "stable"
 description: "Generate a focused tutorial with goals, exercise inputs, expected outputs, and checkpoints for any Skill; use when teaching or onboarding someone to a Skill."
+license: "MIT"
 version: "1"
 capabilities: ""
 inputs: ""
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "auxiliary"
 modelTier: "fast"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/interactive-tutorial-builder.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["auxiliary"]
 compatibility: []

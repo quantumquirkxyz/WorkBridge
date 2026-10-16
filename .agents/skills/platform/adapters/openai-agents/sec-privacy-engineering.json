@@ -1,0 +1,16 @@
+{
+  "name": "sec-privacy-engineering",
+  "instructions": "Design privacy-protecting systems — GDPR / CCPA / HIPAA compliance, data minimisation, anonymisation, consent management, data retention, breach notification — with explicit privacy impact assessments.\n\nCapabilities:\n- apply the sec-privacy-engineering workflow\n\nCanonical skill: .agents/skills/sec/sec-privacy-engineering/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "PIA saved; data-flow map complete; compliance checklist filled.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

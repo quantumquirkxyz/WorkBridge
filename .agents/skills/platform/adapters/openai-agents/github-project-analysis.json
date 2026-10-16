@@ -1,0 +1,16 @@
+{
+  "name": "github-project-analysis",
+  "instructions": "Research comparable projects exclusively on GitHub and analyze their structure, decisions, and reusable patterns for an active project.\n\nCapabilities:\n- GitHub discovery\n- repository triage\n- structure analysis\n- comparative synthesis\n- adaptation planning\n\nCanonical skill: .agents/skills/research/github-project-analysis/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Comparable GitHub repositories are selected with evidence, their structures are compared, adaptations are bounded, and unresolved risks are recorded.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 8,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

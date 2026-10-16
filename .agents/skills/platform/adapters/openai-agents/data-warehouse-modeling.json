@@ -1,0 +1,16 @@
+{
+  "name": "data-warehouse-modeling",
+  "instructions": "Design analytical warehouse schemas — star / snowflake / OBT — with dimension, fact, and bridge tables; partitioning; indexing; and query optimization.\n\nCapabilities:\n- apply the data-warehouse-modeling workflow\n\nCanonical skill: .agents/skills/data/data-warehouse-modeling/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Schema design saved; dimensions and facts defined; optimisation notes present.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 5,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

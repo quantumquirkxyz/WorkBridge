@@ -1,0 +1,16 @@
+{
+  "name": "interaction-design",
+  "instructions": "Design user interactions — task flows, screen states, transitions, error states, feedback patterns — so the interface guides users predictably.\n\nCapabilities:\n- apply the interaction-design workflow\n\nCanonical skill: .agents/skills/ux/interaction-design/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Design user interactions complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

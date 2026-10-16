@@ -4,6 +4,7 @@ category: "cms"
 maturity: "stable"
 version: "1"
 description: "Design CMS content strategy — content models, taxonomy, governance, lifecycle, and multi-channel publishing — with explicit editorial ownership."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "cms"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/cms-content-strategy.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["cms"]
 compatibility: []

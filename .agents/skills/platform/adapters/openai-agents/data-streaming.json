@@ -1,0 +1,16 @@
+{
+  "name": "data-streaming",
+  "instructions": "Design streaming data pipelines — Kafka, Kinesis, Pub/Sub, Flink — with event schemas, stream processing, and real-time analytics.\n\nCapabilities:\n- apply the data-streaming workflow\n\nCanonical skill: .agents/skills/data/data-streaming/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Topology diagram saved; event schema defined; processing rules documented.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 5,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

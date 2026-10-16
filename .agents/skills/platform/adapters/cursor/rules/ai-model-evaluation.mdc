@@ -1,0 +1,13 @@
+---
+description: "Evaluate ML / LLM models — accuracy, fairness, robustness, explainability, drift — with explicit metrics, subgroup analysis, and failure-mode reporting."
+globs: []
+alwaysApply: false
+---
+# ai-model-evaluation
+
+Apply the ai-model-evaluation skill when the request matches its scope.
+
+Capabilities:
+- apply the ai-model-evaluation workflow
+
+Stop when: Report saved; subgroup analysis complete; failure modes documented; recommendation made.

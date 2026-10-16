@@ -1,0 +1,16 @@
+{
+  "name": "graphic-design-editorial",
+  "instructions": "Design editorial layouts — magazines, books, reports, long-form content — with explicit grid systems, typography hierarchy, and production-ready pagination.\n\nCapabilities:\n- apply the graphic-design-editorial workflow\n\nCanonical skill: .agents/skills/graphic-design/graphic-design-editorial/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Design editorial layouts — magazines, books, reports, long-form content — with explicit grid systems, typography hierarchy, and production-ready pagination. complete; structured result returned; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

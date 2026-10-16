@@ -1,0 +1,13 @@
+---
+description: "Construct and optimise portfolios — mean-variance, Black-Litterman, risk-parity, factor — with explicit objectives, constraints, and robustness checks."
+globs: []
+alwaysApply: false
+---
+# quant-portfolio-opt
+
+Apply the quant-portfolio-opt skill when the request matches its scope.
+
+Capabilities:
+- apply the quant-portfolio-opt workflow
+
+Stop when: Construct and optimise portfolios complete; required sections present; completion criteria checked.

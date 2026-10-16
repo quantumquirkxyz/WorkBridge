@@ -1,0 +1,16 @@
+{
+  "name": "devops-terraform-iac",
+  "instructions": "Design infrastructure as code — Terraform / Pulumi / CloudFormation — for reproducible, version-controlled, auditable cloud infrastructure.\n\nCapabilities:\n- apply the devops-terraform-iac workflow\n\nCanonical skill: .agents/skills/devops/devops-terraform-iac/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Module definitions saved; state rules saved; policy checklist filled.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 5,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

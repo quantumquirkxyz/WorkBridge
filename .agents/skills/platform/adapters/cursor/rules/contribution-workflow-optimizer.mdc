@@ -1,0 +1,13 @@
+---
+description: "Inspect changed Skills and recommend contribution improvements across standards, docs, tests, and examples; use when eva"
+globs: []
+alwaysApply: false
+---
+# contribution-workflow-optimizer
+
+Apply the contribution-workflow-optimizer skill when the request matches its scope.
+
+Capabilities:
+- apply the contribution-workflow-optimizer workflow
+
+Stop when: Inspect changed Skills and recommend contribution improvements across standards, docs, tests, and examples complete; structured result returned; completion criteria checked.

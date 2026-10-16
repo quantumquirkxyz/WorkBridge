@@ -1,0 +1,16 @@
+{
+  "name": "cs-algorithms",
+  "instructions": "Design and analyse algorithms — correctness proof, complexity analysis (time and space), and stability — with explicit proof of invariants and termination.\n\nCapabilities:\n- apply the cs-algorithms workflow\n\nCanonical skill: .agents/skills/cs/cs-algorithms/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Design and analyse algorithms complete; required sections present; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

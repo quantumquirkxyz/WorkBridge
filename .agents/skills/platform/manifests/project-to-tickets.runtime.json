@@ -1,0 +1,55 @@
+{
+  "skill": "project/to-tickets",
+  "version": 1,
+  "generatedFrom": "frontmatter",
+  "frontmatterHash": "f5805ec978772aadd075005a1675fec00fd99d9d36c5106fc39eb1f211f95f7e",
+  "role": "workflow",
+  "router": {
+    "positive": [],
+    "negative": [],
+    "requiredSignals": []
+  },
+  "execution": {
+    "defaultAgent": "general",
+    "isolation": "worktree",
+    "maxTurns": 6,
+    "modelTier": "reasoning",
+    "tools": {
+      "allow": [
+        "Read",
+        "Grep",
+        "Glob",
+        "Bash",
+        "Edit",
+        "Write",
+        "WebFetch",
+        "WebSearch"
+      ],
+      "deny": []
+    }
+  },
+  "guardrails": {
+    "sideEffects": [
+      "create-issues",
+      "write-files"
+    ],
+    "approvalRequired": true,
+    "approvalFor": [
+      "create-issues",
+      "write-files"
+    ],
+    "risk": "medium",
+    "trustTier": 3
+  },
+  "verification": {
+    "commands": [],
+    "artifactSchema": ".agents/skills/platform/schemas/ticket-schema.json"
+  },
+  "observability": {
+    "traceEvents": [
+      "skill.route",
+      "skill.execute",
+      "skill.verify"
+    ]
+  }
+}

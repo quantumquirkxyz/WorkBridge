@@ -1,0 +1,13 @@
+---
+description: "Coordinate multiple agent sub-roles (architect, implementer, reviewer, tester) in parallel or sequential swarm mode, with clear handoff contracts and evidence recording."
+globs: []
+alwaysApply: false
+---
+# subagent-swarm
+
+Apply the subagent-swarm skill when the request matches its scope.
+
+Capabilities:
+- apply the subagent-swarm workflow
+
+Stop when: All roles completed with valid evidence, conflicts resolved, and merged output validated.

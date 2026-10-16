@@ -4,6 +4,7 @@ category: "product"
 maturity: "stable"
 version: "1"
 description: "Design OKR cycles — Objectives, Key Results, initiatives — with measurable outcomes, quarterly cadences, and team alignment."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "plan"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/prod-okr-planning.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["product"]
 compatibility: []

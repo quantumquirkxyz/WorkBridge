@@ -1,0 +1,13 @@
+---
+description: "Design ETL / ELT pipelines — extraction, transformation, load — with reproducible steps, schema evolution, quality checks, and observability."
+globs: []
+alwaysApply: false
+---
+# data-etl-pipeline
+
+Apply the data-etl-pipeline skill when the request matches its scope.
+
+Capabilities:
+- apply the data-etl-pipeline workflow
+
+Stop when: Pipeline architecture saved; quality rules defined; schema evolution plan present.

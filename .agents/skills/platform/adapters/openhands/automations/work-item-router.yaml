@@ -1,0 +1,15 @@
+name: work-item-router
+description: "Force reading the canonical work-item governance index before routing specs, tickets, project boards, or publication flows."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/routing-work-item-router
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

@@ -1,0 +1,67 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-zero-trust",
+      "skill": "zero-trust",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "## Completion",
+          "## Process",
+          "## Rules",
+          "ZeroTrustArtifact",
+          "start with identity; zero trust without strong identity is theatre.",
+          "enforce least privilege by default; allow-list exceptions with time-bound approval.",
+          "encrypt all traffic (mTLS east-west, TLS north-south); verify certificates at every hop.",
+          "log every auth decision and policy evaluation; make logs queryable for incident response."
+        ],
+        "doesNotContain": [
+          "## Operating Contract",
+          "ask-matt",
+          "ship-review-fix-loop",
+          "doc-draft-pr",
+          "frontend-development",
+          "ARIES",
+          "Matt",
+          "TODO",
+          "point 1",
+          "Criterion 1",
+          "Acceptance criterion 1",
+          "BE-2",
+          "OpenAPI spec",
+          "localhost:3000",
+          "extremely extensive"
+        ]
+      }
+    },
+    {
+      "id": "v2-frontmatter-zero-trust",
+      "skill": "zero-trust",
+      "type": "behavioral",
+      "expected": {
+        "frontmatterContains": [
+          "name: \"zero-trust\"",
+          "risk: \"medium\"",
+          "trustTier: \"3\"",
+          "modelTier: \"reasoning\"",
+          "promptVersion: \"2.0\"",
+          "artifactType: \"sec\"",
+          "diataxis: \"how-to\""
+        ]
+      }
+    },
+    {
+      "id": "v2-footer-zero-trust",
+      "skill": "zero-trust",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "@include .agents/skills/platform/contract-base.xml"
+        ]
+      }
+    }
+  ]
+}

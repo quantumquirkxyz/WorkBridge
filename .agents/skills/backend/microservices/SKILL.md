@@ -4,6 +4,7 @@ category: "backend"
 maturity: "stable"
 version: "1"
 description: "Design microservice architectures — service decomposition, inter-service communication, data ownership, resilience patterns — with explicit boundaries and failure isolation."
+license: "MIT"
 capabilities: ""
 inputs:
   - type: object
@@ -21,7 +22,7 @@ promptVersion: "2.0"
 artifactType: "backend"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/microservices.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["backend"]
 compatibility: []

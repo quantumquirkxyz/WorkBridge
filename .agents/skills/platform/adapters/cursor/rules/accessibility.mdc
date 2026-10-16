@@ -1,0 +1,13 @@
+---
+description: "Design inclusive products — WCAG compliance, assistive technology support, keyboard navigation, color contrast — with explicit user access guarantees."
+globs: []
+alwaysApply: false
+---
+# accessibility
+
+Apply the accessibility skill when the request matches its scope.
+
+Capabilities:
+- apply the accessibility workflow
+
+Stop when: Design inclusive products complete; artifact saved; completion criteria checked.

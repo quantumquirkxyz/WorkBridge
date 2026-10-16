@@ -4,6 +4,7 @@ category: "routing"
 maturity: "stable"
 version: "1"
 description: "Compact the current conversation into a handoff document for another agent to pick up — with explicit continuity and ownership notes."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects:
@@ -18,7 +19,7 @@ promptVersion: "2.0"
 artifactType: "routing"
 modelTier: "router"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/handoff.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["routing"]
 compatibility: []

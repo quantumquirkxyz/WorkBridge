@@ -1,0 +1,16 @@
+{
+  "name": "llm-eval",
+  "instructions": "Design LLM evaluation harnesses — benchmark design, model comparison, automated evals — with reproducible scoring, confidence intervals, and regression detection.\n\nCapabilities:\n- apply the llm-eval workflow\n\nCanonical skill: .agents/skills/ai/llm-eval/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Benchmark suite defined; comparison protocol documented; harness configuration complete.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

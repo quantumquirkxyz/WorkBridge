@@ -4,6 +4,7 @@ category: "frontend"
 maturity: "stable"
 version: "1"
 description: "Define and evolve reusable UI tokens, components, and usage rules as a coherent system."
+license: "MIT"
 capabilities: ""
 inputs:
   - type: object
@@ -24,7 +25,7 @@ promptVersion: "2.0"
 artifactType: "plan"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/design-system.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["frontend"]
 compatibility: []

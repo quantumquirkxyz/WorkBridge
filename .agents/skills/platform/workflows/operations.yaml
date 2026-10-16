@@ -3,6 +3,9 @@ description: Continuous release, deployment, and monitoring flow
 entryPoint: release-management
 version: "2.0"
 
+context:
+  gateCI: "pending"
+
 states:
   release-management:
     type: planner
@@ -19,15 +22,17 @@ states:
       DEPLOYED: observability
       FAILED: deployment
       ROLLED_BACK: release-management
+    guards:
+      DEPLOYED: gateCI == "passed"
 
   observability:
     type: designer
     description: Define logs, metrics, traces, alerts, SLIs, SLOs
     transitions:
-      DEFINED: monitoring-alerting
+      DEFINED: observability-monitor
       NEEDS_UPDATE: observability
 
-  monitoring-alerting:
+  observability-monitor:
     type: monitor
     description: Monitor production and manage alerts
     transitions:

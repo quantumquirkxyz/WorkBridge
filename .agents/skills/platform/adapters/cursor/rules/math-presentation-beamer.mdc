@@ -1,0 +1,13 @@
+---
+description: "Design mathematics presentations — Beamer slides with TikZ diagrams, colour accessibility, speaker notes, and audience-level adjustments — for seminars, conferences, or lectures."
+globs: []
+alwaysApply: false
+---
+# math-presentation-beamer
+
+Apply the math-presentation-beamer skill when the request matches its scope.
+
+Capabilities:
+- apply the math-presentation-beamer workflow
+
+Stop when: Source compiles; speaker notes saved; accessibility checklist completed; audience-level stated.

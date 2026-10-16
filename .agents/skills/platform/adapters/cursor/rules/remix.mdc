@@ -1,0 +1,13 @@
+---
+description: "Remix framework (loaders, actions, nested routes, progressive enhancement)."
+globs: []
+alwaysApply: false
+---
+# remix
+
+Apply the remix skill when the request matches its scope.
+
+Capabilities:
+- apply the remix workflow
+
+Stop when: Remix design complete; artifact saved; completion criteria checked.

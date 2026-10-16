@@ -1,0 +1,15 @@
+name: improve-codebase-architecture
+description: "Scan a codebase for deepening opportunities and present candidates as a visual HTML report, then grill through the selected one."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/engineering-improve-codebase-architecture
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

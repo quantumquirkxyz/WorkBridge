@@ -1,0 +1,16 @@
+---
+description: "Automate browser and computer-use tasks with a safety rail: declarative page objectives, Playwright-based execution, human review gates for irreversible actions, and screenshots as verifiable evidence."
+globs: []
+alwaysApply: false
+---
+# browser-automation
+
+Apply the browser-automation skill when the request matches its scope.
+
+Capabilities:
+- turn a page objective into a declarative browser task
+- execute browser tasks with Playwright in a sandboxed context
+- gate irreversible or account-affecting actions behind approval
+- capture screenshots and DOM evidence as verifiable artifacts
+
+Stop when: The page objective is met and evidenced, or every irreversible action is gated and reported as approval-required.

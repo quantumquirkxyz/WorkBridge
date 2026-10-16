@@ -1,0 +1,13 @@
+---
+description: "Cloud security (AWS, GCP, Azure, IAM, KMS, security groups, compliance, posture management)"
+globs: []
+alwaysApply: false
+---
+# cloud-security
+
+Apply the cloud-security skill when the request matches its scope.
+
+Capabilities:
+- apply the cloud-security workflow
+
+Stop when: Security architecture saved; IAM reviewed; compliance matrix complete; posture runbook documented.

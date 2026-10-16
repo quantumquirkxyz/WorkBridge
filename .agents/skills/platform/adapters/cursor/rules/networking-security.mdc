@@ -1,0 +1,13 @@
+---
+description: "Design network security — segmentation, firewalls, VPNs, TLS, authentication, and threat boundaries — with explicit trust zones."
+globs: []
+alwaysApply: false
+---
+# networking-security
+
+Apply the networking-security skill when the request matches its scope.
+
+Capabilities:
+- apply the networking-security workflow
+
+Stop when: Trust zones, allowed flows, controls, and residual risks are explicit.

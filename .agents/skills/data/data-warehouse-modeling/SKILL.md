@@ -1,9 +1,10 @@
 ---
 name: "data-warehouse-modeling"
-category: "skill-dev/sandbox"
+category: "data"
 maturity: "stable"
 version: "1"
 description: "Design analytical warehouse schemas — star / snowflake / OBT — with dimension, fact, and bridge tables; partitioning; indexing; and query optimization."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "data"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/data-warehouse-modeling.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["data"]
 compatibility: []

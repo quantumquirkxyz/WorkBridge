@@ -1,0 +1,15 @@
+name: research-data-archiving
+description: "Archive research data — metadata, storage, preservation, provenance, and reuse planning — with reproducibility and access controls."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/research-research-data-archiving
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

@@ -4,6 +4,7 @@ category: "accessibility"
 maturity: "stable"
 version: "1"
 description: "Design accessible interfaces — semantics, focus management, keyboard flows, contrast, and assistive-technology compatibility — with inclusive interaction patterns."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "plan"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/accessibility-design.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["accessibility"]
 compatibility: []

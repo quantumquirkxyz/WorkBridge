@@ -29,6 +29,19 @@ Limiting factor: <one sentence if Bounded or Fragile>
 Word count: <under 200 words>
 ```
 
+**Mandatory fields for all sub-agents (delegation brief):**
+
+Every sub-agent brief above carries these fields, and the aggregation step checks for them before spawning (see `delegation-brief.schema.json`):
+
+| Field | Value for this workflow |
+|---|---|
+| Objective | The single assessment your dimension must produce (one dimension per sub-agent) |
+| Output format | The Output Schema block below, verbatim |
+| Tool guidance | Read-only: read the repository and the shared context; do not run builds, migrations, or network calls |
+| Boundaries | At least the two mandatory boundaries below — plus anything the dimension must not touch |
+| Stop condition | "Every assigned dimension has a rating, a score, and evidence for each finding — or an explicit statement that the shared context was insufficient" |
+| Effort budget | maxToolCalls: 40, maxSubagents: 1, maxMinutes: 20 (read-only, one dimension) |
+
 **Rules for sub-agents:**
 - Do NOT make recommendations for other dimensions. Stay within your assigned axis.
 - Do NOT merge findings across dimensions. Each finding stands alone.
@@ -36,6 +49,8 @@ Word count: <under 200 words>
 - Every finding MUST have a risk level based on Likelihood × Impact (see `evaluation-criteria.md`).
 - If the shared context is insufficient for your dimension, state that explicitly in the Evidence section and assign the lowest viable rating and numeric score.
 - Numeric score must be consistent with categorical rating (see mapping in `evaluation-criteria.md`).
+- Return a bounded summary that references the evidence you wrote down. Do not return your reasoning, a transcript, or a narrative of how you reached the rating.
+- Read-only: do not create, edit, or delete any file; do not run the project's test suite or build.
 
 ## Citation Examples
 

@@ -1,0 +1,16 @@
+{
+  "name": "state-management",
+  "instructions": "Modern state management (Zustand, Jotai, signals, Redux Toolkit, server state).\n\nCapabilities:\n- apply the state-management workflow\n\nCanonical skill: .agents/skills/frontend/state-management/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "State management design complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

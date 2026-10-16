@@ -3,6 +3,14 @@ description: Canonical flow for new feature work from clarification to validated
 entryPoint: ask-to
 version: "2.0"
 
+context:
+  review:
+    standardsFindings: 0
+    specFindings: 0
+  gateCI: "pending"
+  loopIterations: 0
+  maxIterations: 5
+
 states:
   ask-to:
     type: router
@@ -67,6 +75,8 @@ states:
     transitions:
       OPENED: review-pr
       FAILED: implement
+    guards:
+      OPENED: gateCI == "passed"
 
   review-pr:
     type: reviewer
@@ -77,6 +87,9 @@ states:
       CLEAN: ship-subissue
       FINDINGS: review-fix-loop
       CONFLICT: resolving-merge-conflicts
+    guards:
+      CLEAN: review.standardsFindings == 0 && review.specFindings == 0
+      FINDINGS: loopIterations < maxIterations
 
   review-fix-loop:
     type: orchestrator

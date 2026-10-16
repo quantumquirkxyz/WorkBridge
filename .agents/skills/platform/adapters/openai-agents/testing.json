@@ -1,0 +1,16 @@
+{
+  "name": "testing",
+  "instructions": "Shape the test strategy for a project so behavior is verified at the right seams and at the right level.\n\nCapabilities:\n- apply the testing workflow\n\nCanonical skill: .agents/skills/delivery/testing/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Shape the test strategy for a project so behavior is verified at the right seams and at the right level complete; structured result returned; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

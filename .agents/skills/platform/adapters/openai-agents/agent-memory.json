@@ -1,0 +1,16 @@
+{
+  "name": "agent-memory",
+  "instructions": "Maintain external agent memory: structured notes persisted outside the context window (NOW.md for the working thread, MEMORY.md for durable facts) so context can compact or reset while knowledge survives across sessions.\n\nCapabilities:\n- maintain a NOW.md working thread for the active task\n- maintain a MEMORY.md of durable, cross-session facts\n- decide what belongs in memory versus in an artifact\n- recall memory into a fresh context pack with provenance\n\nCanonical skill: .agents/skills/foundation/agent-memory/SKILL.md",
+  "model": "gpt-5-mini",
+  "tools": [],
+  "handoff_description": "Memory files are current, stale entries are reconciled, and every durable fact has a provenance line.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 5,
+    "isolation": "worktree"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

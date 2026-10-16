@@ -1,0 +1,16 @@
+{
+  "name": "cost-optimization",
+  "instructions": "Design FinOps strategies — rightsizing, spot instances, committed use, budgets, showback/chargeback — with cost visibility and optimisation guardrails.\n\nCapabilities:\n- apply the cost-optimization workflow\n\nCanonical skill: .agents/skills/devops/cost-optimization/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Architecture diagram saved; visibility design documented; rightsizing recommendations complete; budget and showback plan filled.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 7,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

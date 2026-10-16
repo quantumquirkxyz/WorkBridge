@@ -1,0 +1,16 @@
+{
+  "name": "devops-feature-flags",
+  "instructions": "Design feature flag systems — gradual rollouts, A/B experiments, kill switches, targeting rules — with lifecycle management and operational runbooks.\n\nCapabilities:\n- apply the devops-feature-flags workflow\n\nCanonical skill: .agents/skills/devops/devops-feature-flags/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Lifecycle documented; targeting rules defined; flag inventory saved.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 4,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

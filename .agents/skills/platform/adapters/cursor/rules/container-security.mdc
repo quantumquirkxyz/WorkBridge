@@ -1,0 +1,13 @@
+---
+description: "Container security (Docker, Kubernetes, image scanning, runtime security, pod security policies)"
+globs: []
+alwaysApply: false
+---
+# container-security
+
+Apply the container-security skill when the request matches its scope.
+
+Capabilities:
+- apply the container-security workflow
+
+Stop when: Container baseline saved; image scan policy defined; runtime rules documented; K8s security policies complete.

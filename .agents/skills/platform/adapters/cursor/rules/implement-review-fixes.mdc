@@ -1,0 +1,13 @@
+---
+description: "Read a GitHub PR remediation plan produced by plan-review-fixes, implement the planned corrections through the repositor"
+globs: []
+alwaysApply: false
+---
+# implement-review-fixes
+
+Apply the implement-review-fixes skill when the request matches its scope.
+
+Capabilities:
+- apply the implement-review-fixes workflow
+
+Stop when: Read a GitHub PR remediation plan produced by plan-review-fixes, implement the planned corrections through the repositor complete; artifact saved; completion criteria checked.

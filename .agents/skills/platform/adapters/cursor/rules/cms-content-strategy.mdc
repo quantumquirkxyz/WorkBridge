@@ -1,0 +1,13 @@
+---
+description: "Design CMS content strategy — content models, taxonomy, governance, lifecycle, and multi-channel publishing — with explicit editorial ownership."
+globs: []
+alwaysApply: false
+---
+# cms-content-strategy
+
+Apply the cms-content-strategy skill when the request matches its scope.
+
+Capabilities:
+- apply the cms-content-strategy workflow
+
+Stop when: Content model, governance, lifecycle, and publishing rules are explicit.

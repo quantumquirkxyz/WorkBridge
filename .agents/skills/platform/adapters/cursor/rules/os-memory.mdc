@@ -1,0 +1,13 @@
+---
+description: "Design operating system memory systems — virtual memory, paging, allocation, swapping, and protection — with explicit resource accounting and locality assumptions."
+globs: []
+alwaysApply: false
+---
+# os-memory
+
+Apply the os-memory skill when the request matches its scope.
+
+Capabilities:
+- apply the os-memory workflow
+
+Stop when: Memory layout, resource limits, and protection/locality trade-offs are explicit.

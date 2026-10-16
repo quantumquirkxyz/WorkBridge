@@ -1,0 +1,13 @@
+---
+description: "Write technical documentation — clear explanations, examples, warnings, and procedural guidance — with audience-aware structure and maintenance rules."
+globs: []
+alwaysApply: false
+---
+# docs-technical-writing
+
+Apply the docs-technical-writing skill when the request matches its scope.
+
+Capabilities:
+- apply the docs-technical-writing workflow
+
+Stop when: The document is clear for its audience, complete for its scope, and maintainable.

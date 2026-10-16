@@ -1,0 +1,13 @@
+---
+description: "Design A/B tests — hypothesis, control/treatment, randomization, metrics, statistical power, duration — with valid inference and rollback rules."
+globs: []
+alwaysApply: false
+---
+# prod-ab-testing
+
+Apply the prod-ab-testing skill when the request matches its scope.
+
+Capabilities:
+- apply the prod-ab-testing workflow
+
+Stop when: Test design saved; analysis plan saved; rollback rules defined; statistical power computed.

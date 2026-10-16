@@ -1,0 +1,13 @@
+---
+description: "Design data contracts — schema evolution, producer-consumer agreements, schema registry, breaking change detection — with explicit compatibility rules and versioning."
+globs: []
+alwaysApply: false
+---
+# data-contracts
+
+Apply the data-contracts skill when the request matches its scope.
+
+Capabilities:
+- apply the data-contracts workflow
+
+Stop when: Contract specification saved; evolution policy defined; registry configuration documented.

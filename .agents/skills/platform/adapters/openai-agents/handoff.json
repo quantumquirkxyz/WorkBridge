@@ -1,0 +1,16 @@
+{
+  "name": "handoff",
+  "instructions": "Compact the current conversation into a handoff document for another agent to pick up — with explicit continuity and ownership notes.\n\nCapabilities:\n- apply the handoff workflow\n\nCanonical skill: .agents/skills/routing/handoff/SKILL.md",
+  "model": "gpt-5.1",
+  "tools": [],
+  "handoff_description": "Compact the current conversation into a handoff document for another agent to pick up complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

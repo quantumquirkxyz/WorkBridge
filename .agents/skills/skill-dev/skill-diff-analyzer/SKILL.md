@@ -4,6 +4,7 @@ category: "skill-dev"
 maturity: "stable"
 version: "1"
 description: "Compare Skill versions and explain contract, dependency, and behavior impact — use when assessing changes between two Skills."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "skill-dev"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/skill-diff-analyzer.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["skill-dev"]
 compatibility: []

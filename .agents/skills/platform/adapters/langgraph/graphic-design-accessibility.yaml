@@ -1,0 +1,25 @@
+name: graphic-design-accessibility
+kind: workflow
+nodes:
+  - id: intake
+    type: passthrough
+  - id: context_pack
+    type: tool
+    tool: read
+  - id: execute
+    type: llm
+    model: reasoning
+  - id: verify
+    type: tool
+    tool: check
+  - id: report
+    type: passthrough
+edges:
+  - {from: intake, to: context_pack}
+  - {from: context_pack, to: execute}
+  - {from: execute, to: verify}
+  - {from: verify, to: report}
+metadata:
+  skill: graphic-design/graphic-design-accessibility
+  risk: low
+  trustTier: 1

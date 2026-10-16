@@ -1,0 +1,13 @@
+---
+description: "API gateway (Kong, Envoy, AWS API Gateway, rate limiting, auth, routing)."
+globs: []
+alwaysApply: false
+---
+# api-gateway
+
+Apply the api-gateway skill when the request matches its scope.
+
+Capabilities:
+- apply the api-gateway workflow
+
+Stop when: API gateway design complete; artifact saved; completion criteria checked.

@@ -1,0 +1,15 @@
+name: brainstorming
+description: "Facilitate structured, inclusive brainstorming that turns an ambiguous problem into prioritized, testable ideas."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/product-brainstorming
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

@@ -1,0 +1,16 @@
+{
+  "name": "grill-with-docs",
+  "instructions": "A relentless interview to sharpen a plan or design, while creating docs (ADRs and glossary) as we go.\n\nCapabilities:\n- apply the grill-with-docs workflow\n\nCanonical skill: .agents/skills/routing/grill-with-docs/SKILL.md",
+  "model": "gpt-5.1",
+  "tools": [],
+  "handoff_description": "A relentless interview to sharpen a plan or design, while creating docs (ADRs and glossary) as we go complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

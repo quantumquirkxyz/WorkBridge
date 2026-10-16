@@ -1,0 +1,13 @@
+---
+description: "Diagnosis loop for hard bugs and performance regressions. Use when the user says \"diagnose\"/\"debug this\", or reports something intermittent, ambiguous, or hard to reproduce."
+globs: []
+alwaysApply: false
+---
+# diagnosing-bugs
+
+Apply the diagnosing-bugs skill when the request matches its scope.
+
+Capabilities:
+- apply the diagnosing-bugs workflow
+
+Stop when: Diagnosis loop for hard bugs and performance regressions complete; structured result returned; completion criteria checked.

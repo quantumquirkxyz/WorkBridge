@@ -1,0 +1,16 @@
+{
+  "name": "gitops",
+  "instructions": "Design GitOps workflows — ArgoCD, Flux, declarative sync, drift detection, progressive delivery — with explicit reconciliation and safety boundaries.\n\nCapabilities:\n- apply the gitops workflow\n\nCanonical skill: .agents/skills/devops/gitops/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Architecture diagram saved; sync configuration documented; drift runbook complete; progressive delivery strategy defined.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 7,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

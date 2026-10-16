@@ -1,0 +1,13 @@
+---
+description: "Review research literature — search strategy, screening, synthesis, citation tracking, and evidence grading — with transparent inclusion criteria."
+globs: []
+alwaysApply: false
+---
+# research-literature-review
+
+Apply the research-literature-review skill when the request matches its scope.
+
+Capabilities:
+- apply the research-literature-review workflow
+
+Stop when: Search strategy, screening criteria, synthesis, and evidence limitations are explicit.

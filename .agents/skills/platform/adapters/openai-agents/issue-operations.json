@@ -1,0 +1,16 @@
+{
+  "name": "issue-operations",
+  "instructions": "Manage issue tracker operations with scoped target resolution, duplicate checks, mutation evidence, and rollback notes for create, update, comment, label, link, assign, and close actions.\n\nCapabilities:\n- apply the issue-operations workflow\n\nCanonical skill: .agents/skills/integrations/issue-operations/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Requested issue tracker actions are completed or explicitly skipped, each target issue is identified, and the user receives evidence for every mutation.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

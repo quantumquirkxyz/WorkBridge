@@ -1,0 +1,16 @@
+{
+  "name": "prod-ab-testing",
+  "instructions": "Design A/B tests — hypothesis, control/treatment, randomization, metrics, statistical power, duration — with valid inference and rollback rules.\n\nCapabilities:\n- apply the prod-ab-testing workflow\n\nCanonical skill: .agents/skills/product/prod-ab-testing/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Test design saved; analysis plan saved; rollback rules defined; statistical power computed.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 5,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

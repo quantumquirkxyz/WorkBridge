@@ -1,0 +1,16 @@
+{
+  "name": "ai-model-evaluation",
+  "instructions": "Evaluate ML / LLM models — accuracy, fairness, robustness, explainability, drift — with explicit metrics, subgroup analysis, and failure-mode reporting.\n\nCapabilities:\n- apply the ai-model-evaluation workflow\n\nCanonical skill: .agents/skills/ai/ai-model-evaluation/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Report saved; subgroup analysis complete; failure modes documented; recommendation made.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

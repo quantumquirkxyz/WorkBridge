@@ -1,0 +1,53 @@
+{
+  "name": "standard-feature-default",
+  "description": "Canonical ticket DAG for this repo's standard-feature flow (see workflows/standard-feature.yaml): publish the spec, split it into tracer-bullet tickets, run the parallel implement wave, green the CI gate, open the pull request, review it on the Standards and Spec axes, then merge. Blocking edges follow the documented transition order and no edge is implied by another, so the over-coupling linter has nothing to report.",
+  "version": "1.0",
+  "entryPoint": "to-spec",
+  "tickets": [
+    {
+      "id": "to-spec",
+      "title": "Publish the feature spec from the clarified requirements",
+      "blockedBy": []
+    },
+    {
+      "id": "to-tickets",
+      "title": "Split the spec into tracer-bullet tickets with blocking edges",
+      "blockedBy": ["to-spec"]
+    },
+    {
+      "id": "implement-contracts",
+      "title": "Implement the contracts and shared helpers with TDD",
+      "blockedBy": ["to-tickets"]
+    },
+    {
+      "id": "implement-gate",
+      "title": "Implement the gate wiring and quality checks with TDD",
+      "blockedBy": ["to-tickets"]
+    },
+    {
+      "id": "implement-docs",
+      "title": "Update the docs, catalog, and generated projections",
+      "blockedBy": ["to-tickets"]
+    },
+    {
+      "id": "gate-ci",
+      "title": "Green the local gate and the CI workflow",
+      "blockedBy": ["implement-contracts", "implement-gate", "implement-docs"]
+    },
+    {
+      "id": "publish-open-pr",
+      "title": "Open the pull request with validation evidence",
+      "blockedBy": ["gate-ci"]
+    },
+    {
+      "id": "review-pr",
+      "title": "Review the pull request on the Standards and Spec axes",
+      "blockedBy": ["publish-open-pr"]
+    },
+    {
+      "id": "ship-subissue",
+      "title": "Merge the clean pull request and close the linked issue",
+      "blockedBy": ["review-pr"]
+    }
+  ]
+}

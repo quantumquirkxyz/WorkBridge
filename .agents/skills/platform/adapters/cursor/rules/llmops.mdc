@@ -1,0 +1,13 @@
+---
+description: "LLMOps (deployment, monitoring, A/B testing, prompt management, cost optimization, evaluation pipelines)"
+globs: []
+alwaysApply: false
+---
+# llmops
+
+Apply the llmops skill when the request matches its scope.
+
+Capabilities:
+- apply the llmops workflow
+
+Stop when: Deployment published; monitoring active; evaluation pipeline green.

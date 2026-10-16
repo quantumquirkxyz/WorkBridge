@@ -4,6 +4,7 @@ category: "data"
 maturity: "stable"
 version: "1"
 description: "Data versioning (DVC, lakeFS, delta tables, snapshotting, reproducibility)."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,11 +17,11 @@ promptVersion: "2.0"
 artifactType: "data"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/data-versioning.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/data-versioning.json
 diataxis: "how-to"
 tags: ["data"]
 compatibility: []
-approvalRequired: "false"
+approvalRequired: "true"
 approvalFor: []
 ---
 

@@ -1,0 +1,15 @@
+name: prompt-template-library
+description: "Prompt template library (versioned templates, A/B testing, composition, evaluation)"
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/ai-prompt-template-library
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

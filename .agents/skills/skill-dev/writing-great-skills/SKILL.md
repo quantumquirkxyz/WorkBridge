@@ -4,6 +4,7 @@ category: "skill-dev"
 maturity: "stable"
 version: "1"
 description: "Reference for writing and editing skills well — the vocabulary and principles that make a skill predictable."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "skill-dev"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/writing-great-skills.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["skill-dev"]
 compatibility: []

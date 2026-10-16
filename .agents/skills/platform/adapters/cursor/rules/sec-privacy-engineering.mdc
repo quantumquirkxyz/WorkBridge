@@ -1,0 +1,13 @@
+---
+description: "Design privacy-protecting systems — GDPR / CCPA / HIPAA compliance, data minimisation, anonymisation, consent management, data retention, breach notification — with explicit privacy impact assessments."
+globs: []
+alwaysApply: false
+---
+# sec-privacy-engineering
+
+Apply the sec-privacy-engineering skill when the request matches its scope.
+
+Capabilities:
+- apply the sec-privacy-engineering workflow
+
+Stop when: PIA saved; data-flow map complete; compliance checklist filled.

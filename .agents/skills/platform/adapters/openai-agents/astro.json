@@ -1,0 +1,16 @@
+{
+  "name": "astro",
+  "instructions": "Astro framework (islands architecture, content-focused sites, SSR/SSG, view transitions).\n\nCapabilities:\n- apply the astro workflow\n\nCanonical skill: .agents/skills/frontend/astro/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Astro design complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

@@ -1,9 +1,10 @@
 ---
 name: "agent-orchestration"
-category: "skill-dev/sandbox"
+category: "ai"
 maturity: "stable"
 version: "1"
 description: "Design agent orchestration — multi-agent patterns, tool use, memory, handoffs, evaluation — with explicit coordination boundaries and observability."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "agent"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/agent-orchestration.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["ai"]
 compatibility: []

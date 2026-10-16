@@ -1,9 +1,10 @@
 ---
 name: "ai-ml-pipeline"
-category: "skill-dev/sandbox"
+category: "ai"
 maturity: "stable"
 version: "1"
 description: "Design ML pipelines — data ingestion, preprocessing, training, evaluation, deployment, monitoring — with reproducibility, fairness, and version control."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,11 +17,11 @@ promptVersion: "2.0"
 artifactType: "ai"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/ai-ml-pipeline.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/ai-ml-pipeline.json
 diataxis: "how-to"
 tags: ["ai"]
 compatibility: []
-approvalRequired: "false"
+approvalRequired: "true"
 approvalFor: []
 ---
 

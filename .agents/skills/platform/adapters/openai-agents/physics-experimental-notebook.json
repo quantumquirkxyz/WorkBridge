@@ -1,0 +1,16 @@
+{
+  "name": "physics-experimental-notebook",
+  "instructions": "Maintain experimental physics lab notebooks — measurements, calibration, error analysis, FAIR data principles, reproducibility — with digital and physical structure.\n\nCapabilities:\n- apply the physics-experimental-notebook workflow\n\nCanonical skill: .agents/skills/physics/physics-experimental-notebook/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Notebook entry saved with all sections; calibration and error analysis complete; FAIR checklist filled.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

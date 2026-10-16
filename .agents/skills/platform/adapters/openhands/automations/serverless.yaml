@@ -1,0 +1,15 @@
+name: serverless
+description: "Serverless architecture (Lambda, Functions, FaaS, event-driven, cold starts, scaling, cost)."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/backend-serverless
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: true
+  sideEffects: []

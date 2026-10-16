@@ -1,0 +1,13 @@
+---
+description: "Design backend caching strategies — cache keys, TTLs, invalidation, stale-while-revalidate, and cache coherence — with explicit consistency and failure trade-offs."
+globs: []
+alwaysApply: false
+---
+# backend-caching
+
+Apply the backend-caching skill when the request matches its scope.
+
+Capabilities:
+- apply the backend-caching workflow
+
+Stop when: Cache purpose, freshness, invalidation, and failure behavior are explicit.

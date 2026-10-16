@@ -4,6 +4,7 @@ category: "os"
 maturity: "stable"
 version: "1"
 description: "Design operating system process management — scheduling, signals, process states, concurrency, and inter-process communication — with explicit isolation boundaries."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "pull-request"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/os-processes.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["os"]
 compatibility: []

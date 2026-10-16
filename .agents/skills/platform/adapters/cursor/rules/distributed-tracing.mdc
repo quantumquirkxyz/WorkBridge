@@ -1,0 +1,13 @@
+---
+description: "Distributed tracing (OpenTelemetry, W3C TraceContext, sampling, instrumentation)."
+globs: []
+alwaysApply: false
+---
+# distributed-tracing
+
+Apply the distributed-tracing skill when the request matches its scope.
+
+Capabilities:
+- apply the distributed-tracing workflow
+
+Stop when: Distributed tracing design complete; artifact saved; completion criteria checked.

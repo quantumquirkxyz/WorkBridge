@@ -12,15 +12,42 @@ async function loadPrompt(skill, version) {
 }
 
 async function loadGolden(skill, version) {
-  const goldenPath = path.join(GOLDEN_DIR, `${skill}-${version}.md`);
+  // Priority 1: golden prompt file (.md) — the real prompt reference.
+  const mdPath = path.join(GOLDEN_DIR, `${skill}-${version}.md`);
   try {
-    return await fs.readFile(goldenPath, 'utf8');
+    return await fs.readFile(mdPath, 'utf8');
+  } catch {
+    /* no .md golden; fall back to execution trace (.json) */
+  }
+
+  const jsonPath = path.join(GOLDEN_DIR, `${skill}-${version}.json`);
+  let raw;
+  try {
+    raw = await fs.readFile(jsonPath, 'utf8');
   } catch {
     return null;
   }
+
+  if (raw.trim().startsWith('{')) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (typeof parsed.prompt === 'string') return parsed.prompt;
+      return null;
+    } catch {
+      return raw;
+    }
+  }
+
+  return raw;
 }
 
 async function comparePrompts(skill, version) {
+  const golden = await loadGolden(skill, version);
+
+  if (!golden) {
+    return { skill, version, status: 'no-golden', message: 'No golden file found' };
+  }
+
   let current;
   try {
     current = await loadPrompt(skill, version);
@@ -28,20 +55,14 @@ async function comparePrompts(skill, version) {
     return { skill, version, status: 'no-prompt', message: 'No prompt file found' };
   }
 
-  const golden = await loadGolden(skill, version);
-  
-  if (!golden) {
-    return { skill, version, status: 'no-golden', message: 'No golden file found' };
-  }
-  
   const currentLines = current.split('\n');
   const goldenLines = golden.split('\n');
-  
+
   const added = currentLines.filter(line => !goldenLines.includes(line)).length;
   const removed = goldenLines.filter(line => !currentLines.includes(line)).length;
-  
+
   const similarity = Math.round((1 - (added + removed) / (currentLines.length + goldenLines.length)) * 100);
-  
+
   return {
     skill,
     version,
@@ -57,20 +78,20 @@ async function main() {
   const args = process.argv.slice(2);
   const skill = args[0];
   const version = args[1] || 'v2';
-  
+
   if (!skill) {
     console.error('Usage: node test-prompt-regression.mjs <skill-name> [version]');
     process.exit(1);
   }
-  
+
   const result = await comparePrompts(skill, version);
-  
+
   console.log(`\nPrompt Regression Test: ${skill}/${version}`);
   console.log(`Status: ${result.status.toUpperCase()}`);
   console.log(`Similarity: ${result.similarity}% (threshold: ${result.threshold}%)`);
   if (result.added) console.log(`Lines added: ${result.added}`);
   if (result.removed) console.log(`Lines removed: ${result.removed}`);
-  
+
   process.exit(result.status === 'pass' ? 0 : 1);
 }
 

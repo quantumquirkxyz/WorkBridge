@@ -4,6 +4,7 @@ category: "ux"
 maturity: "stable"
 version: "1"
 description: "Prototype user experiences — wireframes, interactive mockups, and rapid validation — with explicit experiment goals and iteration criteria."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "pull-request"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/ux-prototyping.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["ux"]
 compatibility: []

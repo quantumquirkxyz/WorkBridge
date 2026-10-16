@@ -4,6 +4,7 @@ category: delivery
 maturity: stable
 version: 2
 description: Implement a piece of work based on a spec or set of tickets, or build a scoped fix that can be handed off for publication. This skill stops at the implemented, validated branch.
+license: MIT
 capabilities:
   - apply implement workflow
   - produce implement artifact
@@ -44,8 +45,22 @@ fixturesPath: .agents/skills/platform/fixtures/behavioral/implement.json
 diataxis: how-to
 tags: [tdd, delivery, implementation, testing]
 compatibility: [to-tickets, publish-open-pr, tdd, gate-ci]
-approvalRequired: false
-approvalFor: []
+approvalRequired: true
+approvalFor: ["write-code", "commit-git", "push-branch"]
+clauses:
+  - id: IMPLEMENT-1
+    text: "Treat a ticket as executable only when its acceptance criteria are concrete and its blockers are resolved."
+    check: "evals/behavioral/implement.json#IMPLEMENT-1"
+  - id: IMPLEMENT-2
+    text: "Require an explicit user request or prior workflow approval before any repository-mutating side effect (write-code, commit-git, push-branch)."
+    check: "evals/behavioral/implement.json#IMPLEMENT-2"
+  - id: IMPLEMENT-3
+    text: "Do not open or merge a PR here; stop at the validated branch and do not proceed to publish-open-pr until gate-ci passes."
+    check: "evals/behavioral/implement.json#IMPLEMENT-3"
+  - id: IMPLEMENT-4
+    text: "Drive tracer-bullet vertical slices with TDD at pre-agreed seams: implement, validate, commit, per slice."
+    check: "evals/behavioral/implement.json#IMPLEMENT-4"
+reloadPolicy: on-trigger
 ---
 
 ## Contract

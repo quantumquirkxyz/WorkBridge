@@ -1,0 +1,13 @@
+---
+description: "Analyse market microstructure — order book dynamics, price formation, execution costs (slippage, spread, impact), and optimal execution strategies."
+globs: []
+alwaysApply: false
+---
+# quant-market-micro
+
+Apply the quant-market-micro skill when the request matches its scope.
+
+Capabilities:
+- apply the quant-market-micro workflow
+
+Stop when: Analyse market microstructure complete; required sections present; completion criteria checked.

@@ -1,0 +1,16 @@
+{
+  "name": "skill-quality-gate",
+  "instructions": "Run and interpret the skill bundle quality gate across schema, lockfile, semantic, routing, placeholder, rule, metadata, and side-effect checks before promotion or publication.\n\nCapabilities:\n- apply the skill-quality-gate workflow\n\nCanonical skill: .agents/skills/skill-dev/skill-quality-gate/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Quality gate commands are executed or blocked with reasons, findings are separated into blockers and warnings, and release readiness is stated.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 5,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

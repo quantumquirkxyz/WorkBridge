@@ -1,0 +1,13 @@
+---
+description: "Set up reproducible physics simulations — Monte Carlo (GEANT4), molecular dynamics (LAMMPS), DFT (VASP, Quantum ESPRESSO), quantum dynamics (QuTiP) — with containers, parameter files, and verification."
+globs: []
+alwaysApply: false
+---
+# physics-simulation-setup
+
+Apply the physics-simulation-setup skill when the request matches its scope.
+
+Capabilities:
+- apply the physics-simulation-setup workflow
+
+Stop when: Container builds; parameters saved; verification report shows agreement with benchmark.

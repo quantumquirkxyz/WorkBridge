@@ -1,0 +1,16 @@
+{
+  "name": "finance-dcf",
+  "instructions": "Discounted Cash Flow — forecast, WACC, terminal value, sensitivity — with explicit assumptions, cross-check against multiples, and a valuation range.\n\nCapabilities:\n- apply the finance-dcf workflow\n\nCanonical skill: .agents/skills/finance/finance-dcf/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Discounted Cash Flow complete; required sections present; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

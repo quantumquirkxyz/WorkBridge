@@ -1,0 +1,16 @@
+{
+  "name": "skill-testing-framework",
+  "instructions": "Validate Skill structure, contracts, dependencies, anti-patterns, and isolated execution — use when checking a Skill before promotion.\n\nCapabilities:\n- apply the skill-testing-framework workflow\n\nCanonical skill: .agents/skills/skill-dev/skill-testing-framework/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Validate Skill structure, contracts, dependencies, anti-patterns, and isolated execution complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "worktree"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

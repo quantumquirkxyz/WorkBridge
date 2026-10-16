@@ -1,0 +1,13 @@
+---
+description: "Analyze computability questions — decidability, reductions, recognizability, and undecidability proofs — with formal problem transformations."
+globs: []
+alwaysApply: false
+---
+# cs-computability
+
+Apply the cs-computability skill when the request matches its scope.
+
+Capabilities:
+- apply the cs-computability workflow
+
+Stop when: The problem class, proof strategy, and reduction obligations are explicit and checked.

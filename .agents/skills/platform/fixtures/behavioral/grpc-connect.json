@@ -1,0 +1,66 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-grpc-connect",
+      "skill": "grpc-connect",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "## Completion",
+          "## Process",
+          "## Rules",
+          "GrpcConnectArtifact",
+          "never reuse field numbers; reserve removed numbers immediately.",
+          "use packages and import boundaries to prevent schema sprawl across teams.",
+          "document retry budgets, idempotency keys, and safe-for-retry semantics per method.",
+          "enable reflection and health checking for operational visibility."
+        ],
+        "doesNotContain": [
+          "## Operating Contract",
+          "ask-matt",
+          "ship-review-fix-loop",
+          "doc-draft-pr",
+          "frontend-development",
+          "Matt",
+          "TODO",
+          "point 1",
+          "Criterion 1",
+          "Acceptance criterion 1",
+          "BE-2",
+          "OpenAPI spec",
+          "localhost:3000",
+          "extremely extensive"
+        ]
+      }
+    },
+    {
+      "id": "v2-frontmatter-grpc-connect",
+      "skill": "grpc-connect",
+      "type": "behavioral",
+      "expected": {
+        "frontmatterContains": [
+          "name: \"grpc-connect\"",
+          "risk: \"medium\"",
+          "trustTier: \"3\"",
+          "modelTier: \"reasoning\"",
+          "promptVersion: \"2.0\"",
+          "artifactType: \"backend\"",
+          "diataxis: \"how-to\""
+        ]
+      }
+    },
+    {
+      "id": "v2-footer-grpc-connect",
+      "skill": "grpc-connect",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "@include .agents/skills/platform/contract-base.xml"
+        ]
+      }
+    }
+  ]
+}

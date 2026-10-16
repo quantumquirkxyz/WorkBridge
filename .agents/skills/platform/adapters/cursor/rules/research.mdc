@@ -1,0 +1,13 @@
+---
+description: Investigate a question against high-trust primary sources and capture the findings as a Markdown file in the repo. Use w
+globs: []
+alwaysApply: false
+---
+# research
+
+Apply the research skill when the request matches its scope.
+
+Capabilities:
+- apply the research workflow
+
+Stop when: Investigate a question against high-trust primary sources and capture the findings as a Markdown file in the repo complete; artifact saved; completion criteria checked.

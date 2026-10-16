@@ -1,0 +1,15 @@
+---
+description: "Optimize a quirk Skill's model-facing description against routing fixtures with a propose-only reflective loop. Use when a Skill routes wrong, fires too rarely or too often, or when evaluate-skill or skill-quality-gate reports a routing regression. Emits a diff-shaped proposal with (skill, version, fixture) evidence; the human applies it. Not for body edits or metadata repair."
+globs: []
+alwaysApply: false
+---
+# skill-optimizer
+
+Apply the skill-optimizer skill when the request matches its scope.
+
+Capabilities:
+- score skill description routing evidence
+- evolve description candidates reflectively
+- emit an apply-ready description proposal
+
+Stop when: Skill description optimization proposal emitted with held-out evidence, or an explicit no-defensible-change verdict; target skill untouched; completion criteria checked.

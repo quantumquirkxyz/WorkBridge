@@ -1,0 +1,16 @@
+{
+  "name": "networking-protocols",
+  "instructions": "Analyze network protocols — packet formats, handshakes, congestion control, routing, and transport behavior — with explicit timing and failure assumptions.\n\nCapabilities:\n- apply the networking-protocols workflow\n\nCanonical skill: .agents/skills/networking/networking-protocols/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Protocol state, message flow, and failure assumptions are explicit.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "incident-forensics",
+  "instructions": "Incident forensics (evidence collection, timeline reconstruction, root cause, reporting)\n\nCapabilities:\n- apply the incident-forensics workflow\n\nCanonical skill: .agents/skills/sec/incident-forensics/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Evidence collected and hashed; timeline complete; root cause identified; report reviewed.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

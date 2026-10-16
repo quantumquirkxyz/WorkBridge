@@ -1,0 +1,16 @@
+{
+  "name": "triage",
+  "instructions": "Move issues and external PRs through a state machine of triage roles — categorise, verify, grill if needed, and write ag\n\nCapabilities:\n- apply the triage workflow\n\nCanonical skill: .agents/skills/routing/triage/SKILL.md",
+  "model": "gpt-5.1",
+  "tools": [],
+  "handoff_description": "Move issues and external PRs through a state machine of triage roles complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "worktree"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

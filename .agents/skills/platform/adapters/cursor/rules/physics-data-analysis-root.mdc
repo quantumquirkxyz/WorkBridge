@@ -1,0 +1,13 @@
+---
+description: "Analyse experimental physics data with ROOT, pandas, uproot, NumPy — calibration, systematic errors, statistical inference, result archival — with reproducible scripts."
+globs: []
+alwaysApply: false
+---
+# physics-data-analysis-root
+
+Apply the physics-data-analysis-root skill when the request matches its scope.
+
+Capabilities:
+- apply the physics-data-analysis-root workflow
+
+Stop when: Script runs; report saved with error budget, systematic table, and plot links.

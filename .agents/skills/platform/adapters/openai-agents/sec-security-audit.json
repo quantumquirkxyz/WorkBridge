@@ -1,0 +1,16 @@
+{
+  "name": "sec-security-audit",
+  "instructions": "Audit software/security posture — code review, dependency scanning, secret detection, access control, audit logging — with explicit findings and remediation priorities.\n\nCapabilities:\n- apply the sec-security-audit workflow\n\nCanonical skill: .agents/skills/sec/sec-security-audit/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Audit report complete; findings classified by severity; recommendations made.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

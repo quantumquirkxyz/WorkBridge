@@ -1,0 +1,13 @@
+---
+description: "Multimodal prompting (vision, audio, video, image generation, vision-language models)"
+globs: []
+alwaysApply: false
+---
+# multimodal-prompting
+
+Apply the multimodal-prompting skill when the request matches its scope.
+
+Capabilities:
+- apply the multimodal-prompting workflow
+
+Stop when: Each modality green on acceptance suite with validation and fallback.

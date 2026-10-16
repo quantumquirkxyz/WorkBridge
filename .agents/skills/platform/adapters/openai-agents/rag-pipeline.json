@@ -1,0 +1,16 @@
+{
+  "name": "rag-pipeline",
+  "instructions": "Design RAG pipelines — retrieval, chunking, embedding, reranking, generation — with explicit data flow, latency budgets, and evaluation seams.\n\nCapabilities:\n- apply the rag-pipeline workflow\n\nCanonical skill: .agents/skills/ai/rag-pipeline/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Architecture documented; chunking and embedding config defined; evaluation plan complete.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

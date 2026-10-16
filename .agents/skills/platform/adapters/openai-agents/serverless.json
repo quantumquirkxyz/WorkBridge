@@ -1,0 +1,16 @@
+{
+  "name": "serverless",
+  "instructions": "Serverless architecture (Lambda, Functions, FaaS, event-driven, cold starts, scaling, cost).\n\nCapabilities:\n- apply the serverless workflow\n\nCanonical skill: .agents/skills/backend/serverless/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Serverless architecture, event sources, scaling behavior, and cost model are explicit.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

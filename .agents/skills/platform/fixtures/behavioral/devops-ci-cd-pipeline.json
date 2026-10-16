@@ -1,0 +1,67 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-devops-ci-cd-pipeline",
+      "skill": "devops-ci-cd-pipeline",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "## Completion",
+          "## Process",
+          "## Rules",
+          "DevopsCiCdPipelineArtifact",
+          "make build, test, security, deploy, and rollback stages explicit.",
+          "use reproducible dependencies, pinned tool versions, and consistent runtime images.",
+          "block promotion on failing tests, critical security findings, or missing artifacts.",
+          "deploy to lower environments before production and define approval gates."
+        ],
+        "doesNotContain": [
+          "## Operating Contract",
+          "ask-matt",
+          "ship-review-fix-loop",
+          "doc-draft-pr",
+          "frontend-development",
+          "ARIES",
+          "Matt",
+          "TODO",
+          "point 1",
+          "Criterion 1",
+          "Acceptance criterion 1",
+          "BE-2",
+          "OpenAPI spec",
+          "localhost:3000",
+          "extremely extensive"
+        ]
+      }
+    },
+    {
+      "id": "v2-frontmatter-devops-ci-cd-pipeline",
+      "skill": "devops-ci-cd-pipeline",
+      "type": "behavioral",
+      "expected": {
+        "frontmatterContains": [
+          "name: \"devops-ci-cd-pipeline\"",
+          "risk: \"medium\"",
+          "trustTier: \"3\"",
+          "modelTier: \"reasoning\"",
+          "promptVersion: \"2.0\"",
+          "artifactType: \"devops\"",
+          "diataxis: \"how-to\""
+        ]
+      }
+    },
+    {
+      "id": "v2-footer-devops-ci-cd-pipeline",
+      "skill": "devops-ci-cd-pipeline",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "@include .agents/skills/platform/contract-base.xml"
+        ]
+      }
+    }
+  ]
+}

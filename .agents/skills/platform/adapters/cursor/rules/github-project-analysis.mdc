@@ -1,0 +1,17 @@
+---
+description: "Research comparable projects exclusively on GitHub and analyze their structure, decisions, and reusable patterns for an active project."
+globs: []
+alwaysApply: false
+---
+# github-project-analysis
+
+Apply the github-project-analysis skill when the request matches its scope.
+
+Capabilities:
+- GitHub discovery
+- repository triage
+- structure analysis
+- comparative synthesis
+- adaptation planning
+
+Stop when: Comparable GitHub repositories are selected with evidence, their structures are compared, adaptations are bounded, and unresolved risks are recorded.

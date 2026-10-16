@@ -1,0 +1,15 @@
+name: nextjs
+description: "Shape Next.js projects around routes, server/client seams, and data flow that stay deep rather than tangled."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/frontend-nextjs
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

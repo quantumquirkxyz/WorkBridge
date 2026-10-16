@@ -1,0 +1,16 @@
+{
+  "name": "math-formal-proof",
+  "instructions": "Develop formal mathematical proofs in proof assistants (Lean 4, Coq, Isabelle, Agda) with literate programming, tactic-driven construction, and verification.\n\nCapabilities:\n- apply the math-formal-proof workflow\n\nCanonical skill: .agents/skills/math/math-formal-proof/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "source file compiles in the target assistant with no errors; verification report attached.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 8,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

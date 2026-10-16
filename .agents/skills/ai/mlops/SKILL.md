@@ -4,6 +4,7 @@ category: "ai"
 maturity: "stable"
 version: "1"
 description: "MLOps (feature stores, model registry, data versioning, pipeline orchestration, monitoring, retraining)"
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,11 +17,11 @@ promptVersion: "2.0"
 artifactType: "ai"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/mlops.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/mlops.json
 diataxis: "how-to"
 tags: ["ai"]
 compatibility: []
-approvalRequired: "false"
+approvalRequired: "true"
 approvalFor: []
 ---
 

@@ -1,0 +1,13 @@
+---
+description: "Design analytical warehouse schemas — star / snowflake / OBT — with dimension, fact, and bridge tables; partitioning; indexing; and query optimization."
+globs: []
+alwaysApply: false
+---
+# data-warehouse-modeling
+
+Apply the data-warehouse-modeling skill when the request matches its scope.
+
+Capabilities:
+- apply the data-warehouse-modeling workflow
+
+Stop when: Schema design saved; dimensions and facts defined; optimisation notes present.

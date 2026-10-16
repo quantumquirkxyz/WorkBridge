@@ -1,0 +1,16 @@
+{
+  "name": "writing-great-skills",
+  "instructions": "Reference for writing and editing skills well — the vocabulary and principles that make a skill predictable.\n\nCapabilities:\n- apply the writing-great-skills workflow\n\nCanonical skill: .agents/skills/skill-dev/writing-great-skills/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Reference for writing and editing skills well complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "accessibility",
+  "instructions": "Design inclusive products — WCAG compliance, assistive technology support, keyboard navigation, color contrast — with explicit user access guarantees.\n\nCapabilities:\n- apply the accessibility workflow\n\nCanonical skill: .agents/skills/accessibility/accessibility/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Design inclusive products complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

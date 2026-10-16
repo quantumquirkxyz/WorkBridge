@@ -1,9 +1,10 @@
 ---
 name: "finance-corporate-val"
-category: "skill-dev/sandbox"
+category: "finance"
 maturity: "stable"
 version: "1"
 description: "Corporate valuation — DCF, multiples, sum-of-parts, scenario analysis — with explicit assumptions, sensitivity, and cross-checks."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "finance"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/finance-corporate-val.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["finance"]
 compatibility: []

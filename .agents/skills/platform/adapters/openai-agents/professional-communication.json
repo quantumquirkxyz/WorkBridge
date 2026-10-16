@@ -1,0 +1,16 @@
+{
+  "name": "professional-communication",
+  "instructions": "Improve professional communication — status updates, stakeholder messages, expectations, and escalation — with clarity and precision.\n\nCapabilities:\n- apply the professional-communication workflow\n\nCanonical skill: .agents/skills/professional/professional-communication/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "The message has a clear audience, ask, status, tone, and next step.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

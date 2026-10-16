@@ -1,0 +1,15 @@
+name: state-management
+description: "Modern state management (Zustand, Jotai, signals, Redux Toolkit, server state)."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/frontend-state-management
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

@@ -1,9 +1,10 @@
 ---
 name: "data-contracts"
-category: "skill-dev/sandbox"
+category: "data"
 maturity: "stable"
 version: "1"
 description: "Design data contracts — schema evolution, producer-consumer agreements, schema registry, breaking change detection — with explicit compatibility rules and versioning."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,11 +17,11 @@ promptVersion: "2.0"
 artifactType: "data"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/data-contracts.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/data-contracts.json
 diataxis: "how-to"
 tags: ["data"]
 compatibility: []
-approvalRequired: "false"
+approvalRequired: "true"
 approvalFor: []
 ---
 

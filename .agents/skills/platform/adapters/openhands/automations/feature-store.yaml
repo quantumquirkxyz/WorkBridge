@@ -1,0 +1,15 @@
+name: feature-store
+description: "Feature store (online/offline, feature engineering, serving, monitoring, drift)."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/data-feature-store
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: true
+  sideEffects: []

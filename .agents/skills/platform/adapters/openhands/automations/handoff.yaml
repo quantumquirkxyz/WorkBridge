@@ -1,0 +1,15 @@
+name: handoff
+description: "Compact the current conversation into a handoff document for another agent to pick up — with explicit continuity and ownership notes."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/routing-handoff
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: [write-temp-file]

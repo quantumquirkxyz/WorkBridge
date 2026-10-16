@@ -1,0 +1,13 @@
+---
+description: "Design supply chain security — SBOM, Sigstore, SLSA, provenance, signing — with explicit trust tiers, artifact verification, and incident response for compromised dependencies."
+globs: []
+alwaysApply: false
+---
+# supply-chain-security
+
+Apply the supply-chain-security skill when the request matches its scope.
+
+Capabilities:
+- apply the supply-chain-security workflow
+
+Stop when: SBOM policy defined; signing policy defined; SLSA target and attestation documented.

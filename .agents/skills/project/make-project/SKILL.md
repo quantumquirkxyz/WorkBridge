@@ -4,6 +4,7 @@ category: "project"
 maturity: "stable"
 version: "1"
 description: "Use when the user wants a new board in GitHub Projects, or another skill needs one — create the project, wire its fields, and preserve tracker semantics."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects:
@@ -20,12 +21,12 @@ promptVersion: "2.0"
 artifactType: "pull-request"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/make-project.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/make-project.json
 diataxis: "how-to"
 tags: ["project"]
 compatibility: []
-approvalRequired: "false"
-approvalFor: []
+approvalRequired: "true"
+approvalFor: ["create-project", "create-project-fields", "link-repositories"]
 ---
 
 ## Contract
@@ -48,6 +49,20 @@ approvalFor: []
 | What risk remains? | Subjective judgment calls, missing context, or external dependency failures
 
 
+## Guardrails
+
+- The GraphQL API cannot create Projects **automation rules** (workflows like "auto-add labeled issues" or "move to Done on close") — those are configured in the UI or via GitHub Actions. Say so rather than pretending to set them.
+- `updateProjectV2ItemFieldValue` cannot change Assignees, Labels, Milestone, or Repository — those are properties of the issue or PR itself, set through the issue/PR APIs, not the project item.
+- Adding an item that's already on the board returns the existing item — no duplicate.
+- Global node IDs are required everywhere; never pass REST numeric IDs.
+
+## Completion
+
+- the skill's completion criteria are explicitly checked
+- the structured result is returned and validated
+- any blockers or skipped validations are documented
+- the next consumer is identified or the work is handed off
+
 ## Artifact
 
 Return `MakeProjectArtifact` as structured output in the current response. Do not write local artifact files unless the user explicitly asks for an export.
@@ -64,7 +79,7 @@ The exact queries and mutations live in [`references/graphql.md`](references/gra
 
 ## Repo Context
 
-Use the current repository's `CONTEXT.md`, `docs/agents/domain.md`, and issue tracker configuration when naming fields, views, and items. Default to portable project fields unless the repo already declares stronger domain fields:
+Use the current repository's `CONTEXT.md`, `docs/reference/agents/domain.md`, and issue tracker configuration when naming fields, views, and items. Default to portable project fields unless the repo already declares stronger domain fields:
 
 - **Work Type** — feature, bug, chore, docs, research, release, review-fix
 - **Repo Scope** — the repository, package, app, service, or module that owns the item
@@ -145,18 +160,5 @@ Run `verify-board`. Confirm the title, linked repositories, fields, views, and i
 
 Completion: verification matches the agreement on every axis, and the URL is reported.
 
-## Guardrails
-
-- The GraphQL API cannot create Projects **automation rules** (workflows like "auto-add labeled issues" or "move to Done on close") — those are configured in the UI or via GitHub Actions. Say so rather than pretending to set them.
-- `updateProjectV2ItemFieldValue` cannot change Assignees, Labels, Milestone, or Repository — those are properties of the issue or PR itself, set through the issue/PR APIs, not the project item.
-- Adding an item that's already on the board returns the existing item — no duplicate.
-- Global node IDs are required everywhere; never pass REST numeric IDs.
-
-## Completion
-
-- the skill's completion criteria are explicitly checked
-- the structured result is returned and validated
-- any blockers or skipped validations are documented
-- the next consumer is identified or the work is handed off
 ---
 @include .agents/skills/platform/contract-base.xml

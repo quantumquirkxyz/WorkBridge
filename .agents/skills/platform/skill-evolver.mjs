@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // skill-evolver.mjs - Evidence-gated skill evolution
-// Usage: node skill-evolver.mjs <skill-path> [--target-version N] [--dry-run] [--evidence <type>]
+// Usage: node skill-evolver.mjs <skill-path> [--target-version N] [--dry-run] [--evidence <type>] [--verified-evidence <type>:<path-or-note> ...]
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -80,8 +80,12 @@ function classifyChange(oldText, newText) {
   return 'knowledge';
 }
 
-async function verifyEvidence(evidenceType, skillPath) {
+async function verifyEvidence(evidenceType, skillPath, verifiedEvidence = new Map()) {
   const skillName = path.basename(skillPath);
+  const verificationNote = verifiedEvidence.get(evidenceType);
+  const awaitVerification = (reason) => verificationNote !== undefined
+    ? { passed: true, status: 'passed', detail: 'verified-by-human: ' + verificationNote }
+    : { passed: false, status: 'pending-verification', detail: 'pending-verification: ' + reason };
   switch (evidenceType) {
     case 'quality-score': {
       const { spawn } = await import('node:child_process');
@@ -93,7 +97,8 @@ async function verifyEvidence(evidenceType, skillPath) {
           try {
             const result = JSON.parse(stdout);
             const threshold = EVIDENCE_TYPES['quality-score'].threshold || 60;
-            resolve({ passed: result.total >= threshold, detail: `score=${result.total}`, threshold });
+            const passed = result.total >= threshold;
+            resolve({ passed, status: passed ? 'passed' : 'failed', detail: `score=${result.total}`, threshold });
           } catch { resolve({ passed: false, detail: 'parse-error' }); }
         });
       });
@@ -109,7 +114,8 @@ async function verifyEvidence(evidenceType, skillPath) {
             const result = JSON.parse(stdout);
             const allowed = EVIDENCE_TYPES['security-scan'].required || [];
             const blocked = result.findings.filter(f => allowed.includes(f.severity));
-            resolve({ passed: blocked.length === 0, detail: `findings=${result.findings.length}`, blocked });
+            const passed = blocked.length === 0;
+            resolve({ passed, status: passed ? 'passed' : 'failed', detail: `findings=${result.findings.length}`, blocked });
           } catch { resolve({ passed: false, detail: 'parse-error' }); }
         });
       });
@@ -117,15 +123,17 @@ async function verifyEvidence(evidenceType, skillPath) {
     case 'behavioral-fixture':
     case 'regression-test': {
       const fixtureFile = path.join(root, `.agents/skills/platform/fixtures/${evidenceType === 'behavioral-fixture' ? 'behavioral' : 'regression'}/${skillName}.json`);
-      if (!await exists(fixtureFile)) return { passed: true, detail: 'no-fixtures-file' };
-      return { passed: true, detail: 'fixtures-exist' };
+      const detail = await exists(fixtureFile)
+        ? evidenceType + ' fixtures exist but were not executed by this script'
+        : 'no ' + evidenceType + ' fixtures file';
+      return awaitVerification(detail);
     }
     case 'dependency-check':
-      return { passed: true, detail: 'manual-verification-required' };
+      return awaitVerification('dependency graph cycle check was not executed by this script');
     case 'peer-review':
-      return { passed: true, detail: 'manual-verification-required' };
+      return awaitVerification('no peer review approval recorded');
     default:
-      return { passed: true, detail: 'unknown-evidence-type' };
+      return awaitVerification('unknown evidence type');
   }
 }
 
@@ -136,7 +144,7 @@ async function appendAuditRecord(record) {
   await fs.appendFile(auditFile, JSON.stringify(record) + '\n', 'utf8');
 }
 
-async function evolveSkill(skillPath, targetVersion, evidenceTypes = [], dryRun = false) {
+async function evolveSkill(skillPath, targetVersion, evidenceTypes = [], dryRun = false, verifiedEvidence = new Map()) {
   const skillFile = path.join(root, skillPath, 'SKILL.md');
   if (!await exists(skillFile)) throw new Error(`Skill not found: ${skillPath}`);
 
@@ -150,7 +158,8 @@ async function evolveSkill(skillPath, targetVersion, evidenceTypes = [], dryRun 
     return { skill: skillName, status: 'no-change', currentVersion, targetVersion: newVersion };
   }
 
-  const updatedText = originalText.replace(/^version: \d+/m, `version: ${newVersion}`);
+  const versionPattern = /^version:\s*(["']?)(\d+)\1/m;
+  const updatedText = originalText.replace(versionPattern, (match, quote) => `version: ${quote}${newVersion}${quote}`);
 
   const changeCategory = await classifyChange(originalText, updatedText);
   const requiredEvidence = CHANGE_CATEGORIES[changeCategory]?.evidence || ['quality-score'];
@@ -158,12 +167,15 @@ async function evolveSkill(skillPath, targetVersion, evidenceTypes = [], dryRun 
 
   const evidenceResults = [];
   for (const evType of evidenceToVerify) {
-    const result = await verifyEvidence(evType, skillPath);
-    evidenceResults.push({ type: evType, passed: result.passed, detail: result.detail });
+    const result = await verifyEvidence(evType, skillPath, verifiedEvidence);
+    evidenceResults.push({ type: evType, passed: result.passed, status: result.status, detail: result.detail });
   }
 
-  const allPassed = evidenceResults.every(e => e.passed);
-  const blocked = evidenceResults.filter(e => !e.passed);
+  const verificationNotes = evidenceResults
+    .filter(e => e.status === 'passed' && typeof e.detail === 'string' && e.detail.startsWith('verified-by-human'))
+    .map(e => e.type + '=' + e.detail);
+  const allPassed = evidenceResults.every(e => e.status === 'passed');
+  const blocked = evidenceResults.filter(e => e.status !== 'passed');
 
   if (!allPassed && !dryRun) {
     const record = {
@@ -174,10 +186,12 @@ async function evolveSkill(skillPath, targetVersion, evidenceTypes = [], dryRun 
       version: `${currentVersion} -> ${newVersion}`,
       evidence: evidenceResults,
       blockedBy: blocked.map(b => b.type),
+      pendingVerification: blocked.filter(b => b.status === 'pending-verification').map(b => b.type),
+      verifiedEvidence: verificationNotes,
       actor: process.env.USER || 'unknown',
     };
     await appendAuditRecord(record);
-    return { skill: skillName, status: 'blocked', changeCategory, version: `${currentVersion} -> ${newVersion}`, evidence: evidenceResults, blockedBy: blocked.map(b => b.type) };
+    return { skill: skillName, status: 'blocked', changeCategory, version: `${currentVersion} -> ${newVersion}`, evidence: evidenceResults, blockedBy: blocked.map(b => b.type), pendingVerification: blocked.filter(b => b.status === 'pending-verification').map(b => b.type) };
   }
 
   if (!dryRun) {
@@ -191,6 +205,7 @@ async function evolveSkill(skillPath, targetVersion, evidenceTypes = [], dryRun 
       evidence: evidenceResults,
       previousHash: crypto.createHash('sha256').update(originalText).digest('hex'),
       newHash: crypto.createHash('sha256').update(updatedText).digest('hex'),
+      verifiedEvidence: verificationNotes,
       actor: process.env.USER || 'unknown',
     };
     await appendAuditRecord(record);
@@ -214,12 +229,26 @@ async function main() {
   const evidenceArg = args.find(a => a.startsWith('--evidence='));
   const evidenceTypes = evidenceArg ? evidenceArg.split('=')[1].split(',') : [];
 
+  const verifiedEvidence = new Map();
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+    let value;
+    if (arg === '--verified-evidence') value = args[i + 1] && !args[i + 1].startsWith('--') ? args[++i] : '';
+    else if (arg.startsWith('--verified-evidence=')) value = arg.slice('--verified-evidence='.length);
+    if (value) {
+      for (const entry of value.split(',')) {
+        const sep = entry.indexOf(':');
+        if (sep > 0) verifiedEvidence.set(entry.slice(0, sep).trim(), entry.slice(sep + 1).trim() || 'verified');
+      }
+    }
+  }
+
   if (!skillPath) {
-    console.error('Usage: node skill-evolver.mjs <skill-path> [--target-version N] [--dry-run] [--evidence type1,type2]');
+    console.error('Usage: node skill-evolver.mjs <skill-path> [--target-version N] [--dry-run] [--evidence type1,type2] [--verified-evidence type:path-or-note ...]');
     process.exit(1);
   }
 
-  const result = await evolveSkill(skillPath, targetVersion, evidenceTypes, dryRun);
+  const result = await evolveSkill(skillPath, targetVersion, evidenceTypes, dryRun, verifiedEvidence);
   console.log(JSON.stringify(result, null, 2));
 
   if (result.status === 'blocked') process.exit(1);

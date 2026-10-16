@@ -1,0 +1,16 @@
+{
+  "name": "backend-architecture",
+  "instructions": "Shape backend systems — REST/gRPC APIs, service contracts, data flow, state management, error handling — with explicit seams and caller responsibilities.\n\nCapabilities:\n- apply the backend-architecture workflow\n\nCanonical skill: .agents/skills/backend/backend-architecture/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Shape backend systems complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

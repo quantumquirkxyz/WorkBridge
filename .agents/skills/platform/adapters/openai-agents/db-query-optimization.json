@@ -1,0 +1,16 @@
+{
+  "name": "db-query-optimization",
+  "instructions": "Optimize database queries — indexing, query plans, cardinality, joins, and execution trade-offs — with explainable reasoning and measurement.\n\nCapabilities:\n- apply the db-query-optimization workflow\n\nCanonical skill: .agents/skills/db/db-query-optimization/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "The bottleneck, proposed change, and validation plan are explicit.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

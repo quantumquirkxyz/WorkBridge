@@ -3,6 +3,7 @@ name: "agent-observability"
 category: "foundation"
 maturity: "stable"
 description: "Capture redacted execution records, traces, and quality signals for skill runs with structured data for analysis. Enables full audit of decisions made during agent execution."
+license: "MIT"
 version: "1"
 capabilities: ""
 inputs: ""
@@ -17,7 +18,7 @@ promptVersion: "2.0"
 artifactType: "agent"
 modelTier: "fast"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/agent-observability.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["foundation"]
 compatibility: []

@@ -1,9 +1,10 @@
 ---
 name: "quant-derivatives-pricing"
-category: "skill-dev/sandbox"
+category: "quant"
 maturity: "stable"
 version: "1"
 description: "Price and calibrate derivatives (options, exotics, structured products) — Black-Scholes, trees, Monte Carlo — with Greeks, model risk, and calibration validation."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "pull-request"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/quant-derivatives-pricing.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["quant"]
 compatibility: []

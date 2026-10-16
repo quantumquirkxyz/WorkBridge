@@ -1,0 +1,16 @@
+{
+  "name": "multimodal-prompting",
+  "instructions": "Multimodal prompting (vision, audio, video, image generation, vision-language models)\n\nCapabilities:\n- apply the multimodal-prompting workflow\n\nCanonical skill: .agents/skills/ai/multimodal-prompting/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Each modality green on acceptance suite with validation and fallback.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

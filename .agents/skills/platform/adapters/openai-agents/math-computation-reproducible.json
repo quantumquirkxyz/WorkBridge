@@ -1,0 +1,16 @@
+{
+  "name": "math-computation-reproducible",
+  "instructions": "Make mathematical computations reproducible — SymPy, Mathematica, Magma, Sage, Julia — with versioned environments (Docker/Conda/Nix), scripts, and result archival.\n\nCapabilities:\n- apply the math-computation-reproducible workflow\n\nCanonical skill: .agents/skills/math/math-computation-reproducible/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "All artifacts saved; container builds; result reproducible from artifacts alone.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

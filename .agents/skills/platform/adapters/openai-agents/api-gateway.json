@@ -1,0 +1,16 @@
+{
+  "name": "api-gateway",
+  "instructions": "API gateway (Kong, Envoy, AWS API Gateway, rate limiting, auth, routing).\n\nCapabilities:\n- apply the api-gateway workflow\n\nCanonical skill: .agents/skills/backend/api-gateway/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "API gateway design complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

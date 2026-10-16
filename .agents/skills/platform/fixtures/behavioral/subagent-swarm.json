@@ -1,0 +1,68 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-subagent-swarm",
+      "skill": "subagent-swarm",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "## Completion",
+          "## Process",
+          "## Guardrails",
+          "## Contracts Per Role",
+          "## Canonical delegation brief",
+          "SubagentSwarmArtifact",
+          "Each subagent must record evidence independently.",
+          "Conflicts must be resolved with explicit reasoning.",
+          "Never merge outputs without validating evidence.",
+          "Preserve context between role handoffs."
+        ],
+        "doesNotContain": [
+          "## Operating Contract",
+          "ask-matt",
+          "ship-review-fix-loop",
+          "doc-draft-pr",
+          "frontend-development",
+          "Matt",
+          "TODO",
+          "point 1",
+          "Criterion 1",
+          "Acceptance criterion 1",
+          "BE-2",
+          "OpenAPI spec",
+          "localhost:3000",
+          "extremely extensive"
+        ]
+      }
+    },
+    {
+      "id": "v2-frontmatter-subagent-swarm",
+      "skill": "subagent-swarm",
+      "type": "behavioral",
+      "expected": {
+        "frontmatterContains": [
+          "name: \"subagent-swarm\"",
+          "risk: \"medium\"",
+          "trustTier: \"3\"",
+          "modelTier: \"reasoning\"",
+          "promptVersion: \"2.0\"",
+          "artifactType: \"agent\"",
+          "diataxis: \"how-to\""
+        ]
+      }
+    },
+    {
+      "id": "v2-footer-subagent-swarm",
+      "skill": "subagent-swarm",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "@include .agents/skills/platform/contract-base.xml"
+        ]
+      }
+    }
+  ]
+}

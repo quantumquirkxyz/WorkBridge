@@ -1,0 +1,13 @@
+---
+description: "Data lineage (end-to-end tracing, impact analysis, column-level lineage, governance)."
+globs: []
+alwaysApply: false
+---
+# data-lineage
+
+Apply the data-lineage skill when the request matches its scope.
+
+Capabilities:
+- apply the data-lineage workflow
+
+Stop when: Lineage graph saved; impact analysis complete; column mappings documented.

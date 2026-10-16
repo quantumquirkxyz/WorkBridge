@@ -1,0 +1,16 @@
+{
+  "name": "capability-router",
+  "instructions": "Route work to the best matching Skill using declared capabilities and compatibility — with explicit selection rules.\n\nCapabilities:\n- apply the capability-router workflow\n\nCanonical skill: .agents/skills/routing/capability-router/SKILL.md",
+  "model": "gpt-5.1",
+  "tools": [],
+  "handoff_description": "Route work to the best matching Skill using declared capabilities and compatibility complete; structured result returned; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

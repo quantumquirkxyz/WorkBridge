@@ -3,6 +3,7 @@ name: "improve-codebase-architecture"
 category: "engineering"
 maturity: "stable"
 description: "Scan a codebase for deepening opportunities and present candidates as a visual HTML report, then grill through the selected one."
+license: "MIT"
 version: "1"
 capabilities: ""
 inputs: ""
@@ -17,7 +18,7 @@ promptVersion: "2.0"
 artifactType: "pull-request"
 modelTier: "fast"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/improve-codebase-architecture.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["engineering"]
 compatibility: []

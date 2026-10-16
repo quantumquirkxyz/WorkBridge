@@ -1,0 +1,43 @@
+{
+  "fixtures": [
+    {
+      "id": "v1-contract-skill-composition",
+      "skill": "skill-composition",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "SkillChainReport"
+        ],
+        "doesNotContain": [
+          "## Operating Contract"
+        ]
+      }
+    },
+    {
+      "id": "v1-footer-skill-composition",
+      "skill": "skill-composition",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "@include .agents/skills/platform/contract-base.xml"
+        ]
+      }
+    },
+    {
+      "id": "v1-description-skill-composition",
+      "skill": "skill-composition",
+      "type": "regression",
+      "expectedOutput": {
+        "contains": [
+          "skill-composition",
+          "SkillChainReport",
+          "producer-consumer",
+          "artifact-handoff"
+        ]
+      }
+    }
+  ]
+}

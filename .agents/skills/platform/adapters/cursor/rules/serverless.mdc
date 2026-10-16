@@ -1,0 +1,13 @@
+---
+description: "Serverless architecture (Lambda, Functions, FaaS, event-driven, cold starts, scaling, cost)."
+globs: []
+alwaysApply: false
+---
+# serverless
+
+Apply the serverless skill when the request matches its scope.
+
+Capabilities:
+- apply the serverless workflow
+
+Stop when: Serverless architecture, event sources, scaling behavior, and cost model are explicit.

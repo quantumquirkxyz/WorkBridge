@@ -1,9 +1,10 @@
 ---
 name: "pro-market-analysis"
-category: "skill-dev/sandbox"
+category: "professional"
 maturity: "stable"
 version: "1"
 description: "Conduct professional market research — TAM/SAM/SOM, competitor analysis, pricing, and trend forecasting — with source citation, data quality checks, and decision framing."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "pull-request"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/pro-market-analysis.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["professional"]
 compatibility: []

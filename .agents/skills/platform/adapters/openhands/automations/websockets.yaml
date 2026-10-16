@@ -1,0 +1,15 @@
+name: websockets
+description: "WebSockets and real-time (Socket.IO, WS, SSE, pub/sub, scaling, reconnection, backpressure)."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/backend-websockets
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: true
+  sideEffects: []

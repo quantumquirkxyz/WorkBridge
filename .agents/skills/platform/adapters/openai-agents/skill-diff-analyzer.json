@@ -1,0 +1,16 @@
+{
+  "name": "skill-diff-analyzer",
+  "instructions": "Compare Skill versions and explain contract, dependency, and behavior impact — use when assessing changes between two Skills.\n\nCapabilities:\n- apply the skill-diff-analyzer workflow\n\nCanonical skill: .agents/skills/skill-dev/skill-diff-analyzer/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Compare Skill versions and explain contract, dependency, and behavior impact complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

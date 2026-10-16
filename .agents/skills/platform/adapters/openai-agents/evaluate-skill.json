@@ -1,0 +1,16 @@
+{
+  "name": "evaluate-skill",
+  "instructions": "Evaluate a Skill against fixed scenarios for routing, completion, and artifact validity.\n\nCapabilities:\n- apply the evaluate-skill workflow\n\nCanonical skill: .agents/skills/skill-dev/evaluate-skill/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Evaluate a Skill against fixed scenarios for routing, completion, and artifact validity complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

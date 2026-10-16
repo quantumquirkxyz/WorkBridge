@@ -4,6 +4,7 @@ category: foundation
 maturity: stable
 version: 1
 description: Design a small, durable API seam — with a deep backend and explicit caller contract boundaries.
+license: MIT
 capabilities:
   - apply api design workflow
   - produce api design artifact

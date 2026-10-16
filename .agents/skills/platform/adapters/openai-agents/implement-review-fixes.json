@@ -1,0 +1,16 @@
+{
+  "name": "implement-review-fixes",
+  "instructions": "Read a GitHub PR remediation plan produced by plan-review-fixes, implement the planned corrections through the repositor\n\nCapabilities:\n- apply the implement-review-fixes workflow\n\nCanonical skill: .agents/skills/delivery/implement-review-fixes/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Read a GitHub PR remediation plan produced by plan-review-fixes, implement the planned corrections through the repositor complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "worktree"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

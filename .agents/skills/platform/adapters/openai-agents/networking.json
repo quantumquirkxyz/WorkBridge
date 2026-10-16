@@ -1,0 +1,16 @@
+{
+  "name": "networking",
+  "instructions": "Design and analyze network infrastructure — TCP/IP, routing, DNS, load balancing, firewalls, VPNs, network security — with explicit assumptions about latency, bandwidth, and failure modes.\n\nCapabilities:\n- apply the networking workflow\n\nCanonical skill: .agents/skills/networking/networking/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Design and analyze network infrastructure complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

@@ -1,0 +1,13 @@
+---
+description: "Evaluate a project's shape, agent fit, and architectural starting point — before the main workflow begins."
+globs: []
+alwaysApply: false
+---
+# project-development
+
+Apply the project-development skill when the request matches its scope.
+
+Capabilities:
+- apply the project-development workflow
+
+Stop when: Evaluate a project's shape, agent fit, and architectural starting point complete; structured result returned; completion criteria checked.

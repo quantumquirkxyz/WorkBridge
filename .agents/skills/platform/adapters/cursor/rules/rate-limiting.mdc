@@ -1,0 +1,13 @@
+---
+description: "Rate limiting and throttling (token bucket, sliding window, distributed rate limiting, API protection)."
+globs: []
+alwaysApply: false
+---
+# rate-limiting
+
+Apply the rate-limiting skill when the request matches its scope.
+
+Capabilities:
+- apply the rate-limiting workflow
+
+Stop when: Rate limiting algorithms, limit tiers, distributed coordination, and API protection rules are explicit.

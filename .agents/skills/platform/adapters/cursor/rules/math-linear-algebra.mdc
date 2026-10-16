@@ -1,0 +1,13 @@
+---
+description: "Solve and analyse linear algebra problems — matrix decompositions (LU, QR, SVD, eigendecomposition), linear systems, and applications in ML, graphics, and optimisation."
+globs: []
+alwaysApply: false
+---
+# math-linear-algebra
+
+Apply the math-linear-algebra skill when the request matches its scope.
+
+Capabilities:
+- apply the math-linear-algebra workflow
+
+Stop when: Solve and analyse linear algebra problems complete; required sections present; completion criteria checked.

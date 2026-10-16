@@ -1,0 +1,7 @@
+{
+  "identifier": "github-project-analysis",
+  "source": "user-request",
+  "mode": "manual-design",
+  "requirements": ["GitHub-only research", "deep repository structure analysis", "evidence links", "bounded adaptation recommendations"],
+  "validation": ["frontmatter", "contract", "completion criteria", "repository gate"]
+}

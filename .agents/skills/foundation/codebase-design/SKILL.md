@@ -4,6 +4,7 @@ category: foundation
 maturity: stable
 version: 1
 description: Shared vocabulary for designing deep modules. Use when the user wants to design or improve a module's interface, find depth, or define a clean seam.
+license: MIT
 capabilities:
   - apply codebase design workflow
   - produce codebase design artifact

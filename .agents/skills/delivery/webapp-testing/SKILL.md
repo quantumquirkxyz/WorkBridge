@@ -4,6 +4,7 @@ category: "delivery"
 maturity: "stable"
 version: "1"
 description: "Choose the right test seam for a web app and describe how to verify it at unit, integration, and end-to-end levels."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "test-strategy"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/webapp-testing.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["delivery"]
 compatibility: []

@@ -1,0 +1,16 @@
+{
+  "name": "grpc-connect",
+  "instructions": "gRPC and Connect (protobuf, ConnectRPC, grpc-gateway, streaming, code generation).\n\nCapabilities:\n- apply the grpc-connect workflow\n\nCanonical skill: .agents/skills/backend/grpc-connect/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "gRPC/Connect design complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

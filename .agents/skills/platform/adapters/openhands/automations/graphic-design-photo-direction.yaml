@@ -1,0 +1,15 @@
+name: graphic-design-photo-direction
+description: "Direct photography and image retouching — art direction, lighting, composition, color grading, and post-production workflows for brand and product imagery."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/graphic-design-graphic-design-photo-direction
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

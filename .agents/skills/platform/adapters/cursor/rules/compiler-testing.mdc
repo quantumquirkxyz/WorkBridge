@@ -1,0 +1,13 @@
+---
+description: "Test compilers and interpreters — parser tests, semantic tests, IR validation, golden tests, and regression checks — with explicit oracle design."
+globs: []
+alwaysApply: false
+---
+# compiler-testing
+
+Apply the compiler-testing skill when the request matches its scope.
+
+Capabilities:
+- apply the compiler-testing workflow
+
+Stop when: Test oracles, fixture classes, and regression checks are explicit.

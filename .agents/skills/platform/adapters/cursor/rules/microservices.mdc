@@ -1,0 +1,13 @@
+---
+description: "Design microservice architectures — service decomposition, inter-service communication, data ownership, resilience patterns — with explicit boundaries and failure isolation."
+globs: []
+alwaysApply: false
+---
+# microservices
+
+Apply the microservices skill when the request matches its scope.
+
+Capabilities:
+- apply the microservices workflow
+
+Stop when: Design microservice architectures complete; artifact saved; completion criteria checked.

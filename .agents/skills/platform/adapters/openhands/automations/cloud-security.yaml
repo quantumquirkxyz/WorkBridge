@@ -1,0 +1,15 @@
+name: cloud-security
+description: "Cloud security (AWS, GCP, Azure, IAM, KMS, security groups, compliance, posture management)"
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/sec-cloud-security
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: true
+  sideEffects: []

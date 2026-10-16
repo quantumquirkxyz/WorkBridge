@@ -1,0 +1,28 @@
+{
+  "artifact": "SkillAuditArtifact",
+  "identifier": "2026-10-09-skills-bundle-audit",
+  "status": "pass",
+  "scope": "Skills bundle, lockfile, symlink parity, generated projections, contracts, fixtures, security and site build",
+  "inventory": {
+    "skills": 242,
+    "semanticMarkdownFiles": 502,
+    "behavioralFixtures": { "passed": 63, "total": 63 }
+  },
+  "checks": [
+    { "command": "npm test", "status": "pass", "result": "16 tests passed" },
+    { "command": "npm run validate", "status": "pass", "result": "242 skills; 0 errors; 0 warnings" },
+    { "command": "npm run audit", "status": "pass", "result": "254 skills; 502 Markdown files; 0 errors; 0 warnings" },
+    { "command": "npm run score", "status": "pass", "result": "skill-creator 82/100 (B)" },
+    { "command": "npm run security", "status": "pass", "result": "0 findings" },
+    { "command": "npm run graph", "status": "pass", "result": "0 dependency cycles" },
+    { "command": "npm run test:fixtures", "status": "pass", "result": "63/63 fixtures" },
+    { "command": "node --test tests/*.test.mjs", "status": "pass", "result": "5 tests passed" },
+    { "command": "npm run site:build", "status": "pass", "result": "Vite production build completed" }
+  ],
+  "repairs": [
+    "Reinstalled site dependencies with npm ci --prefix site because the existing node_modules lacked Vite; no source or lockfile changes were required."
+  ],
+  "warnings": [],
+  "errors": [],
+  "nextConsumer": "Repository maintainer / CI"
+}

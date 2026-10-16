@@ -1,0 +1,13 @@
+---
+description: "Event-driven architecture (Kafka, NATS, EventBridge, choreography vs orchestration)."
+globs: []
+alwaysApply: false
+---
+# event-driven-architecture
+
+Apply the event-driven-architecture skill when the request matches its scope.
+
+Capabilities:
+- apply the event-driven-architecture workflow
+
+Stop when: Event-driven architecture design complete; artifact saved; completion criteria checked.

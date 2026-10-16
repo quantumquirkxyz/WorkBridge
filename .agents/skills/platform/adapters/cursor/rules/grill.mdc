@@ -1,0 +1,13 @@
+---
+description: "Alias for the quirk grilling flow. Use when the user says \"grill\" and wants a relentless interview to sharpen a plan, decision, or design."
+globs: []
+alwaysApply: false
+---
+# grill
+
+Apply the grill skill when the request matches its scope.
+
+Capabilities:
+- apply the grill workflow
+
+Stop when: Alias for the quirk grilling flow complete; structured result returned; completion criteria checked.

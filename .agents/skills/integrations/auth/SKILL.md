@@ -4,6 +4,7 @@ category: "integrations"
 maturity: "stable"
 version: "2"
 description: "Design authentication and authorization as a small, explicit seam — with OAuth2/OIDC, MFA, passkeys, JWT, session management, and clear caller and operator responsibilities."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,11 +17,11 @@ promptVersion: "2.0"
 artifactType: "authentication"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/auth.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/auth.json
 diataxis: "how-to"
 tags: ["integrations"]
 compatibility: []
-approvalRequired: "false"
+approvalRequired: "true"
 approvalFor: []
 ---
 

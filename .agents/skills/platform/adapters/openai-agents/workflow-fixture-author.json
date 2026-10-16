@@ -1,0 +1,16 @@
+{
+  "name": "workflow-fixture-author",
+  "instructions": "Author deterministic scenario and behavioral fixtures for skills so routing, contracts, outputs, side effects, and refusal boundaries can be tested before promotion.\n\nCapabilities:\n- apply the workflow-fixture-author workflow\n\nCanonical skill: .agents/skills/skill-dev/workflow-fixture-author/SKILL.md",
+  "model": "gpt-5-mini",
+  "tools": [],
+  "handoff_description": "Fixtures cover the requested skill behavior and either pass the relevant validator or list exact follow-up fixes.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

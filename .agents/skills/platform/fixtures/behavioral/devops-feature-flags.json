@@ -1,0 +1,65 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-devops-feature-flags",
+      "skill": "devops-feature-flags",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "## Completion",
+          "## Process",
+          "DevopsFeatureFlagsArtifact",
+          "feature flag system",
+          "Release flag",
+          "Experiment flag"
+        ],
+        "doesNotContain": [
+          "## Operating Contract",
+          "ask-matt",
+          "ship-review-fix-loop",
+          "doc-draft-pr",
+          "frontend-development",
+          "ARIES",
+          "Matt",
+          "TODO",
+          "point 1",
+          "Criterion 1",
+          "Acceptance criterion 1",
+          "BE-2",
+          "OpenAPI spec",
+          "localhost:3000",
+          "extremely extensive"
+        ]
+      }
+    },
+    {
+      "id": "v2-frontmatter-devops-feature-flags",
+      "skill": "devops-feature-flags",
+      "type": "behavioral",
+      "expected": {
+        "frontmatterContains": [
+          "name: \"devops-feature-flags\"",
+          "risk: \"medium\"",
+          "trustTier: \"3\"",
+          "modelTier: \"reasoning\"",
+          "promptVersion: \"2.0\"",
+          "artifactType: \"feature-flag\"",
+          "diataxis: \"how-to\""
+        ]
+      }
+    },
+    {
+      "id": "v2-footer-devops-feature-flags",
+      "skill": "devops-feature-flags",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "@include .agents/skills/platform/contract-base.xml"
+        ]
+      }
+    }
+  ]
+}

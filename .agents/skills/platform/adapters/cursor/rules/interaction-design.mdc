@@ -1,0 +1,13 @@
+---
+description: "Design user interactions — task flows, screen states, transitions, error states, feedback patterns — so the interface guides users predictably."
+globs: []
+alwaysApply: false
+---
+# interaction-design
+
+Apply the interaction-design skill when the request matches its scope.
+
+Capabilities:
+- apply the interaction-design workflow
+
+Stop when: Design user interactions complete; artifact saved; completion criteria checked.

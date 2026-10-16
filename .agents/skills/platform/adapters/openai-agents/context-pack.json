@@ -1,0 +1,16 @@
+{
+  "name": "context-pack",
+  "instructions": "Build a minimal fresh context pack with ordered reads and provenance — for scoped, high-signal handoff.\n\nCapabilities:\n- apply the context-pack workflow\n\nCanonical skill: .agents/skills/routing/context-pack/SKILL.md",
+  "model": "gpt-5.1",
+  "tools": [],
+  "handoff_description": "Build a minimal fresh context pack with ordered reads and provenance complete; structured result returned; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "math-linear-algebra",
+  "instructions": "Solve and analyse linear algebra problems — matrix decompositions (LU, QR, SVD, eigendecomposition), linear systems, and applications in ML, graphics, and optimisation.\n\nCapabilities:\n- apply the math-linear-algebra workflow\n\nCanonical skill: .agents/skills/math/math-linear-algebra/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Solve and analyse linear algebra problems complete; required sections present; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

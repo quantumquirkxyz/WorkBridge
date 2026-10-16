@@ -1,0 +1,16 @@
+{
+  "name": "incident-response",
+  "instructions": "Design incident response — runbooks, war rooms, postmortems, blameless culture — with explicit severity taxonomy, escalation paths, and communication rules.\n\nCapabilities:\n- apply the incident-response workflow\n\nCanonical skill: .agents/skills/devops/incident-response/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Incident response plan complete; runbook library defined; postmortem process documented.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

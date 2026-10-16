@@ -4,6 +4,7 @@ category: "qa"
 maturity: "stable"
 version: "1"
 description: "Perform manual test sessions — exploratory checks, edge cases, accessibility, and user-visible regressions — with explicit reproduction notes."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "test-strategy"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/qa-manual-testing.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["qa"]
 compatibility: []

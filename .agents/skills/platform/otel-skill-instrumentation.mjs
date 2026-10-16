@@ -5,6 +5,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { fileURLToPath } from 'node:url';
 
 const root = process.cwd();
 const tracesDir = path.join(root, '.agents', 'skills', 'platform', 'traces');
@@ -54,14 +55,15 @@ async function startTrace(skillName, traceId, spanId, parentSpanId = null) {
   return trace;
 }
 
-async function addSpan(trace, name, kind = 'internal', attributes = {}) {
+function startSpan(trace, name, kind = 'internal', attributes = {}) {
+  const startedAtMs = Date.now();
   const span = {
     spanId: generateSpanId(),
     parentSpanId: trace.spanId,
     name,
     kind,
-    startedAt: new Date().toISOString(),
-    finishedAt: new Date().toISOString(),
+    startedAt: new Date(startedAtMs).toISOString(),
+    finishedAt: null,
     durationMs: 0,
     attributes: {
       'skill.name': trace.skill,
@@ -70,9 +72,32 @@ async function addSpan(trace, name, kind = 'internal', attributes = {}) {
     },
     events: [],
   };
-  span.durationMs = new Date(span.finishedAt) - new Date(span.startedAt);
+  Object.defineProperty(span, 'startedAtMs', { value: startedAtMs, enumerable: false, writable: true });
+  Object.defineProperty(span, 'end', {
+    value: (extraAttributes = {}) => endSpan(trace, span, extraAttributes),
+    enumerable: false,
+    writable: true,
+  });
   trace.spans.push(span);
   return span;
+}
+
+function endSpan(trace, span, extraAttributes = {}) {
+  if (!span || span.finishedAt !== null) return span;
+  const finishedAtMs = Date.now();
+  const startedAtMs = typeof span.startedAtMs === 'number' && Number.isFinite(span.startedAtMs)
+    ? span.startedAtMs
+    : Date.parse(span.startedAt);
+  span.finishedAt = new Date(finishedAtMs).toISOString();
+  span.durationMs = Math.max(0, Math.round(Number.isFinite(startedAtMs) ? finishedAtMs - startedAtMs : 0));
+  if (extraAttributes && typeof extraAttributes === 'object') {
+    Object.assign(span.attributes, extraAttributes);
+  }
+  return span;
+}
+
+function addSpan(trace, name, kind = 'internal', attributes = {}) {
+  return endSpan(trace, startSpan(trace, name, kind, attributes));
 }
 
 async function finishTrace(trace, status = 'ok', errors = []) {
@@ -90,9 +115,10 @@ async function instrumentSkill(skillName, fn) {
   const trace = await startTrace(skillName);
 
   try {
-    const loadSpan = await addSpan(trace, 'skill.load', 'internal', { 'skill.phase': 'load' });
+    const loadSpan = startSpan(trace, 'skill.load', 'internal', { 'skill.phase': 'load' });
     const skillFile = path.join(root, '.agents', 'skills', skillName, 'SKILL.md');
     if (!await exists(skillFile)) {
+      endSpan(trace, loadSpan, { 'error': 'Skill not found', 'skill.path': skillFile });
       await addSpan(trace, 'skill.load.error', 'internal', { 'error': 'Skill not found', 'skill.path': skillFile });
       await finishTrace(trace, 'error', [`Skill not found: ${skillName}`]);
       return { error: `Skill not found: ${skillName}` };
@@ -100,9 +126,9 @@ async function instrumentSkill(skillName, fn) {
     const text = await fs.readFile(skillFile, 'utf8');
     const fm = parseFrontmatter(text);
     const body = text.replace(/^---[\s\S]*?---\s*/, '');
-    loadSpan.attributes['skill.loaded'] = true;
+    endSpan(trace, loadSpan, { 'skill.loaded': true });
 
-    const executeSpan = await addSpan(trace, 'skill.execute', 'internal', {
+    const executeSpan = startSpan(trace, 'skill.execute', 'internal', {
       'skill.phase': 'execute',
       'skill.trustTier': fm.trustTier || '1',
       'skill.risk': fm.risk || 'low',
@@ -112,8 +138,10 @@ async function instrumentSkill(skillName, fn) {
 
     const result = await fn({ skillName, skillFile, text, fm, body });
 
-    executeSpan.attributes['skill.execute.status'] = result.status || 'ok';
-    executeSpan.attributes['skill.execute.durationMs'] = result.durationMs || 0;
+    endSpan(trace, executeSpan, {
+      'skill.execute.status': result.status || 'ok',
+      'skill.execute.durationMs': result.durationMs || executeSpan.durationMs || 0,
+    });
 
     if (result.sideEffects?.length) {
       for (const effect of result.sideEffects) {
@@ -147,7 +175,22 @@ async function main() {
   console.log(JSON.stringify({ traced: skillName, status: result.status || 'ok' }, null, 2));
 }
 
-main().catch(err => {
-  console.error('Error:', err);
-  process.exit(1);
-});
+export {
+  startTrace,
+  startSpan,
+  endSpan,
+  addSpan,
+  finishTrace,
+  instrumentSkill,
+  generateTraceId,
+  generateSpanId,
+};
+
+const isMain = process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1]);
+
+if (isMain) {
+  main().catch(err => {
+    console.error('Error:', err);
+    process.exit(1);
+  });
+}

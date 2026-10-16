@@ -1,0 +1,16 @@
+{
+  "name": "data-lineage",
+  "instructions": "Data lineage (end-to-end tracing, impact analysis, column-level lineage, governance).\n\nCapabilities:\n- apply the data-lineage workflow\n\nCanonical skill: .agents/skills/data/data-lineage/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Lineage graph saved; impact analysis complete; column mappings documented.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

@@ -1,0 +1,13 @@
+---
+description: "Prompt template library (versioned templates, A/B testing, composition, evaluation)"
+globs: []
+alwaysApply: false
+---
+# prompt-template-library
+
+Apply the prompt-template-library skill when the request matches its scope.
+
+Capabilities:
+- apply the prompt-template-library workflow
+
+Stop when: Templates green on acceptance suite with evaluation and fallback.

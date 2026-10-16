@@ -1,0 +1,15 @@
+name: research-literature-review
+description: "Review research literature — search strategy, screening, synthesis, citation tracking, and evidence grading — with transparent inclusion criteria."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/research-research-literature-review
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

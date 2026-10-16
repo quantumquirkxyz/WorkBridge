@@ -8,6 +8,9 @@ const agentsSkillsDir = path.join(repoRoot, '.agents', 'skills');
 const claudeSkillsDir = path.join(repoRoot, '.claude', 'skills');
 const lockPath = path.join(repoRoot, 'skills-lock.json');
 const ignored = new Set(['platform']);
+const writeLikeSideEffects = new Set(['write-files', 'write-docs', 'write-code']);
+const protectedInstructionPathPattern = /(?:^|[\s`"'(:/])(?:SKILL\.md|AGENTS\.md|CONTEXT\.md|MEMORY\.md|skills-lock\.json|\.agents\/[\w./*-]+)/;
+const strictMode = process.argv.includes('--strict');
 
 async function exists(filePath) {
   try {
@@ -74,6 +77,10 @@ function parseName(text, filePath) {
   return path.basename(path.dirname(filePath));
 }
 
+function hasExplicitApproval(value) {
+  return String(value).trim().toLowerCase() === 'true';
+}
+
 function jaccardSimilarity(a, b) {
   const tokensA = new Set((a || '').split(/\s+/).filter(Boolean));
   const tokensB = new Set((b || '').split(/\s+/).filter(Boolean));
@@ -86,6 +93,7 @@ function jaccardSimilarity(a, b) {
 async function main() {
   const skillDirs = await collectSkillDirs(agentsSkillsDir);
   const errors = [];
+  const warnings = [];
   const lock = JSON.parse(await fs.readFile(lockPath, 'utf8'));
   const lockSkills = new Set(Object.keys(lock.skills ?? {}));
   const skillNames = new Set(skillDirs.map((dir) => path.basename(dir)));
@@ -122,10 +130,22 @@ async function main() {
     }
 
     if ((fm.risk === 'medium' || fm.risk === 'high')) {
+      // Fixtures may live in a per-skill `<skillDir>/behavioral-fixtures/` directory
+      // or at the bundle's canonical central location. Both satisfy the coverage rule.
       const fixturesDir = path.join(skillDir, 'behavioral-fixtures');
-      const hasFixtures = await exists(fixturesDir) && (await fs.readdir(fixturesDir)).length > 0;
-      if (!hasFixtures) {
-        // intentionally silent: lack of fixtures is not a gate here
+      const hasLocalFixtures = await exists(fixturesDir) && (await fs.readdir(fixturesDir)).length > 0;
+      const centralFixture = path.join(repoRoot, '.agents', 'skills', 'platform', 'fixtures', 'behavioral', `${name}.json`);
+      const hasCentralFixture = await exists(centralFixture);
+      if (!hasLocalFixtures && !hasCentralFixture) {
+        warnings.push(`${name}: ${fm.risk} risk skill has no behavioral-fixtures directory`);
+      }
+    }
+
+    const declaredFixturesPath = Array.isArray(fm.fixturesPath) ? '' : fm.fixturesPath;
+    if (declaredFixturesPath !== undefined && declaredFixturesPath !== '' && declaredFixturesPath !== '[]') {
+      const fixturesFullPath = path.resolve(repoRoot, String(declaredFixturesPath));
+      if (!(await exists(fixturesFullPath))) {
+        errors.push(`${name}: fixturesPath does not resolve to an existing file (${declaredFixturesPath})`);
       }
     }
 
@@ -134,8 +154,14 @@ async function main() {
     }
     for (const effect of fm.sideEffects ?? []) {
       if (effect === 'write-code' && fm.risk === 'low') {
-        // intentionally silent
+        warnings.push(`${name}: write-code skill marked low risk`);
       }
+    }
+
+    const sideEffects = Array.isArray(fm.sideEffects) ? fm.sideEffects : [fm.sideEffects].filter(Boolean);
+    const writesFiles = sideEffects.some((effect) => writeLikeSideEffects.has(effect));
+    if (strictMode && writesFiles && protectedInstructionPathPattern.test(text) && !hasExplicitApproval(fm.approvalRequired)) {
+      warnings.push(`${name}: write-like skill references protected instruction/identity paths without approvalRequired: true`);
     }
 
     const claudeLink = path.join(claudeSkillsDir, path.basename(skillDir));
@@ -168,7 +194,7 @@ async function main() {
       if (sharedCapabilities.length === 0) continue;
       const descOverlap = jaccardSimilarity(a.description, b.description);
       if (descOverlap > 0.5) {
-        // intentionally silent
+        warnings.push(`${a.name}/${b.name}: duplicate capability overlap ${descOverlap.toFixed(2)} over shared capabilities [${sharedCapabilities.join(', ')}]`);
       }
     }
   }
@@ -180,12 +206,13 @@ async function main() {
     contextPack: 'platform-default',
     status: errors.length ? 'fail' : 'pass',
     errors,
-    extra: { skills: skillDirs.length },
+    warnings,
+    extra: { skills: skillDirs.length, warnings: warnings.length },
   });
 
   console.log(JSON.stringify({
     skills: skillDirs.length,
-    warnings: [],
+    warnings,
     errors,
     status: errors.length ? 'fail' : 'pass',
     executionRecord: path.relative(repoRoot, runPath)

@@ -1,0 +1,16 @@
+{
+  "name": "graphic-design-foundations",
+  "instructions": "Design graphic artifacts — posters, social graphics, editorial layouts, packaging, signage — with explicit composition, color, typography, and production constraints.\n\nCapabilities:\n- apply the graphic-design-foundations workflow\n\nCanonical skill: .agents/skills/graphic-design/graphic-design-foundations/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Graphic design foundations complete; layout, color, and typography decisions explicit; production requirements named.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

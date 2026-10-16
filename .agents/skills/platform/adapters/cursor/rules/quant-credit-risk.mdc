@@ -1,0 +1,13 @@
+---
+description: "Model credit risk — PD, LGD, EAD, expected loss, loss distribution, credit VaR — with default correlation and portfolio-level risk aggregation."
+globs: []
+alwaysApply: false
+---
+# quant-credit-risk
+
+Apply the quant-credit-risk skill when the request matches its scope.
+
+Capabilities:
+- apply the quant-credit-risk workflow
+
+Stop when: Model credit risk complete; required sections present; completion criteria checked.

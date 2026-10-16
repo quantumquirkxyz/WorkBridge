@@ -4,6 +4,7 @@ category: "routing"
 maturity: "stable"
 version: "1"
 description: "Use when a finished subissue already has a clean PR and you need to merge it, mark it as completed, and close the linked issue — with release discipline."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects:
@@ -20,12 +21,23 @@ promptVersion: "2.0"
 artifactType: "routing"
 modelTier: "router"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/ship-subissue.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/ship-subissue.json
 diataxis: "how-to"
 tags: ["routing"]
 compatibility: []
-approvalRequired: "false"
-approvalFor: []
+approvalRequired: "true"
+approvalFor: ["merge-pull-request", "close-issue", "update-project"]
+clauses:
+  - id: SHIP-SUBISSUE-1
+    text: "Never merge a PR with unresolved Standards or Spec review findings; return to review-fix-loop instead."
+    check: "evals/behavioral/ship-subissue.json#SHIP-SUBISSUE-1"
+  - id: SHIP-SUBISSUE-2
+    text: "Never mark an issue complete unless the linked issue reference is clear, and never guess the issue number."
+    check: "evals/behavioral/ship-subissue.json#SHIP-SUBISSUE-2"
+  - id: SHIP-SUBISSUE-3
+    text: "Never delete the branch before the merge has succeeded."
+    check: "evals/behavioral/ship-subissue.json#SHIP-SUBISSUE-3"
+reloadPolicy: always
 ---
 
 ## Contract

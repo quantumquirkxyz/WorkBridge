@@ -1,0 +1,13 @@
+---
+description: "Design compiler pipelines — lexing, parsing, ASTs, type checking, IR, optimization, and code generation — with correctness and modularity."
+globs: []
+alwaysApply: false
+---
+# compiler-design
+
+Apply the compiler-design skill when the request matches its scope.
+
+Capabilities:
+- apply the compiler-design workflow
+
+Stop when: Pipeline stages, representations, invariants, and validation strategy are explicit.

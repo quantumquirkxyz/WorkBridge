@@ -1,0 +1,16 @@
+---
+description: "Define an MCP server that exposes quirk Skills as tools, resources, and prompts to external LLM agents via the Model Context Protocol."
+globs: []
+alwaysApply: false
+---
+# mcp-server
+
+Apply the mcp-server skill when the request matches its scope.
+
+Capabilities:
+- expose-skills-as-mcp-tools
+- generate-skill-resources
+- generate-workflow-prompts
+- configure-transport
+
+Stop when: MCP server configured with tools, resources, and prompts generated; transport exposed; artifact saved; completion criteria checked.

@@ -4,6 +4,7 @@ category: delivery
 maturity: stable
 version: 1
 description: Review a pull request against the fixed point the user supplies, separating Standards and Spec findings into distinct ax
+license: MIT
 capabilities:
   - apply review pr workflow
   - produce review pr artifact
@@ -76,8 +77,8 @@ fixturesPath: .agents/skills/platform/fixtures/regression/review-pr.json
 diataxis: how-to
 tags: [delivery, review, standards, spec, quality]
 compatibility: [plan-review-fixes, ship-subissue, resolving-merge-conflicts]
-approvalRequired: false
-approvalFor: []
+approvalRequired: true
+approvalFor: ["post-pr-comment"]
 sideEffects:
   - post-pr-comment
 dependencies: []
@@ -85,6 +86,20 @@ stopCondition: Review a pull request against the fixed point the user supplies, 
 risk: medium
 trustTier: 3
 maxIterations: 6
+clauses:
+  - id: REVIEW-PR-1
+    text: "Keep the Standards and Spec axes separate; never merge or rerank findings across axes or pick a single winner."
+    check: "evals/behavioral/review-pr.json#REVIEW-PR-1"
+  - id: REVIEW-PR-2
+    text: "Include the exact file and line, the justifying rule or smell, and a concrete explanation of what breaks in every finding."
+    check: "evals/behavioral/review-pr.json#REVIEW-PR-2"
+  - id: REVIEW-PR-3
+    text: "Publish findings only: never change source files, fix the PR, or merge it."
+    check: "evals/behavioral/review-pr.json#REVIEW-PR-3"
+  - id: REVIEW-PR-4
+    text: "Documented-standard breaches are hard violations while baseline smells are always judgement calls."
+    check: "evals/behavioral/review-pr.json#REVIEW-PR-4"
+reloadPolicy: on-trigger
 ---
 
 ## Contract
@@ -130,7 +145,7 @@ Traces record sub-agent parallelism and finding counts via `record-execution.mjs
 
 Both axes run as **parallel sub-agents** so they don't pollute each other's context, then this skill aggregates their findings.
 
-The issue tracker should have been provided to you — run `/setup-quirk-skills` if `docs/agents/issue-tracker.md` is missing.
+The issue tracker should have been provided to you — run `/setup-quirk-skills` if `docs/reference/agents/issue-tracker.md` is missing.
 
 ## Process
 
@@ -147,7 +162,7 @@ If the branch is in a conflicted state from a merge/rebase or from review-reques
 
 Look for the originating spec, in this order:
 
-1. Issue references in the commit messages (`#123`, `Closes #45`, GitLab `!67`, etc.) — fetch via the workflow in `docs/agents/issue-tracker.md`.
+1. Issue references in the commit messages (`#123`, `Closes #45`, GitLab `!67`, etc.) — fetch via the workflow in `docs/reference/agents/issue-tracker.md`.
 2. A path the user passed as an argument.
 3. A PRD/spec file under `docs/`, `specs/`, or `.scratch/` matching the branch name or feature.
 4. If nothing is found, ask the user where the spec is. If they say there isn't one, the **Spec** sub-agent will skip and report "no spec available".

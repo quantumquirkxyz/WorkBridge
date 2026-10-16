@@ -1,0 +1,13 @@
+---
+description: "Design and analyze data structures — arrays, trees, heaps, hash tables, graphs, and balanced variants — with operation costs and invariants."
+globs: []
+alwaysApply: false
+---
+# cs-data-structures
+
+Apply the cs-data-structures skill when the request matches its scope.
+
+Capabilities:
+- apply the cs-data-structures workflow
+
+Stop when: The recommended structure, invariants, and operation costs are explicit.

@@ -1,0 +1,16 @@
+{
+  "name": "improve-codebase-architecture",
+  "instructions": "Scan a codebase for deepening opportunities and present candidates as a visual HTML report, then grill through the selected one.\n\nCapabilities:\n- apply the improve-codebase-architecture workflow\n\nCanonical skill: .agents/skills/engineering/improve-codebase-architecture/SKILL.md",
+  "model": "gpt-5-mini",
+  "tools": [],
+  "handoff_description": "Report generated and a candidate is selected or explicitly deferred.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 3,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

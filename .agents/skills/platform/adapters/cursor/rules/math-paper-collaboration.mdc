@@ -1,0 +1,13 @@
+---
+description: "Manage mathematical paper collaboration — Overleaf / GitHub / arXiv integration, citation tracking, version control, reproducible computation links, and co-author coordination."
+globs: []
+alwaysApply: false
+---
+# math-paper-collaboration
+
+Apply the math-paper-collaboration skill when the request matches its scope.
+
+Capabilities:
+- apply the math-paper-collaboration workflow
+
+Stop when: Source repository has version tags; collaboration rules saved; arXiv package complete.

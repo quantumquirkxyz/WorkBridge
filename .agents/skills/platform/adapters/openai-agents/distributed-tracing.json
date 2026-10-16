@@ -1,0 +1,16 @@
+{
+  "name": "distributed-tracing",
+  "instructions": "Distributed tracing (OpenTelemetry, W3C TraceContext, sampling, instrumentation).\n\nCapabilities:\n- apply the distributed-tracing workflow\n\nCanonical skill: .agents/skills/backend/distributed-tracing/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Distributed tracing design complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

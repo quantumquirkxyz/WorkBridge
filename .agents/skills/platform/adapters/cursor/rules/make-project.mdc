@@ -1,0 +1,13 @@
+---
+description: "Use when the user wants a new board in GitHub Projects, or another skill needs one — create the project, wire its fields, and preserve tracker semantics."
+globs: []
+alwaysApply: false
+---
+# make-project
+
+Apply the make-project skill when the request matches its scope.
+
+Capabilities:
+- apply the make-project workflow
+
+Stop when: Use when the user wants a new board in GitHub Projects, or another skill needs one complete; structured result returned; completion criteria checked.

@@ -1,0 +1,13 @@
+---
+description: "Design and analyze operating system internals — process management, memory management, file systems, scheduling, system calls, concurrency — with explicit resource accounting and failure boundaries."
+globs: []
+alwaysApply: false
+---
+# os-kernel
+
+Apply the os-kernel skill when the request matches its scope.
+
+Capabilities:
+- apply the os-kernel workflow
+
+Stop when: Design and analyze operating system internals complete; artifact saved; completion criteria checked.

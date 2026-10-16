@@ -1,0 +1,13 @@
+---
+description: "Solve classical mechanics problems — Newton's laws, Lagrangian, Hamiltonian, rigid body, orbital — with free-body diagrams, energy accounting, and dimensional checks."
+globs: []
+alwaysApply: false
+---
+# physics-classical
+
+Apply the physics-classical skill when the request matches its scope.
+
+Capabilities:
+- apply the physics-classical workflow
+
+Stop when: Solve classical mechanics problems complete; required sections present; completion criteria checked.

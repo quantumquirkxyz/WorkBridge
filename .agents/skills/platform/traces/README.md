@@ -28,6 +28,15 @@ Emit one `ExecutionTrace` per skill invocation. Populate all required fields at 
 
 Store traces in a structured log sink (e.g., JSON lines file, OpenTelemetry collector, or trace backend) with `traceId` as the partition key.
 
+## Derived Field Semantics
+
+`record-execution.mjs` derives optional fields so a trace never carries fabricated zeros:
+
+- **`input.sizeTokens` / `output.sizeTokens`**: A numeric `sizeTokens` (or `tokens` / `tokenCount`) greater than 0 is used as-is. When the caller supplies `input.content` / `output.content` (a string or object), tokens are estimated as `max(1, ceil(length / 4))`. When neither is given but `outputRef`, `ref`, or `path` names a readable file of at most 2 MB, the estimate is computed from that file. When nothing measurable is available the value stays `0`.
+- **`execution.durationMs`**: Computed as `completedAt - startedAt` whenever the caller does not supply `durationMs`. A caller-supplied `durationMs` always wins; `completedAt` defaults to the time of the write when only `startedAt` is given. Missing or unparsable timestamps fall back to "now", never to a negative duration.
+- **`quality.artifactScore`**: `null` when the score is unknown. An unknown score is never recorded as `0`, so `0` always means a real zero-score artifact. A score is derived only on request: pass `scoreArtifact: true` together with `quality.artifactPath` (a skill directory) or `quality.artifact` (an object with a `body` / `content` / `text` string). The scorer runs in a child process with a time budget and is fully isolated — any failure leaves `artifactScore` as `null` and never fails the trace write. When a score is derived and the caller did not decide the gate, `artifactPassedQualityBar` is set against the 60-point default bar and the `quality-scorer` evaluator is appended to `evaluators`.
+- **Backward compatibility**: Adding `null` to `artifactScore` keeps the key present and keeps every existing trace valid; JSONL readers must treat `null` as "unknown" rather than "zero". All other field names, types, and required keys are unchanged, so readers written against earlier traces keep parsing the log.
+
 ## Regression Testing
 
 Compare new traces against baselines to detect regressions:

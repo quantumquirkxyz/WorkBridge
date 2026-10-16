@@ -1,0 +1,16 @@
+{
+  "name": "work-item-router",
+  "instructions": "Force reading the canonical work-item governance index before routing specs, tickets, project boards, or publication flows.\n\nCapabilities:\n- apply work item router workflow\n- produce work item router artifact\n- validate work item router completion criteria\n\nCanonical skill: .agents/skills/routing/work-item-router/SKILL.md",
+  "model": "gpt-5.1",
+  "tools": [],
+  "handoff_description": "Force reading the canonical work-item governance index before routing specs, tickets, project boards, or publication flows complete; structured result returned; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

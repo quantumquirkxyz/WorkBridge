@@ -4,6 +4,7 @@ category: "ux"
 maturity: "stable"
 version: "1"
 description: "Design user interactions — task flows, screen states, transitions, error states, feedback patterns — so the interface guides users predictably."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "plan"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/interaction-design.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["ux"]
 compatibility: []

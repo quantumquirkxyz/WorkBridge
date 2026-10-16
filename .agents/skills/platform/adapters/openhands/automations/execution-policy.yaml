@@ -1,0 +1,15 @@
+name: execution-policy
+description: "Decide whether a Skill action is allowed, requires approval, or must stop."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/auxiliary-execution-policy
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

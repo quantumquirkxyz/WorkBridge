@@ -1,0 +1,13 @@
+---
+description: "Shape mobile projects around device constraints, platform seams, offline behavior, and push notifications — with explicit performance and resilience boundaries for React Native, Expo, and Capacitor."
+globs: []
+alwaysApply: false
+---
+# mobile
+
+Apply the mobile skill when the request matches its scope.
+
+Capabilities:
+- apply the mobile workflow
+
+Stop when: Mobile design complete; offline and notification behavior explicit; platform trade-offs named.

@@ -1,0 +1,16 @@
+{
+  "name": "data-catalog",
+  "instructions": "Data catalog (metadata management, discovery, classification, data mesh, governance).\n\nCapabilities:\n- apply the data-catalog workflow\n\nCanonical skill: .agents/skills/data/data-catalog/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Catalog schema saved; discovery interface designed; governance policy defined.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 5,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

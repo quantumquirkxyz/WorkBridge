@@ -1,0 +1,15 @@
+name: context-pack
+description: "Build a minimal fresh context pack with ordered reads and provenance — for scoped, high-signal handoff."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/routing-context-pack
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

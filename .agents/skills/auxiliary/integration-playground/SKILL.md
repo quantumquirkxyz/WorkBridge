@@ -3,6 +3,7 @@ name: "integration-playground"
 category: "auxiliary"
 maturity: "stable"
 description: "Create a disposable fixture environment for safely exercising Skills against local APIs, data, and files; use when testing a Skill with isolated local fixtures."
+license: "MIT"
 version: "1"
 capabilities: ""
 inputs: ""
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "auxiliary"
 modelTier: "fast"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/integration-playground.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["auxiliary"]
 compatibility: []

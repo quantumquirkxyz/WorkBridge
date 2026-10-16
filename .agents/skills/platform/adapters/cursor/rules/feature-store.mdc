@@ -1,0 +1,13 @@
+---
+description: "Feature store (online/offline, feature engineering, serving, monitoring, drift)."
+globs: []
+alwaysApply: false
+---
+# feature-store
+
+Apply the feature-store skill when the request matches its scope.
+
+Capabilities:
+- apply the feature-store workflow
+
+Stop when: Architecture diagram saved; feature definitions documented; monitoring plan present.

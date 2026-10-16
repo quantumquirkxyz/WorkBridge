@@ -1,0 +1,16 @@
+{
+  "name": "compiler-testing",
+  "instructions": "Test compilers and interpreters — parser tests, semantic tests, IR validation, golden tests, and regression checks — with explicit oracle design.\n\nCapabilities:\n- apply the compiler-testing workflow\n\nCanonical skill: .agents/skills/compilers/compiler-testing/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Test oracles, fixture classes, and regression checks are explicit.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

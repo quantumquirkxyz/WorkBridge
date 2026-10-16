@@ -1,0 +1,52 @@
+{
+  "skill": "delivery/review-pr",
+  "version": 1,
+  "generatedFrom": "frontmatter",
+  "frontmatterHash": "4eae6e744035b692d857f1fef0c4b2a9de1b508ee11e882d9a6bd8d4f1b59feb",
+  "role": "workflow",
+  "router": {
+    "positive": [],
+    "negative": [],
+    "requiredSignals": []
+  },
+  "execution": {
+    "defaultAgent": "general",
+    "isolation": "worktree",
+    "maxTurns": 6,
+    "modelTier": "reasoning",
+    "tools": {
+      "allow": [
+        "Read",
+        "Grep",
+        "Glob",
+        "WebFetch",
+        "WebSearch"
+      ],
+      "deny": []
+    }
+  },
+  "guardrails": {
+    "sideEffects": [
+      "post-pr-comment"
+    ],
+    "approvalRequired": true,
+    "approvalFor": [
+      "post-pr-comment"
+    ],
+    "risk": "medium",
+    "trustTier": 3
+  },
+  "verification": {
+    "commands": [
+      "node .agents/skills/platform/check-all.mjs"
+    ],
+    "artifactSchema": null
+  },
+  "observability": {
+    "traceEvents": [
+      "skill.route",
+      "skill.execute",
+      "skill.verify"
+    ]
+  }
+}

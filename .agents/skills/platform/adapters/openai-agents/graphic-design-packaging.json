@@ -1,0 +1,16 @@
+{
+  "name": "graphic-design-packaging",
+  "instructions": "Design physical packaging — dielines, structure, materials, regulatory labels — with production-ready specifications.\n\nCapabilities:\n- apply the graphic-design-packaging workflow\n\nCanonical skill: .agents/skills/graphic-design/graphic-design-packaging/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Design physical packaging — dielines, structure, materials, regulatory labels — with production-ready specifications. complete; structured result returned; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

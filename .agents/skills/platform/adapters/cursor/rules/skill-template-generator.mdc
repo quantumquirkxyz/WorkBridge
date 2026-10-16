@@ -1,0 +1,13 @@
+---
+description: "Generate an interactive, contract-complete Skill template in the sandbox — use when starting a new Skill with the lab's scaffolding."
+globs: []
+alwaysApply: false
+---
+# skill-template-generator
+
+Apply the skill-template-generator skill when the request matches its scope.
+
+Capabilities:
+- apply the skill-template-generator workflow
+
+Stop when: Generate an interactive, contract-complete Skill template in the sandbox complete; artifact saved; completion criteria checked.

@@ -4,6 +4,7 @@ category: "db"
 maturity: "stable"
 version: "1"
 description: "Plan database migrations — schema changes, backfills, compatibility windows, and rollback strategy — with explicit application and data safety checks."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "db"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/db-migrations.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["db"]
 compatibility: []

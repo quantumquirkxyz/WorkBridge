@@ -1,0 +1,50 @@
+{
+  "skill": "routing/publish-open-pr",
+  "version": 1,
+  "generatedFrom": "frontmatter",
+  "frontmatterHash": "4cce59be2288439ffa58d57fc11b02a994e1970f18c9a5f3a2edfd970bfd8268",
+  "role": "workflow",
+  "router": {
+    "positive": [],
+    "negative": [],
+    "requiredSignals": []
+  },
+  "execution": {
+    "defaultAgent": "general",
+    "isolation": "none",
+    "maxTurns": 6,
+    "modelTier": "router",
+    "tools": {
+      "allow": [
+        "Read",
+        "Grep",
+        "Glob"
+      ],
+      "deny": []
+    }
+  },
+  "guardrails": {
+    "sideEffects": [
+      "push-branch",
+      "create-pull-request"
+    ],
+    "approvalRequired": true,
+    "approvalFor": [
+      "push-branch",
+      "create-pull-request"
+    ],
+    "risk": "medium",
+    "trustTier": 3
+  },
+  "verification": {
+    "commands": [],
+    "artifactSchema": null
+  },
+  "observability": {
+    "traceEvents": [
+      "skill.route",
+      "skill.execute",
+      "skill.verify"
+    ]
+  }
+}

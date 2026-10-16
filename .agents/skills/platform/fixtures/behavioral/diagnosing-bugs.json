@@ -1,0 +1,36 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-diagnosing-bugs",
+      "skill": "diagnosing-bugs",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact"
+        ],
+        "doesNotContain": [
+          "## Operating Contract"
+        ]
+      }
+    },
+    {
+      "id": "diagnosing-bugs-triggers",
+      "skill": "diagnosing-bugs",
+      "type": "behavioral",
+      "description": "Diagnosing bugs skill triggers on bug reports",
+      "input": "Debug why the login returns 500 intermittently",
+      "expected": {
+        "invokes": true,
+        "outputContains": [
+          "Diagnos",
+          "artifact"
+        ],
+        "doesNotContain": [
+          "not found"
+        ]
+      }
+    }
+  ]
+}

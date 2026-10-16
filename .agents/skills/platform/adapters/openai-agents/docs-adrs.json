@@ -1,0 +1,16 @@
+{
+  "name": "docs-adrs",
+  "instructions": "Create and maintain Architecture Decision Records — context, decision, consequences, alternatives, status — with periodic review.\n\nCapabilities:\n- apply docs adrs workflow\n- produce docs adrs analysis artifact\n- validate docs adrs completion criteria\n\nCanonical skill: .agents/skills/docs/docs-adrs/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Create and maintain Architecture Decision Records complete; required sections present; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

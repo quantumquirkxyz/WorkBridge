@@ -1,0 +1,15 @@
+name: incident-forensics
+description: "Incident forensics (evidence collection, timeline reconstruction, root cause, reporting)"
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/sec-incident-forensics
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: true
+  sideEffects: []

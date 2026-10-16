@@ -1,0 +1,13 @@
+---
+description: "Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or use docs to sharpen the premise before acting."
+globs: []
+alwaysApply: false
+---
+# grilling
+
+Apply the grilling skill when the request matches its scope.
+
+Capabilities:
+- apply the grilling workflow
+
+Stop when: Grill the user relentlessly about a plan, decision, or idea complete; structured result returned; completion criteria checked.

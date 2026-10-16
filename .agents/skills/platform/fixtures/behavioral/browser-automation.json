@@ -1,0 +1,44 @@
+{
+  "fixtures": [
+    {
+      "id": "v1-contract-browser-automation",
+      "skill": "browser-automation",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "BrowserTaskReport"
+        ],
+        "doesNotContain": [
+          "## Operating Contract"
+        ]
+      }
+    },
+    {
+      "id": "v1-footer-browser-automation",
+      "skill": "browser-automation",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "@include .agents/skills/platform/contract-base.xml"
+        ]
+      }
+    },
+    {
+      "id": "v1-description-browser-automation",
+      "skill": "browser-automation",
+      "type": "regression",
+      "expectedOutput": {
+        "contains": [
+          "browser-automation",
+          "BrowserTaskReport",
+          "approval",
+          "Playwright",
+          "untrusted"
+        ]
+      }
+    }
+  ]
+}

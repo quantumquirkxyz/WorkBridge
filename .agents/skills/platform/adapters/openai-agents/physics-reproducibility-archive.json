@@ -1,0 +1,16 @@
+{
+  "name": "physics-reproducibility-archive",
+  "instructions": "Make physics research reproducible and archive it — Zenodo DOI, GitHub + container (Docker/Apptainer), data preservation, code review, and open-science compliance for journals and funders.\n\nCapabilities:\n- apply the physics-reproducibility-archive workflow\n\nCanonical skill: .agents/skills/physics/physics-reproducibility-archive/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Zenodo DOI assigned; GitHub tag created; checklist complete.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

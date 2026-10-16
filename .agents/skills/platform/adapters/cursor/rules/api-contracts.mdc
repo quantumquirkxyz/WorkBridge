@@ -1,0 +1,13 @@
+---
+description: "Define the request and response contracts, versioning rules, compatibility boundaries, OpenAPI/JSON Schema, and breaking change detection for APIs — with explicit consumer obligations."
+globs: []
+alwaysApply: false
+---
+# api-contracts
+
+Apply the api-contracts skill when the request matches its scope.
+
+Capabilities:
+- apply the api-contracts workflow
+
+Stop when: API contracts defined; versioning strategy explicit; breaking change policy and migration path named.

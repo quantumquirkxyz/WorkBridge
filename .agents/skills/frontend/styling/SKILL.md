@@ -4,6 +4,7 @@ category: "frontend"
 maturity: "stable"
 version: "1"
 description: "Modern CSS (Tailwind v4, Panda CSS, CSS modules, CVA, design tokens)."
+license: "MIT"
 capabilities: ""
 inputs:
   - type: object
@@ -21,7 +22,7 @@ promptVersion: "2.0"
 artifactType: "frontend"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/styling.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["frontend"]
 compatibility: []

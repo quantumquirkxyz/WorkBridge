@@ -1,0 +1,16 @@
+{
+  "name": "stream-processing",
+  "instructions": "Stream processing (Flink, Kafka Streams, RisingWave, windowing, state, exactly-once).\n\nCapabilities:\n- apply the stream-processing workflow\n\nCanonical skill: .agents/skills/data/stream-processing/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Topology diagram saved; windowing strategy defined; exactly-once plan documented.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

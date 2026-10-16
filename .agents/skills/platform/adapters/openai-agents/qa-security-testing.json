@@ -1,0 +1,16 @@
+{
+  "name": "qa-security-testing",
+  "instructions": "Test security posture — auth flows, authorization boundaries, injection paths, session handling, and misconfiguration checks — with adversarial scenarios.\n\nCapabilities:\n- apply the qa-security-testing workflow\n\nCanonical skill: .agents/skills/qa/qa-security-testing/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Security boundaries, findings, and responsible next steps are documented.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

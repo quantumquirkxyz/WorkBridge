@@ -1,0 +1,13 @@
+---
+description: "Reference skill for agent workspace control — multi-agent session management, workspace persistence, and cross-device continuity, independent of any external framework."
+globs: []
+alwaysApply: false
+---
+# agent-canvas
+
+Apply the agent-canvas skill when the request matches its scope.
+
+Capabilities:
+- apply the agent-canvas workflow
+
+Stop when: Workspace defined, session has explicit finish line, and state is recorded.

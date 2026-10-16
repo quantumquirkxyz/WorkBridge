@@ -1,0 +1,13 @@
+---
+description: "Model market/portfolio/credit risk (VaR, CVaR, drawdown, stress) with explicit distributions, assumptions, and validation against historical stress events."
+globs: []
+alwaysApply: false
+---
+# quant-risk-modeling
+
+Apply the quant-risk-modeling skill when the request matches its scope.
+
+Capabilities:
+- apply the quant-risk-modeling workflow
+
+Stop when: Model market/portfolio/credit risk (VaR, CVaR, drawdown, stress) with explicit distributions, assumptions, and validation against historical stress events complete; required sections present; completion criteria checked.

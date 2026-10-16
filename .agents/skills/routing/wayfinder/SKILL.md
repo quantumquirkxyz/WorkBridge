@@ -4,6 +4,7 @@ category: "routing"
 maturity: "stable"
 version: "1"
 description: "Plan a huge chunk of work — more than one agent session can hold — as a map of decision tickets on your issue tracker, with staged decomposition and durable scope boundaries."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "routing"
 modelTier: "router"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/wayfinder.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["routing"]
 compatibility: []
@@ -157,6 +158,17 @@ User invokes with a loose idea.
 4. **Create the tickets you can specify now** as child issues of the map — then wire blocking edges in a **second pass** (issues need ids before they can reference each other). Wiring sorts them into the frontier and the blocked; everything you can't yet specify stays in the fog — the **Not yet specified** section.
 5. **Fire the research subagents.** For each `research` ticket you just created, spin up a `/research` subagent to resolve it in parallel, capturing its findings on a throwaway `research/<name>` branch with a context pointer from the ticket.
 6. Stop — charting is one session's work; it hand-resolves nothing.
+
+## Work through the map
+
+User invokes with the map issue.
+
+1. **Orient.** Load the map once per session — Destination, Notes, Decisions so far — then query the frontier: the open, unblocked, unclaimed children.
+2. **Claim one ticket.** Assign it to the dev driving the map **before** any work; that assignment is the claim, so concurrent sessions skip it. One ticket per session — research tickets excepted, which resolve in parallel and never count against the one.
+3. **Resolve it by type.** HITL tickets resolve only through the live exchange with the human who speaks for themselves — the agent never stands in for the human's side of it. Research tickets go to `/research` subagents, each capturing findings on a throwaway `research/<name>` branch with a context pointer from the ticket. Assets made while resolving a ticket are linked from the issue, not pasted in.
+4. **Record the resolution.** Close the ticket with the answer recorded on it — never in the body, which holds only the question. The map's **Decisions so far** gains one line: the ticket's name wrapping its link, plus a one-line gist. The map gists and links; it never restates the ticket's detail.
+5. **Graduate the fog.** Resolving a ticket clears the fog ahead of it: whatever is now specifiable becomes fresh tickets, one at a time. **Fog or ticket?** The test is whether you can state the question precisely now — _not_ whether you can answer it. What still can't be phrased that sharply stays in **Not yet specified**; what sits past the destination goes to **Out of scope** and never graduates — the frontier stops at the destination.
+6. **Hand off when the map clears.** When the frontier is empty and no tickets remain, the way to the destination is clear and the map is done. Hand off to `/to-spec` to turn the decisions into the spec the map was finding its way to.
 
 ## Completion
 

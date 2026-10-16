@@ -1,0 +1,16 @@
+{
+  "name": "make-project",
+  "instructions": "Use when the user wants a new board in GitHub Projects, or another skill needs one — create the project, wire its fields, and preserve tracker semantics.\n\nCapabilities:\n- apply the make-project workflow\n\nCanonical skill: .agents/skills/project/make-project/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Use when the user wants a new board in GitHub Projects, or another skill needs one complete; structured result returned; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

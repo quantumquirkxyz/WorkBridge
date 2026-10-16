@@ -4,6 +4,7 @@ category: "research"
 maturity: "stable"
 version: "1"
 description: "Archive research data — metadata, storage, preservation, provenance, and reuse planning — with reproducibility and access controls."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "research"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/research-data-archiving.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["research"]
 compatibility: []

@@ -1,0 +1,16 @@
+{
+  "name": "skill-sandbox",
+  "instructions": "Create, test, and iterate on experimental skills in an isolated environment without affecting the canonical skills bundle.\n\nCapabilities:\n- apply the skill-sandbox workflow\n\nCanonical skill: .agents/skills/skill-dev/skill-sandbox/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Create, test, and iterate on experimental skills in an isolated environment without affecting the canonical skills bundle complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

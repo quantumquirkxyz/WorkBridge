@@ -1,0 +1,13 @@
+---
+description: "Connect graphic design tools — Figma, Adobe Creative Cloud, Canva, and local production tools — to agent workflows with explicit authentication, scopes, and safety boundaries."
+globs: []
+alwaysApply: false
+---
+# graphic-design-tools
+
+Apply the graphic-design-tools skill when the request matches its scope.
+
+Capabilities:
+- apply the graphic-design-tools workflow
+
+Stop when: Graphic design tools integration plan complete; tool selection, authentication, use cases, and safety boundaries explicit.

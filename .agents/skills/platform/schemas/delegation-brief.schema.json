@@ -1,0 +1,186 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "$id": "https://quirk.skills/schemas/delegation-brief.schema.json",
+  "title": "Delegation Brief and Verification Verdict",
+  "description": "Canonical delegation brief handed to a subagent, and the black-box verification verdict returned to the caller. Valid for both objects: validate an instance against #/$defs/DelegationBrief or #/$defs/DelegationVerdict.",
+  "type": "object",
+  "anyOf": [
+    { "$ref": "#/$defs/DelegationBrief" },
+    { "$ref": "#/$defs/DelegationVerdict" }
+  ],
+  "$defs": {
+    "DelegationBrief": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "A self-contained delegation brief. It carries everything the worker needs and nothing it does not: no transcript, no implementation narrative.",
+      "required": [
+        "briefId",
+        "objective",
+        "outputFormat",
+        "toolGuidance",
+        "boundaries",
+        "stopCondition",
+        "effortBudget",
+        "contextIsolation",
+        "readOnly",
+        "sources"
+      ],
+      "properties": {
+        "briefId": {
+          "type": "string",
+          "pattern": "^brief-[a-z0-9][a-z0-9-]*$",
+          "description": "Stable identifier shared by the brief and its verdict."
+        },
+        "objective": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The single outcome the worker must produce. One objective per brief."
+        },
+        "outputFormat": {
+          "type": "string",
+          "enum": ["summary", "artifact-reference", "findings-only"],
+          "description": "summary = bounded prose with an artifact reference; artifact-reference = the worker writes a file and returns its path plus a bounded summary; findings-only = a list of findings, each with evidence, and no prose."
+        },
+        "toolGuidance": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Which tools and sources the worker may use, in what order, and what to do when a source is missing."
+        },
+        "boundaries": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 },
+          "description": "What the worker must NOT do. At least one explicit negative boundary is mandatory."
+        },
+        "stopCondition": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The observable condition that ends the worker's run. Without it the worker keeps going until the effort budget is exhausted."
+        },
+        "effortBudget": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [],
+          "description": "Effort scaled to task complexity. Every field is optional; the budget scales with complexity (simple, comparison, complex).",
+          "properties": {
+            "maxToolCalls": { "type": "integer", "minimum": 1 },
+            "maxSubagents": { "type": "integer", "minimum": 1 },
+            "maxMinutes": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "contextIsolation": {
+          "type": "string",
+          "enum": ["isolated", "fork"],
+          "default": "isolated",
+          "description": "isolated = the worker starts from a clean context and receives only the brief plus the artifact it must verify; fork = the worker inherits the caller's context."
+        },
+        "readOnly": {
+          "type": "boolean",
+          "default": true,
+          "description": "Read-only workers keep delegation safe. Mutation requires an explicit opt-in AND a mutating sideEffect declared by the invoking skill."
+        },
+        "sources": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "description": "Explicit sources the worker may consult (paths, URLs, commands). Empty means the brief must say so in toolGuidance."
+        },
+        "expectedArtifactPath": {
+          "type": "string",
+          "description": "Where the worker writes its output when outputFormat is artifact-reference."
+        }
+      }
+    },
+    "DelegationVerdict": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Black-box verification verdict. The verifier never sees the implementation narrative of the worker it verifies.",
+      "required": [
+        "briefId",
+        "status",
+        "criteria",
+        "negativeTestsRun",
+        "fullSuiteRun",
+        "summary",
+        "artifactMutating"
+      ],
+      "allOf": [
+        {
+          "if": { "required": ["status"], "properties": { "status": { "const": "pass" } } },
+          "then": { "required": ["fullSuiteRun"], "properties": { "fullSuiteRun": { "const": true } } },
+          "description": "A pass is invalid without the full suite: that is the early-victory anti-pattern."
+        },
+        {
+          "if": {
+            "required": ["status", "artifactMutating"],
+            "properties": { "status": { "const": "pass" }, "artifactMutating": { "const": true } }
+          },
+          "then": { "required": ["negativeTestsRun"], "properties": { "negativeTestsRun": { "minimum": 1 } } },
+          "description": "A pass over a mutating artifact is invalid without at least one negative test."
+        }
+      ],
+      "properties": {
+        "briefId": {
+          "type": "string",
+          "pattern": "^brief-[a-z0-9][a-z0-9-]*$",
+          "description": "The brief this verdict answers."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pass", "fail", "blocked"],
+          "description": "pass = every criterion met with evidence; fail = at least one criterion unmet; blocked = the verifier could not run the checks."
+        },
+        "criteria": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "description", "met", "evidence"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "description": { "type": "string", "minLength": 1 },
+              "met": { "type": "boolean" },
+              "evidence": {
+                "type": "string",
+                "minLength": 1,
+                "description": "The concrete check that proved the criterion, with its location or output."
+              }
+            }
+          }
+        },
+        "negativeTestsRun": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Count of negative tests executed (a check that must fail before the fix is trusted)."
+        },
+        "fullSuiteRun": {
+          "type": "boolean",
+          "description": "Whether the full suite was executed. A pass without it is an early victory, not a verdict."
+        },
+        "artifactMutating": {
+          "type": "boolean",
+          "description": "Whether the verified artifact mutates the repository. Mirrors the brief's readOnly flag."
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Bounded summary returned to the caller. Never a transcript of the worker's run."
+        },
+        "artifactRef": {
+          "type": "string",
+          "description": "Path to the verification artifact the caller may read instead of a transcript."
+        },
+        "tokensUsed": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "Tokens spent verifying, for the effort-budget feedback loop."
+        },
+        "durationMs": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "Wall time spent verifying, for the effort-budget feedback loop."
+        }
+      }
+    }
+  }
+}

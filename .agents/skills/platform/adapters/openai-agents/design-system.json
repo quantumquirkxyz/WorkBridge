@@ -1,0 +1,16 @@
+{
+  "name": "design-system",
+  "instructions": "Define and evolve reusable UI tokens, components, and usage rules as a coherent system.\n\nCapabilities:\n- apply the design-system workflow\n\nCanonical skill: .agents/skills/frontend/design-system/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Define and evolve reusable UI tokens, components, and usage rules as a coherent system complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

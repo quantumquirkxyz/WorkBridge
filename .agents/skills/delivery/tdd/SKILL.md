@@ -4,6 +4,7 @@ category: delivery
 maturity: stable
 version: 1
 description: Test-driven development. Use when the user wants to build features or fix bugs test-first, mentions "red-green-refactor"
+license: MIT
 capabilities:
   - apply tdd workflow
   - produce tdd artifact
@@ -71,6 +72,17 @@ stopCondition: Test-driven development complete; structured result returned; com
 risk: low
 trustTier: 1
 maxIterations: 6
+clauses:
+  - id: TDD-1
+    text: "Write the failing test first, then only enough code to pass it; no speculative implementation."
+    check: "evals/behavioral/tdd.json#TDD-1"
+  - id: TDD-2
+    text: "Test only at pre-agreed seams; confirm the seams with the user before writing any test."
+    check: evals/behavioral/tdd.json#TDD-2
+  - id: TDD-3
+    text: "Keep refactoring out of the red-to-green cycle; it belongs to the review stage."
+    check: evals/behavioral/tdd.json#TDD-3
+reloadPolicy: on-trigger
 ---
 
 ## Why
@@ -102,6 +114,20 @@ Beyond cost, TDD produces executable documentation. A test that passes is a proo
 | **Side effects** | none. |
 | **Boundaries** | one test at a time; no speculative implementation. |
 | **Completion criteria** | each test fails before implementation; each test passes with minimal code; tests survive refactor; no implementation-coupled or tautological tests. |
+
+## Rules of the loop
+
+- **Red before green.** Write the failing test first, then only enough code to pass it. Don't anticipate future tests or add speculative features.
+- **One slice at a time.** One seam, one test, one minimal implementation per cycle.
+- **Rule: after each red-green cycle (one test → one implementation), commit the changes with a conventional commit message.**
+- **Refactoring is not part of the loop.** It belongs to the review stage (see the `code-review` skill), not the red → green implementation cycle.
+
+## Completion
+
+- all cycles follow the red → green → refactor discipline
+- every test is at a pre-agreed seam and survives refactors
+- no implementation-coupled or tautological tests remain
+- `TddArtifact` emitted and validated
 
 ## Artifact
 
@@ -135,13 +161,6 @@ Return to step 2. Each cycle produces one tracer bullet. The accumulating suite 
 
 Refactoring is not part of the red→green cycle. After all cycles are complete, review the implementation for duplication, unclear naming, and missed abstractions. Run the full suite after each refactoring step to confirm no behavior was lost. See the `code-review` skill for the refactor review stage.
 
-## Completion
-
-- all cycles follow the red → green → refactor discipline
-- every test is at a pre-agreed seam and survives refactors
-- no implementation-coupled or tautological tests remain
-- `TddArtifact` emitted and validated
-
 # Test-Driven Development
 
 TDD is the red → green loop. This skill is the reference that makes that loop produce tests worth keeping: what a good test is, where tests go, the anti-patterns, and the rules of the loop. Every section applies on every cycle — consult them before and during the loop, not after.
@@ -169,13 +188,6 @@ These patterns produce tests that look like coverage but fail when you need them
 - **Implementation-coupled** — mocks internal collaborators, tests private methods, or verifies through a side channel (querying the database instead of using the interface). The tell: the test breaks when you refactor but behavior hasn't changed.
 - **Tautological** — the assertion recomputes the expected value the way the code does (`expect(add(a, b)).toBe(a + b)`, a snapshot derived by hand the same way, a constant asserted equal to itself), so it passes by construction and can never disagree with the code. Expected values must come from an independent source of truth — a known-good literal, a worked example, the spec.
 - **Horizontal slicing** — writing all tests first, then all implementation. Bulk tests verify _imagined_ behavior: you test the _shape_ of things rather than user-facing behavior, the tests go insensitive to real changes, and you commit to test structure before understanding the implementation. Work in **vertical slices** instead — one test → one implementation → repeat, each test a **tracer bullet** that responds to what the last cycle taught you.
-
-## Rules of the loop
-
-- **Red before green.** Write the failing test first, then only enough code to pass it. Don't anticipate future tests or add speculative features.
-- **One slice at a time.** One seam, one test, one minimal implementation per cycle.
-- **Rule: after each red-green cycle (one test → one implementation), commit the changes with a conventional commit message.**
-- **Refactoring is not part of the loop.** It belongs to the review stage (see the `code-review` skill), not the red → green implementation cycle.
 
 ---
 @include .agents/skills/platform/contract-base.xml

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "quirk Cost Model",
+  "description": "Estimated price table for the cost ledger. Every figure here is an ESTIMATE used for relative comparison between skills, not a billing record.",
+  "estimate": true,
+  "disclaimer": "Estimated cost from the tiers below; figures are indicative and never a billing statement. A trace with no measured tokens or no priced tier is reported as unknown, never as zero.",
+  "currency": "USD",
+  "unit": "USD per 1K tokens",
+  "tiers": {
+    "reasoning": { "input": 0.015, "output": 0.075 },
+    "code": { "input": 0.003, "output": 0.015 },
+    "fast": { "input": 0.0008, "output": 0.004 },
+    "router": { "input": 0.0003, "output": 0.00125 }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PublishOpenPrArtifact",
+  "description": "Durable publication artifact emitted by the publish-open-pr skill as structured output when a completed branch is published as an open PR.",
+  "type": "object",
+  "required": ["status", "branch", "prNumber", "prUrl", "title", "validation", "gateCiResult"],
+  "properties": {
+    "status": { "type": "string", "enum": ["completed", "blocked", "failed"] },
+    "branch": { "type": "string" },
+    "prNumber": { "type": "integer" },
+    "prUrl": { "type": "string" },
+    "title": { "type": "string" },
+    "validation": {
+      "type": "object",
+      "required": ["passed"],
+      "properties": {
+        "passed": { "type": "boolean" },
+        "commands": { "type": "array", "items": { "type": "string" } },
+        "notes": { "type": "string" }
+      }
+    },
+    "gateCiResult": {
+      "type": "object",
+      "required": ["status", "failingChecks"],
+      "properties": {
+        "status": { "type": "string", "enum": ["pass", "fail"] },
+        "failingChecks": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "reviewers": { "type": "array", "items": { "type": "string" } },
+    "labels": { "type": "array", "items": { "type": "string" } }
+  }
+}

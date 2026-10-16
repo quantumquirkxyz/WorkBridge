@@ -1,0 +1,16 @@
+{
+  "name": "skill-optimizer",
+  "instructions": "Optimize a quirk Skill's model-facing description against routing fixtures with a propose-only reflective loop. Use when a Skill routes wrong, fires too rarely or too often, or when evaluate-skill or skill-quality-gate reports a routing regression. Emits a diff-shaped proposal with (skill, version, fixture) evidence; the human applies it. Not for body edits or metadata repair.\n\nCapabilities:\n- score skill description routing evidence\n- evolve description candidates reflectively\n- emit an apply-ready description proposal\n\nCanonical skill: .agents/skills/skill-dev/skill-optimizer/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Skill description optimization proposal emitted with held-out evidence, or an explicit no-defensible-change verdict; target skill untouched; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

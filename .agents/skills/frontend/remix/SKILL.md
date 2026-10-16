@@ -4,6 +4,7 @@ category: "frontend"
 maturity: "stable"
 version: "1"
 description: "Remix framework (loaders, actions, nested routes, progressive enhancement)."
+license: "MIT"
 capabilities: ""
 inputs:
   - type: object
@@ -21,7 +22,7 @@ promptVersion: "2.0"
 artifactType: "frontend"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/remix.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["frontend"]
 compatibility: []

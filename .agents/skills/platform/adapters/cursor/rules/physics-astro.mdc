@@ -1,0 +1,13 @@
+---
+description: "Model astrophysical systems — stellar structure, orbital dynamics, cosmology, gravitational waves — with physical scales, order-of-magnitude estimates, and scaling laws."
+globs: []
+alwaysApply: false
+---
+# physics-astro
+
+Apply the physics-astro skill when the request matches its scope.
+
+Capabilities:
+- apply the physics-astro workflow
+
+Stop when: Model astrophysical systems complete; required sections present; completion criteria checked.

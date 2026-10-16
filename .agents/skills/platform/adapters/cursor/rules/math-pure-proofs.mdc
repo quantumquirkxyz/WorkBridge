@@ -1,0 +1,13 @@
+---
+description: "Write and verify pure-math proofs (number theory, algebra, analysis, combinatorics) with rigorous step-by-step reasoning and explicit proof strategies."
+globs: []
+alwaysApply: false
+---
+# math-pure-proofs
+
+Apply the math-pure-proofs skill when the request matches its scope.
+
+Capabilities:
+- apply the math-pure-proofs workflow
+
+Stop when: Markdown artifact exists with all five sections (statement, strategy, steps, verification, cited theorems); every proof step is justified with a named rule.

@@ -1,0 +1,15 @@
+name: db-relational-design
+description: "Design relational schemas — entities, relations, keys, indexes, constraints — with normalisation, performance, and migration planning."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/db-db-relational-design
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

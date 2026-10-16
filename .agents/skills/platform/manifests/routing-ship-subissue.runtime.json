@@ -1,0 +1,56 @@
+{
+  "skill": "routing/ship-subissue",
+  "version": 1,
+  "generatedFrom": "frontmatter",
+  "frontmatterHash": "8b391445714e9d926bcadb4284f0bd02020422378feac247718419640c98d777",
+  "role": "workflow",
+  "router": {
+    "positive": [],
+    "negative": [],
+    "requiredSignals": []
+  },
+  "execution": {
+    "defaultAgent": "general",
+    "isolation": "none",
+    "maxTurns": 6,
+    "modelTier": "router",
+    "tools": {
+      "allow": [
+        "Read",
+        "Grep",
+        "Glob"
+      ],
+      "deny": [
+        "Bash",
+        "WebFetch",
+        "WebSearch"
+      ]
+    }
+  },
+  "guardrails": {
+    "sideEffects": [
+      "merge-pull-request",
+      "close-issue",
+      "update-project"
+    ],
+    "approvalRequired": true,
+    "approvalFor": [
+      "merge-pull-request",
+      "close-issue",
+      "update-project"
+    ],
+    "risk": "high",
+    "trustTier": 4
+  },
+  "verification": {
+    "commands": [],
+    "artifactSchema": null
+  },
+  "observability": {
+    "traceEvents": [
+      "skill.route",
+      "skill.execute",
+      "skill.verify"
+    ]
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "id": "task-compatibility-view",
+  "title": "Repair a drifted compatibility view",
+  "skill": "skill-dev/skill-audit",
+  "difficulty": "medium",
+  "workspace": {
+    "kind": "fixture-copy",
+    "source": "fixtures/repos/mini-bundle"
+  },
+  "prompt": "The generated compatibility view in .claude/skills has drifted: one link is absolute so it stops being portable, and one link points at a canonical skill directory that no longer exists. Repair the view so every remaining link is relative and resolves, without editing the canonical skills, the lockfile, or the schema.",
+  "setup": [
+    {
+      "op": "remove",
+      "path": ".claude/skills"
+    },
+    {
+      "op": "copy",
+      "from": "fixtures/repos/mini-bundle",
+      "to": "."
+    },
+    {
+      "op": "copy",
+      "from": ".agents/skills/platform/fix-compatibility-view.mjs",
+      "to": "fix-compatibility-view.mjs"
+    },
+    {
+      "op": "copy",
+      "from": "fixtures/tasks/compat-view/seed-view-drift.mjs",
+      "to": "seed-view-drift.mjs"
+    },
+    {
+      "op": "copy",
+      "from": "fixtures/tasks/compat-view/inspect-view.mjs",
+      "to": "inspect-view.mjs"
+    },
+    {
+      "op": "run",
+      "command": [
+        "node",
+        "seed-view-drift.mjs",
+        "--json"
+      ],
+      "expectExit": 0
+    }
+  ],
+  "actions": [
+    {
+      "op": "run",
+      "command": [
+        "node",
+        "fix-compatibility-view.mjs",
+        "--write",
+        "--json"
+      ],
+      "expectExit": 0
+    },
+    {
+      "op": "run",
+      "command": [
+        "node",
+        "inspect-view.mjs"
+      ],
+      "expectExit": 0
+    }
+  ],
+  "verification": {
+    "stateChecks": [
+      {
+        "kind": "exit-was-zero",
+        "step": 0
+      },
+      {
+        "kind": "exit-was-zero",
+        "step": 1
+      },
+      {
+        "kind": "file-exists",
+        "path": ".claude/skills/review-pr/SKILL.md"
+      },
+      {
+        "kind": "file-missing",
+        "path": ".claude/skills/ghost-skill"
+      },
+      {
+        "kind": "json-field-equals",
+        "path": ".view-report.json",
+        "field": "absoluteCount",
+        "value": 0
+      },
+      {
+        "kind": "json-field-equals",
+        "path": ".view-report.json",
+        "field": "danglingCount",
+        "value": 0
+      },
+      {
+        "kind": "json-field-equals",
+        "path": ".view-report.json",
+        "field": "count",
+        "value": 1
+      }
+    ],
+    "forbiddenPaths": [
+      ".agents/skills/delivery/review-pr/SKILL.md",
+      "skills-lock.json",
+      "schema/review-findings-schema.json"
+    ]
+  }
+}

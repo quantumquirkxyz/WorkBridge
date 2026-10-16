@@ -1,0 +1,13 @@
+---
+description: "Shape backend systems — REST/gRPC APIs, service contracts, data flow, state management, error handling — with explicit seams and caller responsibilities."
+globs: []
+alwaysApply: false
+---
+# backend-architecture
+
+Apply the backend-architecture skill when the request matches its scope.
+
+Capabilities:
+- apply the backend-architecture workflow
+
+Stop when: Shape backend systems complete; artifact saved; completion criteria checked.

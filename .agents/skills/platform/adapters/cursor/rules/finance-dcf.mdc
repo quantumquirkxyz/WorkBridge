@@ -1,0 +1,13 @@
+---
+description: "Discounted Cash Flow — forecast, WACC, terminal value, sensitivity — with explicit assumptions, cross-check against multiples, and a valuation range."
+globs: []
+alwaysApply: false
+---
+# finance-dcf
+
+Apply the finance-dcf skill when the request matches its scope.
+
+Capabilities:
+- apply the finance-dcf workflow
+
+Stop when: Discounted Cash Flow complete; required sections present; completion criteria checked.

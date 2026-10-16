@@ -1,0 +1,16 @@
+{
+  "name": "localization",
+  "instructions": "Design internationalization (i18n) and localization (l10n) — string management, locale handling, RTL support, cultural adaptation — so the product works across languages and regions.\n\nCapabilities:\n- apply the localization workflow\n\nCanonical skill: .agents/skills/cms/localization/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Design internationalization (i18n) and localization (l10n) complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

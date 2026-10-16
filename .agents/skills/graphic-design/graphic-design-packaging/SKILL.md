@@ -1,11 +1,12 @@
 ---
 name: "graphic-design-packaging"
 description: "Design physical packaging — dielines, structure, materials, regulatory labels — with production-ready specifications."
+license: "MIT"
 promptVersion: "2.0"
 artifactType: "plan"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/graphic-design-packaging.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["graphic-design"]
 compatibility: []

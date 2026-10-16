@@ -1,0 +1,13 @@
+---
+description: "Modern state management (Zustand, Jotai, signals, Redux Toolkit, server state)."
+globs: []
+alwaysApply: false
+---
+# state-management
+
+Apply the state-management skill when the request matches its scope.
+
+Capabilities:
+- apply the state-management workflow
+
+Stop when: State management design complete; artifact saved; completion criteria checked.

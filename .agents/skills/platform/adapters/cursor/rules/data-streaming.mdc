@@ -1,0 +1,13 @@
+---
+description: "Design streaming data pipelines — Kafka, Kinesis, Pub/Sub, Flink — with event schemas, stream processing, and real-time analytics."
+globs: []
+alwaysApply: false
+---
+# data-streaming
+
+Apply the data-streaming skill when the request matches its scope.
+
+Capabilities:
+- apply the data-streaming workflow
+
+Stop when: Topology diagram saved; event schema defined; processing rules documented.

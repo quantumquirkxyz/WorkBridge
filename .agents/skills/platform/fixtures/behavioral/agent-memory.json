@@ -1,0 +1,44 @@
+{
+  "fixtures": [
+    {
+      "id": "v1-contract-agent-memory",
+      "skill": "agent-memory",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "MemoryState"
+        ],
+        "doesNotContain": [
+          "## Operating Contract"
+        ]
+      }
+    },
+    {
+      "id": "v1-footer-agent-memory",
+      "skill": "agent-memory",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "@include .agents/skills/platform/contract-base.xml"
+        ]
+      }
+    },
+    {
+      "id": "v1-description-agent-memory",
+      "skill": "agent-memory",
+      "type": "regression",
+      "expectedOutput": {
+        "contains": [
+          "agent-memory",
+          "MemoryState",
+          "NOW.md",
+          "MEMORY.md",
+          "provenance"
+        ]
+      }
+    }
+  ]
+}

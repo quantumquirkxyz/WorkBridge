@@ -1,0 +1,13 @@
+---
+description: "Design infrastructure as code — Terraform / Pulumi / CloudFormation — for reproducible, version-controlled, auditable cloud infrastructure."
+globs: []
+alwaysApply: false
+---
+# devops-terraform-iac
+
+Apply the devops-terraform-iac skill when the request matches its scope.
+
+Capabilities:
+- apply the devops-terraform-iac workflow
+
+Stop when: Module definitions saved; state rules saved; policy checklist filled.

@@ -1,0 +1,16 @@
+{
+  "name": "physics-literature-search",
+  "instructions": "Track physics literature — arXiv (hep-th, cond-mat, astro-ph, gr-qc, quant-ph, nucl-th, physics.*), INSPIRE-HEP, NASA ADS, Web of Science, citation alerts — with domain filters.\n\nCapabilities:\n- apply the physics-literature-search workflow\n\nCanonical skill: .agents/skills/physics/physics-literature-search/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Digest saved; papers grouped; sources cited.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

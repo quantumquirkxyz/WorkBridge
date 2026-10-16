@@ -1,0 +1,15 @@
+name: graphic-design-data-viz
+description: "Design data visualizations — charts, infographics, dashboards — with explicit readability, accessibility, color, typography, and production rules."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/graphic-design-graphic-design-data-viz
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

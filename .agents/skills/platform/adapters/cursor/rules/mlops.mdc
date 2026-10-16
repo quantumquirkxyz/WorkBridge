@@ -1,0 +1,13 @@
+---
+description: "MLOps (feature stores, model registry, data versioning, pipeline orchestration, monitoring, retraining)"
+globs: []
+alwaysApply: false
+---
+# mlops
+
+Apply the mlops skill when the request matches its scope.
+
+Capabilities:
+- apply the mlops workflow
+
+Stop when: Registry green; pipelines passing; model validated; monitoring active.

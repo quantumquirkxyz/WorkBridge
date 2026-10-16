@@ -1,0 +1,16 @@
+{
+  "name": "professional-project-management",
+  "instructions": "Manage professional projects — scope, milestones, risks, dependencies, and stakeholder alignment — with explicit planning and tracking artifacts.\n\nCapabilities:\n- apply the professional-project-management workflow\n\nCanonical skill: .agents/skills/professional/professional-project-management/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Scope, ownership, milestones, risks, and tracking cadence are explicit.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

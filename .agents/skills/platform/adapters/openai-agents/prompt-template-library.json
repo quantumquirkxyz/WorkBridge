@@ -1,0 +1,16 @@
+{
+  "name": "prompt-template-library",
+  "instructions": "Prompt template library (versioned templates, A/B testing, composition, evaluation)\n\nCapabilities:\n- apply the prompt-template-library workflow\n\nCanonical skill: .agents/skills/ai/prompt-template-library/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Templates green on acceptance suite with evaluation and fallback.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

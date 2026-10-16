@@ -1,0 +1,16 @@
+{
+  "name": "analyze-artifacts",
+  "instructions": "Analyze the spec, plan, and ticket artifacts of one work item for consistency: conflicts, gaps, ambiguities, and dead references, each marked [NEEDS CLARIFICATION] when the artifacts cannot resolve it. Use when a spec and its tickets drifted apart, before to-tickets slices work, or when review-pr needs a spec-side verdict. Never edits the artifacts it reads.\n\nCapabilities:\n- index requirements across spec plan and ticket artifacts\n- classify consistency findings by evidence\n- emit a read-only artifact consistency report\n\nCanonical skill: .agents/skills/project/analyze-artifacts/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Artifact consistency analysis complete; every finding classified with evidence; clarification markers carry an owner; report returned read-only; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

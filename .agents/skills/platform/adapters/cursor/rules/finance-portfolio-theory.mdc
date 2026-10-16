@@ -1,0 +1,13 @@
+---
+description: "Modern Portfolio Theory — efficient frontier, CAPM, APT, risk attribution, and performance measurement — with explicit assumptions and regime analysis."
+globs: []
+alwaysApply: false
+---
+# finance-portfolio-theory
+
+Apply the finance-portfolio-theory skill when the request matches its scope.
+
+Capabilities:
+- apply the finance-portfolio-theory workflow
+
+Stop when: Modern Portfolio Theory complete; required sections present; completion criteria checked.

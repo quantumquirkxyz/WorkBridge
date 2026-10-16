@@ -4,6 +4,7 @@ category: "web3"
 maturity: "stable"
 version: "2"
 description: "Analyse DeFi protocols — AMMs, lending, stablecoins, derivatives, intents, solver networks — across protocol mechanics, economic security, MEV protection, and composability risks."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "web3"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/web3-defi.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["web3"]
 compatibility: []

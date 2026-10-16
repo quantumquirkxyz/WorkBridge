@@ -1,0 +1,16 @@
+{
+  "name": "search",
+  "instructions": "Design search behavior, indexing, relevance, and retrieval seams — with Elasticsearch, Algolia, Meilisearch, OpenSearch, synonyms, ranking, analytics, and autocomplete.\n\nCapabilities:\n- apply the search workflow\n\nCanonical skill: .agents/skills/integrations/search/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Search design complete; indexing and ranking strategy explicit; analytics plan named.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

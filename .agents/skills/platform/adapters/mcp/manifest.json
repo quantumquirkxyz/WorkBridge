@@ -1,0 +1,3552 @@
+{
+  "schemaVersion": "1.0",
+  "server": {
+    "name": "skill-lab",
+    "protocolVersion": "2024-11-05"
+  },
+  "skills": [
+    {
+      "skill": "accessibility/accessibility",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/accessibility/accessibility"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "accessibility/accessibility-design",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/accessibility/accessibility-design"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "accessibility/accessibility-testing",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/accessibility/accessibility-testing"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "ai/agent-orchestration",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/ai/agent-orchestration"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "ai/ai-ml-pipeline",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/ai/ai-ml-pipeline"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "ai/ai-model-evaluation",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/ai/ai-model-evaluation"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "ai/ai-prompt-engineering",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/ai/ai-prompt-engineering"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "ai/ai-time-series-forecasting",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/ai/ai-time-series-forecasting"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "ai/llm-eval",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/ai/llm-eval"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "ai/llm-fine-tuning",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/ai/llm-fine-tuning"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "ai/llmops",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/ai/llmops"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "ai/mlops",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/ai/mlops"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "ai/multimodal-prompting",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/ai/multimodal-prompting"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "ai/prompt-template-library",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/ai/prompt-template-library"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "ai/rag-pipeline",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/ai/rag-pipeline"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "ai/structured-output",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/ai/structured-output"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "auxiliary/execution-policy",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/auxiliary/execution-policy"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "auxiliary/integration-playground",
+      "trustTier": 2,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/auxiliary/integration-playground"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "auxiliary/interactive-tutorial-builder",
+      "trustTier": 2,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/auxiliary/interactive-tutorial-builder"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "auxiliary/setup-quirk-skills",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/auxiliary/setup-quirk-skills"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "backend/api-gateway",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/backend/api-gateway"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "backend/backend-architecture",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/backend/backend-architecture"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "backend/backend-caching",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/backend/backend-caching"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "backend/backend-queues",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/backend/backend-queues"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "backend/caching-advanced",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/backend/caching-advanced"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "backend/distributed-tracing",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/backend/distributed-tracing"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "backend/event-driven-architecture",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/backend/event-driven-architecture"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "backend/grpc-connect",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/backend/grpc-connect"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "backend/microservices",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/backend/microservices"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "backend/rate-limiting",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/backend/rate-limiting"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "backend/serverless",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/backend/serverless"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "backend/service-mesh",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/backend/service-mesh"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "backend/websockets",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/backend/websockets"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "cms/cms-access-control",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/cms/cms-access-control"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "cms/cms-architecture",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/cms/cms-architecture"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "cms/cms-content-strategy",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/cms/cms-content-strategy"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "cms/localization",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/cms/localization"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "compilers/compiler-design",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/compilers/compiler-design"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "compilers/compiler-testing",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/compilers/compiler-testing"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "compilers/compilers",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/compilers/compilers"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "cs/cs-algorithms",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/cs/cs-algorithms"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "cs/cs-complexity-analysis",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/cs/cs-complexity-analysis"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "cs/cs-computability",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/cs/cs-computability"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "cs/cs-data-structures",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/cs/cs-data-structures"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "data/data-catalog",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/data/data-catalog"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "data/data-contracts",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/data/data-contracts"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "data/data-etl-pipeline",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/data/data-etl-pipeline"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "data/data-lineage",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/data/data-lineage"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "data/data-quality",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/data/data-quality"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "data/data-streaming",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/data/data-streaming"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "data/data-versioning",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/data/data-versioning"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "data/data-warehouse-modeling",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/data/data-warehouse-modeling"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "data/feature-store",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/data/feature-store"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "data/semantic-layer",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/data/semantic-layer"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "data/stream-processing",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/data/stream-processing"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "db/db-migrations",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/db/db-migrations"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "db/db-nosql-modeling",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/db/db-nosql-modeling"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "db/db-query-optimization",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/db/db-query-optimization"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "db/db-relational-design",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/db/db-relational-design"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "delivery/code-review",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/delivery/code-review"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "delivery/contribution-workflow-optimizer",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/delivery/contribution-workflow-optimizer"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "delivery/diagnosing-bugs",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/delivery/diagnosing-bugs"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "delivery/implement",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/delivery/implement"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "delivery/implement-review-fixes",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/delivery/implement-review-fixes"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "delivery/loop-budget",
+      "trustTier": 2,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/delivery/loop-budget"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "delivery/plan-review-fixes",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/delivery/plan-review-fixes"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "delivery/prototype",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/delivery/prototype"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "delivery/research",
+      "trustTier": 2,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/delivery/research"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "delivery/resolving-merge-conflicts",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/delivery/resolving-merge-conflicts"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "delivery/review-fix-loop",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/delivery/review-fix-loop"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "delivery/review-pr",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/delivery/review-pr"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "delivery/tdd",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/delivery/tdd"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "delivery/testing",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/delivery/testing"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "delivery/webapp-testing",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/delivery/webapp-testing"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "devops/backup-disaster-recovery",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/devops/backup-disaster-recovery"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "devops/chaos-engineering",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/devops/chaos-engineering"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "devops/cost-optimization",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/devops/cost-optimization"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "devops/devops-ci-cd-pipeline",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/devops/devops-ci-cd-pipeline"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "devops/devops-feature-flags",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/devops/devops-feature-flags"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "devops/devops-k8s-orchestration",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/devops/devops-k8s-orchestration"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "devops/devops-terraform-iac",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/devops/devops-terraform-iac"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "devops/gitops",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/devops/gitops"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "devops/incident-response",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/devops/incident-response"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "devops/secret-management",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/devops/secret-management"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "docs/docs-adrs",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/docs/docs-adrs"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "docs/docs-knowledge-base",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/docs/docs-knowledge-base"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "docs/docs-technical-writing",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/docs/docs-technical-writing"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "engineering/improve-codebase-architecture",
+      "trustTier": 2,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/engineering/improve-codebase-architecture"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "finance/finance-corporate-val",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/finance/finance-corporate-val"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "finance/finance-dcf",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/finance/finance-dcf"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "finance/finance-portfolio-theory",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/finance/finance-portfolio-theory"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "foundation/agent-canvas",
+      "trustTier": 2,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/foundation/agent-canvas"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "foundation/agent-card",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/foundation/agent-card"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "foundation/agent-memory",
+      "trustTier": 2,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/foundation/agent-memory"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "foundation/agent-observability",
+      "trustTier": 2,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/foundation/agent-observability"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "foundation/api-design",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/foundation/api-design"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "foundation/codebase-design",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/foundation/codebase-design"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "foundation/context-compaction",
+      "trustTier": 2,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/foundation/context-compaction"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "foundation/context-engine",
+      "trustTier": 2,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/foundation/context-engine"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "foundation/domain-modeling",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/foundation/domain-modeling"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "foundation/mcp-server",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/foundation/mcp-server"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "foundation/observability",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/foundation/observability"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "foundation/skill-composition",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/foundation/skill-composition"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "foundation/subagent-swarm",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/foundation/subagent-swarm"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "foundation/verify-delegation",
+      "trustTier": 2,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/foundation/verify-delegation"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "frontend/astro",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/frontend/astro"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "frontend/design-system",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/frontend/design-system"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "frontend/frontend-design",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/frontend/frontend-design"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "frontend/frontend-testing",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/frontend/frontend-testing"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "frontend/mobile",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/frontend/mobile"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "frontend/nextjs",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/frontend/nextjs"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "frontend/react",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/frontend/react"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "frontend/remix",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/frontend/remix"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "frontend/state-management",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/frontend/state-management"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "frontend/styling",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/frontend/styling"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "graphic-design/brand-identity",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/graphic-design/brand-identity"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "graphic-design/design-system-visual",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/graphic-design/design-system-visual"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "graphic-design/graphic-design-accessibility",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/graphic-design/graphic-design-accessibility"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "graphic-design/graphic-design-advertising",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/graphic-design/graphic-design-advertising"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "graphic-design/graphic-design-data-viz",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/graphic-design/graphic-design-data-viz"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "graphic-design/graphic-design-editorial",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/graphic-design/graphic-design-editorial"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "graphic-design/graphic-design-foundations",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/graphic-design/graphic-design-foundations"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "graphic-design/graphic-design-motion",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/graphic-design/graphic-design-motion"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "graphic-design/graphic-design-packaging",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/graphic-design/graphic-design-packaging"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "graphic-design/graphic-design-photo-direction",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/graphic-design/graphic-design-photo-direction"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "graphic-design/graphic-design-project-management",
+      "trustTier": 2,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/graphic-design/graphic-design-project-management"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "graphic-design/graphic-design-tools",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/graphic-design/graphic-design-tools"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "integrations/api-contracts",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/integrations/api-contracts"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "integrations/auth",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/integrations/auth"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "integrations/browser-automation",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/integrations/browser-automation"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "integrations/issue-operations",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/integrations/issue-operations"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "integrations/payments",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/integrations/payments"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "integrations/pr-operations",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/integrations/pr-operations"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "integrations/search",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/integrations/search"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "iot/iot-embedded",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/iot/iot-embedded"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "math/math-computation-reproducible",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/math/math-computation-reproducible"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "math/math-computational",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/math/math-computational"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "math/math-cryptography",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/math/math-cryptography"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "math/math-formal-proof",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/math/math-formal-proof"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "math/math-grant-structure",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/math/math-grant-structure"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "math/math-linear-algebra",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/math/math-linear-algebra"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "math/math-literature-track",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/math/math-literature-track"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "math/math-optimization",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/math/math-optimization"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "math/math-paper-collaboration",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/math/math-paper-collaboration"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "math/math-presentation-beamer",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/math/math-presentation-beamer"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "math/math-probability-models",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/math/math-probability-models"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "math/math-pure-proofs",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/math/math-pure-proofs"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "math/math-teaching-problem-set",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/math/math-teaching-problem-set"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "networking/networking",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/networking/networking"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "networking/networking-protocols",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/networking/networking-protocols"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "networking/networking-security",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/networking/networking-security"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "os/os-kernel",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/os/os-kernel"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "os/os-memory",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/os/os-memory"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "os/os-processes",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/os/os-processes"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "physics/physics-astro",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/physics/physics-astro"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "physics/physics-career-postdoc",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/physics/physics-career-postdoc"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "physics/physics-classical",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/physics/physics-classical"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "physics/physics-data-analysis-root",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/physics/physics-data-analysis-root"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "physics/physics-experimental-notebook",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/physics/physics-experimental-notebook"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "physics/physics-literature-search",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/physics/physics-literature-search"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "physics/physics-quantum",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/physics/physics-quantum"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "physics/physics-reproducibility-archive",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/physics/physics-reproducibility-archive"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "physics/physics-simulation-setup",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/physics/physics-simulation-setup"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "physics/physics-talk-design",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/physics/physics-talk-design"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "physics/physics-thermo",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/physics/physics-thermo"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "physics/physics-writing-revtex",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/physics/physics-writing-revtex"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "product/brainstorming",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/product/brainstorming"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "product/prod-ab-testing",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/product/prod-ab-testing"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "product/prod-okr-planning",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/product/prod-okr-planning"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "product/prod-prd-writing",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/product/prod-prd-writing"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "professional/pro-market-analysis",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/professional/pro-market-analysis"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "professional/professional-communication",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/professional/professional-communication"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "professional/professional-project-management",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/professional/professional-project-management"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "project/analyze-artifacts",
+      "trustTier": 2,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/project/analyze-artifacts"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "project/docs-management",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/project/docs-management"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "project/make-project",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/project/make-project"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "project/project-development",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/project/project-development"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "project/project-viability",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/project/project-viability"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "project/spec-driven-development",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/project/spec-driven-development"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "project/to-spec",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/project/to-spec"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "project/to-tickets",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/project/to-tickets"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "qa/performance-testing",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/qa/performance-testing"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "qa/qa-automation",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/qa/qa-automation"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "qa/qa-manual-testing",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/qa/qa-manual-testing"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "qa/qa-security-testing",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/qa/qa-security-testing"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "quant/quant-backtest",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/quant/quant-backtest"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "quant/quant-credit-risk",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/quant/quant-credit-risk"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "quant/quant-derivatives-pricing",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/quant/quant-derivatives-pricing"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "quant/quant-factors",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/quant/quant-factors"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "quant/quant-market-micro",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/quant/quant-market-micro"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "quant/quant-portfolio-opt",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/quant/quant-portfolio-opt"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "quant/quant-risk-modeling",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/quant/quant-risk-modeling"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "research/github-project-analysis",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/research/github-project-analysis"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "research/research-data-archiving",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/research/research-data-archiving"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "research/research-literature-review",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/research/research-literature-review"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "research/scientific-hypothesis",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/research/scientific-hypothesis"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "routing/artifact-handoff",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/routing/artifact-handoff"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "routing/ask-to",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/routing/ask-to"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "routing/capability-router",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/routing/capability-router"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "routing/context-pack",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/routing/context-pack"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "routing/grill",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/routing/grill"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "routing/grill-me",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/routing/grill-me"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "routing/grill-with-docs",
+      "trustTier": 2,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/routing/grill-with-docs"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "routing/grilling",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/routing/grilling"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "routing/handoff",
+      "trustTier": 2,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/routing/handoff"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "routing/knowledge-curator",
+      "trustTier": 2,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/routing/knowledge-curator"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "routing/publish-open-pr",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/routing/publish-open-pr"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "routing/ship-subissue",
+      "trustTier": 4,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/routing/ship-subissue"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": false,
+      "reason": "trustTier>3"
+    },
+    {
+      "skill": "routing/triage",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/routing/triage"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "routing/wayfinder",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/routing/wayfinder"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "routing/work-item-router",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/routing/work-item-router"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "sec/cloud-security",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/sec/cloud-security"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "sec/compliance",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/sec/compliance"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "sec/container-security",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/sec/container-security"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "sec/incident-forensics",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/sec/incident-forensics"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "sec/sec-cryptography-applied",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/sec/sec-cryptography-applied"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "sec/sec-privacy-engineering",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/sec/sec-privacy-engineering"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "sec/sec-security-audit",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/sec/sec-security-audit"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "sec/sec-threat-modeling",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/sec/sec-threat-modeling"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "sec/secret-management-security",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/sec/secret-management-security"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "sec/supply-chain-security",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/sec/supply-chain-security"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "sec/zero-trust",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/sec/zero-trust"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "skill-dev/evaluate-skill",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/skill-dev/evaluate-skill"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "skill-dev/lockfile-maintenance",
+      "trustTier": 2,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/skill-dev/lockfile-maintenance"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "skill-dev/rule-cataloger",
+      "trustTier": 2,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/skill-dev/rule-cataloger"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "skill-dev/side-effect-auditor",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/skill-dev/side-effect-auditor"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "skill-dev/skill-audit",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/skill-dev/skill-audit"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "skill-dev/skill-creator",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/skill-dev/skill-creator"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "skill-dev/skill-dependency-graph",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/skill-dev/skill-dependency-graph"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "skill-dev/skill-diff-analyzer",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/skill-dev/skill-diff-analyzer"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "skill-dev/skill-optimizer",
+      "trustTier": 2,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/skill-dev/skill-optimizer"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "skill-dev/skill-performance-metrics",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/skill-dev/skill-performance-metrics"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "skill-dev/skill-promoter",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/skill-dev/skill-promoter"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "skill-dev/skill-quality-gate",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/skill-dev/skill-quality-gate"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "skill-dev/skill-sandbox",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/skill-dev/skill-sandbox"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "skill-dev/skill-template-generator",
+      "trustTier": 2,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/skill-dev/skill-template-generator"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "skill-dev/skill-testing-framework",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/skill-dev/skill-testing-framework"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "skill-dev/skill-tutor",
+      "trustTier": 2,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/skill-dev/skill-tutor"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "skill-dev/workflow-fixture-author",
+      "trustTier": 2,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/skill-dev/workflow-fixture-author"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "skill-dev/writing-great-skills",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/skill-dev/writing-great-skills"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "ux/interaction-design",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/ux/interaction-design"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "ux/ux-accessibility",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/ux/ux-accessibility"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "ux/ux-prototyping",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/ux/ux-prototyping"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "ux/ux-research",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/ux/ux-research"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "web3/web3-consensus",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/web3/web3-consensus"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "web3/web3-defi",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/web3/web3-defi"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "web3/web3-governance",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/web3/web3-governance"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "web3/web3-l2-scaling",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/web3/web3-l2-scaling"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "web3/web3-smart-contracts",
+      "trustTier": 3,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/web3/web3-smart-contracts"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "web3/web3-tokenomics",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/web3/web3-tokenomics"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "xr/xr-development",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/xr/xr-development"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "xr/xr-interaction-design",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/xr/xr-interaction-design"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    },
+    {
+      "skill": "xr/xr-performance",
+      "trustTier": 1,
+      "tools": [
+        "get_skill"
+      ],
+      "resources": [
+        "skill://skill/xr/xr-performance"
+      ],
+      "prompts": [
+        "use_skill"
+      ],
+      "exposed": true
+    }
+  ]
+}

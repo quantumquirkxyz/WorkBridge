@@ -1,0 +1,16 @@
+{
+  "name": "diagnosing-bugs",
+  "instructions": "Diagnosis loop for hard bugs and performance regressions. Use when the user says \"diagnose\"/\"debug this\", or reports something intermittent, ambiguous, or hard to reproduce.\n\nCapabilities:\n- apply the diagnosing-bugs workflow\n\nCanonical skill: .agents/skills/delivery/diagnosing-bugs/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Diagnosis loop for hard bugs and performance regressions complete; structured result returned; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

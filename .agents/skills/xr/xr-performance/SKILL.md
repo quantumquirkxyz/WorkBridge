@@ -4,6 +4,7 @@ category: "xr"
 maturity: "stable"
 version: "1"
 description: "Optimize XR performance — frame rate, motion-to-photon latency, asset budgets, and thermal constraints — with comfort-aware trade-offs."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "xr"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/xr-performance.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["xr"]
 compatibility: []

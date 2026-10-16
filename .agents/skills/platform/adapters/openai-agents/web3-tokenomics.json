@@ -1,0 +1,16 @@
+{
+  "name": "web3-tokenomics",
+  "instructions": "Design token economics — supply, emission, incentives, governance, LST/LRT, restaking, points systems — with economic sustainability checks and adversarial stress tests.\n\nCapabilities:\n- apply the web3-tokenomics workflow\n\nCanonical skill: .agents/skills/web3/web3-tokenomics/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Tokenomics designed; stress tests completed; sustainability verdict explicit.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

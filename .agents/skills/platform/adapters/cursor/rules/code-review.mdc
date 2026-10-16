@@ -1,0 +1,15 @@
+---
+description: "Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes - Standards and Spec - and publish findings only."
+globs: []
+alwaysApply: false
+---
+# code-review
+
+Apply the code-review skill when the request matches its scope.
+
+Capabilities:
+- apply code review workflow
+- produce code review artifact
+- validate code review completion criteria
+
+Stop when: Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes - Standards and Spec - and publish findings only complete; structured result returned; completion criteria checked.

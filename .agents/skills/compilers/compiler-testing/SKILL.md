@@ -4,6 +4,7 @@ category: "compilers"
 maturity: "stable"
 version: "1"
 description: "Test compilers and interpreters — parser tests, semantic tests, IR validation, golden tests, and regression checks — with explicit oracle design."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "test-strategy"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/compiler-testing.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["compilers"]
 compatibility: []

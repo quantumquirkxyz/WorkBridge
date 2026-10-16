@@ -1,0 +1,13 @@
+---
+description: "Scan a codebase for deepening opportunities and present candidates as a visual HTML report, then grill through the selected one."
+globs: []
+alwaysApply: false
+---
+# improve-codebase-architecture
+
+Apply the improve-codebase-architecture skill when the request matches its scope.
+
+Capabilities:
+- apply the improve-codebase-architecture workflow
+
+Stop when: Report generated and a candidate is selected or explicitly deferred.

@@ -4,6 +4,7 @@ category: "product"
 maturity: "stable"
 version: "1"
 description: "Design A/B tests — hypothesis, control/treatment, randomization, metrics, statistical power, duration — with valid inference and rollback rules."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,11 +17,11 @@ promptVersion: "2.0"
 artifactType: "pull-request"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/prod-ab-testing.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/prod-ab-testing.json
 diataxis: "how-to"
 tags: ["product"]
 compatibility: []
-approvalRequired: "false"
+approvalRequired: "true"
 approvalFor: []
 ---
 

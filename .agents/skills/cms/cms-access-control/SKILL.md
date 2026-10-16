@@ -4,6 +4,7 @@ category: "cms"
 maturity: "stable"
 version: "1"
 description: "Design CMS access control — roles, permissions, editorial workflows, and publishing boundaries — with explicit least-privilege and auditability."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "cms"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/cms-access-control.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["cms"]
 compatibility: []

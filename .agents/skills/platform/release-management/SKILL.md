@@ -4,6 +4,7 @@ category: "platform"
 maturity: "stable"
 version: "1"
 description: "Plan the release train, CI handoff, and rollback posture for a project — so shipping stays controlled."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []

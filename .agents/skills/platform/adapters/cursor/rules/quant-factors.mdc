@@ -1,0 +1,13 @@
+---
+description: "Define, test, and stress-test a quantitative factor (momentum, value, carry, quality) with explicit universe, signal, weighting, and statistical checks."
+globs: []
+alwaysApply: false
+---
+# quant-factors
+
+Apply the quant-factors skill when the request matches its scope.
+
+Capabilities:
+- apply the quant-factors workflow
+
+Stop when: Artifact present with all six sections; verdict is honest and grounded.

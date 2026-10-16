@@ -1,0 +1,53 @@
+{
+  "skill": "integrations/browser-automation",
+  "version": 1,
+  "generatedFrom": "frontmatter",
+  "frontmatterHash": "eab3ab1da4e656e7557c86ae132952a96ccaa096b635da8a76a41d0629f6c835",
+  "role": "workflow",
+  "router": {
+    "positive": [],
+    "negative": [],
+    "requiredSignals": []
+  },
+  "execution": {
+    "defaultAgent": "general",
+    "isolation": "worktree",
+    "maxTurns": 8,
+    "modelTier": "reasoning",
+    "tools": {
+      "allow": [
+        "Read",
+        "Grep",
+        "Glob",
+        "Edit",
+        "Write"
+      ],
+      "deny": []
+    }
+  },
+  "guardrails": {
+    "sideEffects": [
+      "network",
+      "write-files"
+    ],
+    "approvalRequired": true,
+    "approvalFor": [
+      "account-affecting actions",
+      "purchases, submissions, deletions",
+      "actions outside the declared objective"
+    ],
+    "risk": "medium",
+    "trustTier": 3
+  },
+  "verification": {
+    "commands": [],
+    "artifactSchema": null
+  },
+  "observability": {
+    "traceEvents": [
+      "skill.route",
+      "skill.execute",
+      "skill.verify"
+    ]
+  }
+}

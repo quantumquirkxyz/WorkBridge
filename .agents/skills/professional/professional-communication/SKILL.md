@@ -4,6 +4,7 @@ category: "professional"
 maturity: "stable"
 version: "1"
 description: "Improve professional communication — status updates, stakeholder messages, expectations, and escalation — with clarity and precision."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "pull-request"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/professional-communication.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["professional"]
 compatibility: []

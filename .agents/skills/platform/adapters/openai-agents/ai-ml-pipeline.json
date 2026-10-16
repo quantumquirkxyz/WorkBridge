@@ -1,0 +1,16 @@
+{
+  "name": "ai-ml-pipeline",
+  "instructions": "Design ML pipelines — data ingestion, preprocessing, training, evaluation, deployment, monitoring — with reproducibility, fairness, and version control.\n\nCapabilities:\n- apply the ai-ml-pipeline workflow\n\nCanonical skill: .agents/skills/ai/ai-ml-pipeline/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Pipeline architecture saved; training report complete; deployment checklist filled.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 8,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

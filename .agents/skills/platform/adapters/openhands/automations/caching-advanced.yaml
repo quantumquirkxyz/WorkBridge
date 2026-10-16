@@ -1,0 +1,15 @@
+name: caching-advanced
+description: "Advanced caching strategies (Redis, Memcached, CDN, cache invalidation, stampede prevention)."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/backend-caching-advanced
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: true
+  sideEffects: []

@@ -1,0 +1,16 @@
+---
+description: "Maintain external agent memory: structured notes persisted outside the context window (NOW.md for the working thread, MEMORY.md for durable facts) so context can compact or reset while knowledge survives across sessions."
+globs: []
+alwaysApply: false
+---
+# agent-memory
+
+Apply the agent-memory skill when the request matches its scope.
+
+Capabilities:
+- maintain a NOW.md working thread for the active task
+- maintain a MEMORY.md of durable, cross-session facts
+- decide what belongs in memory versus in an artifact
+- recall memory into a fresh context pack with provenance
+
+Stop when: Memory files are current, stale entries are reconciled, and every durable fact has a provenance line.

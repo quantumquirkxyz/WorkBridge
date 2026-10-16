@@ -1,0 +1,16 @@
+{
+  "name": "agent-card",
+  "instructions": "Generates and maintains Agent Cards for A2A (Agent-to-Agent) discovery.\n\nCapabilities:\n- generate-agent-card\n- validate-agent-card\n- emit-agent-card-json\n- update-agent-card-index\n\nCanonical skill: .agents/skills/foundation/agent-card/SKILL.md",
+  "model": "gpt-5.1",
+  "tools": [],
+  "handoff_description": "Agent Card JSON emitted to platform/agent-cards, index updated, and completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "worktree"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

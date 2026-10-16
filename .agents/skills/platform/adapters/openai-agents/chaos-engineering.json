@@ -1,0 +1,16 @@
+{
+  "name": "chaos-engineering",
+  "instructions": "Design chaos engineering — fault injection, GameDays, resilience validation — with explicit steady-state hypotheses, blast radius controls, and safety rails.\n\nCapabilities:\n- apply the chaos-engineering workflow\n\nCanonical skill: .agents/skills/devops/chaos-engineering/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Experiment plan defined; fault injection config documented; resilience report produced.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

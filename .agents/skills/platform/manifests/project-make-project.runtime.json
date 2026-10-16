@@ -1,0 +1,55 @@
+{
+  "skill": "project/make-project",
+  "version": 1,
+  "generatedFrom": "frontmatter",
+  "frontmatterHash": "8733aaaa6435abe30d9e37208a7f14f1d967f5a909cb2ea907593180ce1d59ac",
+  "role": "workflow",
+  "router": {
+    "positive": [],
+    "negative": [],
+    "requiredSignals": []
+  },
+  "execution": {
+    "defaultAgent": "general",
+    "isolation": "none",
+    "maxTurns": 6,
+    "modelTier": "reasoning",
+    "tools": {
+      "allow": [
+        "Read",
+        "Grep",
+        "Glob",
+        "Bash",
+        "WebFetch",
+        "WebSearch"
+      ],
+      "deny": []
+    }
+  },
+  "guardrails": {
+    "sideEffects": [
+      "create-project",
+      "create-project-fields",
+      "link-repositories"
+    ],
+    "approvalRequired": true,
+    "approvalFor": [
+      "create-project",
+      "create-project-fields",
+      "link-repositories"
+    ],
+    "risk": "medium",
+    "trustTier": 3
+  },
+  "verification": {
+    "commands": [],
+    "artifactSchema": null
+  },
+  "observability": {
+    "traceEvents": [
+      "skill.route",
+      "skill.execute",
+      "skill.verify"
+    ]
+  }
+}

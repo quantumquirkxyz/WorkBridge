@@ -4,6 +4,7 @@ category: "docs"
 maturity: "stable"
 version: "1"
 description: "Maintain a repository knowledge base — glossary, durable references, indexed guidance, and consumer-oriented navigation — with explicit update rules."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "adr"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/docs-knowledge-base.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["docs"]
 compatibility: []

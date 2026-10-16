@@ -1,0 +1,13 @@
+---
+description: "Model quantum systems (states, operators, measurement, entanglement) and perform calculations using Dirac notation, with checks against limits and known results."
+globs: []
+alwaysApply: false
+---
+# physics-quantum
+
+Apply the physics-quantum skill when the request matches its scope.
+
+Capabilities:
+- apply the physics-quantum workflow
+
+Stop when: Model quantum systems (states, operators, measurement, entanglement) and perform calculations using Dirac notation, with checks against limits and known results complete; required sections present; completion criteria checked.

@@ -1,0 +1,13 @@
+---
+description: "Test security posture — auth flows, authorization boundaries, injection paths, session handling, and misconfiguration checks — with adversarial scenarios."
+globs: []
+alwaysApply: false
+---
+# qa-security-testing
+
+Apply the qa-security-testing skill when the request matches its scope.
+
+Capabilities:
+- apply the qa-security-testing workflow
+
+Stop when: Security boundaries, findings, and responsible next steps are documented.

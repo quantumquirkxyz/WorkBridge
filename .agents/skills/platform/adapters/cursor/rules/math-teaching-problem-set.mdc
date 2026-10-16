@@ -1,0 +1,13 @@
+---
+description: "Design and grade math problem sets and exams — difficulty progression, rubric, anti-cheating variants, accessibility, and LaTeX layout."
+globs: []
+alwaysApply: false
+---
+# math-teaching-problem-set
+
+Apply the math-teaching-problem-set skill when the request matches its scope.
+
+Capabilities:
+- apply the math-teaching-problem-set workflow
+
+Stop when: Problem-set + rubric + variants saved; difficulty progression documented.

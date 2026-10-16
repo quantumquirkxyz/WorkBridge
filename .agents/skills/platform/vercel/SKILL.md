@@ -4,6 +4,7 @@ category: "platform"
 maturity: "stable"
 version: "2"
 description: "Shape Vercel deployment and runtime concerns into a clear operational seam — with Next.js, edge functions, ISR, middleware, environment, security, and observability constraints."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []

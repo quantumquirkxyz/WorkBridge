@@ -1,0 +1,105 @@
+{
+  "date": "2026-10-11",
+  "totalTokens": 11360,
+  "skillCount": 258,
+  "perDomain": {
+    "skill-dev": 835,
+    "delivery": 704,
+    "physics": 615,
+    "graphic-design": 604,
+    "math": 601,
+    "routing": 582,
+    "platform": 562,
+    "foundation": 547,
+    "ai": 492,
+    "devops": 452,
+    "backend": 437,
+    "sec": 436,
+    "project": 411,
+    "data": 392,
+    "quant": 314,
+    "frontend": 308,
+    "integrations": 295,
+    "web3": 291,
+    "auxiliary": 179,
+    "cms": 179,
+    "db": 172,
+    "qa": 168,
+    "cs": 165,
+    "ux": 165,
+    "accessibility": 151,
+    "os": 144,
+    "professional": 143,
+    "networking": 140,
+    "xr": 137,
+    "docs": 133,
+    "research": 131,
+    "finance": 130,
+    "compilers": 130,
+    "product": 127,
+    "iot": 45,
+    "engineering": 43
+  },
+  "topSkills": [
+    {
+      "skill": "analyze-artifacts",
+      "domain": "project",
+      "tokens": 120,
+      "layerChars": 472
+    },
+    {
+      "skill": "skill-optimizer",
+      "domain": "skill-dev",
+      "tokens": 119,
+      "layerChars": 471
+    },
+    {
+      "skill": "loop-budget",
+      "domain": "delivery",
+      "tokens": 90,
+      "layerChars": 356
+    },
+    {
+      "skill": "gate-ci",
+      "domain": "platform",
+      "tokens": 76,
+      "layerChars": 299
+    },
+    {
+      "skill": "project-viability",
+      "domain": "project",
+      "tokens": 74,
+      "layerChars": 290
+    },
+    {
+      "skill": "gate-pre-commit",
+      "domain": "platform",
+      "tokens": 67,
+      "layerChars": 264
+    },
+    {
+      "skill": "verify-delegation",
+      "domain": "foundation",
+      "tokens": 67,
+      "layerChars": 261
+    },
+    {
+      "skill": "domain-modeling",
+      "domain": "foundation",
+      "tokens": 64,
+      "layerChars": 253
+    },
+    {
+      "skill": "physics-career-postdoc",
+      "domain": "physics",
+      "tokens": 63,
+      "layerChars": 247
+    },
+    {
+      "skill": "gate-post-merge",
+      "domain": "platform",
+      "tokens": 60,
+      "layerChars": 237
+    }
+  ]
+}

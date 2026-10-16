@@ -1,0 +1,16 @@
+{
+  "name": "iot-embedded",
+  "instructions": "Design embedded/IoT systems — firmware, sensors, edge computing, device connectivity, OTA updates — with reliability, security, and constrained resource awareness.\n\nCapabilities:\n- apply the iot-embedded workflow\n\nCanonical skill: .agents/skills/iot/iot-embedded/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Design embedded/IoT systems complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

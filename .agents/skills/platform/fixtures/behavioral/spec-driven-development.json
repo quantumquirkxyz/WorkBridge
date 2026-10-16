@@ -1,0 +1,44 @@
+{
+  "fixtures": [
+    {
+      "id": "v1-contract-spec-driven-development",
+      "skill": "spec-driven-development",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "SpecDrivenArtifacts"
+        ],
+        "doesNotContain": [
+          "## Operating Contract"
+        ]
+      }
+    },
+    {
+      "id": "v1-footer-spec-driven-development",
+      "skill": "spec-driven-development",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "@include .agents/skills/platform/contract-base.xml"
+        ]
+      }
+    },
+    {
+      "id": "v1-description-spec-driven-development",
+      "skill": "spec-driven-development",
+      "type": "regression",
+      "expectedOutput": {
+        "contains": [
+          "spec-driven-development",
+          "SpecDrivenArtifacts",
+          "constitution",
+          "to-spec",
+          "to-tickets"
+        ]
+      }
+    }
+  ]
+}

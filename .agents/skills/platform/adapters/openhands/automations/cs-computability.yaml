@@ -1,0 +1,15 @@
+name: cs-computability
+description: "Analyze computability questions — decidability, reductions, recognizability, and undecidability proofs — with formal problem transformations."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/cs-cs-computability
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

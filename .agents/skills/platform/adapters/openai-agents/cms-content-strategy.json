@@ -1,0 +1,16 @@
+{
+  "name": "cms-content-strategy",
+  "instructions": "Design CMS content strategy — content models, taxonomy, governance, lifecycle, and multi-channel publishing — with explicit editorial ownership.\n\nCapabilities:\n- apply the cms-content-strategy workflow\n\nCanonical skill: .agents/skills/cms/cms-content-strategy/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Content model, governance, lifecycle, and publishing rules are explicit.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

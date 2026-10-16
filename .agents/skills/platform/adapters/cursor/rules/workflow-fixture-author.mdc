@@ -1,0 +1,13 @@
+---
+description: "Author deterministic scenario and behavioral fixtures for skills so routing, contracts, outputs, side effects, and refusal boundaries can be tested before promotion."
+globs: []
+alwaysApply: false
+---
+# workflow-fixture-author
+
+Apply the workflow-fixture-author skill when the request matches its scope.
+
+Capabilities:
+- apply the workflow-fixture-author workflow
+
+Stop when: Fixtures cover the requested skill behavior and either pass the relevant validator or list exact follow-up fixes.

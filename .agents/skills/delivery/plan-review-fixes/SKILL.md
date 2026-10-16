@@ -4,6 +4,7 @@ category: "delivery"
 maturity: "stable"
 version: "1"
 description: "Convert review-pr findings on a GitHub PR into a concrete remediation plan and post that plan as PR comments. Use after"
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects:
@@ -18,12 +19,12 @@ promptVersion: "2.0"
 artifactType: "review"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/plan-review-fixes.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/plan-review-fixes.json
 diataxis: "how-to"
 tags: ["delivery"]
 compatibility: []
-approvalRequired: "false"
-approvalFor: []
+approvalRequired: "true"
+approvalFor: ["post-pr-comment"]
 ---
 
 ## Contract

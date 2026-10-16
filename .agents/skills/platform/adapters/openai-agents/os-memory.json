@@ -1,0 +1,16 @@
+{
+  "name": "os-memory",
+  "instructions": "Design operating system memory systems — virtual memory, paging, allocation, swapping, and protection — with explicit resource accounting and locality assumptions.\n\nCapabilities:\n- apply the os-memory workflow\n\nCanonical skill: .agents/skills/os/os-memory/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Memory layout, resource limits, and protection/locality trade-offs are explicit.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

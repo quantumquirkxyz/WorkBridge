@@ -1,0 +1,16 @@
+{
+  "name": "math-probability-models",
+  "instructions": "Build probability models — distributions, stochastic processes (Markov, Brownian, Poisson), inference — with explicit assumptions and sanity checks.\n\nCapabilities:\n- apply the math-probability-models workflow\n\nCanonical skill: .agents/skills/math/math-probability-models/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Build probability models complete; required sections present; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

@@ -1,0 +1,13 @@
+---
+description: "Design accessible interfaces — semantics, focus management, keyboard flows, contrast, and assistive-technology compatibility — with inclusive interaction patterns."
+globs: []
+alwaysApply: false
+---
+# accessibility-design
+
+Apply the accessibility-design skill when the request matches its scope.
+
+Capabilities:
+- apply the accessibility-design workflow
+
+Stop when: Accessibility barriers, design decisions, and validation checks are explicit.

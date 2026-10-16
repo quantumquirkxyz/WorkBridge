@@ -1,0 +1,15 @@
+name: contribution-workflow-optimizer
+description: "Inspect changed Skills and recommend contribution improvements across standards, docs, tests, and examples; use when eva"
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/delivery-contribution-workflow-optimizer
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

@@ -1,0 +1,13 @@
+---
+description: "Create, test, and iterate on experimental skills in an isolated environment without affecting the canonical skills bundle."
+globs: []
+alwaysApply: false
+---
+# skill-sandbox
+
+Apply the skill-sandbox skill when the request matches its scope.
+
+Capabilities:
+- apply the skill-sandbox workflow
+
+Stop when: Create, test, and iterate on experimental skills in an isolated environment without affecting the canonical skills bundle complete; artifact saved; completion criteria checked.

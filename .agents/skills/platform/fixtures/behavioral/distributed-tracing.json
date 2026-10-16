@@ -1,0 +1,66 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-distributed-tracing",
+      "skill": "distributed-tracing",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "## Completion",
+          "## Process",
+          "## Rules",
+          "DistributedTracingArtifact",
+          "generate trace IDs at the edge; propagate them unconditionally across all hops.",
+          "redact secrets, tokens, and PII from span attributes and tags before export.",
+          "instrument both successes and failures; errors without traces are hard to debug.",
+          "validate trace completeness in CI using synthetic traffic or integration tests."
+        ],
+        "doesNotContain": [
+          "## Operating Contract",
+          "ask-matt",
+          "ship-review-fix-loop",
+          "doc-draft-pr",
+          "frontend-development",
+          "Matt",
+          "TODO",
+          "point 1",
+          "Criterion 1",
+          "Acceptance criterion 1",
+          "BE-2",
+          "OpenAPI spec",
+          "localhost:3000",
+          "extremely extensive"
+        ]
+      }
+    },
+    {
+      "id": "v2-frontmatter-distributed-tracing",
+      "skill": "distributed-tracing",
+      "type": "behavioral",
+      "expected": {
+        "frontmatterContains": [
+          "name: \"distributed-tracing\"",
+          "risk: \"medium\"",
+          "trustTier: \"3\"",
+          "modelTier: \"reasoning\"",
+          "promptVersion: \"2.0\"",
+          "artifactType: \"backend\"",
+          "diataxis: \"how-to\""
+        ]
+      }
+    },
+    {
+      "id": "v2-footer-distributed-tracing",
+      "skill": "distributed-tracing",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "@include .agents/skills/platform/contract-base.xml"
+        ]
+      }
+    }
+  ]
+}

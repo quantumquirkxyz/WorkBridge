@@ -4,6 +4,7 @@ category: "accessibility"
 maturity: "stable"
 version: "1"
 description: "Test web interfaces for accessibility compliance — automated scans, manual keyboard navigation, screen reader validation — with explicit barrier detection and remediation evidence."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "test-strategy"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/accessibility-testing.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["accessibility"]
 compatibility: []

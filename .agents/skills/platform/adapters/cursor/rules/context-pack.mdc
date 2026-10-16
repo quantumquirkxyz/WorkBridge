@@ -1,0 +1,13 @@
+---
+description: "Build a minimal fresh context pack with ordered reads and provenance — for scoped, high-signal handoff."
+globs: []
+alwaysApply: false
+---
+# context-pack
+
+Apply the context-pack skill when the request matches its scope.
+
+Capabilities:
+- apply the context-pack workflow
+
+Stop when: Build a minimal fresh context pack with ordered reads and provenance complete; structured result returned; completion criteria checked.

@@ -4,6 +4,7 @@ category: "sec"
 maturity: "stable"
 version: "1"
 description: "Cloud security (AWS, GCP, Azure, IAM, KMS, security groups, compliance, posture management)"
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,11 +17,11 @@ promptVersion: "2.0"
 artifactType: "security"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/cloud-security.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/cloud-security.json
 diataxis: "how-to"
 tags: ["sec"]
 compatibility: []
-approvalRequired: "false"
+approvalRequired: "true"
 approvalFor: []
 ---
 

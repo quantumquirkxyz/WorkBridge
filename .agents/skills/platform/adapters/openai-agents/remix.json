@@ -1,0 +1,16 @@
+{
+  "name": "remix",
+  "instructions": "Remix framework (loaders, actions, nested routes, progressive enhancement).\n\nCapabilities:\n- apply the remix workflow\n\nCanonical skill: .agents/skills/frontend/remix/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Remix design complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

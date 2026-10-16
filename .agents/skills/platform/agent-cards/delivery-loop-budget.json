@@ -1,0 +1,34 @@
+{
+  "name": "loop-budget",
+  "description": "Keep an agent loop inside its declared budget and end it with a typed verdict instead of a runaway process. Use when a repair, polling, or fan-out loop must declare step/cost/wall-time budgets up front, detect degenerate repetition and ping-pong, and exit with {exitStatus, submission, budgetSpent, nudges}.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/delivery/loop-budget/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "delivery/loop-budget",
+      "name": "loop-budget",
+      "description": "Keep an agent loop inside its declared budget and end it with a typed verdict instead of a runaway process. Use when a repair, polling, or fan-out loop must declare step/cost/wall-time budgets up front, detect degenerate repetition and ping-pong, and exit with {exitStatus, submission, budgetSpent, nudges}.",
+      "tags": [
+        "\"delivery\"",
+        "\"loop\"",
+        "\"budget\"",
+        "\"agent-engineering\""
+      ],
+      "parameters": {
+        "trustTier": "2",
+        "modelTier": "reasoning",
+        "artifactType": "loop-budget"
+      }
+    }
+  ]
+}

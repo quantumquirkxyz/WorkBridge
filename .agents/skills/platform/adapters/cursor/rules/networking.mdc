@@ -1,0 +1,13 @@
+---
+description: "Design and analyze network infrastructure — TCP/IP, routing, DNS, load balancing, firewalls, VPNs, network security — with explicit assumptions about latency, bandwidth, and failure modes."
+globs: []
+alwaysApply: false
+---
+# networking
+
+Apply the networking skill when the request matches its scope.
+
+Capabilities:
+- apply the networking workflow
+
+Stop when: Design and analyze network infrastructure complete; artifact saved; completion criteria checked.

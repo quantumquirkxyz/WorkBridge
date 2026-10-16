@@ -4,6 +4,7 @@ category: platform
 maturity: stable
 version: 1
 description: Orchestrate trunk-based development — short-lived branches, small PRs, CI gating, and merge-to-trunk discipline.
+license: MIT
 capabilities:
   - validate branch age and PR size
   - enforce CI gating before merge

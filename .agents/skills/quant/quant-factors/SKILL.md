@@ -1,9 +1,10 @@
 ---
 name: "quant-factors"
-category: "skill-dev/sandbox"
+category: "quant"
 maturity: "stable"
 version: "1"
 description: "Define, test, and stress-test a quantitative factor (momentum, value, carry, quality) with explicit universe, signal, weighting, and statistical checks."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "quant"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/quant-factors.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["quant"]
 compatibility: []

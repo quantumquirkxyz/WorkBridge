@@ -1,0 +1,13 @@
+---
+description: "Analyze algorithmic complexity — time, space, amortized cost, and lower bounds — with explicit assumptions and proof sketches."
+globs: []
+alwaysApply: false
+---
+# cs-complexity-analysis
+
+Apply the cs-complexity-analysis skill when the request matches its scope.
+
+Capabilities:
+- apply the cs-complexity-analysis workflow
+
+Stop when: Complexity bounds are stated, justified, and tied to the chosen input model.

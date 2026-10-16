@@ -4,6 +4,7 @@ category: "routing"
 maturity: "stable"
 version: "1"
 description: "Move issues and external PRs through a state machine of triage roles — categorise, verify, grill if needed, and write ag"
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects:
@@ -21,12 +22,12 @@ promptVersion: "2.0"
 artifactType: "routing"
 modelTier: "router"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/triage.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/triage.json
 diataxis: "how-to"
 tags: ["routing"]
 compatibility: []
-approvalRequired: "false"
-approvalFor: []
+approvalRequired: "true"
+approvalFor: ["label-issue", "post-comment", "close-issue", "write-files"]
 ---
 
 ## Contract

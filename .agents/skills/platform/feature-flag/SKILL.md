@@ -2,6 +2,7 @@
 name: "feature-flag"
 category: "platform"
 description: "Design and manage feature flags with short-lived flags, gradual rollouts, kill switches, A/B testing, and cleanup discipline."
+license: "MIT"
 artifactType: "feature-flag"
 modelTier: "router"
 tags: ["platform"]

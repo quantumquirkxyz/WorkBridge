@@ -1,0 +1,13 @@
+---
+description: "Design agent orchestration — multi-agent patterns, tool use, memory, handoffs, evaluation — with explicit coordination boundaries and observability."
+globs: []
+alwaysApply: false
+---
+# agent-orchestration
+
+Apply the agent-orchestration skill when the request matches its scope.
+
+Capabilities:
+- apply the agent-orchestration workflow
+
+Stop when: Architecture diagram saved; capability matrix complete; handoff contracts defined; evaluation rubric present.

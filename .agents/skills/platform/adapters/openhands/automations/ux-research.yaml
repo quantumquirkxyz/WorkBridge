@@ -1,0 +1,15 @@
+name: ux-research
+description: "Conduct user research — interviews, surveys, usability testing, personas, journey mapping — to ground design decisions in real user behavior."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/ux-ux-research
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

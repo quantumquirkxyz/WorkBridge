@@ -1,0 +1,13 @@
+---
+description: "Capture redacted execution records, traces, and quality signals for skill runs with structured data for analysis. Enables full audit of decisions made during agent execution."
+globs: []
+alwaysApply: false
+---
+# agent-observability
+
+Apply the agent-observability skill when the request matches its scope.
+
+Capabilities:
+- apply the agent-observability workflow
+
+Stop when: Trace recorded, signals captured, and report generated with explicit evidence.

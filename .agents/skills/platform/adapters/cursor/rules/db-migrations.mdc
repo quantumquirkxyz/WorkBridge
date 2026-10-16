@@ -1,0 +1,13 @@
+---
+description: "Plan database migrations — schema changes, backfills, compatibility windows, and rollback strategy — with explicit application and data safety checks."
+globs: []
+alwaysApply: false
+---
+# db-migrations
+
+Apply the db-migrations skill when the request matches its scope.
+
+Capabilities:
+- apply the db-migrations workflow
+
+Stop when: The migration sequence, compatibility window, validation, and rollback posture are explicit.

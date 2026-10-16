@@ -1,0 +1,16 @@
+{
+  "name": "finance-corporate-val",
+  "instructions": "Corporate valuation — DCF, multiples, sum-of-parts, scenario analysis — with explicit assumptions, sensitivity, and cross-checks.\n\nCapabilities:\n- apply the finance-corporate-val workflow\n\nCanonical skill: .agents/skills/finance/finance-corporate-val/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Corporate valuation complete; required sections present; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

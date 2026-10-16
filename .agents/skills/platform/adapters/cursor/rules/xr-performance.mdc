@@ -1,0 +1,13 @@
+---
+description: "Optimize XR performance — frame rate, motion-to-photon latency, asset budgets, and thermal constraints — with comfort-aware trade-offs."
+globs: []
+alwaysApply: false
+---
+# xr-performance
+
+Apply the xr-performance skill when the request matches its scope.
+
+Capabilities:
+- apply the xr-performance workflow
+
+Stop when: XR performance targets, profiling evidence, and comfort trade-offs are explicit.

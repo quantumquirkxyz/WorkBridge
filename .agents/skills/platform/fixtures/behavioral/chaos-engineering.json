@@ -1,0 +1,67 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-chaos-engineering",
+      "skill": "chaos-engineering",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "## Completion",
+          "## Process",
+          "## Rules",
+          "ChaosEngineeringArtifact",
+          "start with a steady-state hypothesis; never inject faults without an expected outcome.",
+          "limit blast radius; prefer staging over production for first experiments.",
+          "require live monitoring and on-call readiness before any fault injection.",
+          "stop immediately if abort conditions are met; do not push through to prove a point."
+        ],
+        "doesNotContain": [
+          "## Operating Contract",
+          "ask-matt",
+          "ship-review-fix-loop",
+          "doc-draft-pr",
+          "frontend-development",
+          "ARIES",
+          "Matt",
+          "TODO",
+          "point 1",
+          "Criterion 1",
+          "Acceptance criterion 1",
+          "BE-2",
+          "OpenAPI spec",
+          "localhost:3000",
+          "extremely extensive"
+        ]
+      }
+    },
+    {
+      "id": "v2-frontmatter-chaos-engineering",
+      "skill": "chaos-engineering",
+      "type": "behavioral",
+      "expected": {
+        "frontmatterContains": [
+          "name: \"chaos-engineering\"",
+          "risk: \"medium\"",
+          "trustTier: \"3\"",
+          "modelTier: \"reasoning\"",
+          "promptVersion: \"2.0\"",
+          "artifactType: \"devops\"",
+          "diataxis: \"how-to\""
+        ]
+      }
+    },
+    {
+      "id": "v2-footer-chaos-engineering",
+      "skill": "chaos-engineering",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "@include .agents/skills/platform/contract-base.xml"
+        ]
+      }
+    }
+  ]
+}

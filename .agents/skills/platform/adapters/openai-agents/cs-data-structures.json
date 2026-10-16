@@ -1,0 +1,16 @@
+{
+  "name": "cs-data-structures",
+  "instructions": "Design and analyze data structures — arrays, trees, heaps, hash tables, graphs, and balanced variants — with operation costs and invariants.\n\nCapabilities:\n- apply the cs-data-structures workflow\n\nCanonical skill: .agents/skills/cs/cs-data-structures/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "The recommended structure, invariants, and operation costs are explicit.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

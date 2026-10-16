@@ -4,6 +4,7 @@ category: "integrations"
 maturity: "stable"
 version: "2"
 description: "Define the request and response contracts, versioning rules, compatibility boundaries, OpenAPI/JSON Schema, and breaking change detection for APIs — with explicit consumer obligations."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "plan"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/api-contracts.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["integrations"]
 compatibility: []

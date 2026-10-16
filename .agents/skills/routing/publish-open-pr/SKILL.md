@@ -4,6 +4,7 @@ category: routing
 maturity: stable
 version: 2
 description: Use when the user wants to publish a finished subissue as an open GitHub pull request from an already-prepared issue branch — with scoped, auditable publication.
+license: MIT
 capabilities:
   - apply publish open pr workflow
   - produce publish open pr artifact
@@ -41,8 +42,22 @@ fixturesPath: .agents/skills/platform/fixtures/behavioral/publish-open-pr.json
 diataxis: how-to
 tags: [routing, pr, publication, quality-gate]
 compatibility: [review-pr, ship-subissue]
-approvalRequired: false
-approvalFor: []
+approvalRequired: true
+approvalFor: ["push-branch", "create-pull-request"]
+clauses:
+  - id: PUBLISH-OPEN-PR-1
+    text: "Never open a PR before gate-ci has passed on the pushed branch; stop and report the failure instead."
+    check: "evals/behavioral/publish-open-pr.json#PUBLISH-OPEN-PR-1"
+  - id: PUBLISH-OPEN-PR-2
+    text: "Never create or amend commits here, and never merge the PR or close the issue; those belong to implement and ship-subissue."
+    check: evals/behavioral/publish-open-pr.json#PUBLISH-OPEN-PR-2
+  - id: PUBLISH-OPEN-PR-3
+    text: "Take the linked issue labels and milestone as the source of truth for PR metadata."
+    check: evals/behavioral/publish-open-pr.json#PUBLISH-OPEN-PR-3
+  - id: PUBLISH-OPEN-PR-4
+    text: "Confirm branch scope and prerequisites first, and stop to ask for clarification when the intended scope is unclear."
+    check: evals/behavioral/publish-open-pr.json#PUBLISH-OPEN-PR-4
+reloadPolicy: always
 ---
 
 ## Contract

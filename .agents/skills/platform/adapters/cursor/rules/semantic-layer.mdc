@@ -1,0 +1,13 @@
+---
+description: "Design a semantic layer — dbt, Cube, metrics, dimensions, measures, self-service analytics — with explicit business logic, governance, and query optimization."
+globs: []
+alwaysApply: false
+---
+# semantic-layer
+
+Apply the semantic-layer skill when the request matches its scope.
+
+Capabilities:
+- apply the semantic-layer workflow
+
+Stop when: Semantic layer specification saved; dbt/Cube structure defined; governance rules documented.

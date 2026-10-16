@@ -1,0 +1,13 @@
+---
+description: "Design incident response — runbooks, war rooms, postmortems, blameless culture — with explicit severity taxonomy, escalation paths, and communication rules."
+globs: []
+alwaysApply: false
+---
+# incident-response
+
+Apply the incident-response skill when the request matches its scope.
+
+Capabilities:
+- apply the incident-response workflow
+
+Stop when: Incident response plan complete; runbook library defined; postmortem process documented.

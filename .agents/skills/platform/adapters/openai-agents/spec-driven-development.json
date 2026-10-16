@@ -1,0 +1,16 @@
+{
+  "name": "spec-driven-development",
+  "instructions": "Run spec-driven development (SDD): a constitution for repo-local rules, then specify, plan, and tasks as durable artifacts, then implement against them - compatible with GitHub Spec Kit's /specify, /plan, /tasks workflow.\n\nCapabilities:\n- author and maintain a repository constitution\n- produce a spec artifact from intent (specify phase)\n- produce a plan artifact with architecture and seams (plan phase)\n- decompose the plan into tracer-bullet tasks (tasks phase)\n- verify implementation against the spec and plan\n\nCanonical skill: .agents/skills/project/spec-driven-development/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Constitution, spec, plan, and tasks exist as durable artifacts and the implementation verifies against them.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 12,
+    "isolation": "worktree"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

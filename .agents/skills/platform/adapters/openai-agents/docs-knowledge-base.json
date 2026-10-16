@@ -1,0 +1,16 @@
+{
+  "name": "docs-knowledge-base",
+  "instructions": "Maintain a repository knowledge base — glossary, durable references, indexed guidance, and consumer-oriented navigation — with explicit update rules.\n\nCapabilities:\n- apply the docs-knowledge-base workflow\n\nCanonical skill: .agents/skills/docs/docs-knowledge-base/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Knowledge-base entries are findable, scoped, owned, and linked to durable sources.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

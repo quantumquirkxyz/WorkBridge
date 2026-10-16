@@ -1,0 +1,91 @@
+{
+  "id": "task-lockfile-integrity",
+  "title": "Detect that an edited SKILL.md breaks the lockfile",
+  "skill": "skill-dev/lockfile-maintenance",
+  "difficulty": "easy",
+  "workspace": {
+    "kind": "fixture-copy",
+    "source": "fixtures/repos/mini-bundle"
+  },
+  "prompt": "A canonical SKILL.md in this repository was edited in place, so skills-lock.json no longer matches the working tree. The lockfile reports drift. Repair the lockfile so it matches the current bytes of every SKILL.md without touching the skill content itself.",
+  "setup": [
+    {
+      "op": "copy",
+      "from": "fixtures/repos/mini-bundle",
+      "to": "."
+    },
+    {
+      "op": "copy",
+      "from": ".agents/skills/skill-dev/lockfile-maintenance/scripts/update-lockfile.mjs",
+      "to": "update-lockfile.mjs"
+    },
+    {
+      "op": "write",
+      "path": ".agents/skills/delivery/review-pr/SKILL.md",
+      "content": "---\nname: review-pr\ncategory: delivery\nmaturity: stable\nversion: 1\ndescription: Review a pull request against the fixed point the user supplies, separating Standards and Spec findings into distinct axes.\nlicense: MIT\ncapabilities:\n  - apply review pr workflow\n  - produce review pr artifact\n  - validate review pr completion criteria\ninputs:\n  - fixed point reference (commit, branch, tag, or merge-base)\n  - diff command\n  - originating spec or issue reference\n  - standards sources\noutputs:\n  - type: object\n    description: Review findings artifact with Standards and Spec axes\n    properties:\n      fixedPoint:\n        type: string\n      diffCommand:\n        type: string\n      standards:\n        type: array\n        items:\n          type: object\n          properties:\n            file:\n              type: string\n            line:\n              type: integer\n            hunk:\n              type: string\n            smellName:\n              type: string\n            severity:\n              type: string\n              enum: [hard-violation, judgement-call]\n            explanation:\n              type: string\n      spec:\n        type: array\n        items:\n          type: object\n          properties:\n            requirement:\n              type: string\n            status:\n              type: string\n              enum: [missing, partial, scope-creep, implemented-incorrectly]\n            evidence:\n              type: string\n      summary:\n        type: object\n        properties:\n          standardsFindings:\n            type: integer\n          specFindings:\n            type: integer\n          worstStandard:\n            type: string\n          worstSpec:\n            type: string\n      completionCriteriaMet:\n        type: boolean\nmodelTier: reasoning\npromptVersion: \"2.0\"\nartifactType: review\nevaluators:\n  - behavioral\n  - regression\n  - traceability\n  - quality-bar\nfixturesPath: fixtures/behavioral/review-pr.json\ndiataxis: how-to\ntags: [delivery, review, standards, spec, quality]\ncompatibility: [plan-review-fixes, ship-subissue, resolving-merge-conflicts]\napprovalRequired: true\napprovalFor: [\"post-pr-comment\"]\nsideEffects:\n  - post-pr-comment\ndependencies: []\nstopCondition: Review a pull request against the fixed point the user supplies, separating Standards and Spec findings into distinct axes complete; structured result returned; completion criteria checked.\nrisk: medium\ntrustTier: 3\nmaxIterations: 6\nreloadPolicy: on-trigger\n---\n\n## Contract\n\n- **Input:** a PR, diff, fixed point reference, and the originating spec if available.\n- **Output:** a two-axis review report (Standards + Spec) with per-file findings and a summary line.\n- **Scope:** publish findings only — do not change source files, fix the PR, or merge it.\n- **Rule:** keep Standards and Spec axes separate so neither masks the other.\n- **Rule:** every finding must include exact file/line, the rule or smell that justifies it, and a concrete explanation of what breaks.\n- **Rule:** documented-standard breaches are hard; baseline smells are always judgement calls.\n- **Rule:** a review that leaves the fixed point unpinned is incomplete.\n\n## Provenance\n\n| Quality-Bar Question | Evidence |\n|---|---|\n| **Intent** | Review a pull request against the fixed point the user supplies, separating Standards and Spec findings into distinct axes. |\n| **Input** | a PR, diff, fixed point reference, and the originating spec if available. |\n| **Output** | a two-axis review report (Standards + Spec) with per-file findings and a summary line. |\n| **Side effects** | may post PR review comments; no local files are written. |\n| **Boundaries** | publish findings only — do not change source files, fix the PR, or merge it. |\n| **Completion criteria** | fixed point pinned and diff non-empty; Standards findings cite documented standards or smell names; Spec findings quote the spec; review published; no merging or fixing. |\n\n## Artifact\n\nThis skill returns a structured review report and, when reviewing a GitHub PR, publishes the review body to the PR. The artifact validates against `schema/review-findings-schema.json`.\n\n## Completion\n\n- fixed point is pinned and diff is non-empty\n- Standards findings cite documented standards or smell names\n- Spec findings quote the spec line for each requirement\n- review is published to the PR (if GitHub) or returned as structured output\n- no source files are changed, fixed, or merged\n- `ReviewArtifact` returned as structured output and validated against `schema/review-findings-schema.json`\n"
+    }
+  ],
+  "actions": [
+    {
+      "op": "run",
+      "command": [
+        "node",
+        "update-lockfile.mjs",
+        "--json"
+      ],
+      "expectExit": 1
+    },
+    {
+      "op": "run",
+      "command": [
+        "node",
+        "update-lockfile.mjs",
+        "--write",
+        "--json"
+      ],
+      "expectExit": 0
+    }
+  ],
+  "verification": {
+    "stateChecks": [
+      {
+        "kind": "exit-was-nonzero",
+        "step": 0
+      },
+      {
+        "kind": "exit-was-zero",
+        "step": 1
+      },
+      {
+        "kind": "file-exists",
+        "path": "skills-lock.json"
+      },
+      {
+        "kind": "file-contains",
+        "path": "skills-lock.json",
+        "value": "review-pr"
+      },
+      {
+        "kind": "json-field-equals",
+        "path": "skills-lock.json",
+        "field": "skills.review-pr.revision",
+        "value": "working-tree"
+      },
+      {
+        "kind": "json-field-equals",
+        "path": "skills-lock.json",
+        "field": "skills.review-pr.hash",
+        "value": "718c6aa9e1bf5be8f3eb67d11f3f0af1ce90bd98b3b4d507ee231156bd202132"
+      },
+      {
+        "kind": "file-min-lines",
+        "path": "skills-lock.json",
+        "value": 2
+      }
+    ],
+    "forbiddenPaths": [
+      ".agents/skills/delivery/review-pr/SKILL.md.bak",
+      "skills-lock.json.bak"
+    ]
+  }
+}

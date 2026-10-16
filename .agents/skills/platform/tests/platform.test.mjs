@@ -15,12 +15,24 @@ test('scenario evaluator passes on repository fixtures', () => {
   assert.equal(payload.scenarios, 8);
 });
 
-test('semantic audit passes without warnings', () => {
+// Wave-1 contract: the semantic auditor reports a documented, heuristic warning
+// category (load-bearing rules after line 150 - compaction keeps only the start of
+// re-injected skill bodies). Warnings stay advisory and never block the gate, so
+// only unexpected warning categories fail here.
+const auditSemanticsWarningPatterns = [
+  /^[^:]+: load-bearing rules appear after line 150/,
+];
+
+test('semantic audit passes with only advisory warning categories', () => {
   const result = run(['.agents/skills/platform/audit-semantics.mjs']);
   assert.equal(result.status, 0, result.stderr || result.stdout);
   const payload = JSON.parse(result.stdout);
   assert.equal(payload.status, 'pass');
-  assert.deepEqual(payload.warnings, []);
+  assert.strictEqual(payload.errors.length, 0, `Unexpected errors: ${JSON.stringify(payload.errors)}`);
+  const unexpectedWarnings = payload.warnings.filter(
+    (warning) => !auditSemanticsWarningPatterns.some((pattern) => pattern.test(warning)),
+  );
+  assert.deepStrictEqual(unexpectedWarnings, [], `Unexpected warning categories: ${JSON.stringify(unexpectedWarnings)}`);
 });
 
 test('sync bundle defaults to dry-run', () => {

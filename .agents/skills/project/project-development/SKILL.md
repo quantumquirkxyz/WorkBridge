@@ -4,6 +4,7 @@ category: "project"
 maturity: "stable"
 version: "1"
 description: "Evaluate a project's shape, agent fit, and architectural starting point — before the main workflow begins."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "pull-request"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/project-development.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["project"]
 compatibility: []

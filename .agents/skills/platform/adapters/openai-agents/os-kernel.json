@@ -1,0 +1,16 @@
+{
+  "name": "os-kernel",
+  "instructions": "Design and analyze operating system internals — process management, memory management, file systems, scheduling, system calls, concurrency — with explicit resource accounting and failure boundaries.\n\nCapabilities:\n- apply the os-kernel workflow\n\nCanonical skill: .agents/skills/os/os-kernel/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Design and analyze operating system internals complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

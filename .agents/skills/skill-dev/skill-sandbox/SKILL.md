@@ -4,6 +4,7 @@ category: "skill-dev"
 maturity: "stable"
 version: "1"
 description: "Create, test, and iterate on experimental skills in an isolated environment without affecting the canonical skills bundle."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "skill-dev"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/skill-sandbox.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["skill-dev"]
 compatibility: []

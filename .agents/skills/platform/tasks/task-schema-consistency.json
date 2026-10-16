@@ -1,0 +1,100 @@
+{
+  "id": "task-schema-consistency",
+  "title": "Repair a SKILL.md that drifted from its declared contract",
+  "skill": "skill-dev/skill-testing-framework",
+  "difficulty": "medium",
+  "workspace": {
+    "kind": "fixture-copy",
+    "source": "fixtures/repos/mini-bundle"
+  },
+  "prompt": "A canonical SKILL.md was edited in place and now violates the contract the bundle declares for a skill: a frontmatter enum value left its documented set, a required frontmatter field disappeared, and a load-bearing body section was dropped. Detect the drift, then repair the file so it satisfies its contract again. Do not repair it by weakening the contract.",
+  "setup": [
+    {
+      "op": "copy",
+      "from": "fixtures/repos/mini-bundle",
+      "to": "."
+    },
+    {
+      "op": "copy",
+      "from": "fixtures/tasks/schema-consistency/check-contract.mjs",
+      "to": "check-contract.mjs"
+    },
+    {
+      "op": "write",
+      "path": ".agents/skills/delivery/review-pr/SKILL.md",
+      "content": "---\nname: review-pr\ncategory: delivery\nmaturity: stable\nversion: 1\ndescription: Review a pull request against the fixed point the user supplies, separating Standards and Spec findings into distinct axes.\nlicense: MIT\ncapabilities:\n  - apply review pr workflow\n  - produce review pr artifact\n  - validate review pr completion criteria\ninputs:\n  - fixed point reference (commit, branch, tag, or merge-base)\n  - diff command\n  - originating spec or issue reference\n  - standards sources\noutputs:\n  - type: object\n    description: Review findings artifact with Standards and Spec axes\n    properties:\n      fixedPoint:\n        type: string\n      diffCommand:\n        type: string\n      standards:\n        type: array\n        items:\n          type: object\n          properties:\n            file:\n              type: string\n            line:\n              type: integer\n            hunk:\n              type: string\n            smellName:\n              type: string\n            severity:\n              type: string\n              enum: [hard-violation, judgement-call]\n            explanation:\n              type: string\n      spec:\n        type: array\n        items:\n          type: object\n          properties:\n            requirement:\n              type: string\n            status:\n              type: string\n              enum: [missing, partial, scope-creep, implemented-incorrectly]\n            evidence:\n              type: string\n      summary:\n        type: object\n        properties:\n          standardsFindings:\n            type: integer\n          specFindings:\n            type: integer\n          worstStandard:\n            type: string\n          worstSpec:\n            type: string\n      completionCriteriaMet:\n        type: boolean\nmodelTier: reasoning\npromptVersion: \"2.0\"\nartifactType: review\nevaluators:\n  - behavioral\n  - regression\n  - traceability\n  - quality-bar\nfixturesPath: fixtures/behavioral/review-pr.json\ndiataxis: how-to\ntags: [delivery, review, standards, spec, quality]\ncompatibility: [plan-review-fixes, ship-subissue, resolving-merge-conflicts]\napprovalRequired: true\napprovalFor: [\"post-pr-comment\"]\nsideEffects:\n  - post-pr-comment\ndependencies: []\n\nrisk: extreme\ntrustTier: 9\nmaxIterations: 6\nreloadPolicy: on-trigger\n---\n\n## Contract\n\n- **Input:** a PR, diff, fixed point reference, and the originating spec if available.\n- **Output:** a two-axis review report (Standards + Spec) with per-file findings and a summary line.\n- **Scope:** publish findings only — do not change source files, fix the PR, or merge it.\n- **Rule:** keep Standards and Spec axes separate so neither masks the other.\n- **Rule:** every finding must include exact file/line, the rule or smell that justifies it, and a concrete explanation of what breaks.\n- **Rule:** documented-standard breaches are hard; baseline smells are always judgement calls.\n\n## Provenance\n\n| Quality-Bar Question | Evidence |\n|---|---|\n| **Intent** | Review a pull request against the fixed point the user supplies, separating Standards and Spec findings into distinct axes. |\n| **Input** | a PR, diff, fixed point reference, and the originating spec if available. |\n| **Output** | a two-axis review report (Standards + Spec) with per-file findings and a summary line. |\n| **Side effects** | may post PR review comments; no local files are written. |\n| **Boundaries** | publish findings only — do not change source files, fix the PR, or merge it. |\n| **Completion criteria** | fixed point pinned and diff non-empty; Standards findings cite documented standards or smell names; Spec findings quote the spec; review published; no merging or fixing. |\n\n## Artifact\n\nThis skill returns a structured review report and, when reviewing a GitHub PR, publishes the review body to the PR. The artifact validates against `schema/review-findings-schema.json`."
+    }
+  ],
+  "actions": [
+    {
+      "op": "run",
+      "command": [
+        "node",
+        "check-contract.mjs",
+        "--json"
+      ],
+      "expectExit": 1
+    },
+    {
+      "op": "write",
+      "path": ".agents/skills/delivery/review-pr/SKILL.md",
+      "content": "---\nname: review-pr\ncategory: delivery\nmaturity: stable\nversion: 1\ndescription: Review a pull request against the fixed point the user supplies, separating Standards and Spec findings into distinct axes.\nlicense: MIT\ncapabilities:\n  - apply review pr workflow\n  - produce review pr artifact\n  - validate review pr completion criteria\ninputs:\n  - fixed point reference (commit, branch, tag, or merge-base)\n  - diff command\n  - originating spec or issue reference\n  - standards sources\noutputs:\n  - type: object\n    description: Review findings artifact with Standards and Spec axes\n    properties:\n      fixedPoint:\n        type: string\n      diffCommand:\n        type: string\n      standards:\n        type: array\n        items:\n          type: object\n          properties:\n            file:\n              type: string\n            line:\n              type: integer\n            hunk:\n              type: string\n            smellName:\n              type: string\n            severity:\n              type: string\n              enum: [hard-violation, judgement-call]\n            explanation:\n              type: string\n      spec:\n        type: array\n        items:\n          type: object\n          properties:\n            requirement:\n              type: string\n            status:\n              type: string\n              enum: [missing, partial, scope-creep, implemented-incorrectly]\n            evidence:\n              type: string\n      summary:\n        type: object\n        properties:\n          standardsFindings:\n            type: integer\n          specFindings:\n            type: integer\n          worstStandard:\n            type: string\n          worstSpec:\n            type: string\n      completionCriteriaMet:\n        type: boolean\nmodelTier: reasoning\npromptVersion: \"2.0\"\nartifactType: review\nevaluators:\n  - behavioral\n  - regression\n  - traceability\n  - quality-bar\nfixturesPath: fixtures/behavioral/review-pr.json\ndiataxis: how-to\ntags: [delivery, review, standards, spec, quality]\ncompatibility: [plan-review-fixes, ship-subissue, resolving-merge-conflicts]\napprovalRequired: true\napprovalFor: [\"post-pr-comment\"]\nsideEffects:\n  - post-pr-comment\ndependencies: []\nstopCondition: Review a pull request against the fixed point the user supplies, separating Standards and Spec findings into distinct axes complete; structured result returned; completion criteria checked.\nrisk: medium\ntrustTier: 3\nmaxIterations: 6\nreloadPolicy: on-trigger\n---\n\n## Contract\n\n- **Input:** a PR, diff, fixed point reference, and the originating spec if available.\n- **Output:** a two-axis review report (Standards + Spec) with per-file findings and a summary line.\n- **Scope:** publish findings only — do not change source files, fix the PR, or merge it.\n- **Rule:** keep Standards and Spec axes separate so neither masks the other.\n- **Rule:** every finding must include exact file/line, the rule or smell that justifies it, and a concrete explanation of what breaks.\n- **Rule:** documented-standard breaches are hard; baseline smells are always judgement calls.\n\n## Provenance\n\n| Quality-Bar Question | Evidence |\n|---|---|\n| **Intent** | Review a pull request against the fixed point the user supplies, separating Standards and Spec findings into distinct axes. |\n| **Input** | a PR, diff, fixed point reference, and the originating spec if available. |\n| **Output** | a two-axis review report (Standards + Spec) with per-file findings and a summary line. |\n| **Side effects** | may post PR review comments; no local files are written. |\n| **Boundaries** | publish findings only — do not change source files, fix the PR, or merge it. |\n| **Completion criteria** | fixed point pinned and diff non-empty; Standards findings cite documented standards or smell names; Spec findings quote the spec; review published; no merging or fixing. |\n\n## Artifact\n\nThis skill returns a structured review report and, when reviewing a GitHub PR, publishes the review body to the PR. The artifact validates against `schema/review-findings-schema.json`.\n\n## Completion\n\n- fixed point is pinned and diff is non-empty\n- Standards findings cite documented standards or smell names\n- Spec findings quote the spec line for each requirement\n- review is published to the PR (if GitHub) or returned as structured output\n- no source files are changed, fixed, or merged\n- `ReviewArtifact` returned as structured output and validated against `schema/review-findings-schema.json`\n"
+    },
+    {
+      "op": "run",
+      "command": [
+        "node",
+        "check-contract.mjs",
+        "--json"
+      ],
+      "expectExit": 0
+    }
+  ],
+  "verification": {
+    "stateChecks": [
+      {
+        "kind": "exit-was-nonzero",
+        "step": 0
+      },
+      {
+        "kind": "exit-was-zero",
+        "step": 2
+      },
+      {
+        "kind": "file-contains",
+        "path": ".agents/skills/delivery/review-pr/SKILL.md",
+        "value": "risk: medium"
+      },
+      {
+        "kind": "file-not-contains",
+        "path": ".agents/skills/delivery/review-pr/SKILL.md",
+        "value": "extreme"
+      },
+      {
+        "kind": "regex-matches",
+        "path": ".agents/skills/delivery/review-pr/SKILL.md",
+        "value": "\ntrustTier: 3\n"
+      },
+      {
+        "kind": "file-contains",
+        "path": ".agents/skills/delivery/review-pr/SKILL.md",
+        "value": "stopCondition:"
+      },
+      {
+        "kind": "file-contains",
+        "path": ".agents/skills/delivery/review-pr/SKILL.md",
+        "value": "## Completion"
+      },
+      {
+        "kind": "file-min-lines",
+        "path": ".agents/skills/delivery/review-pr/SKILL.md",
+        "value": 100
+      }
+    ],
+    "forbiddenPaths": [
+      "schema/review-findings-schema.json",
+      "skills-lock.json",
+      "fixtures/behavioral/review-pr.json"
+    ]
+  }
+}

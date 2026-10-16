@@ -1,9 +1,10 @@
 ---
 name: "quant-backtest"
-category: "skill-dev/sandbox"
+category: "quant"
 maturity: "stable"
 version: "1"
 description: "Run a backtest with full audit hygiene — biases, costs, out-of-sample, regime splits — and produce a verdict on whether a strategy is robust."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "test-strategy"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/quant-backtest.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["quant"]
 compatibility: []

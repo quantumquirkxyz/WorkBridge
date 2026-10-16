@@ -1,0 +1,16 @@
+{
+  "name": "llm-fine-tuning",
+  "instructions": "Fine-tune LLMs — LoRA, QLoRA, full fine-tuning, data preparation, evaluation, deployment — with reproducibility, efficiency, and safety controls.\n\nCapabilities:\n- apply the llm-fine-tuning workflow\n\nCanonical skill: .agents/skills/ai/llm-fine-tuning/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Fine-tuning plan saved; dataset report complete; evaluation report generated; deployment manifest filled.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 8,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

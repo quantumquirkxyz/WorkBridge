@@ -1,0 +1,13 @@
+---
+description: "Design NoSQL data models — document, key-value, wide-column, graph, time-series — with access pattern analysis, consistency requirements, and schema evolution."
+globs: []
+alwaysApply: false
+---
+# db-nosql-modeling
+
+Apply the db-nosql-modeling skill when the request matches its scope.
+
+Capabilities:
+- apply the db-nosql-modeling workflow
+
+Stop when: Design NoSQL data models complete; required sections present; completion criteria checked.

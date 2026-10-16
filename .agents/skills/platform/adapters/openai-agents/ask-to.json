@@ -1,0 +1,16 @@
+{
+  "name": "ask-to",
+  "instructions": "Ask which skill or flow fits your situation. A router over the skills in this repo that recommends the next step after governance preflight.\n\nCapabilities:\n- apply ask to workflow\n- produce ask to artifact\n- validate ask to completion criteria\n\nCanonical skill: .agents/skills/routing/ask-to/SKILL.md",
+  "model": "gpt-5.1",
+  "tools": [],
+  "handoff_description": "Ask which skill or flow fits your situation complete; structured result returned; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

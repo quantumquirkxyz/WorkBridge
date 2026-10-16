@@ -1,0 +1,13 @@
+---
+description: Convert review-pr findings on a GitHub PR into a concrete remediation plan and post that plan as PR comments. Use after
+globs: []
+alwaysApply: false
+---
+# plan-review-fixes
+
+Apply the plan-review-fixes skill when the request matches its scope.
+
+Capabilities:
+- apply the plan-review-fixes workflow
+
+Stop when: Convert review-pr findings on a GitHub PR into a concrete remediation plan and post that plan as PR comments complete; structured result returned; completion criteria checked.

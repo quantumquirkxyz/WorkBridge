@@ -1,0 +1,13 @@
+---
+description: "Design content management systems — content models, editorial workflows, publishing pipelines, localization — with schema evolution and multi-channel delivery."
+globs: []
+alwaysApply: false
+---
+# cms-architecture
+
+Apply the cms-architecture skill when the request matches its scope.
+
+Capabilities:
+- apply the cms-architecture workflow
+
+Stop when: Design content management systems complete; artifact saved; completion criteria checked.

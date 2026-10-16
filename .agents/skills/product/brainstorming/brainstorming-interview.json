@@ -1,0 +1,7 @@
+{
+  "identifier": "brainstorming",
+  "source": "user-request",
+  "mode": "manual-design",
+  "requirements": ["structured ideation", "prioritization", "testable next steps", "preserve assumptions and dissent"],
+  "validation": ["frontmatter", "contract", "completion criteria", "repository gate"]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "web3-defi",
+  "instructions": "Analyse DeFi protocols — AMMs, lending, stablecoins, derivatives, intents, solver networks — across protocol mechanics, economic security, MEV protection, and composability risks.\n\nCapabilities:\n- apply the web3-defi workflow\n\nCanonical skill: .agents/skills/web3/web3-defi/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Protocol classified; mechanics and economic security documented; recommendation tied to risk profile.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

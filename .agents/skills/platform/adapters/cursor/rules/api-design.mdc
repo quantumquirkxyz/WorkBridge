@@ -1,0 +1,15 @@
+---
+description: "Design a small, durable API seam — with a deep backend and explicit caller contract boundaries."
+globs: []
+alwaysApply: false
+---
+# api-design
+
+Apply the api-design skill when the request matches its scope.
+
+Capabilities:
+- apply api design workflow
+- produce api design artifact
+- validate api design completion criteria
+
+Stop when: Design a small, durable API seam complete; artifact saved; completion criteria checked.

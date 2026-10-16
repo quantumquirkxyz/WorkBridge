@@ -52,6 +52,14 @@ async function skillFiles(base = skillsRoot, out = []) {
   return out.sort();
 }
 async function manifest(file) { return frontmatter(await read(file)); }
+async function resolveSkillFile(requested) {
+  const candidate = path.resolve(root, requested.endsWith('.md') ? requested : path.join(skillsRoot, requested, 'SKILL.md'));
+  if (await exists(candidate)) return candidate;
+  if (requested.endsWith('.md') || requested.includes(path.sep)) return candidate;
+  const matches = (await skillFiles()).filter((file) => path.basename(path.dirname(file)) === requested);
+  if (matches.length === 1) return matches[0];
+  return candidate;
+}
 function listValue(value) { return Array.isArray(value) ? value : !value || value === '[]' ? [] : [value]; }
 function json(value) { console.log(JSON.stringify(value, null, 2)); }
 function optionValue(name, fallback) {
@@ -97,6 +105,8 @@ function runCommand(command, args, cwd) {
 }
 function usage() {
   console.log(`skill-lab commands:
+  list [--json]
+  search <query> [--json]
   template <name> [--domain domain] [--description text] [--capabilities JSON]
   validate [path] [--json]
   graph [--format mermaid|json]
@@ -104,10 +114,45 @@ function usage() {
   diff <old/SKILL.md> <new/SKILL.md>
   tutorial <skill-name|SKILL.md>
   metrics [runs-directory]
+  cost [--by-skill|--by-day] [--since YYYY-MM-DD] [--no-estimate] [--json]
   playground [--output directory] [--fixtures JSON] [--command JSON]
   pr-check [--base ref]
   evolve [skill-path] [--target-version N] [--dry-run]
   work-item [description]`);
+}
+async function list() {
+  const skills = [];
+  for (const file of await skillFiles()) {
+    const fm = normalizedManifest(await manifest(file));
+    skills.push({
+      name: fm.name || path.basename(path.dirname(file)),
+      description: fm.description || '',
+      capabilities: fm.capabilities,
+      file: path.relative(root, file),
+    });
+  }
+  if (process.argv.includes('--json')) json({ skills });
+  else for (const skill of skills) console.log(`${skill.name}\t${skill.description}`);
+}
+async function search() {
+  const query = process.argv.slice(3).filter((value) => !value.startsWith('--')).join(' ').toLowerCase();
+  if (!query) throw new Error('search requires a query');
+  const terms = query.split(/\s+/).filter(Boolean);
+  const matches = [];
+  for (const file of await skillFiles()) {
+    const fm = normalizedManifest(await manifest(file));
+    const haystack = [fm.name, fm.description, ...fm.capabilities].join(' ').toLowerCase();
+    if (terms.every((term) => haystack.includes(term))) {
+      matches.push({
+        name: fm.name || path.basename(path.dirname(file)),
+        description: fm.description || '',
+        capabilities: fm.capabilities,
+        file: path.relative(root, file),
+      });
+    }
+  }
+  if (process.argv.includes('--json')) json({ query, matches });
+  else for (const skill of matches) console.log(`${skill.name}\t${skill.description}`);
 }
 async function template() {
   const name = process.argv[3];
@@ -350,7 +395,7 @@ async function diff() {
 }
 async function tutorial() {
   const requested = process.argv[3]; if (!requested) throw new Error('tutorial requires a skill name');
-  const file = requested.endsWith('.md') ? path.resolve(root, requested) : path.join(skillsRoot, requested, 'SKILL.md');
+  const file = await resolveSkillFile(requested);
   const fm = normalizedManifest(await manifest(file));
   const learnerContext = optionValue('--learner-context', 'a contributor learning the quirk method');
   console.log(`# Tutorial: ${fm.name}\n\n${fm.description}\n\n## Learner context\n\n${learnerContext}\n\n## Learning goals\n\n${listValue(fm.capabilities).map((x) => `- ${x}`).join('\n')}\n\n## Exercise\n\nProvide an input satisfying: ${listValue(fm.inputs).join(', ') || 'the documented contract'}.\n\n## Expected result\n\n${listValue(fm.outputs).map((x) => `- ${x}`).join('\n')}\n\n## Checkpoint\n\n${fm.stopCondition || 'Confirm the output and validation evidence.'}\n\n## Learner response\n\nRecord the input, output, and validation evidence before continuing.\n`);
@@ -405,6 +450,25 @@ async function playground() {
   }
   json(result);
 }
+async function cost() {
+  const { buildCostLedger, printLedger } = await import('./cost-ledger.mjs');
+  const args = process.argv.slice(3);
+  const valueOf = (flag, fallback) => {
+    const index = args.indexOf(flag);
+    return index === -1 ? fallback : (args[index + 1] ?? fallback);
+  };
+  const since = args.includes('--since') ? valueOf('--since', null) : null;
+  if (since && !/^\d{4}-\d{2}-\d{2}$/.test(since)) throw new Error('--since must be YYYY-MM-DD');
+  const ledger = buildCostLedger({
+    tracesDir: path.resolve(root, valueOf('--traces', path.join(skillsRoot, 'platform', 'traces'))),
+    costModelFile: path.resolve(root, valueOf('--cost-model', path.join(skillsRoot, 'platform', 'cost-model.json'))),
+    mode: args.includes('--by-day') ? 'by-day' : 'by-skill',
+    since,
+    estimate: !args.includes('--no-estimate'),
+  });
+  if (args.includes('--json')) json(ledger);
+  else console.log(printLedger(ledger));
+}
 async function prCheck() {
   const { stdout } = await new Promise((resolve, reject) => {
     const child = spawn('git', ['diff', '--name-only', `${optionValue('--base', 'HEAD~1')}...HEAD`], { cwd: root });
@@ -415,16 +479,38 @@ async function prCheck() {
   json({ changedSkills: changed, checks: ['contract/frontmatter', 'documentation', 'dependencies', 'examples'], recommendation: validation });
 }
 
+function runExternal(script, args) {
+  return new Promise((resolve, reject) => {
+    const child = spawn(process.execPath, [script, ...args], { cwd: root, stdio: 'inherit' });
+    child.on('error', reject);
+    child.on('exit', (code) => {
+      process.exitCode = code || 0;
+      resolve();
+    });
+  });
+}
+async function evolve() {
+  await runExternal(path.join(root, '.agents', 'skills', 'platform', 'skill-evolver.mjs'), process.argv.slice(3));
+}
+async function workItem() {
+  await runExternal(path.join(root, 'scripts', 'work-item-router.mjs'), process.argv.slice(3));
+}
+
 const command = process.argv[2];
 try {
-  if (command === 'template') await template();
+  if (command === 'list') await list();
+  else if (command === 'search') await search();
+  else if (command === 'template') await template();
   else if (command === 'validate') await validate();
   else if (command === 'graph') await graph();
   else if (command === 'rules') await rules();
   else if (command === 'diff') await diff();
   else if (command === 'tutorial') await tutorial();
   else if (command === 'metrics') await metrics();
+  else if (command === 'cost') await cost();
   else if (command === 'playground') await playground();
   else if (command === 'pr-check') await prCheck();
+  else if (command === 'evolve') await evolve();
+  else if (command === 'work-item') await workItem();
   else usage();
 } catch (error) { console.error(error.message); process.exitCode = 1; }

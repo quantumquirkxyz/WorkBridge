@@ -1,0 +1,13 @@
+---
+description: "Compare Skill versions and explain contract, dependency, and behavior impact — use when assessing changes between two Skills."
+globs: []
+alwaysApply: false
+---
+# skill-diff-analyzer
+
+Apply the skill-diff-analyzer skill when the request matches its scope.
+
+Capabilities:
+- apply the skill-diff-analyzer workflow
+
+Stop when: Compare Skill versions and explain contract, dependency, and behavior impact complete; artifact saved; completion criteria checked.

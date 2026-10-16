@@ -4,6 +4,7 @@ category: "backend"
 maturity: "stable"
 version: "1"
 description: "Design backend queues and background job systems — durability, retries, ordering, idempotency, and backpressure — with explicit delivery guarantees."
+license: "MIT"
 capabilities: ""
 inputs:
   - type: object
@@ -21,7 +22,7 @@ promptVersion: "2.0"
 artifactType: "queue-design"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/backend-queues.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["backend"]
 compatibility: []

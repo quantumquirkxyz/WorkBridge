@@ -1,0 +1,15 @@
+name: project-development
+description: "Evaluate a project's shape, agent fit, and architectural starting point — before the main workflow begins."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/project-project-development
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

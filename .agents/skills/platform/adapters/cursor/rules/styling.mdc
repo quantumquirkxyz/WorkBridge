@@ -1,0 +1,13 @@
+---
+description: "Modern CSS (Tailwind v4, Panda CSS, CSS modules, CVA, design tokens)."
+globs: []
+alwaysApply: false
+---
+# styling
+
+Apply the styling skill when the request matches its scope.
+
+Capabilities:
+- apply the styling workflow
+
+Stop when: Styling design complete; artifact saved; completion criteria checked.

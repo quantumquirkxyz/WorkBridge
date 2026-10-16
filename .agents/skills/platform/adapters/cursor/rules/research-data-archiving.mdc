@@ -1,0 +1,13 @@
+---
+description: "Archive research data — metadata, storage, preservation, provenance, and reuse planning — with reproducibility and access controls."
+globs: []
+alwaysApply: false
+---
+# research-data-archiving
+
+Apply the research-data-archiving skill when the request matches its scope.
+
+Capabilities:
+- apply the research-data-archiving workflow
+
+Stop when: Data, metadata, provenance, access controls, and preservation plan are explicit.

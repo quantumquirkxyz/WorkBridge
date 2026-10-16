@@ -1,0 +1,15 @@
+---
+description: "Break a plan, spec, or the current conversation into a set of tracer-bullet tickets, each declaring its blocking edges, and publish the smallest claimable slices."
+globs: []
+alwaysApply: false
+---
+# to-tickets
+
+Apply the to-tickets skill when the request matches its scope.
+
+Capabilities:
+- apply to tickets workflow
+- produce to tickets artifact
+- validate to tickets completion criteria
+
+Stop when: Break a plan, spec, or the current conversation into a set of tracer-bullet tickets, each declaring its blocking edges, and publish the smallest claimable slices complete; artifact saved; completion criteria checked.

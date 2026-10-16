@@ -1,0 +1,13 @@
+---
+description: "Design FinOps strategies — rightsizing, spot instances, committed use, budgets, showback/chargeback — with cost visibility and optimisation guardrails."
+globs: []
+alwaysApply: false
+---
+# cost-optimization
+
+Apply the cost-optimization skill when the request matches its scope.
+
+Capabilities:
+- apply the cost-optimization workflow
+
+Stop when: Architecture diagram saved; visibility design documented; rightsizing recommendations complete; budget and showback plan filled.

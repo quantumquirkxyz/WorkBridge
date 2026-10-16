@@ -1,0 +1,16 @@
+{
+  "name": "react",
+  "instructions": "Design React component structure and state seams — with composability, testability, and clear data flow.\n\nCapabilities:\n- apply the react workflow\n\nCanonical skill: .agents/skills/frontend/react/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Design React component structure and state seams complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

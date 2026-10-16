@@ -1,0 +1,16 @@
+{
+  "name": "graphic-design-accessibility",
+  "instructions": "Design inclusive graphic artifacts — WCAG-compliant visuals, colorblind-safe palettes, readable typography, and assistive-technology-compatible layouts for print and digital.\n\nCapabilities:\n- apply the graphic-design-accessibility workflow\n\nCanonical skill: .agents/skills/graphic-design/graphic-design-accessibility/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Design inclusive graphic artifacts — WCAG-compliant visuals, colorblind-safe palettes, readable typography, and assistive-technology-compatible layouts for print and digital. complete; structured result returned; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

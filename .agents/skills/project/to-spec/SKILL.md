@@ -4,6 +4,7 @@ category: project
 maturity: stable
 version: 1
 description: Turn the current conversation into a spec and publish it to the project issue tracker - no interview, just synthesis of what is already known.
+license: MIT
 capabilities:
   - apply to spec workflow
   - produce to spec artifact
@@ -79,8 +80,8 @@ fixturesPath: .agents/skills/platform/fixtures/behavioral/to-spec.json
 diataxis: how-to
 tags: [project, spec, planning, documentation]
 compatibility: [to-tickets, grill-with-docs]
-approvalRequired: false
-approvalFor: []
+approvalRequired: true
+approvalFor: ["create-issue"]
 sideEffects:
   - create-issue
 dependencies: []
@@ -88,6 +89,17 @@ stopCondition: Turn the current conversation into a spec and publish it to the p
 risk: medium
 trustTier: 3
 maxIterations: 6
+clauses:
+  - id: TO-SPEC-1
+    text: "Prefer one seam, and make any seam choice explicit before publishing."
+    check: "evals/behavioral/to-spec.json#TO-SPEC-1"
+  - id: TO-SPEC-2
+    text: "If the spec cannot be made concrete enough to hand off, stop and say what is still missing."
+    check: "evals/behavioral/to-spec.json#TO-SPEC-2"
+  - id: TO-SPEC-3
+    text: "Synthesize what is already known; do not reopen discovery interviews."
+    check: "evals/behavioral/to-spec.json#TO-SPEC-3"
+reloadPolicy: on-trigger
 ---
 
 ## Why
@@ -141,7 +153,7 @@ Check with the user that these seams match their expectations.
 
 ### 2. Draft the spec
 
-Write the spec using [`references/spec-template.md`](references/spec-template.md) as the canonical shape. Apply the repo defaults from `docs/agents/issue-tracker.md`: for this repo that means labels `spec` plus `ready-for-agent` — no need for additional triage. The entire published issue, including headings, user stories, and notes, must be in English. Also apply the work-item format defaults: set the milestone when one is known, add the issue to the matching project board when relevant, and keep the todo/acceptance content aligned with the metadata.
+Write the spec using [`references/spec-template.md`](references/spec-template.md) as the canonical shape, and hold every acceptance criterion to the reviewer-owned unit tests in [`references/spec-checklist.md`](references/spec-checklist.md) before you write it down. Apply the repo defaults from [`docs/reference/agents/issue-tracker.md`](../../../../docs/reference/agents/issue-tracker.md): for this repo that means labels `spec` plus `ready-for-agent` — no need for additional triage. The entire published issue, including headings, user stories, and notes, must be in English. Also apply the work-item format defaults: set the milestone when one is known, add the issue to the matching project board when relevant, and keep the todo/acceptance content aligned with the metadata.
 
 The template shape still needs the familiar sections that make specs ticket-ready:
 
@@ -154,9 +166,18 @@ Professional spec standard: the template must be compact, traceable, and ticket-
 
 ### 3. Review against completion criteria
 
-Before publishing, verify each criterion is satisfied. If any criterion cannot be met, record the gap in `validationNotes` and explain what is missing.
+Before publishing, verify each criterion is satisfied. Run the per-criterion tests `SC-01` through `SC-08` and the whole-spec tests `SC-09` through `SC-14` from [`references/spec-checklist.md`](references/spec-checklist.md) on the draft. If any criterion cannot be met, record the gap in `validationNotes` and explain what is missing.
 
-### 4. Publish
+### 4. Mark unresolved requirements
+
+Any requirement that cannot be made testable from what is already known is published with a `[NEEDS CLARIFICATION]` marker instead of being guessed at or padded with a placeholder. Follow the marker rules in [`references/spec-checklist.md`](references/spec-checklist.md):
+
+- The marker names the owner (a person or a role) and the decision it blocks.
+- Record every marker in `validationNotes` together with the requirement it belongs to.
+- A spec published with an open marker is not ticket-ready: `to-tickets` must not slice a marked requirement into work, because the ticket would inherit an untestable criterion.
+- A marker is cleared only by the owner's answer recorded in the spec, never by deleting the marker to make the spec look complete.
+
+### 5. Publish
 
 Publish the spec to the configured tracker with the canonical metadata shape from [`docs/agents/work-item-format.md`](../../../../docs/reference/agents/work-item-format.md). Emit the `SpecArtifact` JSON atomically with the published issue so the machine-readable contract and the Markdown stay in sync.
 
@@ -171,7 +192,7 @@ The spec is complete when all of the following are true:
 - the spec is published with the tracker defaults applied
 - the artifact JSON is emitted and its schema version matches the declared `artifactType`
 
-See [`references/spec-template.md`](references/spec-template.md) for the canonical shape.
+See [`references/spec-template.md`](references/spec-template.md) for the canonical shape, and [`references/spec-checklist.md`](references/spec-checklist.md) for the reviewer-owned unit tests every criterion must pass.
 
 ---
 @include .agents/skills/platform/contract-base.xml

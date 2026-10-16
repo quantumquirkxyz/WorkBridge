@@ -1,0 +1,16 @@
+{
+  "name": "agent-observability",
+  "instructions": "Capture redacted execution records, traces, and quality signals for skill runs with structured data for analysis. Enables full audit of decisions made during agent execution.\n\nCapabilities:\n- apply the agent-observability workflow\n\nCanonical skill: .agents/skills/foundation/agent-observability/SKILL.md",
+  "model": "gpt-5-mini",
+  "tools": [],
+  "handoff_description": "Trace recorded, signals captured, and report generated with explicit evidence.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 3,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

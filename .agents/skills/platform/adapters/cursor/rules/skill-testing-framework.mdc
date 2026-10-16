@@ -1,0 +1,13 @@
+---
+description: "Validate Skill structure, contracts, dependencies, anti-patterns, and isolated execution — use when checking a Skill before promotion."
+globs: []
+alwaysApply: false
+---
+# skill-testing-framework
+
+Apply the skill-testing-framework skill when the request matches its scope.
+
+Capabilities:
+- apply the skill-testing-framework workflow
+
+Stop when: Validate Skill structure, contracts, dependencies, anti-patterns, and isolated execution complete; artifact saved; completion criteria checked.

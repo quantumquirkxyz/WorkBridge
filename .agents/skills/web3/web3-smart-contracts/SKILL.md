@@ -4,6 +4,7 @@ category: "web3"
 maturity: "stable"
 version: "2"
 description: "Design and review smart contracts — security, gas optimization, upgradeability, account abstraction, EIP-7702 — with an adversarial review step."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,11 +17,11 @@ promptVersion: "2.0"
 artifactType: "web3"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/web3-smart-contracts.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/web3-smart-contracts.json
 diataxis: "how-to"
 tags: ["web3"]
 compatibility: []
-approvalRequired: "false"
+approvalRequired: "true"
 approvalFor: []
 ---
 
@@ -42,6 +43,21 @@ approvalFor: []
 | What evidence proves it is done? | Completion criteria met, artifact saved, validation passed |
 | What risk remains? | Subjective judgment calls, missing context, or external dependency failures
 
+
+## Rules
+
+- Rule: never deploy without an adversarial review.
+- Rule: separate security findings from gas optimisations.
+- Rule: state trust assumptions for every external call.
+- Rule: document upgrade, AA, and delegation mechanisms explicitly.
+- Rule: prefer minimal, audited libraries (Solmate, OpenZeppelin) over custom implementations.
+
+## Completion
+
+- the skill's completion criteria are explicitly checked
+- the artifact is saved and validated
+- any blockers or skipped validations are documented
+- the next consumer is identified or the work is handed off
 
 ## Artifact
 
@@ -147,19 +163,5 @@ Markdown artifact: requirements, security review, gas audit, upgrade/governance/
 
 **Completion criterion:** artifact present; deployment recommendation is explicit.
 
-## Rules
-
-- Rule: never deploy without an adversarial review.
-- Rule: separate security findings from gas optimisations.
-- Rule: state trust assumptions for every external call.
-- Rule: document upgrade, AA, and delegation mechanisms explicitly.
-- Rule: prefer minimal, audited libraries (Solmate, OpenZeppelin) over custom implementations.
-
-## Completion
-
-- the skill's completion criteria are explicitly checked
-- the artifact is saved and validated
-- any blockers or skipped validations are documented
-- the next consumer is identified or the work is handed off
 ---
 @include .agents/skills/platform/contract-base.xml

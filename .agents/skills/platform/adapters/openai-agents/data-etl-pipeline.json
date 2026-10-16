@@ -1,0 +1,16 @@
+{
+  "name": "data-etl-pipeline",
+  "instructions": "Design ETL / ELT pipelines — extraction, transformation, load — with reproducible steps, schema evolution, quality checks, and observability.\n\nCapabilities:\n- apply the data-etl-pipeline workflow\n\nCanonical skill: .agents/skills/data/data-etl-pipeline/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Pipeline architecture saved; quality rules defined; schema evolution plan present.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

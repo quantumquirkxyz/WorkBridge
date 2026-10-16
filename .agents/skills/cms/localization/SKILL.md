@@ -4,6 +4,7 @@ category: "cms"
 maturity: "stable"
 version: "1"
 description: "Design internationalization (i18n) and localization (l10n) — string management, locale handling, RTL support, cultural adaptation — so the product works across languages and regions."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "cms"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/localization.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["cms"]
 compatibility: []

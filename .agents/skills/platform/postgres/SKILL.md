@@ -4,6 +4,7 @@ category: "platform"
 maturity: "stable"
 version: "1"
 description: "Shape PostgreSQL schema and query decisions — so the data model stays durable and reviewable."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []

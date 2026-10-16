@@ -1,0 +1,16 @@
+{
+  "name": "performance-testing",
+  "instructions": "Design and execute performance tests — load, stress, soak, spike — to validate latency, throughput, and resource consumption under realistic conditions.\n\nCapabilities:\n- apply the performance-testing workflow\n\nCanonical skill: .agents/skills/qa/performance-testing/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Design and execute performance tests complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

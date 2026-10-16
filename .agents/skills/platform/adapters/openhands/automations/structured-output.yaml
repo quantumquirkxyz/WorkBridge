@@ -1,0 +1,15 @@
+name: structured-output
+description: "Structured output for LLMs (JSON mode, function calling, constrained decoding, validation)"
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/ai-structured-output
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

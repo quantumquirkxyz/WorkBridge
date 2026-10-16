@@ -1,0 +1,13 @@
+---
+description: "Design GitOps workflows — ArgoCD, Flux, declarative sync, drift detection, progressive delivery — with explicit reconciliation and safety boundaries."
+globs: []
+alwaysApply: false
+---
+# gitops
+
+Apply the gitops skill when the request matches its scope.
+
+Capabilities:
+- apply the gitops workflow
+
+Stop when: Architecture diagram saved; sync configuration documented; drift runbook complete; progressive delivery strategy defined.

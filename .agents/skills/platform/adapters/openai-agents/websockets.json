@@ -1,0 +1,16 @@
+{
+  "name": "websockets",
+  "instructions": "WebSockets and real-time (Socket.IO, WS, SSE, pub/sub, scaling, reconnection, backpressure).\n\nCapabilities:\n- apply the websockets workflow\n\nCanonical skill: .agents/skills/backend/websockets/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "WebSocket/SSE architecture, connection lifecycle, scaling topology, and failure handling are explicit.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

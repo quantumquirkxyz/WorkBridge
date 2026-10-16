@@ -1,0 +1,16 @@
+{
+  "name": "api-design",
+  "instructions": "Design a small, durable API seam — with a deep backend and explicit caller contract boundaries.\n\nCapabilities:\n- apply api design workflow\n- produce api design artifact\n- validate api design completion criteria\n\nCanonical skill: .agents/skills/foundation/api-design/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Design a small, durable API seam complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

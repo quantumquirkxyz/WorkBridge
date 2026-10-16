@@ -1,0 +1,13 @@
+---
+description: "Define the logs, metrics, traces, and alerts needed to understand a system in production — with SLIs, SLOs, dashboards, alert rules, and incident runbooks."
+globs: []
+alwaysApply: false
+---
+# observability
+
+Apply the observability skill when the request matches its scope.
+
+Capabilities:
+- apply the observability workflow
+
+Stop when: Observability design complete; artifact saved; completion criteria checked.

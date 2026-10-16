@@ -1,0 +1,67 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-data-quality",
+      "skill": "data-quality",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "## Completion",
+          "## Process",
+          "## Rules",
+          "DataQualityArtifact",
+          "treat data quality as a product feature, not an afterthought; assign owners.",
+          "define SLAs in terms of business impact, not just technical thresholds.",
+          "run checks as close to the source as possible; fail fast and loud.",
+          "version expectation suites alongside data models and pipeline code."
+        ],
+        "doesNotContain": [
+          "## Operating Contract",
+          "ask-matt",
+          "ship-review-fix-loop",
+          "doc-draft-pr",
+          "frontend-development",
+          "ARIES",
+          "Matt",
+          "TODO",
+          "point 1",
+          "Criterion 1",
+          "Acceptance criterion 1",
+          "BE-2",
+          "OpenAPI spec",
+          "localhost:3000",
+          "extremely extensive"
+        ]
+      }
+    },
+    {
+      "id": "v2-frontmatter-data-quality",
+      "skill": "data-quality",
+      "type": "behavioral",
+      "expected": {
+        "frontmatterContains": [
+          "name: \"data-quality\"",
+          "risk: \"medium\"",
+          "trustTier: \"3\"",
+          "modelTier: \"reasoning\"",
+          "promptVersion: \"2.0\"",
+          "artifactType: \"data\"",
+          "diataxis: \"how-to\""
+        ]
+      }
+    },
+    {
+      "id": "v2-footer-data-quality",
+      "skill": "data-quality",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "@include .agents/skills/platform/contract-base.xml"
+        ]
+      }
+    }
+  ]
+}

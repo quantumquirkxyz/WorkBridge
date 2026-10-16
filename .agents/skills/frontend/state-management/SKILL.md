@@ -4,6 +4,7 @@ category: "frontend"
 maturity: "stable"
 version: "1"
 description: "Modern state management (Zustand, Jotai, signals, Redux Toolkit, server state)."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "frontend"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/state-management.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["frontend"]
 compatibility: []

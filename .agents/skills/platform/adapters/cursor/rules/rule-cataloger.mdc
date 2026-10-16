@@ -1,0 +1,13 @@
+---
+description: "Extract and classify rules across Skills by type, frequency, and application area; use when auditing the repository's shared guidance."
+globs: []
+alwaysApply: false
+---
+# rule-cataloger
+
+Apply the rule-cataloger skill when the request matches its scope.
+
+Capabilities:
+- apply the rule-cataloger workflow
+
+Stop when: Every discovered rule is listed with its source Skill, type, and frequency.

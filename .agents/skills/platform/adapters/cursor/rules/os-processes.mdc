@@ -1,0 +1,13 @@
+---
+description: "Design operating system process management — scheduling, signals, process states, concurrency, and inter-process communication — with explicit isolation boundaries."
+globs: []
+alwaysApply: false
+---
+# os-processes
+
+Apply the os-processes skill when the request matches its scope.
+
+Capabilities:
+- apply the os-processes workflow
+
+Stop when: Process states, scheduling assumptions, IPC, and failure behavior are explicit.

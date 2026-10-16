@@ -1,0 +1,15 @@
+name: knowledge-curator
+description: "Keep context, ADRs, registry entries, and research coherent over time — with refresh and provenance discipline."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/routing-knowledge-curator
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: [write-docs]

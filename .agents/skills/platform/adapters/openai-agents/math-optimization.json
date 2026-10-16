@@ -1,0 +1,16 @@
+{
+  "name": "math-optimization",
+  "instructions": "Formulate and solve optimization problems (linear, convex, non-convex, combinatorial) — model, choose solver, verify optimality, report sensitivity.\n\nCapabilities:\n- apply the math-optimization workflow\n\nCanonical skill: .agents/skills/math/math-optimization/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Formulate and solve optimization problems (linear, convex, non-convex, combinatorial) complete; required sections present; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

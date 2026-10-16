@@ -4,6 +4,7 @@ category: "platform"
 maturity: "stable"
 version: "1"
 description: "Design whole systems — components, data flow, scaling, reliability, and trade-offs — with clear assumptions and failure boundaries."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []

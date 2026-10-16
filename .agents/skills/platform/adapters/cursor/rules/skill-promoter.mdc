@@ -1,0 +1,13 @@
+---
+description: Promote validated experimental skills from the sandbox to the canonical skills bundle.
+globs: []
+alwaysApply: false
+---
+# skill-promoter
+
+Apply the skill-promoter skill when the request matches its scope.
+
+Capabilities:
+- apply the skill-promoter workflow
+
+Stop when: Promote validated experimental skills from the sandbox to the canonical skills bundle complete; artifact saved; completion criteria checked.

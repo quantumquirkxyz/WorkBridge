@@ -1,0 +1,16 @@
+{
+  "name": "to-spec",
+  "instructions": "Turn the current conversation into a spec and publish it to the project issue tracker - no interview, just synthesis of what is already known.\n\nCapabilities:\n- apply to spec workflow\n- produce to spec artifact\n- validate to spec completion criteria\n\nCanonical skill: .agents/skills/project/to-spec/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Turn the current conversation into a spec and publish it to the project issue tracker - no interview, just synthesis of what is already known complete; structured result returned; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

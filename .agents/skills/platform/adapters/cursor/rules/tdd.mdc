@@ -1,0 +1,15 @@
+---
+description: "Test-driven development. Use when the user wants to build features or fix bugs test-first, mentions \"red-green-refactor"
+globs: []
+alwaysApply: false
+---
+# tdd
+
+Apply the tdd skill when the request matches its scope.
+
+Capabilities:
+- apply tdd workflow
+- produce tdd artifact
+- validate tdd completion criteria
+
+Stop when: Test-driven development complete; structured result returned; completion criteria checked.

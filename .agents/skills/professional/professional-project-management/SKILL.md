@@ -4,6 +4,7 @@ category: "professional"
 maturity: "stable"
 version: "1"
 description: "Manage professional projects — scope, milestones, risks, dependencies, and stakeholder alignment — with explicit planning and tracking artifacts."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "pull-request"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/professional-project-management.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["professional"]
 compatibility: []

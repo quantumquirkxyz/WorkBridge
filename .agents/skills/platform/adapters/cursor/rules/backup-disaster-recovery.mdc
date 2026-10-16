@@ -1,0 +1,13 @@
+---
+description: "Design backup and disaster recovery — RPO/RTO, backup strategies, restore testing, cross-region — with explicit recovery objectives and validation."
+globs: []
+alwaysApply: false
+---
+# backup-disaster-recovery
+
+Apply the backup-disaster-recovery skill when the request matches its scope.
+
+Capabilities:
+- apply the backup-disaster-recovery workflow
+
+Stop when: Architecture diagram saved; recovery objectives matrix complete; backup strategy documented; restore testing plan filled.

@@ -1,0 +1,67 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-llm-fine-tuning",
+      "skill": "llm-fine-tuning",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "## Completion",
+          "## Process",
+          "## Rules",
+          "LlmFineTuningArtifact",
+          "document compute requirements and cost estimates before starting training.",
+          "use reproducible seeds, versioned datasets, and experiment tracking for every run.",
+          "run safety and bias evaluation before promoting any fine-tuned model to production.",
+          "compare fine-tuned model against base model on held-out test set; report delta metrics."
+        ],
+        "doesNotContain": [
+          "## Operating Contract",
+          "ask-matt",
+          "ship-review-fix-loop",
+          "doc-draft-pr",
+          "frontend-development",
+          "ARIES",
+          "Matt",
+          "TODO",
+          "point 1",
+          "Criterion 1",
+          "Acceptance criterion 1",
+          "BE-2",
+          "OpenAPI spec",
+          "localhost:3000",
+          "extremely extensive"
+        ]
+      }
+    },
+    {
+      "id": "v2-frontmatter-llm-fine-tuning",
+      "skill": "llm-fine-tuning",
+      "type": "behavioral",
+      "expected": {
+        "frontmatterContains": [
+          "name: \"llm-fine-tuning\"",
+          "risk: \"medium\"",
+          "trustTier: \"3\"",
+          "modelTier: \"reasoning\"",
+          "promptVersion: \"2.0\"",
+          "artifactType: \"ai\"",
+          "diataxis: \"how-to\""
+        ]
+      }
+    },
+    {
+      "id": "v2-footer-llm-fine-tuning",
+      "skill": "llm-fine-tuning",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "@include .agents/skills/platform/contract-base.xml"
+        ]
+      }
+    }
+  ]
+}

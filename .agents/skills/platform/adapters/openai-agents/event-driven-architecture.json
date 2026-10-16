@@ -1,0 +1,16 @@
+{
+  "name": "event-driven-architecture",
+  "instructions": "Event-driven architecture (Kafka, NATS, EventBridge, choreography vs orchestration).\n\nCapabilities:\n- apply the event-driven-architecture workflow\n\nCanonical skill: .agents/skills/backend/event-driven-architecture/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Event-driven architecture design complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

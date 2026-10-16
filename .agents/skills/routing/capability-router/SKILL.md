@@ -4,6 +4,7 @@ category: "routing"
 maturity: "stable"
 version: "1"
 description: "Route work to the best matching Skill using declared capabilities and compatibility — with explicit selection rules."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "plan"
 modelTier: "router"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/capability-router.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["routing"]
 compatibility: []
@@ -31,6 +32,8 @@ approvalFor: []
 - Scope: stay within the skill's declared boundaries; do not broaden without explicit direction.
 - Rule: documented standards override defaults; explicit project rules take precedence.
 - Rule: if blocked by missing context or dependencies, surface the blocker before proceeding.
+- Rule: exact and keyword matches always outrank graph neighborhood activation; the graph re-ranks candidates and never replaces direct matching.
+- Rule: record in the CapabilityRouterArtifact which candidates came from keyword/seed matching and which were activated by the graph neighborhood.
 
 ## Provenance
 
@@ -60,8 +63,9 @@ Use this skill to choose the right Skill from the registry instead of relying on
 
 1. Parse the task intent and required artifact type.
 2. Match against declared capabilities and side effects.
-3. Prefer the thinnest Skill that can finish the work.
-4. Fall back to a human-readable rationale when multiple Skills fit.
+3. Ask `skill-graph.mjs` to rank the candidate set: `node .agents/skills/platform/skill-graph.mjs rank "<query>" --json`, or read the persisted graph at `.agents/skills/platform/graph/skill-graph.json`.
+4. Prefer the thinnest Skill that can finish the work; use neighborhood activation only to break near-ties and to pull declared prerequisites.
+5. Fall back to a human-readable rationale when multiple Skills fit.
 
 ## Completion
 

@@ -3,6 +3,13 @@ description: Review-repair cycle for PRs with findings
 entryPoint: plan-review-fixes
 version: "2.0"
 
+context:
+  review:
+    standardsFindings: 0
+    specFindings: 0
+  loopIterations: 0
+  maxIterations: 5
+
 states:
   plan-review-fixes:
     type: planner
@@ -28,6 +35,9 @@ states:
       CLEAN: ship-subissue
       FINDINGS: plan-review-fixes
       CONFLICT: resolving-merge-conflicts
+    guards:
+      CLEAN: review.standardsFindings == 0 && review.specFindings == 0
+      FINDINGS: loopIterations < maxIterations
 
   resolving-merge-conflicts:
     type: resolver

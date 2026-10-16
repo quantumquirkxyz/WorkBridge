@@ -4,6 +4,7 @@ category: "cs"
 maturity: "stable"
 version: "1"
 description: "Design and analyze data structures — arrays, trees, heaps, hash tables, graphs, and balanced variants — with operation costs and invariants."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "data"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/cs-data-structures.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["cs"]
 compatibility: []

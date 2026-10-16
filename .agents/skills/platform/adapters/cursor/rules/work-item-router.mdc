@@ -1,0 +1,15 @@
+---
+description: "Force reading the canonical work-item governance index before routing specs, tickets, project boards, or publication flows."
+globs: []
+alwaysApply: false
+---
+# work-item-router
+
+Apply the work-item-router skill when the request matches its scope.
+
+Capabilities:
+- apply work item router workflow
+- produce work item router artifact
+- validate work item router completion criteria
+
+Stop when: Force reading the canonical work-item governance index before routing specs, tickets, project boards, or publication flows complete; structured result returned; completion criteria checked.

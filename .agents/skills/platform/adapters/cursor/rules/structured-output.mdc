@@ -1,0 +1,13 @@
+---
+description: "Structured output for LLMs (JSON mode, function calling, constrained decoding, validation)"
+globs: []
+alwaysApply: false
+---
+# structured-output
+
+Apply the structured-output skill when the request matches its scope.
+
+Capabilities:
+- apply the structured-output workflow
+
+Stop when: Structured output green on acceptance suite with validation harness.

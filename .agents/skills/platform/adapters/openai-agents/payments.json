@@ -1,0 +1,16 @@
+{
+  "name": "payments",
+  "instructions": "Design payment flows as a high-trust seam with explicit failure, reconciliation, webhooks, idempotency, PCI DSS, and rollback posture — with Stripe, Adyen, or equivalent.\n\nCapabilities:\n- apply the payments workflow\n\nCanonical skill: .agents/skills/integrations/payments/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Payment design complete; flows, webhooks, and reconciliation explicit; PCI and fraud controls named.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

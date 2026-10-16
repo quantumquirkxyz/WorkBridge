@@ -1,0 +1,16 @@
+{
+  "name": "api-contracts",
+  "instructions": "Define the request and response contracts, versioning rules, compatibility boundaries, OpenAPI/JSON Schema, and breaking change detection for APIs — with explicit consumer obligations.\n\nCapabilities:\n- apply the api-contracts workflow\n\nCanonical skill: .agents/skills/integrations/api-contracts/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "API contracts defined; versioning strategy explicit; breaking change policy and migration path named.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

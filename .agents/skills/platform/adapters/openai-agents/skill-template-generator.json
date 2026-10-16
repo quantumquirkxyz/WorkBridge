@@ -1,0 +1,16 @@
+{
+  "name": "skill-template-generator",
+  "instructions": "Generate an interactive, contract-complete Skill template in the sandbox — use when starting a new Skill with the lab's scaffolding.\n\nCapabilities:\n- apply the skill-template-generator workflow\n\nCanonical skill: .agents/skills/skill-dev/skill-template-generator/SKILL.md",
+  "model": "gpt-5-mini",
+  "tools": [],
+  "handoff_description": "Generate an interactive, contract-complete Skill template in the sandbox complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "worktree"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

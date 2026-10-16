@@ -1,0 +1,13 @@
+---
+description: "Keep context, ADRs, registry entries, and research coherent over time — with refresh and provenance discipline."
+globs: []
+alwaysApply: false
+---
+# knowledge-curator
+
+Apply the knowledge-curator skill when the request matches its scope.
+
+Capabilities:
+- apply the knowledge-curator workflow
+
+Stop when: Keep context, ADRs, registry entries, and research coherent over time complete; artifact saved; completion criteria checked.

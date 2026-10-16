@@ -4,6 +4,7 @@ category: "networking"
 maturity: "stable"
 version: "1"
 description: "Analyze network protocols — packet formats, handshakes, congestion control, routing, and transport behavior — with explicit timing and failure assumptions."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "pull-request"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/networking-protocols.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["networking"]
 compatibility: []

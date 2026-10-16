@@ -4,6 +4,7 @@ category: "data"
 maturity: "stable"
 version: "1"
 description: "Stream processing (Flink, Kafka Streams, RisingWave, windowing, state, exactly-once)."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,11 +17,11 @@ promptVersion: "2.0"
 artifactType: "pull-request"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/stream-processing.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/stream-processing.json
 diataxis: "how-to"
 tags: ["data"]
 compatibility: []
-approvalRequired: "false"
+approvalRequired: "true"
 approvalFor: []
 ---
 

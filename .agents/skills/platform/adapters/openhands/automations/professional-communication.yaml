@@ -1,0 +1,15 @@
+name: professional-communication
+description: "Improve professional communication — status updates, stakeholder messages, expectations, and escalation — with clarity and precision."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/professional-professional-communication
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

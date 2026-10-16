@@ -1,0 +1,15 @@
+name: graphic-design-packaging
+description: "Design physical packaging — dielines, structure, materials, regulatory labels — with production-ready specifications."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/graphic-design-graphic-design-packaging
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

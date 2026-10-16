@@ -7,6 +7,7 @@ Use this matrix to map implied operations to expected metadata. Choose the highe
 | Diagnostic only | inspect, audit, review, report | `[]` | low | 1 | No files or external systems change. |
 | Local docs or fixtures | write docs, create fixture, update template | `write-files` or `write-docs` | low | 2 | Include path boundaries and validation. |
 | Local code edits | implement, refactor, format, generate code | `write-code` | medium | 3 | Require tests and scope control. |
+| Protected instruction or identity path writes | edit skill instructions, update AGENTS.md, change CONTEXT.md, rewrite MEMORY.md, update skills-lock.json, modify .agents/** | `write-files`, `write-docs`, or `write-code` plus `approvalRequired: true` | medium | 3 | Treat as deny-write unless explicit approval is declared; these paths can alter agent identity, governance, memory, or skill provenance. |
 | Git metadata | commit, push, tag, branch | `commit-git`, `push-branch`, `create-tag` | medium | 3 | Push/tag operations affect collaboration state. |
 | Issue tracker | create, update, comment, label, assign, close | `create-issue`, `update-issue`, `post-comment`, `label-issue`, `assign-issue`, `close-issue` | medium | 3 | Close/reopen/state transitions need explicit reason. |
 | Pull request | create PR, update PR, comment, request review, label | `create-pull-request`, `update-pull-request`, `post-pr-comment`, `request-review`, `label-pull-request` | medium | 3 | Review requests can notify people. Merge is separate. |
@@ -18,6 +19,7 @@ Use this matrix to map implied operations to expected metadata. Choose the highe
 ## Audit severity
 
 - Blocker: the skill can mutate external/shared state but declares no matching side effect.
+- Blocker: the skill can write protected instruction or identity paths without explicit approval.
 - Blocker: the skill can delete, deploy, merge, send, schedule, or alter access without a high enough risk boundary.
 - Warning: the skill declares broad side effects that are not present in the body.
 - Warning: dependencies are missing for a delegated required workflow.

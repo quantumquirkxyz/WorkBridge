@@ -1,0 +1,15 @@
+name: mlops
+description: "MLOps (feature stores, model registry, data versioning, pipeline orchestration, monitoring, retraining)"
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/ai-mlops
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: true
+  sideEffects: []

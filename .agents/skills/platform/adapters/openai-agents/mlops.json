@@ -1,0 +1,16 @@
+{
+  "name": "mlops",
+  "instructions": "MLOps (feature stores, model registry, data versioning, pipeline orchestration, monitoring, retraining)\n\nCapabilities:\n- apply the mlops workflow\n\nCanonical skill: .agents/skills/ai/mlops/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Registry green; pipelines passing; model validated; monitoring active.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 8,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

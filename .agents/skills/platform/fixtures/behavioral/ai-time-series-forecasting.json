@@ -1,0 +1,67 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-ai-time-series-forecasting",
+      "skill": "ai-time-series-forecasting",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "## Completion",
+          "## Process",
+          "## Rules",
+          "AiTimeSeriesForecastingArtifact",
+          "preserve time order in every split, feature, and validation step.",
+          "include naive, seasonal naive, or simple baseline models before complex models.",
+          "use only exogenous variables known at forecast time.",
+          "evaluate with rolling or expanding backtests, not random splits."
+        ],
+        "doesNotContain": [
+          "## Operating Contract",
+          "ask-matt",
+          "ship-review-fix-loop",
+          "doc-draft-pr",
+          "frontend-development",
+          "ARIES",
+          "Matt",
+          "TODO",
+          "point 1",
+          "Criterion 1",
+          "Acceptance criterion 1",
+          "BE-2",
+          "OpenAPI spec",
+          "localhost:3000",
+          "extremely extensive"
+        ]
+      }
+    },
+    {
+      "id": "v2-frontmatter-ai-time-series-forecasting",
+      "skill": "ai-time-series-forecasting",
+      "type": "behavioral",
+      "expected": {
+        "frontmatterContains": [
+          "name: \"ai-time-series-forecasting\"",
+          "risk: \"medium\"",
+          "trustTier: \"3\"",
+          "modelTier: \"reasoning\"",
+          "promptVersion: \"2.0\"",
+          "artifactType: \"ai\"",
+          "diataxis: \"how-to\""
+        ]
+      }
+    },
+    {
+      "id": "v2-footer-ai-time-series-forecasting",
+      "skill": "ai-time-series-forecasting",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "@include .agents/skills/platform/contract-base.xml"
+        ]
+      }
+    }
+  ]
+}

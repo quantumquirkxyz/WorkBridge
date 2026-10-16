@@ -1,0 +1,13 @@
+---
+description: "Audit software/security posture — code review, dependency scanning, secret detection, access control, audit logging — with explicit findings and remediation priorities."
+globs: []
+alwaysApply: false
+---
+# sec-security-audit
+
+Apply the sec-security-audit skill when the request matches its scope.
+
+Capabilities:
+- apply the sec-security-audit workflow
+
+Stop when: Audit report complete; findings classified by severity; recommendations made.

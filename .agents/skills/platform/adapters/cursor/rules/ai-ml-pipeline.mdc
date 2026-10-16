@@ -1,0 +1,13 @@
+---
+description: "Design ML pipelines — data ingestion, preprocessing, training, evaluation, deployment, monitoring — with reproducibility, fairness, and version control."
+globs: []
+alwaysApply: false
+---
+# ai-ml-pipeline
+
+Apply the ai-ml-pipeline skill when the request matches its scope.
+
+Capabilities:
+- apply the ai-ml-pipeline workflow
+
+Stop when: Pipeline architecture saved; training report complete; deployment checklist filled.

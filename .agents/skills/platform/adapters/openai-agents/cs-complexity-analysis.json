@@ -1,0 +1,16 @@
+{
+  "name": "cs-complexity-analysis",
+  "instructions": "Analyze algorithmic complexity — time, space, amortized cost, and lower bounds — with explicit assumptions and proof sketches.\n\nCapabilities:\n- apply the cs-complexity-analysis workflow\n\nCanonical skill: .agents/skills/cs/cs-complexity-analysis/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Complexity bounds are stated, justified, and tied to the chosen input model.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

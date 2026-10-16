@@ -4,6 +4,7 @@ category: "data"
 maturity: "stable"
 version: "1"
 description: "Data lineage (end-to-end tracing, impact analysis, column-level lineage, governance)."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,11 +17,11 @@ promptVersion: "2.0"
 artifactType: "data"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/data-lineage.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/data-lineage.json
 diataxis: "how-to"
 tags: ["data"]
 compatibility: []
-approvalRequired: "false"
+approvalRequired: "true"
 approvalFor: []
 ---
 

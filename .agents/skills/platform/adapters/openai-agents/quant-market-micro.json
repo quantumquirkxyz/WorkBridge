@@ -1,0 +1,16 @@
+{
+  "name": "quant-market-micro",
+  "instructions": "Analyse market microstructure — order book dynamics, price formation, execution costs (slippage, spread, impact), and optimal execution strategies.\n\nCapabilities:\n- apply the quant-market-micro workflow\n\nCanonical skill: .agents/skills/quant/quant-market-micro/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Analyse market microstructure complete; required sections present; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

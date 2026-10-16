@@ -1,0 +1,16 @@
+{
+  "name": "pro-market-analysis",
+  "instructions": "Conduct professional market research — TAM/SAM/SOM, competitor analysis, pricing, and trend forecasting — with source citation, data quality checks, and decision framing.\n\nCapabilities:\n- apply the pro-market-analysis workflow\n\nCanonical skill: .agents/skills/professional/pro-market-analysis/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Conduct professional market research complete; required sections present; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

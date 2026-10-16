@@ -4,6 +4,7 @@ category: "platform"
 maturity: "stable"
 version: "1"
 description: "Define how a project is built, released, and rolled back — as a safe operational seam."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []

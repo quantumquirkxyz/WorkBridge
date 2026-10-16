@@ -1,0 +1,13 @@
+---
+description: "Analyse and compare consensus mechanisms — PoW, PoS, BFT, DA, based sequencing — with security properties, finality guarantees, MEV, and economic incentive alignment."
+globs: []
+alwaysApply: false
+---
+# web3-consensus
+
+Apply the web3-consensus skill when the request matches its scope.
+
+Capabilities:
+- apply the web3-consensus workflow
+
+Stop when: Consensus classified; security properties and economics assessed; recommendation tied to threat model.

@@ -1,0 +1,13 @@
+---
+description: "Interactive interview and collaborative design tool that helps users define, research, name, generate, and validate complete Codex skills with SKILL.md, scripts, references, assets, ADRs, and traceability."
+globs: []
+alwaysApply: false
+---
+# skill-creator
+
+Apply the skill-creator skill when the request matches its scope.
+
+Capabilities:
+- apply the skill-creator workflow
+
+Stop when: The user has completed the interview and generated a valid skill structure, or an existing skill has been validated with the supported tooling.

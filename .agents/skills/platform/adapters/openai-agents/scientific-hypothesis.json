@@ -1,0 +1,16 @@
+{
+  "name": "scientific-hypothesis",
+  "instructions": "Formulate testable scientific hypotheses — null/alternative, variables, controls, falsifiability — with explicit variables and statistical plan.\n\nCapabilities:\n- apply the scientific-hypothesis workflow\n\nCanonical skill: .agents/skills/research/scientific-hypothesis/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Formulate testable scientific hypotheses complete; required sections present; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

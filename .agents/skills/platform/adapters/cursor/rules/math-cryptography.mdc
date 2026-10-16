@@ -1,0 +1,13 @@
+---
+description: "Analyse cryptographic constructions — symmetric, asymmetric, hashing, MACs, zero-knowledge — with security reductions, hardness assumptions, and attack analysis."
+globs: []
+alwaysApply: false
+---
+# math-cryptography
+
+Apply the math-cryptography skill when the request matches its scope.
+
+Capabilities:
+- apply the math-cryptography workflow
+
+Stop when: Analyse cryptographic constructions complete; required sections present; completion criteria checked.

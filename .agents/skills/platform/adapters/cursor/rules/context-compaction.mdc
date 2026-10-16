@@ -1,0 +1,16 @@
+---
+description: "Run the context compaction discipline for long agent sessions: summarize the working set, clear stale tool results, and re-initiate a fresh window without losing the thread or the durable artifacts."
+globs: []
+alwaysApply: false
+---
+# context-compaction
+
+Apply the context-compaction skill when the request matches its scope.
+
+Capabilities:
+- diagnose context pressure in a running session
+- compact a conversation window with a structured summary
+- clear stale tool results and re-derive them on demand
+- hand off a session across a compaction boundary
+
+Stop when: The session continues with a fresh window, every durable artifact preserved, and every dropped item either re-derivable or recorded as a risk.

@@ -1,0 +1,16 @@
+{
+  "name": "skill-dependency-graph",
+  "instructions": "Build a dependency graph that exposes central Skills, cycles, and unnecessary coupling — use when analyzing Skill modularity.\n\nCapabilities:\n- apply the skill-dependency-graph workflow\n\nCanonical skill: .agents/skills/skill-dev/skill-dependency-graph/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Build a dependency graph that exposes central Skills, cycles, and unnecessary coupling complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

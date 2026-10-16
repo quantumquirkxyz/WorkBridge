@@ -1,0 +1,13 @@
+---
+description: "Astro framework (islands architecture, content-focused sites, SSR/SSG, view transitions)."
+globs: []
+alwaysApply: false
+---
+# astro
+
+Apply the astro skill when the request matches its scope.
+
+Capabilities:
+- apply the astro workflow
+
+Stop when: Astro design complete; artifact saved; completion criteria checked.

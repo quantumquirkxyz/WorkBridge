@@ -1,0 +1,13 @@
+---
+description: "Advanced caching strategies (Redis, Memcached, CDN, cache invalidation, stampede prevention)."
+globs: []
+alwaysApply: false
+---
+# caching-advanced
+
+Apply the caching-advanced skill when the request matches its scope.
+
+Capabilities:
+- apply the caching-advanced workflow
+
+Stop when: Cache architecture, invalidation strategy, stampede prevention, and consistency model are explicit.

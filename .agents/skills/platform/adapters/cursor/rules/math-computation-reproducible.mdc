@@ -1,0 +1,13 @@
+---
+description: "Make mathematical computations reproducible — SymPy, Mathematica, Magma, Sage, Julia — with versioned environments (Docker/Conda/Nix), scripts, and result archival."
+globs: []
+alwaysApply: false
+---
+# math-computation-reproducible
+
+Apply the math-computation-reproducible skill when the request matches its scope.
+
+Capabilities:
+- apply the math-computation-reproducible workflow
+
+Stop when: All artifacts saved; container builds; result reproducible from artifacts alone.

@@ -1,0 +1,13 @@
+---
+description: "Manage pull request operations with branch, diff, validation, reviewer, label, comment, and publication evidence while keeping merge decisions explicit."
+globs: []
+alwaysApply: false
+---
+# pr-operations
+
+Apply the pr-operations skill when the request matches its scope.
+
+Capabilities:
+- apply the pr-operations workflow
+
+Stop when: Requested PR actions are completed or explicitly skipped, target PRs are identified, and validation or readiness evidence is reported.

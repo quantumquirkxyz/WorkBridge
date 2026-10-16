@@ -1,0 +1,32 @@
+{
+  "name": "brainstorming",
+  "description": "Facilitate structured, inclusive brainstorming that turns an ambiguous problem into prioritized, testable ideas.",
+  "url": "https://github.com/quirk/example/blob/main/.agents/skills/product/brainstorming/SKILL.md",
+  "version": "1",
+  "capabilities": {
+    "skillInvocation": true,
+    "artifactProduction": true,
+    "workflowOrchestration": true
+  },
+  "authentication": {
+    "schemes": [
+      "none"
+    ]
+  },
+  "skills": [
+    {
+      "id": "product/brainstorming",
+      "name": "brainstorming",
+      "description": "Facilitate structured, inclusive brainstorming that turns an ambiguous problem into prioritized, testable ideas.",
+      "tags": [
+        "\"product\"",
+        "\"ideation\""
+      ],
+      "parameters": {
+        "trustTier": "1",
+        "modelTier": "reasoning",
+        "artifactType": "product-discovery"
+      }
+    }
+  ]
+}

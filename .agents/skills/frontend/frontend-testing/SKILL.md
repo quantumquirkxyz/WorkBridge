@@ -4,6 +4,7 @@ category: "frontend"
 maturity: "stable"
 version: "1"
 description: "Frontend testing (Vitest, Testing Library, Playwright, visual testing, Storybook)."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "test-strategy"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/frontend-testing.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["frontend"]
 compatibility: []

@@ -4,6 +4,7 @@ category: "networking"
 maturity: "stable"
 version: "1"
 description: "Design network security — segmentation, firewalls, VPNs, TLS, authentication, and threat boundaries — with explicit trust zones."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "security"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/networking-security.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["networking"]
 compatibility: []

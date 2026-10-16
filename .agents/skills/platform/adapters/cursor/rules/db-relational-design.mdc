@@ -1,0 +1,13 @@
+---
+description: "Design relational schemas — entities, relations, keys, indexes, constraints — with normalisation, performance, and migration planning."
+globs: []
+alwaysApply: false
+---
+# db-relational-design
+
+Apply the db-relational-design skill when the request matches its scope.
+
+Capabilities:
+- apply the db-relational-design workflow
+
+Stop when: Artifact complete with schema, indexes, constraints, and migration sequence.

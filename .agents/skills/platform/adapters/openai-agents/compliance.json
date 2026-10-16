@@ -1,0 +1,16 @@
+{
+  "name": "compliance",
+  "instructions": "Compliance (SOC2, ISO27001, GDPR, HIPAA, PCI DSS, audits, evidence, remediation)\n\nCapabilities:\n- apply the compliance workflow\n\nCanonical skill: .agents/skills/sec/compliance/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Gap analysis complete; evidence pack assembled; remediation roadmap accepted.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

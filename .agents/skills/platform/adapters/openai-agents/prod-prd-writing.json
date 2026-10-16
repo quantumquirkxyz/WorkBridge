@@ -1,0 +1,16 @@
+{
+  "name": "prod-prd-writing",
+  "instructions": "Write Product Requirement Documents (PRDs) — problem statement, goals, user stories, acceptance criteria, success metrics, timeline — with stakeholder alignment.\n\nCapabilities:\n- apply the prod-prd-writing workflow\n\nCanonical skill: .agents/skills/product/prod-prd-writing/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "PRD saved; stakeholder alignment noted; metrics defined.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 5,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

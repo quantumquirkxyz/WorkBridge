@@ -4,6 +4,7 @@ category: "qa"
 maturity: "stable"
 version: "1"
 description: "Test security posture — auth flows, authorization boundaries, injection paths, session handling, and misconfiguration checks — with adversarial scenarios."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "test-strategy"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/qa-security-testing.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["qa"]
 compatibility: []

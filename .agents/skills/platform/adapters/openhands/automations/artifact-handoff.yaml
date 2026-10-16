@@ -1,0 +1,15 @@
+name: artifact-handoff
+description: "Transfer structured artifacts between Skills and sessions — with explicit provenance and consumer expectations."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/routing-artifact-handoff
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

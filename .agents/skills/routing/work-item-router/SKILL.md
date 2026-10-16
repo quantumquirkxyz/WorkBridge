@@ -4,6 +4,7 @@ category: routing
 maturity: stable
 version: 1
 description: Force reading the canonical work-item governance index before routing specs, tickets, project boards, or publication flows.
+license: MIT
 capabilities:
   - apply work item router workflow
   - produce work item router artifact
@@ -50,6 +51,20 @@ stopCondition: Force reading the canonical work-item governance index before rou
 risk: low
 trustTier: 1
 maxIterations: 6
+clauses:
+  - id: WORK-ITEM-ROUTER-1
+    text: "Always read the canonical work-item governance index at docs/reference/agents/index.md before routing any spec, ticket, board, or publication request."
+    check: "evals/behavioral/work-item-router.json#WORK-ITEM-ROUTER-1"
+  - id: WORK-ITEM-ROUTER-2
+    text: "Route to the thinnest downstream skill that can finish the work, and never draft the routed artifact inside the router."
+    check: evals/behavioral/work-item-router.json#WORK-ITEM-ROUTER-2
+  - id: WORK-ITEM-ROUTER-3
+    text: "Preserve the canonical work-item metadata shape from docs/reference/agents/work-item-format.md instead of ad hoc tracker metadata."
+    check: evals/behavioral/work-item-router.json#WORK-ITEM-ROUTER-3
+  - id: WORK-ITEM-ROUTER-4
+    text: "Return the routing decision as structured output in the current response and emit a trace with the selected transition and next skill."
+    check: evals/behavioral/work-item-router.json#WORK-ITEM-ROUTER-4
+reloadPolicy: always
 ---
 
 ## Contract
@@ -57,7 +72,7 @@ maxIterations: 6
 - **Input:** a request involving specs, tickets, spec/ticket audits, projects, PR metadata, or review-fix comments.
 - **Output:** a routing note that identifies the downstream skill and the relevant governance documents.
 - **Scope:** routing only. Do not draft the artifact here.
-- **Rule:** always read `docs/agents/index.md` first.
+- **Rule:** always read `docs/reference/agents/index.md` first.
 - **Rule:** prefer the canonical work-item format over ad hoc tracker metadata.
 - **Rule:** route to the thinnest downstream skill that can finish the work.
 
@@ -96,10 +111,10 @@ Governance preflight prevents tracker drift by forcing every work-item request t
 
 ## Workflow
 
-1. Read `docs/agents/index.md`.
+1. Read `docs/reference/agents/index.md`.
 2. Identify whether the request is a spec, ticket, spec completion audit, ticket coverage audit, corrective ticket publication, project board, PR publication, review-fix plan, or closeout.
 3. Route to the thinnest downstream skill that can finish the work.
-4. If metadata is involved, preserve the canonical shape from `docs/agents/work-item-format.md`.
+4. If metadata is involved, preserve the canonical shape from `docs/reference/agents/work-item-format.md`.
 5. Return the routing decision as structured output in the current response; rely on execution traces for auditability.
 
 ## Request types

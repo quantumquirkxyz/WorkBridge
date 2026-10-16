@@ -1,0 +1,25 @@
+name: skill-template-generator
+kind: workflow
+nodes:
+  - id: intake
+    type: passthrough
+  - id: context_pack
+    type: tool
+    tool: read
+  - id: execute
+    type: llm
+    model: fast
+  - id: verify
+    type: tool
+    tool: check
+  - id: report
+    type: passthrough
+edges:
+  - {from: intake, to: context_pack}
+  - {from: context_pack, to: execute}
+  - {from: execute, to: verify}
+  - {from: verify, to: report}
+metadata:
+  skill: skill-dev/skill-template-generator
+  risk: low
+  trustTier: 2

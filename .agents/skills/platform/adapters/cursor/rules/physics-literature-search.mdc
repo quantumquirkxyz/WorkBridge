@@ -1,0 +1,13 @@
+---
+description: "Track physics literature — arXiv (hep-th, cond-mat, astro-ph, gr-qc, quant-ph, nucl-th, physics.*), INSPIRE-HEP, NASA ADS, Web of Science, citation alerts — with domain filters."
+globs: []
+alwaysApply: false
+---
+# physics-literature-search
+
+Apply the physics-literature-search skill when the request matches its scope.
+
+Capabilities:
+- apply the physics-literature-search workflow
+
+Stop when: Digest saved; papers grouped; sources cited.

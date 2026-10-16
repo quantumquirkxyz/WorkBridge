@@ -1,0 +1,15 @@
+name: skill-dependency-graph
+description: "Build a dependency graph that exposes central Skills, cycles, and unnecessary coupling — use when analyzing Skill modularity."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/skill-dev-skill-dependency-graph
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

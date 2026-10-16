@@ -4,6 +4,7 @@ category: "web3"
 maturity: "stable"
 version: "2"
 description: "Design token economics — supply, emission, incentives, governance, LST/LRT, restaking, points systems — with economic sustainability checks and adversarial stress tests."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "web3"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/web3-tokenomics.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["web3"]
 compatibility: []

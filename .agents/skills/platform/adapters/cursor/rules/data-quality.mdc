@@ -1,0 +1,13 @@
+---
+description: "Design data quality frameworks — Great Expectations, Soda, checks, observability, contracts — with explicit SLAs, freshness rules, and incident response for bad data."
+globs: []
+alwaysApply: false
+---
+# data-quality
+
+Apply the data-quality skill when the request matches its scope.
+
+Capabilities:
+- apply the data-quality workflow
+
+Stop when: Framework defined; check suite configured; observability and contract rules documented.

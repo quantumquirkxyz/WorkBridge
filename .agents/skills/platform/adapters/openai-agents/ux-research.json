@@ -1,0 +1,16 @@
+{
+  "name": "ux-research",
+  "instructions": "Conduct user research — interviews, surveys, usability testing, personas, journey mapping — to ground design decisions in real user behavior.\n\nCapabilities:\n- apply the ux-research workflow\n\nCanonical skill: .agents/skills/ux/ux-research/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Conduct user research complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

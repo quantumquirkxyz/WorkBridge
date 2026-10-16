@@ -1,0 +1,16 @@
+{
+  "name": "review-fix-loop",
+  "instructions": "Orchestrate the PR repair loop: run review-pr, use plan-review-fixes when findings exist, use implement-review-fixes to apply them, and repeat until the PR is clean or blocked. This skill coordinates the loop only.\n\nCapabilities:\n- apply the review-fix-loop workflow\n\nCanonical skill: .agents/skills/delivery/review-fix-loop/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Orchestrate the PR repair loop: run review-pr, use plan-review-fixes when findings exist, use implement-review-fixes to apply them, and repeat until the PR is clean or blocked complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "worktree"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

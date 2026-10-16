@@ -4,6 +4,7 @@ category: "web3"
 maturity: "stable"
 version: "2"
 description: "Design and audit on-chain and off-chain governance — token voting, delegation, quadratic voting, timelock, multisig, oSnap, Zodiac, EIP-7702 delegation — with attack vectors and resilience analysis."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "web3"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/web3-governance.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["web3"]
 compatibility: []

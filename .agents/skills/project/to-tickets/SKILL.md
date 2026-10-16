@@ -4,6 +4,7 @@ category: project
 maturity: stable
 version: 1
 description: Break a plan, spec, or the current conversation into a set of tracer-bullet tickets, each declaring its blocking edges, and publish the smallest claimable slices.
+license: MIT
 capabilities:
   - apply to tickets workflow
   - produce to tickets artifact
@@ -44,8 +45,8 @@ fixturesPath: .agents/skills/platform/fixtures/behavioral/to-tickets.json
 diataxis: how-to
 tags: [project, tickets, planning, decomposition]
 compatibility: [implement, to-spec]
-approvalRequired: false
-approvalFor: []
+approvalRequired: true
+approvalFor: ["create-issues", "write-files"]
 sideEffects:
   - create-issues
   - write-files
@@ -54,6 +55,20 @@ stopCondition: Break a plan, spec, or the current conversation into a set of tra
 risk: medium
 trustTier: 3
 maxIterations: 6
+clauses:
+  - id: TO-TICKETS-1
+    text: "Publish tracer-bullet vertical slices, each independently understandable and claimable, never a horizontal task dump."
+    check: "evals/behavioral/to-tickets.json#TO-TICKETS-1"
+  - id: TO-TICKETS-2
+    text: "Every blocking edge must correspond to a genuine prerequisite so the frontier can be taken without guessing order."
+    check: evals/behavioral/to-tickets.json#TO-TICKETS-2
+  - id: TO-TICKETS-3
+    text: "Every published ticket must carry the canonical metadata from docs/reference/agents/work-item-format.md, and no parent issue may be closed or modified."
+    check: evals/behavioral/to-tickets.json#TO-TICKETS-3
+  - id: TO-TICKETS-4
+    text: "When the input is corrective, preserve the parent spec metadata and publish the smallest ticket that closes the audited gap."
+    check: evals/behavioral/to-tickets.json#TO-TICKETS-4
+reloadPolicy: on-trigger
 ---
 
 ## Why
@@ -71,8 +86,8 @@ Tracer bullets also surface design problems early. The first slice reveals the s
 - **Scope:** produce tracer bullets, not a horizontal task dump.
 - **Rule:** frame slices in this repo's terms where relevant: context, harness, loop, graph, data plane, execution plane, observability, and safety boundaries.
 - **Rule:** every ticket must be independently understandable and claimable.
-- **Rule:** every blocking edge must correspond to a genuine prerequisite.
-- **Rule:** every published ticket must carry the canonical metadata from `docs/agents/work-item-format.md` for labels, milestone, project item, and project fields.
+- **Rule:** every blocking edge must be a genuine prerequisite — a redundant edge only lowers expected subtask success (FLOW, ICLR 2025), so remove it or record it as intentional in the ticket's risks.
+- **Rule:** every published ticket must carry the canonical metadata from `docs/reference/agents/work-item-format.md` for labels, milestone, project item, and project fields.
 - **Rule:** when the input is corrective, preserve the parent spec metadata and the minimal missing behavior only.
 
 ## Provenance
@@ -85,6 +100,22 @@ Tracer bullets also surface design problems early. The first slice reveals the s
 | **Side effects** | create-issues, write-files. |
 | **Boundaries** | produce tracer bullets, not a horizontal task dump. |
 | **Completion criteria** | every ticket cuts a narrow but complete path through the work; each ticket has an explicit blocker set or none; the frontier can be taken without guessing about order; user approved granularity before publication; published tickets follow canonical metadata shape. |
+
+## Load-bearing rules
+
+- Do NOT close or modify any parent issue.
+- Don't force it into a tracer bullet; sequence it as **expand–contract**.
+- Do not expand scope beyond the missing requirement; publish the smallest ticket that closes the audited gap.
+
+## Completion Criteria
+
+- every ticket cuts a narrow but complete path through the work
+- each ticket has an explicit blocker set or none
+- the frontier can be taken without guessing about order
+- the user has approved the granularity before publication
+- the published tickets follow the canonical metadata shape in `docs/reference/agents/work-item-format.md`
+- the `TicketArtifact` JSON is emitted with valid blocking edges and traceId
+- the DAG waves are emitted with the artifact and every over-coupling warning is removed or recorded as intentional
 
 ## Artifact
 
@@ -116,7 +147,13 @@ If the input is corrective, do not expand scope beyond the missing requirement; 
 
 **Wide refactors are the exception to vertical slicing.** A **wide refactor** is one mechanical change — rename a column, retype a shared symbol — whose **blast radius** fans across the whole codebase, so a single edit breaks thousands of call sites at once and no vertical slice can land green. Don't force it into a tracer bullet; sequence it as **expand–contract**. First expand: add the new form beside the old so nothing breaks. Then migrate the call sites over in batches sized by blast radius (per package, per directory), each batch its own ticket blocked by the expand, keeping CI green batch to batch because the old form still exists. Finally contract: delete the old form once no caller remains, in a ticket blocked by every migrate batch. When even the batches can't stay green alone, keep the sequence but let them share an integration branch that all block a final integrate-and-verify ticket — green is promised only there.
 
-### 4. Quiz the user
+### 4. Compute DAG waves and lint over-coupling
+
+Run `node .agents/skills/platform/dag-scheduler.mjs levels <ticket-artifact.json>` over the drafted ticket array. The output is the wave plan: wave 0 holds the tickets with no blockers, and a ticket belongs to wave N only when the tickets that block it are already in waves 0..N-1. Emit the wave plan together with the `TicketArtifact` JSON so the frontier is machine-checkable instead of a guess about ordering.
+
+Then run `node .agents/skills/platform/dag-scheduler.mjs check <ticket-artifact.json>` and treat every warning as a debt you must discharge. A redundant blocking edge is one whose removal changes no ticket's level — delete it or record it as intentional in that ticket's risks, and say which you chose. A ticket with more than three blockers gets the same treatment: justify it in the ticket's risks or thin the fan-in.
+
+### 5. Quiz the user
 
 Present the proposed breakdown as a numbered list. For each ticket, show:
 
@@ -134,21 +171,12 @@ Iterate until the user approves the breakdown.
 
 For corrective inputs, the user approval step may be skipped only when the audit explicitly marked the recommendation as ready for handoff and the user already asked to publish corrections.
 
-## Completion Criteria
-
-- every ticket cuts a narrow but complete path through the work
-- each ticket has an explicit blocker set or none
-- the frontier can be taken without guessing about order
-- the user has approved the granularity before publication
-- the published tickets follow the canonical metadata shape in `docs/agents/work-item-format.md`
-- the `TicketArtifact` JSON is emitted with valid blocking edges and traceId
-
 ## Publish
 
 Publish the approved tickets. **How** depends on the tracker `/setup-quirk-skills` configured — the tickets are the same either way, only the shape of the blocking edges changes:
 
 - **Local files** → write one file per ticket under `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from `01` in dependency order (blockers first). Each file's "Blocked by" lists the numbers/titles it depends on. Use [`references/issue-template.md`](references/issue-template.md) for the per-ticket shape — one ticket per file, never a single combined file.
-- **A real issue tracker (GitHub, Linear, …)** → publish one issue per ticket in dependency order (blockers first) so each ticket's blocking edges can reference real identifiers. When the input came from `/to-spec`, create the tickets as subissues of that spec issue so the execution tree stays attached to the published spec. Use the platform's native blocking / sub-issue relationship where it has one; otherwise set each ticket's "Blocked by" to the blocking issues. Apply the tracker defaults from `docs/agents/issue-tracker.md`: for this repo that means `ready-for-agent` plus any justified area or priority labels inherited from the source spec or parent issue. The ticket body itself must also be written in English and should preserve this repo's vocabulary rather than backsliding to generic trading wording.
+- **A real issue tracker (GitHub, Linear, …)** → publish one issue per ticket in dependency order (blockers first) so each ticket's blocking edges can reference real identifiers. When the input came from `/to-spec`, create the tickets as subissues of that spec issue so the execution tree stays attached to the published spec. Use the platform's native blocking / sub-issue relationship where it has one; otherwise set each ticket's "Blocked by" to the blocking issues. Apply the tracker defaults from `docs/reference/agents/issue-tracker.md`: for this repo that means `ready-for-agent` plus any justified area or priority labels inherited from the source spec or parent issue. The ticket body itself must also be written in English and should preserve this repo's vocabulary rather than backsliding to generic trading wording.
 
 The ticket template still needs the familiar sections that keep slices actionable:
 
@@ -156,7 +184,7 @@ The ticket template still needs the familiar sections that keep slices actionabl
 - Validation
 - Blocked by
 
-Work the **frontier**: any ticket whose blockers are all done. For a purely linear chain that means top to bottom.
+Work the **frontier**: any ticket whose blockers are all done. For a purely linear chain that means top to bottom. Dispatch the frontier one wave at a time — take wave 0 first, and only claim wave N once wave N-1 has landed.
 
 Do NOT close or modify any parent issue.
 

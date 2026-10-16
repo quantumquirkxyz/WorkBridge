@@ -1,0 +1,13 @@
+---
+description: "Route work to the best matching Skill using declared capabilities and compatibility — with explicit selection rules."
+globs: []
+alwaysApply: false
+---
+# capability-router
+
+Apply the capability-router skill when the request matches its scope.
+
+Capabilities:
+- apply the capability-router workflow
+
+Stop when: Route work to the best matching Skill using declared capabilities and compatibility complete; structured result returned; completion criteria checked.

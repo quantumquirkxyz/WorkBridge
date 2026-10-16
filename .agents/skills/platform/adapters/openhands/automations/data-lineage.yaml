@@ -1,0 +1,15 @@
+name: data-lineage
+description: "Data lineage (end-to-end tracing, impact analysis, column-level lineage, governance)."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/data-data-lineage
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: true
+  sideEffects: []

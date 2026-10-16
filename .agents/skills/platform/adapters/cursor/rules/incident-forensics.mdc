@@ -1,0 +1,13 @@
+---
+description: "Incident forensics (evidence collection, timeline reconstruction, root cause, reporting)"
+globs: []
+alwaysApply: false
+---
+# incident-forensics
+
+Apply the incident-forensics skill when the request matches its scope.
+
+Capabilities:
+- apply the incident-forensics workflow
+
+Stop when: Evidence collected and hashed; timeline complete; root cause identified; report reviewed.

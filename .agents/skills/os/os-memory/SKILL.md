@@ -4,6 +4,7 @@ category: "os"
 maturity: "stable"
 version: "1"
 description: "Design operating system memory systems — virtual memory, paging, allocation, swapping, and protection — with explicit resource accounting and locality assumptions."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "os"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/os-memory.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["os"]
 compatibility: []

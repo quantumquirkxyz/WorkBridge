@@ -1,0 +1,16 @@
+{
+  "name": "physics-writing-revtex",
+  "instructions": "Write physics papers using RevTeX / APS / IOP / AIP formatting, with figure conventions, citation styles, and submission package preparation.\n\nCapabilities:\n- apply the physics-writing-revtex workflow\n\nCanonical skill: .agents/skills/physics/physics-writing-revtex/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "PDF compiled in journal format; figure checklist complete; submission package ready.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

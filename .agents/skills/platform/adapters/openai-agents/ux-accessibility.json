@@ -1,0 +1,16 @@
+{
+  "name": "ux-accessibility",
+  "instructions": "Design accessible UX — keyboard navigation, focus order, semantics, contrast, and assistive-technology support — with inclusive interaction patterns.\n\nCapabilities:\n- apply the ux-accessibility workflow\n\nCanonical skill: .agents/skills/ux/ux-accessibility/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Task-level accessibility barriers and flow-level remediations are explicit.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

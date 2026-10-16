@@ -1,0 +1,13 @@
+---
+description: "Write physics papers using RevTeX / APS / IOP / AIP formatting, with figure conventions, citation styles, and submission package preparation."
+globs: []
+alwaysApply: false
+---
+# physics-writing-revtex
+
+Apply the physics-writing-revtex skill when the request matches its scope.
+
+Capabilities:
+- apply the physics-writing-revtex workflow
+
+Stop when: PDF compiled in journal format; figure checklist complete; submission package ready.

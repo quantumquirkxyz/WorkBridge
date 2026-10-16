@@ -1,0 +1,16 @@
+{
+  "name": "web3-l2-scaling",
+  "instructions": "Analyse Layer-2 scaling solutions — Rollups (optimistic, ZK), validiums, based sequencing, shared sequencing — with security assumptions, data availability, and cost trade-offs.\n\nCapabilities:\n- apply the web3-l2-scaling workflow\n\nCanonical skill: .agents/skills/web3/web3-l2-scaling/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "L2 type classified; security assumptions explicit; recommendation tied to use case.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

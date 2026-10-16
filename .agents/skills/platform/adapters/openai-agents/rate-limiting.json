@@ -1,0 +1,16 @@
+{
+  "name": "rate-limiting",
+  "instructions": "Rate limiting and throttling (token bucket, sliding window, distributed rate limiting, API protection).\n\nCapabilities:\n- apply the rate-limiting workflow\n\nCanonical skill: .agents/skills/backend/rate-limiting/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Rate limiting algorithms, limit tiers, distributed coordination, and API protection rules are explicit.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

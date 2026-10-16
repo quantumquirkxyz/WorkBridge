@@ -1,0 +1,16 @@
+{
+  "name": "physics-classical",
+  "instructions": "Solve classical mechanics problems — Newton's laws, Lagrangian, Hamiltonian, rigid body, orbital — with free-body diagrams, energy accounting, and dimensional checks.\n\nCapabilities:\n- apply the physics-classical workflow\n\nCanonical skill: .agents/skills/physics/physics-classical/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Solve classical mechanics problems complete; required sections present; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

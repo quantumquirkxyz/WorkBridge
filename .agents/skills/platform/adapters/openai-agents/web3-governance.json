@@ -1,0 +1,16 @@
+{
+  "name": "web3-governance",
+  "instructions": "Design and audit on-chain and off-chain governance — token voting, delegation, quadratic voting, timelock, multisig, oSnap, Zodiac, EIP-7702 delegation — with attack vectors and resilience analysis.\n\nCapabilities:\n- apply the web3-governance workflow\n\nCanonical skill: .agents/skills/web3/web3-governance/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Governance model documented; attack vectors assessed; resilience recommendations made.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

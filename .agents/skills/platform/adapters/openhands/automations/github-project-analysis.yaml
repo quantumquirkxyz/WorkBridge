@@ -1,0 +1,15 @@
+name: github-project-analysis
+description: "Research comparable projects exclusively on GitHub and analyze their structure, decisions, and reusable patterns for an active project."
+trigger:
+  type: webhook
+  events: [pull_request.opened, issues.opened]
+runtime:
+  agent: claude-code
+  sandbox: docker
+steps:
+  - uses: skill/research-github-project-analysis
+    with:
+      task: "{{ event.title }}"
+policy:
+  approvalRequired: false
+  sideEffects: []

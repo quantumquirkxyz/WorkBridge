@@ -4,6 +4,7 @@ category: "networking"
 maturity: "stable"
 version: "1"
 description: "Design and analyze network infrastructure — TCP/IP, routing, DNS, load balancing, firewalls, VPNs, network security — with explicit assumptions about latency, bandwidth, and failure modes."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "networking"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/networking.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["networking"]
 compatibility: []

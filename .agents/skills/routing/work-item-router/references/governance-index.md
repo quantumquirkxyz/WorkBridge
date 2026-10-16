@@ -25,4 +25,4 @@ The governance index is `docs/reference/agents/index.md`. It is the operating ma
 
 ## Usage rule
 
-Always read `docs/agents/index.md` before routing any spec, ticket, project board, or publication flow. The index tells `work-item-router` which downstream skill owns the requested operation and what metadata contract applies.
+Always read `docs/reference/agents/index.md` before routing any spec, ticket, project board, or publication flow. The index tells `work-item-router` which downstream skill owns the requested operation and what metadata contract applies.

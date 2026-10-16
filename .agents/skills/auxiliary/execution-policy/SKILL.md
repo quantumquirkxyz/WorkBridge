@@ -3,6 +3,7 @@ name: "execution-policy"
 category: "auxiliary"
 maturity: "stable"
 description: "Decide whether a Skill action is allowed, requires approval, or must stop."
+license: "MIT"
 disable-model-invocation: "true"
 version: "1"
 capabilities: ""
@@ -17,7 +18,7 @@ promptVersion: "2.0"
 artifactType: "auxiliary"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/execution-policy.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["auxiliary"]
 compatibility: []

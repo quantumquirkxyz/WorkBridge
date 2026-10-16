@@ -1,0 +1,13 @@
+---
+description: "Formulate and solve optimization problems (linear, convex, non-convex, combinatorial) — model, choose solver, verify optimality, report sensitivity."
+globs: []
+alwaysApply: false
+---
+# math-optimization
+
+Apply the math-optimization skill when the request matches its scope.
+
+Capabilities:
+- apply the math-optimization workflow
+
+Stop when: Formulate and solve optimization problems (linear, convex, non-convex, combinatorial) complete; required sections present; completion criteria checked.

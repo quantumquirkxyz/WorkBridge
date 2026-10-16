@@ -4,6 +4,7 @@ category: "cms"
 maturity: "stable"
 version: "1"
 description: "Design content management systems — content models, editorial workflows, publishing pipelines, localization — with schema evolution and multi-channel delivery."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "cms"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/cms-architecture.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["cms"]
 compatibility: []

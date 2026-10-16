@@ -1,0 +1,13 @@
+---
+description: "WebSockets and real-time (Socket.IO, WS, SSE, pub/sub, scaling, reconnection, backpressure)."
+globs: []
+alwaysApply: false
+---
+# websockets
+
+Apply the websockets skill when the request matches its scope.
+
+Capabilities:
+- apply the websockets workflow
+
+Stop when: WebSocket/SSE architecture, connection lifecycle, scaling topology, and failure handling are explicit.

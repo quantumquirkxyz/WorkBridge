@@ -1,0 +1,67 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-web3-smart-contracts",
+      "skill": "web3-smart-contracts",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "## Completion",
+          "## Rules",
+          "## When to use",
+          "## Process",
+          "Web3SmartContractsArtifact",
+          "never deploy without an adversarial review.",
+          "separate security findings from gas optimisations.",
+          "state trust assumptions for every external call.",
+          "document upgrade, AA, and delegation mechanisms explicitly."
+        ],
+        "doesNotContain": [
+          "## Operating Contract",
+          "ask-matt",
+          "ship-review-fix-loop",
+          "doc-draft-pr",
+          "frontend-development",
+          "Matt",
+          "TODO",
+          "point 1",
+          "Criterion 1",
+          "Acceptance criterion 1",
+          "BE-2",
+          "OpenAPI spec",
+          "localhost:3000",
+          "extremely extensive"
+        ]
+      }
+    },
+    {
+      "id": "v2-frontmatter-web3-smart-contracts",
+      "skill": "web3-smart-contracts",
+      "type": "behavioral",
+      "expected": {
+        "frontmatterContains": [
+          "name: \"web3-smart-contracts\"",
+          "risk: \"medium\"",
+          "trustTier: \"3\"",
+          "modelTier: \"reasoning\"",
+          "promptVersion: \"2.0\"",
+          "artifactType: \"web3\"",
+          "diataxis: \"how-to\""
+        ]
+      }
+    },
+    {
+      "id": "v2-footer-web3-smart-contracts",
+      "skill": "web3-smart-contracts",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "@include .agents/skills/platform/contract-base.xml"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "microservices",
+  "instructions": "Design microservice architectures — service decomposition, inter-service communication, data ownership, resilience patterns — with explicit boundaries and failure isolation.\n\nCapabilities:\n- apply the microservices workflow\n\nCanonical skill: .agents/skills/backend/microservices/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Design microservice architectures complete; artifact saved; completion criteria checked.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

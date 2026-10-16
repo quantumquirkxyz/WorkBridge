@@ -1,0 +1,13 @@
+---
+description: "Build probability models — distributions, stochastic processes (Markov, Brownian, Poisson), inference — with explicit assumptions and sanity checks."
+globs: []
+alwaysApply: false
+---
+# math-probability-models
+
+Apply the math-probability-models skill when the request matches its scope.
+
+Capabilities:
+- apply the math-probability-models workflow
+
+Stop when: Build probability models complete; required sections present; completion criteria checked.

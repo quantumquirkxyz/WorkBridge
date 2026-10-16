@@ -1,11 +1,12 @@
 ---
 name: "graphic-design-data-viz"
 description: "Design data visualizations — charts, infographics, dashboards — with explicit readability, accessibility, color, typography, and production rules."
+license: "MIT"
 promptVersion: "2.0"
 artifactType: "plan"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/graphic-design-data-viz.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["graphic-design"]
 compatibility: []

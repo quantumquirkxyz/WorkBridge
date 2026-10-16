@@ -1,0 +1,16 @@
+{
+  "name": "mobile",
+  "instructions": "Shape mobile projects around device constraints, platform seams, offline behavior, and push notifications — with explicit performance and resilience boundaries for React Native, Expo, and Capacitor.\n\nCapabilities:\n- apply the mobile workflow\n\nCanonical skill: .agents/skills/frontend/mobile/SKILL.md",
+  "model": "gpt-5",
+  "tools": [],
+  "handoff_description": "Mobile design complete; offline and notification behavior explicit; platform trade-offs named.",
+  "runtime": {
+    "role": "workflow",
+    "maxTurns": 6,
+    "isolation": "none"
+  },
+  "guardrails": {
+    "input": [],
+    "output": []
+  }
+}

@@ -1,9 +1,10 @@
 ---
 name: "db-relational-design"
-category: "skill-dev/sandbox"
+category: "db"
 maturity: "stable"
 version: "1"
 description: "Design relational schemas — entities, relations, keys, indexes, constraints — with normalisation, performance, and migration planning."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "plan"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/db-relational-design.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["db"]
 compatibility: []

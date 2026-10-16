@@ -4,6 +4,7 @@ category: "integrations"
 maturity: "stable"
 version: "1"
 description: "Manage pull request operations with branch, diff, validation, reviewer, label, comment, and publication evidence while keeping merge decisions explicit."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: ""
@@ -16,11 +17,11 @@ promptVersion: "2.0"
 artifactType: "pull-request"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/pr-operations.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/pr-operations.json
 diataxis: "how-to"
 tags: ["integrations"]
 compatibility: []
-approvalRequired: "false"
+approvalRequired: "true"
 approvalFor: []
 ---
 

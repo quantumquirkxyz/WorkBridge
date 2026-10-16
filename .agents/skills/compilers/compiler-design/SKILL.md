@@ -4,6 +4,7 @@ category: "compilers"
 maturity: "stable"
 version: "1"
 description: "Design compiler pipelines — lexing, parsing, ASTs, type checking, IR, optimization, and code generation — with correctness and modularity."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "plan"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/compiler-design.json"
+fixturesPath: ""
 diataxis: "how-to"
 tags: ["compilers"]
 compatibility: []

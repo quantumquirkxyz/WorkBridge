@@ -1,0 +1,13 @@
+---
+description: "Stream processing (Flink, Kafka Streams, RisingWave, windowing, state, exactly-once)."
+globs: []
+alwaysApply: false
+---
+# stream-processing
+
+Apply the stream-processing skill when the request matches its scope.
+
+Capabilities:
+- apply the stream-processing workflow
+
+Stop when: Topology diagram saved; windowing strategy defined; exactly-once plan documented.

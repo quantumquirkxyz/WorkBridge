@@ -4,6 +4,7 @@ category: "foundation"
 maturity: "stable"
 version: "2"
 description: "Define the logs, metrics, traces, and alerts needed to understand a system in production — with SLIs, SLOs, dashboards, alert rules, and incident runbooks."
+license: "MIT"
 capabilities: ""
 outputs: ""
 sideEffects: []
@@ -16,7 +17,7 @@ promptVersion: "2.0"
 artifactType: "foundation"
 modelTier: "reasoning"
 evaluators: ["behavioral", "regression"]
-fixturesPath: ".agents/skills/platform/fixtures/behavioral/observability.json"
+fixturesPath: .agents/skills/platform/fixtures/behavioral/observability.json
 diataxis: "how-to"
 tags: ["foundation"]
 compatibility: []

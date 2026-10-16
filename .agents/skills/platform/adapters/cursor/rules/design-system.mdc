@@ -1,0 +1,13 @@
+---
+description: "Define and evolve reusable UI tokens, components, and usage rules as a coherent system."
+globs: []
+alwaysApply: false
+---
+# design-system
+
+Apply the design-system skill when the request matches its scope.
+
+Capabilities:
+- apply the design-system workflow
+
+Stop when: Define and evolve reusable UI tokens, components, and usage rules as a coherent system complete; artifact saved; completion criteria checked.

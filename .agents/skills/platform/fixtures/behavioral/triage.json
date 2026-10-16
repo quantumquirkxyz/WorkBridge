@@ -1,0 +1,69 @@
+{
+  "fixtures": [
+    {
+      "id": "v2-contract-triage",
+      "skill": "triage",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "## Contract",
+          "## Provenance",
+          "## Artifact",
+          "## Completion",
+          "## Reference docs",
+          "## Roles",
+          "## Invocation",
+          "## Show what needs attention",
+          "## Triage a specific issue or PR",
+          "## Quick state override",
+          "TriageArtifact",
+          "[PR]",
+          "[issue]",
+          "work-item-router"
+        ],
+        "doesNotContain": [
+          "## Operating Contract",
+          "ask-matt",
+          "ship-review-fix-loop",
+          "doc-draft-pr",
+          "frontend-development",
+          "Matt",
+          "TODO",
+          "point 1",
+          "Criterion 1",
+          "Acceptance criterion 1",
+          "BE-2",
+          "OpenAPI spec",
+          "localhost:3000",
+          "extremely extensive"
+        ]
+      }
+    },
+    {
+      "id": "v2-frontmatter-triage",
+      "skill": "triage",
+      "type": "behavioral",
+      "expected": {
+        "frontmatterContains": [
+          "name: \"triage\"",
+          "risk: \"medium\"",
+          "trustTier: \"3\"",
+          "modelTier: \"router\"",
+          "promptVersion: \"2.0\"",
+          "artifactType: \"routing\"",
+          "diataxis: \"how-to\""
+        ]
+      }
+    },
+    {
+      "id": "v2-footer-triage",
+      "skill": "triage",
+      "type": "behavioral",
+      "expected": {
+        "outputContains": [
+          "@include .agents/skills/platform/contract-base.xml"
+        ]
+      }
+    }
+  ]
+}

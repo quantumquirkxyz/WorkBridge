@@ -1,0 +1,13 @@
+---
+description: "Transfer structured artifacts between Skills and sessions — with explicit provenance and consumer expectations."
+globs: []
+alwaysApply: false
+---
+# artifact-handoff
+
+Apply the artifact-handoff skill when the request matches its scope.
+
+Capabilities:
+- apply the artifact-handoff workflow
+
+Stop when: Transfer structured artifacts between Skills and sessions complete; structured result returned; completion criteria checked.

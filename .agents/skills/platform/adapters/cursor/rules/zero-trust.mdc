@@ -1,0 +1,13 @@
+---
+description: "Design zero trust architecture — identity, per-request auth, microsegmentation, policy — with explicit trust tiers, continuous verification, and least-privilege enforcement."
+globs: []
+alwaysApply: false
+---
+# zero-trust
+
+Apply the zero-trust skill when the request matches its scope.
+
+Capabilities:
+- apply the zero-trust workflow
+
+Stop when: Architecture documented; identity model defined; segmentation and policy rules documented.

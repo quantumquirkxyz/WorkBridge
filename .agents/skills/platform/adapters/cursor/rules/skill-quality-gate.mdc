@@ -1,0 +1,13 @@
+---
+description: "Run and interpret the skill bundle quality gate across schema, lockfile, semantic, routing, placeholder, rule, metadata, and side-effect checks before promotion or publication."
+globs: []
+alwaysApply: false
+---
+# skill-quality-gate
+
+Apply the skill-quality-gate skill when the request matches its scope.
+
+Capabilities:
+- apply the skill-quality-gate workflow
+
+Stop when: Quality gate commands are executed or blocked with reasons, findings are separated into blockers and warnings, and release readiness is stated.
