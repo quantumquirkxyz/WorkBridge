@@ -1,4 +1,3 @@
-import type { ExtractorKind, ProfileDraft } from '@puente/domain';
 import {
   heuristicProfileExtractor,
   type ExtractionInput,

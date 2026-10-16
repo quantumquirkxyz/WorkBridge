@@ -5,7 +5,6 @@ import {
   type DraftEducation,
   type DraftExperience,
   type DraftSkill,
-  type ExperienceType,
   type ExtractorKind,
   type Provenance,
   type ProfileDraft,
@@ -65,6 +64,8 @@ const EXPERIENCE_SIGNALS = [
   'mantenimiento',
   'soporte',
   'servicio al cliente',
+  'tesis',
+  'trabajo academico',
 ];
 
 const EDUCATION_SIGNALS = ['bachiller', 'licenciatura', 'universidad', 'colegio', 'instituto', 'escuela', 'tecnico', 'técnico', 'secundaria', 'primaria'];
@@ -90,6 +91,16 @@ function firstWords(value: string, count: number): string {
   const words = value.split(/\s+/).filter(Boolean);
   const title = words.slice(0, count).join(' ');
   return title.length > 120 ? `${title.slice(0, 117)}...` : title;
+}
+
+/** Build an experience draft anchored to one exact statement. */
+function experienceFromStatement(statement: string, provenance: Provenance): DraftExperience {
+  return {
+    experience_type: inferExperienceType(statement),
+    title: firstWords(statement, 8),
+    description: statement,
+    evidence: [{ claim: statement, source: provenance, excerpt: statement }],
+  };
 }
 
 function educationLevelOf(statement: string): DraftEducation['level'] {
@@ -135,35 +146,18 @@ export const heuristicProfileExtractor: ProfileExtractor = {
         }
         continue;
       }
-      if (containsAny(statement, EDUCATION_SIGNALS)) {
-        if (education.length < MAX_EDUCATION) {
-          education.push({
-            institution: extractInstitution(statement),
-            program: firstWords(statement, 12),
-            level: educationLevelOf(statement),
-            evidence: [{ claim: statement, source: input.provenance, excerpt: statement }],
-          });
-        }
-        // A statement can be both academic and experiential ("trabajé en la
-        // universidad…"); the spec asks for academic work as an experience too.
-        if (containsAny(statement, EXPERIENCE_SIGNALS) && experiences.length < MAX_EXPERIENCES) {
-          experiences.push({
-            experience_type: inferExperienceType(statement),
-            title: firstWords(statement, 8),
-            description: statement,
-            evidence: [{ claim: statement, source: input.provenance, excerpt: statement }],
-          });
-        }
-        continue;
-      }
-      if (containsAny(statement, EXPERIENCE_SIGNALS) && experiences.length < MAX_EXPERIENCES) {
-        const experienceType: ExperienceType = inferExperienceType(statement);
-        experiences.push({
-          experience_type: experienceType,
-          title: firstWords(statement, 8),
-          description: statement,
+      if (containsAny(statement, EDUCATION_SIGNALS) && education.length < MAX_EDUCATION) {
+        education.push({
+          institution: extractInstitution(statement),
+          program: firstWords(statement, 12),
+          level: educationLevelOf(statement),
           evidence: [{ claim: statement, source: input.provenance, excerpt: statement }],
         });
+      }
+      // A statement can be both academic and experiential ("trabajé en la
+      // universidad…"), so experience detection runs independently of education.
+      if (containsAny(statement, EXPERIENCE_SIGNALS) && experiences.length < MAX_EXPERIENCES) {
+        experiences.push(experienceFromStatement(statement, input.provenance));
       }
     }
 

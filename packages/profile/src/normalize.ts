@@ -1,8 +1,11 @@
 import {
   assertCandidateProfile,
+  CONFIDENCE_BY_PROVENANCE,
   DECLARED_ONLY_MAX_LEVEL,
+  DEFAULT_EXPERIENCE_CONFIDENCE,
   DEFAULT_LOCALE,
   LEVEL_BEYOND_BASIC_PROVENANCE,
+  MIN_CONFIDENCE,
   PROFILE_SCHEMA_VERSION,
   PROVENANCE_RANK,
   SKILL_LEVEL_MAX,
@@ -59,10 +62,7 @@ export function strongestProvenance(records: readonly Evidence[]): Provenance {
 }
 
 function defaultConfidence(provenance: Provenance): number {
-  if (provenance === 'verified') return 0.95;
-  if (provenance === 'extracted') return 0.75;
-  if (provenance === 'inferred') return 0.5;
-  return 0.55;
+  return CONFIDENCE_BY_PROVENANCE[provenance];
 }
 
 function slugify(value: string): string {
@@ -194,7 +194,7 @@ function buildSkill(
   }
 
   const confidence =
-    draft.confidence ?? Math.max(0.3, Math.min(1, records.reduce((min, r) => Math.min(min, r.confidence), 1)));
+    draft.confidence ?? Math.max(MIN_CONFIDENCE, Math.min(1, records.reduce((min, r) => Math.min(min, r.confidence), 1)));
 
   const skill: CandidateSkill = {
     skill_id: skillId,
@@ -251,10 +251,10 @@ function buildExperience(
   });
 
   const records = evidence.records.filter((record) => evidenceIds.includes(record.id));
-  const confidence = draft.confidence ?? Math.max(0.3, classification.score || 0.5);
+  const confidence = draft.confidence ?? Math.max(MIN_CONFIDENCE, classification.score || DEFAULT_EXPERIENCE_CONFIDENCE);
 
   const experience: CandidateExperience = {
-    id: makeId('exp', [draft.experience_type, draft.title, draft.organization ?? '', draft.description].join('|')),
+    id: makeId('exp', [experienceType, draft.title, draft.organization ?? '', draft.description].join('|')),
     experience_type: experienceType,
     title: draft.title.trim(),
     description: draft.description.trim(),

@@ -135,4 +135,19 @@ describe('buildProfile end to end', () => {
     expect(types).toContain('academic');
     expect(types).toContain('family_business');
   });
+
+  it('keeps formal employment distinct from family work and extracts academic artifacts', async () => {
+    const text = [
+      'Conseguí un puesto en la empresa para ayudar a mi familia.',
+      'Tesis: predicción de demanda con modelos de series de tiempo.',
+    ].join('\n');
+    const result = await buildProfile(
+      { text, source: source('text'), provenance: 'declared', traceId: 'trace_regressions' },
+      { now: fixedNow },
+    );
+    const byDescription = (fragment: string) =>
+      result.profile.experiences.find((experience) => experience.description.includes(fragment));
+    expect(byDescription('puesto en la empresa')?.experience_type).toBe('formal_employment');
+    expect(byDescription('Tesis')?.experience_type).toBe('academic');
+  });
 });
