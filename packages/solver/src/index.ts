@@ -50,11 +50,9 @@ export {
 } from "./scoring";
 
 export {
-  accessibilityStatus,
   evaluateHardConstraints,
   failedConstraintIds,
   salaryFloor,
-  type AccessibilityStatus,
   type ConstraintInput,
 } from "./constraints";
 
@@ -67,13 +65,7 @@ export {
   type RoutingPortOptions,
 } from "./routing";
 
-export {
-  buildTieBreakKey,
-  compareCodePoints,
-  compareDecisions,
-  pairKey,
-  type TieBreakParts,
-} from "./ties";
+export { buildTieBreakKey, compareDecisions, type TieBreakParts } from "./ties";
 
 export {
   applyPromotion,

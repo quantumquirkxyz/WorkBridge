@@ -40,7 +40,7 @@
     },
     "failedConstraints": {
       "type": "array",
-      "items": { "type": "string", "minLength": 1 }
+      "items": { "$ref": "#/$defs/HardConstraintId" }
     },
     "reasons": {
       "type": "array",
@@ -52,6 +52,17 @@
     "decidedAt": { "type": "string", "format": "date-time" }
   },
   "$defs": {
+    "HardConstraintId": {
+      "enum": [
+        "mandatory_skills",
+        "mandatory_requirements_mapped",
+        "schedule",
+        "salary",
+        "capacity",
+        "geographic_commute",
+        "geographic_accessibility"
+      ]
+    },
     "ScoreBreakdownItem": {
       "type": "object",
       "additionalProperties": false,
@@ -74,7 +85,7 @@
       "additionalProperties": false,
       "required": ["id", "satisfied", "reason"],
       "properties": {
-        "id": { "type": "string", "minLength": 1 },
+        "id": { "$ref": "#/$defs/HardConstraintId" },
         "satisfied": { "type": "boolean" },
         "reason": { "type": "string", "minLength": 1 }
       }

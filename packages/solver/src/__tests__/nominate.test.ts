@@ -117,6 +117,22 @@ describe("nominate", () => {
     expect(reverse.assignments.map((decision) => decision.candidateId)).toEqual(["cand-a"]);
   });
 
+  it("canonicalizes equal-score assignments to the documented order across vacancies", async () => {
+    const candA: SolverCandidate = { ...boundary, candidateId: "cand-a" };
+    const candB: SolverCandidate = { ...boundary, candidateId: "cand-b" };
+    const vac1: SolverVacancy = { ...metro, vacancyId: "vac-1", capacity: 1 };
+    const vac2: SolverVacancy = { ...metro, vacancyId: "vac-2", capacity: 1 };
+
+    const run = (candidates: SolverCandidate[]) =>
+      nominate({ candidates, vacancies: [vac1, vac2], now, routing: route49 });
+
+    const forward = await run([candA, candB]);
+    const reverse = await run([candB, candA]);
+    const expected = ["cand-a->vac-1", "cand-b->vac-2"];
+    expect(forward.assignments.map(key).sort()).toEqual(expected);
+    expect(reverse.assignments.map(key).sort()).toEqual(expected);
+  });
+
   it("records a fallback when the MILP solver fails", async () => {
     const broken = {
       name: "broken",

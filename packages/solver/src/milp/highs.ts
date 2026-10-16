@@ -46,7 +46,9 @@ export function serializeMilpToLp(model: MilpModel): string {
     const expression = linearExpression(constraint.coefficients);
     const hasLower = constraint.lower !== undefined && constraint.lower > 0;
     const hasUpper = constraint.upper !== undefined;
-    if (hasLower && hasUpper) {
+    if (hasLower && hasUpper && constraint.lower === constraint.upper) {
+      lines.push(` ${constraint.name}: ${expression} = ${constraint.upper!}`);
+    } else if (hasLower && hasUpper) {
       lines.push(
         ` ${constraint.name}: ${constraint.lower!} <= ${expression} <= ${constraint.upper!}`,
       );

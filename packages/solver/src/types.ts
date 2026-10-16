@@ -43,7 +43,7 @@ export interface CandidateAvailability {
 
 export interface CandidateTransport {
   hasVehicle: boolean;
-  /** Route features the candidate requires (e.g. `wheelchair`). */
+  /** Features the candidate needs the route/vacancy to provide (e.g. `wheelchair`). */
   accessibilityNeeds?: string[];
   /** Maximum acceptable one-way commute in minutes. */
   maxCommuteMinutes: number;

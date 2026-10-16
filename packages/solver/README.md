@@ -53,9 +53,10 @@ score.
 `capacity`, `geographic_commute`, `geographic_accessibility`. A mandatory
 requirement with no canonical `skillId` cannot be confirmed deterministically and
 is treated as a failure rather than a silent pass. The accessibility constraint is
-reachable in the default path: it fails when the route reports a barrier or when
-the vacancy does not provide every feature in `candidate.transport.accessibilityNeeds`
-(vacancy features live in `SolverVacancy.accessibilityRequirements`).
+reachable in the default path: it fails when the vacancy does not provide every
+feature in `candidate.transport.accessibilityNeeds` (vacancy features live in
+`SolverVacancy.accessibilityRequirements`), and it also fails when an injected
+router reports a route barrier (`RouteEstimate.accessible === false`).
 
 ## Aptitude and promotion
 
@@ -78,10 +79,12 @@ silently.
   constraints, and the vacancy/candidate ids — never protected attributes or
   randomness. Ids are compared by UTF-16 code unit, not `localeCompare`, so the
   order does not depend on the process locale.
-- The MILP objective encodes the same documented order lexicographically (score
-  first, then vacancy/candidate id), so equal-score assignment conflicts do not
-  depend on solver internals. The reported `objectiveValue` stays the sum of the
-  selected scores so the MILP and greedy paths agree.
+- The MILP maximizes total score; the optimal solution is then canonicalized to
+  the documented order by walking the pairs in that order and including each one
+  whenever a completion still reaches the optimal score. Equal-score assignment
+  conflicts therefore do not depend on solver internals. The reported
+  `objectiveValue` stays the sum of the selected scores so the MILP and greedy
+  paths agree.
 - The greedy fallback sorts eligible pairs by score then vacancy/candidate id.
 - HiGHS runs with `random_seed: 0` and `output_flag: false`.
 

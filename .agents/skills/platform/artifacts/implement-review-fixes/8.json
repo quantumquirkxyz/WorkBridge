@@ -1,0 +1,23 @@
+{
+  "status": "implemented",
+  "completed": [
+    "Spec blocker (S5): the geographic accessibility hard constraint is now reachable in the default path. It fails when the route reports a barrier or when the vacancy does not provide every entry in candidate.transport.accessibilityNeeds; the same accessibilityStatus feeds the transport dimension. The dangling RouteRequest.requiresAccessible was removed and SolverVacancy.accessibilityRequirements is documented as workplace-provided features.",
+    "Spec required (S6): the documented tie order is now encoded into the MILP objective lexicographically (score*scale - rank, scale = pairs^2 + 1), the greedy fallback uses the same comparator, and solveAssignment reports objectiveValue as the sum of selected scores so the MILP and greedy paths agree.",
+    "Spec required (S7): ids are compared by UTF-16 code unit via compareCodePoints; no localeCompare remains in src.",
+    "Standards required (findings 3, 4): exported effectiveRequiredLevel and added requirementLevel in scoring.ts; constraints.ts uses both instead of re-implementing the default and the bestSkillSignal lookup.",
+    "Standards required (finding 9): one shared pairKey in ties.ts is used by nominate.ts, milp/greedy.ts, and milp/model.ts, removing the divergent formats.",
+    "Standards required (finding 5): exhaustive HardConstraintId union drives HardConstraintResult.id and MatchDecision.failedConstraints; failedConstraintIds returns HardConstraintId[].",
+    "Standards required (finding 6): removed the unused WEIGHTS_VERSION export and stopped leaking resetHiGHSInstance/serializeMilpToLp from the public index (tests import them from milp/highs directly).",
+    "Standards required (finding 7): deleted the dead formatNumber branch in milp/highs.ts and formatted values inline.",
+    "Tests: added accessibility feature-coverage cases (barrier, missing feature, fully provided), MILP/greedy equal-score ordering cases, and a nominate tie test proving the documented winner is chosen independent of input order."
+  ],
+  "validation": [
+    "npm run lint - pass",
+    "npm run typecheck - pass",
+    "npm test - 153/153 pass (was 148; +5 new)",
+    "npm run test:coverage - 94.57% lines / 79.64% branches / 93.16% stmts (gate: 80% lines)",
+    "npm audit - 0 vulnerabilities"
+  ],
+  "remaining": "No blocker/required planned item remains. Advisory findings were intentionally not actioned: Spec S3 (mandatory_requirements_mapped fails closed - conservative reading of 'enforce mandatory skills'), Spec S4 (desirable half-weight is a technical-score detail), Standards 1 (Evidence vocabulary has no verification axis at this seam), Standards 2 (MatchDecision/nominate/promotion lack an ADR/glossary entry). Deferred and owned: S1 (agent-runtime to solver seam), S2 (Google Maps path by default), and Standards 8 (Location to GeoPoint geocoding) - follow-up issue #20, owner KerubeDev.",
+  "scopeNotes": "Changes are limited to packages/solver (src + tests + README). No MatchDecision schema change; new ordering helpers live in the existing ties.ts. Plan comment: https://github.com/HackathonFISC/equipo-02/pull/18#issuecomment-6226503145 ; completion comment: https://github.com/HackathonFISC/equipo-02/pull/18#issuecomment-6226508422 ; commit 8f9524f."
+}

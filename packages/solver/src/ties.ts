@@ -12,7 +12,7 @@ export interface TieBreakParts {
  * depends on the process locale, so it cannot be used where the ordering must be
  * identical across environments. Returns -1, 0, or 1.
  */
-export function compareCodePoints(a: string, b: string): number {
+export function compareCodeUnits(a: string, b: string): number {
   if (a === b) return 0;
   return a < b ? -1 : 1;
 }
@@ -49,7 +49,7 @@ export function compareDecisions(a: MatchDecision, b: MatchDecision): number {
   if (a.failedConstraints.length !== b.failedConstraints.length) {
     return a.failedConstraints.length - b.failedConstraints.length;
   }
-  const byVacancy = compareCodePoints(a.vacancyId, b.vacancyId);
+  const byVacancy = compareCodeUnits(a.vacancyId, b.vacancyId);
   if (byVacancy !== 0) return byVacancy;
-  return compareCodePoints(a.candidateId, b.candidateId);
+  return compareCodeUnits(a.candidateId, b.candidateId);
 }

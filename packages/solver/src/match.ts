@@ -97,7 +97,12 @@ export async function buildBaseDecision(
   );
   const baseScore = weightedScore(rawScores);
 
-  const hardConstraints = evaluateHardConstraints({ candidate, vacancy, routing });
+  const hardConstraints = evaluateHardConstraints({
+    candidate,
+    vacancy,
+    routing,
+    accessibility,
+  });
   const failedConstraints = failedConstraintIds(hardConstraints);
 
   const reasons: string[] = [];

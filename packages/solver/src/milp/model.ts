@@ -1,4 +1,4 @@
-import { compareCodePoints, pairKey } from "../ties";
+import { compareCodeUnits, pairKey } from "../ties";
 
 export interface MilpVariable {
   name: string;
@@ -58,7 +58,7 @@ function coefficientsOf(names: readonly string[]): Record<string, number> {
  */
 function comparePairs(a: AssignmentPair, b: AssignmentPair): number {
   if (b.score !== a.score) return b.score - a.score;
-  return compareCodePoints(
+  return compareCodeUnits(
     pairKey(a.vacancyId, a.candidateId),
     pairKey(b.vacancyId, b.candidateId),
   );
@@ -68,21 +68,19 @@ function comparePairs(a: AssignmentPair, b: AssignmentPair): number {
  * Build the assignment MILP: one binary variable per eligible pair, at most one
  * vacancy per candidate, and at most `capacity` candidates per vacancy.
  *
- * The objective encodes the documented tie order lexicographically: each score
- * is scaled above the largest achievable ordering-index sum, and the pair's rank
- * in the deterministic order is subtracted. Maximizing this therefore always
- * prefers more score, then the earlier pair on ties — never solver internals.
+ * Variables are emitted in the documented deterministic pair order (score desc,
+ * then vacancy id, then candidate id); `solveAssignment` uses that order to break
+ * residual solver ties lexicographically.
  */
 export function buildAssignmentModel(
   pairs: readonly AssignmentPair[],
   capacities: ReadonlyMap<string, number>,
 ): AssignmentModel {
-  const tieScale = pairs.length * pairs.length + 1;
   const ordered = [...pairs].sort(comparePairs);
   const variables = ordered.map((pair, index) => ({ name: `x${index}`, pair }));
-  const milpVariables: MilpVariable[] = variables.map((variable, index) => ({
+  const milpVariables: MilpVariable[] = variables.map((variable) => ({
     name: variable.name,
-    cost: variable.pair.score * tieScale - index,
+    cost: variable.pair.score,
     lower: 0,
     upper: 1,
     integer: true,

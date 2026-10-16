@@ -2,7 +2,9 @@ import { greedyAssignment } from "./greedy";
 import {
   buildAssignmentModel,
   type AssignmentPair,
+  type MilpModel,
   type MilpSolverPort,
+  type MilpVariable,
 } from "./model";
 
 export interface AssignmentSolveResult {
@@ -13,11 +15,84 @@ export interface AssignmentSolveResult {
   fallbackReason?: string;
 }
 
+interface NamedPair {
+  name: string;
+  pair: AssignmentPair;
+}
+
+function cloneForFixation(
+  variables: readonly MilpVariable[],
+  targetName: string,
+  fixed: ReadonlyMap<string, number>,
+): MilpVariable[] {
+  return variables.map((variable) => {
+    const pinned = fixed.get(variable.name);
+    return {
+      name: variable.name,
+      cost: variable.name === targetName ? 1 : 0,
+      lower: pinned ?? 0,
+      upper: pinned ?? 1,
+      integer: true,
+    };
+  });
+}
+
+/**
+ * Make a maximum-score solution a pure function of the pairs. Walking the pairs
+ * in the documented order, each pair is included exactly when a completion that
+ * still reaches `targetScore` exists. This resolves the residual ties the MILP
+ * objective is indifferent to, so the result never depends on which optimum the
+ * solver internals happened to return.
+ *
+ * Returns `null` if a refinement solve fails, so the caller keeps the base solve.
+ */
+async function canonicalSelection(
+  variables: readonly NamedPair[],
+  targetScore: number,
+  baseModel: MilpModel,
+  solver: MilpSolverPort,
+): Promise<AssignmentPair[] | null> {
+  const scoreCoefficients: Record<string, number> = {};
+  for (const variable of variables) scoreCoefficients[variable.name] = variable.pair.score;
+
+  const fixed = new Map<string, number>();
+  for (const variable of variables) {
+    const model: MilpModel = {
+      sense: "maximize",
+      variables: cloneForFixation(baseModel.variables, variable.name, fixed),
+      constraints: [
+        ...baseModel.constraints,
+        {
+          name: "score_target",
+          coefficients: scoreCoefficients,
+          lower: targetScore,
+          upper: targetScore,
+        },
+      ],
+    };
+    try {
+      const result = await solver.solve(model);
+      if (result.status !== "optimal") return null;
+      fixed.set(variable.name, (result.values[variable.name] ?? 0) > 0.5 ? 1 : 0);
+    } catch {
+      return null;
+    }
+  }
+
+  return variables
+    .filter((variable) => fixed.get(variable.name) === 1)
+    .map((variable) => variable.pair);
+}
+
+function sumScores(pairs: readonly AssignmentPair[]): number {
+  return pairs.reduce((sum, pair) => sum + pair.score, 0);
+}
+
 /**
  * Solve the capacity-constrained assignment with the MILP solver. Any non-
  * optimal status or solver error falls back to the deterministic greedy
- * assignment, recording why. The fallback is a pure function of the sorted
- * eligible pairs, so it is always reproducible.
+ * assignment, recording why. An optimal MILP solution is then canonicalized to
+ * the documented deterministic order, so the result is reproducible.
  */
 export async function solveAssignment(
   pairs: readonly AssignmentPair[],
@@ -29,14 +104,21 @@ export async function solveAssignment(
   try {
     const solution = await solver.solve(model);
     if (solution.status === "optimal") {
-      const selected: AssignmentPair[] = [];
+      const baseSelected: AssignmentPair[] = [];
       for (const variable of variables) {
-        if ((solution.values[variable.name] ?? 0) > 0.5) selected.push(variable.pair);
+        if ((solution.values[variable.name] ?? 0) > 0.5) baseSelected.push(variable.pair);
       }
-      // Report the human-facing objective (sum of selected scores), not the
-      // tie-scaled MILP cost, so the MILP and greedy paths agree.
-      const objectiveValue = selected.reduce((sum, pair) => sum + pair.score, 0);
-      return { solver: solver.name, selected, objectiveValue };
+      // The reported objective stays the sum of selected scores, so the MILP and
+      // greedy paths agree and stay human-meaningful.
+      const objectiveValue = sumScores(baseSelected);
+      const canonical = await canonicalSelection(
+        variables,
+        objectiveValue,
+        model,
+        solver,
+      );
+      const selected = canonical ?? baseSelected;
+      return { solver: solver.name, selected, objectiveValue: sumScores(selected) };
     }
 
     const greedy = greedyAssignment(pairs, capacities);

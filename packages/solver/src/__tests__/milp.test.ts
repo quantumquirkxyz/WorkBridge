@@ -63,7 +63,26 @@ describe("serializeMilpToLp", () => {
     expect(lp).toContain("Subject To");
     expect(lp).toContain("General");
     expect(lp).toContain("End");
-    expect(lp).toContain("900 x0");
+    expect(lp).toContain("90 x0");
+  });
+
+  it("emits an equality row when a constraint is fixed", () => {
+    const { model } = buildAssignmentModel(pairs, capacities);
+    const fixed: MilpModel = {
+      ...model,
+      constraints: [
+        ...model.constraints,
+        {
+          name: "score_target",
+          coefficients: { x0: 90, x1: 80, x2: 70 },
+          lower: 150,
+          upper: 150,
+        },
+      ],
+    };
+    expect(serializeMilpToLp(fixed)).toContain(
+      "score_target: 90 x0 + 80 x1 + 70 x2 = 150",
+    );
   });
 });
 

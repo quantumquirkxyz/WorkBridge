@@ -11,6 +11,8 @@ export interface ConstraintInput {
   candidate: SolverCandidate;
   vacancy: SolverVacancy;
   routing: RouteEstimate;
+  /** Optional precomputed accessibility result, to avoid recomputation. */
+  accessibility?: AccessibilityStatus;
 }
 
 export interface AccessibilityStatus {
@@ -65,6 +67,7 @@ export function evaluateHardConstraints({
   candidate,
   vacancy,
   routing,
+  accessibility: precomputedAccessibility,
 }: ConstraintInput): HardConstraintResult[] {
   const results: HardConstraintResult[] = [];
 
@@ -137,7 +140,8 @@ export function evaluateHardConstraints({
         : `Commute of ${Math.round(routing.commuteMinutes)} min exceeds the ${candidate.transport.maxCommuteMinutes} min limit.`,
   });
 
-  const accessibility = accessibilityStatus(candidate, vacancy, routing);
+  const accessibility =
+    precomputedAccessibility ?? accessibilityStatus(candidate, vacancy, routing);
   results.push({
     id: "geographic_accessibility",
     satisfied: accessibility.satisfied,

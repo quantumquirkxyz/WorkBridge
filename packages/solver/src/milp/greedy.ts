@@ -1,4 +1,4 @@
-import { compareCodePoints, pairKey } from "../ties";
+import { compareCodeUnits, pairKey } from "../ties";
 import type { AssignmentPair } from "./model";
 
 export interface GreedyResult {
@@ -18,7 +18,7 @@ export function greedyAssignment(
 ): GreedyResult {
   const sorted = [...pairs].sort((a, b) => {
     if (b.score !== a.score) return b.score - a.score;
-    return compareCodePoints(
+    return compareCodeUnits(
       pairKey(a.vacancyId, a.candidateId),
       pairKey(b.vacancyId, b.candidateId),
     );
