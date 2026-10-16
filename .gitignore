@@ -12,6 +12,9 @@ out/
 coverage/
 *.tsbuildinfo
 
+# Next.js generated type references (recreated on build/dev)
+next-env.d.ts
+
 # Local environment and generated artifacts
 .env
 .env.local
