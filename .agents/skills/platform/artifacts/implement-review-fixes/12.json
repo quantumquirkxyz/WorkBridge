@@ -1,0 +1,21 @@
+{
+  "status": "implemented",
+  "completed": [
+    "Spec required: Better Auth sessions are HMAC-signed with BETTER_AUTH_SECRET. A forged role fails signature verification and cannot submit.",
+    "Spec required: every non-empty Certo token, provider key, and database URL is rejected.",
+    "Spec required: a correction that changes the evidence subset clears candidate and counselor approvals. Submit checks the approved evidence ids.",
+    "Spec required: approval, correction, rejection, submission, and interview actions must use the draft traceId.",
+    "Spec required: DATABASE_URL or NEON_DATABASE_URL selects the SQL idempotency store. Health reports persistence sql and does not echo the URL.",
+    "Spec required: Playwright covers counselor approval, gated submission, and retry.",
+    "Spec required: a counselor can approve or reject a clean draft. Submission still requires counselor approval only when a gate reason exists.",
+    "Standards required: draft and action parsing call assertWorkflowEnvelope and reject a blocked guardrail."
+  ],
+  "validation": [
+    "npx tsc --noEmit - pass",
+    "npx eslint on the application, e2e, and playwright config - pass",
+    "npx vitest run --coverage - 100/100 pass; 92.83% lines / 84.11% branches",
+    "npx playwright test - 3/3 pass"
+  ],
+  "remaining": "Judgement-call smells from pass 1 were not in the executable plan: Repeated Switches, Divergent Change, Primitive Obsession, duplicated secret scan, duplicated fixtures, and the signature copy in docs/reference/assumed-contracts.md.",
+  "scopeNotes": "Fixes stay inside the application approval flow, its tests, the Neon store selection, and the session signature note. Plan comment: https://github.com/HackathonFISC/equipo-02/pull/21#issuecomment-6226808274. Commit 4cdaf1e."
+}
