@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://puentelaboral.pa/schemas/workflow-envelope.schema.json",
+  "title": "WorkflowEnvelope",
+  "description": "Assumed signature of the issue #9 internal REST/SSE envelope. traceId and idempotencyKey are required. Issue #12 does not run Mastra; it only accepts work that already carries this envelope.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["traceId", "idempotencyKey", "agent", "schemaId", "guardrails", "dqlState"],
+  "properties": {
+    "traceId": { "type": "string", "minLength": 1 },
+    "idempotencyKey": { "type": "string", "minLength": 1 },
+    "agent": {
+      "enum": ["exploration", "profile_and_evidence", "market_and_matching", "training"]
+    },
+    "schemaId": { "type": "string", "minLength": 1 },
+    "guardrails": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/GuardrailVerdict" }
+    },
+    "dqlState": { "enum": ["received", "validated", "processed", "dead_letter"] }
+  },
+  "$defs": {
+    "GuardrailVerdict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stage", "allowed", "code"],
+      "properties": {
+        "stage": { "enum": ["input", "tool_result", "permission", "output"] },
+        "allowed": { "type": "boolean" },
+        "code": {
+          "enum": [
+            "ok",
+            "prompt_injection",
+            "pii_leakage",
+            "invalid_schema",
+            "invented_credential",
+            "unauthorized_tool"
+          ]
+        }
+      }
+    }
+  }
+}
