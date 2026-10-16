@@ -48,11 +48,14 @@ const FAMILY_NOUNS = [
   'hermano',
   'tia',
   'tio',
+  'padres',
   'abuelo',
   'abuela',
   'hijo',
   'hija',
 ];
+
+const FAMILY_POSSESSIVE_PREFIXES = ['mi', 'mis', 'la'];
 
 /** Adjective phrases that already imply a family business on their own. */
 const FAMILY_BUSINESS_PHRASES = [
@@ -83,7 +86,7 @@ const EXPERIENCE_TYPE_RULES: ReadonlyArray<{ type: ExperienceType; keywords: str
 function hasPossessiveFamilyVenue(haystack: string): boolean {
   return POSSESSIVE_FAMILY_VENUES.some((venue) =>
     FAMILY_NOUNS.some(
-      (noun) => haystack.includes(`${venue} de mi ${noun}`) || haystack.includes(`${venue} de la ${noun}`),
+      (noun) => FAMILY_POSSESSIVE_PREFIXES.some((prefix) => haystack.includes(`${venue} de ${prefix} ${noun}`)),
     ),
   );
 }
