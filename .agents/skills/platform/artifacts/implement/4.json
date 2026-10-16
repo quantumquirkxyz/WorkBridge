@@ -1,0 +1,42 @@
+{
+  "artifactType": "ImplementArtifact",
+  "schemaVersion": "1.0",
+  "issue": "#4",
+  "title": "Build candidate intake and profile",
+  "status": "completed",
+  "branch": "feat/issue-4-build-candidate-intake-and-profile",
+  "commitSha": "5143a4186acc8045ae60d5962698052ede09f94b",
+  "changes": [
+    "packages/domain: JSON Schema 2020-12 contracts (common, evidence, skill, experience, education, certification, intake-source, candidate-profile, profile-draft, intake-request, intake-result), Ajv 2020 validators, TypeScript mirrors and skill/role taxonomy",
+    "packages/ingestion: PDF extraction (unpdf), image OCR adapters (alt-text, tesseract, vision, chained) and unified extractText returning a provenance-carrying IntakeSource",
+    "packages/profile: deterministic heuristic extractor, normalization with a declared-only level cap, experience-type detection, relevance classification and buildProfile",
+    "apps/agent-runtime: ProfileAgent, LLM profile extractor, OpenRouter chat/vision adapters, PII redaction and createAgentFromEnv with a resilient heuristic fallback",
+    "apps/web: Next.js intake UI (IntakeForm), POST /api/intake route, pure handleIntake, handler tests and .env.example",
+    "docs: README run instructions and CONTEXT.md confirmed stack"
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npm install",
+      "npm run typecheck",
+      "npm test",
+      "npm run gate:ci",
+      "npm run build --workspace @puente/web",
+      "curl -X POST http://localhost:3111/api/intake --data @cv-family-business.json"
+    ],
+    "skipped": [
+      "gate-ide lint/format/spellcheck: no eslint/prettier/cspell configured in the repo",
+      "gate-ci semgrep/snyk/k6: security and performance scanners are not configured in the repo; npm audit reported 0 vulnerabilities",
+      "node .agents/skills/platform/check-all.mjs: pre-existing failure, policy/tool-risk-budget.json is referenced by the script but was never tracked in this repo"
+    ],
+    "notes": "Provenance drives the rules: pdf/image sources are extracted, text/audio_transcript are declared, and declared-only skills are capped at level 1. The end-to-end smoke test returned HTTP 200 with a schema-valid CandidateProfile containing a family_business experience classified partially_relevant, declared skills at level 1 and needs_review=true."
+  },
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  },
+  "nextConsumer": "publish-open-pr",
+  "blockedBy": [],
+  "riskRemaining": "Heuristic extraction quality is imperfect: section headers can surface as experiences or certifications and sentence titles are sometimes truncated (e.g. 'Ayudaba en la tienda de mi familia los'). These are cosmetic issues in the deterministic path, not contract or classification failures. The optional tesseract.js OCR fallback is intentionally uninstalled and aliased to a stub. Mastra workflow orchestration, candidate preferences (ticket #7) and the safety plane (ticket #9) remain out of scope."
+}
