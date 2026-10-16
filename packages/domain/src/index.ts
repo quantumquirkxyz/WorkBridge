@@ -1,9 +1,14 @@
 export type {
+  ActorRole,
+  AgentEnvelope,
+  AgentId,
   Alert,
   AlertClassification,
   AlertDisposition,
   AlertResolution,
   CanonicalSkill,
+  DeclaredCredentialClaim,
+  EnvelopeKind,
   JobRequirements,
   JobRequirementsMetadata,
   Location,
@@ -14,6 +19,7 @@ export type {
   ReviewItem,
   VacancySource,
   VacancyStatus,
+  WorkflowRunRequest,
 } from "./types";
 
 export {
@@ -25,11 +31,17 @@ export {
 } from "./taxonomy";
 
 export {
+  AGENT_ENVELOPE_SCHEMA_ID,
   AjvValidationError,
   SCHEMA_ID,
   SCHEMA_VERSION,
+  WORKFLOW_RUN_SCHEMA_ID,
   ajv,
+  assertAgentEnvelope,
   assertJobRequirements,
+  assertWorkflowRun,
+  validateAgentEnvelope,
   validateJobRequirements,
+  validateWorkflowRun,
   type AjvError,
 } from "./ajv";
