@@ -1,8 +1,12 @@
-# Agent Runtime — Vacancy Normalization and Fairness
+# Agent Runtime
 
-This package is the Market and Matching seam. This ticket delivers the vacancy
-normalization and fairness pipeline; the Mastra workflow graph is added by its
-own ticket (see spec #3).
+This package hosts two seams:
+
+- Market and Matching vacancy normalization and fairness (issue #5).
+- The multi-agent workflow, safety, and observability plane (issue #9).
+
+Candidate intake (#4) and credential verification (#6) stay outside this plane.
+The workflow accepts candidate text and declared credential claims as ports.
 
 ## Seam
 
@@ -59,12 +63,37 @@ if (document.status === "accepted") {
 }
 ```
 
+## Workflow, safety, and observability
+
+```
+POST /internal/workflow/runs
+        │  JSON Schema 2020-12 + Ajv
+        │  required trace_id, idempotency_key
+        ▼
+Mastra workflow
+  exploration → profile_and_evidence → market_and_matching → training
+        │
+        ├─ input, tool-result, permission, and output guardrails
+        ├─ OpenRouter capability chains, token budgets, preflight, fallback
+        └─ Langfuse spans, append-only audit_events, DQL lifecycle
+```
+
+`handleWorkflowRequest` is the internal REST adapter. `Accept: text/event-stream`
+returns SSE (`envelope`, `lifecycle`, `trace`, `result`). Any other accept
+value returns JSON. A repeated `idempotency_key` replays the stored result.
+
+Guardrail fixtures live in `fixtures/guardrails/cases.json` (10 cases): prompt
+injection in a CV and in a scraped vacancy, PII leakage, invalid schema,
+invented credentials, unauthorized tools, and a clean input. A forced primary
+model failure promotes the next model in the capability chain. Exhausting the
+chain records `pending → failed → retrying → dead_letter`.
+
 ## Validation
 
 ```bash
 npm run lint          # eslint
 npm run typecheck     # tsc --noEmit
-npm test              # vitest (72 tests)
+npm test              # vitest (113 tests)
 npm run test:coverage # vitest + v8 coverage (80% line threshold)
 ```
 
