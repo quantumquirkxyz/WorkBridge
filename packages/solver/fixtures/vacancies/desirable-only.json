@@ -1,0 +1,40 @@
+{
+  "vacancyId": "vac-desirable-only",
+  "location": { "lat": 8.9833, "lng": -79.5167 },
+  "mandatory": [],
+  "desirable": [
+    {
+      "requirementId": "des-1",
+      "skillId": "PA-OFF-0002",
+      "wording": "Manejo de Excel",
+      "requiredLevel": 2
+    },
+    {
+      "requirementId": "des-2",
+      "skillId": "PA-CS-0001",
+      "wording": "Atención al cliente",
+      "requiredLevel": 2
+    },
+    {
+      "requirementId": "des-3",
+      "skillId": "PA-LANG-0002",
+      "wording": "Inglés básico",
+      "requiredLevel": 2
+    },
+    {
+      "requirementId": "des-4",
+      "skillId": "PA-IT-0001",
+      "wording": "Soporte técnico",
+      "requiredLevel": 2
+    }
+  ],
+  "schedule": {
+    "days": [1, 2, 3, 4, 5],
+    "startMinute": 480,
+    "endMinute": 1020,
+    "weeklyHours": 45
+  },
+  "salaryMinUsd": 600,
+  "salaryMaxUsd": 800,
+  "capacity": 3
+}

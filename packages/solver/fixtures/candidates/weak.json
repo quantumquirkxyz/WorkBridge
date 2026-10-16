@@ -1,0 +1,16 @@
+{
+  "candidateId": "cand-weak",
+  "home": { "lat": 8.9833, "lng": -79.5167 },
+  "skills": [],
+  "experienceLevel": 0,
+  "relevantEvidenceCount": 0,
+  "availability": {
+    "days": [1, 2, 3, 4, 5],
+    "startMinute": 480,
+    "endMinute": 1020,
+    "weeklyHours": 45
+  },
+  "transport": { "hasVehicle": false, "maxCommuteMinutes": 60, "modes": ["transit"] },
+  "expectedSalaryUsd": 800,
+  "minimumSalaryUsd": 600
+}

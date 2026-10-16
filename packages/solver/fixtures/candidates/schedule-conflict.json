@@ -1,0 +1,38 @@
+{
+  "candidateId": "cand-schedule-conflict",
+  "home": { "lat": 8.9833, "lng": -79.5167 },
+  "skills": [
+    {
+      "skillId": "PA-OFF-0002",
+      "level": 3,
+      "source": "verified",
+      "evidenceCount": 2,
+      "confidence": 0.95
+    },
+    {
+      "skillId": "PA-CS-0001",
+      "level": 3,
+      "source": "extracted",
+      "evidenceCount": 3,
+      "confidence": 0.9
+    },
+    {
+      "skillId": "PA-LANG-0002",
+      "level": 2,
+      "source": "declared",
+      "evidenceCount": 1,
+      "confidence": 0.7
+    }
+  ],
+  "experienceLevel": 3,
+  "relevantEvidenceCount": 5,
+  "availability": {
+    "days": [1, 2, 3],
+    "startMinute": 420,
+    "endMinute": 1080,
+    "weeklyHours": 30
+  },
+  "transport": { "hasVehicle": true, "maxCommuteMinutes": 60, "modes": ["driving"] },
+  "expectedSalaryUsd": 700,
+  "minimumSalaryUsd": 600
+}

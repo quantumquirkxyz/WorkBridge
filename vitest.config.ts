@@ -5,10 +5,15 @@ const domainEntry = fileURLToPath(
   new URL("./packages/domain/src/index.ts", import.meta.url),
 );
 
+const solverEntry = fileURLToPath(
+  new URL("./packages/solver/src/index.ts", import.meta.url),
+);
+
 export default defineConfig({
   resolve: {
     alias: {
       "@puente/domain": domainEntry,
+      "@puente/solver": solverEntry,
     },
   },
   test: {
