@@ -1,0 +1,31 @@
+{
+  "name": "puente-laboral-panama",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Puente Laboral Panamá — multi-agent employability system. Ticket #4: candidate intake and profile.",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "build": "npm run build --workspaces --if-present",
+    "dev": "npm run dev --workspace @puente/web",
+    "gate:ci": "npm run typecheck && npm run test:coverage"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.9",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "@vitest/coverage-v8": "^4.1.12",
+    "typescript": "^5.7.2",
+    "vitest": "^4.1.12"
+  }
+}

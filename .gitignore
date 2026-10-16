@@ -4,3 +4,15 @@ node_modules/
 .opencode/goals/
 .DS_Store
 Thumbs.db
+
+# Node / build output for the application monorepo (ticket #4)
+dist/
+.next/
+out/
+coverage/
+*.tsbuildinfo
+
+# Local environment and generated artifacts
+.env
+.env.local
+.env.*.local
