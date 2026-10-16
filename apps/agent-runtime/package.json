@@ -1,14 +1,24 @@
 {
-  "name": "@puente-laboral/agent-runtime",
+  "name": "@puente/agent-runtime",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
+  "description": "Agent runtime seam. Vacancy normalization and fairness checks, and normalized credential verification. The Mastra workflow graph is added by its own ticket.",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
   "scripts": {
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "ajv": "^8.17.1"
+    "@puente/domain": "*",
+    "ajv": "^8.17.1",
+    "tesseract.js": "^5.1.1",
+    "unpdf": "^1.9.0"
   },
   "devDependencies": {
     "@types/node": "^22.15.21",
