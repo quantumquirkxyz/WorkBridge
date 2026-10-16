@@ -4,6 +4,8 @@ import {
   evaluateGuardrailFixture,
   findPii,
   screenPermission,
+  screenRequestedTool,
+  screenToolResult,
   type GuardrailFixture,
 } from "../guardrails";
 
@@ -41,6 +43,24 @@ describe("guardrail fixtures", () => {
       role: "employer",
     });
     expect(decision.allowed).toBe(false);
+    expect(decision.code).toBe("unauthorized_tool");
+  });
+
+  it("checks a requested tool against the agent that owns it", () => {
+    const decision = screenRequestedTool("read_cv", "employer");
+    expect(decision.stage).toBe("permission");
+    expect(decision.code).toBe("unauthorized_tool");
+  });
+
+  it("keeps a permission denial on the permission stage", () => {
+    const decision = screenToolResult({
+      tool: "read_cv",
+      agent: "profile_and_evidence",
+      role: "employer",
+      body: "Credencial: AWS Certified Solutions Architect",
+      declaredCredentials: [],
+    });
+    expect(decision.stage).toBe("permission");
     expect(decision.code).toBe("unauthorized_tool");
   });
 });

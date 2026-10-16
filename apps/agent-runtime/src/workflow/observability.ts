@@ -170,6 +170,18 @@ export class LangfuseRecorder {
   }
 
   /** Langfuse ingestion batch. The in-memory recorder is the sink used in tests and local runs. */
+  private flushed: ReturnType<LangfuseRecorder["toIngestionBatch"]> | null = null;
+
+  /** Build the ingestion batch and keep it so a run can prove the flush happened. */
+  flush(): ReturnType<LangfuseRecorder["toIngestionBatch"]> {
+    this.flushed = this.toIngestionBatch();
+    return this.flushed;
+  }
+
+  lastBatch(): ReturnType<LangfuseRecorder["toIngestionBatch"]> | null {
+    return this.flushed;
+  }
+
   toIngestionBatch(): {
     batch: Array<{ id: string; type: "trace-create" | "span-create"; timestamp: string; body: unknown }>;
   } {
@@ -192,4 +204,38 @@ export class LangfuseRecorder {
     }
     return { batch };
   }
+}
+
+export interface LangfuseIngestionBatch {
+  batch: Array<{ id: string; type: string; timestamp: string; body: unknown }>;
+}
+
+export interface LangfuseClient {
+  ingest(batch: LangfuseIngestionBatch): Promise<void>;
+}
+
+/** Posts a batch to Langfuse's public ingestion API. Tests inject fetch. */
+export function createLangfuseClient(options: {
+  publicKey: string;
+  secretKey?: string;
+  fetchImpl: typeof fetch;
+  baseUrl?: string;
+}): LangfuseClient {
+  const baseUrl = options.baseUrl ?? "https://cloud.langfuse.com";
+  const token = Buffer.from(`${options.publicKey}:${options.secretKey ?? ""}`).toString("base64");
+  return {
+    async ingest(batch) {
+      const response = await options.fetchImpl(`${baseUrl}/api/public/ingestion`, {
+        method: "POST",
+        headers: {
+          Authorization: `Basic ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(batch),
+      });
+      if (!response.ok) {
+        throw new Error(`Langfuse ingestion failed: ${response.status}`);
+      }
+    },
+  };
 }

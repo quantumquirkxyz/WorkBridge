@@ -132,11 +132,15 @@ export function screenPermission(input: {
   return allow("permission", source);
 }
 
-export function screenRequestedTool(tool: string, role: ActorRole): GuardrailDecision {
-  const known = (Object.values(AGENT_TOOLS) as readonly (readonly string[])[]).some((tools) =>
+function owningAgent(tool: string): AgentId | undefined {
+  const match = (Object.entries(AGENT_TOOLS) as Array<[AgentId, readonly string[]]>).find(([, tools]) =>
     tools.includes(tool),
   );
-  if (ALWAYS_DENIED.has(tool) || !known) {
+  return match?.[0];
+}
+
+export function screenRequestedTool(tool: string, role: ActorRole): GuardrailDecision {
+  if (ALWAYS_DENIED.has(tool)) {
     return block(
       "permission",
       "unauthorized_tool",
@@ -144,15 +148,16 @@ export function screenRequestedTool(tool: string, role: ActorRole): GuardrailDec
       tool,
     );
   }
-  if (role === "employer" && EMPLOYER_DENIED.has(tool)) {
+  const owner = owningAgent(tool);
+  if (!owner) {
     return block(
       "permission",
       "unauthorized_tool",
-      `Role ${role} cannot call "${tool}"`,
+      `Tool "${tool}" is not on the workflow allowlist`,
       tool,
     );
   }
-  return allow("permission", tool);
+  return screenPermission({ tool, agent: owner, role, source: tool });
 }
 
 export function inventedCredentialNames(
@@ -192,9 +197,7 @@ export function screenToolResult(input: {
     role: input.role,
     source: input.tool,
   });
-  if (!permission.allowed) {
-    return { ...permission, stage: "tool_result" };
-  }
+  if (!permission.allowed) return permission;
   const injection = findInjection(input.body);
   if (injection) {
     return block(

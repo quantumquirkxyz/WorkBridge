@@ -5,6 +5,7 @@ import {
   redactPii,
   screenInput,
   screenOutput,
+  screenPermission,
   screenRequestedTool,
   screenToolResult,
   type GuardrailDecision,
@@ -16,7 +17,12 @@ import {
   estimateTokens,
   type ModelRouter,
 } from "./models";
-import type { AppendOnlyAuditLog, DqlStore, LangfuseRecorder } from "./observability";
+import type { AppendOnlyAuditLog, DqlRecord, DqlStore, LangfuseRecorder } from "./observability";
+
+export interface WorkflowStreamEvent {
+  event: "envelope" | "lifecycle" | "trace";
+  data: unknown;
+}
 
 export interface WorkflowServices {
   audit: AppendOnlyAuditLog;
@@ -25,13 +31,14 @@ export interface WorkflowServices {
   router: ModelRouter;
   clock: () => string;
   envelopes: AgentEnvelope[];
+  emit?: (event: WorkflowStreamEvent) => void;
 }
 
 function publish(
   services: WorkflowServices,
   carrier: Carrier,
   agent: AgentId,
-  kind: "response" | "event",
+  kind: "request" | "response" | "event",
   payload: Record<string, unknown>,
 ): void {
   const envelope: AgentEnvelope = {
@@ -43,6 +50,18 @@ function publish(
   };
   assertAgentEnvelope(envelope);
   services.envelopes.push(envelope);
+  services.emit?.({ event: "envelope", data: envelope });
+}
+
+function move(
+  services: WorkflowServices,
+  id: string,
+  next: DqlRecord["state"],
+  reason: string,
+): DqlRecord {
+  const record = services.dql.transition(id, next, reason, services.clock());
+  services.emit?.({ event: "lifecycle", data: record });
+  return record;
 }
 
 function audit(
@@ -71,23 +90,6 @@ function audit(
   });
 }
 
-function toolBody(agent: AgentId, carrier: Carrier): string {
-  switch (agent) {
-    case "exploration":
-      return redactPii(carrier.candidateText);
-    case "profile_and_evidence":
-      return carrier.declaredCredentials.map((credential) => credential.name).join(", ") || "none";
-    case "market_and_matching":
-      return redactPii(carrier.vacancyText);
-    case "training":
-      return "suggest a short practice plan";
-    default: {
-      const unknown: never = agent;
-      return unknown;
-    }
-  }
-}
-
 function promptFor(agent: AgentId, carrier: Carrier): string {
   return [
     `Agent ${agent}.`,
@@ -113,17 +115,13 @@ function reject(
     });
   }
   const primary = findings[0];
-  services.dql.transition(
-    dqlId,
-    "rejected",
-    primary?.reason ?? "guardrail rejected the step",
-    services.clock(),
-  );
-  services.traces.endSpan(spanId, {
+  move(services, dqlId, "rejected", primary?.reason ?? "guardrail rejected the step");
+  const span = services.traces.endSpan(spanId, {
     endTime: services.clock(),
     level: "ERROR",
     output: findings,
   });
+  services.emit?.({ event: "trace", data: span });
   publish(services, carrier, agent, "event", {
     status: "rejected",
     findings,
@@ -143,6 +141,7 @@ export async function runAgent(
 ): Promise<Carrier> {
   if (carrier.halted) return carrier;
 
+  const tool = DEFAULT_AGENT_TOOL[agent];
   const startedAt = services.clock();
   const span = services.traces.startSpan({
     id: `${carrier.traceId}:${agent}`,
@@ -150,14 +149,24 @@ export async function runAgent(
     name: agent,
     startTime: startedAt,
     input: { agent },
-    metadata: { agent, trace_id: carrier.traceId },
+    metadata: {
+      agent,
+      trace_id: carrier.traceId,
+      actor: carrier.actorId,
+      role: carrier.actorRole,
+      tool,
+      evidence: null,
+      constraint: null,
+    },
   });
   const dqlId = `${carrier.traceId}:${agent}`;
-  services.dql.enqueue(dqlId, carrier.traceId, startedAt, `${agent} started`);
+  const pending = services.dql.enqueue(dqlId, carrier.traceId, startedAt, `${agent} started`);
+  services.emit?.({ event: "lifecycle", data: pending });
+  publish(services, carrier, agent, "request", { tool, capability: AGENT_CAPABILITIES[agent] });
 
   if (agent === "exploration") {
     const findings = [
-      ...carrier.requestedTools.map((tool) => screenRequestedTool(tool, carrier.actorRole)),
+      ...carrier.requestedTools.map((requested) => screenRequestedTool(requested, carrier.actorRole)),
       screenInput(carrier.candidateText, "candidate"),
       screenInput(carrier.vacancyText, "vacancy"),
     ].filter((decision) => !decision.allowed);
@@ -166,16 +175,14 @@ export async function runAgent(
     }
   }
 
-  const tool = DEFAULT_AGENT_TOOL[agent];
-  const toolDecision = screenToolResult({
+  const permission = screenPermission({
     tool,
     agent,
     role: carrier.actorRole,
-    body: toolBody(agent, carrier),
-    declaredCredentials: carrier.declaredCredentials,
+    source: tool,
   });
-  if (!toolDecision.allowed) {
-    return reject(carrier, services, agent, span.id, dqlId, [toolDecision]);
+  if (!permission.allowed) {
+    return reject(carrier, services, agent, span.id, dqlId, [permission]);
   }
 
   const prompt = promptFor(agent, carrier);
@@ -185,6 +192,16 @@ export async function runAgent(
       prompt,
       estimatedTokens: estimateTokens(prompt),
     });
+    const toolDecision = screenToolResult({
+      tool,
+      agent,
+      role: carrier.actorRole,
+      body: completion.text,
+      declaredCredentials: carrier.declaredCredentials,
+    });
+    if (!toolDecision.allowed) {
+      return reject(carrier, services, agent, span.id, dqlId, [toolDecision]);
+    }
     const outputDecision = screenOutput({
       text: completion.text,
       declaredCredentials: carrier.declaredCredentials,
@@ -195,25 +212,33 @@ export async function runAgent(
     }
 
     if (completion.fallbacks.length > 0) {
-      services.dql.transition(dqlId, "retrying", "primary model failed", services.clock());
+      move(services, dqlId, "retrying", "primary model failed");
       for (const hop of completion.fallbacks) {
         audit(services, carrier, agent, "model_fallback", {
           tool,
           modelFallback: `${hop.from} -> ${hop.to}`,
           constraint: "model_fallback",
+          evidence: hop.to,
         });
       }
     }
 
-    services.dql.transition(dqlId, "success", `${agent} completed`, services.clock());
-    services.traces.endSpan(span.id, {
+    move(services, dqlId, "success", `${agent} completed`);
+    audit(services, carrier, agent, "agent_completed", {
+      tool,
+      evidence: completion.text.slice(0, 120),
+      constraint: null,
+    });
+    const closed = services.traces.endSpan(span.id, {
       endTime: services.clock(),
       output: completion.text,
       metadata: {
         modelId: completion.modelId,
         fallbacks: completion.fallbacks,
+        evidence: completion.text.slice(0, 120),
       },
     });
+    services.emit?.({ event: "trace", data: closed });
     publish(services, carrier, agent, "response", {
       summary: completion.text,
       modelId: completion.modelId,
@@ -234,19 +259,24 @@ export async function runAgent(
   } catch (error) {
     if (error instanceof ModelChainExhaustedError || error instanceof BudgetExceededError) {
       const message = error.message;
-      services.dql.transition(dqlId, "failed", message, services.clock());
-      services.dql.transition(dqlId, "retrying", "model chain retry", services.clock());
-      services.dql.transition(dqlId, "dead_letter", message, services.clock());
+      const attempted = error instanceof ModelChainExhaustedError ? error.attempted : [];
+      move(services, dqlId, "failed", attempted[0] ? `${attempted[0]} failed: ${message}` : message);
+      for (const modelId of attempted.slice(1)) {
+        move(services, dqlId, "retrying", `called ${modelId}`);
+        move(services, dqlId, "failed", `${modelId} failed: ${message}`);
+      }
+      move(services, dqlId, "dead_letter", message);
       audit(services, carrier, agent, "model_dead_letter", {
         tool,
         constraint: error.code,
-        evidence: error instanceof ModelChainExhaustedError ? error.attempted.join(",") : null,
+        evidence: attempted.length > 0 ? attempted.join(",") : null,
       });
-      services.traces.endSpan(span.id, {
+      const closed = services.traces.endSpan(span.id, {
         endTime: services.clock(),
         level: "ERROR",
         output: { message },
       });
+      services.emit?.({ event: "trace", data: closed });
       publish(services, carrier, agent, "event", { status: "dead_letter", message });
       return { ...carrier, halted: true, status: "dead_letter" };
     }

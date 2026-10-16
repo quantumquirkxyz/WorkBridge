@@ -44,11 +44,33 @@ describe("employability workflow", () => {
       "training",
     ]);
     expect(result.agents.map((agent) => agent.agent)).toEqual(result.mastraSteps);
-    expect(result.envelopes).toHaveLength(4);
+    expect(result.envelopes.map((envelope) => envelope.kind)).toEqual([
+      "request",
+      "response",
+      "request",
+      "response",
+      "request",
+      "response",
+      "request",
+      "response",
+    ]);
     expect(result.envelopes.every((envelope) => envelope.trace_id === "trace-0001")).toBe(true);
     expect(calls).toHaveLength(4);
     expect(engine.dql.list("trace-0001").every((record) => record.state === "success")).toBe(true);
-    expect(engine.traces.tracesFor("trace-0001").trace?.metadata.trace_id).toBe("trace-0001");
+    const completed = engine.audit.read().find((event) => event.action === "agent_completed");
+    expect(completed).toMatchObject({
+      trace_id: "trace-0001",
+      actor: "cand-1",
+      role: "candidate",
+      tool: "read_goals",
+    });
+    expect(engine.traces.tracesFor("trace-0001").spans[0]?.metadata).toMatchObject({
+      trace_id: "trace-0001",
+      actor: "cand-1",
+      role: "candidate",
+      tool: "read_goals",
+    });
+    expect(engine.lastIngestion?.batch.some((item) => item.type === "trace-create")).toBe(true);
   });
 
   it("rejects malicious instructions injected through a CV and a scraped vacancy", async () => {
@@ -96,8 +118,12 @@ describe("employability workflow", () => {
       "pending",
       "failed",
       "retrying",
+      "failed",
       "dead_letter",
     ]);
+    expect(exploration?.history.find((entry) => entry.state === "retrying")?.reason).toContain(
+      "called",
+    );
     expect(engine.audit.read().some((event) => event.action === "model_dead_letter")).toBe(true);
   });
 
@@ -109,6 +135,17 @@ describe("employability workflow", () => {
     expect(second.idempotentReplay).toBe(true);
     expect(second.trace_id).toBe(first.trace_id);
     expect(calls).toHaveLength(4);
+  });
+
+  it("rejects an invented credential returned by the model", async () => {
+    const { engine, calls } = runtime(async () => ({
+      text: "Credencial: AWS Certified Solutions Architect",
+    }));
+    const result = await engine.run(request());
+    expect(result.status).toBe("rejected");
+    expect(result.findings[0]?.code).toBe("invented_credential");
+    expect(result.findings[0]?.stage).toBe("tool_result");
+    expect(calls).toHaveLength(1);
   });
 
   it("blocks an unauthorized tool before any model call", async () => {

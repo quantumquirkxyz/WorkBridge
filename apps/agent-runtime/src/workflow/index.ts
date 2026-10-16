@@ -35,9 +35,11 @@ export {
   DqlStore,
   InvalidDqlTransitionError,
   LangfuseRecorder,
+  createLangfuseClient,
   type AuditEvent,
   type DqlRecord,
   type DqlState,
+  type LangfuseClient,
 } from "./observability";
 
 export {
@@ -50,7 +52,6 @@ export {
 
 export {
   encodeSseEvent,
-  encodeWorkflowSse,
   handleWorkflowRequest,
   type WorkflowHttpRequest,
   type WorkflowHttpResponse,

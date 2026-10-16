@@ -4,6 +4,7 @@ import {
   DqlStore,
   InvalidDqlTransitionError,
   LangfuseRecorder,
+  createLangfuseClient,
 } from "../observability";
 
 const at = "2026-10-16T12:00:00.000Z";
@@ -75,5 +76,26 @@ describe("LangfuseRecorder", () => {
     expect(batch.batch.map((item) => item.type)).toEqual(["trace-create", "span-create"]);
     const spanBody = batch.batch[1]?.body as { metadata: { trace_id: string } };
     expect(spanBody.metadata.trace_id).toBe("trace-0001");
+    expect(recorder.flush().batch).toHaveLength(2);
+    expect(recorder.lastBatch()?.batch).toHaveLength(2);
+  });
+});
+
+describe("createLangfuseClient", () => {
+  it("posts the ingestion batch when fetch is injected", async () => {
+    let posted = "";
+    const client = createLangfuseClient({
+      publicKey: "pk-test",
+      secretKey: "sk-test",
+      baseUrl: "https://langfuse.test",
+      fetchImpl: async (_input, init) => {
+        posted = String(init?.body);
+        return new Response("ok", { status: 200 });
+      },
+    });
+    await client.ingest({
+      batch: [{ id: "trace-0001", type: "trace-create", timestamp: at, body: { id: "trace-0001" } }],
+    });
+    expect(posted).toContain("trace-0001");
   });
 });

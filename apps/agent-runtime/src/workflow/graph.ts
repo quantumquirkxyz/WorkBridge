@@ -5,11 +5,16 @@ import {
   type AgentId,
   type WorkflowRunRequest,
 } from "@puente/domain";
-import { runAgent, type WorkflowServices } from "./agents";
+import { runAgent, type WorkflowServices, type WorkflowStreamEvent } from "./agents";
 import { carrierSchema, type Carrier } from "./carrier";
 import type { GuardrailDecision } from "./guardrails";
 import { CAPABILITY_CHAINS, ModelRouter, type ModelInvoke } from "./models";
-import { AppendOnlyAuditLog, DqlStore, LangfuseRecorder } from "./observability";
+import {
+  AppendOnlyAuditLog,
+  DqlStore,
+  LangfuseRecorder,
+  type LangfuseClient,
+} from "./observability";
 
 export const WORKFLOW_ID = "puente-employability";
 
@@ -36,6 +41,11 @@ export interface WorkflowDependencies {
   complete: ModelInvoke;
   catalog?: readonly string[];
   clock?: () => string;
+  langfuse?: LangfuseClient;
+}
+
+export interface WorkflowRunOptions {
+  onEvent?: (event: WorkflowStreamEvent) => void;
 }
 
 function toCarrier(input: WorkflowRunRequest): Carrier {
@@ -60,14 +70,17 @@ export class WorkflowRuntime {
   readonly audit = new AppendOnlyAuditLog();
   readonly dql = new DqlStore();
   readonly traces = new LangfuseRecorder();
+  lastIngestion: ReturnType<LangfuseRecorder["flush"]> | null = null;
   private readonly router: ModelRouter;
   private readonly clock: () => string;
+  private readonly langfuse?: LangfuseClient;
   private readonly active = new Map<string, WorkflowServices>();
   private readonly cache = new Map<string, WorkflowResult>();
   private readonly workflow: ReturnType<WorkflowRuntime["build"]>;
 
   constructor(deps: WorkflowDependencies) {
     this.clock = deps.clock ?? (() => new Date().toISOString());
+    this.langfuse = deps.langfuse;
     this.router = new ModelRouter(CAPABILITY_CHAINS, deps.complete);
     if (deps.catalog) this.router.preflight(deps.catalog);
     this.workflow = this.build();
@@ -107,10 +120,15 @@ export class WorkflowRuntime {
       .commit();
   }
 
-  async run(input: WorkflowRunRequest): Promise<WorkflowResult> {
+  async run(input: WorkflowRunRequest, options: WorkflowRunOptions = {}): Promise<WorkflowResult> {
     assertWorkflowRun(input);
     const cached = this.cache.get(input.idempotency_key);
-    if (cached) return { ...cached, idempotentReplay: true };
+    if (cached) {
+      for (const envelope of cached.envelopes) {
+        options.onEvent?.({ event: "envelope", data: envelope });
+      }
+      return { ...cached, idempotentReplay: true };
+    }
 
     const services: WorkflowServices = {
       audit: this.audit,
@@ -119,6 +137,7 @@ export class WorkflowRuntime {
       router: this.router,
       clock: this.clock,
       envelopes: [],
+      emit: options.onEvent,
     };
     this.active.set(input.trace_id, services);
     services.traces.startTrace({
@@ -158,6 +177,8 @@ export class WorkflowRuntime {
         envelopes: [...services.envelopes],
         mastraSteps: AGENT_ORDER.filter((agent) => agent in started.steps),
       };
+      this.lastIngestion = this.traces.flush();
+      if (this.langfuse) await this.langfuse.ingest(this.lastIngestion);
       this.cache.set(input.idempotency_key, result);
       return result;
     } finally {

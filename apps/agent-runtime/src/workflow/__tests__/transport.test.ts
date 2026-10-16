@@ -32,25 +32,54 @@ describe("workflow transport", () => {
     });
     expect(response.status).toBe(200);
     expect(response.headers["content-type"]).toBe("application/json");
-    const body = JSON.parse(response.body) as { status: string; trace_id: string };
+    expect(typeof response.body).toBe("string");
+    const body = JSON.parse(response.body as string) as { status: string; trace_id: string };
     expect(body.status).toBe("success");
     expect(body.trace_id).toBe("trace-0099");
   });
 
-  it("streams SSE envelopes, lifecycle, and the trace", async () => {
-    const response = await handleWorkflowRequest(runtime(), {
+  it("enqueues the request envelope before the model call returns", async () => {
+    let release: () => void = () => {};
+    const gate = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    let calls = 0;
+    const engine = createWorkflowRuntime({
+      clock: () => "2026-10-16T12:00:00.000Z",
+      complete: async () => {
+        calls += 1;
+        if (calls === 1) await gate;
+        return { text: "Plan de practica en caja" };
+      },
+    });
+    const response = await handleWorkflowRequest(engine, {
       method: "POST",
       path: "/internal/workflow/runs",
       headers: { Accept: "text/event-stream" },
       body: request(),
     });
-    expect(response.status).toBe(200);
-    expect(response.headers["content-type"]).toBe("text/event-stream");
-    expect(response.body).toContain("event: envelope");
-    expect(response.body).toContain("event: lifecycle");
-    expect(response.body).toContain("event: trace");
-    expect(response.body).toContain("trace-0099");
-    expect(response.body).toContain("idem-0099");
+    expect(response.body).toBeInstanceOf(ReadableStream);
+    const reader = (response.body as ReadableStream<Uint8Array>).getReader();
+    const decoder = new TextDecoder();
+    let head = "";
+    while (!head.includes('"kind":"request"')) {
+      const chunk = await reader.read();
+      expect(chunk.done).toBe(false);
+      head += decoder.decode(chunk.value);
+    }
+    expect(head).toContain("event: envelope");
+    expect(head).toContain("trace-0099");
+    release();
+    let rest = "";
+    while (true) {
+      const chunk = await reader.read();
+      if (chunk.done) break;
+      rest += decoder.decode(chunk.value);
+    }
+    expect(rest).toContain("event: lifecycle");
+    expect(rest).toContain("event: trace");
+    expect(rest).toContain("event: result");
+    expect(rest).toContain("idem-0099");
   });
 
   it("maps a missing trace_id to invalid_schema", async () => {
@@ -61,7 +90,8 @@ describe("workflow transport", () => {
       body,
     });
     expect(response.status).toBe(400);
-    expect(JSON.parse(response.body)).toMatchObject({ code: "invalid_schema" });
+    expect(typeof response.body).toBe("string");
+    expect(JSON.parse(response.body as string)).toMatchObject({ code: "invalid_schema" });
   });
 
   it("rejects the wrong method and path", async () => {

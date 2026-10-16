@@ -79,7 +79,8 @@ Mastra workflow
 ```
 
 `handleWorkflowRequest` is the internal REST adapter. `Accept: text/event-stream`
-returns SSE (`envelope`, `lifecycle`, `trace`, `result`). Any other accept
+returns a `ReadableStream` that enqueues `envelope`, `lifecycle`, and `trace`
+while the Mastra run is still in progress, then `result`. Any other accept
 value returns JSON. A repeated `idempotency_key` replays the stored result.
 
 Guardrail fixtures live in `fixtures/guardrails/cases.json` (10 cases): prompt
@@ -93,7 +94,7 @@ chain records `pending → failed → retrying → dead_letter`.
 ```bash
 npm run lint          # eslint
 npm run typecheck     # tsc --noEmit
-npm test              # vitest (113 tests)
+npm test              # vitest (117 tests)
 npm run test:coverage # vitest + v8 coverage (80% line threshold)
 ```
 
