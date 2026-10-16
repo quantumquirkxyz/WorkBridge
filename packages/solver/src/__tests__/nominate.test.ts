@@ -95,6 +95,28 @@ describe("nominate", () => {
     expect(second).toEqual(first);
   });
 
+  it("breaks assignment ties by the documented order, independent of input order", async () => {
+    const candA: SolverCandidate = { ...boundary, candidateId: "cand-a" };
+    const candB: SolverCandidate = { ...boundary, candidateId: "cand-b" };
+    const vacancy: SolverVacancy = { ...metro, capacity: 1 };
+
+    const forward = await nominate({
+      candidates: [candA, candB],
+      vacancies: [vacancy],
+      now,
+      routing: route49,
+    });
+    const reverse = await nominate({
+      candidates: [candB, candA],
+      vacancies: [vacancy],
+      now,
+      routing: route49,
+    });
+
+    expect(forward.assignments.map((decision) => decision.candidateId)).toEqual(["cand-a"]);
+    expect(reverse.assignments.map((decision) => decision.candidateId)).toEqual(["cand-a"]);
+  });
+
   it("records a fallback when the MILP solver fails", async () => {
     const broken = {
       name: "broken",

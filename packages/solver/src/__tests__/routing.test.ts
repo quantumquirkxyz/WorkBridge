@@ -12,7 +12,6 @@ const request: RouteRequest = {
   origin: { lat: 8.9833, lng: -79.5167 },
   destination: { lat: 9.0167, lng: -79.4667 },
   mode: "driving",
-  requiresAccessible: false,
 };
 
 function jsonResponse(body: unknown, status = 200): Response {

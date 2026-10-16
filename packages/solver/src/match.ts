@@ -1,4 +1,4 @@
-import { evaluateHardConstraints, failedConstraintIds } from "./constraints";
+import { accessibilityStatus, evaluateHardConstraints, failedConstraintIds } from "./constraints";
 import { InvalidMatchDecisionError } from "./errors";
 import { applyPromotion } from "./promotion";
 import { createRoutingPort } from "./routing";
@@ -58,16 +58,13 @@ export async function buildBaseDecision(
   const now = options.now ?? (() => new Date());
   const routingPort = options.routing ?? defaultRoutingPort;
 
-  const requiresAccessible =
-    (candidate.transport.accessibilityNeeds?.length ?? 0) > 0 ||
-    (vacancy.accessibilityRequirements?.length ?? 0) > 0;
   const routing = await routingPort.route({
     origin: candidate.home,
     destination: vacancy.location,
     mode: preferredMode(candidate),
-    requiresAccessible,
   });
 
+  const accessibility = accessibilityStatus(candidate, vacancy, routing);
   const dimensionScores: Record<ScoreDimension, DimensionScore> = {
     technical: technicalScore(candidate, vacancy),
     experience: experienceScore(candidate),
@@ -75,7 +72,7 @@ export async function buildBaseDecision(
     transport: transportScore(
       routing.commuteMinutes,
       candidate.transport.maxCommuteMinutes,
-      routing.accessible,
+      accessibility.satisfied,
     ),
     salary: salaryScore(candidate, vacancy),
   };

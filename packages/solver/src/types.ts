@@ -94,7 +94,7 @@ export interface SolverVacancy {
   salaryMaxUsd: number;
   /** Openings available; a value below 1 is a capacity hard-constraint failure. */
   capacity: number;
-  /** Route features the vacancy's location requires (e.g. `elevator`). */
+  /** Accessibility features the vacancy's workplace provides (e.g. `wheelchair`, `elevator`). */
   accessibilityRequirements?: string[];
 }
 
@@ -118,8 +118,18 @@ export interface ScoreBreakdownItem {
   reasons: string[];
 }
 
+/** The exhaustive set of hard constraints the solver can report. */
+export type HardConstraintId =
+  | "mandatory_skills"
+  | "mandatory_requirements_mapped"
+  | "schedule"
+  | "salary"
+  | "capacity"
+  | "geographic_commute"
+  | "geographic_accessibility";
+
 export interface HardConstraintResult {
-  id: string;
+  id: HardConstraintId;
   satisfied: boolean;
   reason: string;
 }
@@ -128,8 +138,6 @@ export interface RouteRequest {
   origin: GeoPoint;
   destination: GeoPoint;
   mode: TransportMode;
-  /** True when the route must satisfy the candidate's accessibility needs. */
-  requiresAccessible: boolean;
 }
 
 export interface RouteEstimate {
@@ -173,7 +181,7 @@ export interface MatchDecision {
   baseScore: number;
   scoreBreakdown: ScoreBreakdownItem[];
   hardConstraints: HardConstraintResult[];
-  failedConstraints: string[];
+  failedConstraints: HardConstraintId[];
   reasons: string[];
   /** Deterministic ordering key; never derived from protected attributes. */
   tieBreakKey: string;

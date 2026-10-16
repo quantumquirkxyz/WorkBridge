@@ -40,7 +40,7 @@ preferences, and salary expectations).
 | Technical | 30% | Mandatory skills (full weight) + desirable skills (half weight), met fraction relative to the required level. |
 | Experience / evidence | 25% | Experience level 0–4 plus relevant evidence depth. |
 | Availability | 15% | Weekly schedule coverage plus hours headroom. |
-| Transport / accessibility | 20% | Commute against the candidate's limit, and route accessibility. |
+| Transport / accessibility | 20% | Commute against the candidate's limit, and accessibility (route barrier plus vacancy-provided features). |
 | Salary / conditions | 10% | Vacancy maximum against the candidate's floor and expectation. |
 
 The weighted score is rounded to an integer 0–100. Hard-constraint failures are
@@ -52,7 +52,10 @@ score.
 `mandatory_skills`, `mandatory_requirements_mapped`, `schedule`, `salary`,
 `capacity`, `geographic_commute`, `geographic_accessibility`. A mandatory
 requirement with no canonical `skillId` cannot be confirmed deterministically and
-is treated as a failure rather than a silent pass.
+is treated as a failure rather than a silent pass. The accessibility constraint is
+reachable in the default path: it fails when the route reports a barrier or when
+the vacancy does not provide every feature in `candidate.transport.accessibilityNeeds`
+(vacancy features live in `SolverVacancy.accessibilityRequirements`).
 
 ## Aptitude and promotion
 
@@ -73,7 +76,12 @@ silently.
 - Scoring is a pure function of the pair and the injected routing estimate.
 - `tieBreakKey` and `compareDecisions` use only the score, the number of failed
   constraints, and the vacancy/candidate ids — never protected attributes or
-  randomness.
+  randomness. Ids are compared by UTF-16 code unit, not `localeCompare`, so the
+  order does not depend on the process locale.
+- The MILP objective encodes the same documented order lexicographically (score
+  first, then vacancy/candidate id), so equal-score assignment conflicts do not
+  depend on solver internals. The reported `objectiveValue` stays the sum of the
+  selected scores so the MILP and greedy paths agree.
 - The greedy fallback sorts eligible pairs by score then vacancy/candidate id.
 - HiGHS runs with `random_seed: 0` and `output_flag: false`.
 

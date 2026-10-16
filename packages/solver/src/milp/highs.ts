@@ -19,10 +19,6 @@ export function resetHiGHSInstance(): void {
   instancePromise = null;
 }
 
-function formatNumber(value: number): string {
-  return Number.isInteger(value) ? String(value) : String(value);
-}
-
 function linearExpression(coefficients: Record<string, number>): string {
   const terms: string[] = [];
   for (const [name, coefficient] of Object.entries(coefficients)) {
@@ -38,7 +34,7 @@ export function serializeMilpToLp(model: MilpModel): string {
   lines.push(model.sense === "maximize" ? "Maximize" : "Minimize");
 
   const objective = model.variables
-    .map((variable) => `${formatNumber(variable.cost)} ${variable.name}`)
+    .map((variable) => `${variable.cost} ${variable.name}`)
     .join(" + ");
   lines.push(` obj: ${objective.length > 0 ? objective : "0"}`);
 
@@ -52,22 +48,22 @@ export function serializeMilpToLp(model: MilpModel): string {
     const hasUpper = constraint.upper !== undefined;
     if (hasLower && hasUpper) {
       lines.push(
-        ` ${constraint.name}: ${formatNumber(constraint.lower!)} <= ${expression} <= ${formatNumber(constraint.upper!)}`,
+        ` ${constraint.name}: ${constraint.lower!} <= ${expression} <= ${constraint.upper!}`,
       );
     } else if (hasUpper) {
-      lines.push(` ${constraint.name}: ${expression} <= ${formatNumber(constraint.upper!)}`);
+      lines.push(` ${constraint.name}: ${expression} <= ${constraint.upper!}`);
     } else if (hasLower) {
-      lines.push(` ${constraint.name}: ${expression} >= ${formatNumber(constraint.lower!)}`);
+      lines.push(` ${constraint.name}: ${expression} >= ${constraint.lower!}`);
     }
   }
 
   lines.push("Bounds");
   for (const variable of model.variables) {
     if (variable.lower > 0) {
-      lines.push(` ${variable.name} >= ${formatNumber(variable.lower)}`);
+      lines.push(` ${variable.name} >= ${variable.lower}`);
     }
     if (Number.isFinite(variable.upper)) {
-      lines.push(` ${variable.name} <= ${formatNumber(variable.upper)}`);
+      lines.push(` ${variable.name} <= ${variable.upper}`);
     }
   }
 

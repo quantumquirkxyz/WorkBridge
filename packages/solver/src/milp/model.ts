@@ -1,3 +1,5 @@
+import { compareCodePoints, pairKey } from "../ties";
+
 export interface MilpVariable {
   name: string;
   cost: number;
@@ -51,17 +53,36 @@ function coefficientsOf(names: readonly string[]): Record<string, number> {
 }
 
 /**
+ * The documented deterministic pair order: higher score first, then vacancy id,
+ * then candidate id. Both the MILP cost and the greedy fallback use it.
+ */
+function comparePairs(a: AssignmentPair, b: AssignmentPair): number {
+  if (b.score !== a.score) return b.score - a.score;
+  return compareCodePoints(
+    pairKey(a.vacancyId, a.candidateId),
+    pairKey(b.vacancyId, b.candidateId),
+  );
+}
+
+/**
  * Build the assignment MILP: one binary variable per eligible pair, at most one
  * vacancy per candidate, and at most `capacity` candidates per vacancy.
+ *
+ * The objective encodes the documented tie order lexicographically: each score
+ * is scaled above the largest achievable ordering-index sum, and the pair's rank
+ * in the deterministic order is subtracted. Maximizing this therefore always
+ * prefers more score, then the earlier pair on ties — never solver internals.
  */
 export function buildAssignmentModel(
   pairs: readonly AssignmentPair[],
   capacities: ReadonlyMap<string, number>,
 ): AssignmentModel {
-  const variables = pairs.map((pair, index) => ({ name: `x${index}`, pair }));
-  const milpVariables: MilpVariable[] = variables.map((variable) => ({
+  const tieScale = pairs.length * pairs.length + 1;
+  const ordered = [...pairs].sort(comparePairs);
+  const variables = ordered.map((pair, index) => ({ name: `x${index}`, pair }));
+  const milpVariables: MilpVariable[] = variables.map((variable, index) => ({
     name: variable.name,
-    cost: variable.pair.score,
+    cost: variable.pair.score * tieScale - index,
     lower: 0,
     upper: 1,
     integer: true,

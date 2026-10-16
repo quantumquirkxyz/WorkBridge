@@ -8,6 +8,24 @@ export interface TieBreakParts {
 }
 
 /**
+ * Locale-independent string comparison by UTF-16 code unit. `localeCompare`
+ * depends on the process locale, so it cannot be used where the ordering must be
+ * identical across environments. Returns -1, 0, or 1.
+ */
+export function compareCodePoints(a: string, b: string): number {
+  if (a === b) return 0;
+  return a < b ? -1 : 1;
+}
+
+/**
+ * Stable key for a candidate/vacancy pair. Shared by the assignment model, the
+ * greedy fallback, and nomination so the format cannot drift between them.
+ */
+export function pairKey(vacancyId: string, candidateId: string): string {
+  return `${vacancyId}|${candidateId}`;
+}
+
+/**
  * Deterministic ordering key. It is derived only from the score, the number of
  * failed hard constraints, and the stable vacancy/candidate identifiers — never
  * from protected attributes or randomness.
@@ -31,7 +49,7 @@ export function compareDecisions(a: MatchDecision, b: MatchDecision): number {
   if (a.failedConstraints.length !== b.failedConstraints.length) {
     return a.failedConstraints.length - b.failedConstraints.length;
   }
-  const byVacancy = a.vacancyId.localeCompare(b.vacancyId);
+  const byVacancy = compareCodePoints(a.vacancyId, b.vacancyId);
   if (byVacancy !== 0) return byVacancy;
-  return a.candidateId.localeCompare(b.candidateId);
+  return compareCodePoints(a.candidateId, b.candidateId);
 }

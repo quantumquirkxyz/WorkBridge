@@ -5,6 +5,7 @@ export type {
   CandidateTransport,
   EvidenceSource,
   GeoPoint,
+  HardConstraintId,
   HardConstraintResult,
   HumanApprovalDecision,
   MatchDecision,
@@ -29,7 +30,6 @@ export {
   MATCH_WEIGHTS,
   PROMOTION_BAND,
   PROMOTION_POINTS,
-  WEIGHTS_VERSION,
   clampScore,
   classifyAptitude,
   weightedScore,
@@ -50,9 +50,11 @@ export {
 } from "./scoring";
 
 export {
+  accessibilityStatus,
   evaluateHardConstraints,
   failedConstraintIds,
   salaryFloor,
+  type AccessibilityStatus,
   type ConstraintInput,
 } from "./constraints";
 
@@ -65,7 +67,13 @@ export {
   type RoutingPortOptions,
 } from "./routing";
 
-export { buildTieBreakKey, compareDecisions, type TieBreakParts } from "./ties";
+export {
+  buildTieBreakKey,
+  compareCodePoints,
+  compareDecisions,
+  pairKey,
+  type TieBreakParts,
+} from "./ties";
 
 export {
   applyPromotion,
@@ -101,7 +109,7 @@ export { greedyAssignment, type GreedyResult } from "./milp/greedy";
 
 export { solveAssignment, type AssignmentSolveResult } from "./milp/assignment";
 
-export { highsMilpSolver, resetHiGHSInstance, serializeMilpToLp } from "./milp/highs";
+export { highsMilpSolver } from "./milp/highs";
 
 export {
   nominate,

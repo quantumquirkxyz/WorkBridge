@@ -1,5 +1,6 @@
 import type {
   CandidateSkillSignal,
+  SkillLevel,
   SolverCandidate,
   SolverVacancy,
   VacancyRequirement,
@@ -22,8 +23,14 @@ function clamp01(value: number): number {
   return Math.max(0, Math.min(1, value));
 }
 
-function effectiveRequiredLevel(requirement: VacancyRequirement): number {
+/** Effective required level, defaulting to 1 when the vacancy left it unset. */
+export function effectiveRequiredLevel(requirement: VacancyRequirement): number {
   return requirement.requiredLevel > 0 ? requirement.requiredLevel : 1;
+}
+
+/** Highest demonstrated level for a canonical skill; 0 when nothing is demonstrated. */
+export function requirementLevel(candidate: SolverCandidate, skillId: string): SkillLevel {
+  return bestSkillSignal(candidate.skills, skillId)?.level ?? 0;
 }
 
 /** Highest demonstrating signal for a canonical skill, or `undefined`. */
@@ -57,7 +64,7 @@ export function technicalScore(
   const missingMandatory: string[] = [];
 
   for (const requirement of mandatory) {
-    const level = bestSkillSignal(candidate.skills, requirement.skillId!)?.level ?? 0;
+    const level = requirementLevel(candidate, requirement.skillId!);
     const required = effectiveRequiredLevel(requirement);
     const fraction = clamp01(level / required);
     numerator += fraction * required;
@@ -66,7 +73,7 @@ export function technicalScore(
   }
 
   for (const requirement of desirable) {
-    const level = bestSkillSignal(candidate.skills, requirement.skillId!)?.level ?? 0;
+    const level = requirementLevel(candidate, requirement.skillId!);
     const required = effectiveRequiredLevel(requirement);
     const fraction = clamp01(level / required);
     numerator += DESIRABLE_FACTOR * fraction * required;

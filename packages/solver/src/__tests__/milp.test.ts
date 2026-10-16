@@ -41,6 +41,18 @@ describe("buildAssignmentModel", () => {
     expect(candidateRow?.upper).toBe(1);
     expect(vacancyRows.map((row) => row.upper).sort()).toEqual([1, 1]);
   });
+
+  it("orders equal-score pairs by vacancy id then candidate id", () => {
+    const tied: AssignmentPair[] = [
+      { candidateId: "c2", vacancyId: "v1", score: 50 },
+      { candidateId: "c1", vacancyId: "v1", score: 50 },
+      { candidateId: "c1", vacancyId: "v0", score: 50 },
+    ];
+    const { variables } = buildAssignmentModel(tied, capacities);
+    expect(
+      variables.map((variable) => `${variable.pair.vacancyId}:${variable.pair.candidateId}`),
+    ).toEqual(["v0:c1", "v1:c1", "v1:c2"]);
+  });
 });
 
 describe("serializeMilpToLp", () => {
@@ -51,7 +63,7 @@ describe("serializeMilpToLp", () => {
     expect(lp).toContain("Subject To");
     expect(lp).toContain("General");
     expect(lp).toContain("End");
-    expect(lp).toContain("90 x0");
+    expect(lp).toContain("900 x0");
   });
 });
 
@@ -64,6 +76,15 @@ describe("greedyAssignment", () => {
       { candidateId: "c1", vacancyId: "v1", score: 90 },
     ]);
     expect(first.objectiveValue).toBe(90);
+  });
+
+  it("prefers the documented pair order on equal scores", () => {
+    const tied: AssignmentPair[] = [
+      { candidateId: "c2", vacancyId: "v1", score: 50 },
+      { candidateId: "c1", vacancyId: "v1", score: 50 },
+    ];
+    const result = greedyAssignment(tied, new Map([["v1", 1]]));
+    expect(result.selected.map((pair) => pair.candidateId)).toEqual(["c1"]);
   });
 });
 

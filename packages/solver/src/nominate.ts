@@ -3,6 +3,7 @@ import { solveAssignment } from "./milp/assignment";
 import { highsMilpSolver } from "./milp/highs";
 import type { MilpSolverPort } from "./milp/model";
 import { applyPromotion } from "./promotion";
+import { pairKey } from "./ties";
 import type {
   HumanApprovalDecision,
   MatchDecision,
@@ -31,10 +32,6 @@ export interface NominationResult {
   assignments: MatchDecision[];
   fallbackReason?: string;
   solvedAt: string;
-}
-
-function pairKey(candidateId: string, vacancyId: string): string {
-  return `${candidateId}__${vacancyId}`;
 }
 
 /**
@@ -100,14 +97,14 @@ export async function nominate(problem: NominationProblem): Promise<NominationRe
 
   const decisionIndex = new Map(
     decisions.map((decision) => [
-      pairKey(decision.candidateId, decision.vacancyId),
+      pairKey(decision.vacancyId, decision.candidateId),
       decision,
     ]),
   );
 
   const assignments: MatchDecision[] = [];
   for (const pair of solved.selected) {
-    const decision = decisionIndex.get(pairKey(pair.candidateId, pair.vacancyId));
+    const decision = decisionIndex.get(pairKey(pair.vacancyId, pair.candidateId));
     if (decision) assignments.push(decision);
   }
 

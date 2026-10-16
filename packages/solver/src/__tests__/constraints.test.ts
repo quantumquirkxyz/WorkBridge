@@ -79,6 +79,28 @@ describe("evaluateHardConstraints", () => {
     expect(failed).toContain("geographic_accessibility");
   });
 
+  it("fails accessibility when the vacancy lacks a required feature", () => {
+    const candidate: SolverCandidate = {
+      ...strong,
+      transport: { ...strong.transport, accessibilityNeeds: ["wheelchair"] },
+    };
+    const failed = failedConstraintIds(evaluate(candidate, metro));
+    expect(failed).toContain("geographic_accessibility");
+  });
+
+  it("passes accessibility when the vacancy provides every required feature", () => {
+    const candidate: SolverCandidate = {
+      ...strong,
+      transport: { ...strong.transport, accessibilityNeeds: ["wheelchair"] },
+    };
+    const vacancy: SolverVacancy = {
+      ...metro,
+      accessibilityRequirements: ["wheelchair", "elevator"],
+    };
+    const failed = failedConstraintIds(evaluate(candidate, vacancy));
+    expect(failed).not.toContain("geographic_accessibility");
+  });
+
   it("uses the minimum salary as the floor when provided", () => {
     expect(salaryFloor(strong)).toBe(600);
     expect(salaryFloor({ ...strong, minimumSalaryUsd: undefined })).toBe(700);

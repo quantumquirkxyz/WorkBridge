@@ -33,7 +33,10 @@ export async function solveAssignment(
       for (const variable of variables) {
         if ((solution.values[variable.name] ?? 0) > 0.5) selected.push(variable.pair);
       }
-      return { solver: solver.name, selected, objectiveValue: solution.objectiveValue ?? 0 };
+      // Report the human-facing objective (sum of selected scores), not the
+      // tie-scaled MILP cost, so the MILP and greedy paths agree.
+      const objectiveValue = selected.reduce((sum, pair) => sum + pair.score, 0);
+      return { solver: solver.name, selected, objectiveValue };
     }
 
     const greedy = greedyAssignment(pairs, capacities);

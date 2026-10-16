@@ -9,8 +9,6 @@ export const MATCH_WEIGHTS: Readonly<Record<ScoreDimension, number>> = {
   salary: 0.1,
 };
 
-export const WEIGHTS_VERSION = "2026.10.0";
-
 /** Inclusive aptitude thresholds. */
 export const APT_THRESHOLD = 75;
 export const APT_WITH_GAPS_THRESHOLD = 50;

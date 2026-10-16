@@ -1,3 +1,4 @@
+import { compareCodePoints, pairKey } from "../ties";
 import type { AssignmentPair } from "./model";
 
 export interface GreedyResult {
@@ -5,15 +6,11 @@ export interface GreedyResult {
   objectiveValue: number;
 }
 
-function pairKey(pair: AssignmentPair): string {
-  return `${pair.vacancyId}|${pair.candidateId}`;
-}
-
 /**
  * Deterministic greedy fallback: take the highest-scoring eligible pairs first,
  * skipping candidates that are already assigned and vacancies at capacity.
  * Ties break by vacancy id then candidate id, so the result never depends on
- * input order or randomness.
+ * input order, process locale, or randomness.
  */
 export function greedyAssignment(
   pairs: readonly AssignmentPair[],
@@ -21,7 +18,10 @@ export function greedyAssignment(
 ): GreedyResult {
   const sorted = [...pairs].sort((a, b) => {
     if (b.score !== a.score) return b.score - a.score;
-    return pairKey(a).localeCompare(pairKey(b));
+    return compareCodePoints(
+      pairKey(a.vacancyId, a.candidateId),
+      pairKey(b.vacancyId, b.candidateId),
+    );
   });
 
   const remaining = new Map(capacities);
@@ -31,9 +31,9 @@ export function greedyAssignment(
 
   for (const pair of sorted) {
     if (assignedCandidates.has(pair.candidateId)) continue;
-    const capacity = remaining.get(pair.vacancyId) ?? 0;
-    if (capacity <= 0) continue;
-    remaining.set(pair.vacancyId, capacity - 1);
+    const left = remaining.get(pair.vacancyId) ?? 0;
+    if (left <= 0) continue;
+    remaining.set(pair.vacancyId, left - 1);
     assignedCandidates.add(pair.candidateId);
     selected.push(pair);
     objectiveValue += pair.score;

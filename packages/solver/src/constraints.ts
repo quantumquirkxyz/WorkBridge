@@ -1,15 +1,54 @@
 import type {
+  HardConstraintId,
   HardConstraintResult,
   RouteEstimate,
   SolverCandidate,
   SolverVacancy,
 } from "./types";
-import { bestSkillSignal, scheduleCoverage } from "./scoring";
+import { effectiveRequiredLevel, requirementLevel, scheduleCoverage } from "./scoring";
 
 export interface ConstraintInput {
   candidate: SolverCandidate;
   vacancy: SolverVacancy;
   routing: RouteEstimate;
+}
+
+export interface AccessibilityStatus {
+  satisfied: boolean;
+  reason: string;
+}
+
+/**
+ * Shared accessibility check used by both the hard constraint (aptitude) and the
+ * transport dimension (score). It is reachable in the default path: the route
+ * must report no barrier, and every feature the candidate needs must be one the
+ * vacancy's workplace provides.
+ */
+export function accessibilityStatus(
+  candidate: SolverCandidate,
+  vacancy: SolverVacancy,
+  routing: RouteEstimate,
+): AccessibilityStatus {
+  if (!routing.accessible) {
+    return {
+      satisfied: false,
+      reason: "No route satisfies the candidate's accessibility needs.",
+    };
+  }
+  const provided = new Set(vacancy.accessibilityRequirements ?? []);
+  const unmet = (candidate.transport.accessibilityNeeds ?? []).filter(
+    (need) => !provided.has(need),
+  );
+  if (unmet.length > 0) {
+    return {
+      satisfied: false,
+      reason: `The vacancy does not provide the required accessibility feature(s): ${unmet.join(", ")}.`,
+    };
+  }
+  return {
+    satisfied: true,
+    reason: "The route and the vacancy's features satisfy the candidate's accessibility needs.",
+  };
 }
 
 /** Effective salary floor: the explicit minimum, else the expectation. */
@@ -31,8 +70,8 @@ export function evaluateHardConstraints({
 
   const mappedMandatory = vacancy.mandatory.filter((req) => req.skillId !== null);
   const missingMandatory = mappedMandatory.filter((req) => {
-    const required = req.requiredLevel > 0 ? req.requiredLevel : 1;
-    const level = bestSkillSignal(candidate.skills, req.skillId!)?.level ?? 0;
+    const required = effectiveRequiredLevel(req);
+    const level = requirementLevel(candidate, req.skillId!);
     return level < required;
   });
   results.push({
@@ -98,17 +137,18 @@ export function evaluateHardConstraints({
         : `Commute of ${Math.round(routing.commuteMinutes)} min exceeds the ${candidate.transport.maxCommuteMinutes} min limit.`,
   });
 
+  const accessibility = accessibilityStatus(candidate, vacancy, routing);
   results.push({
     id: "geographic_accessibility",
-    satisfied: routing.accessible,
-    reason: routing.accessible
-      ? "The route satisfies the accessibility needs."
-      : "No route satisfies the candidate's accessibility needs.",
+    satisfied: accessibility.satisfied,
+    reason: accessibility.reason,
   });
 
   return results;
 }
 
-export function failedConstraintIds(results: readonly HardConstraintResult[]): string[] {
+export function failedConstraintIds(
+  results: readonly HardConstraintResult[],
+): HardConstraintId[] {
   return results.filter((result) => !result.satisfied).map((result) => result.id);
 }
