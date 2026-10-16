@@ -31,8 +31,19 @@ Ajv, HiGHS, Google Maps, Apify LinkedIn Jobs scraper, Langfuse, Vitest, and Play
 
 ## Instalación y ejecución
 
-Installation and demo instructions will be added with the implementation. Use `.env.example`; never
-commit real credentials.
+Requiere Node.js ≥ 22. El proyecto es un monorepo de npm workspaces (`packages/*`, `apps/*`).
+
+```bash
+npm install          # instala el workspace completo
+npm test             # Vitest: unitarias y contratos
+npm run typecheck    # tsc --noEmit
+npm run gate:ci      # typecheck + cobertura (umbral 80% de líneas)
+npm run dev          # interfaz de intake en http://localhost:3000
+```
+
+Copia `apps/web/.env.example` a `apps/web/.env.local` para configurar OpenRouter. Sin
+`OPENROUTER_API_KEY` el intake usa el extractor heurístico determinista y aun así produce un
+`CandidateProfile` válido. El sistema nunca envía una postulación.
 
 ## Evals
 
