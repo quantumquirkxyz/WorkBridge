@@ -10,3 +10,4 @@ export {
   type VerificationStatus,
 } from "./status.js";
 export { validateCredentialVerification } from "./schema.js";
+export { verifyCredential, type CredentialInput, type VerifyDeps } from "./verify.js";

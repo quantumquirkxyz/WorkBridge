@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://puente-laboral.local/schemas/certo-verify-result.json",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["verified"],
+  "properties": {
+    "verified": { "type": "boolean" },
+    "error": { "type": "string" },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["check", "result"],
+        "properties": {
+          "check": { "type": "string" },
+          "result": { "enum": ["success", "error", "warning"] },
+          "message": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "credential": { "type": "object" }
+  }
+}
