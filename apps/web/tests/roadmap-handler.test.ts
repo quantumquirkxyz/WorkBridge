@@ -72,6 +72,31 @@ describe('handleRoadmap', () => {
     expect((body as { gaps: { skillId: string }[] }).gaps.map((gap) => gap.skillId)).toContain('PA-CS-0001');
   });
 
+  it('loads a persisted profile when the injected store has no profile', async () => {
+    const service = { evaluatePair: vi.fn(async () => ({ aptitude: 'not_currently_apt' as const })) };
+    const loadProfile = vi.fn(async () => profile);
+    const { status } = await handleRoadmap(noMatchResult, {
+      now: NOW,
+      service: service as never,
+      profileStore: createInMemoryProfileStore(),
+      loadProfile,
+    });
+    expect(status).toBe(200);
+    expect(loadProfile).toHaveBeenCalledWith(noMatchResult.candidateId);
+    expect(service.evaluatePair).toHaveBeenCalledTimes(1);
+  });
+
+  it('retains a valid canonical vacancy id when its label is not mappable', async () => {
+    const result = structuredClone(noMatchResult);
+    result.noMatch!.nearMatches[0]!.vacancy.skills[0] = {
+      ...result.noMatch!.nearMatches[0]!.vacancy.skills[0]!,
+      skillId: 'PA-CS-0001',
+      labelEs: 'Etiqueta no catalogada',
+    };
+    const { body } = await handleRoadmap(result, { now: NOW, ...solverDeps() });
+    expect((body as { gaps: { skillId: string }[] }).gaps.map((gap) => gap.skillId)).toContain('PA-CS-0001');
+  });
+
   it('does not build a roadmap when a viable match exists', async () => {
     const matched = exploreVacancies(preferences, createSeedCatalog(), { now: NOW });
     expect(matched.matches.length).toBeGreaterThan(0);

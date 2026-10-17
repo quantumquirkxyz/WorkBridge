@@ -1,14 +1,12 @@
-import { matchSkill, matchVacancySkill, resolveTargetRoles, type CandidatePreferences, type JobRequirements, type Requirement } from '@puente/domain';
-import { validateExplorationResult, type CachedVacancy, type ExplorationResult } from '@puente/catalog';
+import { matchSkill, resolveTargetRoles, type CandidatePreferences, type CandidateProfile } from '@puente/domain';
+import { validateExplorationResult, type ExplorationResult } from '@puente/catalog';
 import {
   createMatchingService,
   DEFAULT_GEO_POINT,
   matchingConfigFromEnv,
   toSolverCandidate,
   toSolverVacancy,
-  type CandidateMatchContext,
   type MatchingService,
-  type VacancyMatchInput,
 } from '@puente/agent-runtime';
 import {
   buildRoadmap,
@@ -22,6 +20,8 @@ import {
 } from '@puente/training';
 import type { HandlerResult } from './handler-result';
 import { profileStore, type ProfileStore } from './profile-store';
+import { readCandidateProfile } from './neon-repository';
+import { candidateContext, vacancyInput } from './matching-input';
 
 export interface RoadmapHandlerDeps {
   /** Injected for tests; defaults to the bundled cached training catalogue. */
@@ -30,6 +30,7 @@ export interface RoadmapHandlerDeps {
   routing?: BuildRoadmapOptions['routing'];
   profileStore?: ProfileStore;
   service?: MatchingService;
+  loadProfile?: (candidateId: string) => Promise<CandidateProfile | undefined>;
 }
 
 /** Role definition id → training specialization slug used by the catalogue. */
@@ -54,73 +55,6 @@ function specializationsFor(preferences: CandidatePreferences): string[] {
     .map((role) => ROLE_TO_SPECIALIZATION[role.role_id])
     .filter((slug): slug is string => typeof slug === 'string');
   return [...new Set(slugs)].sort();
-}
-
-function vacancyInput(vacancy: CachedVacancy): VacancyMatchInput {
-  const requirements: Requirement[] = vacancy.skills.map((skill, index) => ({
-    id: `${vacancy.jobId}-requirement-${index + 1}`,
-    kind: 'skill',
-    category: skill.required ? 'mandatory' : 'desirable',
-    originalWording: skill.labelEs,
-    normalizedWording: skill.labelEs,
-    canonical: matchVacancySkill(skill.skillId ?? skill.labelEs),
-    level: 1,
-    justification: null,
-    alertId: null,
-    rankingEligible: true,
-    excludedFromRanking: false,
-  }));
-  const document: JobRequirements = {
-    schemaVersion: '1.0.0',
-    vacancyId: vacancy.jobId,
-    title: vacancy.title,
-    employer: vacancy.company,
-    source: 'json',
-    capturedAt: vacancy.queriedAt,
-    locale: 'es-PA',
-    taxonomyVersion: 'panama-v1',
-    status: 'accepted',
-    location: vacancy.location,
-    requirements,
-    alerts: [],
-    reviewQueue: [],
-    blockingReasons: [],
-    metadata: {
-      inputKind: 'json', extractor: 'catalog', extractedAt: vacancy.queriedAt,
-      rawText: null, requirementCount: requirements.length,
-      mandatoryCount: requirements.filter((item) => item.category === 'mandatory').length,
-      desirableCount: requirements.filter((item) => item.category === 'desirable').length,
-      alertCount: 0, excludedCount: 0,
-    },
-  };
-  return {
-    document,
-    context: {
-      schedule: { days: vacancy.schedule.days, startMinute: vacancy.schedule.startMinute, endMinute: vacancy.schedule.endMinute, weeklyHours: vacancy.schedule.weeklyHours },
-      salaryMinUsd: vacancy.salary.minUsd ?? 0,
-      salaryMaxUsd: vacancy.salary.maxUsd ?? vacancy.salary.minUsd ?? 0,
-      capacity: 1,
-    },
-  };
-}
-
-function candidateContext(preferences: CandidatePreferences): CandidateMatchContext {
-  return {
-    home: preferences.max_location,
-    availability: {
-      days: preferences.availability.days,
-      startMinute: preferences.availability.start_minute,
-      endMinute: preferences.availability.end_minute,
-      weeklyHours: preferences.availability.weekly_hours,
-    },
-    transport: {
-      hasVehicle: preferences.transport_modes.includes('driving'),
-      maxCommuteMinutes: preferences.max_travel_minutes,
-      modes: preferences.transport_modes,
-    },
-    expectedSalaryUsd: preferences.minimum_salary_usd,
-    minimumSalaryUsd: preferences.minimum_salary_usd,
-  };
 }
 
 function matchingService(): MatchingService {
@@ -193,7 +127,12 @@ export async function handleRoadmap(payload: unknown, deps: RoadmapHandlerDeps =
     return { status: 200, body: { roadmap: null, gaps: [], reason: 'candidate_declined_training' } };
   }
 
-  const profile = (deps.profileStore ?? profileStore).get(result.candidateId);
+  const stored = (deps.profileStore ?? profileStore).get(result.candidateId);
+  const profile = stored ?? (deps.loadProfile
+    ? await deps.loadProfile(result.candidateId)
+    : deps.profileStore
+      ? undefined
+      : await readCandidateProfile(result.candidateId));
   if (!profile) return { status: 409, body: { error: 'profile_required' } };
 
   const vacancy = noMatch.nearMatches[0]?.vacancy;
