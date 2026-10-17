@@ -1,4 +1,4 @@
-import type { VacancySource } from "@puente/domain";
+import type { VacancySource } from "@workbridge/domain";
 import { parseVacancyText } from "../text";
 import type {
   ExtractedVacancy,

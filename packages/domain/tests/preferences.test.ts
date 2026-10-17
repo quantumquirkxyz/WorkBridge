@@ -32,7 +32,7 @@ export function validPreferences(overrides: Record<string, unknown> = {}): Candi
 
 describe('CandidatePreferences schema', () => {
   it('registers the preferences schema under its canonical $id', () => {
-    expect(createAjv().getSchema('https://puente-laboral.pa/schemas/candidate-preferences/1.0.0')).toBeTruthy();
+    expect(createAjv().getSchema('https://workbridge.pa/schemas/candidate-preferences/1.0.0')).toBeTruthy();
   });
 
   it('accepts a fully explicit preferences document', () => {

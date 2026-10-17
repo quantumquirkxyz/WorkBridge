@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import type { ChatFn, ChatRequest } from '@puente/agent-runtime';
+import type { ChatFn, ChatRequest } from '@workbridge/agent-runtime';
 import { CAP_MESSAGE, MAX_LLM_TURNS, MAX_TRANSCRIPT_MESSAGES, handleChatTurn, readChatSessionView } from '../lib/chat-handler';
 import { createInMemoryChatSessionStore } from '../lib/chat-store';
 import type { ChatTurn } from '../lib/chat/schema';

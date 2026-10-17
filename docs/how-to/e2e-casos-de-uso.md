@@ -1,6 +1,6 @@
 # Casos de uso en el navegador
 
-La suite visual recorre la interfaz actual contra Next en `http://127.0.0.1:4372`. El servidor de esa suite arranca con `PUENTE_PERSISTENCE=memory` y sin `OPENROUTER_API_KEY` ni `DATABASE_URL`, así que el intake usa el extractor heurístico y la exploración lee el catálogo en caché. El puerto **3001** sigue siendo el de `npm run dev`. El runtime de postulación sigue en **4371**, en el proyecto `runtime`.
+La suite visual recorre la interfaz actual contra Next en `http://127.0.0.1:4372`. El servidor de esa suite arranca con `WORKBRIDGE_PERSISTENCE=memory` y sin `OPENROUTER_API_KEY` ni `DATABASE_URL`, así que el intake usa el extractor heurístico y la exploración lee el catálogo en caché. El puerto **3001** sigue siendo el de `npm run dev`. El runtime de postulación sigue en **4371**, en el proyecto `runtime`.
 
 Las capturas de página completa quedan en `test-results/e2e-web/`. Son salida de prueba y no se commitean. El reporte HTML de Playwright adjunta la captura de cada test.
 

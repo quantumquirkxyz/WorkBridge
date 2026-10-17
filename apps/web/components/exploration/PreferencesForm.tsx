@@ -1,6 +1,6 @@
 'use client';
 
-import type { ContractType, TransportMode, WorkModality } from '@puente/domain';
+import type { ContractType, TransportMode, WorkModality } from '@workbridge/domain';
 import { Button } from '../ui/button';
 import { Checkbox } from '../ui/checkbox';
 import { Input } from '../ui/input';

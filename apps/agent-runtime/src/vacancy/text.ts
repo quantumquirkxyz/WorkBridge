@@ -1,5 +1,5 @@
-import { normalizeText } from "@puente/domain";
-import type { RequirementKind } from "@puente/domain";
+import { normalizeText } from "@workbridge/domain";
+import type { RequirementKind } from "@workbridge/domain";
 import type { RawRequirementInput } from "./types";
 
 const BULLET = /^\s*(?:[-*•·‣▪►]|\d{1,3}[.)]|[a-z][.)])\s+/i;

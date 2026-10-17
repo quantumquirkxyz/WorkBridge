@@ -1,7 +1,7 @@
-import { AjvValidationError, ajv, type ActorRole, type AgentId, type CandidatePreferences, type DeclaredCredentialClaim } from "@puente/domain";
+import { AjvValidationError, ajv, type ActorRole, type AgentId, type CandidatePreferences, type DeclaredCredentialClaim } from "@workbridge/domain";
 import type { GuardrailDecision } from "./guardrails";
 import type { CandidateNominationResult } from "../matching";
-import type { Roadmap } from "@puente/training";
+import type { Roadmap } from "@workbridge/training";
 import carrierJsonSchema from "./carrier.schema.json";
 
 export interface Carrier {

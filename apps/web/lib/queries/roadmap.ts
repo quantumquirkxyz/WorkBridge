@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import type { ExplorationResult } from '@puente/catalog';
+import type { ExplorationResult } from '@workbridge/catalog';
 import { requestRoadmap } from '../api/client';
 
 export function useRequestRoadmap() {

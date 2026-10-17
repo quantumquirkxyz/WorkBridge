@@ -11,7 +11,7 @@
  * #8) through `deriveGaps`, and can also be supplied directly.
  */
 
-import type { Aptitude, GeoPoint, MilpSolverPort, RoutingPort, SkillLevel, SolverCandidate, SolverVacancy } from "@puente/solver";
+import type { Aptitude, GeoPoint, MilpSolverPort, RoutingPort, SkillLevel, SolverCandidate, SolverVacancy } from "@workbridge/solver";
 
 export type Modality = "online" | "onsite" | "hybrid";
 

@@ -7,7 +7,7 @@ import { savedSearchesStore } from '../../../lib/saved-searches-store';
 import type { VacancyVisitsStore } from '../../../lib/vacancy-visits-store';
 import { unauthorized } from '../../../lib/candidate-session';
 import { getServerSession } from '../../../lib/auth';
-import { makeCandidateId } from '@puente/domain';
+import { makeCandidateId } from '@workbridge/domain';
 import { markCandidateVacancyVisit, persistSavedSearch, readCandidateVacancyVisit, readSavedSearches } from '../../../lib/neon-repository';
 
 export const runtime = 'nodejs';
@@ -24,7 +24,7 @@ export async function POST(request: Request): Promise<Response> {
   const preferences = { ...((input.preferences as Record<string, unknown> | undefined) ?? {}), candidate_id: candidateId };
   const { status, body } = await handleSaveSearch({ ...input, preferences });
   if (status === 201 && typeof body === 'object' && body && 'preferences' in body) {
-    const preferences = body.preferences as import('@puente/domain').CandidatePreferences;
+    const preferences = body.preferences as import('@workbridge/domain').CandidatePreferences;
     const previousPreferences = preferencesStore.get(preferences.candidate_id);
     const previousSearches = savedSearchesStore.list(preferences.candidate_id);
       try {

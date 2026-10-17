@@ -1,8 +1,8 @@
 'use client';
 
-import type { ExplorationResult } from '@puente/catalog';
-import type { Roadmap } from '@puente/training';
-import type { MatchDecision } from '@puente/solver';
+import type { ExplorationResult } from '@workbridge/catalog';
+import type { Roadmap } from '@workbridge/training';
+import type { MatchDecision } from '@workbridge/solver';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { ApiClientError } from '../lib/api/errors';
@@ -104,7 +104,7 @@ export function ExplorationDashboard() {
 
     try {
       const explored = await exploreMutation.mutateAsync(buildPayload(form));
-      window.localStorage.setItem('puente:candidateId', explored.candidateId);
+      window.localStorage.setItem('workbridge:candidateId', explored.candidateId);
       if (explored.preferences) saveStoredPreferences(explored.candidateId, explored.preferences);
       setResult(explored);
       setDecisions([]);

@@ -1,11 +1,11 @@
-import { matchSkill, resolveTargetRoles, type CandidatePreferences, type CandidateProfile } from '@puente/domain';
-import { validateExplorationResult, type ExplorationResult } from '@puente/catalog';
+import { matchSkill, resolveTargetRoles, type CandidatePreferences, type CandidateProfile } from '@workbridge/domain';
+import { validateExplorationResult, type ExplorationResult } from '@workbridge/catalog';
 import {
   DEFAULT_GEO_POINT,
   toSolverCandidate,
   toSolverVacancy,
   type MatchingService,
-} from '@puente/agent-runtime';
+} from '@workbridge/agent-runtime';
 import {
   buildRoadmap,
   createSeedTrainingCatalog,
@@ -15,7 +15,7 @@ import {
   type BuildRoadmapOptions,
   type TrainingCatalog,
   type TrainingGap,
-} from '@puente/training';
+} from '@workbridge/training';
 import type { HandlerResult } from './handler-result';
 import { profileStore, type ProfileStore } from './profile-store';
 import { readCandidateProfile } from './neon-repository';
@@ -63,7 +63,7 @@ function specializationsFor(preferences: CandidatePreferences): string[] {
  * invented, because the training catalogue is keyed by taxonomy id.
  *
  * This is deliberately named `deriveAdvisoryGaps` and not `deriveGaps`, because
- * `@puente/training` already owns the canonical `deriveGaps({ candidate,
+ * `@workbridge/training` already owns the canonical `deriveGaps({ candidate,
  * vacancy })` that consumes deterministic solver output. See
  * `.agents/adr/0005-exploration-advisory-training-roadmap.md`: the exploration
  * slice has no candidate skill profile, so it must not claim the solver's
@@ -98,7 +98,7 @@ export function deriveAdvisoryGaps(result: ExplorationResult): TrainingGap[] {
  * This is the "trigger the training-roadmap path" seam. The Exploration Agent
  * never calls training itself (ADR-0002/0004 keep the seams separate); the web
  * handler composes them, invoking the deterministic `buildRoadmap` from
- * `@puente/training` only when the exploration actually reported a no-match
+ * `@workbridge/training` only when the exploration actually reported a no-match
  * (`result.noMatch` is present) **and** the candidate declared willingness to
  * train. A result with no `noMatch` — including one whose `matches` is empty only
  * because a caller passed `limit: 0` — never builds a roadmap.

@@ -1,4 +1,4 @@
-import type { CandidatePreferences, CandidateProfile } from '@puente/domain';
+import type { CandidatePreferences, CandidateProfile } from '@workbridge/domain';
 import { savedSearchesStore, type SavedSearch } from './saved-searches-store';
 import { neon } from '@neondatabase/serverless';
 import { preferencesStore } from './preferences-store';
@@ -7,7 +7,7 @@ import { vacancyVisitsStore } from './vacancy-visits-store';
 import { ChatSessionConflictError, chatSessionStore, type ChatSession } from './chat-store';
 
 export function persistenceMode(env: NodeJS.ProcessEnv = process.env): 'neon' | 'memory' {
-  return env.PUENTE_PERSISTENCE === 'memory' ? 'memory' : 'neon';
+  return env.WORKBRIDGE_PERSISTENCE === 'memory' ? 'memory' : 'neon';
 }
 
 function database() {

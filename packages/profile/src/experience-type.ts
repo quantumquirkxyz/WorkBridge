@@ -1,5 +1,5 @@
-import type { ExperienceType } from '@puente/domain';
-import { normalizeTerm } from '@puente/domain';
+import type { ExperienceType } from '@workbridge/domain';
+import { normalizeTerm } from '@workbridge/domain';
 
 /** Terms that describe academic work rather than an academic credential. */
 export const ACADEMIC_WORK_TERMS = ['tesis', 'trabajo academico'];

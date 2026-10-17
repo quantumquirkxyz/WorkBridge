@@ -1,4 +1,4 @@
-import { validateCandidatePreferences, type CandidatePreferences } from '@puente/domain';
+import { validateCandidatePreferences, type CandidatePreferences } from '@workbridge/domain';
 import { buildPreferences, type PreferencesDraft } from './preferences';
 import { preferencesStore, type PreferencesStore } from './preferences-store';
 import { savedSearchesStore, type SavedSearchesStore } from './saved-searches-store';

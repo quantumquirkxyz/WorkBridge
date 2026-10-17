@@ -2,14 +2,14 @@
 
 This package is the cached-vacancy seam named in spec #1 (ticket #7):
 `apps/agent-runtime` and `apps/web` hand validated `CandidatePreferences` to
-`@puente/catalog`, which queries the cached catalogue and returns compatible
+`@workbridge/catalog`, which queries the cached catalogue and returns compatible
 vacancies with provenance and freshness. It does **not** rank candidates or
 submit applications.
 
 ## Seam
 
 ```
-CandidatePreferences (@puente/domain)
+CandidatePreferences (@workbridge/domain)
         │
         ▼
 exploreVacancies(preferences, catalog)  ──► ExplorationResult (JSON Schema 2020-12, Ajv)
@@ -21,9 +21,9 @@ exploreVacancies(preferences, catalog)  ──► ExplorationResult (JSON Schema
 ```
 
 `CandidatePreferences` and the shared enums (`work_modality`, `contract_type`,
-`transport_mode`, `location`) live in `@puente/domain`. `CachedVacancy` and
+`transport_mode`, `location`) live in `@workbridge/domain`. `CachedVacancy` and
 `ExplorationResult` are defined once here, validated by the shared Ajv 2020-12
-instance from `@puente/domain` before anything leaves the module.
+instance from `@workbridge/domain` before anything leaves the module.
 
 ## Preserved scraper facts
 
@@ -58,7 +58,7 @@ deterministic order.
 ## Usage
 
 ```ts
-import { createVacancyCatalog, exploreVacancies, type CachedVacancy } from '@puente/catalog';
+import { createVacancyCatalog, exploreVacancies, type CachedVacancy } from '@workbridge/catalog';
 
 const catalog = createVacancyCatalog(records);
 const result = exploreVacancies(preferences, catalog, { now: () => new Date() });

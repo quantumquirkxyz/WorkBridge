@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { createAgentFromEnv } from '@puente/agent-runtime';
-import { type CandidateProfile } from '@puente/domain';
+import { createAgentFromEnv } from '@workbridge/agent-runtime';
+import { type CandidateProfile } from '@workbridge/domain';
 import { handleIntake } from '../../../lib/intake-handler';
 import { persistCandidateProfile, readCandidateProfile } from '../../../lib/neon-repository';
 import { profileStore } from '../../../lib/profile-store';

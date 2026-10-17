@@ -1,6 +1,6 @@
 'use client';
 
-import type { CandidatePreferences, CandidateProfile } from '@puente/domain';
+import type { CandidatePreferences, CandidateProfile } from '@workbridge/domain';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';

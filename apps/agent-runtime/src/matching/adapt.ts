@@ -6,8 +6,8 @@ import {
   type Location,
   type Provenance,
   type Requirement,
-} from "@puente/domain";
-import type { MatchDecision as ApplicationMatchDecision } from "@puente/domain";
+} from "@workbridge/domain";
+import type { MatchDecision as ApplicationMatchDecision } from "@workbridge/domain";
 import type {
   CandidateAvailability,
   CandidateSkillSignal,
@@ -20,7 +20,7 @@ import type {
   SolverVacancy,
   VacancyRequirement,
   VacancySchedule,
-} from "@puente/solver";
+} from "@workbridge/solver";
 import { getRankableRequirements } from "../vacancy/ranking";
 
 /**

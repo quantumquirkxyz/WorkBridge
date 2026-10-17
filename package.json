@@ -1,9 +1,9 @@
 {
-  "name": "puente-laboral-panama",
+  "name": "workbridge",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Puente Laboral Panamá — multi-agent employability system for young people in Panama.",
+  "description": "WorkBridge — multi-agent employability system for young people in Panama.",
   "workspaces": [
     "packages/*",
     "apps/*"
@@ -23,7 +23,7 @@
     "test:e2e": "playwright test",
     "test:e2e:web": "playwright test --project=web",
     "build": "npm run build --workspaces --if-present",
-    "dev": "npm run dev --workspace @puente/web",
+    "dev": "npm run dev --workspace @workbridge/web",
     "gate:ci": "npm run typecheck && npm run test:coverage",
     "db:migrate": "NODE_OPTIONS=--no-network-family-autoselection neon psql production -- -f migrations/001_initial.sql -f migrations/002_better_auth.sql -f migrations/003_chat_sessions.sql",
     "seed:roles": "tsx scripts/seed-roles.ts",

@@ -5,7 +5,7 @@
  * (PROMPT_VERSION in lib/chat/prompt.ts) and store results with the eval artifacts.
  */
 import { describe, expect, it } from 'vitest';
-import { createOpenRouterChat, type ChatFn } from '@puente/agent-runtime';
+import { createOpenRouterChat, type ChatFn } from '@workbridge/agent-runtime';
 import { handleChatTurn } from '../lib/chat-handler';
 import { createInMemoryChatSessionStore } from '../lib/chat-store';
 import type { ChatTurn } from '../lib/chat/schema';

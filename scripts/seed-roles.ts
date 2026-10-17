@@ -22,7 +22,7 @@ async function main() {
          set name = excluded.name,
              environment = excluded.environment,
              "updatedAt" = now()`,
-      [employerOrgId, `Puente Employer ${ROLE_ENV}`, ROLE_ENV],
+      [employerOrgId, `WorkBridge Employer ${ROLE_ENV}`, ROLE_ENV],
     );
 
     await upsertUser(client, {

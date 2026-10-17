@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://puentelaboral.pa/schemas/job-requirements.schema.json",
+  "$id": "https://workbridge.pa/schemas/job-requirements.schema.json",
   "title": "JobRequirements",
   "description": "Normalized vacancy requirements with mandatory/desirable separation, ESCO-based skill mapping, fairness alerts, and ranking eligibility. Emitted by the Market and Matching slice after vacancy normalization.",
   "type": "object",

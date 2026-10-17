@@ -1,5 +1,5 @@
-import { validateProfileDraft, type ProfileDraft } from '@puente/domain';
-import type { ExtractionInput, ExtractionOutcome, ProfileExtractor } from '@puente/profile';
+import { validateProfileDraft, type ProfileDraft } from '@workbridge/domain';
+import type { ExtractionInput, ExtractionOutcome, ProfileExtractor } from '@workbridge/profile';
 import type { ChatFn } from '../llm/openrouter';
 import { redactPii } from '../pii';
 
@@ -90,7 +90,7 @@ export const LLM_DRAFT_SCHEMA: Record<string, unknown> = {
 };
 
 export const DEFAULT_SYSTEM_PROMPT = [
-  'Eres el Agente de Perfil y Evidencia de Puente Laboral Panamá.',
+  'Eres el Agente de Perfil y Evidencia de WorkBridge.',
   'Extraes experiencia formal e informal, proyectos, negocio familiar, voluntariado y trabajo académico,',
   'además de habilidades técnicas y blandas, desde el texto de un CV o una descripción.',
   'Reglas estrictas:',

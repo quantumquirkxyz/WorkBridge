@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import type { VacancyMatch } from '@puente/catalog';
-import type { MatchDecision } from '@puente/solver';
+import type { VacancyMatch } from '@workbridge/catalog';
+import type { MatchDecision } from '@workbridge/solver';
 import { orderMatchesByDecision } from '../../components/exploration/utils';
 
 function match(jobId: string): VacancyMatch {

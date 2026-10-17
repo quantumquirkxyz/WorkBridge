@@ -1,4 +1,4 @@
-import { createAjv } from '@puente/domain';
+import { createAjv } from '@workbridge/domain';
 import type { ValidateFunction } from 'ajv';
 import cachedVacancySchema from './schemas/cached-vacancy.schema.json';
 import explorationResultSchema from './schemas/exploration-result.schema.json';
@@ -6,8 +6,8 @@ import type { CachedVacancy, ExplorationResult } from './types';
 
 /** Canonical `$id` for every catalogue contract, JSON Schema 2020-12. */
 export const CATALOG_SCHEMA_IDS = {
-  cachedVacancy: 'https://puente-laboral.pa/schemas/cached-vacancy/1.0.0',
-  explorationResult: 'https://puente-laboral.pa/schemas/exploration-result/1.0.0',
+  cachedVacancy: 'https://workbridge.pa/schemas/cached-vacancy/1.0.0',
+  explorationResult: 'https://workbridge.pa/schemas/exploration-result/1.0.0',
 } as const;
 
 let cachedAjv: ReturnType<typeof createAjv> | undefined;

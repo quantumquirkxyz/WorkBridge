@@ -1,5 +1,5 @@
-import { createSeedCatalog, type VacancyCatalog } from '@puente/catalog';
-import { createExplorationAgent, type ExplorationAgent } from '@puente/agent-runtime';
+import { createSeedCatalog, type VacancyCatalog } from '@workbridge/catalog';
+import { createExplorationAgent, type ExplorationAgent } from '@workbridge/agent-runtime';
 
 /** The exploration seam every web handler shares. */
 export interface ExplorationSeamDeps {

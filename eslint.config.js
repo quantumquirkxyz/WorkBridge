@@ -47,7 +47,7 @@ export default tseslint.config(
                 "Client components must not import in-process stores; use lib/api/client and lib/queries instead.",
             },
             {
-              group: ["@puente/agent-runtime", "@puente/agent-runtime/*"],
+              group: ["@workbridge/agent-runtime", "@workbridge/agent-runtime/*"],
               message: "Agent runtime is server-only; use /api routes from the typed client.",
             },
           ],

@@ -1,4 +1,4 @@
-# Puente Laboral Panamá glossary
+# WorkBridge glossary
 
 | Term | Definition |
 |---|---|

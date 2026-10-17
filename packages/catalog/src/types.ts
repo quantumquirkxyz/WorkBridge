@@ -3,7 +3,7 @@ import type {
   ContractType,
   PreferenceLocation,
   WorkModality,
-} from '@puente/domain';
+} from '@workbridge/domain';
 
 /**
  * The catalogue keeps the *raw* vacancy facts exactly as the scraper produced

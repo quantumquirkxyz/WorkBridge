@@ -1,4 +1,4 @@
-import { createAjv } from '@puente/domain';
+import { createAjv } from '@workbridge/domain';
 import { SLOT_IDS, type SlotId } from './slots';
 
 const slotEnum = [...SLOT_IDS];

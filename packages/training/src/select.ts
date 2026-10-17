@@ -3,7 +3,7 @@ import {
   highsMilpSolver,
   type MilpConstraint,
   type MilpSolverPort,
-} from "@puente/solver";
+} from "@workbridge/solver";
 import { coveredSkillLevel } from "./scoring";
 import { gapDeficit, heldSkillLevel } from "./gaps";
 import type {

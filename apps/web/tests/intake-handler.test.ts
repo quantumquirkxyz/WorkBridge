@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
-import { validateIntakeResult, type CandidateProfile } from '@puente/domain';
-import { createProfileAgent, type ProfileAgent } from '@puente/agent-runtime';
+import { validateIntakeResult, type CandidateProfile } from '@workbridge/domain';
+import { createProfileAgent, type ProfileAgent } from '@workbridge/agent-runtime';
 import { handleIntake } from '../lib/intake-handler';
 import { createInMemoryProfileStore } from '../lib/profile-store';
 

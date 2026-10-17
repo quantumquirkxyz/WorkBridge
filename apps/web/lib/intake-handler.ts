@@ -3,10 +3,10 @@ import {
   validateIntakeRequest,
   type IntakeRequest,
   type IntakeResult,
-} from '@puente/domain';
-import { createProfileAgent, type ProfileAgent } from '@puente/agent-runtime';
-import type { RawIntake } from '@puente/ingestion';
-import { mergeCandidateProfiles, profileNeedsReview } from '@puente/profile';
+} from '@workbridge/domain';
+import { createProfileAgent, type ProfileAgent } from '@workbridge/agent-runtime';
+import type { RawIntake } from '@workbridge/ingestion';
+import { mergeCandidateProfiles, profileNeedsReview } from '@workbridge/profile';
 import { profileStore, type ProfileStore } from './profile-store';
 
 export interface IntakeHandlerDeps {

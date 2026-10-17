@@ -24,8 +24,8 @@ ticket-ready when every row is **Resolved** — reached on 2026-10-16.
 ## OQ-1 — Readiness source
 
 **Context.** Exploration returns `matchScore` (0–100 compatibility with *declared preferences*,
-`@puente/catalog`). The solver returns `MatchDecision.score` + `aptitude` (Apt / Apt with gaps /
-Not currently apt) using the *profile* (`@puente/solver` via `MatchingService`, issue #20), but no
+`@workbridge/catalog`). The solver returns `MatchDecision.score` + `aptitude` (Apt / Apt with gaps /
+Not currently apt) using the *profile* (`@workbridge/solver` via `MatchingService`, issue #20), but no
 web route exposes it (CS-3). Drafts (G7) require a domain `MatchDecision` anyway (R13).
 
 | Option | Pros | Cons |
@@ -46,14 +46,14 @@ the same candidate id, so a second call overwrites the first (R2).
 
 | Option | Pros | Cons |
 |---|---|---|
-| A. Server merge: intake with an existing candidate id merges skills/experiences/evidence by canonical id | Any number of sources; matches "complete what is missing" | New merge logic in `@puente/profile` + tests |
+| A. Server merge: intake with an existing candidate id merges skills/experiences/evidence by canonical id | Any number of sources; matches "complete what is missing" | New merge logic in `@workbridge/profile` + tests |
 | B. Attachment first, then chat text sent with `candidateId` and merged only for empty fields | Smaller change | Loses chat details that overlap the CV |
 | C. One source only: if a CV is attached, chat only fills preference slots | Simplest | Informal experience missing from the CV is lost — against the product promise |
 
 **Recommendation:** A.
 
 **Decision (2026-10-16, product owner):** A, server-side merge by canonical id (AC-07, R2). New
-work: merge in `@puente/profile` / `ProfileAgent` when the candidate already has a profile.
+work: merge in `@workbridge/profile` / `ProfileAgent` when the candidate already has a profile.
 
 ## OQ-3 — Authentication and identity
 

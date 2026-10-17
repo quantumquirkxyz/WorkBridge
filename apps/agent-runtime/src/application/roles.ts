@@ -1,7 +1,7 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { ApplicationError } from "./errors";
 
-/** Better Auth `session.user.role` values for Puente Laboral. */
+/** Better Auth `session.user.role` values for WorkBridge. */
 export const BETTER_AUTH_ROLES = ["candidate", "employer", "counselor"] as const;
 
 export type AuthRole = (typeof BETTER_AUTH_ROLES)[number];

@@ -1,6 +1,6 @@
-import type { AjvError } from "@puente/domain";
+import type { AjvError } from "@workbridge/domain";
 
-/** Ajv 2020-12 error shape, re-exported through `@puente/domain`. */
+/** Ajv 2020-12 error shape, re-exported through `@workbridge/domain`. */
 export type TrainingAjvError = AjvError;
 
 function describe(

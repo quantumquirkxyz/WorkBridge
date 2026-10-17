@@ -30,10 +30,10 @@ export async function POST(request: Request): Promise<Response> {
   const payload = { ...(parsed.payload as Record<string, unknown>), candidate_id: candidateId };
   const { status, body } = handleSavePreferences(payload);
   if (status === 200) {
-    const candidateId = (body as import('@puente/domain').CandidatePreferences).candidate_id;
+    const candidateId = (body as import('@workbridge/domain').CandidatePreferences).candidate_id;
     const previous = preferencesStore.get(candidateId);
     try {
-      await persistCandidatePreferences(body as import('@puente/domain').CandidatePreferences);
+      await persistCandidatePreferences(body as import('@workbridge/domain').CandidatePreferences);
     } catch {
       if (previous) preferencesStore.save(previous);
       else preferencesStore.delete(candidateId);

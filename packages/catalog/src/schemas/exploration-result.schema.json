@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://puente-laboral.pa/schemas/exploration-result/1.0.0",
+  "$id": "https://workbridge.pa/schemas/exploration-result/1.0.0",
   "title": "ExplorationResult",
   "description": "The Exploration Agent response: compatible cached vacancies, each with provenance and a freshness label, plus the vacancies that were excluded and why. Stale vacancies (older than 72 hours by default) never appear as matches. When nothing is viable the result also carries a per-cause explanation and near matches (vacancies blocked by exactly one declared constraint).",
   "type": "object",
@@ -8,9 +8,9 @@
   "required": ["schemaVersion", "candidateId", "generatedAt", "preferences", "matches", "excluded", "summary"],
   "properties": {
     "schemaVersion": { "const": "1.0.0" },
-    "candidateId": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" },
+    "candidateId": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/identifier" },
     "generatedAt": { "type": "string", "format": "date-time" },
-    "preferences": { "$ref": "https://puente-laboral.pa/schemas/candidate-preferences/1.0.0" },
+    "preferences": { "$ref": "https://workbridge.pa/schemas/candidate-preferences/1.0.0" },
     "matches": { "type": "array", "items": { "$ref": "#/$defs/match" } },
     "excluded": { "type": "array", "items": { "$ref": "#/$defs/excluded" } },
     "summary": { "$ref": "#/$defs/summary" },
@@ -45,9 +45,9 @@
       "additionalProperties": false,
       "required": ["vacancy", "freshness", "provenance", "matchScore", "matchReasons"],
       "properties": {
-        "vacancy": { "$ref": "https://puente-laboral.pa/schemas/cached-vacancy/1.0.0" },
+        "vacancy": { "$ref": "https://workbridge.pa/schemas/cached-vacancy/1.0.0" },
         "freshness": { "$ref": "#/$defs/freshness" },
-        "provenance": { "$ref": "https://puente-laboral.pa/schemas/cached-vacancy/1.0.0#/$defs/provenance" },
+        "provenance": { "$ref": "https://workbridge.pa/schemas/cached-vacancy/1.0.0#/$defs/provenance" },
         "matchScore": { "type": "number", "minimum": 0, "maximum": 100 },
         "matchReasons": { "type": "array", "items": { "type": "string", "minLength": 1 } }
       }
@@ -57,7 +57,7 @@
       "additionalProperties": false,
       "required": ["jobId", "reason", "detail", "freshness"],
       "properties": {
-        "jobId": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" },
+        "jobId": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/identifier" },
         "reason": { "$ref": "#/$defs/exclusionReason" },
         "detail": { "type": "string", "minLength": 1 },
         "failedConstraints": {
@@ -74,9 +74,9 @@
       "additionalProperties": false,
       "required": ["vacancy", "freshness", "provenance", "blockedBy", "warnings", "proximity"],
       "properties": {
-        "vacancy": { "$ref": "https://puente-laboral.pa/schemas/cached-vacancy/1.0.0" },
+        "vacancy": { "$ref": "https://workbridge.pa/schemas/cached-vacancy/1.0.0" },
         "freshness": { "$ref": "#/$defs/freshness" },
-        "provenance": { "$ref": "https://puente-laboral.pa/schemas/cached-vacancy/1.0.0#/$defs/provenance" },
+        "provenance": { "$ref": "https://workbridge.pa/schemas/cached-vacancy/1.0.0#/$defs/provenance" },
         "blockedBy": { "$ref": "#/$defs/exclusionReason" },
         "warnings": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
         "proximity": { "type": "number", "minimum": 0, "maximum": 100 }

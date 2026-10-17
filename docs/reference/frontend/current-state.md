@@ -22,7 +22,7 @@ the UI and the domain packages, and visible-behavior defects.
 |---|---|---|---|
 | CS-1 | Classes `.danger`, `.warning-panel`, `.result` are used but never defined | `ExplorationDashboard.tsx`; absent from `globals.css` | "Eliminar mis datos" renders as a primary blue button next to "Guardar búsqueda" — a destructive action with no visual distinction |
 | CS-2 | Intake profile and exploration are disconnected | `ExplorationDashboard` never sends `candidate_id`; `lib/preferences.ts` derives a deterministic id from the declaration | The profile does not inform exploration; the user types target roles twice; profile and preferences live under different candidate ids |
-| CS-3 | Aptitude is never shown | `apps/web` does not import `@puente/solver`; `MatchingService` exists in `apps/agent-runtime/src/matching/service.ts` but no web route exposes it | The product's core output (Apt / Apt with gaps / Not currently apt) is invisible |
+| CS-3 | Aptitude is never shown | `apps/web` does not import `@workbridge/solver`; `MatchingService` exists in `apps/agent-runtime/src/matching/service.ts` but no web route exposes it | The product's core output (Apt / Apt with gaps / Not currently apt) is invisible |
 | CS-4 | `ExplorationDashboard` is shallow and oversized | 712 lines, 20 `useState`, 4 fetch flows, 5 result views in one module | Cannot be split into wizard steps or tested in isolation |
 | CS-5 | Internal vocabulary leaks to users | `CandidateProfile`, "trace", "Extractor", "catálogo en caché", raw `jobId` for excluded vacancies, ISO `savedAt` | Confusing for the target audience |
 | CS-6 | Wide tables (up to 7 columns) | Matches, excluded, near matches, roadmap | Unusable at phone width |

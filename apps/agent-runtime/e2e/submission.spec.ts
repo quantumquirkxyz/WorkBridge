@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import type { MatchDecision } from "@puente/domain";
+import type { MatchDecision } from "@workbridge/domain";
 import { sampleMatchDecision, sampleWorkflowEnvelope } from "../src/application/fixtures";
 import { signBetterAuthSession } from "../src/application/roles";
 
@@ -9,7 +9,7 @@ function session(role: "candidate" | "employer" | "counselor", id = role) {
   return signBetterAuthSession(
     {
       session: { id: `sess-${id}`, userId: id, expiresAt: "2027-01-01T00:00:00.000Z" },
-      user: { id, email: `${id}@puente.pa`, role },
+      user: { id, email: `${id}@workbridge.pa`, role },
     },
     SESSION_SECRET,
   );

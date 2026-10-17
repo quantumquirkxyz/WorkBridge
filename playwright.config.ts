@@ -12,7 +12,7 @@ function isolatedWebEnv(): Record<string, string> {
   // The visual suite must use the heuristic extractor and the cached catalog.
   env.OPENROUTER_API_KEY = "";
   env.DATABASE_URL = "";
-  env.PUENTE_PERSISTENCE = "memory";
+  env.WORKBRIDGE_PERSISTENCE = "memory";
   return env;
 }
 

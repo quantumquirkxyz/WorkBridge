@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://puentelaboral.pa/schemas/match-decision.schema.json",
+  "$id": "https://workbridge.pa/schemas/match-decision.schema.json",
   "title": "MatchDecision",
   "description": "Deterministic aptitude decision for one candidate/vacancy pair: weighted score breakdown, hard-constraint outcomes, one-point promotion record, and the routing estimate that produced the geographic reasons.",
   "type": "object",

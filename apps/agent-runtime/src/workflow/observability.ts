@@ -1,4 +1,4 @@
-import type { AgentId, ActorRole } from "@puente/domain";
+import type { AgentId, ActorRole } from "@workbridge/domain";
 
 export type DqlState =
   | "pending"

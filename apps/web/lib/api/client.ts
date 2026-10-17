@@ -1,7 +1,7 @@
-import type { IntakeRequest, IntakeResult, CandidateProfile, CandidatePreferences } from '@puente/domain';
-import type { ExplorationResult } from '@puente/catalog';
-import type { Roadmap, TrainingGap } from '@puente/training';
-import type { MatchDecision } from '@puente/solver';
+import type { IntakeRequest, IntakeResult, CandidateProfile, CandidatePreferences } from '@workbridge/domain';
+import type { ExplorationResult } from '@workbridge/catalog';
+import type { Roadmap, TrainingGap } from '@workbridge/training';
+import type { MatchDecision } from '@workbridge/solver';
 import type { PreferencesDraft } from '../preferences';
 import { ApiClientError } from './errors';
 import type { SavedSearch, SavedSearchView } from './contracts';

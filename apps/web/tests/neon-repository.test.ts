@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import type { CandidatePreferences, CandidateProfile } from '@puente/domain';
+import type { CandidatePreferences, CandidateProfile } from '@workbridge/domain';
 import {
   deleteCandidateData,
   persistCandidatePreferences,
@@ -52,12 +52,12 @@ const preferences: CandidatePreferences = {
   willing_to_intern: false,
 };
 
-const previousPersistence = process.env.PUENTE_PERSISTENCE;
+const previousPersistence = process.env.WORKBRIDGE_PERSISTENCE;
 const previousDatabaseUrl = process.env.DATABASE_URL;
 
 afterEach(() => {
-  if (previousPersistence === undefined) delete process.env.PUENTE_PERSISTENCE;
-  else process.env.PUENTE_PERSISTENCE = previousPersistence;
+  if (previousPersistence === undefined) delete process.env.WORKBRIDGE_PERSISTENCE;
+  else process.env.WORKBRIDGE_PERSISTENCE = previousPersistence;
   if (previousDatabaseUrl === undefined) delete process.env.DATABASE_URL;
   else process.env.DATABASE_URL = previousDatabaseUrl;
   profileStore.delete(CANDIDATE_ID);
@@ -67,18 +67,18 @@ afterEach(() => {
 
 describe('persistenceMode', () => {
   it('is memory only when the flag is exactly memory', () => {
-    process.env.PUENTE_PERSISTENCE = 'memory';
+    process.env.WORKBRIDGE_PERSISTENCE = 'memory';
     expect(persistenceMode()).toBe('memory');
-    process.env.PUENTE_PERSISTENCE = 'neon';
+    process.env.WORKBRIDGE_PERSISTENCE = 'neon';
     expect(persistenceMode()).toBe('neon');
-    delete process.env.PUENTE_PERSISTENCE;
+    delete process.env.WORKBRIDGE_PERSISTENCE;
     expect(persistenceMode()).toBe('neon');
   });
 });
 
 describe('memory persistence', () => {
   it('resolves writes and reads without DATABASE_URL', async () => {
-    process.env.PUENTE_PERSISTENCE = 'memory';
+    process.env.WORKBRIDGE_PERSISTENCE = 'memory';
     delete process.env.DATABASE_URL;
     profileStore.save(profile);
     preferencesStore.save(preferences);
@@ -107,7 +107,7 @@ describe('memory persistence', () => {
   });
 
   it('still requires DATABASE_URL when the flag is absent', async () => {
-    delete process.env.PUENTE_PERSISTENCE;
+    delete process.env.WORKBRIDGE_PERSISTENCE;
     delete process.env.DATABASE_URL;
     profileStore.save(profile);
 

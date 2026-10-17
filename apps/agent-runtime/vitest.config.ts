@@ -6,7 +6,7 @@ const r = (p: string) => fileURLToPath(new URL(p, import.meta.url));
 export default defineConfig({
   resolve: {
     alias: {
-      "@puente/training": r("../../packages/training/src/index.ts"),
+      "@workbridge/training": r("../../packages/training/src/index.ts"),
     },
   },
   test: {

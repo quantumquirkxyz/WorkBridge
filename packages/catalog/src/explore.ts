@@ -3,7 +3,7 @@ import {
   relevantSkillIds,
   resolveTargetRoles,
   type CandidatePreferences,
-} from '@puente/domain';
+} from '@workbridge/domain';
 import type { VacancyCatalog } from './catalog';
 import { assertExplorationResult } from './ajv';
 import { DEFAULT_MAX_AGE_HOURS, computeFreshness } from './freshness';

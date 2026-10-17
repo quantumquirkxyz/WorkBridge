@@ -60,7 +60,7 @@ describe("LangfuseRecorder", () => {
     const recorder = new LangfuseRecorder();
     recorder.startTrace({
       id: "trace-0001",
-      name: "puente-employability",
+      name: "workbridge-employability",
       timestamp: at,
       metadata: { trace_id: "trace-0001" },
     });

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
-import { validateCandidatePreferences } from '@puente/domain';
-import { validateExplorationResult } from '@puente/catalog';
+import { validateCandidatePreferences } from '@workbridge/domain';
+import { validateExplorationResult } from '@workbridge/catalog';
 import { buildPreferences, type PreferencesDraft } from '../lib/preferences';
 import { createInMemoryPreferencesStore } from '../lib/preferences-store';
 import { handleDeleteCandidate, handleExploration, handleSavePreferences } from '../lib/exploration-handler';

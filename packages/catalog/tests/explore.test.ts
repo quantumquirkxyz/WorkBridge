@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { CandidatePreferences } from '@puente/domain';
+import type { CandidatePreferences } from '@workbridge/domain';
 import {
   createVacancyCatalog,
   exploreVacancies,

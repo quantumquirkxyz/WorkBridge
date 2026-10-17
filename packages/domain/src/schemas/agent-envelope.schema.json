@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://puentelaboral.pa/schemas/agent-envelope.schema.json",
+  "$id": "https://workbridge.pa/schemas/agent-envelope.schema.json",
   "title": "AgentEnvelope",
   "description": "Internal agent-to-agent message. trace_id and idempotency_key are mandatory on every hop.",
   "type": "object",

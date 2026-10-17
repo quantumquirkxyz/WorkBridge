@@ -24,5 +24,5 @@ export function orderMatchesByDecision(
       (decisions.find((decision) => decision.vacancyId === a.vacancy.jobId)?.score ?? -1),
   );
 }
-import type { VacancyMatch } from '@puente/catalog';
-import type { MatchDecision } from '@puente/solver';
+import type { VacancyMatch } from '@workbridge/catalog';
+import type { MatchDecision } from '@workbridge/solver';

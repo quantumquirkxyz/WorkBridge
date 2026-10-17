@@ -22,7 +22,7 @@ Input modes kept for every task: touch, pointer, keyboard, voice (chat), assisti
 | # | Barrier | Task | Impact | Design response |
 |---|---|---|---|---|
 | B1 | New chat messages not announced, or focus jumps on each message | J1 | Blocks | `role="log"` + `aria-live="polite"` on the message list; focus stays in the composer; chips are announced as a group "Respuestas sugeridas" |
-| B2 | Long LLM wait with no feedback | J1 | High | Typing indicator announced once ("Puente está escribiendo"); "Estoy pensando…" after 3 s; no timeouts that discard input |
+| B2 | Long LLM wait with no feedback | J1 | High | Typing indicator announced once ("WorkBridge está escribiendo"); "Estoy pensando…" after 3 s; no timeouts that discard input |
 | B3 | Readiness shown only as a colored bar | J2 | High | `Progress` with `aria-valuenow`, visible "80 %" text and label "Preparación" (D4) |
 | B4 | Bottom sheet traps or loses focus | J2 | High | Radix `Sheet` (Dialog semantics): focus moves to the title, Esc and × close, focus returns to the originating card |
 | B5 | Status badges distinguishable only by color | J7–J9 | High | Icon + text in every `StatusBadge` and verification badge |
@@ -37,7 +37,7 @@ Input modes kept for every task: touch, pointer, keyboard, voice (chat), assisti
 ### Structure and semantics
 - One `h1` per page; headings follow the screen outline in [screens.md](screens.md).
 - Landmarks: `header`, `nav` (labelled "Principal"), `main`, and `aside` for the desktop detail pane.
-- `lang="es"` on `<html>`; page `<title>` per route, e.g. "Vacantes — Puente Laboral".
+- `lang="es"` on `<html>`; page `<title>` per route, e.g. "Vacantes — WorkBridge".
 - Route changes move focus to the page `h1` and announce the title (Next.js route announcer kept).
 
 ### Forms and decisions

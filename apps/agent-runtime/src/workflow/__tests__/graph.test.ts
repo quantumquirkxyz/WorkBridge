@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { validateCandidateProfile, type WorkflowRunRequest, type CandidatePreferences } from "@puente/domain";
-import { validateExplorationResult } from "@puente/catalog";
+import { validateCandidateProfile, type WorkflowRunRequest, type CandidatePreferences } from "@workbridge/domain";
+import { validateExplorationResult } from "@workbridge/catalog";
 import preferencesFixture from "../../../../../packages/catalog/fixtures/preferences.json";
-import { createSeedTrainingCatalog, type TrainingPreferences } from "@puente/training";
+import { createSeedTrainingCatalog, type TrainingPreferences } from "@workbridge/training";
 import { CAPABILITY_CHAINS } from "../models";
 import { createWorkflowRuntime } from "../graph";
 import {

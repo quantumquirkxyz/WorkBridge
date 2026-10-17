@@ -38,7 +38,7 @@ export const SLOTS: readonly SlotDefinition[] = [
     id: 'greeting',
     phase: 'profile',
     question:
-      '¡Hola! Soy Puente 👋 Te voy a hacer unas preguntas para conocer lo que sabes hacer. También puedes preguntarme lo que quieras. ¿Cómo te llamo?',
+      '¡Hola! Soy WorkBridge 👋 Te voy a hacer unas preguntas para conocer lo que sabes hacer. También puedes preguntarme lo que quieras. ¿Cómo te llamo?',
     chips: labels('Prefiero no decirlo'),
   },
   {

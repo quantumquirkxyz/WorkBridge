@@ -1,5 +1,5 @@
-import type { CandidateProfile, IntakeSource, JobRequirements } from "@puente/domain";
-import { normalizeProfileDraft } from "@puente/profile";
+import type { CandidateProfile, IntakeSource, JobRequirements } from "@workbridge/domain";
+import { normalizeProfileDraft } from "@workbridge/profile";
 import { normalizeVacancy } from "../../vacancy/normalize";
 import type { RawVacancy } from "../../vacancy/types";
 import type { CandidateMatchContext, VacancyMatchContext } from "../adapt";

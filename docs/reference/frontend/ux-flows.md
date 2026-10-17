@@ -92,7 +92,7 @@ Fallback question = what the deterministic path asks, and the tone reference for
 
 | # | Slot | Incomplete when | Fallback question | Fallback chips |
 |---|---|---|---|---|
-| 0 | `greeting` (name, optional) | — (skippable) | "¡Hola! Soy Puente 👋 Te voy a hacer unas preguntas para conocer lo que sabes hacer. También puedes preguntarme lo que quieras. ¿Cómo te llamo?" | "Prefiero no decirlo" |
+| 0 | `greeting` (name, optional) | — (skippable) | "¡Hola! Soy WorkBridge 👋 Te voy a hacer unas preguntas para conocer lo que sabes hacer. También puedes preguntarme lo que quieras. ¿Cómo te llamo?" | "Prefiero no decirlo" |
 | 1 | `cv_source` | — | "¿Tienes un CV o una hoja de vida?" | "Sí, lo subo 📎", "No tengo / prefiero contarte" |
 | 2 | `experiences[]` | 0 entries and the user has not said "Todavía no" | "¿Has trabajado o ayudado en algún lugar? Vale todo: negocio familiar, voluntariado, trabajos por tu cuenta, proyectos del colegio…" | "Todavía no" |
 | 3 | `experiences[i].tasks` | entry has no task | "¿Qué hacías ahí?" | "Atender clientes", "Caja / cobrar", "Inventario", "Redes sociales", "Reparar computadoras o celulares", "Organizar documentos" |

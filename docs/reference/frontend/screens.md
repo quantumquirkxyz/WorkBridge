@@ -20,7 +20,7 @@ are redirected to `/vacantes`.
 ```
 Phone                                   Desktop (md+)
 ┌───────────────────────────┐           ┌──────────────────────────────────────────────┐
-│ ◠ Puente Laboral          │           │ ◠ Puente Laboral                             │
+│ ◠ WorkBridge          │           │ ◠ WorkBridge                             │
 │                           │           │ ┌──────────────────────┐  ┌───────────────┐  │
 │   [ilustración]           │           │ │ Tu experiencia       │  │ [ilustración] │  │
 │                           │           │ │ cuenta. Aunque sea   │  │               │  │
@@ -50,7 +50,7 @@ is in flight.
 ```
 Phone                                    Desktop (md+): centered column max-w 640px
 ┌───────────────────────────┐
-│ ←  Puente      ●●●○○ 3/5  │  ← header: back, progress (phase steps)
+│ ←  WorkBridge      ●●●○○ 3/5  │  ← header: back, progress (phase steps)
 ├───────────────────────────┤
 │ 🤖 ¿Has trabajado o       │
 │    ayudado en algún lugar?│
@@ -83,7 +83,7 @@ Phone                                    Desktop (md+): centered column max-w 64
 ```
 Phone                                   Desktop (md+)
 ┌───────────────────────────┐           ┌──────────────────────────────────────────────┐
-│ Hola, Ana 👋              │           │ ◠ Puente   Vacantes  Mi ruta  Mi perfil      │
+│ Hola, Ana 👋              │           │ ◠ WorkBridge   Vacantes  Mi ruta  Mi perfil      │
 │ 3 vacantes para ti        │           ├───────────────────────┬──────────────────────┤
 │ Revisamos 24 · actualizado│           │ 3 vacantes para ti    │ Cajero/a — Super 99  │
 │ hace 2 h                  │           │ ┌───────────────────┐ │ Preparación ████░ 80%│
@@ -232,7 +232,7 @@ account (`?next=` keeps the destination).
 
 ```
 ┌───────────────────────────┐
-│ ◠ Puente Laboral          │
+│ ◠ WorkBridge          │
 │ Guarda tu avance          │
 │ Crea tu cuenta para       │
 │ postular y volver cuando  │
@@ -305,7 +305,7 @@ Phone                                   Desktop (md+): documents left (tabs), ac
 ```
 Desktop                                              Phone: queue as cards; detail full screen
 ┌───────────────────────────────────────────────────────────────┐
-│ ◠ Puente · Orientación          Pendientes (4)   Historial  ⏻ │
+│ ◠ WorkBridge · Orientación          Pendientes (4)   Historial  ⏻ │
 ├──────────────────────────┬────────────────────────────────────┤
 │ Pendientes de revisión   │ Ana P. → Cajero/a · Super 99        │
 │ ▸ Ana P. · Cajero/a      │ Motivos: [Brecha crítica]          │
@@ -333,7 +333,7 @@ Desktop                                              Phone: queue as cards; deta
 
 ```
 ┌───────────────────────────────────────────────────────────────┐
-│ ◠ Puente · Empresas        Postulaciones (3)                ⏻ │
+│ ◠ WorkBridge · Empresas        Postulaciones (3)                ⏻ │
 ├──────────────────────────┬────────────────────────────────────┤
 │ Pendientes               │ Postulación a Cajero/a              │
 │ ▸ Cajero/a · hace 1 día  │ [ CV ] [ Carta ]                    │

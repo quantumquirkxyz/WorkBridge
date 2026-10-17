@@ -1,8 +1,8 @@
-import type { ExplorationResult } from '@puente/catalog';
-import type { Roadmap } from '@puente/training';
+import type { ExplorationResult } from '@workbridge/catalog';
+import type { Roadmap } from '@workbridge/training';
 
-const EXPLORATION_KEY = 'puente-laboral:exploration';
-const ROADMAP_KEY = 'puente-laboral:roadmap';
+const EXPLORATION_KEY = 'workbridge:exploration';
+const ROADMAP_KEY = 'workbridge:roadmap';
 
 export interface ExplorationSession {
   result: ExplorationResult;

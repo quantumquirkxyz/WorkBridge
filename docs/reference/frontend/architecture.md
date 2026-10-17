@@ -19,7 +19,7 @@ flowchart LR
     BFF[/api/applications/*<br/>BFF: sign session + forward/]
   end
   subgraph packages
-    DOM[@puente/domain] --- CAT[@puente/catalog] --- TRN[@puente/training]
+    DOM[@workbridge/domain] --- CAT[@workbridge/catalog] --- TRN[@workbridge/training]
   end
   RT[apps/agent-runtime<br/>ApplicationService REST]
   LLM[(OpenRouter)]
@@ -98,7 +98,7 @@ not a security boundary on their own (AC-76, AC-78).
 | `lib/api/client.ts` | Client-safe | Typed `fetch` wrappers for `/api/*` |
 
 Rule: a client component never imports from `lib/*-handler.ts`, `lib/*-store.ts`, `lib/auth.ts`,
-or `@puente/agent-runtime`; enforced with an ESLint `no-restricted-imports` rule for files
+or `@workbridge/agent-runtime`; enforced with an ESLint `no-restricted-imports` rule for files
 containing `'use client'`.
 
 ## Component graph (candidate)
@@ -192,7 +192,7 @@ lib/chat/
 ├─ tracker.ts      pure: (slotState, slotUpdates, userAction) → slotState, pendingSlot
 ├─ prompt.ts       system prompt builder: persona, rules (no promises, no submission, grounding),
 │                  pending slot, slot summary, last 12 turns
-├─ schema.ts       ChatTurn JSON Schema (Ajv via @puente/domain createAjv)
+├─ schema.ts       ChatTurn JSON Schema (Ajv via @workbridge/domain createAjv)
 └─ handler.ts      handleChatTurn(body, { chat?: ChatFn, now? }) → { status, body: ChatTurn }
 ```
 
@@ -200,7 +200,7 @@ lib/chat/
   output, then fallback (`source: "fallback"`). 20 s timeout via `AbortController`.
 - The tracker, not the model, sets `pendingSlot` and `phase`. Model `slotUpdates` are accepted
   only as `proposed`; the client turns them into confirmation chips.
-- PII: the request body carries no name; `redactPii` from `@puente/agent-runtime` (`src/pii.ts`)
+- PII: the request body carries no name; `redactPii` from `@workbridge/agent-runtime` (`src/pii.ts`)
   runs on the transcript before it reaches the model.
 - Observability: each turn logs trace id, `source`, latency, token usage, and slot transitions —
   server-side only (NG4).

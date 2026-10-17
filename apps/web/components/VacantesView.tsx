@@ -1,9 +1,9 @@
 'use client';
 
 import { forwardRef, useEffect, useRef, useState } from 'react';
-import type { ExplorationResult, NearMatch, VacancyMatch } from '@puente/catalog';
-import type { MatchDecision } from '@puente/solver';
-import { MODALITY_LABELS } from '@puente/catalog';
+import type { ExplorationResult, NearMatch, VacancyMatch } from '@workbridge/catalog';
+import type { MatchDecision } from '@workbridge/solver';
+import { MODALITY_LABELS } from '@workbridge/catalog';
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from './ui/sheet';
 import { Skeleton } from './ui/skeleton';
@@ -43,9 +43,9 @@ export function VacantesView({ result = null, loading = false, decisions = [], d
 
   useEffect(() => {
     const pending = new URLSearchParams(window.location.search).get('save') === '1'
-      ? window.sessionStorage.getItem('puente:pending-save')
+      ? window.sessionStorage.getItem('workbridge:pending-save')
       : null;
-    if (pending) window.sessionStorage.removeItem('puente:pending-save');
+    if (pending) window.sessionStorage.removeItem('workbridge:pending-save');
     fetch('/api/candidate')
       .then((response) => response.ok ? response.json() : null)
       .then(async (candidate: { candidateId?: string } | null) => {
@@ -62,9 +62,9 @@ export function VacantesView({ result = null, loading = false, decisions = [], d
             }
           } catch { /* discard malformed pending state */ }
         }
-        const stored = window.localStorage.getItem(`puente:exploration:${candidate.candidateId}`);
+        const stored = window.localStorage.getItem(`workbridge:exploration:${candidate.candidateId}`);
         if (stored) {
-          try { setStoredResult(JSON.parse(stored) as ExplorationResult); } catch { window.localStorage.removeItem(`puente:exploration:${candidate.candidateId}`); }
+          try { setStoredResult(JSON.parse(stored) as ExplorationResult); } catch { window.localStorage.removeItem(`workbridge:exploration:${candidate.candidateId}`); }
         }
         const response = await fetch(`/api/searches?candidateId=${encodeURIComponent(candidate.candidateId)}`);
         return response.ok ? { candidateId: candidate.candidateId, body: await response.json() } : null;
@@ -87,7 +87,7 @@ export function VacantesView({ result = null, loading = false, decisions = [], d
     if (!preferences) return;
     const response = await fetch('/api/searches', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ label: saveLabel, preferences }) });
     if (response.status === 401) {
-      window.sessionStorage.setItem('puente:pending-save', JSON.stringify({ label: saveLabel, preferences }));
+      window.sessionStorage.setItem('workbridge:pending-save', JSON.stringify({ label: saveLabel, preferences }));
       window.location.href = `/ingresar?next=${encodeURIComponent('/vacantes?save=1')}`;
       return;
     }

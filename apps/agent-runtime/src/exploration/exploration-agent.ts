@@ -1,10 +1,10 @@
-import { assertCandidatePreferences } from '@puente/domain';
+import { assertCandidatePreferences } from '@workbridge/domain';
 import {
   exploreVacancies,
   type ExplorationQueryOptions,
   type ExplorationResult,
   type VacancyCatalog,
-} from '@puente/catalog';
+} from '@workbridge/catalog';
 
 /**
  * The Exploration Agent seam (spec #1). It is deliberately thin and

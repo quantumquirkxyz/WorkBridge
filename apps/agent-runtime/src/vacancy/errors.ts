@@ -1,4 +1,4 @@
-import type { AjvError } from "@puente/domain";
+import type { AjvError } from "@workbridge/domain";
 
 export class VacancyInputError extends Error {
   constructor(message: string) {

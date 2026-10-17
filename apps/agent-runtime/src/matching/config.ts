@@ -1,4 +1,4 @@
-import { createGoogleMapsRouter, createRoutingPort, type RoutingPort } from "@puente/solver";
+import { createGoogleMapsRouter, createRoutingPort, type RoutingPort } from "@workbridge/solver";
 import {
   createGeocodingPort,
   createGoogleGeocoder,

@@ -1,13 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://puente-laboral.pa/schemas/intake-source/1.0.0",
+  "$id": "https://workbridge.pa/schemas/intake-source/1.0.0",
   "title": "IntakeSource",
   "description": "Provenance record for one raw candidate input converted to text before profile extraction.",
   "type": "object",
   "additionalProperties": false,
   "required": ["kind", "ref", "extraction_method", "extracted_at"],
   "properties": {
-    "kind": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/intake_source_kind" },
+    "kind": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/intake_source_kind" },
     "ref": { "type": "string", "minLength": 1, "maxLength": 300 },
     "mime_type": { "type": "string", "maxLength": 150 },
     "byte_length": { "type": "integer", "minimum": 0 },
@@ -19,7 +19,7 @@
       "maxLength": 120,
       "description": "Adapter that produced the text, e.g. `unpdf`, `vision`, `tesseract`, `passthrough`."
     },
-    "extraction_confidence": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/confidence" },
+    "extraction_confidence": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/confidence" },
     "warnings": {
       "type": "array",
       "items": { "type": "string", "minLength": 1 }

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://puente-laboral.pa/schemas/skill/1.0.0",
+  "$id": "https://workbridge.pa/schemas/skill/1.0.0",
   "title": "CandidateSkill",
   "description": "A candidate skill with canonical identity, level 0-4, provenance, supporting evidence and confidence. A declared-only skill cannot exceed level 1, and a skill above level 0 must carry at least one piece of evidence.",
   "type": "object",
@@ -16,7 +16,7 @@
     "confidence"
   ],
   "properties": {
-    "skill_id": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" },
+    "skill_id": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/identifier" },
     "canonical_name": { "type": "string", "minLength": 1, "maxLength": 200 },
     "original_term": {
       "type": "string",
@@ -24,15 +24,15 @@
       "maxLength": 200,
       "description": "The candidate's own wording, always preserved."
     },
-    "kind": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/skill_kind" },
-    "level": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/skill_level" },
+    "kind": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/skill_kind" },
+    "level": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/skill_level" },
     "evidence_ids": {
       "type": "array",
-      "items": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" },
+      "items": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/identifier" },
       "uniqueItems": true
     },
-    "source": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/provenance" },
-    "confidence": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/confidence" },
+    "source": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/provenance" },
+    "confidence": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/confidence" },
     "synonyms": {
       "type": "array",
       "items": { "type": "string", "minLength": 1 },

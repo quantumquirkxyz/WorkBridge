@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { createVacancyCatalog, toCachedVacancy, validateExplorationResult, type CachedVacancy } from '@puente/catalog';
-import type { CandidatePreferences } from '@puente/domain';
+import { createVacancyCatalog, toCachedVacancy, validateExplorationResult, type CachedVacancy } from '@workbridge/catalog';
+import type { CandidatePreferences } from '@workbridge/domain';
 import { createExplorationAgent } from '../src/exploration/exploration-agent';
 
 const NOW = () => new Date('2026-10-16T12:00:00.000Z');

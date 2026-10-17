@@ -4,10 +4,10 @@ import {
   type CandidatePreferences,
   type JobRequirements,
   type Requirement,
-} from '@puente/domain';
-import type { CachedVacancy } from '@puente/catalog';
-import type { CandidateMatchContext, VacancyMatchInput } from '@puente/agent-runtime';
-import { createMatchingService, matchingConfigFromEnv, type MatchingService } from '@puente/agent-runtime';
+} from '@workbridge/domain';
+import type { CachedVacancy } from '@workbridge/catalog';
+import type { CandidateMatchContext, VacancyMatchInput } from '@workbridge/agent-runtime';
+import { createMatchingService, matchingConfigFromEnv, type MatchingService } from '@workbridge/agent-runtime';
 
 function canonicalSkill(skill: CachedVacancy['skills'][number]) {
   if (skill.skillId?.startsWith('PA-')) {

@@ -1,4 +1,4 @@
-import { clampScore, createRoutingPort, type RoutingPort } from "@puente/solver";
+import { clampScore, createRoutingPort, type RoutingPort } from "@workbridge/solver";
 import type {
   GapContribution,
   OpportunitySchedule,

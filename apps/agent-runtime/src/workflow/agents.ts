@@ -1,7 +1,7 @@
-import { assertAgentEnvelope, type AgentEnvelope, type AgentId, type CandidatePreferences } from "@puente/domain";
+import { assertAgentEnvelope, type AgentEnvelope, type AgentId, type CandidatePreferences } from "@workbridge/domain";
 import { createExplorationAgent } from "../exploration/exploration-agent";
 import { createProfileAgent } from "../profile-agent";
-import { createSeedCatalog } from "@puente/catalog";
+import { createSeedCatalog } from "@workbridge/catalog";
 import type { Carrier } from "./carrier";
 import {
   DEFAULT_AGENT_TOOL,
@@ -20,7 +20,7 @@ import {
   estimateTokens,
   type ModelRouter,
 } from "./models";
-import type { Aptitude } from "@puente/solver";
+import type { Aptitude } from "@workbridge/solver";
 import type { AppendOnlyAuditLog, DqlRecord, DqlStore, LangfuseRecorder } from "./observability";
 import {
   toSolverCandidate,
@@ -34,7 +34,7 @@ import {
   type Roadmap,
   type TrainingCatalog,
   type TrainingPreferences,
-} from "@puente/training";
+} from "@workbridge/training";
 
 export interface WorkflowStreamEvent {
   event: "envelope" | "lifecycle" | "trace";

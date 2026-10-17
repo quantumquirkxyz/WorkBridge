@@ -25,25 +25,25 @@
       "@/*": [
         "apps/web/*"
       ],
-      "@puente/domain": [
+      "@workbridge/domain": [
         "packages/domain/src/index.ts"
       ],
-      "@puente/solver": [
+      "@workbridge/solver": [
         "packages/solver/src/index.ts"
       ],
-      "@puente/ingestion": [
+      "@workbridge/ingestion": [
         "packages/ingestion/src/index.ts"
       ],
-      "@puente/profile": [
+      "@workbridge/profile": [
         "packages/profile/src/index.ts"
       ],
-      "@puente/catalog": [
+      "@workbridge/catalog": [
         "packages/catalog/src/index.ts"
       ],
-      "@puente/training": [
+      "@workbridge/training": [
         "packages/training/src/index.ts"
       ],
-      "@puente/agent-runtime": [
+      "@workbridge/agent-runtime": [
         "apps/agent-runtime/src/index.ts"
       ]
     },

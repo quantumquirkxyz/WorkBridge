@@ -18,7 +18,7 @@ TrainingGap[]  +  TrainingCatalog (cached snapshot)  +  TrainingPreferences
 
 The Training Agent refreshes the catalog out of band; this package only reads
 the last valid snapshot. `TrainingCatalog` and `Roadmap` are the contracts,
-validated with the shared Ajv 2020-12 instance from `@puente/domain` before they
+validated with the shared Ajv 2020-12 instance from `@workbridge/domain` before they
 leave the module.
 
 ## Inputs
@@ -85,7 +85,7 @@ needs no training plan.
 ## Usage
 
 ```ts
-import { deriveGaps, buildRoadmap, loadCatalog } from "@puente/training";
+import { deriveGaps, buildRoadmap, loadCatalog } from "@workbridge/training";
 
 const catalog = loadCatalog(snapshot); // validates TrainingCatalog
 const gaps = deriveGaps({ candidate, vacancy }); // ticket #8 solver contracts

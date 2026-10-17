@@ -2,7 +2,7 @@
 
 This package is the deterministic matching seam named in spec #2:
 `apps/agent-runtime` receives validated profiles and vacancies and calls
-`@puente/solver`. It scores candidate/vacancy pairs, enforces hard constraints,
+`@workbridge/solver`. It scores candidate/vacancy pairs, enforces hard constraints,
 and nominates candidates with a HiGHS MILP plus a deterministic greedy fallback.
 
 ## Seam
@@ -23,7 +23,7 @@ nominate(candidates, vacancies) ──► capacity-constrained assignment
 
 `MatchDecision` is the contract, defined once in
 `packages/solver/src/schemas/match-decision.schema.json` and validated with the
-shared Ajv 2020-12 instance from `@puente/domain` before it leaves the module.
+shared Ajv 2020-12 instance from `@workbridge/domain` before it leaves the module.
 
 ## Inputs
 
@@ -93,7 +93,7 @@ silently.
 ## Usage
 
 ```ts
-import { evaluateMatch, nominate, createRoutingPort, createGoogleMapsRouter } from "@puente/solver";
+import { evaluateMatch, nominate, createRoutingPort, createGoogleMapsRouter } from "@workbridge/solver";
 
 const routing = createRoutingPort({
   google: process.env.GOOGLE_MAPS_API_KEY

@@ -4,9 +4,9 @@
  * A single global key would let one candidate's declaration leak into another
  * browser session, so the key is derived from the authenticated candidate id
  * shared by the chat, dashboard, and save-search flows — the same id used for
- * `puente:exploration:<candidateId>`.
+ * `workbridge:exploration:<candidateId>`.
  */
-const PREFERENCES_PREFIX = 'puente:preferences';
+const PREFERENCES_PREFIX = 'workbridge:preferences';
 
 export function preferencesStorageKey(candidateId: string): string {
   return `${PREFERENCES_PREFIX}:${candidateId}`;

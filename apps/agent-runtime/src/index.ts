@@ -1,9 +1,9 @@
 
-import { heuristicProfileExtractor, createResilientExtractor, type ProfileExtractor } from '@puente/profile';
+import { heuristicProfileExtractor, createResilientExtractor, type ProfileExtractor } from '@workbridge/profile';
 import { createOpenRouterChat, createOpenRouterVision } from './llm/openrouter';
 import { createLlmProfileExtractor } from './extractors/llm-extractor';
 import { ProfileAgent } from './profile-agent';
-import { visionOcrAdapter } from '@puente/ingestion';
+import { visionOcrAdapter } from '@workbridge/ingestion';
 
 export interface AgentRuntimeEnv {
   OPENROUTER_API_KEY?: string;

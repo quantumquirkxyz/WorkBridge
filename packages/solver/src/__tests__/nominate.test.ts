@@ -166,7 +166,7 @@ describe("nominate", () => {
           candidateId: "cand-boundary",
           vacancyId: metro.vacancyId,
           approved: true,
-          reviewer: "counselor@puente.pa",
+          reviewer: "counselor@workbridge.pa",
         },
       ],
     });

@@ -8,7 +8,7 @@ import {
   type CandidateSkill,
   type Evidence,
   type IntakeSource,
-} from '@puente/domain';
+} from '@workbridge/domain';
 import { mergeCandidateProfiles, profileNeedsReview } from '../src/index';
 
 function evidence(id: string, claim: string): Evidence {

@@ -1,4 +1,4 @@
-import type { IntakeResult, IntakeSource, IntakeSourceKind, Provenance } from '@puente/domain';
+import type { IntakeResult, IntakeSource, IntakeSourceKind, Provenance } from '@workbridge/domain';
 import { heuristicProfileExtractor, type ProfileExtractor } from './heuristic';
 import { normalizeProfileDraft } from './normalize';
 

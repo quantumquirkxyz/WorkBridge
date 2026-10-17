@@ -145,7 +145,7 @@ describe("evaluateMatch promotion integration", () => {
         candidateId: "cand-boundary",
         vacancyId: metro.vacancyId,
         approved: true,
-        reviewer: "counselor@puente.pa",
+        reviewer: "counselor@workbridge.pa",
       },
     });
     expect(decision.promotion.applied).toBe(true);
@@ -176,7 +176,7 @@ describe("evaluateMatch promotion integration", () => {
         candidateId: "cand-boundary",
         vacancyId: metro.vacancyId,
         approved: true,
-        reviewer: "counselor@puente.pa",
+        reviewer: "counselor@workbridge.pa",
       },
     });
     const twice = applyPromotion(once, { peerScores: [67], approved: true });

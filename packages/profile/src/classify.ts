@@ -6,7 +6,7 @@ import {
   type ExperienceType,
   type Relevance,
   type RoleDefinition,
-} from '@puente/domain';
+} from '@workbridge/domain';
 
 export interface ClassificationInput {
   description: string;

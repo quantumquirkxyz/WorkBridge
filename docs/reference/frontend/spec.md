@@ -1,9 +1,9 @@
-# Puente Laboral Web: candidate, counselor, and employer experience
+# WorkBridge Web: candidate, counselor, and employer experience
 
 Spec produced with the `to-spec` skill from the 2026-10-16 design conversation. Shape follows
 `.agents/skills/project/to-spec/references/spec-template.md`; criteria were run against
 `spec-checklist.md` (see [Validation notes](#validation-notes)). Parent spec:
-`.agents/skills/platform/artifacts/to-spec/puente-laboral-quantumquirkxyz.md` (#3); approval rules
+`.agents/skills/platform/artifacts/to-spec/workbridge-quantumquirkxyz.md` (#3); approval rules
 come from ticket 09 and ADR-0003.
 
 ## Problem
@@ -141,7 +141,7 @@ IDs are stable identifiers, not an order. AC-46+ were added in revisions.
 - [ ] AC-51 Every candidate flow (J1–J7) is completable on a 360 × 640 viewport with touch only, and every touch target is at least 44 × 44 CSS px.
 - [ ] AC-52 Fixed bottom elements (nav bar, chat composer, sheet actions) respect `env(safe-area-inset-bottom)` and stay visible above the on-screen keyboard on iOS Safari and Android Chrome.
 - [ ] AC-53 Counselor and employer surfaces are fully usable at 360 px width (lists become cards; detail opens full screen).
-- [ ] AC-83 The app serves a web app manifest (name "Puente Laboral", `display: standalone`, theme color, 192 px and 512 px icons, maskable icon) so it can be added to the home screen; no service worker caching and no push notifications are included (OQ-9).
+- [ ] AC-83 The app serves a web app manifest (name "WorkBridge", `display: standalone`, theme color, 192 px and 512 px icons, maskable icon) so it can be added to the home screen; no service worker caching and no push notifications are included (OQ-9).
 - [ ] AC-54 Playwright e2e runs every journey on a mobile profile (Pixel 7, iPhone 14) and on desktop Chromium.
 - [ ] AC-40 Every route passes an axe scan with zero serious or critical violations in light and dark themes.
 - [ ] AC-41 Every interactive flow is completable with keyboard only.
@@ -239,7 +239,7 @@ IDs are stable identifiers, not an order. AC-46+ were added in revisions.
 | Risk | Mitigation | Owner |
 |---|---|---|
 | R1 Solver matching per vacancy adds latency to `/vacantes` (geocoding + constraints) | Decisions fetched in parallel after the list renders; skeleton bars; cache per (candidate, vacancy, preferences version) | Backend lead |
-| R2 Merging sources creates duplicates or conflicting levels | Merge by canonical skill id keeps the highest-evidence level and all evidence ids; unit tests in `@puente/profile` | Backend lead |
+| R2 Merging sources creates duplicates or conflicting levels | Merge by canonical skill id keeps the highest-evidence level and all evidence ids; unit tests in `@workbridge/profile` | Backend lead |
 | R3 Web Speech API support is partial (absent in Firefox; varies on iOS) | Feature-detect and hide the mic (AC-06) | Frontend lead |
 | R4 Profile carries few preference signals (only `target_roles`) | Preference phase capped at 6 chip-driven slots; the rest defaulted | Product owner |
 | R5 In-memory stores lose data on restart, breaking accounts and returning visits | Persist preferences/searches to Neon like profiles | Backend lead |
