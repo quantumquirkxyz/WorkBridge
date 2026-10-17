@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://puentelaboral.pa/schemas/agent-envelope.schema.json",
+  "title": "AgentEnvelope",
+  "description": "Internal agent-to-agent message. trace_id and idempotency_key are mandatory on every hop.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["trace_id", "idempotency_key", "agent", "kind", "payload"],
+  "properties": {
+    "trace_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{7,127}$"
+    },
+    "idempotency_key": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{7,127}$"
+    },
+    "agent": {
+      "enum": [
+        "exploration",
+        "profile_and_evidence",
+        "market_and_matching",
+        "training"
+      ]
+    },
+    "kind": { "enum": ["request", "response", "event"] },
+    "payload": { "type": "object" }
+  }
+}

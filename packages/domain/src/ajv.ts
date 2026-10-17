@@ -1,8 +1,10 @@
 import Ajv2020 from "ajv/dist/2020";
 import type { ErrorObject, ValidateFunction } from "ajv";
 import addFormats from "ajv-formats";
+import agentEnvelopeSchema from "./schemas/agent-envelope.schema.json";
 import jobRequirementsSchema from "./schemas/job-requirements.schema.json";
-import type { JobRequirements } from "./types";
+import workflowRunSchema from "./schemas/workflow-run.schema.json";
+import type { AgentEnvelope, JobRequirements, WorkflowRunRequest } from "./types";
 
 /** Ajv 2020-12 error shape (draft-07's legacy `dataPath` is not used here). */
 export type AjvError = ErrorObject<string, Record<string, unknown>, unknown>;
@@ -44,5 +46,26 @@ export class AjvValidationError extends Error {
 export function assertJobRequirements(value: unknown): asserts value is JobRequirements {
   if (!validateJobRequirements(value)) {
     throw new AjvValidationError("JobRequirements", validateJobRequirements.errors);
+  }
+}
+
+export const AGENT_ENVELOPE_SCHEMA_ID = agentEnvelopeSchema.$id;
+export const WORKFLOW_RUN_SCHEMA_ID = workflowRunSchema.$id;
+
+export const validateAgentEnvelope: ValidateFunction<AgentEnvelope> =
+  ajv.compile<AgentEnvelope>(agentEnvelopeSchema);
+
+export const validateWorkflowRun: ValidateFunction<WorkflowRunRequest> =
+  ajv.compile<WorkflowRunRequest>(workflowRunSchema);
+
+export function assertAgentEnvelope(value: unknown): asserts value is AgentEnvelope {
+  if (!validateAgentEnvelope(value)) {
+    throw new AjvValidationError("AgentEnvelope", validateAgentEnvelope.errors);
+  }
+}
+
+export function assertWorkflowRun(value: unknown): asserts value is WorkflowRunRequest {
+  if (!validateWorkflowRun(value)) {
+    throw new AjvValidationError("WorkflowRunRequest", validateWorkflowRun.errors);
   }
 }

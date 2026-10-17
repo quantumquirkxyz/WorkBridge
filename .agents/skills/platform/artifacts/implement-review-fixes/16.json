@@ -1,0 +1,24 @@
+{
+  "status": "implemented",
+  "completed": [
+    "Missing Certo or Accredible API tokens return unavailable and do not call that provider.",
+    "Credly requests omit Authorization and leave CREDLY_API_TOKEN unused.",
+    "The mock fixture-valid binds to candidate@example.com and does not verify an unmatched or missing holder.",
+    "An unmatched holder is rejected; an unestablished holder stays partially_verified when the proof otherwise passes.",
+    "Accredible and Credly map only payload fields that are present, so a sparse payload is not verified.",
+    "Certo no longer copies the aggregate verified flag into missing checks.",
+    "ADR-0003 records partially_verified with issue #6 as the source."
+  ],
+  "validation": [
+    "npx vitest run test/certo.test.ts test/fallback.test.ts",
+    "npx vitest run test/fallback.test.ts test/ground-truth.test.ts",
+    "npx vitest run test/certo.test.ts",
+    "npx vitest run test/ground-truth.test.ts",
+    "npx vitest run test/ground-truth.test.ts test/fallback.test.ts",
+    "npx vitest run test/certo.test.ts test/ground-truth.test.ts",
+    "npx vitest run test/status.test.ts",
+    "npx tsc --noEmit"
+  ],
+  "remaining": "The PR is not marked clean. Another review-pr pass is required. Judgement-call smells were left unfixed: duplicated isPast, duplicated Accredible and Credly query shape, duplicated jsonResponse, and primitive provider and holder-binding types. Dev-only Vitest audit advisories are unchanged.",
+  "scopeNotes": "Fixes stay inside apps/agent-runtime/src/verification, its tests, .env.example, and ADR-0003. Commit 98c1298d9c2fc54ac616bba9344644070f2229b4. No Mastra graph, UI, Prisma, or live provider calls. Issue #6 remains labelled ready-for-agent with no milestone, so this note adds no tracker metadata. The local execution trace was not committed."
+}

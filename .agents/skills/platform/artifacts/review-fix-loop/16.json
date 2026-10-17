@@ -1,0 +1,27 @@
+{
+  "status": "clean",
+  "pr": 16,
+  "branch": "feat/issue-6-build-normalized-credential-verification",
+  "fixedPoint": "8e089c25b9e472ffec7a81db273464e74fe6f36d",
+  "diffCommand": "git diff 8e089c25b9e472ffec7a81db273464e74fe6f36d...HEAD",
+  "reviewPasses": 2,
+  "lastReview": "https://github.com/HackathonFISC/equipo-02/pull/16#pullrequestreview-5554610345",
+  "lastPlanPosted": false,
+  "lastImplementationCompleted": true,
+  "standardsHardViolations": 0,
+  "specFindings": 0,
+  "judgementCalls": [
+    "Duplicated Code: isPast, optionalBoolean, and revocationFrom in accredible.ts and credly.ts",
+    "Duplicated Code: queryAccredible and queryCredly in verify.ts",
+    "Duplicated Code: jsonResponse in three test files",
+    "Primitive Obsession: provider string and inline holder-binding union"
+  ],
+  "validation": [
+    "Prior implement-review-fixes validation still stands on commit 98c1298d9c2fc54ac616bba9344644070f2229b4"
+  ],
+  "deferred": [],
+  "remaining": "No executable implementation defects. The four judgement calls were already excluded from the review fix plan. Posting that plan again would restate the same non-executable notes.",
+  "scopeNotes": "Issue #6 label ready-for-agent, milestone none. The loop did not widen scope and did not merge. The local execution trace was not committed.",
+  "nextConsumer": "ship-subissue",
+  "traceId": "c80b4cb1-275f-4988-89e2-33a6237fb10f"
+}

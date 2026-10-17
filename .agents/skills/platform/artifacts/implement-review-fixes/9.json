@@ -1,0 +1,17 @@
+{
+  "status": "implemented",
+  "completed": [
+    "Spec blocker: a dead-letter transition records retrying only when ModelChainExhaustedError.attempted contains a later model that was actually called. A single attempt or BudgetExceededError goes failed then dead_letter.",
+    "Spec required: screenToolResult now runs on the model text, so an invented credential rejects the live workflow at stage tool_result. Permission denials keep stage permission. screenRequestedTool delegates to the owning agent's screenPermission.",
+    "Spec required: successful steps append agent_completed audit events and span metadata with actor, role, tool, evidence, constraint, and trace_id. The run flushes toIngestionBatch and calls an optional Langfuse ingestion client.",
+    "Spec required: Accept: text/event-stream returns a ReadableStream that enqueues events during the run. Each agent hop publishes an Ajv-validated request envelope before the model call and a response or event envelope after it."
+  ],
+  "validation": [
+    "npm run lint - pass",
+    "npm run typecheck - pass",
+    "npm test - 117/117 pass (was 113)",
+    "npm run test:coverage - exit 0; 93.96% lines / 79.08% branches (thresholds 80% lines / 70% branches)"
+  ],
+  "remaining": "Advisory Standards findings were not actioned: duplicated output/tool-result screeners, copied AgentId enums, stringly audit fields, the trace/idempotency pair, module cohesion, runAgent feature envy, the unused runtime agent union, and the DqlStore name. Issues #4 and #6 stay open.",
+  "scopeNotes": "Changes stay in apps/agent-runtime/src/workflow and its tests, plus the runtime README. No apps/web listener. No CandidateProfile or Certo work. Plan comment: https://github.com/HackathonFISC/equipo-02/pull/19#issuecomment-6226607665 ; commit b094a1a."
+}
