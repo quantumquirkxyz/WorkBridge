@@ -330,7 +330,12 @@ function ExplorationResultView({ result }: { result: ExplorationResult }) {
       </p>
 
       {result.matches.length === 0 ? (
-        <p className="hint">No encontramos vacantes compatibles con tus preferencias.</p>
+        <div role="alert" className="warning-panel">
+          <h4>No encontramos una vacante viable</h4>
+          <p>{result.noMatch?.explanation ?? 'No encontramos vacantes compatibles con tus preferencias.'}</p>
+          {result.noMatch?.roadmapRequested ? <p>Se activó la ruta de capacitación para cerrar tus brechas.</p> : null}
+          {result.noMatch?.nearMatches.length ? <p>Opciones cercanas (con advertencias): {result.noMatch.nearMatches.map((item) => `${item.jobId}: ${item.detail}`).join(' · ')}</p> : null}
+        </div>
       ) : (
         <table>
           <caption className="hint">Vacantes compatibles con procedencia, frescura y motivo de coincidencia.</caption>

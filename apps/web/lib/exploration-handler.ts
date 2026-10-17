@@ -52,6 +52,12 @@ export function handleSavePreferences(
   return { status: 200, body: parsed.preferences };
 }
 
+export function handleDeleteCandidate(candidateId: string, deps: ExplorationHandlerDeps = {}): HandlerResult {
+  if (!candidateId || candidateId.length > 128) return { status: 400, body: { error: 'invalid_candidate_id' } };
+  const deleted = (deps.store ?? preferencesStore).delete(candidateId);
+  return { status: deleted ? 200 : 404, body: { deleted, candidateId } };
+}
+
 /**
  * Persist preferences and query the cached vacancy catalogue for compatible
  * vacancies with provenance and freshness. No application is ever submitted.

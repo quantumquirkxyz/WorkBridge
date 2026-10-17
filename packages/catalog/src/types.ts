@@ -120,6 +120,7 @@ export interface ExplorationResult {
   matches: VacancyMatch[];
   excluded: ExcludedVacancy[];
   summary: ExplorationSummary;
+  noMatch?: { explanation: string; nearMatches: ExcludedVacancy[]; roadmapRequested: boolean };
 }
 
 export interface CatalogOptions {

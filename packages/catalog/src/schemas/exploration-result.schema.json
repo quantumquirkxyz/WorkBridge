@@ -13,7 +13,16 @@
     "preferences": { "$ref": "https://puente-laboral.pa/schemas/candidate-preferences/1.0.0" },
     "matches": { "type": "array", "items": { "$ref": "#/$defs/match" } },
     "excluded": { "type": "array", "items": { "$ref": "#/$defs/excluded" } },
-    "summary": { "$ref": "#/$defs/summary" }
+    "summary": { "$ref": "#/$defs/summary" },
+    "noMatch": {
+      "type": "object", "additionalProperties": false,
+      "required": ["explanation", "nearMatches", "roadmapRequested"],
+      "properties": {
+        "explanation": { "type": "string", "minLength": 1 },
+        "nearMatches": { "type": "array", "items": { "$ref": "#/$defs/excluded" } },
+        "roadmapRequested": { "type": "boolean" }
+      }
+    }
   },
   "$defs": {
     "freshness": {

@@ -230,6 +230,17 @@ export function exploreVacancies(
     },
   };
 
+  if (limited.length === 0) {
+    const nearMatches = excluded.filter((entry) => entry.reason !== 'stale').slice(0, 5);
+    result.noMatch = {
+      explanation: excluded.length === 0
+        ? 'No hay vacantes vigentes en el catálogo para evaluar.'
+        : 'No hay una vacante viable porque las restricciones declaradas excluyen las opciones disponibles. Ninguna restricción fue relajada.',
+      nearMatches,
+      roadmapRequested: preferences.willing_to_train,
+    };
+  }
+
   assertExplorationResult(result);
   return result;
 }

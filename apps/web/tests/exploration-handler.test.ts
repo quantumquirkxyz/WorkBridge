@@ -3,7 +3,7 @@ import { validateCandidatePreferences } from '@puente/domain';
 import { validateExplorationResult } from '@puente/catalog';
 import { buildPreferences, type PreferencesDraft } from '../lib/preferences';
 import { createInMemoryPreferencesStore } from '../lib/preferences-store';
-import { handleExploration, handleSavePreferences } from '../lib/exploration-handler';
+import { handleDeleteCandidate, handleExploration, handleSavePreferences } from '../lib/exploration-handler';
 
 const NOW = () => new Date('2026-10-16T12:00:00.000Z');
 
@@ -70,6 +70,16 @@ describe('handleExploration', () => {
     expect(status).toBe(400);
     expect(body).toMatchObject({ error: 'invalid_preferences' });
   });
+
+  it('explains a no-match result, preserves hard-constraint warnings, and requests training', async () => {
+    const result = await handleExploration(draft({ willing_to_train: true, max_location: { country: 'PA', province: 'Bocas del Toro', district: null, raw: 'Bocas del Toro' } }), { now: NOW });
+    expect(result.status).toBe(200);
+    const body = result.body as { matches: unknown[]; noMatch?: { explanation: string; nearMatches: unknown[]; roadmapRequested: boolean } };
+    expect(body.matches).toHaveLength(0);
+    expect(body.noMatch?.explanation).toContain('restricciones');
+    expect(body.noMatch?.nearMatches.length).toBeGreaterThan(0);
+    expect(body.noMatch?.roadmapRequested).toBe(true);
+  });
 });
 
 describe('handleSavePreferences', () => {
@@ -84,5 +94,17 @@ describe('handleSavePreferences', () => {
   it('rejects an invalid document', () => {
     const { status } = handleSavePreferences({ target_roles: ['x'] }, { now: NOW });
     expect(status).toBe(400);
+  });
+});
+
+describe('handleDeleteCandidate', () => {
+  it('deletes saved preferences without touching any external submission seam', () => {
+    const store = createInMemoryPreferencesStore();
+    handleSavePreferences(draft(), { store, now: NOW });
+    expect(handleDeleteCandidate('candidate_web_1', { store })).toEqual({
+      status: 200,
+      body: { deleted: true, candidateId: 'candidate_web_1' },
+    });
+    expect(store.get('candidate_web_1')).toBeUndefined();
   });
 });
