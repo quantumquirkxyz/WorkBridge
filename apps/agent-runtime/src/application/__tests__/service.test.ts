@@ -225,7 +225,7 @@ describe("application approval and submission", () => {
     const ready = app.createDraft(session("candidate"), draftInput({ idempotencyKey: "idem-draft-3" }));
     app.approveDraft(session("candidate"), ready.draftId, action("apruebo", "idem-r3"));
     const submitted = await app.submit(session("candidate"), ready.draftId, action("envío", "idem-r4"));
-    const interview = app.decideInterview(session("employer"), submitted.submissionId, {
+    const interview = await app.decideInterview(session("employer"), submitted.submissionId, {
       ...action("no avanzamos a entrevista", "idem-r5"),
       decision: "rejected",
     });
@@ -241,20 +241,20 @@ describe("application approval and submission", () => {
     const created = app.createDraft(session("candidate"), draftInput());
     app.approveDraft(session("candidate"), created.draftId, action("apruebo", "idem-e1"));
     const submitted = await app.submit(session("candidate"), created.draftId, action("envío", "idem-e2"));
-    expect(() =>
+    await expect(
       app.decideInterview(session("employer"), submitted.submissionId, {
         ...action("quiero entrevistar", "idem-e3"),
         decision: "approved",
       }),
-    ).toThrow(/Employer approval/);
-    expect(() =>
+    ).rejects.toThrow(/Employer approval/);
+    await expect(
       app.decideInterview(session("candidate"), submitted.submissionId, {
         ...action("no me corresponde", "idem-e4"),
         decision: "approved",
       }),
-    ).toThrow(/Only an employer/);
+    ).rejects.toThrow(/Only an employer/);
     app.approveInterview(session("employer"), submitted.submissionId, action("apruebo entrevista", "idem-e5"));
-    const progressed = app.decideInterview(session("employer"), submitted.submissionId, {
+    const progressed = await app.decideInterview(session("employer"), submitted.submissionId, {
       ...action("agendamos entrevista", "idem-e6"),
       decision: "approved",
     });
@@ -319,9 +319,9 @@ describe("application approval and submission", () => {
       /already submitted/,
     );
     expect(() => app.auditTrail(session("candidate"), " ")).toThrow(/traceId/);
-    expect(() => app.decideInterview(session("employer"), "missing", { ...action("x"), decision: "rejected" })).toThrow(
-      /not found/,
-    );
+    await expect(
+      app.decideInterview(session("employer"), "missing", { ...action("x"), decision: "rejected" }),
+    ).rejects.toThrow(/not found/);
   });
 
   it("flags invented draft text", () => {

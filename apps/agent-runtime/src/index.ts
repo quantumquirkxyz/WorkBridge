@@ -149,6 +149,14 @@ export {
 } from "./matching";
 
 export { ApplicationService } from "./application/service";
+export {
+  createMemoryNotificationOutbox,
+  createMockNotificationPort,
+  createSqlNotificationOutbox,
+  type NotificationOutbox,
+  type NotificationPort,
+  type OutboundNotification,
+} from "./application/notification";
 export { createApplicationServer } from "./application/server";
 export { BETTER_AUTH_ROLES, actorFromBetterAuthSession, signBetterAuthSession } from "./application/roles";
 export type { BetterAuthSession } from "./application/roles";
@@ -172,3 +180,24 @@ export {
   type WorkflowDependencies,
   type WorkflowResult,
 } from "./workflow";
+
+export {
+  NOTE_MISSING_EXAMPLE,
+  NOTE_MISSING_FOCUS,
+  NOTE_STRONG,
+  NOTE_TOO_SHORT,
+  UnknownInterviewQuestionError,
+  createInterviewTurnStore,
+  getSimulatedInterviewRuntime,
+  practiceQuestions,
+  resetSimulatedInterviewRuntime,
+  runSimulatedInterview,
+  scoreInterviewAnswer,
+  type InterviewAnswer,
+  type InterviewAnswerScore,
+  type InterviewTurn,
+  type InterviewVacancy,
+  type PracticeQuestion,
+  type SimulatedInterviewPorts,
+  type SimulatedInterviewResult,
+} from "./interview/simulated-interview";

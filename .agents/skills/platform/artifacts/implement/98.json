@@ -1,0 +1,28 @@
+{
+  "status": "completed",
+  "changes": [
+    "Vacancy-specific questions and deterministic answer rubric",
+    "Session-bound POST /api/interview",
+    "Turn storage including submitted answers, completed span, and audit event"
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npm run typecheck",
+      "npm exec eslint -- changed interview files",
+      "npm exec vitest run -- --coverage --maxWorkers=1"
+    ],
+    "skipped": [],
+    "notes": "712 tests passed, 10 skipped; lines 92.22%, statements 89.63%, functions 93.6%, branches 78.57%. Focused interview tests 8/8. Independent Standards and Spec reviews clean."
+  },
+  "commitSha": "700d0908c933086f0888e13b9b0ca1589dad01a9",
+  "branch": "issue/98-add-the-simulated-interview-agent",
+  "nextConsumer": "publish-open-pr",
+  "blockedBy": [],
+  "riskRemaining": "The default interview turn store is process-local, following the existing runtime storage-port convention.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  }
+}
