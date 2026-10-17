@@ -32,8 +32,14 @@ export function createMemoryIdempotencyStore<T>(): IdempotencyStore<T> {
 }
 
 export function createSqlIdempotencyStore<T>(query: SqlQuery): IdempotencyStore<T> {
+  let ready: Promise<void> | undefined;
+  const ensure = () => {
+    ready ??= query(ENSURE_IDEMPOTENCY_TABLE_SQL, []).then(() => undefined);
+    return ready;
+  };
   return {
     async get(key) {
+      await ensure();
       const result = await query(
         "SELECT fingerprint, response FROM submission_idempotency WHERE idempotency_key = $1",
         [key],
@@ -44,6 +50,7 @@ export function createSqlIdempotencyStore<T>(query: SqlQuery): IdempotencyStore<
       return { key, fingerprint: row.fingerprint, response };
     },
     async put(record) {
+      await ensure();
       await query(
         `INSERT INTO submission_idempotency (idempotency_key, fingerprint, response)
          VALUES ($1, $2, $3::jsonb)

@@ -149,6 +149,7 @@ describe("application HTTP surface", () => {
         }),
       });
       expect(submitted.status).toBe(200);
+      expect(calls[0]).toBe(ENSURE_IDEMPOTENCY_TABLE_SQL);
       expect(calls.some((sql) => sql.includes("INSERT"))).toBe(true);
     }, query);
   });
@@ -302,6 +303,7 @@ describe("application HTTP surface", () => {
     const rows = new Map<string, { fingerprint: string; response: string }>();
     const store = createSqlIdempotencyStore<{ ok: boolean }>(async (sql, params) => {
       calls.push({ sql, params });
+      if (sql === ENSURE_IDEMPOTENCY_TABLE_SQL) return { rows: [] };
       if (sql.startsWith("SELECT")) {
         const row = rows.get(String(params[0]));
         return { rows: row ? [row] : [] };
@@ -309,11 +311,11 @@ describe("application HTTP surface", () => {
       rows.set(String(params[0]), { fingerprint: String(params[1]), response: String(params[2]) });
       return { rows: [] };
     });
-    expect(ENSURE_IDEMPOTENCY_TABLE_SQL).toContain("submission_idempotency");
     await store.put({ key: "k1", fingerprint: "fp", response: { ok: true } });
     await expect(store.get("missing")).resolves.toBeUndefined();
     await expect(store.get("k1")).resolves.toEqual({ key: "k1", fingerprint: "fp", response: { ok: true } });
-    expect(calls[0]?.sql).toContain("INSERT");
+    expect(calls[0]?.sql).toBe(ENSURE_IDEMPOTENCY_TABLE_SQL);
+    expect(calls[1]?.sql).toContain("INSERT");
   });
 
   it("starts the local server entry and the Vercel handler", async () => {
