@@ -221,7 +221,7 @@ const cases: GroundTruthCase[] = [
   {
     id: 13,
     name: "all providers unavailable",
-    groundTruth: "unverified",
+    groundTruth: "rejected",
     provider: "mock",
     externallyVerified: false,
     credentialId: "case-13",

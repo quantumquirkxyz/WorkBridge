@@ -50,7 +50,7 @@ export function deriveStatus(signals: VerificationSignals): VerificationStatus {
     signals.expired === true ||
     signals.inconsistent === true ||
     signals.reused === true ||
-    signals.holderBinding === "unbound"
+    signals.holderBinding !== "bound"
   ) {
     return "rejected";
   }

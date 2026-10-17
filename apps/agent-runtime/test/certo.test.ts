@@ -165,7 +165,7 @@ describe("CertoVerifier", () => {
     );
     expect(result.provider).toBe("mock");
     expect(result.externally_verified).toBe(false);
-    expect(result.status).toBe("unverified");
+    expect(result.status).toBe("rejected");
   });
 
   it("does not call Certo when the API token is missing", async () => {

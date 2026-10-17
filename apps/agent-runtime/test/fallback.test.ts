@@ -160,7 +160,7 @@ describe("provider fallback chain", () => {
     );
     expect(result.provider).toBe("mock");
     expect(result.externally_verified).toBe(false);
-    expect(result.status).toBe("unverified");
+    expect(result.status).toBe("rejected");
   });
 
   it("does not call Accredible when its token is missing", async () => {

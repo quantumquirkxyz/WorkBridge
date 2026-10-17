@@ -83,13 +83,13 @@ describe("verification status", () => {
     expect(mandatoryCredentialSatisfied(verification)).toBe(false);
   });
 
-  it("returns unverified when the holder cannot be established", () => {
+  it("returns rejected when the holder cannot be established", () => {
     const verification = normalizeVerification({
       signals: { ...trustedBound, holderBinding: "unknown" },
       provider: "certo",
     });
 
-    expect(verification.status).toBe("unverified");
+    expect(verification.status).toBe("rejected");
     expect(mandatoryCredentialSatisfied(verification)).toBe(false);
   });
 
