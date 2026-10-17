@@ -98,9 +98,10 @@ export async function enqueueChatTurn(
       enforceAdmission: true,
     }));
   } catch (error) {
-    if (error instanceof ChatJobBackpressureError) {
+    const isActiveCandidateConflict = typeof error === 'object' && error !== null && 'code' in error && error.code === '23505';
+    if (error instanceof ChatJobBackpressureError || isActiveCandidateConflict) {
       const result = chatTurnError('chat_backpressure', 'Another chat turn is already being processed.', { status: 429, requestId, retryable: true });
-      return { ...result, headers: { 'Retry-After': String(error.retryAfterSeconds) } };
+      return { ...result, headers: { 'Retry-After': String(error instanceof ChatJobBackpressureError ? error.retryAfterSeconds : 1) } };
     }
     return chatTurnError('queue_unavailable', 'The chat queue is temporarily unavailable.', {
       status: 503,

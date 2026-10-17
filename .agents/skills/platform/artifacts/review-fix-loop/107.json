@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "pr": 107,
+  "fixedPoint": "main",
+  "passes": 4,
+  "completed": ["Atomic per-candidate uniqueness constraint", "queued-only limit semantics", "redacted worker context logging", "terminal worker failure observation"],
+  "remaining": ["metrics are process-local rather than durable across instances", "duration excludes failure and retry paths", "dedicated metrics endpoint and duration coverage is incomplete"],
+  "blocker": "The remaining findings require a durable metrics aggregation design and a clarified duration metric contract; repeating local patches would not resolve the architectural gap.",
+  "nextConsumer": "implement-review-fixes"
+}

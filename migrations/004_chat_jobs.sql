@@ -37,3 +37,19 @@ alter table chat_jobs add column if not exists next_attempt_at timestamptz;
 create unique index if not exists chat_jobs_idempotency_idx on chat_jobs (candidate_id, idempotency_key);
 create index if not exists chat_jobs_claim_idx on chat_jobs (status, created_at);
 create index if not exists chat_jobs_candidate_status_idx on chat_jobs (candidate_id, status);
+create unique index if not exists chat_jobs_one_active_candidate_idx on chat_jobs (candidate_id) where status in ('queued', 'running');
+
+create table if not exists chat_queue_metrics (
+  metric_key text primary key default 'chat',
+  attempts bigint not null default 0,
+  worker_errors bigint not null default 0,
+  dead_letters bigint not null default 0,
+  session_conflicts bigint not null default 0,
+  provider_timeouts bigint not null default 0,
+  duration_seconds_total double precision not null default 0,
+  duration_samples bigint not null default 0,
+  oldest_alert_since timestamptz,
+  error_alert_since timestamptz,
+  updated_at timestamptz not null default now()
+);
+insert into chat_queue_metrics (metric_key) values ('chat') on conflict (metric_key) do nothing;
