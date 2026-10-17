@@ -16,11 +16,34 @@ async function handler(request: Request, context: RouteContext): Promise<Respons
     return NextResponse.json({ error: 'application_runtime_unavailable' }, { status: 503 });
   }
 
-  const session = await readSession(request);
+  const { path } = await context.params;
+  // URL normalization would turn dot segments into a different runtime route than the one authenticated below.
+  if ((path ?? []).some((segment) => segment === '.' || segment === '..')) {
+    return NextResponse.json({ error: 'bad_request' }, { status: 400 });
+  }
+  const isShortlist = path?.length === 3 && path[0] === 'vacancies' && path[2] === 'shortlist';
+  let session = await readSession(request);
+  if (isShortlist) {
+    // Ranking is employer-only and uses the real cookie session, never a caller-supplied role header.
+    const { getServerSession } = await import('../../../../lib/auth');
+    const authenticated = await getServerSession();
+    if (!authenticated) return NextResponse.json({ error: 'unauthenticated' }, { status: 401 });
+    if (authenticated.user.role !== 'employer') return NextResponse.json({ error: 'forbidden' }, { status: 403 });
+    session = {
+      session: {
+        id: authenticated.session.id,
+        userId: authenticated.user.id,
+        expiresAt: new Date(authenticated.session.expiresAt).toISOString(),
+      },
+      user: {
+        id: authenticated.user.id, email: authenticated.user.email, role: 'employer',
+        employerOrgId: authenticated.user.employerOrgId ?? undefined,
+      },
+    };
+  }
   if (!session) return NextResponse.json({ error: 'unauthenticated' }, { status: 401 });
 
   const signedSession = signBetterAuthSession(session, secret);
-  const { path } = await context.params;
   const incoming = new URL(request.url);
   const target = new URL(`${runtimeUrl.replace(/\/$/, '')}/${(path ?? []).map(encodeURIComponent).join('/')}`);
   incoming.searchParams.forEach((value, key) => target.searchParams.set(key, value));

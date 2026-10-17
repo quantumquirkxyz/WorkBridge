@@ -1,0 +1,18 @@
+{
+  "status": "partial",
+  "changes": [
+    "Migrated ChatScreen turn submission to the versioned asynchronous enqueue and status endpoints.",
+    "Added stable session-version submission, per-attempt idempotency/request IDs, queued/running polling, and retryable versus terminal error handling.",
+    "Added pollAfterMs and Retry-After metadata to asynchronous turn responses."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": false,
+    "commands": ["npm run lint", "npm run typecheck", "npm test", "npm test -- --run apps/web/tests/components/chat-screen.test.tsx", "npm run test:e2e:web"],
+    "skipped": ["gate-ci / publication"],
+    "notes": "Lint, typecheck, full unit suite (698 passed, 10 skipped), and ChatScreen tests (12 passed) pass. Playwright is externally blocked because the environment lacks libnspr4.so."
+  },
+  "branch": "feat/issue-97-migrate-web-chat-async-turns",
+  "nextConsumer": "implement",
+  "riskRemaining": "Component and E2E coverage must be updated and passing before publication; the branch is not ready for PR publication.",
+  "qualityGateResults": { "gateIde": "pass", "gatePreCommit": "skipped", "gateCi": "fail" }
+}

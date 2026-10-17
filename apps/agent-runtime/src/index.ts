@@ -148,6 +148,7 @@ export {
 } from "./matching";
 
 export { ApplicationService } from "./application/service";
+export { candidateContext, vacancyInput } from "./matching/catalog-input";
 export {
   createMemoryNotificationOutbox,
   createMockNotificationPort,

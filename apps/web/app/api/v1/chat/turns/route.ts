@@ -46,5 +46,9 @@ export async function POST(request: Request): Promise<Response> {
     requestId,
     traceId: request.headers.get('x-trace-id') ?? requestId,
   });
-  return NextResponse.json(body, { status, headers });
+  const responseHeaders = new Headers(headers);
+  if (status === 202) {
+    responseHeaders.set('Retry-After', '1');
+  }
+  return NextResponse.json({ ...(body as Record<string, unknown>), ...(status === 202 ? { pollAfterMs: 1000 } : {}) }, { status, headers: responseHeaders });
 }

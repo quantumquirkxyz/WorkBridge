@@ -42,6 +42,8 @@ interface ChatSnapshot {
   slotState?: SlotState;
   pendingSlot?: SlotId | null;
   phase?: ChatTurn['phase'];
+  sessionVersion?: number;
+  version?: number;
 }
 
 interface RetryRequest {
@@ -97,6 +99,8 @@ export function ChatScreen() {
   const profileText = useRef<string[]>([]);
   const intakeStarted = useRef(false);
   const explorationStarted = useRef(false);
+  const sessionVersion = useRef(0);
+  const activeRequest = useRef(0);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [slotState, setSlotState] = useState<SlotState>(initialSlotState);
   const [phase, setPhase] = useState<ChatTurn['phase']>('profile');
@@ -179,6 +183,8 @@ export function ChatScreen() {
         }
         if (snapshot?.slotState) setSlotState(snapshot.slotState);
         if (snapshot?.phase) setPhase(snapshot.phase);
+        if (typeof snapshot?.sessionVersion === 'number') sessionVersion.current = snapshot.sessionVersion;
+        else if (typeof snapshot?.version === 'number') sessionVersion.current = snapshot.version;
       })
       .catch(() => {
         if (active) setMessages([{ id: nextId(), role: 'assistant', content: WELCOME_MESSAGE }]);
@@ -240,14 +246,63 @@ export function ChatScreen() {
     setActivity('WorkBridge está escribiendo…');
     setRetry(null);
     const thinkingTimer = window.setTimeout(() => setActivity('Estoy pensando…'), 3000);
+    const requestId = activeRequest.current + 1;
+    activeRequest.current = requestId;
     try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(request),
-      });
-      if (!response.ok) throw new Error('chat_request_failed');
-      const turn = await response.json() as ChatTurn;
+      let response: Response;
+      try {
+        response = await fetch('/api/v1/chat/turns', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', 'Idempotency-Key': crypto.randomUUID(), 'x-request-id': crypto.randomUUID() },
+          body: JSON.stringify({ ...request, sessionVersion: sessionVersion.current }),
+        });
+      } catch {
+        // Keep the synchronous adapter usable while deployments roll out the
+        // versioned queue endpoints (and for older embedded clients).
+        response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(request),
+        });
+      }
+      if (response.status === 404 || response.status === 500) {
+        response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(request),
+        });
+      }
+      if (!response.ok) {
+        const error = await response.json().catch(() => null) as { error?: { retryable?: boolean; message?: string } } | null;
+        const retryable = error?.error?.retryable === true;
+        if (!retryable) throw new Error(error?.error?.message ?? 'chat_request_failed');
+        throw new Error('chat_request_retryable');
+      }
+      const handle = await response.json() as { jobId?: string; status?: string; statusUrl?: string; pollAfterMs?: number; result?: ChatTurn; reply?: string };
+      let turn = handle.result;
+      let observedServerVersion = false;
+      // The compatibility adapter returns a ChatTurn directly.
+      if (handle.reply && !handle.jobId) {
+        sessionVersion.current += 1;
+        turn = handle as unknown as ChatTurn;
+      }
+      while (!turn && handle.jobId && activeRequest.current === requestId) {
+        setActivity(handle.status === 'running' ? 'Estoy procesando tu respuesta…' : 'Tu respuesta está en cola…');
+        await new Promise((resolve) => window.setTimeout(resolve, Math.max(250, handle.pollAfterMs ?? 1000)));
+        const statusResponse = await fetch(handle.statusUrl ?? `/api/v1/chat/turns/${encodeURIComponent(handle.jobId)}`, { headers: { 'x-request-id': crypto.randomUUID() } });
+        const statusBody = await statusResponse.json() as { status?: string; sessionVersion?: number; version?: number; result?: ChatTurn; error?: { retryable?: boolean; message?: string }; pollAfterMs?: number };
+        if (!statusResponse.ok || statusBody.status === 'failed') {
+          if (statusBody.error?.retryable) throw new Error('chat_request_retryable');
+          throw new Error(statusBody.error?.message ?? 'chat_request_failed');
+        }
+        if (typeof statusBody.sessionVersion === 'number') { sessionVersion.current = statusBody.sessionVersion; observedServerVersion = true; }
+        else if (typeof statusBody.version === 'number') { sessionVersion.current = statusBody.version; observedServerVersion = true; }
+        if (statusBody.result) turn = statusBody.result;
+        handle.status = statusBody.status;
+        handle.pollAfterMs = statusBody.pollAfterMs ?? handle.pollAfterMs;
+      }
+      if (!turn) throw new Error('chat_request_failed');
+      if (!observedServerVersion && typeof (handle as { sessionVersion?: number; version?: number }).sessionVersion !== 'number' && typeof (handle as { sessionVersion?: number; version?: number }).version !== 'number') sessionVersion.current += 1;
       const nextState = applyTurn(slotState, turn.slotUpdates, request.action);
       setSlotState(nextState);
       setPhase(turn.phase);
