@@ -45,7 +45,7 @@ function runtime(
 }
 
 describe("employability workflow", () => {
-  it("coordinates the four agents through Mastra", async () => {
+  it("coordinates the employability agents through Mastra", async () => {
     const { engine, calls } = runtime(async () => ({ text: "Plan de practica en caja" }));
     const result = await engine.run(request());
     expect(result.status).toBe("success");
@@ -53,10 +53,13 @@ describe("employability workflow", () => {
       "exploration",
       "profile_and_evidence",
       "market_and_matching",
+      "bias_auditor",
       "training",
     ]);
     expect(result.agents.map((agent) => agent.agent)).toEqual(result.mastraSteps);
     expect(result.envelopes.map((envelope) => envelope.kind)).toEqual([
+      "request",
+      "response",
       "request",
       "response",
       "request",

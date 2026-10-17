@@ -22,6 +22,11 @@ import {
 import type { Aptitude } from "@workbridge/solver";
 import type { AppendOnlyAuditLog, DqlRecord, DqlStore, LangfuseRecorder } from "./observability";
 import {
+  auditCounterfactuals,
+  biasSubjectFor,
+  type BiasAlert,
+} from "../bias/audit";
+import {
   toSolverCandidate,
   toSolverVacancy,
   type CandidateNominationInput,
@@ -179,7 +184,6 @@ async function buildTrainingRoadmap(
   const targetVacancyId =
     nomination.result.assignments[0]?.vacancyId ??
     decisions[0]?.vacancyId ??
-    input.vacancies[0]?.document.vacancyId ??
     null;
   const vacancyInput = input.vacancies.find((item) => item.document.vacancyId === targetVacancyId);
   if (!vacancyInput) return undefined;
@@ -399,6 +403,77 @@ export async function runAgent(
     }
     // Carrier data insufficient for a deterministic roadmap (e.g. missing
     // preferences): fall through to the model-generated summary below.
+  }
+
+  if (agent === "bias_auditor") {
+    const supplied = carrier.matchingInput as CandidateNominationInput | undefined;
+    const baseline = carrier.matchResult;
+    const alerts: BiasAlert[] = [];
+    let match = baseline;
+    let auditedVacancies = supplied?.vacancies.map((vacancy) => vacancy.document) ?? [];
+    if (supplied && baseline && services.matching) {
+      const audited = await auditCounterfactuals({
+        input: supplied,
+        baseline,
+        matching: services.matching,
+        now: () => new Date(services.clock()),
+        subject: biasSubjectFor(supplied, carrier.declaredCredentials[0]?.name),
+      });
+      alerts.push(...audited.alerts);
+      match = audited.match;
+      auditedVacancies = audited.vacancies;
+      for (const alert of alerts) {
+        const findingSpan = services.traces.startSpan({
+          id: `${carrier.traceId}:bias_finding:${alert.id}`,
+          traceId: carrier.traceId,
+          name: "bias_finding",
+          startTime: services.clock(),
+          input: { vacancyId: alert.vacancyId, attribute: alert.attribute },
+          metadata: {
+            agent: "bias_auditor",
+            finding: true,
+            vacancyId: alert.vacancyId,
+            attribute: alert.attribute,
+            trace_id: carrier.traceId,
+            actor: carrier.actorId,
+            role: carrier.actorRole,
+          },
+        });
+        const closedFinding = services.traces.endSpan(findingSpan.id, {
+          endTime: services.clock(),
+          level: "WARNING",
+          output: { id: alert.id, reason: alert.reason },
+        });
+        services.emit?.({ event: "trace", data: closedFinding });
+        audit(services, carrier, agent, "bias_finding", {
+          tool,
+          evidence: alert.vacancyId,
+          constraint: alert.attribute,
+        });
+      }
+    }
+    const summary = JSON.stringify({
+      biasAlerts: alerts,
+      blockedVacancyIds: alerts.reduce<string[]>((ids, alert) => {
+        if (!ids.includes(alert.vacancyId)) ids.push(alert.vacancyId);
+        return ids;
+      }, []),
+    });
+    const done = completeDeterministic(
+      services,
+      carrier,
+      agent,
+      span.id,
+      dqlId,
+      { biasAlerts: alerts },
+      summary,
+    );
+    return {
+      ...done,
+      ...(match ? { matchResult: match } : {}),
+      biasAlerts: alerts,
+      auditedVacancies,
+    };
   }
 
     const completion = await services.router.complete({

@@ -115,7 +115,7 @@ POST /internal/workflow/runs
         │  required trace_id, idempotency_key
         ▼
 Mastra workflow
-  exploration → profile_and_evidence → market_and_matching → training
+  exploration → profile_and_evidence → market_and_matching → bias_auditor → training
         │
         ├─ input, tool-result, permission, and output guardrails
         ├─ OpenRouter capability chains, token budgets, preflight, fallback

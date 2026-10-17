@@ -45,6 +45,7 @@ const AGENT_TOOLS: Record<AgentId, readonly string[]> = {
   exploration: ["read_goals"],
   profile_and_evidence: ["read_cv", "list_declared_credentials"],
   market_and_matching: ["read_vacancy", "match_skills"],
+  bias_auditor: ["audit_counterfactual"],
   training: ["suggest_course"],
 };
 
@@ -56,6 +57,7 @@ export const DEFAULT_AGENT_TOOL: Record<AgentId, string> = {
   exploration: "read_goals",
   profile_and_evidence: "read_cv",
   market_and_matching: "read_vacancy",
+  bias_auditor: "audit_counterfactual",
   training: "suggest_course",
 };
 

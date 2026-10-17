@@ -375,6 +375,7 @@ export type AgentId =
   | "exploration"
   | "profile_and_evidence"
   | "market_and_matching"
+  | "bias_auditor"
   | "training";
 
 export type EnvelopeKind = "request" | "response" | "event";
