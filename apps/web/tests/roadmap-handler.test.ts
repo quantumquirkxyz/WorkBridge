@@ -42,7 +42,7 @@ describe('handleRoadmap', () => {
     expect(status).toBe(200);
     const { roadmap, gaps } = body as { roadmap: { aptitude: string; recommendations: unknown[]; catalogVersion: string } | null; gaps: { skillId: string }[] };
     expect(gaps.length).toBeGreaterThan(0);
-    expect(gaps.map((gap) => gap.skillId)).toEqual(['PA-CS-0001', 'PA-SOFT-0001', 'PA-SOFT-0003']);
+    expect(gaps.map((gap) => gap.skillId)).toEqual(['PA-CS-0001', 'PA-SOFT-0003']);
     expect(roadmap).not.toBeNull();
     expect(roadmap!.aptitude).toBe('apt_with_gaps');
     expect(typeof roadmap!.catalogVersion).toBe('string');
@@ -61,12 +61,25 @@ describe('handleRoadmap', () => {
     expect(service.evaluatePair).not.toHaveBeenCalled();
   });
 
+  it('preserves canonical vacancy skill ids when the display label is not mappable', async () => {
+    const result = structuredClone(noMatchResult);
+    result.noMatch!.nearMatches[0]!.vacancy.skills[0] = {
+      ...result.noMatch!.nearMatches[0]!.vacancy.skills[0]!,
+      skillId: 'plp:customer-service',
+      labelEs: 'Etiqueta no catalogada',
+    };
+    const { body } = await handleRoadmap(result, { now: NOW, ...solverDeps() });
+    expect((body as { gaps: { skillId: string }[] }).gaps.map((gap) => gap.skillId)).toContain('PA-CS-0001');
+  });
+
   it('does not build a roadmap when a viable match exists', async () => {
     const matched = exploreVacancies(preferences, createSeedCatalog(), { now: NOW });
     expect(matched.matches.length).toBeGreaterThan(0);
-    const { status, body } = await handleRoadmap(matched, { now: NOW });
+    const service = { evaluatePair: vi.fn() };
+    const { status, body } = await handleRoadmap(matched, { now: NOW, service: service as never });
     expect(status).toBe(200);
     expect(body).toMatchObject({ roadmap: null, reason: 'viable_match_exists' });
+    expect(service.evaluatePair).not.toHaveBeenCalled();
   });
 
   it('keys off noMatch, not the match array, and honours the training opt-in', async () => {

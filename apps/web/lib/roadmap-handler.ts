@@ -63,7 +63,7 @@ function vacancyInput(vacancy: CachedVacancy): VacancyMatchInput {
     category: skill.required ? 'mandatory' : 'desirable',
     originalWording: skill.labelEs,
     normalizedWording: skill.labelEs,
-    canonical: matchVacancySkill(skill.labelEs),
+    canonical: matchVacancySkill(skill.skillId ?? skill.labelEs),
     level: 1,
     justification: null,
     alertId: null,
