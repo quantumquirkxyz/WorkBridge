@@ -417,6 +417,7 @@ export interface WorkflowRunRequest {
     role: ActorRole;
   };
   requestedTools: string[];
+  preferences?: CandidatePreferences;
   /** Optional validated matching payload consumed by agent-runtime's solver seam. */
   matchingInput?: unknown;
 }

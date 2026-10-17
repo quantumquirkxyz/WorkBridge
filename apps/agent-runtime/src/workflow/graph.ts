@@ -15,6 +15,9 @@ import {
   type MatchingService,
 } from "../matching";
 import { CAPABILITY_CHAINS, ModelRouter, type ModelInvoke } from "./models";
+import { createExplorationAgent } from "../exploration/exploration-agent";
+import { createSeedCatalog } from "@puente/catalog";
+import { createProfileAgent } from "../profile-agent";
 import {
   AppendOnlyAuditLog,
   DqlStore,
@@ -67,6 +70,7 @@ function toCarrier(input: WorkflowRunRequest): Carrier {
     actorId: input.actor.id,
     actorRole: input.actor.role,
     requestedTools: [...input.requestedTools],
+    ...(input.preferences ? { preferences: input.preferences } : {}),
     ...(input.matchingInput ? { matchingInput: input.matchingInput } : {}),
     halted: false,
     status: "running",
@@ -153,6 +157,8 @@ export class WorkflowRuntime {
       clock: this.clock,
       envelopes: [],
       emit: options.onEvent,
+      explorationAgent: createExplorationAgent({ catalog: createSeedCatalog(), now: () => new Date(this.clock()) }),
+      profileAgent: createProfileAgent({ now: () => new Date(this.clock()) }),
     };
     this.active.set(input.trace_id, services);
     services.traces.startTrace({

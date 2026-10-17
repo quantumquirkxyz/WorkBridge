@@ -34,11 +34,24 @@
       "type": "array",
       "items": { "type": "string", "minLength": 1 }
     },
+    "preferences": { "$ref": "#/$defs/CandidatePreferences" },
     "matchingInput": {
       "type": "object"
     }
   },
   "$defs": {
+    "CandidatePreferences": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "preferences_id", "candidate_id", "locale", "origin", "created_at", "updated_at", "target_roles", "modality", "max_location", "max_travel_minutes", "monthly_transport_budget_usd", "minimum_salary_usd", "availability", "contract_types", "transport_modes", "willing_to_train", "willing_to_intern"],
+      "properties": {
+        "schema_version": { "const": "1.0.0" }, "preferences_id": { "type": "string" }, "candidate_id": { "type": "string" }, "locale": { "type": "string" }, "origin": { "const": "candidate_explicit" }, "created_at": { "type": "string" }, "updated_at": { "type": "string" }, "target_roles": { "type": "array", "items": { "type": "string" } }, "modality": { "enum": ["onsite", "hybrid", "remote"] },
+        "max_location": { "type": "object", "additionalProperties": false, "required": ["country", "province", "district", "raw"], "properties": { "country": { "type": "string" }, "province": { "type": ["string", "null"] }, "district": { "type": ["string", "null"] }, "raw": { "type": ["string", "null"] } } },
+        "max_travel_minutes": { "type": "number" }, "monthly_transport_budget_usd": { "type": "number" }, "minimum_salary_usd": { "type": "number" },
+        "availability": { "type": "object", "additionalProperties": false, "required": ["days", "start_minute", "end_minute", "weekly_hours"], "properties": { "days": { "type": "array", "items": { "type": "number" } }, "start_minute": { "type": "number" }, "end_minute": { "type": "number" }, "weekly_hours": { "type": "number" } } },
+        "contract_types": { "type": "array", "items": { "type": "string" } }, "transport_modes": { "type": "array", "items": { "type": "string" } }, "willing_to_train": { "type": "boolean" }, "willing_to_intern": { "type": "boolean" }
+      }
+    },
     "DeclaredCredentialClaim": {
       "type": "object",
       "additionalProperties": false,

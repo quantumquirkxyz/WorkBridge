@@ -1,4 +1,4 @@
-import { AjvValidationError, ajv, type ActorRole, type AgentId, type DeclaredCredentialClaim } from "@puente/domain";
+import { AjvValidationError, ajv, type ActorRole, type AgentId, type CandidatePreferences, type DeclaredCredentialClaim } from "@puente/domain";
 import type { GuardrailDecision } from "./guardrails";
 import carrierJsonSchema from "./carrier.schema.json";
 
@@ -11,6 +11,7 @@ export interface Carrier {
   actorId: string;
   actorRole: ActorRole;
   requestedTools: string[];
+  preferences?: CandidatePreferences;
   matchingInput?: unknown;
   halted: boolean;
   status: "running" | "success" | "rejected" | "dead_letter";

@@ -1,4 +1,7 @@
-import { assertAgentEnvelope, type AgentEnvelope, type AgentId } from "@puente/domain";
+import { assertAgentEnvelope, type AgentEnvelope, type AgentId, type CandidatePreferences } from "@puente/domain";
+import { createExplorationAgent } from "../exploration/exploration-agent";
+import { createProfileAgent } from "../profile-agent";
+import { createSeedCatalog } from "@puente/catalog";
 import type { Carrier } from "./carrier";
 import {
   DEFAULT_AGENT_TOOL,
@@ -35,6 +38,8 @@ export interface WorkflowServices {
   clock: () => string;
   envelopes: AgentEnvelope[];
   emit?: (event: WorkflowStreamEvent) => void;
+  explorationAgent?: ReturnType<typeof createExplorationAgent>;
+  profileAgent?: ReturnType<typeof createProfileAgent>;
 }
 
 function publish(
@@ -166,6 +171,25 @@ export async function runAgent(
   const pending = services.dql.enqueue(dqlId, carrier.traceId, startedAt, `${agent} started`);
   services.emit?.({ event: "lifecycle", data: pending });
   publish(services, carrier, agent, "request", { tool, capability: AGENT_CAPABILITIES[agent] });
+
+  if (agent === "exploration" || agent === "profile_and_evidence") {
+    if (agent === "exploration" && !carrier.preferences) {
+      const finding: GuardrailDecision = { stage: "input", code: "preferences_required", source: "candidate", reason: "Candidate preferences are required for exploration.", allowed: false };
+      services.emit?.({ event: "lifecycle", data: finding });
+      publish(services, carrier, agent, "event", { status: "skipped", findings: [finding] });
+      return { ...carrier, findings: [...carrier.findings, finding] };
+    }
+    if (agent === "exploration" && services.explorationAgent && carrier.preferences) {
+      const exploration = await services.explorationAgent.run(carrier.preferences);
+      publish(services, carrier, agent, "response", exploration as unknown as Record<string, unknown>);
+      return { ...carrier, summaries: [...carrier.summaries, { agent, summary: JSON.stringify(exploration) }] };
+    }
+    if (agent === "profile_and_evidence" && services.profileAgent) {
+      const intake = await services.profileAgent.run({ kind: "text", ref: `${carrier.traceId}:candidate`, text: carrier.candidateText }, { traceId: carrier.traceId, candidateId: carrier.actorId, locale: "es-PA" });
+      publish(services, carrier, agent, "response", intake.profile as unknown as Record<string, unknown>);
+      return { ...carrier, summaries: [...carrier.summaries, { agent, summary: JSON.stringify(intake.profile) }] };
+    }
+  }
 
   if (agent === "exploration") {
     const findings = [
