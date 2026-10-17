@@ -135,7 +135,7 @@ test('UC-05 guarda la búsqueda y la lista', async ({ page }) => {
 test('UC-07 muestra coincidencias nuevas y registra la visita a Vacantes', async ({ page }) => {
   let acknowledged = false;
   await page.addInitScript(() => localStorage.setItem('puente:candidateId', 'candidate-e2e'));
-  await page.addInitScript(() => localStorage.setItem('puente:preferences', JSON.stringify({ candidate_id: 'candidate-e2e' })));
+  await page.addInitScript(() => localStorage.setItem('puente:preferences:candidate-e2e', JSON.stringify({ candidate_id: 'candidate-e2e' })));
   await page.route('**/api/searches**', async (route) => {
     if (route.request().method() === 'POST') {
       await route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify({ searchId: 'search-e2e' }) });

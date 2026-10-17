@@ -36,7 +36,7 @@ describe('ChatScreen', () => {
     expect(screen.getByRole('log', { name: 'Conversación' })).toHaveAttribute('aria-live', 'polite');
     await userEvent.type(input, 'hola');
     await userEvent.keyboard('{Enter}');
-    expect(await screen.findByRole('button', { name: 'Prefiero no decirlo' })).toBeInTheDocument();
+    expect(await screen.findAllByRole('button', { name: 'Prefiero no decirlo' })).toHaveLength(2);
     await waitFor(() => expect(input).toHaveFocus());
     expect(container.querySelector('.chat-progress')).toBeInTheDocument();
   });
@@ -60,6 +60,18 @@ describe('ChatScreen', () => {
     expect(await screen.findByText('¿En qué zona te queda bien trabajar?')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'San Miguelito' })).toBeInTheDocument();
     expect(screen.queryByText('¿Cómo te llamo?')).not.toBeInTheDocument();
+  });
+
+  it('starts an entirely empty session with the greeting quick reply', async () => {
+    let action: unknown;
+    server.use(http.post('/api/chat', async ({ request }) => {
+      action = (await request.json() as { action?: unknown }).action;
+      return HttpResponse.json(turn({ reply: '¿Tienes un CV?', pendingSlot: 'cv_source' }));
+    }));
+    render(<ChatScreen />);
+    expect(await screen.findByText(/¡Hola! Soy Puente/)).toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: 'Prefiero no decirlo' }));
+    await waitFor(() => expect(action).toEqual({ kind: 'chip', slot: 'greeting' }));
   });
 
   it('runs intake before exploration when profile completion reports done', async () => {

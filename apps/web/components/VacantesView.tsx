@@ -9,6 +9,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '
 import { Skeleton } from './ui/skeleton';
 import { Progress } from './ui/progress';
 import { orderMatchesByDecision } from './exploration/utils';
+import { readStoredPreferences, saveStoredPreferences } from '../lib/preferences-storage';
 
 export interface VacantesViewProps {
   result?: ExplorationResult | null;
@@ -34,20 +35,33 @@ export function VacantesView({ result = null, loading = false, decisions = [], d
   const [pendingSave, setPendingSave] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const cardRefs = useRef(new Map<string, HTMLButtonElement>());
+  const candidateIdRef = useRef<string | null>(null);
   const activeResult = result ?? storedResult;
   const matches = activeResult?.matches ?? [];
   const orderedMatches = orderMatchesByDecision(matches, decisions, decisionsLoading);
   const selected = orderedMatches.find((match) => match.vacancy.jobId === selectedId) ?? null;
 
   useEffect(() => {
-    if (new URLSearchParams(window.location.search).get('save') === '1') {
-      const pending = window.sessionStorage.getItem('puente:pending-save');
-      if (pending) { try { const saved = JSON.parse(pending) as { label?: unknown; preferences?: unknown }; if (typeof saved.label === 'string' && saved.preferences) { window.localStorage.setItem('puente:preferences', JSON.stringify(saved.preferences)); setSaveLabel(saved.label); setPendingSave(true); setSaveOpen(true); } } catch { /* discard malformed pending state */ } window.sessionStorage.removeItem('puente:pending-save'); }
-    }
+    const pending = new URLSearchParams(window.location.search).get('save') === '1'
+      ? window.sessionStorage.getItem('puente:pending-save')
+      : null;
+    if (pending) window.sessionStorage.removeItem('puente:pending-save');
     fetch('/api/candidate')
       .then((response) => response.ok ? response.json() : null)
       .then(async (candidate: { candidateId?: string } | null) => {
         if (!candidate?.candidateId) return null;
+        candidateIdRef.current = candidate.candidateId;
+        if (pending) {
+          try {
+            const saved = JSON.parse(pending) as { label?: unknown; preferences?: unknown };
+            if (typeof saved.label === 'string' && saved.preferences) {
+              saveStoredPreferences(candidate.candidateId, saved.preferences);
+              setSaveLabel(saved.label);
+              setPendingSave(true);
+              setSaveOpen(true);
+            }
+          } catch { /* discard malformed pending state */ }
+        }
         const stored = window.localStorage.getItem(`puente:exploration:${candidate.candidateId}`);
         if (stored) {
           try { setStoredResult(JSON.parse(stored) as ExplorationResult); } catch { window.localStorage.removeItem(`puente:exploration:${candidate.candidateId}`); }
@@ -67,11 +81,13 @@ export function VacantesView({ result = null, loading = false, decisions = [], d
   }, [pendingSave, saveOpen]);
 
   async function saveSearch() {
-    const rawPreferences = window.localStorage.getItem('puente:preferences');
-    if (!rawPreferences) return;
-    const response = await fetch('/api/searches', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ label: saveLabel, preferences: JSON.parse(rawPreferences) }) });
+    const candidateId = candidateIdRef.current;
+    if (!candidateId) return;
+    const preferences = readStoredPreferences(candidateId);
+    if (!preferences) return;
+    const response = await fetch('/api/searches', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ label: saveLabel, preferences }) });
     if (response.status === 401) {
-      window.sessionStorage.setItem('puente:pending-save', JSON.stringify({ label: saveLabel, preferences: JSON.parse(rawPreferences) }));
+      window.sessionStorage.setItem('puente:pending-save', JSON.stringify({ label: saveLabel, preferences }));
       window.location.href = `/ingresar?next=${encodeURIComponent('/vacantes?save=1')}`;
       return;
     }

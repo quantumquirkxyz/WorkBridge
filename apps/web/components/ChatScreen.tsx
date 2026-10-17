@@ -6,6 +6,7 @@ import type { ChatTurn } from '@/lib/chat/schema';
 import { SLOTS, type SlotChip, type SlotId } from '@/lib/chat/slots';
 import { applyTurn, initialSlotState, pendingSlot, type SlotState, type UserAction } from '@/lib/chat/tracker';
 import type { PreferencesDraft } from '@/lib/preferences';
+import { saveStoredPreferences } from '@/lib/preferences-storage';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 
@@ -93,8 +94,14 @@ export function ChatScreen() {
           const seededState = snapshot?.slotState;
           const hasKnownSlots = seededState && Object.values(seededState).some((entry) => entry.state === 'filled' || entry.state === 'proposed');
           const seededSlot = hasKnownSlots ? snapshot?.pendingSlot ?? pendingSlot(seededState) : null;
-          const seededDefinition = seededSlot ? SLOTS.find((slot) => slot.id === seededSlot) : undefined;
-          const seededChips = seededDefinition?.chips.map((chip) => ({ ...chip, slot: seededSlot ?? undefined }));
+          // An entirely empty session keeps the greeting's quick reply so a new
+          // candidate can start the fallback journey without typing.
+          const seededDefinition = seededSlot
+            ? SLOTS.find((slot) => slot.id === seededSlot)
+            : hasKnownSlots
+              ? undefined
+              : SLOTS[0];
+          const seededChips = seededDefinition?.chips.map((chip) => ({ ...chip, slot: seededDefinition.id }));
           setMessages([{ id: nextId(), role: 'assistant', content: seededDefinition?.question ?? WELCOME_MESSAGE, ...(seededChips?.length ? { chips: seededChips } : {}) }]);
         }
         if (snapshot?.slotState) setSlotState(snapshot.slotState);
@@ -253,7 +260,7 @@ export function ChatScreen() {
     const explored = await response.json() as { candidateId?: string; preferences?: unknown };
     if (explored.candidateId) window.localStorage.setItem('puente:candidateId', explored.candidateId);
     if (explored.candidateId) window.localStorage.setItem(`puente:exploration:${explored.candidateId}`, JSON.stringify(explored));
-    if (explored.preferences) window.localStorage.setItem('puente:preferences', JSON.stringify(explored.preferences));
+    if (explored.candidateId && explored.preferences) saveStoredPreferences(explored.candidateId, explored.preferences);
     setExplorationRetry(null);
     router.push('/vacantes');
   }
