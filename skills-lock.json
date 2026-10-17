@@ -980,6 +980,11 @@
       "revision": "working-tree",
       "sourceType": "local"
     },
+    "repo-issue-copy": {
+      "hash": "e06893a6c247e50142179a57182a53d349eb2d55705750e3341cd134fe81d327",
+      "revision": "working-tree",
+      "sourceType": "local"
+    },
     "research": {
       "hash": "e84ef6b2f06cd94d6d60db352ca1446203475fbebf4b1e1770b61ceec790a315",
       "revision": "working-tree",
