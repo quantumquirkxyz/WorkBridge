@@ -1,0 +1,15 @@
+{
+  "skill": "review-fix-loop",
+  "identifier": "15",
+  "pr": 15,
+  "branch": "feat/issue-4-build-candidate-intake-and-profile",
+  "fixedPoint": "main",
+  "status": "blocked",
+  "pass": 6,
+  "reason": "The post-conflict-resolution branch is not typecheck-clean. The merge combines incompatible public taxonomy APIs in @puente/domain (candidate profile expects TermMatch.skill; vacancy code expects CanonicalSkill), and the merged lockfile required regeneration. A focused merge repair is required before review-pr can provide a valid clean/unclean result.",
+  "validation": {
+    "npm run typecheck": "failed: taxonomy API incompatibility, missing highs and tesseract.js dependencies",
+    "git diff --check": "failed before repair: unresolved package-lock conflict markers"
+  },
+  "nextConsumer": "resolving-merge-conflicts / focused merge repair"
+}
