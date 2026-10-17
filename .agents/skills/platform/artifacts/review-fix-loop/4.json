@@ -1,0 +1,47 @@
+{
+  "artifactType": "ReviewFixLoopArtifact",
+  "schemaVersion": "1.0",
+  "issue": "#4",
+  "pr": "#15",
+  "title": "Build candidate intake and profile",
+  "branch": "feat/issue-4-build-candidate-intake-and-profile",
+  "fixedPoint": "main (8e089c2)",
+  "headSha": "2c6a020",
+  "status": "clean",
+  "verdict": "clean",
+  "passes": [
+    { "pass": 1, "headSha": "21e77bf", "standardsFindings": 9, "specFindings": 6, "planComment": 6226132087, "implementationSha": "bace248", "outcome": "planned and implemented" },
+    { "pass": 2, "headSha": "bace248", "standardsFindings": 5, "specFindings": 2, "planComment": 6226228251, "implementationSha": "56417a1", "outcome": "planned and implemented" },
+    { "pass": 3, "headSha": "56417a1", "standardsFindings": 3, "specFindings": 1, "planComment": 6226301670, "implementationSha": "5de229b", "outcome": "planned and implemented" },
+    { "pass": 4, "headSha": "5de229b", "standardsFindings": 1, "specFindings": 0, "planComment": null, "implementationSha": "0b118c2", "outcome": "implemented without a separate plan comment (single Standards smell)" },
+    { "pass": 5, "headSha": "0b118c2", "standardsFindings": 1, "specFindings": 1, "planComment": null, "implementationSha": null, "outcome": "stopped: recurring family-work condition (REVIEW-FIX-LOOP-2)" },
+    { "pass": 6, "headSha": "2c6a020", "standardsFindings": 0, "specFindings": 0, "planComment": null, "implementationSha": "2c6a020", "outcome": "clean after plural possessive fix; one speculative Spec concern disproven by current code and regression test" }
+  ],
+  "blocker": null,
+  "deferred": [
+    { "axis": "Spec", "finding": "PII vault pseudonymization (parent-spec risk, not a ticket #4 acceptance criterion)", "owner": "MateoDG2006", "followUpTicket": "#9", "status": "open" },
+    { "axis": "Spec", "finding": "Retain the original input for correction (parent-spec risk)", "owner": "MateoDG2006", "followUpTicket": "#9", "status": "open" }
+  ],
+  "accepted": [
+    { "axis": "Spec", "finding": "Optional LLM provider adapter (openrouter.ts, llm-extractor.ts, pii.ts)", "reason": "Optional, thin, re-validated downstream, deterministic fallback intact; in-scope for the agent that consumes #4's contracts" },
+    { "axis": "Spec", "finding": "Durable persistence of the CandidateProfile", "reason": "Ticket #4's deliverable is a valid CandidateProfile JSON document (JSON Schema 2020-12 + Ajv); the route returns and validates it; no ticket specifies storage" }
+  ],
+  "resolved": [
+    "Declared-only level cap is enforced against the intake provenance and the evidence source is clamped (spec #4)",
+    "Resilient extractor reports the strategy per call instead of via shared mutable state",
+    "Academic work and family work are extracted (academic reachable; family work by venue + relation)",
+    "Standards smells from passes 1-4 repaired (dead exports, duplicated helpers, magic numbers, dead import, Middle Man, data clumps, single-sourced family venues)"
+  ],
+  "validation": {
+    "commands": ["npm run typecheck", "npm test", "npm run gate:ci", "npm run build --workspace @puente/web"],
+    "results": {
+      "typecheck": "pass",
+      "tests": "73 passed (8 files)",
+      "gateCi": "pass (93.02% lines, threshold 80%)",
+      "webBuild": "pass"
+    }
+  },
+  "nextConsumer": "ship-subissue",
+  "handoff": "Review is clean after the plural possessive family-work fix. ship-subissue may proceed when the user requests merge/close/project updates.",
+  "riskRemaining": "The deterministic heuristic remains imprecise for ambiguous Spanish work vocabulary (puesto, comercio, local). Section headers can still surface as experiences or certifications, and sentence titles can be truncated. These are deterministic-path quality limits, not contract failures; every emitted fact is anchored to an exact statement and the profile is schema-valid."
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://puente-laboral.pa/schemas/certification/1.0.0",
+  "title": "CandidateCertification",
+  "description": "A declared or verified certification. Ticket #4 persists declared certifications only; verification states are defined here so ticket #6 can extend the same contract.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "status", "source", "evidence_ids", "confidence"],
+  "properties": {
+    "id": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 300 },
+    "issuer": { "type": "string", "maxLength": 200 },
+    "issued_at": { "type": "string", "format": "date" },
+    "expires_at": { "type": "string", "format": "date" },
+    "credential_url": { "type": "string", "format": "uri" },
+    "status": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/credential_status" },
+    "source": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/provenance" },
+    "evidence_ids": {
+      "type": "array",
+      "items": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" },
+      "uniqueItems": true
+    },
+    "skill_ids": {
+      "type": "array",
+      "items": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" },
+      "uniqueItems": true
+    },
+    "confidence": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/confidence" }
+  }
+}

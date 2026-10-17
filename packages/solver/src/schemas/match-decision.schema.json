@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://puentelaboral.pa/schemas/match-decision.schema.json",
+  "title": "MatchDecision",
+  "description": "Deterministic aptitude decision for one candidate/vacancy pair: weighted score breakdown, hard-constraint outcomes, one-point promotion record, and the routing estimate that produced the geographic reasons.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "candidateId",
+    "vacancyId",
+    "aptitude",
+    "score",
+    "baseScore",
+    "scoreBreakdown",
+    "hardConstraints",
+    "failedConstraints",
+    "reasons",
+    "tieBreakKey",
+    "promotion",
+    "routing",
+    "decidedAt"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "candidateId": { "type": "string", "minLength": 1 },
+    "vacancyId": { "type": "string", "minLength": 1 },
+    "aptitude": { "enum": ["apt", "apt_with_gaps", "not_currently_apt"] },
+    "score": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "baseScore": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "scoreBreakdown": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": { "$ref": "#/$defs/ScoreBreakdownItem" }
+    },
+    "hardConstraints": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/HardConstraintResult" }
+    },
+    "failedConstraints": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/HardConstraintId" }
+    },
+    "reasons": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "tieBreakKey": { "type": "string", "minLength": 1 },
+    "promotion": { "$ref": "#/$defs/PromotionRecord" },
+    "routing": { "$ref": "#/$defs/RouteEstimate" },
+    "decidedAt": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "HardConstraintId": {
+      "enum": [
+        "mandatory_skills",
+        "mandatory_requirements_mapped",
+        "schedule",
+        "salary",
+        "capacity",
+        "geographic_commute",
+        "geographic_accessibility"
+      ]
+    },
+    "ScoreBreakdownItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dimension", "weight", "rawScore", "weightedScore", "reasons"],
+      "properties": {
+        "dimension": {
+          "enum": ["technical", "experience", "availability", "transport", "salary"]
+        },
+        "weight": { "type": "number", "minimum": 0, "maximum": 1 },
+        "rawScore": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "weightedScore": { "type": "number", "minimum": 0, "maximum": 100 },
+        "reasons": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "HardConstraintResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "satisfied", "reason"],
+      "properties": {
+        "id": { "$ref": "#/$defs/HardConstraintId" },
+        "satisfied": { "type": "boolean" },
+        "reason": { "type": "string", "minLength": 1 }
+      }
+    },
+    "PromotionRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["eligible", "applied", "requiresHumanApproval", "reason"],
+      "properties": {
+        "eligible": { "type": "boolean" },
+        "applied": { "type": "boolean" },
+        "requiresHumanApproval": { "type": "boolean" },
+        "reason": { "type": "string", "minLength": 1 }
+      }
+    },
+    "RouteEstimate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["commuteMinutes", "distanceKm", "accessible", "source"],
+      "properties": {
+        "commuteMinutes": { "type": "number", "minimum": 0 },
+        "distanceKm": { "type": "number", "minimum": 0 },
+        "accessible": { "type": "boolean" },
+        "source": { "enum": ["google_maps", "local_matrix"] },
+        "fallbackReason": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

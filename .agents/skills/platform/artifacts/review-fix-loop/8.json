@@ -1,0 +1,110 @@
+{
+  "schemaVersion": "1.0",
+  "artifactType": "review-fix-loop",
+  "id": "review-fix-loop-8",
+  "skill": "review-fix-loop",
+  "createdAt": "2026-10-16T18:50:00.000Z",
+  "updatedAt": "2026-10-16T18:50:00.000Z",
+  "pr": "https://github.com/HackathonFISC/equipo-02/pull/18",
+  "branch": "feat/issue-8-build-deterministic-geographic-matching",
+  "fixedPoint": "main",
+  "specSource": "GitHub issue #8 (parent spec #2)",
+  "reviewPassCount": 4,
+  "passes": [
+    {
+      "pass": 1,
+      "headReviewed": "69cb25a",
+      "reviewUrl": "https://github.com/HackathonFISC/equipo-02/pull/18#pullrequestreview-5554587174",
+      "standardsFindings": 9,
+      "specFindings": 7,
+      "blockerOrRequiredFindings": 3,
+      "planComment": "https://github.com/HackathonFISC/equipo-02/pull/18#issuecomment-6226503145",
+      "planStatus": "planned",
+      "implementationComment": "https://github.com/HackathonFISC/equipo-02/pull/18#issuecomment-6226508422",
+      "implementationCommit": "8f9524f",
+      "implementationStatus": "implemented",
+      "note": "Plan carried 8 executable items (1 Spec blocker, 2 Spec required, 5 Standards required). S5 (accessibility unreachable), S6 (tie-break unused), S7 (localeCompare) were the spec-critical ones."
+    },
+    {
+      "pass": 2,
+      "headReviewed": "8f9524f",
+      "reviewUrl": "https://github.com/HackathonFISC/equipo-02/pull/18#issuecomment-6226886367",
+      "standardsFindings": 5,
+      "specFindings": 4,
+      "blockerOrRequiredFindings": 2,
+      "implementationCommit": "0b84416",
+      "implementationStatus": "implemented",
+      "note": "Inline two-axis re-review. S6 was found STILL OPEN: the scaled-rank MILP objective was not a strict total order, so equal-score conflicts still fell to solver internals. Also: the HiGHS LP reader silently ignored the ranged `a <= expr <= b` row, and the schema still left HardConstraintId open. Repaired by canonicalizing the MILP optimum lexicographically and emitting fixed constraints as equality rows."
+    },
+    {
+      "pass": 3,
+      "headReviewed": "0b84416",
+      "reviewUrl": "https://github.com/HackathonFISC/equipo-02/pull/18#issuecomment-6226886367",
+      "standardsFindings": 4,
+      "specFindings": 3,
+      "blockerOrRequiredFindings": 0,
+      "implementationCommit": "a1c8a7a",
+      "implementationStatus": "implemented",
+      "note": "Inline two-axis re-review. S6 and S7 RESOLVED (canonicalization verified as a pure function of the pairs preserving max total score, via a brute-force + real HiGHS harness). S5 partial: vacancy-feature branch reachable by default, route-barrier branch needs an injected router (documented). Only judgement follow-ups remained (solve cost, silent degradation, unexported type, id sync) plus one low order inconsistency (concatenated vs field-wise id order)."
+    },
+    {
+      "pass": 4,
+      "headReviewed": "a1c8a7a",
+      "reviewUrl": "https://github.com/HackathonFISC/equipo-02/pull/18#issuecomment-6226886367",
+      "standardsFindings": 0,
+      "specFindings": 0,
+      "blockerOrRequiredFindings": 0,
+      "implementationCommit": "a1c8a7a",
+      "implementationStatus": "verified",
+      "note": "Inline two-axis confirmation. No documented-standard breach and no Spec defect. NS-1..NS-4 resolved; order inconsistency resolved; S5/S6/S7 hold."
+    }
+  ],
+  "loopState": {
+    "lastPlanPosted": true,
+    "lastImplementationCompleted": true,
+    "validation": [
+      "npm run lint - pass",
+      "npm run typecheck - pass",
+      "npm test - 156/156 pass (was 148 at pass 1)",
+      "npm run test:coverage - 94.72% lines / 80.26% branches (threshold 80% lines)",
+      "npm audit - 0 vulnerabilities"
+    ],
+    "metadataAligned": {
+      "issue": 8,
+      "labels": [],
+      "milestone": null,
+      "note": "No tracker metadata invented on the PR; issue #8's triage label was intentionally not carried onto the PR."
+    }
+  },
+  "exitCondition": "clean",
+  "deferred": [
+    {
+      "finding": "S1: the apps/agent-runtime -> packages/solver seam is absent (parent spec #2 says the runtime calls the solver).",
+      "owner": "KerubeDev",
+      "followUpTicket": "https://github.com/HackathonFISC/equipo-02/issues/20",
+      "reason": "Integration work outside packages/solver; needs the runtime wiring and the candidate profile adapter."
+    },
+    {
+      "finding": "S2: no working Google Maps path by default (createRoutingPort() has no google adapter unless a caller injects a key).",
+      "owner": "KerubeDev",
+      "followUpTicket": "https://github.com/HackathonFISC/equipo-02/issues/20",
+      "reason": "Operational configuration in the runtime, not the solver package."
+    },
+    {
+      "finding": "Standards 8: domain Location is textual while the solver requires GeoPoint; the advertised profile-layer adaptation is not bridgeable without geocoding.",
+      "owner": "KerubeDev",
+      "followUpTicket": "https://github.com/HackathonFISC/equipo-02/issues/20",
+      "reason": "Needs a geocoding step / geocode port in the integration layer."
+    }
+  ],
+  "residualAdvisory": [
+    "Spec (judgement): S3 mandatory_requirements_mapped is a conservative reading of 'enforce mandatory skills' - an unmapped mandatory requirement cannot be confirmed deterministically, so failing closed is defensible; not removed.",
+    "Spec (judgement): S4 desirable-requirement half-weight is a scoring detail inside the 'technical requirements' weight; recorded, not changed.",
+    "Standards (judgement): EvidenceSource has no ADR-0003 verification axis at this seam (matches issue #4's Provenance).",
+    "Standards (judgement): MatchDecision / nominate / promotion have no ADR or glossary entry yet.",
+    "Standards (residual): localMatrixRouter and the Google adapter hardcode accessible:true, so the route-barrier sub-branch of geographic_accessibility needs an injected router (pre-existing; part of #20 scope).",
+    "Standards (residual): the canonical === null branch has no direct unit test; the throw/non-optimal fallback paths are covered.",
+    "Standards (residual): pairKey uses '|' as a delimiter but is now only an exact-equality map key, so a collision requires an id literally containing '|'."
+  ],
+  "nextConsumer": "ship-subissue"
+}

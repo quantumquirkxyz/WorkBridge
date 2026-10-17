@@ -3,29 +3,34 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Puente Laboral Panamá — multi-agent employability system for young people in Panama.",
-  "engines": {
-    "node": ">=20"
-  },
+  "description": "Puente Laboral Panam\u00e1 \u2014 multi-agent employability system. Ticket #4: candidate intake and profile.",
   "workspaces": [
     "packages/*",
     "apps/*"
   ],
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
-    "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "build": "npm run build --workspaces --if-present",
+    "dev": "npm run dev --workspace @puente/web",
+    "gate:ci": "npm run typecheck && npm run test:coverage",
+    "lint": "eslint .",
     "verify": "npm run lint && npm run typecheck && npm run test"
   },
   "devDependencies": {
+    "@types/node": "^20.17.9",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "@vitest/coverage-v8": "^4.1.12",
+    "typescript": "^5.7.2",
+    "vitest": "^4.1.12",
     "@eslint/js": "^9.17.0",
-    "@types/node": "^22.10.5",
-    "@vitest/coverage-v8": "^5.0.5",
     "eslint": "^9.17.0",
-    "typescript": "^5.7.3",
-    "typescript-eslint": "^8.19.1",
-    "vitest": "^5.0.5"
+    "typescript-eslint": "^8.19.1"
   }
 }

@@ -1,0 +1,31 @@
+{
+  "candidateId": "cand-mid",
+  "home": { "lat": 8.9833, "lng": -79.5167 },
+  "skills": [
+    {
+      "skillId": "PA-OFF-0002",
+      "level": 2,
+      "source": "extracted",
+      "evidenceCount": 1,
+      "confidence": 0.8
+    },
+    {
+      "skillId": "PA-CS-0001",
+      "level": 2,
+      "source": "extracted",
+      "evidenceCount": 1,
+      "confidence": 0.8
+    }
+  ],
+  "experienceLevel": 2,
+  "relevantEvidenceCount": 3,
+  "availability": {
+    "days": [1, 2, 3, 4, 5],
+    "startMinute": 480,
+    "endMinute": 1020,
+    "weeklyHours": 45
+  },
+  "transport": { "hasVehicle": false, "maxCommuteMinutes": 60, "modes": ["transit"] },
+  "expectedSalaryUsd": 750,
+  "minimumSalaryUsd": 600
+}

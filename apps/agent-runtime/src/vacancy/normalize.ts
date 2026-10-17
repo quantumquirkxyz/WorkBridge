@@ -1,6 +1,6 @@
 import {
   PANAMA_SKILL_TAXONOMY,
-  matchSkill,
+  matchVacancySkill,
   normalizeText,
   validateJobRequirements,
   type Alert,
@@ -45,7 +45,7 @@ function buildRequirements(
       category: entry.category,
       originalWording,
       normalizedWording,
-      canonical: matchSkill(originalWording, taxonomy),
+      canonical: matchVacancySkill(originalWording, taxonomy),
       level: entry.raw.level ?? parseLevel(normalizedWording),
       justification: entry.raw.justification ?? null,
       alertId: null,

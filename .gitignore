@@ -5,3 +5,18 @@ coverage/
 .opencode/goals/
 .DS_Store
 Thumbs.db
+
+# Node / build output for the application monorepo (ticket #4)
+dist/
+.next/
+out/
+coverage/
+*.tsbuildinfo
+
+# Next.js generated type references (recreated on build/dev)
+next-env.d.ts
+
+# Local environment and generated artifacts
+.env
+.env.local
+.env.*.local
