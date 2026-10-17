@@ -1,0 +1,16 @@
+{
+  "pr": 31,
+  "branch": "feat/issue-1-candidate-exploration-and-evidence",
+  "conflictSource": "origin/main",
+  "status": "resolved",
+  "resolution": "Merged origin/main, preserved the PR's Neon persistence behavior, and completed the merge commit.",
+  "mergeCommit": "ed85fd7",
+  "validation": {
+    "build": "passed",
+    "gateCi": "passed",
+    "tests": 488,
+    "lineCoverage": 94.37
+  },
+  "preservedLocalChanges": true,
+  "nextConsumer": "review-pr"
+}

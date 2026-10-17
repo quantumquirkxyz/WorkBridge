@@ -54,7 +54,6 @@ export {
 } from "./weights";
 
 export {
-  AVG_KM_PER_MINUTE,
   COST_CEILING_SCORE,
   DURATION_REFERENCE_HOURS,
   NEUTRAL_GEOGRAPHY_SCORE,

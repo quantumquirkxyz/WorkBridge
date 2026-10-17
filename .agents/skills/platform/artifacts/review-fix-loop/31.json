@@ -1,0 +1,17 @@
+{
+  "pr": 31,
+  "branch": "feat/issue-1-candidate-exploration-and-evidence",
+  "fixedPoint": "origin/main",
+  "passes": 4,
+  "status": "clean",
+  "planPosted": true,
+  "implementationPosted": true,
+  "validation": {
+    "build": "passed",
+    "gateCi": "passed",
+    "tests": 488,
+    "lineCoverage": 94.37
+  },
+  "remaining": "Non-blocking duplication smells were explicitly kept out of scope.",
+  "nextConsumer": "ship-subissue"
+}

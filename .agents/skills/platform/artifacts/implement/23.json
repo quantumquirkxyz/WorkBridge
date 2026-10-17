@@ -1,0 +1,25 @@
+{
+  "status": "completed",
+  "changes": [
+    "Replaced greedy roadmap selection with a deterministic HiGHS MILP model with coverage, prerequisite, cost, and duration constraints plus fallback.",
+    "Reused the solver routing port and local-matrix fallback for on-site training geography.",
+    "Moved GeoPoint to the shared common schema and referenced it from the training catalog schema.",
+    "Updated roadmap callers and tests for the asynchronous routing and MILP seams."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npm run lint",
+      "npm run typecheck",
+      "npm test -- --run",
+      "npm run test:coverage",
+      "git diff --check"
+    ],
+    "skipped": [],
+    "notes": "486 tests passed; coverage is 93.57% lines and 80.37% branches."
+  },
+  "commitSha": "f7392ce",
+  "branch": "feat/issue-23-training-roadmap-milp-routing-schema",
+  "nextConsumer": "publish-open-pr",
+  "riskRemaining": "The default routing mode for training geography is driving; callers that need another mode must provide a routing adapter."
+}
