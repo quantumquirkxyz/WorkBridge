@@ -1,3 +1,4 @@
+
 import { heuristicProfileExtractor, createResilientExtractor, type ProfileExtractor } from '@puente/profile';
 import { createOpenRouterChat, createOpenRouterVision } from './llm/openrouter';
 import { createLlmProfileExtractor } from './extractors/llm-extractor';
@@ -65,7 +66,6 @@ export * from './llm/openrouter';
 export * from './extractors/llm-extractor';
 export * from './pii';
 
-
 export type {
   ExtractedVacancy,
   NormalizeVacancyOptions,
@@ -117,3 +117,4 @@ export {
 } from "./vacancy/extract/adapters";
 
 export { inferKind, parseLevel, parseVacancyText, slugify } from "./vacancy/text";
+
