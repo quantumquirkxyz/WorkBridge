@@ -1,0 +1,47 @@
+{
+  "status": "completed",
+  "changes": [
+    "apps/agent-runtime/src/verification/status.ts",
+    "apps/agent-runtime/src/verification/schema.ts",
+    "apps/agent-runtime/src/verification/credential-verification.schema.json",
+    "apps/agent-runtime/src/verification/certo-mapper.ts",
+    "apps/agent-runtime/src/verification/certo-verify-result.schema.json",
+    "apps/agent-runtime/src/verification/accredible.ts",
+    "apps/agent-runtime/src/verification/credly.ts",
+    "apps/agent-runtime/src/verification/http.ts",
+    "apps/agent-runtime/src/verification/verify.ts",
+    "apps/agent-runtime/src/verification/holder.ts",
+    "apps/agent-runtime/src/verification/mock-fixtures.ts",
+    "apps/agent-runtime/src/verification/metrics.ts",
+    "apps/agent-runtime/src/verification/circuit-breaker.ts",
+    "apps/agent-runtime/test/status.test.ts",
+    "apps/agent-runtime/test/certo.test.ts",
+    "apps/agent-runtime/test/fallback.test.ts",
+    "apps/agent-runtime/test/ground-truth.test.ts",
+    "apps/agent-runtime/.env.example"
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npm test --prefix apps/agent-runtime",
+      "npx tsc --noEmit",
+      "npx vitest run --coverage"
+    ],
+    "skipped": [
+      "eslint, prettier, cspell, and gitleaks are not installed. gate-ide used TypeScript typecheck and the package unit tests.",
+      "semgrep, snyk, and k6 are not installed. gate-ci used the Vitest suite and the 80 percent line-coverage threshold. Measured line coverage was 96.67 percent.",
+      "npm audit reports two critical and two moderate advisories in the Vitest dev-dependency tree (tinypool and @vitest/mocker). They are not production dependencies and were not upgraded."
+    ],
+    "notes": "Fifteen ground-truth cases reported TP 3, TN 12, FP 0, FN 0, precision 1, recall 1, false-positive rate 0, false-negative rate 0, and fallback rate 0.2. A mandatory credential is satisfied only when status is verified, which requires holder binding. Certo is called through its documented HTTPS routes and its source is not vendored. The API token is redacted from evidence."
+  },
+  "commitSha": "421d3abdda8bbf7abbcc335ad48a2630d3cfc89c",
+  "branch": "feat/issue-6-build-normalized-credential-verification",
+  "nextConsumer": "publish-open-pr",
+  "blockedBy": [],
+  "riskRemaining": "Live Certo, Accredible, and Credly deployments were not called; tests inject fetch. Adapter mappings cover the documented fields used for normalization. Dev-only Vitest advisories remain. Semgrep, Snyk, and k6 were unavailable, so those scans were not claimed as passed.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  }
+}

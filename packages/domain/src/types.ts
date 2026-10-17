@@ -371,6 +371,54 @@ export interface Location {
   raw: string | null;
 }
 
+export type AgentId =
+  | "exploration"
+  | "profile_and_evidence"
+  | "market_and_matching"
+  | "training";
+
+export type EnvelopeKind = "request" | "response" | "event";
+
+export type ActorRole = "candidate" | "counselor" | "employer" | "system";
+
+/**
+ * Agent-to-agent message. `trace_id` and `idempotency_key` are required so
+ * every hop can be audited and replayed without double execution.
+ */
+export interface AgentEnvelope {
+  trace_id: string;
+  idempotency_key: string;
+  agent: AgentId;
+  kind: EnvelopeKind;
+  payload: Record<string, unknown>;
+}
+
+/**
+ * Declared credential claim supplied to the workflow.
+ * This is not the CredentialVerification contract from issue #6.
+ */
+export interface DeclaredCredentialClaim {
+  id: string;
+  name: string;
+}
+
+/**
+ * REST body for `POST /internal/workflow/runs`.
+ * Candidate text is an intake port, not the persisted CandidateProfile from issue #4.
+ */
+export interface WorkflowRunRequest {
+  trace_id: string;
+  idempotency_key: string;
+  candidateText: string;
+  vacancyText: string;
+  declaredCredentials: DeclaredCredentialClaim[];
+  actor: {
+    id: string;
+    role: ActorRole;
+  };
+  requestedTools: string[];
+}
+
 export interface JobRequirementsMetadata {
   inputKind: VacancySource;
   extractor: string;
@@ -399,12 +447,4 @@ export interface JobRequirements {
   reviewQueue: ReviewItem[];
   blockingReasons: string[];
   metadata: JobRequirementsMetadata;
-
 }
-
-
-/**
- * TypeScript mirror of the JSON Schema 2020-12 contracts in `src/schemas`.
- * The schemas are the source of truth; these types exist so application code
- * gets compile-time help. Drift is caught by the contract tests.
- */

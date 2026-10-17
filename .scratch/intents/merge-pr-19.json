@@ -1,0 +1,14 @@
+{
+  "key": "merge-pr-19",
+  "payload": {
+    "pr": 19,
+    "strategy": "merge",
+    "issue": 9
+  },
+  "recordedAt": "2026-10-17T00:41:52.456Z",
+  "outcome": {
+    "state": "merged",
+    "mergeCommit": "e481da29d5550734e2f43e87f2eb922d7efc1c12",
+    "url": "https://github.com/HackathonFISC/equipo-02/pull/19"
+  }
+}

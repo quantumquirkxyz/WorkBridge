@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "2.0",
+  "artifactType": "plan",
+  "id": "resolve-conflict-21",
+  "skill": "resolving-merge-conflicts",
+  "skillVersion": "1",
+  "promptVersion": "2.0",
+  "createdAt": "2026-10-17T00:41:22.356Z",
+  "updatedAt": "2026-10-17T00:41:22.356Z",
+  "input": {
+    "branch": "feat/issue-12-build-role-based-approval-and-safe-application-submission",
+    "conflictSource": "merge",
+    "conflictingFiles": [
+      "README.md",
+      "apps/agent-runtime/src/index.ts",
+      "package-lock.json",
+      "package.json",
+      "tsconfig.json"
+    ]
+  },
+  "output": {
+    "status": "resolved",
+    "resolution": "Merged origin/main into the issue #12 branch. Kept intake, solver, and web scripts together with the application start and Playwright scripts. Regenerated the lockfile from main plus pg, tsx, and Playwright. The shipped #8 MatchDecision keeps https://puentelaboral.pa/schemas/match-decision.schema.json. The #12 consumer schema moved to assumed-match-decision so both documents load on the one Ajv instance. Coverage still includes the application package. ESLint ignores generated Playwright and Next output.",
+    "filesResolved": [
+      "README.md",
+      "apps/agent-runtime/src/index.ts",
+      "package-lock.json",
+      "package.json",
+      "tsconfig.json",
+      "vitest.config.ts",
+      "packages/domain/src/schemas/match-decision.schema.json",
+      "docs/reference/assumed-contracts.md",
+      "packages/ingestion/src/ocr.ts",
+      "eslint.config.js"
+    ],
+    "filesRemaining": [],
+    "branchClean": true,
+    "nextConsumer": "ship-subissue"
+  },
+  "provenance": {
+    "sourceOfTruth": "origin/main at 58805c5 and the issue #12 branch at 02e5f32",
+    "scope": [
+      "Conflict markers in README, package.json, tsconfig, index.ts, and package-lock.json",
+      "Ajv schema id collision between the assumed #12 contract and the shipped #8 schema"
+    ],
+    "outOfScope": [
+      "Rewriting issue #12 drafts onto the shipped MatchDecision shape"
+    ],
+    "nextConsumer": "ship-subissue",
+    "blockedBy": [],
+    "evidence": "npx tsc --noEmit pass; npx eslint . pass; npx vitest run --coverage 258/258, 92.78% lines / 80.77% branches; npx playwright test 3/3",
+    "riskRemaining": "Issue #12 still validates the assumed MatchDecision shape, not the shipped #8 document."
+  },
+  "evaluation": {
+    "qualityBarScore": 82,
+    "artifactPassedQualityBar": true,
+    "evaluators": {
+      "behavioral": { "passed": true, "score": 84, "notes": "Both sides of each conflict remain: intake dev server and application start, web includes and e2e includes, application exports." },
+      "traceability": { "passed": true, "score": 80, "notes": "The schema id split is recorded in assumed-contracts.md and this artifact." },
+      "quality-bar": { "passed": true, "score": 82, "notes": "Typecheck, lint, unit coverage, and Playwright passed after the merge." }
+    }
+  }
+}

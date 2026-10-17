@@ -1,0 +1,18 @@
+{
+  "status": "implemented",
+  "completed": [
+    "Spec partial: createSqlIdempotencyStore runs ENSURE_IDEMPOTENCY_TABLE_SQL before the first read or write. A fresh Neon database gets submission_idempotency without a live connection in tests. Health still does not query or echo the URL."
+  ],
+  "validation": [
+    "npx tsc --noEmit - pass",
+    "npx eslint on store.ts and server.test.ts - pass",
+    "npx vitest run --coverage - 100/100 pass; 92.88% lines / 84.11% branches",
+    "npx playwright test - 3/3 pass"
+  ],
+  "remaining": "Pass-2 judgement calls were not in the executable plan: duplicated envelope() helpers, and the session signature documented on BetterAuthSession while the code keeps it on SignedBetterAuthSession. Pass-1 advisories remain: Repeated Switches, Divergent Change, Primitive Obsession, duplicated secret scan, and duplicated fixtures.",
+  "scopeNotes": "Pass 2 plan: https://github.com/HackathonFISC/equipo-02/pull/21#issuecomment-6226981288. Commit b68b9cd. Earlier pass-1 implementation remains at 4cdaf1e.",
+  "previous": {
+    "commit": "4cdaf1e",
+    "planComment": "https://github.com/HackathonFISC/equipo-02/pull/21#issuecomment-6226808274"
+  }
+}

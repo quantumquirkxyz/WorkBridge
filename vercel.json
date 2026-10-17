@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "functions": {
+    "apps/agent-runtime/src/application/vercel.ts": {
+      "runtime": "@vercel/node"
+    }
+  },
+  "routes": [
+    { "src": "/(.*)", "dest": "apps/agent-runtime/src/application/vercel.ts" }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "candidateId": "cand-soft-skill-gaps",
+  "targetVacancyId": null,
+  "aptitude": "apt_with_gaps",
+  "gaps": [
+    {
+      "skillId": "PA-SOFT-0001",
+      "label": "Comunicación escrita",
+      "kind": "soft",
+      "requiredLevel": 2,
+      "currentLevel": 1,
+      "mandatory": false
+    },
+    {
+      "skillId": "PA-SOFT-0003",
+      "label": "Trabajo en equipo",
+      "kind": "soft",
+      "requiredLevel": 1,
+      "currentLevel": 0,
+      "mandatory": false
+    }
+  ],
+  "heldSkills": [],
+  "preferences": { "specializations": ["customer_service"] }
+}

@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://puentelaboral.pa/schemas/assumed-match-decision.schema.json",
+  "title": "AssumedMatchDecision",
+  "description": "Consumer contract issue #12 validates. Issue #8 shipped a different MatchDecision at https://puentelaboral.pa/schemas/match-decision.schema.json; this document keeps a separate id so both can load on the one Ajv instance.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "decisionId",
+    "traceId",
+    "candidateId",
+    "vacancyId",
+    "strategy",
+    "aptitude",
+    "score",
+    "hardConstraints",
+    "transport",
+    "gaps",
+    "biasAlerts",
+    "promotion",
+    "tieBreak",
+    "reasons"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "decisionId": { "type": "string", "minLength": 1 },
+    "traceId": { "type": "string", "minLength": 1 },
+    "candidateId": { "type": "string", "minLength": 1 },
+    "vacancyId": { "type": "string", "minLength": 1 },
+    "strategy": { "enum": ["highs_milp", "deterministic_greedy"] },
+    "aptitude": { "enum": ["apt", "apt_with_gaps", "not_currently_apt"] },
+    "score": { "$ref": "#/$defs/ScoreBreakdown" },
+    "hardConstraints": { "$ref": "#/$defs/HardConstraints" },
+    "transport": { "$ref": "#/$defs/Transport" },
+    "gaps": { "type": "array", "items": { "$ref": "#/$defs/Gap" } },
+    "biasAlerts": { "type": "array", "items": { "$ref": "#/$defs/BiasAlert" } },
+    "promotion": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/Promotion" }] },
+    "tieBreak": { "$ref": "#/$defs/TieBreak" },
+    "reasons": { "type": "array", "items": { "$ref": "#/$defs/Reason" } }
+  },
+  "$defs": {
+    "ScoreBreakdown": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "technicalRequirements",
+        "experienceEvidence",
+        "availability",
+        "transportAccessibility",
+        "salaryConditions",
+        "weightedTotal"
+      ],
+      "properties": {
+        "technicalRequirements": { "type": "number", "minimum": 0, "maximum": 100 },
+        "experienceEvidence": { "type": "number", "minimum": 0, "maximum": 100 },
+        "availability": { "type": "number", "minimum": 0, "maximum": 100 },
+        "transportAccessibility": { "type": "number", "minimum": 0, "maximum": 100 },
+        "salaryConditions": { "type": "number", "minimum": 0, "maximum": 100 },
+        "weightedTotal": { "type": "number", "minimum": 0, "maximum": 100 }
+      }
+    },
+    "HardConstraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mandatorySkills", "schedule", "salary", "capacity", "geographic"],
+      "properties": {
+        "mandatorySkills": { "enum": ["pass", "fail"] },
+        "schedule": { "enum": ["pass", "fail"] },
+        "salary": { "enum": ["pass", "fail"] },
+        "capacity": { "enum": ["pass", "fail"] },
+        "geographic": { "enum": ["pass", "fail"] }
+      }
+    },
+    "Transport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["feasible", "source"],
+      "properties": {
+        "feasible": { "type": "boolean" },
+        "source": { "enum": ["google_maps", "local_matrix"] }
+      }
+    },
+    "Gap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "severity", "description"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "severity": { "enum": ["critical", "minor"] },
+        "description": { "type": "string", "minLength": 1 }
+      }
+    },
+    "BiasAlert": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "reason"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 }
+      }
+    },
+    "Promotion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["applied", "humanApproved"],
+      "properties": {
+        "applied": { "type": "boolean" },
+        "humanApproved": { "type": "boolean" }
+      }
+    },
+    "TieBreak": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["deterministic", "usedProtectedAttributes", "usedRandomness"],
+      "properties": {
+        "deterministic": { "const": true },
+        "usedProtectedAttributes": { "const": false },
+        "usedRandomness": { "const": false }
+      }
+    },
+    "Reason": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message"],
+      "properties": {
+        "code": { "type": "string", "minLength": 1 },
+        "message": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

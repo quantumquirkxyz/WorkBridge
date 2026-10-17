@@ -1,0 +1,20 @@
+{
+  "candidateId": "cand-schedule-conflict",
+  "targetVacancyId": "vac-metro-support",
+  "aptitude": "not_currently_apt",
+  "gaps": [
+    {
+      "skillId": "PA-IT-0001",
+      "label": "Soporte técnico",
+      "kind": "technical",
+      "requiredLevel": 2,
+      "currentLevel": 0,
+      "mandatory": true
+    }
+  ],
+  "heldSkills": [],
+  "preferences": {
+    "specializations": ["it_support"],
+    "availabilityWindow": { "days": [1, 2, 3, 4, 5], "startMinute": 480, "endMinute": 1020, "weeklyHours": 45 }
+  }
+}

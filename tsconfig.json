@@ -37,6 +37,9 @@
       "@puente/catalog": [
         "packages/catalog/src/index.ts"
       ],
+      "@puente/training": [
+        "packages/training/src/index.ts"
+      ],
       "@puente/agent-runtime": [
         "apps/agent-runtime/src/index.ts"
       ]
@@ -48,6 +51,9 @@
     "packages/**/*.ts",
     "apps/**/*.ts",
     "apps/**/*.tsx",
-    "tests/**/*.ts"
+    "tests/**/*.ts",
+    "vitest.config.ts",
+    "playwright.config.ts",
+    "eslint.config.js"
   ]
 }

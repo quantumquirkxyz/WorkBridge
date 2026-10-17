@@ -1,0 +1,106 @@
+{
+  "schemaVersion": "1.0",
+  "artifactType": "review-fix-loop",
+  "id": "review-fix-loop-11",
+  "skill": "review-fix-loop",
+  "createdAt": "2026-10-17T00:49:37.000Z",
+  "updatedAt": "2026-10-17T00:49:37.000Z",
+  "pr": "https://github.com/HackathonFISC/equipo-02/pull/22",
+  "branch": "feat/issue-11-build-specialization-aware-training-roadmap",
+  "fixedPoint": "eb2cad7",
+  "specSource": "GitHub issue #11 (parent spec #2); design source .agents/skills/platform/artifacts/grill-with-docs/empleabilidad-panama-v1.md",
+  "reviewPassCount": 4,
+  "passes": [
+    {
+      "pass": 1,
+      "headReviewed": "bf9998f",
+      "reviewUrl": "https://github.com/HackathonFISC/equipo-02/pull/22#pullrequestreview-5555044018",
+      "standardsFindings": 9,
+      "specFindings": 5,
+      "blockerOrRequiredFindings": 0,
+      "planComment": "https://github.com/HackathonFISC/equipo-02/pull/22#issuecomment-6227364078",
+      "planStatus": "planned",
+      "implementationCommit": "51c89b4",
+      "implementationStatus": "implemented",
+      "note": "Plan carried 9 executable items (Spec: enforce catalog 15-30 bound, filter by specialization; Standards: dedupe compareCodeUnits via @puente/solver, reuse modalityLabelEs, consolidate gapLabel, single prerequisite predicate, alias AvailabilityWindow, remove dead catalog helpers, rename preferences availability -> availabilityWindow, consistent zero duration ceiling). Three design-level findings deferred to #23."
+    },
+    {
+      "pass": 2,
+      "headReviewed": "51c89b4",
+      "reviewUrl": "https://github.com/HackathonFISC/equipo-02/pull/22#issuecomment-6227364078",
+      "standardsFindings": 4,
+      "specFindings": 1,
+      "blockerOrRequiredFindings": 1,
+      "implementationCommit": "5dad4a6",
+      "implementationStatus": "implemented",
+      "note": "Inline two-axis re-review. All 9 Standards and 5 Spec findings from pass 1 resolved. Spec still open: buildRoadmap emitted an apt roadmap and TrainingPreferences.requireCredential was dead. Standards info: catalog change-detector test, recomputed specialization overlap, residual label fallback, param naming."
+    },
+    {
+      "pass": 3,
+      "headReviewed": "5dad4a6",
+      "reviewUrl": "https://github.com/HackathonFISC/equipo-02/pull/22#issuecomment-6227364078",
+      "standardsFindings": 4,
+      "specFindings": 0,
+      "blockerOrRequiredFindings": 0,
+      "implementationCommit": "7fb5c17",
+      "implementationStatus": "implemented",
+      "note": "Inline two-axis re-review. Spec clean: apt now yields an empty roadmap and requireCredential is removed. Standards: 0 blocker/0 warning, 4 info - one a regression introduced by pass-2 (a non-null assertion replacing a total fallback). Repaired by gapLabelForContribution and the naming/message polish."
+    },
+    {
+      "pass": 4,
+      "headReviewed": "7fb5c17",
+      "reviewUrl": "https://github.com/HackathonFISC/equipo-02/pull/22#issuecomment-6227364078",
+      "standardsFindings": 2,
+      "specFindings": 0,
+      "blockerOrRequiredFindings": 0,
+      "implementationCommit": "7fb5c17",
+      "implementationStatus": "verified",
+      "note": "Final Standards-only confirmation. All four pass-3 notes resolved. Only two info nitpicks remain (a micro O(gaps x contributions) lookup inside the new helper, and a naming preference), consciously accepted as non-blocking rather than chased."
+    }
+  ],
+  "loopState": {
+    "lastPlanPosted": true,
+    "lastImplementationCompleted": true,
+    "validation": [
+      "npm run lint - pass",
+      "npm run typecheck - pass",
+      "npm test - 211/211 pass (was 208 at pass 1)",
+      "npx vitest run packages/training - 55/55 pass",
+      "npm run test:coverage - 95.81% lines / 82.3% branches (threshold 80% lines); training package 98.67% lines / 87.61% branches",
+      "npm audit - 0 vulnerabilities"
+    ],
+    "metadataAligned": {
+      "issue": 11,
+      "labels": [],
+      "milestone": null,
+      "note": "No tracker metadata invented on the PR; issue #11's triage label ready-for-agent was intentionally not carried onto the PR."
+    }
+  },
+  "exitCondition": "clean",
+  "deferred": [
+    {
+      "finding": "Spec: selectRoadmap is a deterministic greedy set cover instead of the design source's y[curso] MILP (select.ts:38-125).",
+      "owner": "KerubeDev",
+      "followUpTicket": "https://github.com/HackathonFISC/equipo-02/issues/23",
+      "reason": "The issue #11 ticket does not mandate the MILP; the design-level optimisation belongs with the solver's MilpSolverPort, recorded in the ImplementArtifact riskRemaining."
+    },
+    {
+      "finding": "Spec: on-site geography uses a fixed AVG_KM_PER_MINUTE haversine estimate instead of the shared routing API + deterministic fallback (scoring.ts:22,193-221).",
+      "owner": "KerubeDev",
+      "followUpTicket": "https://github.com/HackathonFISC/equipo-02/issues/23",
+      "reason": "Requires injecting the routing port into the synchronous scorer; out of scope for the cached-catalog roadmap seam."
+    },
+    {
+      "finding": "Standards: the GeoPoint schema shape is restated in training-catalog.schema.json:21-29 instead of a shared $def (cross-package drift risk).",
+      "owner": "KerubeDev",
+      "followUpTicket": "https://github.com/HackathonFISC/equipo-02/issues/23",
+      "reason": "A shared schema location across packages is a repository-wide decision, not an issue #11 change."
+    }
+  ],
+  "residualAdvisory": [
+    "Standards (info): gapLabelForContribution does a linear gaps.find per contribution (O(gaps x contributions)); gaps are few and the path replaced the same inline finds, so no memoization added.",
+    "Standards (info): the gapLabelForContribution name reads narrower than its (gaps, contribution) signature; kept for symmetry with gapLabel/gapLabelForSkill.",
+    "Spec (caveat): an apt request with a non-empty gaps array reports those gaps as unresolved with coveredGapCount 0; only reachable with contradictory input."
+  ],
+  "nextConsumer": "ship-subissue"
+}
