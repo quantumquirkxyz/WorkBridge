@@ -16,7 +16,7 @@ export function candidateIdFromRequest(request: Request): string | undefined {
   if (!raw) return undefined;
   try {
     const session = JSON.parse(raw) as CandidateSession;
-    if (session.user?.role !== undefined && session.user.role !== 'candidate') return undefined;
+    if (session.user?.role !== 'candidate') return undefined;
     const userId = session.user?.id ?? session.session?.userId;
     if (typeof userId !== 'string' || userId.length === 0) return undefined;
     const ownedCandidate = userId.startsWith('candidate_') ? userId : makeCandidateId(userId);
