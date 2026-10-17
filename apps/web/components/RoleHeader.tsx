@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { Map } from 'lucide-react';
 import { roleLabel } from '../lib/auth-navigation';
+import { BrandMark } from './BrandMark';
 import { SignOutButton } from './SignOutButton';
 import { ThemeToggle } from './theme-provider';
 
@@ -15,7 +15,7 @@ export function RoleHeader({ role }: { role: ChromeRole }) {
     <header className="role-header">
       <div className="role-header-start">
         <Link className="candidate-brand" href={home} aria-label={`WorkBridge, ir a ${role === 'employer' ? 'Postulaciones' : 'Pendientes'}`}>
-          <span className="candidate-brand-mark" aria-hidden="true"><Map /></span>
+          <BrandMark className="candidate-brand-mark" />
           <span>WorkBridge</span>
         </Link>
         <span className={`role-badge role-badge-${role}`}>{roleLabel(role)}</span>
