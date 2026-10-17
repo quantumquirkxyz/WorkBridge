@@ -1,0 +1,18 @@
+{
+  "status": "clean",
+  "pr": 84,
+  "branch": "feat/issue-60-structured-workflow-results",
+  "fixedPoint": "origin/main",
+  "reviewPasses": 2,
+  "lastPlanPosted": true,
+  "lastImplementationCompleted": true,
+  "validation": {
+    "commands": ["npm run typecheck", "npm test -- --run apps/agent-runtime/src/workflow/__tests__/graph.test.ts", "npm run gate:ci"],
+    "result": "passed",
+    "tests": "55 files, 502 tests"
+  },
+  "standardsFindings": 0,
+  "specFindings": 0,
+  "nextConsumer": "ship-subissue",
+  "riskRemaining": "No blocking review findings."
+}
