@@ -22,6 +22,7 @@ type RenderedChip = SlotChip & { slot?: SlotId };
 interface ChatSnapshot {
   transcript?: Array<{ role: 'assistant' | 'user'; content: string }>;
   slotState?: SlotState;
+  phase?: ChatTurn['phase'];
 }
 
 interface RetryRequest {
@@ -75,6 +76,7 @@ export function ChatScreen() {
           setMessages([{ id: nextId(), role: 'assistant', content: WELCOME_MESSAGE }]);
         }
         if (snapshot?.slotState) setSlotState(snapshot.slotState);
+        if (snapshot?.phase) setPhase(snapshot.phase);
       })
       .catch(() => {
         if (active) setMessages([{ id: nextId(), role: 'assistant', content: WELCOME_MESSAGE }]);

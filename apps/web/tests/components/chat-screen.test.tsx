@@ -40,6 +40,13 @@ describe('ChatScreen', () => {
     expect(container.querySelector('.chat-progress')).toBeInTheDocument();
   });
 
+  it('restores the server-reported phase after reload', async () => {
+    server.use(http.get('/api/chat', () => HttpResponse.json({ transcript: [{ role: 'assistant', content: '¿En qué zona?' }], slotState: initialSlotState(), phase: 'preferences' })));
+    render(<ChatScreen />);
+    await screen.findByText('¿En qué zona?');
+    expect(screen.getByLabelText('Fase preferencias')).toBeInTheDocument();
+  });
+
   it('shows confirmation chips and sends Sí for a proposed value', async () => {
     let calls = 0;
     server.use(
