@@ -63,6 +63,50 @@ if (document.status === "accepted") {
 }
 ```
 
+## Market matching (issue #20 solver seam)
+
+`apps/agent-runtime` calls `@puente/solver` through `MatchingService`. The service
+geocodes the candidate's home and each normalized vacancy location, projects the
+domain documents onto the solver's contracts, then runs the deterministic matcher.
+
+```
+CandidateProfile + CandidateMatchContext ─┐
+                                          ├─ MatchingService ─► @puente/solver
+JobRequirements + VacancyMatchContext ────┘        │
+                                                   ├─ geocode Location ─► GeoPoint
+                                                   ├─ canonical skill-id bridge
+                                                   └─ nominate | evaluateMatch ─► MatchDecision
+```
+
+- **Geocoding** (`matching/geocode.ts`): a `GeocodingPort` maps the textual domain
+  `Location` onto a solver `GeoPoint`. The deterministic Panama catalog is the
+  offline default; the Google Geocoding API answers when `GOOGLE_MAPS_API_KEY` is
+  set. A provider failure falls back to the catalog with a recorded `fallbackReason`.
+- **Routing**: the same key configures the Distance Matrix port. With no key,
+  `createRoutingPort()` uses the local matrix, so matching runs fully offline.
+- **Skill-id bridge**: the profile layer emits its own curated ids (`plp:*`) while
+  vacancy requirements carry the ESCO-shaped ids (`PA-*`); `toSolverCandidate`
+  re-matches each profile skill against the vacancy taxonomy so the mandatory
+  comparison is meaningful.
+- **Fairness**: only `getRankableRequirements` are projected, so flagged
+  requirements stay out of ranking, and blocked vacancies are skipped, not scored.
+
+Facts the solver needs that the profile/vacancy documents do not carry (schedule,
+salary, capacity, transport, availability, home location) are supplied explicitly
+through `CandidateMatchContext` / `VacancyMatchContext`; nothing is inferred.
+
+```ts
+import { createMatchingService, matchingConfigFromEnv } from "@puente/agent-runtime";
+
+const config = matchingConfigFromEnv(process.env);
+const matching = createMatchingService(config);
+
+const decision = await matching.evaluatePair(profile, candidateContext, {
+  document: jobRequirements,
+  context: vacancyContext,
+});
+```
+
 ## Workflow, safety, and observability
 
 ```
@@ -94,7 +138,7 @@ chain records `pending → failed → retrying → dead_letter`.
 ```bash
 npm run lint          # eslint
 npm run typecheck     # tsc --noEmit
-npm test              # vitest (117 tests)
+npm test              # vitest (193 tests)
 npm run test:coverage # vitest + v8 coverage (80% line threshold)
 ```
 

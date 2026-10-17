@@ -1,0 +1,22 @@
+{
+  "status": "partial",
+  "changes": [
+    "Added intake API regression coverage for pre-transcribed audio and image submissions.",
+    "Confirmed existing candidate profile normalization, explicit preference persistence, and cached exploration seams satisfy issue #1 criteria."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": false,
+    "commands": ["npm run lint", "npm run typecheck", "npm test", "npm run gate:ci"],
+    "skipped": [],
+    "notes": "The intake input-path regression coverage is complete, but issue #1 remains partial because durable profile persistence and several broader acceptance criteria are outside this PR."
+  },
+  "commitSha": "3f36fa9918c7b9c453d06d9892bd1be65c4624ff",
+  "branch": "feat/issue-1-candidate-exploration-and-evidence",
+  "nextConsumer": "publish-open-pr",
+  "riskRemaining": "Original intake bytes are processed in-memory by the current API seam; durable profile storage is outside this issue slice.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  }
+}

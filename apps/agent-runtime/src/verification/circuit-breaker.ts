@@ -1,4 +1,4 @@
-import type { ProviderName } from "./status.js";
+import type { ProviderName } from "./status";
 
 export interface CircuitBreaker {
   isOpen(provider: ProviderName): boolean;

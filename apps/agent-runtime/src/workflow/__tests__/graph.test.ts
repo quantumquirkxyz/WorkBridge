@@ -2,6 +2,13 @@ import { describe, expect, it } from "vitest";
 import type { WorkflowRunRequest } from "@puente/domain";
 import { CAPABILITY_CHAINS } from "../models";
 import { createWorkflowRuntime } from "../graph";
+import {
+  candidateProfile,
+  CANDIDATE_CONTEXT,
+  objectiveDocument,
+  VACANCY_CONTEXT,
+  now,
+} from "../../matching/__tests__/helpers";
 
 const PRIMARY = CAPABILITY_CHAINS.planning.models[0];
 
@@ -71,6 +78,30 @@ describe("employability workflow", () => {
       tool: "read_goals",
     });
     expect(engine.lastIngestion?.batch.some((item) => item.type === "trace-create")).toBe(true);
+  });
+
+  it("uses the deterministic solver for market matching when validated input is supplied", async () => {
+    const calls: string[] = [];
+    const matchingInput = {
+      profile: candidateProfile(),
+      context: CANDIDATE_CONTEXT,
+      vacancies: [{ document: await objectiveDocument(), context: VACANCY_CONTEXT }],
+      now,
+    };
+    const engine = createWorkflowRuntime({
+      clock: () => "2026-10-16T12:00:00.000Z",
+      complete: async (modelId) => {
+        calls.push(modelId);
+        return { text: "Plan de practica en caja" };
+      },
+      matchingEnv: {},
+    });
+
+    const result = await engine.run(request({ matchingInput }));
+    const matching = result.agents.find((agent) => agent.agent === "market_and_matching");
+    expect(matching?.summary).toContain('"candidateId"');
+    expect(calls).toHaveLength(3);
+    expect(engine.audit.read().some((event) => event.action === "matching_completed")).toBe(true);
   });
 
   it("rejects malicious instructions injected through a CV and a scraped vacancy", async () => {

@@ -1,16 +1,16 @@
-import { accredibleEvidence, parseAccredibleCredential, signalsFromAccredible } from "./accredible.js";
-import { evidenceFromCerto, parseCertoVerifyResult, signalsFromCerto } from "./certo-mapper.js";
-import { createCircuitBreaker, type CircuitBreaker } from "./circuit-breaker.js";
-import { verificationConfigFromEnv } from "./config.js";
-import { credlyEvidence, parseCredlyAssertion, signalsFromCredly } from "./credly.js";
-import { fetchJsonWithRetry, traceHeaders } from "./http.js";
-import { mockSignalsFor } from "./mock-fixtures.js";
+import { accredibleEvidence, parseAccredibleCredential, signalsFromAccredible } from "./accredible";
+import { evidenceFromCerto, parseCertoVerifyResult, signalsFromCerto } from "./certo-mapper";
+import { createCircuitBreaker, type CircuitBreaker } from "./circuit-breaker";
+import { verificationConfigFromEnv } from "./config";
+import { credlyEvidence, parseCredlyAssertion, signalsFromCredly } from "./credly";
+import { fetchJsonWithRetry, traceHeaders } from "./http";
+import { mockSignalsFor } from "./mock-fixtures";
 import {
   normalizeVerification,
   type CredentialVerification,
   type EvidenceItem,
   type VerificationSignals,
-} from "./status.js";
+} from "./status";
 
 export interface CredentialInput {
   credentialId?: string;

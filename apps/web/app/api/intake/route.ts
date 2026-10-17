@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createAgentFromEnv } from '@puente/agent-runtime';
 import { handleIntake } from '../../../lib/intake-handler';
+import { persistCandidateProfile } from '../../../lib/neon-repository';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -22,5 +23,8 @@ export async function POST(request: Request): Promise<Response> {
     OPENROUTER_BASE_URL: process.env.OPENROUTER_BASE_URL,
   });
   const { status, body } = await handleIntake(payload, { agent });
+  if (status === 200 && typeof body === 'object' && body && 'profile' in body) {
+    await persistCandidateProfile(body.profile as import('@puente/domain').CandidateProfile);
+  }
   return NextResponse.json(body, { status });
 }
