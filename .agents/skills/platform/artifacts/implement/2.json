@@ -15,9 +15,9 @@
       "npm run gate:ci"
     ],
     "skipped": [],
-    "notes": "The implementation is integrated through child-ticket commits #5 (8f6bbe5fbe713adf724597cdd31c00112166a3a7), #8 (bab2947c35303313db91d40d5cac35cbf0743566), and #11 (59c991d689c7652a48e854eff480848bdd2c1e3e). Vacancy evidence is in apps/agent-runtime/src/vacancy/__tests__/normalize.test.ts, fairness.test.ts, and ranking.test.ts; matching evidence is in packages/solver/src/__tests__/scoring.test.ts, constraints.test.ts, promotion.test.ts, routing.test.ts, match.test.ts, and nominate.test.ts; roadmap evidence is in packages/training/src/__tests__/rank.test.ts, select.test.ts, roadmap.test.ts, and catalog.test.ts. Validation covered 54 test files and 486 tests; coverage was 92.61% statements and 94.37% lines."
+    "notes": "The implementation is integrated through child-ticket commits #5 (8f6bbe5fbe713adf724597cdd31c00112166a3a7), #8 (bab2947c35303313db91d40d5cac35cbf0743566), and #11 (59c991d689c7652a48e854eff480848bdd2c1e3e). The routing fallback correction and its validation were completed at f7072fe. Vacancy evidence is in apps/agent-runtime/src/vacancy/__tests__/normalize.test.ts, fairness.test.ts, and ranking.test.ts; matching evidence is in packages/solver/src/__tests__/scoring.test.ts, constraints.test.ts, promotion.test.ts, routing.test.ts, match.test.ts, and nominate.test.ts; roadmap evidence is in packages/training/src/__tests__/rank.test.ts, select.test.ts, roadmap.test.ts, and catalog.test.ts. Validation covered 54 test files and 486 tests; coverage was 92.61% statements and 94.37% lines."
   },
-  "commitSha": "36af5d2a0009f770cbb05b35ebceb6d78140aff8",
+  "commitSha": "f7072fe4bf72e69a47c80c91c245bc37c0a6e1ec",
   "branch": "feat/issue-2-market-matching-training-roadmap",
   "nextConsumer": "publish-open-pr",
   "blockedBy": [],
