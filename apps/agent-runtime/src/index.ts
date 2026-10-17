@@ -118,6 +118,8 @@ export {
 
 export { inferKind, parseLevel, parseVacancyText, slugify } from "./vacancy/text";
 
+export { verificationConfigFromEnv, verifyCredential } from "./verification/index";
+
 export {
   AGENT_CAPABILITIES,
   CAPABILITY_CHAINS,
