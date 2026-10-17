@@ -7,6 +7,7 @@ import {
   gapCoverageScore,
   geographyScore,
   modalityScore,
+  scheduleCoverage,
   scheduleScore,
   specializationScore,
   type DimensionScore,
@@ -52,6 +53,13 @@ export function staticExclusionReasons(
     reasons.push(
       `Cuesta USD ${opportunity.costUsd}, por encima de tu límite de USD ${preferences.maxCostUsd}.`,
     );
+  }
+  if (opportunity.schedule && preferences.availability) {
+    const { coverage, missingDays } = scheduleCoverage(opportunity.schedule, preferences.availability);
+    if (coverage < 1) {
+      const days = missingDays.length > 0 ? ` (días no disponibles: ${missingDays.join(", ")})` : "";
+      reasons.push(`El horario no coincide con tu disponibilidad${days}.`);
+    }
   }
   return reasons;
 }

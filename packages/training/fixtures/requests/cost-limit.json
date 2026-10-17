@@ -1,0 +1,17 @@
+{
+  "candidateId": "cand-cost-limit",
+  "targetVacancyId": "vac-metro-support",
+  "aptitude": "apt_with_gaps",
+  "gaps": [
+    {
+      "skillId": "PA-OFF-0002",
+      "label": "Hoja de cálculo Excel",
+      "kind": "technical",
+      "requiredLevel": 2,
+      "currentLevel": 0,
+      "mandatory": true
+    }
+  ],
+  "heldSkills": [],
+  "preferences": { "specializations": ["administration"], "maxCostUsd": 10 }
+}
