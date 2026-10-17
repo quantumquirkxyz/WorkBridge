@@ -16,7 +16,7 @@ export async function GET(request: Request): Promise<Response> {
     const profile = await readCandidateProfile(candidateId);
     return profile ? NextResponse.json(profile) : NextResponse.json({ error: 'not_found' }, { status: 404 });
   } catch (error) {
-    return NextResponse.json({ error: 'persistence_unavailable', message: error instanceof Error ? error.message : String(error) }, { status: 503 });
+    return NextResponse.json({ error: 'persistence_unavailable' }, { status: 503 });
   }
 }
 

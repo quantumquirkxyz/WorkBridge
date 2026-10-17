@@ -59,7 +59,7 @@ export async function DELETE(request: Request): Promise<Response> {
     try {
       await deleteCandidateData(candidateId);
     } catch (error) {
-      return NextResponse.json({ error: 'persistence_unavailable', message: error instanceof Error ? error.message : String(error) }, { status: 503 });
+      return NextResponse.json({ error: 'persistence_unavailable' }, { status: 503 });
     }
   }
   const { status, body } = handleDeleteCandidate(candidateId);
