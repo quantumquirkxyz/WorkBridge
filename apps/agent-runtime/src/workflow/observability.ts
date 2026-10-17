@@ -173,8 +173,8 @@ export class LangfuseRecorder {
   private flushed: ReturnType<LangfuseRecorder["toIngestionBatch"]> | null = null;
 
   /** Build the ingestion batch and keep it so a run can prove the flush happened. */
-  flush(): ReturnType<LangfuseRecorder["toIngestionBatch"]> {
-    this.flushed = this.toIngestionBatch();
+  flush(traceId?: string): ReturnType<LangfuseRecorder["toIngestionBatch"]> {
+    this.flushed = this.toIngestionBatch(traceId);
     return this.flushed;
   }
 
@@ -182,11 +182,12 @@ export class LangfuseRecorder {
     return this.flushed;
   }
 
-  toIngestionBatch(): {
+  toIngestionBatch(traceId?: string): {
     batch: Array<{ id: string; type: "trace-create" | "span-create"; timestamp: string; body: unknown }>;
   } {
     const batch: Array<{ id: string; type: "trace-create" | "span-create"; timestamp: string; body: unknown }> = [];
     for (const trace of this.traces.values()) {
+      if (traceId !== undefined && trace.id !== traceId) continue;
       batch.push({
         id: trace.id,
         type: "trace-create",
@@ -195,6 +196,7 @@ export class LangfuseRecorder {
       });
     }
     for (const span of this.spans) {
+      if (traceId !== undefined && span.traceId !== traceId) continue;
       batch.push({
         id: span.id,
         type: "span-create",
@@ -212,6 +214,29 @@ export interface LangfuseIngestionBatch {
 
 export interface LangfuseClient {
   ingest(batch: LangfuseIngestionBatch): Promise<void>;
+}
+
+export interface LangfuseEnv {
+  LANGFUSE_PUBLIC_KEY?: string;
+  LANGFUSE_SECRET_KEY?: string;
+  LANGFUSE_BASE_URL?: string;
+}
+
+/** Returns a client only when both keys are set. Empty keys stay offline. */
+export function langfuseClientFromEnv(
+  env: LangfuseEnv,
+  fetchImpl: typeof fetch = globalThis.fetch,
+): LangfuseClient | undefined {
+  const publicKey = env.LANGFUSE_PUBLIC_KEY?.trim() ?? "";
+  const secretKey = env.LANGFUSE_SECRET_KEY?.trim() ?? "";
+  if (publicKey.length === 0 || secretKey.length === 0) return undefined;
+  const baseUrl = env.LANGFUSE_BASE_URL?.trim().replace(/\/+$/, "");
+  return createLangfuseClient({
+    publicKey,
+    secretKey,
+    fetchImpl,
+    ...(baseUrl ? { baseUrl } : {}),
+  });
 }
 
 /** Posts a batch to Langfuse's public ingestion API. Tests inject fetch. */
@@ -232,6 +257,7 @@ export function createLangfuseClient(options: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(batch),
+        signal: AbortSignal.timeout(5_000),
       });
       if (!response.ok) {
         throw new Error(`Langfuse ingestion failed: ${response.status}`);

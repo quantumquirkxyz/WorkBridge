@@ -30,7 +30,9 @@ import {
   AppendOnlyAuditLog,
   DqlStore,
   LangfuseRecorder,
+  langfuseClientFromEnv,
   type LangfuseClient,
+  type LangfuseEnv,
 } from "./observability";
 
 export const WORKFLOW_ID = "workbridge-employability";
@@ -68,6 +70,10 @@ export interface WorkflowDependencies {
   catalog?: readonly string[];
   clock?: () => string;
   langfuse?: LangfuseClient;
+  /** When `langfuse` is omitted, keys in this env (or `process.env`) enable ingestion. */
+  langfuseEnv?: LangfuseEnv;
+  /** Transport for env-configured Langfuse. Tests stub this so no network call is made. */
+  fetchImpl?: typeof fetch;
   /** Matching service used when the caller supplies validated matching input. */
   matching?: MatchingService;
   matchingEnv?: MatchingEnv;
@@ -118,7 +124,9 @@ export class WorkflowRuntime {
 
   constructor(deps: WorkflowDependencies) {
     this.clock = deps.clock ?? (() => new Date().toISOString());
-    this.langfuse = deps.langfuse;
+    this.langfuse =
+      deps.langfuse ??
+      langfuseClientFromEnv(deps.langfuseEnv ?? (process.env as LangfuseEnv), deps.fetchImpl);
     this.matching = deps.matching ?? createMatchingService(
       matchingConfigFromEnv(deps.matchingEnv ?? (process.env as MatchingEnv)),
     );
@@ -231,8 +239,14 @@ export class WorkflowRuntime {
         auditedVacancies: carrier.auditedVacancies ?? [],
         ...(carrier.roadmapResult ? { roadmap: carrier.roadmapResult } : {}),
       };
-      this.lastIngestion = this.traces.flush();
-      if (this.langfuse) await this.langfuse.ingest(this.lastIngestion);
+      this.lastIngestion = this.traces.flush(input.trace_id);
+      if (this.langfuse) {
+        try {
+          await this.langfuse.ingest(this.lastIngestion);
+        } catch {
+          // Best-effort: a Langfuse failure must not fail a completed run.
+        }
+      }
       this.cache.set(input.idempotency_key, result);
       return result;
     } finally {
