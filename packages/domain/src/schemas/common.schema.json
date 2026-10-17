@@ -64,6 +64,33 @@
       "type": "string",
       "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
       "description": "BCP-47 style tag, e.g. `es-PA`."
+    },
+    "work_modality": {
+      "description": "Where the work is performed: on-site, hybrid, or fully remote.",
+      "type": "string",
+      "enum": ["onsite", "hybrid", "remote"]
+    },
+    "transport_mode": {
+      "description": "A way of commuting to work.",
+      "type": "string",
+      "enum": ["driving", "transit", "walking", "cycling"]
+    },
+    "contract_type": {
+      "description": "Normalized employment contract type.",
+      "type": "string",
+      "enum": ["full_time", "part_time", "fixed_term", "internship", "temporary", "freelance"]
+    },
+    "location": {
+      "description": "A Panamanian location reference. Used both for a candidate's maximum acceptable area and for a vacancy's location.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["country", "province", "district", "raw"],
+      "properties": {
+        "country": { "type": "string", "minLength": 2 },
+        "province": { "type": ["string", "null"] },
+        "district": { "type": ["string", "null"] },
+        "raw": { "type": ["string", "null"] }
+      }
     }
   }
 }

@@ -138,6 +138,60 @@ export interface CandidateProfile {
   trace_id: string;
 }
 
+export type WorkModality = 'onsite' | 'hybrid' | 'remote';
+
+export type TransportMode = 'driving' | 'transit' | 'walking' | 'cycling';
+
+export type ContractType =
+  | 'full_time'
+  | 'part_time'
+  | 'fixed_term'
+  | 'internship'
+  | 'temporary'
+  | 'freelance';
+
+export interface PreferenceAvailability {
+  /** ISO weekdays, 0 = Sunday … 6 = Saturday. */
+  days: number[];
+  /** Minutes from midnight; the window is [start_minute, end_minute). */
+  start_minute: number;
+  end_minute: number;
+  weekly_hours: number;
+}
+
+export interface PreferenceLocation {
+  country: string;
+  province: string | null;
+  district: string | null;
+  raw: string | null;
+}
+
+/**
+ * Work preferences captured explicitly from the candidate (ticket #7). They are
+ * never inferred by an LLM and are persisted as a validated JSON document.
+ */
+export interface CandidatePreferences {
+  schema_version: '1.0.0';
+  preferences_id: string;
+  candidate_id: string;
+  locale: string;
+  /** Explicit-capture guard: preferences only ever enter from the candidate. */
+  origin: 'candidate_explicit';
+  created_at: string;
+  updated_at: string;
+  target_roles: string[];
+  modality: WorkModality;
+  max_location: PreferenceLocation;
+  max_travel_minutes: number;
+  monthly_transport_budget_usd: number;
+  minimum_salary_usd: number;
+  availability: PreferenceAvailability;
+  contract_types: ContractType[];
+  transport_modes: TransportMode[];
+  willing_to_train: boolean;
+  willing_to_intern: boolean;
+}
+
 export interface DraftEvidence {
   claim: string;
   source: Provenance;

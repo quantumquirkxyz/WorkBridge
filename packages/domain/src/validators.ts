@@ -9,10 +9,12 @@ import educationSchema from './schemas/education.schema.json';
 import certificationSchema from './schemas/certification.schema.json';
 import intakeSourceSchema from './schemas/intake-source.schema.json';
 import candidateProfileSchema from './schemas/candidate-profile.schema.json';
+import candidatePreferencesSchema from './schemas/candidate-preferences.schema.json';
 import profileDraftSchema from './schemas/profile-draft.schema.json';
 import intakeRequestSchema from './schemas/intake-request.schema.json';
 import intakeResultSchema from './schemas/intake-result.schema.json';
 import type {
+  CandidatePreferences,
   CandidateProfile,
   IntakeRequest,
   IntakeResult,
@@ -29,6 +31,7 @@ export const SCHEMA_IDS = {
   certification: 'https://puente-laboral.pa/schemas/certification/1.0.0',
   intakeSource: 'https://puente-laboral.pa/schemas/intake-source/1.0.0',
   candidateProfile: 'https://puente-laboral.pa/schemas/candidate-profile/1.0.0',
+  candidatePreferences: 'https://puente-laboral.pa/schemas/candidate-preferences/1.0.0',
   profileDraft: 'https://puente-laboral.pa/schemas/profile-draft/1.0.0',
   intakeRequest: 'https://puente-laboral.pa/schemas/intake-request/1.0.0',
   intakeResult: 'https://puente-laboral.pa/schemas/intake-result/1.0.0',
@@ -43,6 +46,7 @@ export const ALL_SCHEMAS: readonly object[] = [
   certificationSchema,
   intakeSourceSchema,
   candidateProfileSchema,
+  candidatePreferencesSchema,
   profileDraftSchema,
   intakeRequestSchema,
   intakeResultSchema,
@@ -122,6 +126,10 @@ export function validateCandidateProfile(data: unknown): ValidationResult {
   return validateAgainst('candidateProfile', data);
 }
 
+export function validateCandidatePreferences(data: unknown): ValidationResult {
+  return validateAgainst('candidatePreferences', data);
+}
+
 export function validateIntakeRequest(data: unknown): ValidationResult {
   return validateAgainst('intakeRequest', data);
 }
@@ -137,6 +145,11 @@ export function validateIntakeResult(data: unknown): ValidationResult {
 export function assertCandidateProfile(data: unknown): asserts data is CandidateProfile {
   const result = validateCandidateProfile(data);
   if (!result.valid) throw new ContractValidationError('CandidateProfile', result.errors);
+}
+
+export function assertCandidatePreferences(data: unknown): asserts data is CandidatePreferences {
+  const result = validateCandidatePreferences(data);
+  if (!result.valid) throw new ContractValidationError('CandidatePreferences', result.errors);
 }
 
 export function assertIntakeRequest(data: unknown): asserts data is IntakeRequest {
