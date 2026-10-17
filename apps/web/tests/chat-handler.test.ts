@@ -28,6 +28,7 @@ describe('handleChatTurn', () => {
       store: createInMemoryChatSessionStore(),
       context: {
         preferences: {
+          target_roles: ['Ventas'],
           availability: { days: [1, 2, 3, 4, 5], start_minute: 540, end_minute: 1020, weekly_hours: 40 },
           contract_types: ['full_time'],
         },
@@ -37,6 +38,7 @@ describe('handleChatTurn', () => {
       state: 'filled',
       value: { days: [1, 2, 3, 4, 5], from: '09:00', to: '17:00', weekly_hours: 40, contract_type: 'full_time' },
     });
+    expect((res.body as { slotState: Record<string, { state: string; value?: unknown }> }).slotState.target_roles).toEqual({ state: 'filled', value: 'Ventas' });
   });
 
   it('returns a valid LLM turn with tracker-owned pendingSlot and chips', async () => {

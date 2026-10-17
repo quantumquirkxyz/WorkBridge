@@ -44,8 +44,10 @@ function seededSlotState(context?: CandidateContext): SlotState {
   const state = initialSlotState();
   const profile = context?.profile && typeof context.profile === 'object' ? (context.profile as Record<string, unknown>) : undefined;
   const preferences = context?.preferences && typeof context.preferences === 'object' ? (context.preferences as Record<string, unknown>) : undefined;
-  const targetRoles = profile?.target_roles;
-  if (Array.isArray(targetRoles) && typeof targetRoles[0] === 'string' && targetRoles[0].trim()) {
+  const targetRoles = [profile?.target_roles, preferences?.target_roles].find(
+    (roles): roles is unknown[] => Array.isArray(roles) && typeof roles[0] === 'string' && roles[0].trim().length > 0,
+  );
+  if (targetRoles && typeof targetRoles[0] === 'string') {
     state.target_roles = { state: 'filled', value: targetRoles[0] };
   }
 
