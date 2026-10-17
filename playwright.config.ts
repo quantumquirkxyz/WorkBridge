@@ -77,7 +77,7 @@ const projects: ProjectWithWebServer[] = [
   {
     name: "web",
     testDir: "./apps/web/e2e",
-    testMatch: "intake-explore.spec.ts",
+    testMatch: /(?:intake-explore|async-chat)\.spec\.ts/,
     timeout: 60_000,
     use: { ...devices["Desktop Chrome"], baseURL: `http://127.0.0.1:${webPort}`, ...webCapture },
     webServer: [webWebServer],
