@@ -3,6 +3,7 @@ import { ApplicationError } from "./errors";
 /** Names that must never be copied into a draft, audit event, or HTTP body. */
 export const SECRET_ENV_NAMES = [
   "CERTO_TOKEN",
+  "CERTO_API_TOKEN",
   "OPENROUTER_API_KEY",
   "GOOGLE_MAPS_API_KEY",
   "ACCREDIBLE_API_KEY",

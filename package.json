@@ -14,7 +14,9 @@
   "scripts": {
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "start": "tsx apps/agent-runtime/src/application/main.ts",
+    "start": "node --env-file=.env --import tsx apps/agent-runtime/src/application/main.ts",
+    "certo:up": "node scripts/certo.mjs up",
+    "certo:down": "node scripts/certo.mjs down",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
