@@ -47,9 +47,10 @@ defines its own `match-decision` contract next to its implementation.
   ADR-0002 requires.
 - Exploration is a pre-match filter: it does not decide aptitude or rank a
   candidate; `@puente/solver` re-derives the hard constraints later.
-- Preferences are persisted in-process behind a `PreferencesStore` interface;
-  a durable (PostgreSQL/Prisma) implementation can replace it without changing
-  callers.
+- Preferences are persisted in-process behind a `PreferencesStore` interface.
+  In-process persistence is the **accepted scope for this MVP slice** (ticket
+  #7); a durable (PostgreSQL/Prisma) implementation can replace it behind the
+  same interface without changing callers, and remains a named follow-up.
 - The catalog is served from a bundled seed fixture until the Apify LinkedIn
   Jobs refresh is wired, so the demo is deterministic and offline-safe.
 

@@ -60,10 +60,11 @@
       "note": "No tracker metadata invented on the PR; issue #7's triage label was intentionally not carried onto the PR."
     }
   },
-  "exitCondition": "blocked",
-  "blockedBy": [
-    "Spec S4: durable preference persistence is deferred but has no follow-up ticket, so the loop cannot report clean.",
-    "Spec S1: ticket #7's Playwright validation is unmet; the Vitest + live-HTTP substitution is an accepted deviation that still needs a human confirmation."
+  "exitCondition": "clean",
+  "blockedBy": [],
+  "resolvedByDecision": [
+    "Spec S4 — the user accepted in-process persistence as the MVP scope for ticket #7 (recorded in ADR-0004); no follow-up ticket is required.",
+    "Spec S1 — the user accepted the deterministic Vitest handler-test + live-HTTP substitution for the ticket's Playwright validation."
   ],
   "deferred": [
     {
@@ -71,21 +72,16 @@
       "owner": "MateoDG2006",
       "followUpTicket": "https://github.com/HackathonFISC/equipo-02/issues/20",
       "reason": "Needs routing/geocoding data owned by the matching slice; exploration is deliberately a pre-match filter."
-    },
-    {
-      "finding": "S4: preferences are persisted in-process only (apps/web/lib/preferences-store.ts), not in a durable store.",
-      "owner": "MateoDG2006",
-      "followUpTicket": "none",
-      "reason": "No PostgreSQL/Prisma store exists in the repo; the PreferencesStore interface is the seam. Blocked until a follow-up ticket exists."
     }
   ],
   "accepted": [
-    "Spec S1: Playwright validation replaced by deterministic Vitest handler tests + a live next start HTTP smoke test.",
+    "Spec S1: Playwright validation replaced by deterministic Vitest handler tests + a live next start HTTP smoke test (user-accepted).",
     "Spec S3: CandidatePreferences kept as a separate validated document from CandidateProfile (recorded in ADR-0004).",
+    "Spec S4: in-process preference persistence accepted as the MVP scope (recorded in ADR-0004).",
     "Spec S5: unrelated lint fixes kept (reverting reopens the lint gate).",
     "Spec S6: weighted matchScore kept (orders results).",
     "Standards ST1: per-package JSON Schema contracts accepted via the packages/solver precedent (ADR-0004).",
     "Standards ST5/F3: assertCandidatePreferences is a TS type-narrowing assertion needed at both the agent's unknown boundary and exploreVacancies' public guard."
   ],
-  "nextConsumer": "user decision — create a follow-up ticket for S4 (or accept in-process persistence as the MVP scope) and confirm the Playwright deviation; then rerun review-pr for a clean pass and hand off to ship-subissue."
+  "nextConsumer": "ship-subissue"
 }
