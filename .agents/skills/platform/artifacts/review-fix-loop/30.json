@@ -1,0 +1,19 @@
+{
+  "status": "clean",
+  "pr": 30,
+  "branch": "feat/issue-23-training-roadmap-milp-routing-schema",
+  "fixedPoint": "main",
+  "mergeBase": "73e232a",
+  "passes": 4,
+  "lastImplementationCommit": "98bf266",
+  "standardsFindings": 0,
+  "specFindings": 0,
+  "deferred": [],
+  "validation": [
+    "npm run gate:ci — passed",
+    "489 tests passed",
+    "npm run lint — passed"
+  ],
+  "nextConsumer": "ship-subissue",
+  "reviewComment": "https://github.com/HackathonFISC/equipo-02/pull/30#issuecomment-6229304897"
+}

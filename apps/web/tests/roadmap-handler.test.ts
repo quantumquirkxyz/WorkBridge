@@ -18,9 +18,9 @@ const noMatchResult = exploreVacancies(
 );
 
 describe('handleRoadmap', () => {
-  it('builds a real roadmap from the training seam when there is no viable match', () => {
+  it('builds a real roadmap from the training seam when there is no viable match', async () => {
     expect(noMatchResult.matches).toHaveLength(0);
-    const { status, body } = handleRoadmap(noMatchResult, { now: NOW });
+    const { status, body } = await handleRoadmap(noMatchResult, { now: NOW });
     expect(status).toBe(200);
     const { roadmap, gaps } = body as { roadmap: { aptitude: string; recommendations: unknown[]; catalogVersion: string } | null; gaps: unknown[] };
     expect(gaps.length).toBeGreaterThan(0);
@@ -30,35 +30,35 @@ describe('handleRoadmap', () => {
     expect(roadmap!.recommendations.length).toBeGreaterThan(0);
   });
 
-  it('does not build a roadmap when a viable match exists', () => {
+  it('does not build a roadmap when a viable match exists', async () => {
     const matched = exploreVacancies(preferences, createSeedCatalog(), { now: NOW });
     expect(matched.matches.length).toBeGreaterThan(0);
-    const { status, body } = handleRoadmap(matched, { now: NOW });
+    const { status, body } = await handleRoadmap(matched, { now: NOW });
     expect(status).toBe(200);
     expect(body).toMatchObject({ roadmap: null, reason: 'viable_match_exists' });
   });
 
-  it('keys off noMatch, not the match array, and honours the training opt-in', () => {
+  it('keys off noMatch, not the match array, and honours the training opt-in', async () => {
     // A result truncated by `limit: 0` has no `noMatch` and must build nothing.
     const truncated = exploreVacancies(preferences, createSeedCatalog(), { now: NOW, limit: 0 });
     expect(truncated.matches).toHaveLength(0);
     expect(truncated.noMatch).toBeUndefined();
-    expect(handleRoadmap(truncated, { now: NOW }).body).toMatchObject({
+    expect((await handleRoadmap(truncated, { now: NOW })).body).toMatchObject({
       roadmap: null,
       reason: 'viable_match_exists',
     });
 
     // A candidate who declined training gets no roadmap either.
     const declined = { ...noMatchResult, noMatch: { ...noMatchResult.noMatch!, roadmapRequested: false } };
-    expect(handleRoadmap(declined, { now: NOW }).body).toMatchObject({
+    expect((await handleRoadmap(declined, { now: NOW })).body).toMatchObject({
       roadmap: null,
       reason: 'candidate_declined_training',
     });
   });
 
-  it('rejects a payload that is not an exploration result', () => {
-    expect(handleRoadmap({ nope: true }).status).toBe(400);
-    expect(handleRoadmap(null).status).toBe(400);
+  it('rejects a payload that is not an exploration result', async () => {
+    expect((await handleRoadmap({ nope: true })).status).toBe(400);
+    expect((await handleRoadmap(null)).status).toBe(400);
   });
 });
 
@@ -81,10 +81,10 @@ describe('deriveAdvisoryGaps', () => {
 });
 
 describe('no external submission', () => {
-  it('does not reach the network while building a roadmap', () => {
+  it('does not reach the network while building a roadmap', async () => {
     const spy = vi.spyOn(globalThis, 'fetch').mockRejectedValue(new Error('no network in test'));
     try {
-      handleRoadmap(noMatchResult, { now: NOW });
+      await handleRoadmap(noMatchResult, { now: NOW });
       expect(spy).not.toHaveBeenCalled();
     } finally {
       spy.mockRestore();

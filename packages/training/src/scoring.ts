@@ -1,4 +1,4 @@
-import { clampScore, haversineKm } from "@puente/solver";
+import { clampScore, createRoutingPort, type RoutingPort } from "@puente/solver";
 import type {
   GapContribution,
   OpportunitySchedule,
@@ -11,6 +11,7 @@ import { gapDeficit, gapLabelForContribution } from "./gaps";
 export interface DimensionScore {
   rawScore: number;
   reasons: string[];
+  commuteMinutes?: number;
 }
 
 export interface GapCoverageScore extends DimensionScore {
@@ -18,8 +19,6 @@ export interface GapCoverageScore extends DimensionScore {
   coveredDeficit: number;
 }
 
-/** Average travel speed used by the offline on-site access estimate (km/min). */
-export const AVG_KM_PER_MINUTE = 0.35;
 /** Neutral score when geography cannot be estimated deterministically. */
 export const NEUTRAL_GEOGRAPHY_SCORE = 70;
 /** Lowest cost score, reached when the cost equals the candidate's ceiling. */
@@ -198,11 +197,12 @@ export function modalityScore(
   };
 }
 
-/** Geography: online is free; on-site uses a deterministic haversine estimate. */
-export function geographyScore(
+/** Geography: online is free; on-site uses the shared routing port. */
+export async function geographyScore(
   opportunity: TrainingOpportunity,
   preferences: TrainingPreferences,
-): DimensionScore {
+  routing: RoutingPort = createRoutingPort(),
+): Promise<DimensionScore> {
   if (opportunity.modality === "online") {
     return { rawScore: 100, reasons: ["La oportunidad es en línea; sin traslado."] };
   }
@@ -214,17 +214,21 @@ export function geographyScore(
       reasons: ["No se pudo estimar el traslado; se aplica un puntaje neutral."],
     };
   }
-  const allowedKm = maxCommute * AVG_KM_PER_MINUTE;
-  if (allowedKm <= 0) {
+  if (maxCommute <= 0) {
     return { rawScore: 0, reasons: ["Sin presupuesto de traslado."] };
   }
-  const distanceKm = haversineKm(home, opportunity.location);
-  const ratio = distanceKm / allowedKm;
+  const estimate = await routing.route({
+    origin: home,
+    destination: opportunity.location,
+    mode: "driving",
+  });
+  const ratio = estimate.commuteMinutes / maxCommute;
   const rawScore = clampScore(100 - 55 * ratio);
   return {
     rawScore,
+    commuteMinutes: estimate.commuteMinutes,
     reasons: [
-      `A unos ${distanceKm.toFixed(1)} km de tu ubicación (límite ~${maxCommute} min de traslado).`,
+      `A unos ${estimate.distanceKm.toFixed(1)} km y ${estimate.commuteMinutes} min de tu ubicación (límite ${maxCommute} min; fuente ${estimate.source}).`,
     ],
   };
 }

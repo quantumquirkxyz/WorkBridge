@@ -4,6 +4,7 @@ import addFormats from "ajv-formats";
 import agentEnvelopeSchema from "./schemas/agent-envelope.schema.json";
 import jobRequirementsSchema from "./schemas/job-requirements.schema.json";
 import workflowRunSchema from "./schemas/workflow-run.schema.json";
+import commonSchema from "./schemas/common.schema.json";
 import type { AgentEnvelope, JobRequirements, WorkflowRunRequest } from "./types";
 
 /** Ajv 2020-12 error shape (draft-07's legacy `dataPath` is not used here). */
@@ -25,6 +26,7 @@ export const ajv = new Ajv2020({
 });
 
 addFormats(ajv);
+ajv.addSchema(commonSchema);
 
 export const validateJobRequirements: ValidateFunction<JobRequirements> =
   ajv.compile<JobRequirements>(jobRequirementsSchema);

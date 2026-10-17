@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import { loadCatalog } from "../catalog";
 import { buildRoadmap } from "../roadmap";
 import { InvalidRoadmapError, TrainingInputError } from "../errors";
@@ -16,7 +16,7 @@ function request(name: string): RoadmapRequest {
   return loadFixture<RoadmapRequest>(`requests/${name}.json`);
 }
 
-function build(name: string): Roadmap {
+function build(name: string): Promise<Roadmap> {
   return buildRoadmap(request(name), catalog, { now });
 }
 
@@ -25,13 +25,14 @@ function recommendationIds(roadmap: Roadmap): string[] {
 }
 
 describe("buildRoadmap — missing technical skills", () => {
-  const roadmap = build("missing-technical");
+  let roadmap: Roadmap;
+  beforeAll(async () => { roadmap = await build("missing-technical"); });
 
-  it("emits a valid Roadmap JSON", () => {
+  it("emits a valid Roadmap JSON", async () => {
     expect(validateRoadmap(roadmap)).toBe(true);
   });
 
-  it("recommends the catalogued courses that close the gaps", () => {
+  it("recommends the catalogued courses that close the gaps", async () => {
     expect(recommendationIds(roadmap)).toEqual(["TR-002", "TR-001"]);
     expect(roadmap.unresolvedGaps).toEqual([]);
     expect(roadmap.totals).toEqual({
@@ -43,7 +44,7 @@ describe("buildRoadmap — missing technical skills", () => {
     });
   });
 
-  it("explains each recommendation in Spanish with source and freshness", () => {
+  it("explains each recommendation in Spanish with source and freshness", async () => {
     for (const item of roadmap.recommendations) {
       expect(item.explanationEs).toContain("Fuente:");
       expect(item.explanationEs).toMatch(/actualizados/);
@@ -54,7 +55,7 @@ describe("buildRoadmap — missing technical skills", () => {
     expect(roadmap.recommendations[0]!.explanationEs).toContain("Cubre:");
   });
 
-  it("recommends only catalogued opportunities, embedded verbatim", () => {
+  it("recommends only catalogued opportunities, embedded verbatim", async () => {
     for (const item of roadmap.recommendations) {
       expect(catalogIds.has(item.opportunity.opportunityId)).toBe(true);
       const catalogEntry = catalog.opportunities.find(
@@ -64,7 +65,7 @@ describe("buildRoadmap — missing technical skills", () => {
     }
   });
 
-  it("records the constraints and the target vacancy", () => {
+  it("records the constraints and the target vacancy", async () => {
     expect(roadmap.targetVacancyId).toBe("vac-metro-support");
     expect(roadmap.constraints).toEqual({
       specializations: ["it_support"],
@@ -74,15 +75,16 @@ describe("buildRoadmap — missing technical skills", () => {
     expect(roadmap.catalogVersion).toBe(catalog.catalogVersion);
   });
 
-  it("is deterministic for repeated builds", () => {
-    expect(build("missing-technical")).toEqual(roadmap);
+  it("is deterministic for repeated builds", async () => {
+    await expect(build("missing-technical")).resolves.toEqual(roadmap);
   });
 });
 
 describe("buildRoadmap — soft-skill gaps", () => {
-  const roadmap = build("soft-skill-gaps");
+  let roadmap: Roadmap;
+  beforeAll(async () => { roadmap = await build("soft-skill-gaps"); });
 
-  it("produces a valid apt_with_gaps roadmap that closes both soft gaps", () => {
+  it("produces a valid apt_with_gaps roadmap that closes both soft gaps", async () => {
     expect(validateRoadmap(roadmap)).toBe(true);
     expect(roadmap.aptitude).toBe("apt_with_gaps");
     expect(recommendationIds(roadmap)).toEqual(["TR-016", "TR-017"]);
@@ -92,9 +94,10 @@ describe("buildRoadmap — soft-skill gaps", () => {
 });
 
 describe("buildRoadmap — cost limit", () => {
-  const roadmap = build("cost-limit");
+  let roadmap: Roadmap;
+  beforeAll(async () => { roadmap = await build("cost-limit"); });
 
-  it("stays within the cost ceiling and reports the excluded option", () => {
+  it("stays within the cost ceiling and reports the excluded option", async () => {
     expect(validateRoadmap(roadmap)).toBe(true);
     expect(recommendationIds(roadmap)).toEqual(["TR-006"]);
     expect(roadmap.totals.costUsd).toBeLessThanOrEqual(10);
@@ -105,9 +108,10 @@ describe("buildRoadmap — cost limit", () => {
 });
 
 describe("buildRoadmap — schedule conflict", () => {
-  const roadmap = build("schedule-conflict");
+  let roadmap: Roadmap;
+  beforeAll(async () => { roadmap = await build("schedule-conflict"); });
 
-  it("leaves the gap unresolved and explains the schedule exclusion", () => {
+  it("leaves the gap unresolved and explains the schedule exclusion", async () => {
     expect(validateRoadmap(roadmap)).toBe(true);
     expect(roadmap.recommendations).toEqual([]);
     expect(roadmap.unresolvedGaps.map((gap) => gap.skillId)).toEqual(["PA-IT-0001"]);
@@ -118,9 +122,10 @@ describe("buildRoadmap — schedule conflict", () => {
 });
 
 describe("buildRoadmap — no catalog option", () => {
-  const roadmap = build("no-catalog-option");
+  let roadmap: Roadmap;
+  beforeAll(async () => { roadmap = await build("no-catalog-option"); });
 
-  it("returns no recommendations and every opportunity as excluded", () => {
+  it("returns no recommendations and every opportunity as excluded", async () => {
     expect(validateRoadmap(roadmap)).toBe(true);
     expect(roadmap.recommendations).toEqual([]);
     expect(roadmap.unresolvedGaps.map((gap) => gap.skillId)).toEqual([
@@ -133,15 +138,15 @@ describe("buildRoadmap — no catalog option", () => {
 });
 
 describe("buildRoadmap — edge cases", () => {
-  it("returns an empty roadmap when there are no gaps", () => {
-    const roadmap = buildRoadmap({ ...request("missing-technical"), gaps: [] }, catalog, { now });
+  it("returns an empty roadmap when there are no gaps", async () => {
+    const roadmap = await buildRoadmap({ ...request("missing-technical"), gaps: [] }, catalog, { now });
     expect(validateRoadmap(roadmap)).toBe(true);
     expect(roadmap.recommendations).toEqual([]);
     expect(roadmap.reasons[0]).toContain("No hay brechas");
   });
 
-  it("returns an empty roadmap for an already-apt candidate", () => {
-    const roadmap = buildRoadmap(
+  it("returns an empty roadmap for an already-apt candidate", async () => {
+    const roadmap = await buildRoadmap(
       { ...request("missing-technical"), aptitude: "apt" },
       catalog,
       { now },
@@ -151,25 +156,23 @@ describe("buildRoadmap — edge cases", () => {
     expect(roadmap.reasons[0]).toContain("ya es apto");
   });
 
-  it("rejects a request without a candidate id", () => {
-    expect(() => buildRoadmap({ ...request("missing-technical"), candidateId: "" }, catalog, { now })).toThrow(
-      TrainingInputError,
-    );
+  it("rejects a request without a candidate id", async () => {
+    await expect(buildRoadmap({ ...request("missing-technical"), candidateId: "" }, catalog, { now })).rejects.toThrow(TrainingInputError);
   });
 
-  it("rejects a request without preferences", () => {
+  it("rejects a request without preferences", async () => {
     const broken = { ...request("missing-technical"), preferences: undefined } as unknown as RoadmapRequest;
-    expect(() => buildRoadmap(broken, catalog, { now })).toThrow(TrainingInputError);
+    await expect(buildRoadmap(broken, catalog, { now })).rejects.toThrow(TrainingInputError);
   });
 
-  it("rejects an invalid Roadmap and throws through assertRoadmap", () => {
-    const roadmap = build("missing-technical");
+  it("rejects an invalid Roadmap and throws through assertRoadmap", async () => {
+    const roadmap = await build("missing-technical");
     expect(validateRoadmap({ ...roadmap, totals: { ...roadmap.totals, costUsd: -1 } })).toBe(false);
     expect(validateRoadmap({ ...roadmap, aptitude: "maybe" })).toBe(false);
     expect(() => assertRoadmap({ schemaVersion: "1.0.0" })).toThrow(InvalidRoadmapError);
   });
 
-  it("keeps the schema dimension enum aligned with the ranking order", () => {
+  it("keeps the schema dimension enum aligned with the ranking order", async () => {
     const schema = roadmapSchema as {
       $defs: { RankingBreakdownItem: { properties: { dimension: { enum: string[] } } } };
     };

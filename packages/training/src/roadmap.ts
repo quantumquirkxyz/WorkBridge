@@ -71,11 +71,11 @@ function summaryReasons(
  * `apt` request is accepted but yields an empty roadmap, because an already-apt
  * candidate needs no training plan.
  */
-export function buildRoadmap(
+export async function buildRoadmap(
   request: RoadmapRequest,
   catalog: TrainingCatalog,
   options: BuildRoadmapOptions = {},
-): Roadmap {
+): Promise<Roadmap> {
   if (typeof request.candidateId !== "string" || request.candidateId.length === 0) {
     throw new TrainingInputError("RoadmapRequest.candidateId must be a non-empty string.");
   }
@@ -88,10 +88,10 @@ export function buildRoadmap(
   const needsTraining = request.aptitude !== "apt";
 
   const ranked = needsTraining
-    ? rankOpportunities({ catalog, gaps, preferences: request.preferences, now })
+    ? await rankOpportunities({ catalog, gaps, preferences: request.preferences, now, routing: options.routing })
     : [];
   const selection: SelectionResult = needsTraining
-    ? selectRoadmap(ranked, gaps, request.preferences, heldSkills)
+    ? await selectRoadmap(ranked, gaps, request.preferences, heldSkills, options.solver)
     : { selected: [], unresolvedGaps: gaps, omitted: [] };
 
   const recommendations: RoadmapRecommendation[] = selection.selected.map(

@@ -36,21 +36,21 @@ const excelGap: TrainingGap = {
   mandatory: true,
 };
 
-function rankedWith(id: string, gaps: TrainingGap[], preferences: TrainingPreferences) {
-  const ranked = rankOpportunities({ catalog, gaps, preferences, now });
+async function rankedWith(id: string, gaps: TrainingGap[], preferences: TrainingPreferences) {
+  const ranked = await rankOpportunities({ catalog, gaps, preferences, now });
   const match = ranked.find((item) => item.opportunity.opportunityId === id);
   if (!match) throw new Error(`missing ranked ${id}`);
   return match;
 }
 
-describe("training weights", () => {
-  it("sums the nine criteria to 1", () => {
+describe("training weights", async () => {
+  it("sums the nine criteria to 1", async () => {
     const total = RANKING_DIMENSIONS.reduce((sum, dimension) => sum + TRAINING_WEIGHTS[dimension], 0);
     expect(RANKING_DIMENSIONS).toHaveLength(9);
     expect(total).toBeCloseTo(1, 10);
   });
 
-  it("clamps and rounds the weighted score", () => {
+  it("clamps and rounds the weighted score", async () => {
     const all = Object.fromEntries(
       RANKING_DIMENSIONS.map((dimension) => [dimension, 100]),
     ) as Record<(typeof RANKING_DIMENSIONS)[number], number>;
@@ -60,13 +60,13 @@ describe("training weights", () => {
   });
 });
 
-describe("dimension scorers", () => {
-  it("reports the covered skill level", () => {
+describe("dimension scorers", async () => {
+  it("reports the covered skill level", async () => {
     expect(coveredSkillLevel(opportunity("TR-007"), "PA-OFF-0002")).toBe(3);
     expect(coveredSkillLevel(opportunity("TR-001"), "PA-OFF-0002")).toBe(0);
   });
 
-  it("scores specialization overlap against the target areas", () => {
+  it("scores specialization overlap against the target areas", async () => {
     expect(specializationScore(opportunity("TR-001"), { specializations: ["it_support"] }).rawScore).toBe(100);
     expect(specializationScore(opportunity("TR-006"), { specializations: ["it_support"] }).rawScore).toBe(0);
     expect(
@@ -77,7 +77,7 @@ describe("dimension scorers", () => {
     expect(specializationScore(opportunity("TR-001"), { specializations: [] }).rawScore).toBe(100);
   });
 
-  it("scores cost against the ceiling", () => {
+  it("scores cost against the ceiling", async () => {
     expect(costScore(opportunity("TR-006"), { specializations: [] }).rawScore).toBe(100);
     expect(costScore(opportunity("TR-002"), { specializations: [], maxCostUsd: 100 }).rawScore).toBe(0);
     const within = costScore(opportunity("TR-002"), { specializations: [], maxCostUsd: 200 });
@@ -85,28 +85,28 @@ describe("dimension scorers", () => {
     expect(costScore(opportunity("TR-016"), { specializations: [], maxCostUsd: 0 }).rawScore).toBe(100);
   });
 
-  it("scores duration against the effort ceiling", () => {
+  it("scores duration against the effort ceiling", async () => {
     expect(durationScore(opportunity("TR-016"), { specializations: [], maxTotalHours: 200 }).rawScore).toBe(97);
     expect(durationScore(opportunity("TR-019"), { specializations: [], maxTotalHours: 160 }).rawScore).toBe(50);
     expect(durationScore(opportunity("TR-019"), { specializations: [], maxTotalHours: 0 }).rawScore).toBe(0);
   });
 
-  it("scores modality against the preferred list", () => {
+  it("scores modality against the preferred list", async () => {
     expect(modalityScore(opportunity("TR-001"), { specializations: [] }).rawScore).toBe(100);
     expect(modalityScore(opportunity("TR-001"), { specializations: [], preferredModalities: ["online"] }).rawScore).toBe(100);
     expect(modalityScore(opportunity("TR-008"), { specializations: [], preferredModalities: ["online"] }).rawScore).toBe(50);
   });
 
-  it("estimates geography offline and is neutral when unknown", () => {
-    expect(geographyScore(opportunity("TR-001"), { specializations: [] }).rawScore).toBe(100);
-    expect(geographyScore(opportunity("TR-008"), { specializations: [] }).rawScore).toBe(70);
-    const nearby = geographyScore(opportunity("TR-008"), {
+  it("estimates geography offline and is neutral when unknown", async () => {
+    expect((await geographyScore(opportunity("TR-001"), { specializations: [] })).rawScore).toBe(100);
+    expect((await geographyScore(opportunity("TR-008"), { specializations: [] })).rawScore).toBe(70);
+    const nearby = await geographyScore(opportunity("TR-008"), {
       specializations: [],
       home: { lat: 8.99, lng: -79.51 },
       maxCommuteMinutes: 60,
     });
     expect(nearby.rawScore).toBe(100);
-    const far = geographyScore(opportunity("TR-008"), {
+    const far = await geographyScore(opportunity("TR-008"), {
       specializations: [],
       home: { lat: 9.5, lng: -79.9 },
       maxCommuteMinutes: 10,
@@ -114,7 +114,23 @@ describe("dimension scorers", () => {
     expect(far.rawScore).toBeLessThan(50);
   });
 
-  it("computes schedule coverage and flags unavailable days", () => {
+  it("excludes an on-site opportunity beyond the commute ceiling", async () => {
+    const ranked = await rankOpportunities({
+      catalog,
+      gaps: [excelGap],
+      preferences: {
+        specializations: [],
+        home: { lat: 9.5, lng: -79.9 },
+        maxCommuteMinutes: 1,
+      },
+      now,
+    });
+    const distant = ranked.find((item) => item.opportunity.opportunityId === "TR-008");
+    expect(distant?.eligible).toBe(false);
+    expect(distant?.exclusionReasons.join(" ")).toContain("supera tu límite");
+  });
+
+  it("computes schedule coverage and flags unavailable days", async () => {
     const coverage = scheduleCoverage(
       { days: [1, 3], startMinute: 1080, endMinute: 1260, weeklyHours: 6 },
       { days: [1], startMinute: 1080, endMinute: 1260, weeklyHours: 6 },
@@ -129,19 +145,19 @@ describe("dimension scorers", () => {
     expect(conflict.rawScore).toBe(0);
   });
 
-  it("scores availability from open seats", () => {
+  it("scores availability from open seats", async () => {
     expect(availabilityScore(opportunity("TR-001")).rawScore).toBe(100);
     expect(availabilityScore(opportunity("TR-021")).rawScore).toBe(0);
   });
 
-  it("scores credential relevance from the probability", () => {
+  it("scores credential relevance from the probability", async () => {
     expect(credentialScore(opportunity("TR-002")).rawScore).toBe(90);
   });
 });
 
 describe("rankOpportunities", () => {
-  it("ranks every catalogued opportunity with a nine-item breakdown", () => {
-    const ranked = rankOpportunities({
+  it("ranks every catalogued opportunity with a nine-item breakdown", async () => {
+    const ranked = await rankOpportunities({
       catalog,
       gaps: [excelGap],
       preferences: { specializations: ["administration"] },
@@ -160,18 +176,18 @@ describe("rankOpportunities", () => {
     }
   });
 
-  it("rewards opportunities that cover the gaps", () => {
-    const covered = rankedWith("TR-006", [excelGap], { specializations: ["administration"] });
-    const uncovered = rankedWith("TR-001", [excelGap], { specializations: ["administration"] });
+  it("rewards opportunities that cover the gaps", async () => {
+    const covered = await rankedWith("TR-006", [excelGap], { specializations: ["administration"] });
+    const uncovered = await rankedWith("TR-001", [excelGap], { specializations: ["administration"] });
     expect(covered.coveredGaps).toEqual([{ skillId: "PA-OFF-0002", addedLevel: 2 }]);
     expect(uncovered.coveredGaps).toEqual([]);
     expect(covered.score).toBeGreaterThan(uncovered.score);
   });
 
-  it("is deterministic and breaks score ties by opportunity id", () => {
+  it("is deterministic and breaks score ties by opportunity id", async () => {
     const options = { catalog, gaps: [excelGap], preferences: { specializations: ["administration"] }, now };
-    const first = rankOpportunities(options);
-    const second = rankOpportunities(options);
+    const first = await rankOpportunities(options);
+    const second = await rankOpportunities(options);
     expect(second).toEqual(first);
     for (let index = 1; index < first.length; index += 1) {
       const previous = first[index - 1]!;
@@ -182,8 +198,8 @@ describe("rankOpportunities", () => {
     }
   });
 
-  it("marks expired, full, and over-budget opportunities ineligible", () => {
-    const ranked = rankOpportunities({
+  it("marks expired, full, and over-budget opportunities ineligible", async () => {
+    const ranked = await rankOpportunities({
       catalog,
       gaps: [excelGap],
       preferences: { specializations: ["customer_service"], maxCostUsd: 50 },
@@ -202,18 +218,18 @@ describe("rankOpportunities", () => {
     expect(pricey.eligible).toBe(false);
     expect(pricey.exclusionReasons.join(" ")).toContain("límite");
 
-    const stale = rankOpportunities({
+    const stale = (await rankOpportunities({
       catalog,
       gaps: [excelGap],
       preferences: { specializations: ["it_support"] },
       now,
-    }).find((item) => item.opportunity.opportunityId === "TR-018")!;
+    })).find((item) => item.opportunity.opportunityId === "TR-018")!;
     expect(stale.freshness).toBe("stale");
     expect(stale.eligible).toBe(true);
   });
 
-  it("excludes opportunities outside the target specializations", () => {
-    const ranked = rankOpportunities({
+  it("excludes opportunities outside the target specializations", async () => {
+    const ranked = await rankOpportunities({
       catalog,
       gaps: [excelGap],
       preferences: { specializations: ["administration"] },

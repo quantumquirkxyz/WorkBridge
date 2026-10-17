@@ -9,6 +9,6 @@ export async function POST(request: Request): Promise<Response> {
   const parsed = await readJsonBody(request);
   if (!parsed.ok) return parsed.response;
 
-  const { status, body } = handleRoadmap(parsed.payload);
+  const { status, body } = await handleRoadmap(parsed.payload);
   return NextResponse.json(body, { status });
 }

@@ -11,7 +11,7 @@
  * #8) through `deriveGaps`, and can also be supplied directly.
  */
 
-import type { Aptitude, GeoPoint, SkillLevel, SolverCandidate, SolverVacancy } from "@puente/solver";
+import type { Aptitude, GeoPoint, MilpSolverPort, RoutingPort, SkillLevel, SolverCandidate, SolverVacancy } from "@puente/solver";
 
 export type Modality = "online" | "onsite" | "hybrid";
 
@@ -218,6 +218,8 @@ export interface Roadmap {
 
 export interface BuildRoadmapOptions {
   now?: () => Date;
+  routing?: RoutingPort;
+  solver?: MilpSolverPort;
 }
 
 /** Inputs for `deriveGaps`, staying close to the ticket #8 solver contracts. */
