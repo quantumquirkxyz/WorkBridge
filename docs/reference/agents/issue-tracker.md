@@ -2,7 +2,7 @@
 
 ## Tracker
 
-GitHub Issues in `quantumquirkxyz/Agent-Hackathon` are the issue tracker for this repo.
+GitHub Issues in `HackathonFISC/equipo-02` are the issue tracker for WorkBridge.
 
 ## Workflow
 

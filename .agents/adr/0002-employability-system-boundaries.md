@@ -13,7 +13,7 @@ chatbot or a full employment marketplace.
 
 ## Decision
 
-Build Puente Laboral Panamá around one end-to-end flow:
+Build WorkBridge around one end-to-end flow:
 
 1. capture CVs, credentials, projects, and declared experiences;
 2. normalize candidate evidence and job requirements;
@@ -31,3 +31,4 @@ administrative roles across Panama Metro and Panama Oeste.
 - Informal experience is included without treating it as an automatically verified credential.
 - The project does not attempt to implement a complete job marketplace or live audio pipeline.
 - A broader occupation taxonomy can be added after the competition MVP.
+- The product name is WorkBridge, and its issue tracker is `HackathonFISC/equipo-02`.
