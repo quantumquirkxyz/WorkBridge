@@ -68,7 +68,12 @@ export {
   type RoutingPortOptions,
 } from "./routing";
 
-export { buildTieBreakKey, compareDecisions, type TieBreakParts } from "./ties";
+export {
+  buildTieBreakKey,
+  compareCodeUnits,
+  compareDecisions,
+  type TieBreakParts,
+} from "./ties";
 
 export {
   applyPromotion,

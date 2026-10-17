@@ -1,0 +1,180 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://puentelaboral.pa/schemas/roadmap.schema.json",
+  "title": "Roadmap",
+  "description": "Specialization-aware training roadmap for an apt_with_gaps or not_currently_apt candidate. Contains only catalogued opportunities; each recommendation embeds the exact catalog entry and a Spanish explanation with source and freshness.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "candidateId",
+    "targetVacancyId",
+    "aptitude",
+    "generatedAt",
+    "catalogVersion",
+    "constraints",
+    "gaps",
+    "recommendations",
+    "unresolvedGaps",
+    "excludedOpportunities",
+    "totals",
+    "reasons"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "candidateId": { "type": "string", "minLength": 1 },
+    "targetVacancyId": { "type": ["string", "null"] },
+    "aptitude": { "enum": ["apt", "apt_with_gaps", "not_currently_apt"] },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "catalogVersion": { "type": "string", "minLength": 1 },
+    "constraints": { "$ref": "#/$defs/RoadmapConstraints" },
+    "gaps": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/TrainingGap" }
+    },
+    "recommendations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/RoadmapRecommendation" }
+    },
+    "unresolvedGaps": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/TrainingGap" }
+    },
+    "excludedOpportunities": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ExcludedOpportunity" }
+    },
+    "totals": { "$ref": "#/$defs/RoadmapTotals" },
+    "reasons": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "$defs": {
+    "TrainingGap": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["skillId", "label", "kind", "requiredLevel", "currentLevel", "mandatory"],
+      "properties": {
+        "skillId": { "type": "string", "minLength": 1 },
+        "label": { "type": ["string", "null"] },
+        "kind": { "enum": ["technical", "soft", "language"] },
+        "requiredLevel": { "type": "integer", "minimum": 0, "maximum": 4 },
+        "currentLevel": { "type": "integer", "minimum": 0, "maximum": 4 },
+        "mandatory": { "type": "boolean" }
+      }
+    },
+    "RankingBreakdownItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dimension", "weight", "rawScore", "weightedScore", "reasons"],
+      "properties": {
+        "dimension": {
+          "enum": [
+            "gap_coverage",
+            "specialization",
+            "cost",
+            "duration",
+            "modality",
+            "geography",
+            "schedule",
+            "availability",
+            "credential_relevance"
+          ]
+        },
+        "weight": { "type": "number", "minimum": 0, "maximum": 1 },
+        "rawScore": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "weightedScore": { "type": "number", "minimum": 0, "maximum": 100 },
+        "reasons": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "GapContribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["skillId", "addedLevel"],
+      "properties": {
+        "skillId": { "type": "string", "minLength": 1 },
+        "addedLevel": { "type": "number", "minimum": 0 }
+      }
+    },
+    "RoadmapRecommendation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rank",
+        "score",
+        "scoreBreakdown",
+        "coveredGaps",
+        "explanationEs",
+        "source",
+        "retrievedAt",
+        "freshness",
+        "opportunity"
+      ],
+      "properties": {
+        "rank": { "type": "integer", "minimum": 1 },
+        "score": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "scoreBreakdown": {
+          "type": "array",
+          "minItems": 9,
+          "maxItems": 9,
+          "items": { "$ref": "#/$defs/RankingBreakdownItem" }
+        },
+        "coveredGaps": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/GapContribution" }
+        },
+        "explanationEs": { "type": "string", "minLength": 1 },
+        "source": { "type": "string", "minLength": 1 },
+        "retrievedAt": { "type": "string", "format": "date-time" },
+        "freshness": { "enum": ["fresh", "stale", "expired"] },
+        "opportunity": {
+          "$ref": "https://puentelaboral.pa/schemas/training-catalog.schema.json#/$defs/TrainingOpportunity"
+        }
+      }
+    },
+    "ExcludedOpportunity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["opportunityId", "reason"],
+      "properties": {
+        "opportunityId": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 }
+      }
+    },
+    "RoadmapConstraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["specializations", "maxCostUsd", "maxTotalHours"],
+      "properties": {
+        "specializations": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "maxCostUsd": { "type": ["number", "null"], "minimum": 0 },
+        "maxTotalHours": { "type": ["number", "null"], "minimum": 0 }
+      }
+    },
+    "RoadmapTotals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "costUsd",
+        "durationHours",
+        "recommendationCount",
+        "coveredGapCount",
+        "unresolvedGapCount"
+      ],
+      "properties": {
+        "costUsd": { "type": "number", "minimum": 0 },
+        "durationHours": { "type": "number", "minimum": 0 },
+        "recommendationCount": { "type": "integer", "minimum": 0 },
+        "coveredGapCount": { "type": "integer", "minimum": 0 },
+        "unresolvedGapCount": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

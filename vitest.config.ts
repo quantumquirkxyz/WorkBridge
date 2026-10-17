@@ -9,6 +9,7 @@ export default defineConfig({
       "@puente/domain": r("./packages/domain/src/index.ts"),
       "@puente/ingestion": r("./packages/ingestion/src/index.ts"),
       "@puente/profile": r("./packages/profile/src/index.ts"),
+      "@puente/training": r("./packages/training/src/index.ts"),
       "@puente/agent-runtime": r("./apps/agent-runtime/src/index.ts"),
       "@puente/solver": r("./packages/solver/src/index.ts"),
     },
