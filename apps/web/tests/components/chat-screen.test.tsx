@@ -188,6 +188,6 @@ describe('ChatScreen', () => {
     await userEvent.type(input, 'hola');
     await userEvent.keyboard('{Enter}');
     await waitFor(() => expect(push).toHaveBeenCalledWith('/vacantes'));
-    expect(window.localStorage.getItem('puente:exploration')).toContain('candidate-test');
+    expect(window.localStorage.getItem('puente:exploration:candidate-test')).toContain('candidate-test');
   });
 });

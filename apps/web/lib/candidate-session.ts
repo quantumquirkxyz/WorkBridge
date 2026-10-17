@@ -30,14 +30,13 @@ export function candidateIdFromRequest(request: Request): string | undefined {
 
 /** Resolve browser requests from the Better Auth cookie, while retaining the signed-header seam for tests/BFF calls. */
 export async function candidateIdFromRequestOrSession(request: Request): Promise<string | undefined> {
-  const headerCandidate = candidateIdFromRequest(request);
-  if (headerCandidate) return headerCandidate;
   try {
     const session = await getServerSession();
-    return session?.user.role === 'candidate' && session.user.id ? makeCandidateId(session.user.id) : undefined;
+    if (session?.user.role === 'candidate' && session.user.id) return makeCandidateId(session.user.id);
   } catch {
-    return undefined;
+    // Test-only header fallback below preserves the route seam without trusting it in production.
   }
+  return process.env.NODE_ENV === 'test' ? candidateIdFromRequest(request) : undefined;
 }
 
 export function unauthorized(): Response {

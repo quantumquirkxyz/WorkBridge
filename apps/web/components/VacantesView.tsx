@@ -40,9 +40,10 @@ export function VacantesView({ result = null, loading = false, decisions = [], d
   const selected = orderedMatches.find((match) => match.vacancy.jobId === selectedId) ?? null;
 
   useEffect(() => {
-    const stored = window.localStorage.getItem('puente:exploration');
+    const candidateId = window.localStorage.getItem('puente:candidateId');
+    const stored = candidateId ? window.localStorage.getItem(`puente:exploration:${candidateId}`) : null;
     if (stored) {
-      try { setStoredResult(JSON.parse(stored) as ExplorationResult); } catch { window.localStorage.removeItem('puente:exploration'); }
+      try { setStoredResult(JSON.parse(stored) as ExplorationResult); } catch { window.localStorage.removeItem(`puente:exploration:${candidateId}`); }
     }
     if (new URLSearchParams(window.location.search).get('save') === '1') {
       const pending = window.sessionStorage.getItem('puente:pending-save');

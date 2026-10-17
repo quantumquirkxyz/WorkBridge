@@ -250,8 +250,9 @@ export function ChatScreen() {
       body: JSON.stringify(preferences),
     });
     if (!response.ok) throw new Error('explore_request_failed');
-    const explored = await response.json() as { preferences?: unknown };
-    window.localStorage.setItem('puente:exploration', JSON.stringify(explored));
+    const explored = await response.json() as { candidateId?: string; preferences?: unknown };
+    if (explored.candidateId) window.localStorage.setItem('puente:candidateId', explored.candidateId);
+    if (explored.candidateId) window.localStorage.setItem(`puente:exploration:${explored.candidateId}`, JSON.stringify(explored));
     if (explored.preferences) window.localStorage.setItem('puente:preferences', JSON.stringify(explored.preferences));
     setExplorationRetry(null);
     router.push('/vacantes');
