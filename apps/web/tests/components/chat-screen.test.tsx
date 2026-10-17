@@ -80,6 +80,27 @@ describe('ChatScreen', () => {
     expect(calls).toEqual(['intake', 'explore']);
   });
 
+  it('resumes exploration after a successful intake retry', async () => {
+    const slotState = initialSlotState();
+    for (const slot of SLOTS) slotState[slot.id] = { state: 'filled', value: 'known' };
+    let intakeCalls = 0;
+    let exploreCalls = 0;
+    server.use(
+      http.get('/api/chat', () => HttpResponse.json({ transcript: [{ role: 'assistant', content: 'Listo para buscar.' }], slotState, phase: 'profile' })),
+      http.post('/api/chat', () => HttpResponse.json(turn({ phase: 'done', pendingSlot: null, chips: [], reply: 'Listo.' }))),
+      http.post('/api/intake', () => { intakeCalls += 1; return intakeCalls === 1 ? HttpResponse.json({ error: 'failed' }, { status: 503 }) : HttpResponse.json({ profile: { skills: [], experiences: [] } }); }),
+      http.post('/api/explore', () => { exploreCalls += 1; return HttpResponse.json({ preferences: {} }); }),
+    );
+    render(<ChatScreen />);
+    const input = await screen.findByRole('textbox', { name: 'Escribe tu respuesta' });
+    await userEvent.type(input, 'continuemos');
+    await userEvent.keyboard('{Enter}');
+    await userEvent.click(await screen.findByRole('button', { name: 'Reintentar' }));
+    await waitFor(() => expect(push).toHaveBeenCalledWith('/vacantes'));
+    expect(intakeCalls).toBe(2);
+    expect(exploreCalls).toBe(1);
+  });
+
   it('shows confirmation chips and sends Sí for a proposed value', async () => {
     let calls = 0;
     server.use(

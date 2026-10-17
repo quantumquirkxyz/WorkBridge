@@ -49,6 +49,7 @@ export function ChatScreen() {
   const [activity, setActivity] = useState<string | null>(null);
   const [retry, setRetry] = useState<RetryRequest | null>(null);
   const [intakeRetryText, setIntakeRetryText] = useState<string | null>(null);
+  const [intakeExplorationRetry, setIntakeExplorationRetry] = useState<PreferencesDraft | null>(null);
   const [explorationRetry, setExplorationRetry] = useState<PreferencesDraft | null>(null);
 
   function nextId() {
@@ -189,6 +190,7 @@ export function ChatScreen() {
           await submitIntake(text);
         } catch {
           setIntakeRetryText(text);
+          if (turn.phase === 'done') setIntakeExplorationRetry(preferencesFromState(nextState));
           addMessage('assistant', 'No pude leer lo que me contaste. Conservé nuestra conversación; puedes intentarlo de nuevo.', [
             { label: 'Reintentar', kind: 'retry' },
           ]);
@@ -289,7 +291,19 @@ export function ChatScreen() {
       } else if (intakeRetryText) {
         setLoading(true);
         setActivity('Estoy leyendo lo que me contaste…');
-        void submitIntake(intakeRetryText).catch(() => {
+        const pendingExploration = intakeExplorationRetry;
+        void submitIntake(intakeRetryText).then(async () => {
+          if (!pendingExploration) return;
+          setIntakeExplorationRetry(null);
+          explorationStarted.current = true;
+          try {
+            await submitExploration(pendingExploration);
+          } catch {
+            explorationStarted.current = false;
+            setExplorationRetry(pendingExploration);
+            addMessage('assistant', 'No pude buscar vacantes todavía. Puedes intentarlo de nuevo.', [{ label: 'Reintentar', kind: 'retry' }]);
+          }
+        }).catch(() => {
           addMessage('assistant', 'No pude leerlo todavía. Puedes intentarlo de nuevo.', [{ label: 'Reintentar', kind: 'retry' }]);
         }).finally(() => {
           setLoading(false);
