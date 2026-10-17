@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import type { ChatTurn } from '@/lib/chat/schema';
 import { SLOTS, type SlotChip, type SlotId } from '@/lib/chat/slots';
-import { applyTurn, initialSlotState, type SlotState, type UserAction } from '@/lib/chat/tracker';
+import { applyTurn, initialSlotState, pendingSlot, type SlotState, type UserAction } from '@/lib/chat/tracker';
 import type { PreferencesDraft } from '@/lib/preferences';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
@@ -22,6 +22,7 @@ type RenderedChip = SlotChip & { slot?: SlotId };
 interface ChatSnapshot {
   transcript?: Array<{ role: 'assistant' | 'user'; content: string }>;
   slotState?: SlotState;
+  pendingSlot?: SlotId | null;
   phase?: ChatTurn['phase'];
 }
 
@@ -70,7 +71,20 @@ export function ChatScreen() {
         if (!active) return;
         const restored = snapshot?.transcript ?? [];
         if (restored.length > 0) {
-          setMessages(restored.map((message) => ({ ...message, id: nextId() })));
+          const restoredState = snapshot?.slotState;
+          const proposedSlot = restoredState
+            ? (Object.entries(restoredState).find(([, entry]) => entry.state === 'proposed')?.[0] as SlotId | undefined)
+            : undefined;
+          const answerSlot = proposedSlot ?? snapshot?.pendingSlot ?? (restoredState ? pendingSlot(restoredState) : null);
+          const answerDefinition = answerSlot ? SLOTS.find((slot) => slot.id === answerSlot) : undefined;
+          const restoredChips = proposedSlot
+            ? [{ label: 'Sí', kind: 'confirm' as const, slot: proposedSlot }, { label: 'Cambiar', kind: 'change' as const, slot: proposedSlot }]
+            : answerDefinition?.chips.map((chip) => ({ ...chip, slot: answerSlot ?? undefined }));
+          setMessages(restored.map((message, index) => ({
+            ...message,
+            id: nextId(),
+            ...(index === restored.length - 1 && message.role === 'assistant' && restoredChips?.length ? { chips: restoredChips } : {}),
+          })));
           profileText.current = restored.filter((message) => message.role === 'user').map((message) => message.content);
         } else {
           setMessages([{ id: nextId(), role: 'assistant', content: WELCOME_MESSAGE }]);

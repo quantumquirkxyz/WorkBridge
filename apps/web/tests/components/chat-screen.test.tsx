@@ -41,10 +41,13 @@ describe('ChatScreen', () => {
   });
 
   it('restores the server-reported phase after reload', async () => {
-    server.use(http.get('/api/chat', () => HttpResponse.json({ transcript: [{ role: 'assistant', content: '¿En qué zona?' }], slotState: initialSlotState(), phase: 'preferences' })));
+    const slotState = initialSlotState();
+    slotState.zone = { state: 'missing' };
+    server.use(http.get('/api/chat', () => HttpResponse.json({ transcript: [{ role: 'assistant', content: '¿En qué zona?' }], slotState, pendingSlot: 'zone', phase: 'preferences' })));
     render(<ChatScreen />);
     await screen.findByText('¿En qué zona?');
     expect(screen.getByLabelText('Fase preferencias')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'San Miguelito' })).toBeInTheDocument();
   });
 
   it('shows confirmation chips and sends Sí for a proposed value', async () => {
