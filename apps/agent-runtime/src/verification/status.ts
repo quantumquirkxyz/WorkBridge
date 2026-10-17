@@ -42,6 +42,7 @@ export interface CredentialVerification {
 
 export function deriveStatus(signals: VerificationSignals): VerificationStatus {
   if (signals.declaredOnly) return "declared";
+  if (signals.holderBinding !== "bound") return "rejected";
   if (signals.unsupportedFormat) return "unverified";
   if (
     signals.documentIntegrity === false ||
@@ -49,8 +50,7 @@ export function deriveStatus(signals: VerificationSignals): VerificationStatus {
     signals.revocationStatus === "revoked" ||
     signals.expired === true ||
     signals.inconsistent === true ||
-    signals.reused === true ||
-    signals.holderBinding !== "bound"
+    signals.reused === true
   ) {
     return "rejected";
   }

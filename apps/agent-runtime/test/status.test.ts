@@ -139,6 +139,16 @@ describe("verification status", () => {
     expect(mandatoryCredentialSatisfied(missingKey)).toBe(false);
   });
 
+  it("returns rejected when an unreadable credential has no established holder", () => {
+    const verification = normalizeVerification({
+      signals: { ...trustedBound, unsupportedFormat: true, holderBinding: "unknown" },
+      provider: "certo",
+    });
+
+    expect(verification.status).toBe("rejected");
+    expect(mandatoryCredentialSatisfied(verification)).toBe(false);
+  });
+
   it("returns declared when the candidate supplied the credential without evidence", () => {
     const verification = normalizeVerification({
       signals: {
