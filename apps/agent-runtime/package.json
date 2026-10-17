@@ -17,6 +17,7 @@
   "dependencies": {
     "@mastra/core": "^1.78.0",
     "@puente/domain": "*",
+    "@puente/catalog": "*",
     "@puente/ingestion": "*",
     "@puente/profile": "*",
     "ajv": "^8.17.1",

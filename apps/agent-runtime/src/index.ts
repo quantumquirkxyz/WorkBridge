@@ -65,6 +65,7 @@ export * from './profile-agent';
 export * from './llm/openrouter';
 export * from './extractors/llm-extractor';
 export * from './pii';
+export * from './exploration/exploration-agent';
 
 export type {
   ExtractedVacancy,

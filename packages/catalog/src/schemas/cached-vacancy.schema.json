@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://puente-laboral.pa/schemas/cached-vacancy/1.0.0",
+  "title": "CachedVacancy",
+  "description": "One vacancy as returned by the cached catalogue. The scraped facts (jobUrl, jobId, query date, scrapingInfo) are preserved verbatim beside a normalized view so exploration can cite provenance and freshness.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "jobId",
+    "jobUrl",
+    "title",
+    "company",
+    "location",
+    "modality",
+    "contractType",
+    "salary",
+    "schedule",
+    "skills",
+    "postedAt",
+    "queriedAt",
+    "provenance",
+    "scrapingInfo"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "jobId": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" },
+    "jobUrl": { "type": "string", "format": "uri" },
+    "title": { "type": "string", "minLength": 1, "maxLength": 300 },
+    "company": { "type": ["string", "null"] },
+    "location": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/location" },
+    "modality": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/work_modality" },
+    "contractType": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/contract_type" },
+    "salary": { "$ref": "#/$defs/salary" },
+    "schedule": { "$ref": "#/$defs/schedule" },
+    "skills": { "type": "array", "items": { "$ref": "#/$defs/skill" } },
+    "postedAt": { "type": "string", "format": "date-time" },
+    "queriedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The date this vacancy was queried from the provider."
+    },
+    "provenance": { "$ref": "#/$defs/provenance" },
+    "scrapingInfo": { "$ref": "#/$defs/scrapingInfo" }
+  },
+  "$defs": {
+    "salary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minUsd", "maxUsd"],
+      "properties": {
+        "minUsd": { "type": ["number", "null"], "minimum": 0 },
+        "maxUsd": { "type": ["number", "null"], "minimum": 0 }
+      }
+    },
+    "schedule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["days", "startMinute", "endMinute", "weeklyHours"],
+      "properties": {
+        "days": {
+          "type": "array",
+          "items": { "type": "integer", "minimum": 0, "maximum": 6 },
+          "uniqueItems": true
+        },
+        "startMinute": { "type": "integer", "minimum": 0, "maximum": 1439 },
+        "endMinute": { "type": "integer", "minimum": 1, "maximum": 1440 },
+        "weeklyHours": { "type": "integer", "minimum": 0, "maximum": 168 }
+      }
+    },
+    "skill": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["skillId", "labelEs", "required"],
+      "properties": {
+        "skillId": { "type": ["string", "null"] },
+        "labelEs": { "type": "string", "minLength": 1 },
+        "labelEn": { "type": ["string", "null"] },
+        "required": { "type": "boolean" }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "source", "sourceUrl", "retrievedAt"],
+      "properties": {
+        "provider": { "type": "string", "minLength": 1 },
+        "source": { "enum": ["scraper", "manual", "seed"] },
+        "sourceUrl": { "type": "string", "format": "uri" },
+        "retrievedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "scrapingInfo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "query", "scrapedAt"],
+      "properties": {
+        "provider": { "type": "string", "minLength": 1 },
+        "query": { "type": "string" },
+        "scrapedAt": { "type": "string", "format": "date-time" },
+        "runId": { "type": ["string", "null"] },
+        "sourceJobId": { "type": ["string", "null"] },
+        "pageUrl": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://puente-laboral.pa/schemas/exploration-result/1.0.0",
+  "title": "ExplorationResult",
+  "description": "The Exploration Agent response: compatible cached vacancies, each with provenance and a freshness label, plus the vacancies that were excluded and why. Stale vacancies (older than 72 hours by default) never appear as matches.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "candidateId", "generatedAt", "preferences", "matches", "excluded", "summary"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "candidateId": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "preferences": { "$ref": "https://puente-laboral.pa/schemas/candidate-preferences/1.0.0" },
+    "matches": { "type": "array", "items": { "$ref": "#/$defs/match" } },
+    "excluded": { "type": "array", "items": { "$ref": "#/$defs/excluded" } },
+    "summary": { "$ref": "#/$defs/summary" }
+  },
+  "$defs": {
+    "freshness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ageHours", "maxAgeHours", "stale", "label"],
+      "properties": {
+        "ageHours": { "type": "number", "minimum": 0 },
+        "maxAgeHours": { "type": "number", "minimum": 0 },
+        "stale": { "type": "boolean" },
+        "label": { "type": "string", "minLength": 1 }
+      }
+    },
+    "match": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["vacancy", "freshness", "provenance", "matchScore", "matchReasons"],
+      "properties": {
+        "vacancy": { "$ref": "https://puente-laboral.pa/schemas/cached-vacancy/1.0.0" },
+        "freshness": { "$ref": "#/$defs/freshness" },
+        "provenance": { "$ref": "https://puente-laboral.pa/schemas/cached-vacancy/1.0.0#/$defs/provenance" },
+        "matchScore": { "type": "number", "minimum": 0, "maximum": 100 },
+        "matchReasons": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "excluded": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["jobId", "reason", "detail", "freshness"],
+      "properties": {
+        "jobId": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" },
+        "reason": { "enum": ["stale", "modality", "location", "salary", "contract", "schedule"] },
+        "detail": { "type": "string", "minLength": 1 },
+        "freshness": { "$ref": "#/$defs/freshness" }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["considered", "matched", "excluded", "stale"],
+      "properties": {
+        "considered": { "type": "integer", "minimum": 0 },
+        "matched": { "type": "integer", "minimum": 0 },
+        "excluded": { "type": "integer", "minimum": 0 },
+        "stale": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

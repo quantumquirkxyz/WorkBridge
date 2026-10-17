@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "preferences_id": "pref_fixture_1",
+  "candidate_id": "candidate_fixture_1",
+  "locale": "es-PA",
+  "origin": "candidate_explicit",
+  "created_at": "2026-10-16T11:00:00.000Z",
+  "updated_at": "2026-10-16T11:00:00.000Z",
+  "target_roles": ["Atención al cliente"],
+  "modality": "onsite",
+  "max_location": { "country": "PA", "province": "Panamá", "district": "Panamá", "raw": "Ciudad de Panamá" },
+  "max_travel_minutes": 60,
+  "monthly_transport_budget_usd": 40,
+  "minimum_salary_usd": 600,
+  "availability": { "days": [1, 2, 3, 4, 5], "start_minute": 480, "end_minute": 1020, "weekly_hours": 40 },
+  "contract_types": ["full_time"],
+  "transport_modes": ["transit", "walking"],
+  "willing_to_train": true,
+  "willing_to_intern": false
+}

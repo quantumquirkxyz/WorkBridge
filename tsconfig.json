@@ -34,6 +34,9 @@
       "@puente/profile": [
         "packages/profile/src/index.ts"
       ],
+      "@puente/catalog": [
+        "packages/catalog/src/index.ts"
+      ],
       "@puente/training": [
         "packages/training/src/index.ts"
       ],

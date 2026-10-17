@@ -6,6 +6,7 @@ const nextConfig = {
     '@puente/ingestion',
     '@puente/profile',
     '@puente/agent-runtime',
+    '@puente/catalog',
   ],
   serverExternalPackages: ['unpdf'],
   turbopack: {

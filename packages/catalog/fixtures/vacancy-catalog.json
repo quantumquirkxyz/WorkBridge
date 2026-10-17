@@ -1,0 +1,191 @@
+[
+  {
+    "schemaVersion": "1.0.0",
+    "jobId": "lnk-1001",
+    "jobUrl": "https://www.linkedin.com/jobs/view/lnk-1001",
+    "title": "Agente de Servicio al Cliente",
+    "company": "Banco Delta",
+    "location": { "country": "PA", "province": "Panamá", "district": "Panamá", "raw": "Ciudad de Panamá" },
+    "modality": "onsite",
+    "contractType": "full_time",
+    "salary": { "minUsd": 700, "maxUsd": 900 },
+    "schedule": { "days": [1, 2, 3, 4, 5], "startMinute": 480, "endMinute": 1020, "weeklyHours": 40 },
+    "skills": [
+      { "skillId": "plp:customer-service", "labelEs": "Atención al cliente", "labelEn": "Customer service", "required": true },
+      { "skillId": "plp:communication", "labelEs": "Comunicación", "labelEn": "Communication", "required": true },
+      { "skillId": "plp:teamwork", "labelEs": "Trabajo en equipo", "labelEn": "Teamwork", "required": false }
+    ],
+    "postedAt": "2026-10-16T09:00:00.000Z",
+    "queriedAt": "2026-10-16T10:00:00.000Z",
+    "provenance": {
+      "provider": "apify_linkedin_jobs",
+      "source": "scraper",
+      "sourceUrl": "https://www.linkedin.com/jobs/view/lnk-1001",
+      "retrievedAt": "2026-10-16T10:00:00.000Z"
+    },
+    "scrapingInfo": {
+      "provider": "apify_linkedin_jobs",
+      "query": "atencion al cliente panama",
+      "scrapedAt": "2026-10-16T10:00:00.000Z",
+      "runId": "run_2026_10_16_a",
+      "sourceJobId": "linkedin:lnk-1001",
+      "pageUrl": "https://www.linkedin.com/jobs/search/?keywords=atencion%20al%20cliente"
+    }
+  },
+  {
+    "schemaVersion": "1.0.0",
+    "jobId": "lnk-1002",
+    "jobUrl": "https://www.linkedin.com/jobs/view/lnk-1002",
+    "title": "Cajero de Mostrador",
+    "company": "Supermercado Central",
+    "location": { "country": "PA", "province": "Panamá", "district": "Panamá", "raw": "Ciudad de Panamá" },
+    "modality": "onsite",
+    "contractType": "part_time",
+    "salary": { "minUsd": 550, "maxUsd": 650 },
+    "schedule": { "days": [5, 6, 0], "startMinute": 600, "endMinute": 1080, "weeklyHours": 24 },
+    "skills": [
+      { "skillId": "plp:customer-service", "labelEs": "Atención al cliente", "labelEn": "Customer service", "required": true },
+      { "skillId": "plp:point-of-sale", "labelEs": "Punto de venta", "labelEn": "Point of sale", "required": true }
+    ],
+    "postedAt": "2026-10-15T12:00:00.000Z",
+    "queriedAt": "2026-10-16T10:00:00.000Z",
+    "provenance": {
+      "provider": "apify_linkedin_jobs",
+      "source": "scraper",
+      "sourceUrl": "https://www.linkedin.com/jobs/view/lnk-1002",
+      "retrievedAt": "2026-10-16T10:00:00.000Z"
+    },
+    "scrapingInfo": {
+      "provider": "apify_linkedin_jobs",
+      "query": "cajero panama",
+      "scrapedAt": "2026-10-16T10:00:00.000Z",
+      "runId": "run_2026_10_16_a",
+      "sourceJobId": "linkedin:lnk-1002",
+      "pageUrl": null
+    }
+  },
+  {
+    "schemaVersion": "1.0.0",
+    "jobId": "lnk-1003",
+    "jobUrl": "https://www.linkedin.com/jobs/view/lnk-1003",
+    "title": "Asistente Administrativo Remoto",
+    "company": "Consultora Istmo",
+    "location": { "country": "PA", "province": "Panamá", "district": "Panamá", "raw": "Remoto" },
+    "modality": "remote",
+    "contractType": "full_time",
+    "salary": { "minUsd": 800, "maxUsd": 1000 },
+    "schedule": { "days": [1, 2, 3, 4, 5], "startMinute": 480, "endMinute": 1020, "weeklyHours": 40 },
+    "skills": [
+      { "skillId": "plp:office-suite", "labelEs": "Ofimática", "labelEn": "Office suite", "required": true }
+    ],
+    "postedAt": "2026-10-16T11:00:00.000Z",
+    "queriedAt": "2026-10-16T11:30:00.000Z",
+    "provenance": {
+      "provider": "apify_linkedin_jobs",
+      "source": "scraper",
+      "sourceUrl": "https://www.linkedin.com/jobs/view/lnk-1003",
+      "retrievedAt": "2026-10-16T11:30:00.000Z"
+    },
+    "scrapingInfo": {
+      "provider": "apify_linkedin_jobs",
+      "query": "asistente administrativo remoto",
+      "scrapedAt": "2026-10-16T11:30:00.000Z",
+      "runId": "run_2026_10_16_a",
+      "sourceJobId": "linkedin:lnk-1003",
+      "pageUrl": null
+    }
+  },
+  {
+    "schemaVersion": "1.0.0",
+    "jobId": "lnk-1004",
+    "jobUrl": "https://www.linkedin.com/jobs/view/lnk-1004",
+    "title": "Auxiliar de Servicio al Cliente",
+    "company": "Farmacias Del Istmo",
+    "location": { "country": "PA", "province": "Panamá", "district": "Panamá", "raw": "Ciudad de Panamá" },
+    "modality": "onsite",
+    "contractType": "full_time",
+    "salary": { "minUsd": 620, "maxUsd": 780 },
+    "schedule": { "days": [1, 2, 3, 4, 5], "startMinute": 480, "endMinute": 1020, "weeklyHours": 40 },
+    "skills": [
+      { "skillId": "plp:customer-service", "labelEs": "Atención al cliente", "labelEn": "Customer service", "required": true }
+    ],
+    "postedAt": "2026-10-12T12:00:00.000Z",
+    "queriedAt": "2026-10-16T10:00:00.000Z",
+    "provenance": {
+      "provider": "apify_linkedin_jobs",
+      "source": "scraper",
+      "sourceUrl": "https://www.linkedin.com/jobs/view/lnk-1004",
+      "retrievedAt": "2026-10-16T10:00:00.000Z"
+    },
+    "scrapingInfo": {
+      "provider": "apify_linkedin_jobs",
+      "query": "atencion al cliente panama",
+      "scrapedAt": "2026-10-16T10:00:00.000Z",
+      "runId": "run_2026_10_16_a",
+      "sourceJobId": "linkedin:lnk-1004",
+      "pageUrl": null
+    }
+  },
+  {
+    "schemaVersion": "1.0.0",
+    "jobId": "lnk-1005",
+    "jobUrl": "https://www.linkedin.com/jobs/view/lnk-1005",
+    "title": "Pasantía de Ventas",
+    "company": "Grupo Mar",
+    "location": { "country": "PA", "province": "Panamá", "district": "Panamá", "raw": "Ciudad de Panamá" },
+    "modality": "onsite",
+    "contractType": "internship",
+    "salary": { "minUsd": 400, "maxUsd": 450 },
+    "schedule": { "days": [1, 2, 3, 4, 5], "startMinute": 480, "endMinute": 1020, "weeklyHours": 40 },
+    "skills": [
+      { "skillId": "plp:point-of-sale", "labelEs": "Punto de venta", "labelEn": "Point of sale", "required": true }
+    ],
+    "postedAt": "2026-10-16T08:00:00.000Z",
+    "queriedAt": "2026-10-16T10:00:00.000Z",
+    "provenance": {
+      "provider": "apify_linkedin_jobs",
+      "source": "scraper",
+      "sourceUrl": "https://www.linkedin.com/jobs/view/lnk-1005",
+      "retrievedAt": "2026-10-16T10:00:00.000Z"
+    },
+    "scrapingInfo": {
+      "provider": "apify_linkedin_jobs",
+      "query": "ventas pasantia panama",
+      "scrapedAt": "2026-10-16T10:00:00.000Z",
+      "runId": "run_2026_10_16_a",
+      "sourceJobId": "linkedin:lnk-1005",
+      "pageUrl": null
+    }
+  },
+  {
+    "schemaVersion": "1.0.0",
+    "jobId": "lnk-1006",
+    "jobUrl": "https://www.linkedin.com/jobs/view/lnk-1006",
+    "title": "Vendedor de Mostrador",
+    "company": "Ferretería El Tornillo",
+    "location": { "country": "PA", "province": "Panamá", "district": "Arraiján", "raw": "Arraiján" },
+    "modality": "onsite",
+    "contractType": "full_time",
+    "salary": { "minUsd": 650, "maxUsd": 800 },
+    "schedule": { "days": [1, 2, 3, 4, 5], "startMinute": 480, "endMinute": 1020, "weeklyHours": 40 },
+    "skills": [
+      { "skillId": "plp:customer-service", "labelEs": "Atención al cliente", "labelEn": "Customer service", "required": true }
+    ],
+    "postedAt": "2026-10-16T06:00:00.000Z",
+    "queriedAt": "2026-10-16T10:00:00.000Z",
+    "provenance": {
+      "provider": "apify_linkedin_jobs",
+      "source": "scraper",
+      "sourceUrl": "https://www.linkedin.com/jobs/view/lnk-1006",
+      "retrievedAt": "2026-10-16T10:00:00.000Z"
+    },
+    "scrapingInfo": {
+      "provider": "apify_linkedin_jobs",
+      "query": "vendedor panama",
+      "scrapedAt": "2026-10-16T10:00:00.000Z",
+      "runId": "run_2026_10_16_a",
+      "sourceJobId": "linkedin:lnk-1006",
+      "pageUrl": null
+    }
+  }
+]

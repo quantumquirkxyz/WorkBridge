@@ -11,6 +11,7 @@ export default tseslint.config(
       "**/playwright-report/**",
       "**/blob-report/**",
       "**/.next/**",
+      "**/out/**",
       ".agents/**",
       ".claude/**",
       ".opencode/**",

@@ -1,4 +1,5 @@
 import { IntakeForm } from '../components/IntakeForm';
+import { ExplorationDashboard } from '../components/ExplorationDashboard';
 
 export default function HomePage() {
   return (
@@ -6,9 +7,11 @@ export default function HomePage() {
       <h1>Puente Laboral Panamá</h1>
       <p className="lead">
         Captura tu CV o describe tus experiencias. El sistema extrae tu perfil, clasifica cada experiencia y
-        guarda un <code>CandidateProfile</code> validado. Nunca envía una postulación.
+        guarda un <code>CandidateProfile</code> validado. Luego declaras tus preferencias de trabajo y exploras
+        vacantes compatibles del catálogo en caché. Nunca envía una postulación.
       </p>
       <IntakeForm />
+      <ExplorationDashboard />
     </main>
   );
 }
