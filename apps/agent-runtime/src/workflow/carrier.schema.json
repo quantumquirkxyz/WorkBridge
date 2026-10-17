@@ -48,6 +48,9 @@
     "modelFallbacks": {
       "type": "array",
       "items": { "$ref": "#/$defs/ModelFallback" }
+    },
+    "matchingInput": {
+      "type": "object"
     }
   },
   "$defs": {

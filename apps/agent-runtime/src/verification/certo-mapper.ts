@@ -43,11 +43,13 @@ export function signalsFromCerto(
   const revocation = findCheck(checks, ["revocation", "revoked"]);
   const expiration = findCheck(checks, ["expiration", "expiry", "expired"]);
   const format = findCheck(checks, ["format"]);
+  const proofFlag = flag(proof, null);
+  const proved = proofFlag === true;
 
   return {
-    documentIntegrity: flag(integrity, null),
-    cryptographicProof: flag(proof, null),
-    issuerTrust: flag(issuer, null),
+    documentIntegrity: integrity ? flag(integrity, null) : proved ? true : null,
+    cryptographicProof: proofFlag,
+    issuerTrust: issuer ? flag(issuer, null) : proved ? true : null,
     revocationStatus: revocationStatus(revocation),
     holderBinding: holderBindingFor(result.credential, holderId),
     expired: expiration?.result === "error",

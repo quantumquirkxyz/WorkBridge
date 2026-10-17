@@ -417,6 +417,8 @@ export interface WorkflowRunRequest {
     role: ActorRole;
   };
   requestedTools: string[];
+  /** Optional validated matching payload consumed by agent-runtime's solver seam. */
+  matchingInput?: unknown;
 }
 
 export interface JobRequirementsMetadata {

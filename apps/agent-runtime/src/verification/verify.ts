@@ -121,7 +121,7 @@ async function attemptProvider(
 async function queryCerto(input: CredentialInput, deps: VerifyDeps): Promise<ProviderAttempt> {
   const config = configOf(deps);
   const baseUrl = config.certoBaseUrl?.replace(/\/$/, "");
-  if (!baseUrl?.startsWith("https://") || !config.certoApiToken) {
+  if (!baseUrl || !isAllowedCertoBaseUrl(baseUrl) || !config.certoApiToken) {
     return { kind: "unavailable", reason: "certo_unavailable", outage: false };
   }
   if (!input.credentialId && !input.document) {
@@ -134,7 +134,7 @@ async function queryCerto(input: CredentialInput, deps: VerifyDeps): Promise<Pro
     certoUrl(baseUrl, input),
     {
       method: input.document ? "POST" : "GET",
-      headers: certoHeaders(deps, input.traceId, Boolean(input.document)),
+      headers: certoHeaders(input.traceId, Boolean(input.document)),
       body: input.document ? JSON.stringify({ credential: input.document }) : undefined,
     },
     config.timeoutMs,
@@ -220,17 +220,27 @@ function configOf(deps: VerifyDeps): VerifierConfig {
   return deps.config ?? verificationConfigFromEnv();
 }
 
+function isAllowedCertoBaseUrl(baseUrl: string): boolean {
+  let parsed: URL;
+  try {
+    parsed = new URL(baseUrl);
+  } catch {
+    return false;
+  }
+  if (parsed.protocol === "https:") return true;
+  return (
+    parsed.protocol === "http:" &&
+    (parsed.hostname === "localhost" || parsed.hostname === "127.0.0.1")
+  );
+}
+
 function certoUrl(baseUrl: string, input: CredentialInput): string {
   if (input.document) return `${baseUrl}/api/credentials/validate`;
   return `${baseUrl}/api/credentials/${encodeURIComponent(input.credentialId ?? "")}/verify`;
 }
 
-function certoHeaders(deps: VerifyDeps, traceId: string, jsonBody: boolean): Headers {
-  const token = configOf(deps).certoApiToken;
-  const headers = traceHeaders(
-    traceId,
-    token ? { name: "authorization", value: `Bearer ${token}` } : undefined,
-  );
+function certoHeaders(traceId: string, jsonBody: boolean): Headers {
+  const headers = traceHeaders(traceId);
   if (jsonBody) headers.set("content-type", "application/json");
   return headers;
 }

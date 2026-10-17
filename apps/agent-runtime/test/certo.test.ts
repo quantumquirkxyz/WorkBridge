@@ -43,7 +43,8 @@ describe("CertoVerifier", () => {
     expect(url).toBe(
       "https://certo.example/api/credentials/urn%3Auuid%3Avalid/verify",
     );
-    expect(new Headers(init.headers).get("authorization")).toBe(`Bearer ${TOKEN}`);
+    expect(new Headers(init.headers).get("authorization")).toBeNull();
+    expect(JSON.stringify(init)).not.toContain(TOKEN);
     expect(new Headers(init.headers).get("x-trace-id")).toBe(TRACE);
     expect(result.status).toBe("verified");
     expect(result.provider).toBe("certo");
@@ -185,6 +186,39 @@ describe("CertoVerifier", () => {
     );
     expect(result.provider).toBe("mock");
     expect(result.externally_verified).toBe(false);
+  });
+
+  it("maps Certo's live proof checks to a verified credential", async () => {
+    const fetchMock = vi.fn(async () =>
+      jsonResponse({
+        verified: true,
+        checks: [
+          { check: "not_revoked", result: "success" },
+          { check: "not_expired", result: "success" },
+          { check: "proof", result: "success" },
+        ],
+        credential: { credentialSubject: { id: "mailto:candidate@example.com" } },
+      }),
+    );
+
+    const result = await verifyCredential(
+      {
+        credentialId: "urn:uuid:live-shape",
+        holderId: "candidate@example.com",
+        traceId: TRACE,
+      },
+      {
+        fetch: fetchMock,
+        config: { certoBaseUrl: "https://certo.example", certoApiToken: TOKEN },
+      },
+    );
+
+    const [, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
+    expect(new Headers(init.headers).get("authorization")).toBeNull();
+    expect(JSON.stringify(init)).not.toContain(TOKEN);
+    expect(result.status).toBe("verified");
+    expect(result.provider).toBe("certo");
+    expect(result.externally_verified).toBe(true);
   });
 
   it("does not treat an aggregate Certo verified flag as separate checks", async () => {

@@ -1,0 +1,8 @@
+# Local overlay for the Certo checkout at apps/certo.
+# Does not define the Nuxt frontend: that service publishes host port 3000,
+# which the Puente intake already uses. Start only postgres, mailhog, and backend.
+services:
+  backend:
+    environment:
+      PUBLIC_URL: http://localhost:1337
+      FRONTEND_URL: http://localhost:3001

@@ -104,11 +104,61 @@ describe("verificationConfigFromEnv", () => {
           }),
         );
         const call = fetchMock.mock.calls[0] as unknown as [string, RequestInit] | undefined;
-        expect(new Headers(call?.[1]?.headers).get("authorization")).toBe("Bearer from-process-env");
+        expect(new Headers(call?.[1]?.headers).get("authorization")).toBeNull();
+        expect(JSON.stringify(call?.[1])).not.toContain("from-process-env");
         expect(JSON.stringify(result)).not.toContain("from-process-env");
         expect(result.provider).toBe("certo");
       },
     );
+  });
+
+  it("calls localhost Certo over http and skips any other http host", async () => {
+    const localFetch = vi.fn(async () => jsonResponse(trustedResult));
+    await verifyCredential(
+      {
+        credentialId: "urn:uuid:local",
+        holderId: "candidate@example.com",
+        traceId: "trace-local",
+      },
+      {
+        fetch: localFetch,
+        config: { certoBaseUrl: "http://localhost:1337", certoApiToken: "local-token" },
+      },
+    );
+    expect(localFetch).toHaveBeenCalledWith(
+      "http://localhost:1337/api/credentials/urn%3Auuid%3Alocal/verify",
+      expect.anything(),
+    );
+
+    const loopbackFetch = vi.fn(async () => jsonResponse(trustedResult));
+    await verifyCredential(
+      {
+        credentialId: "urn:uuid:loopback",
+        holderId: "candidate@example.com",
+        traceId: "trace-loopback",
+      },
+      {
+        fetch: loopbackFetch,
+        config: { certoBaseUrl: "http://127.0.0.1:1337", certoApiToken: "local-token" },
+      },
+    );
+    const loopbackCall = loopbackFetch.mock.calls[0] as unknown as [string, RequestInit] | undefined;
+    expect(String(loopbackCall?.[0])).toBe(
+      "http://127.0.0.1:1337/api/credentials/urn%3Auuid%3Aloopback/verify",
+    );
+
+    const remoteFetch = vi.fn(async () => jsonResponse(trustedResult));
+    await verifyCredential(
+      { credentialId: "urn:uuid:remote", traceId: "trace-remote" },
+      {
+        fetch: remoteFetch,
+        config: { certoBaseUrl: "http://example.com", certoApiToken: "remote-token" },
+      },
+    );
+    const remoteUrls = (remoteFetch.mock.calls as unknown as [string][])
+      .map((call) => String(call[0]))
+      .join(" ");
+    expect(remoteUrls).not.toContain("example.com");
   });
 
   it("does not call an http Certo URL and does not let process.env override explicit config", async () => {

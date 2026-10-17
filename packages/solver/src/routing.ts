@@ -144,7 +144,14 @@ export function createRoutingPort({
 }: RoutingPortOptions = {}): RoutingPort {
   return {
     async route(request: RouteRequest): Promise<RouteEstimate> {
-      if (!google) return local.route(request);
+      if (!google) {
+        const fallback = await local.route(request);
+        return {
+          ...fallback,
+          source: "local_matrix",
+          fallbackReason: "Google Maps is not configured; using the local matrix.",
+        };
+      }
       try {
         const estimate = await google.route(request);
         return { ...estimate, source: "google_maps", fallbackReason: undefined };
