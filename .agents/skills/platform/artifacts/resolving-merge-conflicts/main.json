@@ -1,0 +1,75 @@
+{
+  "schemaVersion": "2.0",
+  "artifactType": "plan",
+  "id": "resolve-conflict-main",
+  "skill": "resolving-merge-conflicts",
+  "skillVersion": "1",
+  "promptVersion": "2.0",
+  "createdAt": "2026-10-17T07:35:00.000Z",
+  "updatedAt": "2026-10-17T07:35:00.000Z",
+  "input": {
+    "branch": "main",
+    "conflictSource": "merge",
+    "conflictingFiles": [
+      "apps/web/next.config.mjs",
+      "playwright.config.ts",
+      "package-lock.json",
+      "apps/web/lib/neon-repository.ts",
+      "apps/agent-runtime/src/matching/adapt.ts"
+    ]
+  },
+  "output": {
+    "status": "resolved",
+    "resolution": "Local main merged origin/main in 759b3c2 and bcc13b4. Kept allowedDevOrigins plus the Playwright comment. Kept the shipped runtime and device smoke projects on ports 4371/4372, and added project web for intake-explore.spec.ts. The web server blanks OPENROUTER_API_KEY and DATABASE_URL and sets PUENTE_PERSISTENCE=memory. Lockfile taken from origin/main and refreshed with npm install. deleteCandidateData keeps the memory-store early return and the Neon saved-search delete. persistSavedSearch and readSavedSearches follow the same memory path. The follow-up commit removes the duplicate MatchDecision import that the second merge left in adapt.ts.",
+    "filesResolved": [
+      "apps/web/next.config.mjs",
+      "playwright.config.ts",
+      "package-lock.json",
+      "apps/web/lib/neon-repository.ts",
+      "apps/web/tests/neon-repository.test.ts",
+      "apps/agent-runtime/src/matching/adapt.ts",
+      "docs/how-to/e2e-casos-de-uso.md",
+      "docs/reference/frontend/testing.md"
+    ],
+    "filesRemaining": [],
+    "branchClean": false,
+    "nextConsumer": "user"
+  },
+  "provenance": {
+    "sourceOfTruth": "In-progress merge of local main 0e16e02 with origin/main fc96ebd, plus the visual e2e docs and the shipped frontend testing harness.",
+    "scope": [
+      "Conflict markers and the semantic import clash created by this merge",
+      "Playwright project names required by test:e2e:web and the device smoke harness",
+      "Memory-mode persistence so the visual suite does not call Neon"
+    ],
+    "outOfScope": [
+      "apps/certo untracked tree",
+      "Pushing main",
+      "Deleting remote issue branches"
+    ],
+    "nextConsumer": "user",
+    "evidence": "No conflict markers remain. Playwright lists 12 tests across runtime, Pixel 7, iPhone 14, Desktop Chrome, and web. neon-repository.test.ts passed 3 tests. tsc reports no errors outside the untracked apps/certo tree.",
+    "riskRemaining": "The visual Playwright suite was listed, not executed in a browser. apps/certo stays untracked and makes a full-repo tsc fail until it is ignored or given its own project."
+  },
+  "evaluation": {
+    "qualityBarScore": 86,
+    "artifactPassedQualityBar": true,
+    "evaluators": {
+      "behavioral": {
+        "passed": true,
+        "score": 84,
+        "notes": "Repository memory tests passed. Playwright config loads and lists both suites. Browser e2e was not run."
+      },
+      "traceability": {
+        "passed": true,
+        "score": 90,
+        "notes": "Each conflict file maps to a kept behavior: device smokes, visual project web, memory persistence, and Neon saved-search deletes."
+      },
+      "quality-bar": {
+        "passed": true,
+        "score": 86,
+        "notes": "Merge can be completed. Untracked apps/certo is outside the conflict and still dirty."
+      }
+    }
+  }
+}
