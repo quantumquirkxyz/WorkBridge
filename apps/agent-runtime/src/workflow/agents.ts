@@ -18,6 +18,7 @@ import {
   type ModelRouter,
 } from "./models";
 import type { AppendOnlyAuditLog, DqlRecord, DqlStore, LangfuseRecorder } from "./observability";
+import type { CandidateNominationInput, MatchingService } from "../matching";
 
 export interface WorkflowStreamEvent {
   event: "envelope" | "lifecycle" | "trace";
@@ -29,6 +30,8 @@ export interface WorkflowServices {
   dql: DqlStore;
   traces: LangfuseRecorder;
   router: ModelRouter;
+  /** Optional validated matching seam for the market-and-matching step. */
+  matching?: MatchingService;
   clock: () => string;
   envelopes: AgentEnvelope[];
   emit?: (event: WorkflowStreamEvent) => void;
@@ -186,7 +189,48 @@ export async function runAgent(
   }
 
   const prompt = promptFor(agent, carrier);
+  let matchingActive = false;
   try {
+  const suppliedInput = agent === "market_and_matching"
+    ? carrier.matchingInput
+    : undefined;
+  if (agent === "market_and_matching" && services.matching && suppliedInput) {
+    matchingActive = true;
+    const nomination = await services.matching.nominateForCandidate({
+      ...(suppliedInput as CandidateNominationInput),
+      now: () => new Date(services.clock()),
+    });
+    const summary = JSON.stringify({
+      candidateId: nomination.candidateId,
+      decisions: nomination.result.decisions,
+      skippedVacancyIds: nomination.skippedVacancyIds,
+      geocoding: nomination.geocoding,
+      warnings: nomination.warnings,
+    });
+    move(services, dqlId, "success", `${agent} completed deterministically`);
+    audit(services, carrier, agent, "matching_completed", {
+      tool,
+      evidence: summary.slice(0, 120),
+      constraint: nomination.warnings.length > 0 ? "geocoding_fallback" : null,
+    });
+    const closed = services.traces.endSpan(span.id, {
+      endTime: services.clock(),
+      output: summary,
+      metadata: { deterministic: true, warnings: nomination.warnings },
+    });
+    services.emit?.({ event: "trace", data: closed });
+    publish(services, carrier, agent, "response", {
+      summary,
+      deterministic: true,
+      warnings: nomination.warnings,
+    });
+    return {
+      ...carrier,
+      summaries: [...carrier.summaries, { agent, summary }],
+      status: carrier.status,
+    };
+  }
+
     const completion = await services.router.complete({
       capability: AGENT_CAPABILITIES[agent],
       prompt,
@@ -257,6 +301,24 @@ export async function runAgent(
       status: agent === "training" ? "success" : carrier.status,
     };
   } catch (error) {
+    if (agent === "market_and_matching" && services.matching && matchingActive) {
+      const message = error instanceof Error ? error.message : String(error);
+      move(services, dqlId, "failed", message);
+      move(services, dqlId, "dead_letter", message);
+      audit(services, carrier, agent, "matching_dead_letter", {
+        tool,
+        constraint: "matching_failure",
+        evidence: message,
+      });
+      const closed = services.traces.endSpan(span.id, {
+        endTime: services.clock(),
+        level: "ERROR",
+        output: { message },
+      });
+      services.emit?.({ event: "trace", data: closed });
+      publish(services, carrier, agent, "event", { status: "dead_letter", message });
+      return { ...carrier, halted: true, status: "dead_letter" };
+    }
     if (error instanceof ModelChainExhaustedError || error instanceof BudgetExceededError) {
       const message = error.message;
       const attempted = error instanceof ModelChainExhaustedError ? error.attempted : [];

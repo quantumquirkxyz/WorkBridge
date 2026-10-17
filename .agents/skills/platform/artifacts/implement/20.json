@@ -1,0 +1,37 @@
+{
+  "status": "completed",
+  "changes": [
+    "Added apps/agent-runtime/src/matching, the runtime half of spec #2's 'apps/agent-runtime receives validated profiles and vacancies, then calls packages/solver' seam required by issue #20.",
+    "Implemented MatchingService.nominateForCandidate and MatchingService.evaluatePair, which geocode inputs, project the domain documents onto the solver contracts, and call @puente/solver nominate/evaluateMatch.",
+    "Added geocode.ts: a GeocodingPort mapping the textual domain Location onto the solver GeoPoint, with a deterministic Panama catalog as the offline default and a Google Geocoding adapter used when a key is configured; provider failures fall back to the catalog with a recorded fallbackReason.",
+    "Added config.ts: matchingConfigFromEnv drives both the Distance Matrix routing port and the geocoding port from GOOGLE_MAPS_API_KEY, so the production routing path uses Google Maps when configured and the local matrix otherwise.",
+    "Added adapt.ts: JobRequirements -> SolverVacancy (projecting only getRankableRequirements, preserving original wording) and CandidateProfile -> SolverCandidate, with arrays copied so the solver cannot mutate caller state.",
+    "Bridged the two skill-id spaces: the profile layer emits plp:* ids while vacancy requirements carry ESCO-shaped PA-* ids, so toSolverCandidate re-matches each profile skill against the vacancy taxonomy. Without this every mandatory-skill comparison would fail.",
+    "Blocked vacancies are skipped rather than scored; MatchingService throws MatchingInputError when no rankable vacancy is supplied.",
+    "Exported the seam from apps/agent-runtime and declared @puente/solver as a workspace dependency; documented GOOGLE_MAPS_API_KEY in .env.example and the seam in apps/agent-runtime/README.md.",
+    "Added 26 Vitest tests across geocode, config, adapt, and service."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npm run lint",
+      "npm run typecheck",
+      "npm test",
+      "npm run test:coverage"
+    ],
+    "skipped": [
+      "Live Google Maps Distance Matrix and Geocoding calls: exercised with an injected fetch so the suite stays hermetic and offline."
+    ],
+    "notes": "419/419 tests pass (26 new matching tests; the prior suite was 393). Coverage 93.89% lines / 82.37% branches (gate-ci threshold is 80% lines / 70% branches). lint and tsc --noEmit are clean."
+  },
+  "commitSha": "146b475",
+  "branch": "feat/issue-20-integrate-solver-seam-agent-runtime-geocoding-google-maps",
+  "nextConsumer": "publish-open-pr",
+  "blockedBy": [],
+  "riskRemaining": "The Google Distance Matrix and Geocoding adapters are covered by injected-fetch tests, not live calls. CandidateMatchContext and VacancyMatchContext carry the facts the solver needs but the profile/vacancy documents do not (schedule, salary, capacity, transport, availability, home location); they are explicit inputs today and are not yet sourced from the preferences ticket (#7) or an extended JobRequirements. The workflow's market_and_matching step still uses the LLM path; it does not yet invoke MatchingService, which is wired but consumed only through the exported seam.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  }
+}

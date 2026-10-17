@@ -8,6 +8,12 @@ import {
 import { runAgent, type WorkflowServices, type WorkflowStreamEvent } from "./agents";
 import { assertCarrier, carrierSchema, type Carrier } from "./carrier";
 import type { GuardrailDecision } from "./guardrails";
+import {
+  createMatchingService,
+  matchingConfigFromEnv,
+  type MatchingEnv,
+  type MatchingService,
+} from "../matching";
 import { CAPABILITY_CHAINS, ModelRouter, type ModelInvoke } from "./models";
 import {
   AppendOnlyAuditLog,
@@ -42,6 +48,9 @@ export interface WorkflowDependencies {
   catalog?: readonly string[];
   clock?: () => string;
   langfuse?: LangfuseClient;
+  /** Matching service used when the caller supplies validated matching input. */
+  matching?: MatchingService;
+  matchingEnv?: MatchingEnv;
 }
 
 export interface WorkflowRunOptions {
@@ -58,6 +67,7 @@ function toCarrier(input: WorkflowRunRequest): Carrier {
     actorId: input.actor.id,
     actorRole: input.actor.role,
     requestedTools: [...input.requestedTools],
+    ...(input.matchingInput ? { matchingInput: input.matchingInput } : {}),
     halted: false,
     status: "running",
     findings: [],
@@ -74,6 +84,7 @@ export class WorkflowRuntime {
   private readonly router: ModelRouter;
   private readonly clock: () => string;
   private readonly langfuse?: LangfuseClient;
+  private readonly matching?: MatchingService;
   private readonly active = new Map<string, WorkflowServices>();
   private readonly cache = new Map<string, WorkflowResult>();
   private readonly workflow: ReturnType<WorkflowRuntime["build"]>;
@@ -81,6 +92,9 @@ export class WorkflowRuntime {
   constructor(deps: WorkflowDependencies) {
     this.clock = deps.clock ?? (() => new Date().toISOString());
     this.langfuse = deps.langfuse;
+    this.matching = deps.matching ?? createMatchingService(
+      matchingConfigFromEnv(deps.matchingEnv ?? (process.env as MatchingEnv)),
+    );
     this.router = new ModelRouter(CAPABILITY_CHAINS, deps.complete);
     if (deps.catalog) this.router.preflight(deps.catalog);
     this.workflow = this.build();
@@ -135,6 +149,7 @@ export class WorkflowRuntime {
       dql: this.dql,
       traces: this.traces,
       router: this.router,
+      ...(this.matching ? { matching: this.matching } : {}),
       clock: this.clock,
       envelopes: [],
       emit: options.onEvent,

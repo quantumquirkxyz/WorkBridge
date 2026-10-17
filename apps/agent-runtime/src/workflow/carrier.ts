@@ -11,6 +11,7 @@ export interface Carrier {
   actorId: string;
   actorRole: ActorRole;
   requestedTools: string[];
+  matchingInput?: unknown;
   halted: boolean;
   status: "running" | "success" | "rejected" | "dead_letter";
   findings: GuardrailDecision[];

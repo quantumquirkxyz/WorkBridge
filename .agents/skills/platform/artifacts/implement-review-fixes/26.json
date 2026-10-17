@@ -1,0 +1,37 @@
+{
+  "status": "implemented",
+  "identifier": "26",
+  "prNumber": 26,
+  "branch": "feat/issue-20-integrate-solver-seam-agent-runtime-geocoding-google-maps",
+  "fixedPoint": "main",
+  "planComment": "https://github.com/HackathonFISC/equipo-02/pull/26#issuecomment-6227998080",
+  "implementationComment": "https://github.com/HackathonFISC/equipo-02/pull/26#issuecomment-6228030472",
+  "changedFiles": [
+    "apps/agent-runtime/src/matching/adapt.ts",
+    "apps/agent-runtime/src/matching/service.ts",
+    "apps/agent-runtime/src/matching/index.ts",
+    "apps/agent-runtime/src/workflow/agents.ts",
+    "apps/agent-runtime/src/workflow/graph.ts",
+    "apps/agent-runtime/src/matching/__tests__/service.test.ts",
+    "apps/agent-runtime/src/workflow/__tests__/graph.test.ts"
+  ],
+  "completedItems": [
+    "Wired validated matching input into the market_and_matching workflow path and bypassed the LLM router for deterministic solver execution.",
+    "Added runtime profile/vacancy validation, authoritative 72-hour freshness validation, deterministic workflow-clock handling, and propagated matching/provider warnings.",
+    "Preserved geocoding source and fallbackReason in caller-visible matching results."
+  ],
+  "blockedItems": [],
+  "validation": {
+    "status": "passed",
+    "commands": [
+      "npm run lint",
+      "npm test -- --run",
+      "npm run test:coverage",
+      "npm run typecheck"
+    ],
+    "tests": 423,
+    "coverage": { "lines": 94.13, "branches": 82.45 },
+    "reason": "User explicitly authorized implementing the deferred corrections in PR #26."
+  },
+  "nextConsumer": "review-pr"
+}

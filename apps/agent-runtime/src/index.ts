@@ -119,6 +119,33 @@ export {
 
 export { inferKind, parseLevel, parseVacancyText, slugify } from "./vacancy/text";
 
+export {
+  DEFAULT_GEO_POINT,
+  MatchingInputError,
+  MatchingService,
+  createGeocodingPort,
+  createGoogleGeocoder,
+  createLocalGeocoder,
+  createMatchingService,
+  canonicalSkillId,
+  deriveExperienceLevel,
+  matchingConfigFromEnv,
+  toSolverCandidate,
+  toSolverVacancy,
+  GeocodingUnavailableError,
+  PANAMA_LOCATIONS,
+  type CandidateMatchContext,
+  type CandidateNominationInput,
+  type CandidateNominationResult,
+  type GeocodeResult,
+  type GeocodingPort,
+  type MatchingEnv,
+  type MatchingRuntimeConfig,
+  type MatchingServiceDeps,
+  type VacancyMatchContext,
+  type VacancyMatchInput,
+} from "./matching";
+
 export { ApplicationService } from "./application/service";
 export { createApplicationServer } from "./application/server";
 export { BETTER_AUTH_ROLES } from "./application/roles";
