@@ -7,6 +7,9 @@ COPY tsconfig.json vitest.config.ts ./
 RUN npm ci
 
 FROM base AS web
+# Tailwind v4 only runs when Next can see this config. Without it the image
+# ships raw @apply/@theme rules and utility classes never get generated.
+COPY postcss.config.mjs ./
 RUN npm run build --workspace @workbridge/web
 WORKDIR /app/apps/web
 ENV PORT=3001
