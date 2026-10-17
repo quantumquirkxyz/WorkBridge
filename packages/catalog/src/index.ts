@@ -34,4 +34,6 @@ export { DEFAULT_MAX_AGE_HOURS, computeFreshness } from './freshness';
 
 export { createVacancyCatalog, loadCatalogFromScraped, toCachedVacancy } from './catalog';
 
+export { createSeedCatalog, seedVacancies } from './seed';
+
 export { exploreVacancies } from './explore';

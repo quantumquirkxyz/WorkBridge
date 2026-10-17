@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@puente/domain": "*",
+    "@puente/catalog": "*",
     "tesseract.js": "^5.1.1",
     "unpdf": "^1.9.0",
     "@puente/ingestion": "*",
