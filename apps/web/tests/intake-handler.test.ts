@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { validateIntakeResult } from '@puente/domain';
 import type { ProfileAgent } from '@puente/agent-runtime';
+import type { IntakeResult } from '@puente/domain';
 import { handleIntake } from '../lib/intake-handler';
 
 const CV = [
@@ -25,6 +26,38 @@ describe('handleIntake', () => {
     const result = body as { profile: { experiences: Array<{ experience_type: string }> } };
     expect(result.profile.experiences.some((experience) => experience.experience_type === 'family_business')).toBe(
       true,
+    );
+  });
+
+  it.each([
+    ['audio_transcript', { kind: 'audio_transcript', text: CV }],
+    ['image', { kind: 'image', fileName: 'cv.png', mimeType: 'image/png', contentBase64: 'aGVsbG8=' }],
+  ] as const)('accepts %s intake through the API seam', async (_label, payload) => {
+    const run: ProfileAgent['run'] = vi.fn(async (): Promise<IntakeResult> => ({
+      trace_id: 'trace_intake',
+      profile: {
+        schema_version: '1.0.0',
+        candidate_id: 'candidate_default',
+        locale: 'es-PA',
+        created_at: '2026-01-01T00:00:00.000Z',
+        updated_at: '2026-01-01T00:00:00.000Z',
+        sources: [],
+        skills: [],
+        experiences: [],
+        education: [],
+        certifications: [],
+        evidence: [],
+        trace_id: 'trace_intake',
+      },
+      extraction: { extractor: 'heuristic', needs_review: false, warnings: [] },
+    }));
+
+    const { status } = await handleIntake(payload, { agent: stubAgent({ run }) });
+
+    expect(status).toBe(200);
+    expect(run).toHaveBeenCalledWith(
+      expect.objectContaining({ kind: payload.kind }),
+      expect.objectContaining({ traceId: expect.any(String) }),
     );
   });
 
