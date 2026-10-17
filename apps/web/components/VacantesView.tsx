@@ -25,6 +25,7 @@ const money = (min: number | null, max: number | null) => {
 };
 
 export function VacantesView({ result = null, loading = false, decisions = [], decisionsLoading = false }: VacantesViewProps) {
+  const [storedResult, setStoredResult] = useState<ExplorationResult | null>(null);
   const [newMatches, setNewMatches] = useState<VacancyMatch[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [saveOpen, setSaveOpen] = useState(false);
@@ -33,11 +34,16 @@ export function VacantesView({ result = null, loading = false, decisions = [], d
   const [pendingSave, setPendingSave] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const cardRefs = useRef(new Map<string, HTMLButtonElement>());
-  const matches = result?.matches ?? [];
+  const activeResult = result ?? storedResult;
+  const matches = activeResult?.matches ?? [];
   const orderedMatches = orderMatchesByDecision(matches, decisions, decisionsLoading);
   const selected = orderedMatches.find((match) => match.vacancy.jobId === selectedId) ?? null;
 
   useEffect(() => {
+    const stored = window.localStorage.getItem('puente:exploration');
+    if (stored) {
+      try { setStoredResult(JSON.parse(stored) as ExplorationResult); } catch { window.localStorage.removeItem('puente:exploration'); }
+    }
     if (new URLSearchParams(window.location.search).get('save') === '1') {
       const pending = window.sessionStorage.getItem('puente:pending-save');
       if (pending) { try { const saved = JSON.parse(pending) as { label?: unknown; preferences?: unknown }; if (typeof saved.label === 'string' && saved.preferences) { window.localStorage.setItem('puente:preferences', JSON.stringify(saved.preferences)); setSaveLabel(saved.label); setPendingSave(true); setSaveOpen(true); } } catch { /* discard malformed pending state */ } window.sessionStorage.removeItem('puente:pending-save'); }
@@ -113,7 +119,7 @@ export function VacantesView({ result = null, loading = false, decisions = [], d
     {notice ? <div className="toast-notice" role="status">{notice}</div> : null}
     <div className="vacantes-heading">
       <div><p className="eyebrow">Explora oportunidades</p><h1>Vacantes para ti</h1><p className="lead">Encontramos oportunidades que se ajustan a lo que buscas.</p></div>
-      <span className="vacantes-count">{result?.summary.matched ?? 0} compatibles</span>
+       <span className="vacantes-count">{activeResult?.summary.matched ?? 0} compatibles</span>
     </div>
     <button type="button" onClick={() => setSaveOpen(true)}>Guardar esta búsqueda</button>
     {saveOpen ? <div role="presentation" className="save-dialog-backdrop"><section role="dialog" aria-modal="true" aria-labelledby="save-search-title" className="save-dialog"><h2 id="save-search-title">Guardar esta búsqueda</h2><label htmlFor="vacantes-save-label">Nombre de la búsqueda</label><input id="vacantes-save-label" value={saveLabel} onChange={(event) => setSaveLabel(event.target.value)} /><button type="button" onClick={saveSearch} disabled={!saveLabel.trim()}>Guardar</button><button type="button" onClick={() => setSaveOpen(false)}>Cancelar</button></section></div> : null}
@@ -121,8 +127,8 @@ export function VacantesView({ result = null, loading = false, decisions = [], d
     {newMatches.length > 0 ? <section className="new-vacancies" aria-labelledby="new-vacancies-heading"><h2 id="new-vacancies-heading">Nuevas desde tu última visita</h2><div className="vacancy-grid">{newMatches.map((match) => <VacancyCard key={match.vacancy.jobId} match={match} decisionsLoading={false} onOpen={open} />)}</div></section> : null}
     {loading ? <div className="vacancy-grid" aria-label="Cargando vacantes">{[1, 2, 3].map((id) => <Skeleton key={id} className="vacancy-skeleton" />)}</div> : <>
        {matches.length ? <div className="vacancy-grid" aria-label="Vacantes compatibles">{orderedMatches.map((match) => <VacancyCard key={match.vacancy.jobId} match={match} decision={decisions.find((d) => d.vacancyId === match.vacancy.jobId)} decisionsLoading={decisionsLoading} onOpen={open} ref={(node) => { if (node) cardRefs.current.set(match.vacancy.jobId, node); }} />)}</div> : <div className="vacantes-empty" role="status"><h2>Aún no hay vacantes compatibles</h2><p>Completa tus preferencias para descubrir oportunidades hechas para ti.</p></div>}
-      {result?.noMatch?.nearMatches.length ? <NearMatches matches={result.noMatch.nearMatches} /> : null}
-      {result?.excluded.length ? <p className="excluded-summary"><strong>{result.excluded.length} vacantes excluidas</strong> · {topCauses(result.excluded)}</p> : null}
+     {activeResult?.noMatch?.nearMatches.length ? <NearMatches matches={activeResult.noMatch.nearMatches} /> : null}
+     {activeResult?.excluded.length ? <p className="excluded-summary"><strong>{activeResult.excluded.length} vacantes excluidas</strong> · {topCauses(activeResult.excluded)}</p> : null}
     </>}
      <VacancyDetail match={selected} decision={selected ? decisions.find((d) => d.vacancyId === selected.vacancy.jobId) : undefined} open={Boolean(selected)} onClose={close} />
   </main>;

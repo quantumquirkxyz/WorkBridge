@@ -24,6 +24,7 @@ function turn(overrides: Record<string, unknown> = {}) {
 describe('ChatScreen', () => {
   beforeEach(() => {
     push.mockReset();
+    window.localStorage.clear();
     server.use(http.get('/api/chat', () => HttpResponse.json({ transcript: [], slotState: initialSlotState() })));
   });
 
@@ -72,5 +73,18 @@ describe('ChatScreen', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Reintentar' }));
     await waitFor(() => expect(calls).toBe(2));
     expect(screen.getAllByText('hola')).toHaveLength(1);
+  });
+
+  it('persists the exploration result before navigating to Vacantes', async () => {
+    server.use(
+      http.post('/api/chat', () => HttpResponse.json(turn({ phase: 'done', pendingSlot: null, chips: [], reply: 'Listo.' }))),
+      http.post('/api/explore', () => HttpResponse.json({ candidateId: 'candidate-test', preferences: { target_roles: ['Ventas'] }, matches: [] })),
+    );
+    render(<ChatScreen />);
+    const input = await screen.findByRole('textbox', { name: 'Escribe tu respuesta' });
+    await userEvent.type(input, 'hola');
+    await userEvent.keyboard('{Enter}');
+    await waitFor(() => expect(push).toHaveBeenCalledWith('/vacantes'));
+    expect(window.localStorage.getItem('puente:exploration')).toContain('candidate-test');
   });
 });

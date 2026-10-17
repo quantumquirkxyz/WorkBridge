@@ -169,6 +169,9 @@ export function ChatScreen() {
           body: JSON.stringify(preferencesFromState(nextState)),
         });
         if (!exploreResponse.ok) throw new Error('explore_request_failed');
+        const explored = await exploreResponse.json() as { preferences?: unknown };
+        window.localStorage.setItem('puente:exploration', JSON.stringify(explored));
+        if (explored.preferences) window.localStorage.setItem('puente:preferences', JSON.stringify(explored.preferences));
         router.push('/vacantes');
       }
     } catch {
