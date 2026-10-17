@@ -1,4 +1,5 @@
 import type { CandidatePreferences, CandidateProfile } from '@puente/domain';
+import { savedSearchesStore, type SavedSearch } from './saved-searches-store';
 import { neon } from '@neondatabase/serverless';
 import { preferencesStore } from './preferences-store';
 import { profileStore } from './profile-store';
@@ -57,8 +58,30 @@ export async function deleteCandidateData(candidateId: string): Promise<void> {
   if (persistenceMode() === 'memory') {
     profileStore.delete(candidateId);
     preferencesStore.delete(candidateId);
+    savedSearchesStore.deleteByCandidate(candidateId);
     return;
   }
+  await database()`delete from candidate_saved_searches where candidate_id = ${candidateId}`;
   await database()`delete from candidate_profiles where candidate_id = ${candidateId}`;
   await database()`delete from candidate_preferences where candidate_id = ${candidateId}`;
+}
+
+export async function persistSavedSearch(search: SavedSearch): Promise<void> {
+  if (persistenceMode() === 'memory') {
+    if (!savedSearchesStore.get(search.searchId)) {
+      throw new Error('Saved search is not in the memory store');
+    }
+    return;
+  }
+  await database()`
+    insert into candidate_saved_searches (search_id, candidate_id, search)
+    values (${search.searchId}, ${search.candidateId}, ${JSON.stringify(search)}::jsonb)
+    on conflict (search_id) do update set search = excluded.search, updated_at = now()
+  `;
+}
+
+export async function readSavedSearches(candidateId: string): Promise<SavedSearch[]> {
+  if (persistenceMode() === 'memory') return savedSearchesStore.list(candidateId);
+  const rows = await database()`select search from candidate_saved_searches where candidate_id = ${candidateId} order by search_id`;
+  return rows.map((row) => (row as { search: SavedSearch }).search);
 }

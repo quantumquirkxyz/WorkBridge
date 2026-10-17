@@ -1,0 +1,24 @@
+{
+  "status": "partial",
+  "changes": [
+    "Added the Better Auth session identity seam and removed browser-supplied candidate ids from web API routes.",
+    "Added profile read and candidate-wide delete endpoints.",
+    "Added Neon persistence for saved searches and the saved-search migration table."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": false,
+    "commands": ["bun x vitest run", "bun x eslint apps/web/app/api apps/web/lib/candidate-session.ts apps/web/lib/neon-repository.ts", "bun x tsc --noEmit"],
+    "skipped": ["npm run verify could not run because npm resolves to the Windows installation from this WSL worktree.", "gate-ci was not clean: repository typecheck has pre-existing errors in apps/agent-runtime/src/matching/adapt.ts.", "ship-subissue was not run because this request forbids pushing or merging and no PR exists."],
+    "notes": "Vitest passed: 55 files and 500 tests. Scoped ESLint passed. Typecheck reaches only pre-existing matching errors after the web route errors were fixed."
+  },
+  "commitSha": "b430789",
+  "branch": "issue/39-derive-the-candidate-id-from-the-session",
+  "nextConsumer": "ship-subissue",
+  "blockedBy": ["#37 Better Auth web integration is not present in this branch"],
+  "riskRemaining": "The session helper consumes the existing signed session header contract; wiring to the Better Auth SDK/cookie API remains dependent on #37.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "skipped",
+    "gateCi": "fail"
+  }
+}

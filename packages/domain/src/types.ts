@@ -438,6 +438,7 @@ export interface JobRequirements {
   vacancyId: string;
   title: string;
   employer: string | null;
+  employerOrgId?: string;
   source: VacancySource;
   capturedAt: string;
   locale: string;

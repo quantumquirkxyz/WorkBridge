@@ -20,6 +20,7 @@ import type {
   SolverVacancy,
   VacancyRequirement,
   VacancySchedule,
+  MatchDecision,
 } from "@puente/solver";
 import { getRankableRequirements } from "../vacancy/ranking";
 
