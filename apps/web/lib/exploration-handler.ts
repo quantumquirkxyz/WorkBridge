@@ -1,19 +1,14 @@
 import { validateCandidatePreferences, type CandidatePreferences } from '@puente/domain';
-import { createSeedCatalog, type VacancyCatalog } from '@puente/catalog';
-import { createExplorationAgent, type ExplorationAgent } from '@puente/agent-runtime';
 import { buildPreferences, type PreferencesDraft } from './preferences';
 import { preferencesStore, type PreferencesStore } from './preferences-store';
+import { savedSearchesStore, type SavedSearchesStore } from './saved-searches-store';
+import { resolveExplorationAgent, type ExplorationSeamDeps } from './exploration-seam';
+import type { HandlerResult } from './handler-result';
 
-export interface ExplorationHandlerDeps {
-  agent?: ExplorationAgent;
-  catalog?: VacancyCatalog;
+export interface ExplorationHandlerDeps extends ExplorationSeamDeps {
   store?: PreferencesStore;
-  now?: () => Date;
-}
-
-export interface HandlerResult {
-  status: number;
-  body: unknown;
+  /** Injected for tests; defaults to the shared saved-search store. */
+  searchesStore?: SavedSearchesStore;
 }
 
 type Parsed =
@@ -52,6 +47,27 @@ export function handleSavePreferences(
   return { status: 200, body: parsed.preferences };
 }
 
+/** Upper bound on a candidate id accepted by the deletion seam. Named, not magic. */
+export const MAX_CANDIDATE_ID_LENGTH = 128;
+
+/**
+ * Delete every piece of candidate data this slice stores: the validated
+ * preferences document and any saved searches for the same candidate. This is
+ * the data-deletion seam for issue #10; it never touches a submission path.
+ */
+export function handleDeleteCandidate(candidateId: string, deps: ExplorationHandlerDeps = {}): HandlerResult {
+  if (!candidateId || candidateId.length > MAX_CANDIDATE_ID_LENGTH) {
+    return { status: 400, body: { error: 'invalid_candidate_id' } };
+  }
+  const preferencesDeleted = (deps.store ?? preferencesStore).delete(candidateId);
+  const searchesDeleted = (deps.searchesStore ?? savedSearchesStore).deleteByCandidate(candidateId);
+  const deleted = preferencesDeleted || searchesDeleted > 0;
+  return {
+    status: deleted ? 200 : 404,
+    body: { deleted, candidateId, preferencesDeleted, searchesDeleted },
+  };
+}
+
 /**
  * Persist preferences and query the cached vacancy catalogue for compatible
  * vacancies with provenance and freshness. No application is ever submitted.
@@ -66,8 +82,7 @@ export async function handleExploration(
   const store = deps.store ?? preferencesStore;
   store.save(parsed.preferences);
 
-  const agent =
-    deps.agent ?? createExplorationAgent({ catalog: deps.catalog ?? createSeedCatalog(), now: deps.now });
+  const agent = resolveExplorationAgent(deps);
   const result = await agent.run(parsed.preferences);
   return { status: 200, body: result };
 }

@@ -1,0 +1,12 @@
+{
+  "issueId": "10",
+  "source": "https://github.com/HackathonFISC/equipo-02/issues/10",
+  "status": "implemented",
+  "branch": "feat/issue-10-build-no-match-exploration-and-saved-alerts",
+  "scope": ["no-match explanations", "near-match warnings", "training roadmap request", "saved preference deletion"],
+  "outOfScope": ["application submission"],
+  "qualityGateResults": {"lint": "passed", "typecheck": "passed", "tests": "passed", "gateCi": "passed"},
+  "nextConsumer": "publish-open-pr",
+  "knownLimitations": ["Saved alerts use the existing in-memory preference store and are process-lifetime only."],
+  "evidence": "npm run verify; 48 test files and 434 tests passed"
+}

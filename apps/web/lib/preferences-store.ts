@@ -5,6 +5,7 @@ export interface PreferencesStore {
   save(preferences: CandidatePreferences): void;
   get(candidateId: string): CandidatePreferences | undefined;
   all(): CandidatePreferences[];
+  delete(candidateId: string): boolean;
 }
 
 /**
@@ -25,6 +26,9 @@ export function createInMemoryPreferencesStore(): PreferencesStore {
       return [...byCandidate.values()].sort((a, b) =>
         a.candidate_id < b.candidate_id ? -1 : a.candidate_id > b.candidate_id ? 1 : 0,
       );
+    },
+    delete(candidateId) {
+      return byCandidate.delete(candidateId);
     },
   };
 }

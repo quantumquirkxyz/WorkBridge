@@ -27,6 +27,8 @@ export type {
 
 export { loadCatalog } from "./catalog";
 
+export { createSeedTrainingCatalog } from "./seed";
+
 export {
   FRESH_HOURS,
   STALE_HOURS,

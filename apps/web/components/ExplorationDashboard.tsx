@@ -2,7 +2,18 @@
 
 import { useState } from 'react';
 import type { ContractType, TransportMode, WorkModality } from '@puente/domain';
-import { CONTRACT_LABELS, DEFAULT_MAX_AGE_HOURS, MODALITY_LABELS, type ExplorationResult } from '@puente/catalog';
+import {
+  CONTRACT_LABELS,
+  DEFAULT_MAX_AGE_HOURS,
+  EXCLUSION_LABELS,
+  MODALITY_LABELS,
+  type ExplorationResult,
+  type NearMatch,
+  type NoMatchCause,
+} from '@puente/catalog';
+import type { Roadmap, TrainingGap } from '@puente/training';
+import type { SavedSearchView } from '../lib/saved-searches-store';
+import type { PreferencesDraft } from '../lib/preferences';
 
 const DAY_LABELS: Array<{ value: number; label: string }> = [
   { value: 1, label: 'Lun' },
@@ -36,15 +47,6 @@ const TRANSPORT_OPTIONS: Array<{ value: TransportMode; label: string }> = [
   { value: 'cycling', label: 'Bicicleta' },
 ];
 
-const EXCLUSION_LABELS: Record<string, string> = {
-  stale: 'Desactualizada',
-  modality: 'Modalidad',
-  location: 'Ubicación',
-  salary: 'Salario',
-  contract: 'Contrato',
-  schedule: 'Horario',
-};
-
 function timeToMinutes(value: string): number {
   const [hours = '0', minutes = '0'] = value.split(':');
   return Number(hours) * 60 + Number(minutes);
@@ -58,6 +60,9 @@ interface FormStatus {
   loading: boolean;
   error?: string;
 }
+
+/** The exact preference-draft shape the API validates; no local re-declaration. */
+type PreferencesPayload = PreferencesDraft;
 
 export function ExplorationDashboard() {
   const [targetRoles, setTargetRoles] = useState('Atención al cliente');
@@ -77,21 +82,21 @@ export function ExplorationDashboard() {
   const [willingIntern, setWillingIntern] = useState(false);
   const [status, setStatus] = useState<FormStatus>({ loading: false });
   const [result, setResult] = useState<ExplorationResult | null>(null);
+  const [roadmap, setRoadmap] = useState<Roadmap | null>(null);
+  const [searchLabel, setSearchLabel] = useState('');
+  const [searches, setSearches] = useState<SavedSearchView[]>([]);
+  const [savedMessage, setSavedMessage] = useState<string | null>(null);
 
   function toggle<T>(list: T[], value: T, setter: (next: T[]) => void) {
     setter(list.includes(value) ? list.filter((item) => item !== value) : [...list, value]);
   }
 
-  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setStatus({ loading: true });
-
+  function currentPayload(): PreferencesPayload {
     const roles = targetRoles
       .split(',')
       .map((role) => role.trim())
       .filter((role) => role.length > 0);
-
-    const payload = {
+    return {
       locale: 'es-PA',
       target_roles: roles,
       modality,
@@ -115,12 +120,50 @@ export function ExplorationDashboard() {
       willing_to_train: willingTrain,
       willing_to_intern: willingIntern,
     };
+  }
+
+  async function loadSearches(candidateId: string) {
+    try {
+      const response = await fetch(`/api/searches?candidateId=${encodeURIComponent(candidateId)}`);
+      if (!response.ok) return;
+      const body = (await response.json()) as { searches: SavedSearchView[] };
+      setSearches(body.searches);
+    } catch {
+      // A listing failure must not break the primary exploration view.
+    }
+  }
+
+  async function requestRoadmap(explored: ExplorationResult) {
+    setRoadmap(null);
+    // `noMatch` is the authoritative signal. An empty `matches` array can also
+    // mean a caller deliberately requested `limit: 0`; that is not a no-match
+    // exploration and must not trigger training.
+    if (!explored.noMatch?.roadmapRequested) return;
+    try {
+      const response = await fetch('/api/roadmap', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(explored),
+      });
+      if (!response.ok) return;
+      const body = (await response.json()) as { roadmap: Roadmap | null };
+      setRoadmap(body.roadmap);
+    } catch {
+      // The roadmap is advisory; a failure leaves the no-match explanation intact.
+    }
+  }
+
+  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setStatus({ loading: true });
+    setRoadmap(null);
+    setSavedMessage(null);
 
     try {
       const response = await fetch('/api/explore', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(currentPayload()),
       });
       const body = (await response.json()) as ExplorationResult | { error?: string; details?: string[] };
       if (!response.ok) {
@@ -129,13 +172,56 @@ export function ExplorationDashboard() {
         setStatus({ loading: false, error: details || `No se pudo explorar vacantes (HTTP ${response.status}).` });
         return;
       }
-      setResult(body as ExplorationResult);
+      const explored = body as ExplorationResult;
+      setResult(explored);
       setStatus({ loading: false });
+      // Trigger the training-roadmap path only when nothing viable was found.
+      await requestRoadmap(explored);
+      await loadSearches(explored.candidateId);
     } catch (error) {
       setStatus({
         loading: false,
         error: error instanceof Error ? error.message : 'Ocurrió un error inesperado.',
       });
+    }
+  }
+
+  async function onSaveSearch() {
+    if (!result) return;
+    try {
+      const response = await fetch('/api/searches', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ label: searchLabel, preferences: currentPayload() }),
+      });
+      if (!response.ok) {
+        setSavedMessage('No se pudo guardar la búsqueda.');
+        return;
+      }
+      setSavedMessage('Búsqueda guardada. Volverás a verla aquí cuando haya coincidencias nuevas.');
+      setSearchLabel('');
+      await loadSearches(result.candidateId);
+    } catch {
+      setSavedMessage('No se pudo guardar la búsqueda.');
+    }
+  }
+
+  async function onDeleteData() {
+    if (!result) return;
+    try {
+      const response = await fetch(`/api/preferences?candidateId=${encodeURIComponent(result.candidateId)}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        setSavedMessage('No se pudieron eliminar tus datos.');
+        return;
+      }
+      setResult(null);
+      setSearches([]);
+      setRoadmap(null);
+      setSavedMessage('Tus preferencias y búsquedas guardadas fueron eliminadas.');
+    } catch {
+      setSavedMessage('No se pudieron eliminar tus datos.');
     }
   }
 
@@ -315,6 +401,19 @@ export function ExplorationDashboard() {
       </div>
 
       {result ? <ExplorationResultView result={result} /> : null}
+
+      {result ? <NoMatchPanel result={result} roadmap={roadmap} /> : null}
+
+      {result ? (
+        <SavedSearchesPanel
+          searches={searches}
+          searchLabel={searchLabel}
+          onLabelChange={setSearchLabel}
+          onSave={onSaveSearch}
+          onDelete={onDeleteData}
+          message={savedMessage}
+        />
+      ) : null}
     </section>
   );
 }
@@ -412,6 +511,202 @@ function ExplorationResultView({ result }: { result: ExplorationResult }) {
         {result.preferences.willing_to_train ? 'sí' : 'no'} · Pasantía:{' '}
         {result.preferences.willing_to_intern ? 'sí' : 'no'}
       </p>
+    </div>
+  );
+}
+
+function CauseList({ causes }: { causes: NoMatchCause[] }) {
+  if (causes.length === 0) return null;
+  return (
+    <ul className="warnings">
+      {causes.map((cause) => (
+        <li key={cause.reason}>
+          {EXCLUSION_LABELS[cause.reason] ?? cause.reason}: {cause.count} vacante(s) — {cause.detail}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function NearMatchesTable({ nearMatches }: { nearMatches: NearMatch[] }) {
+  if (nearMatches.length === 0) return null;
+  return (
+    <>
+      <h5>Opciones cercanas (bloqueadas por una sola restricción)</h5>
+      <p className="hint">
+        No son compatibles: cada una incumple exactamente una restricción declarada, que se muestra como advertencia.
+      </p>
+      <table>
+        <caption className="hint">Vacantes cercanas con la restricción que las bloqueó.</caption>
+        <thead>
+          <tr>
+            <th scope="col">Vacante</th>
+            <th scope="col">Restricción</th>
+            <th scope="col">Advertencia</th>
+            <th scope="col">Cercanía</th>
+          </tr>
+        </thead>
+        <tbody>
+          {nearMatches.map((near) => (
+            <tr key={near.vacancy.jobId}>
+              <td>
+                <strong>{near.vacancy.title}</strong>
+                <div className="hint">{near.vacancy.company ?? 'Empresa no indicada'}</div>
+              </td>
+              <td>{EXCLUSION_LABELS[near.blockedBy] ?? near.blockedBy}</td>
+              <td>
+                <ul className="warnings">
+                  {near.warnings.map((warning) => (
+                    <li key={warning}>{warning}</li>
+                  ))}
+                </ul>
+              </td>
+              <td>{near.proximity}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
+  );
+}
+
+function RoadmapPanel({ roadmap, gaps }: { roadmap: Roadmap; gaps: TrainingGap[] }) {
+  return (
+    <div className="result" aria-labelledby="roadmap-heading">
+      <h4 id="roadmap-heading">Ruta de capacitación</h4>
+      <p className="hint">
+        No hay una vacante viable ahora. Esta ruta se construyó con el catálogo de capacitación en caché para cerrar
+        las brechas detectadas.
+      </p>
+      {gaps.length > 0 ? (
+        <p className="hint">Brechas consideradas: {gaps.map((gap) => gap.label ?? gap.skillId).join(', ')}.</p>
+      ) : null}
+      {roadmap.recommendations.length > 0 ? (
+        <table>
+          <caption className="hint">Oportunidades recomendadas, con la brecha que cubren y su fuente.</caption>
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Oportunidad</th>
+              <th scope="col">Proveedor</th>
+              <th scope="col">Cubre</th>
+              <th scope="col">Costo</th>
+              <th scope="col">Duración</th>
+            </tr>
+          </thead>
+          <tbody>
+            {roadmap.recommendations.map((recommendation) => (
+              <tr key={recommendation.rank}>
+                <td>{recommendation.rank}</td>
+                <td>
+                  <strong>{recommendation.opportunity.title}</strong>
+                  <div className="hint">{recommendation.explanationEs}</div>
+                </td>
+                <td>{recommendation.opportunity.provider}</td>
+                <td>{recommendation.coveredGaps.map((gap) => gap.skillId).join(', ')}</td>
+                <td>USD {recommendation.opportunity.costUsd}</td>
+                <td>{recommendation.opportunity.durationHours} h</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <p className="hint">
+          El catálogo no ofrece una oportunidad elegible para las brechas detectadas todavía.
+        </p>
+      )}
+      {roadmap.unresolvedGaps.length > 0 ? (
+        <p className="hint">
+          Brechas sin cubrir en el catálogo: {roadmap.unresolvedGaps.map((gap) => gap.label ?? gap.skillId).join(', ')}.
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+function NoMatchPanel({ result, roadmap }: { result: ExplorationResult; roadmap: Roadmap | null }) {
+  if (result.matches.length > 0 || !result.noMatch) return null;
+  return (
+    <div role="alert" className="warning-panel">
+      <h4>No encontramos una vacante viable</h4>
+      <p>{result.noMatch.explanation}</p>
+      <CauseList causes={result.noMatch.causes} />
+      <NearMatchesTable nearMatches={result.noMatch.nearMatches} />
+      {roadmap ? <RoadmapPanel roadmap={roadmap} gaps={roadmap.gaps} /> : null}
+    </div>
+  );
+}
+
+function SavedSearchesPanel({
+  searches,
+  searchLabel,
+  onLabelChange,
+  onSave,
+  onDelete,
+  message,
+}: {
+  searches: SavedSearchView[];
+  searchLabel: string;
+  onLabelChange: (value: string) => void;
+  onSave: () => void;
+  onDelete: () => void;
+  message: string | null;
+}) {
+  return (
+    <div className="result" aria-labelledby="saved-searches-heading">
+      <h4 id="saved-searches-heading">Búsquedas guardadas</h4>
+      <p className="hint">
+        Guarda esta búsqueda y vuelve más tarde: aquí verás las coincidencias nuevas que aparecieron después.
+      </p>
+      <div className="field-row">
+        <div className="field">
+          <label htmlFor="search-label">Nombre de la búsqueda</label>
+          <input
+            id="search-label"
+            type="text"
+            value={searchLabel}
+            onChange={(event) => onLabelChange(event.target.value)}
+            placeholder="Atención al cliente en Panamá"
+          />
+        </div>
+        <button type="button" onClick={onSave} disabled={searchLabel.trim().length === 0}>
+          Guardar búsqueda
+        </button>
+        <button type="button" onClick={onDelete} className="danger">
+          Eliminar mis datos
+        </button>
+      </div>
+      <div aria-live="polite" role="status">
+        {message ? <p className="hint">{message}</p> : null}
+      </div>
+
+      {searches.length === 0 ? (
+        <p className="hint">Todavía no tienes búsquedas guardadas.</p>
+      ) : (
+        <ul>
+          {searches.map((view) => (
+            <li key={view.search.searchId}>
+              <strong>{view.search.label}</strong>
+              <div className="hint">
+                Guardada el {view.search.savedAt} · Coincidencias actuales: {view.matches.length} · Nuevas desde
+                entonces: {view.newSinceSaved.length}
+              </div>
+              {view.newSinceSaved.length > 0 ? (
+                <ul className="warnings">
+                  {view.newSinceSaved.map((match) => (
+                    <li key={match.vacancy.jobId}>
+                      Nueva: {match.vacancy.title} ({match.vacancy.company ?? 'Empresa no indicada'})
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+              {view.matches.length > 0 ? (
+                <div className="hint">Coincidencias: {view.matches.map((match) => match.vacancy.title).join(', ')}</div>
+              ) : null}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

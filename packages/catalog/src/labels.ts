@@ -1,4 +1,4 @@
-import type { ContractType, WorkModality } from './types';
+import type { ContractType, ExclusionReason, WorkModality } from './types';
 
 /**
  * Single source of truth for the Spanish display labels of the shared enums.
@@ -19,3 +19,21 @@ export const CONTRACT_LABELS: Record<ContractType, string> = {
   temporary: 'Temporal',
   freelance: 'Independiente',
 };
+
+/**
+ * Spanish display labels for exclusion reasons, in the canonical priority order
+ * (staleness first). This map is the single source of truth for *both* the
+ * labels and the order: adding a reason means adding one entry here, and the
+ * `Record<ExclusionReason, string>` type forces it to be exhaustive.
+ */
+export const EXCLUSION_LABELS: Record<ExclusionReason, string> = {
+  stale: 'Desactualizada',
+  modality: 'Modalidad',
+  location: 'Ubicación',
+  contract: 'Contrato',
+  schedule: 'Horario',
+  salary: 'Salario',
+};
+
+/** Canonical exclusion priority, derived from `EXCLUSION_LABELS` (one source, not two). */
+export const EXCLUSION_ORDER = Object.keys(EXCLUSION_LABELS) as ExclusionReason[];
