@@ -1,0 +1,33 @@
+{
+  "artifactType": "ReviewFixLoopArtifact",
+  "schemaVersion": "1.0",
+  "identifier": "pr-105",
+  "pr": 105,
+  "prUrl": "https://github.com/HackathonFISC/equipo-02/pull/105",
+  "branch": "feat/issue-91-build-the-durable-chat-turn-path",
+  "fixedPoint": "origin/main (7acb1e3)",
+  "reviewPasses": 5,
+  "plansPosted": 2,
+  "implementations": ["91a1574", "41b114a"],
+  "status": "awaiting-scope-review",
+  "standardsFindings": 2,
+  "specFindings": 4,
+  "blockedBy": [
+    "The same parent-spec backpressure/retry/observability findings recur after more than three review passes; the latest pass additionally identifies the missing global 1000-job limit.",
+    "The configured PostgreSQL/Neon fixture is unreachable (ETIMEDOUT/ENETUNREACH), so real DB evidence is unavailable."
+  ],
+  "deferred": [
+    {
+      "finding": "Parent #90 backpressure, retry backoff/jitter, and queue observability.",
+      "owner": "KerubeDev",
+      "followUpTicket": "#90",
+      "reason": "Issue #91 scope clarification explicitly defers these parent requirements to open, assigned issue #90."
+    }
+  ],
+  "validation": {
+    "tests": "npm test: 692 passed, 10 skipped; npm run gate:ci passed; focused tests 37 passed, 2 skipped",
+    "result": "Code validation passed; real database integration remains blocked by unavailable network access."
+  },
+  "loopComment": "https://github.com/HackathonFISC/equipo-02/pull/105#issuecomment-6233185913",
+  "nextConsumer": "review-pr against clarified issue #91 scope"
+}

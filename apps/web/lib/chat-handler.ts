@@ -95,7 +95,8 @@ export function isAllowedSlotValue(slot: SlotId, value: unknown): boolean {
   return (typeof value === 'number' && Number.isFinite(value)) || typeof value === 'boolean';
 }
 
-function parseAction(raw: unknown): UserAction | undefined {
+/** Parse and validate a chat action; `undefined` means the payload names an unknown action. */
+export function parseChatAction(raw: unknown): UserAction | undefined {
   if (raw === undefined || raw === null) return { kind: 'text' };
   if (typeof raw !== 'object') return undefined;
   const a = raw as Record<string, unknown>;
@@ -195,7 +196,7 @@ export async function handleChatTurn(
 ): Promise<HandlerResult> {
   const body = (payload ?? {}) as Record<string, unknown>;
   const message = typeof body.message === 'string' ? body.message.trim() : '';
-  const action = parseAction(body.action);
+  const action = parseChatAction(body.action);
   if (!message || message.length > MAX_MESSAGE_LENGTH || !action) {
     return { status: 400, body: { error: 'invalid_chat_request' } };
   }

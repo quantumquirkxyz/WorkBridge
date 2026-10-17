@@ -1,0 +1,24 @@
+{
+  "artifactType": "ImplementReviewFixesArtifact",
+  "schemaVersion": "1.0",
+  "identifier": "pr-105-review-fixes-final",
+  "pr": 105,
+  "status": "implemented",
+  "planComment": "https://github.com/HackathonFISC/equipo-02/pull/105#issuecomment-6233274311",
+  "commit": "7c265e2",
+  "completed": [
+    "Guard SQL and in-memory acknowledgements by the claimed lease owner.",
+    "Add running-state GET route coverage."
+  ],
+  "deferred": [
+    "PostgreSQL integration execution remains unavailable without a reachable fixture.",
+    "Legacy GET /api/chat compatibility has no new regression test because the current route is unchanged."
+  ],
+  "validation": {
+    "typecheck": "passed",
+    "focusedTests": "39 passed",
+    "fullTests": "694 passed, 10 skipped",
+    "changedFileLint": "passed"
+  },
+  "nextConsumer": "review-pr"
+}

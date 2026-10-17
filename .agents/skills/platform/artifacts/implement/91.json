@@ -1,0 +1,39 @@
+{
+  "status": "completed",
+  "changes": [
+    "migrations/004_chat_jobs.sql: chat_jobs queue table with candidate ownership, per-candidate idempotency key, session version, payload, status, lease fields (lease_owner, lease_expires_at), attempts/max_attempts, timestamps, trace_id/request_id, result, and terminal error fields, plus idempotency/claim/candidate indexes.",
+    "apps/web/lib/chat-jobs.ts: ChatJobStore contract, createInMemoryChatJobStore fixture, createSqlChatJobStore using SELECT ... FOR UPDATE SKIP LOCKED leases and ON CONFLICT DO NOTHING idempotency, and the memory/Neon default store resolver.",
+    "apps/web/lib/chat-turns-handler.ts: enqueueChatTurn and readChatTurnStatus with session-owned candidate binding, action/sessionVersion validation, 202 handle, owning-candidate status, and the documented error shape.",
+    "apps/web/app/api/v1/chat/turns/route.ts: POST versioned enqueue route (session auth, 202 jobId/statusUrl/requestId/sessionVersion).",
+    "apps/web/app/api/v1/chat/turns/[jobId]/route.ts: GET owning-candidate status route (queued|running|succeeded|failed).",
+    "apps/web/lib/chat-worker.ts: processOneChatJob claims one job with a lease, runs handleChatTurn with the existing ChatFn, checks session-version ordering, and acknowledges only after the optimistic session commit succeeds.",
+    "apps/web/scripts/chat-worker.ts: dedicated Node worker entry.",
+    "apps/web/lib/chat-handler.ts: exported parseChatAction so the versioned endpoint validates actions identically.",
+    "apps/web/lib/neon-repository.ts: candidate deletion now cascades to chat_jobs.",
+    "package.json: db:migrate includes 004_chat_jobs.sql; added start:worker script.",
+    "apps/web/tests/chat-jobs.test.ts, apps/web/tests/chat-turns-route.test.ts, apps/web/tests/chat-worker.test.ts: queue, route contract, and worker tests."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npm run typecheck",
+      "npx vitest run apps/web/tests/chat-jobs.test.ts apps/web/tests/chat-turns-route.test.ts apps/web/tests/chat-worker.test.ts",
+      "npm test",
+      "npm run gate:ci"
+    ],
+    "skipped": [
+      "npm run lint is not a clean completion signal in this environment: it reports five pre-existing errors in unrelated files (apps/agent-runtime/.../server.test.ts, apps/agent-runtime/src/workflow/agents.ts, apps/web/app/api/searches/route.ts). ESLint on every changed file in this ticket reports no errors."
+    ],
+    "notes": "Focused tests pass (33 tests across the three new files). Full suite passes (688 passed, 8 skipped). Typecheck passes. gate:ci passes with 92.59% line coverage (threshold 80%)."
+  },
+  "commitSha": "ee078c373e3ed55eb60e0e5954bf9303ce14370a",
+  "branch": "feat/issue-91-build-the-durable-chat-turn-path",
+  "nextConsumer": "publish-open-pr",
+  "blockedBy": [],
+  "riskRemaining": "Delivery is at-least-once by design: a job whose lease expires during a long provider call can be re-claimed and re-executed; the scheduler/wait adapter and backpressure (429/503) from the parent spec are intentionally out of this tracer bullet, as are retry backoff scheduling and dead-letter retention.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  }
+}

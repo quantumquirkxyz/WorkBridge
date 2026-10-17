@@ -25,8 +25,9 @@
     "build": "npm run build --workspaces --if-present",
     "dev": "npm run dev --workspace @workbridge/web",
     "gate:ci": "npm run typecheck && npm run test:coverage",
-    "db:migrate": "NODE_OPTIONS=--no-network-family-autoselection neon psql production -- -f migrations/001_initial.sql -f migrations/002_better_auth.sql -f migrations/003_chat_sessions.sql",
+    "db:migrate": "NODE_OPTIONS=--no-network-family-autoselection neon psql production -- -f migrations/001_initial.sql -f migrations/002_better_auth.sql -f migrations/003_chat_sessions.sql -f migrations/004_chat_jobs.sql",
     "seed:roles": "tsx scripts/seed-roles.ts",
+    "start:worker": "node --env-file=.env --import tsx apps/web/scripts/chat-worker.ts",
     "verify": "npm run lint && npm run typecheck && npm run test"
   },
   "devDependencies": {

@@ -6,4 +6,5 @@
 export interface HandlerResult {
   status: number;
   body: unknown;
+  headers?: Record<string, string>;
 }
