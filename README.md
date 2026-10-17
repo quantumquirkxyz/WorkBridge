@@ -13,8 +13,8 @@ Reto: 3
 
 ## Problema
 
-La transición de los estudios al primer empleo es difícil para jóvenes panameños. Puente Laboral
-Panamá conecta perfiles, vacantes y rutas de formación considerando habilidades técnicas y blandas,
+La transición de los estudios al primer empleo es difícil para jóvenes panameños. WorkBridge
+conecta perfiles, vacantes y rutas de formación considerando habilidades técnicas y blandas,
 experiencia informal, certificaciones, transporte, horario, salario y equidad.
 
 ## Arquitectura de agentes
