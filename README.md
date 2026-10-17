@@ -23,6 +23,8 @@ The system uses four agents: Exploration, Profile and Evidence, Market and Match
 Mastra coordinates them through a workflow graph. Deterministic matching uses HiGHS; Google Maps
 handles routing; Certo is a separately deployed credential verifier with Accredible, Credly, and
 transparent mock fallbacks. Human approval is required before application submission.
+See the complete [agent architecture diagram](docs/reference/agents/architecture.md) for each
+agent's tools, the data and execution planes, and all human approval points.
 
 ## Tecnologías y fuentes de datos
 
