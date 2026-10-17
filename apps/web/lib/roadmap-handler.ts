@@ -1,8 +1,19 @@
-import { matchSkill, resolveTargetRoles, type CandidatePreferences } from '@puente/domain';
-import { validateExplorationResult, type ExplorationResult } from '@puente/catalog';
+import { matchSkill, matchVacancySkill, resolveTargetRoles, type CandidatePreferences, type JobRequirements, type Requirement } from '@puente/domain';
+import { validateExplorationResult, type CachedVacancy, type ExplorationResult } from '@puente/catalog';
+import {
+  createMatchingService,
+  DEFAULT_GEO_POINT,
+  matchingConfigFromEnv,
+  toSolverCandidate,
+  toSolverVacancy,
+  type CandidateMatchContext,
+  type MatchingService,
+  type VacancyMatchInput,
+} from '@puente/agent-runtime';
 import {
   buildRoadmap,
   createSeedTrainingCatalog,
+  deriveGaps,
   type Modality,
   type Roadmap,
   type BuildRoadmapOptions,
@@ -10,12 +21,15 @@ import {
   type TrainingGap,
 } from '@puente/training';
 import type { HandlerResult } from './handler-result';
+import { profileStore, type ProfileStore } from './profile-store';
 
 export interface RoadmapHandlerDeps {
   /** Injected for tests; defaults to the bundled cached training catalogue. */
   trainingCatalog?: TrainingCatalog;
   now?: () => Date;
   routing?: BuildRoadmapOptions['routing'];
+  profileStore?: ProfileStore;
+  service?: MatchingService;
 }
 
 /** Role definition id → training specialization slug used by the catalogue. */
@@ -40,6 +54,81 @@ function specializationsFor(preferences: CandidatePreferences): string[] {
     .map((role) => ROLE_TO_SPECIALIZATION[role.role_id])
     .filter((slug): slug is string => typeof slug === 'string');
   return [...new Set(slugs)].sort();
+}
+
+function vacancyInput(vacancy: CachedVacancy): VacancyMatchInput {
+  const requirements: Requirement[] = vacancy.skills.map((skill, index) => ({
+    id: `${vacancy.jobId}-requirement-${index + 1}`,
+    kind: 'skill',
+    category: skill.required ? 'mandatory' : 'desirable',
+    originalWording: skill.labelEs,
+    normalizedWording: skill.labelEs,
+    canonical: matchVacancySkill(skill.labelEs),
+    level: 1,
+    justification: null,
+    alertId: null,
+    rankingEligible: true,
+    excludedFromRanking: false,
+  }));
+  const document: JobRequirements = {
+    schemaVersion: '1.0.0',
+    vacancyId: vacancy.jobId,
+    title: vacancy.title,
+    employer: vacancy.company,
+    source: 'json',
+    capturedAt: vacancy.queriedAt,
+    locale: 'es-PA',
+    taxonomyVersion: 'panama-v1',
+    status: 'accepted',
+    location: vacancy.location,
+    requirements,
+    alerts: [],
+    reviewQueue: [],
+    blockingReasons: [],
+    metadata: {
+      inputKind: 'json', extractor: 'catalog', extractedAt: vacancy.queriedAt,
+      rawText: null, requirementCount: requirements.length,
+      mandatoryCount: requirements.filter((item) => item.category === 'mandatory').length,
+      desirableCount: requirements.filter((item) => item.category === 'desirable').length,
+      alertCount: 0, excludedCount: 0,
+    },
+  };
+  return {
+    document,
+    context: {
+      schedule: { days: vacancy.schedule.days, startMinute: vacancy.schedule.startMinute, endMinute: vacancy.schedule.endMinute, weeklyHours: vacancy.schedule.weeklyHours },
+      salaryMinUsd: vacancy.salary.minUsd ?? 0,
+      salaryMaxUsd: vacancy.salary.maxUsd ?? vacancy.salary.minUsd ?? 0,
+      capacity: 1,
+    },
+  };
+}
+
+function candidateContext(preferences: CandidatePreferences): CandidateMatchContext {
+  return {
+    home: preferences.max_location,
+    availability: {
+      days: preferences.availability.days,
+      startMinute: preferences.availability.start_minute,
+      endMinute: preferences.availability.end_minute,
+      weeklyHours: preferences.availability.weekly_hours,
+    },
+    transport: {
+      hasVehicle: preferences.transport_modes.includes('driving'),
+      maxCommuteMinutes: preferences.max_travel_minutes,
+      modes: preferences.transport_modes,
+    },
+    expectedSalaryUsd: preferences.minimum_salary_usd,
+    minimumSalaryUsd: preferences.minimum_salary_usd,
+  };
+}
+
+function matchingService(): MatchingService {
+  return createMatchingService({ ...matchingConfigFromEnv({
+    GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY,
+    GOOGLE_MAPS_ENDPOINT: process.env.GOOGLE_MAPS_ENDPOINT,
+    GOOGLE_GEOCODING_ENDPOINT: process.env.GOOGLE_GEOCODING_ENDPOINT,
+  }), warnings: [] });
 }
 
 /**
@@ -104,12 +193,24 @@ export async function handleRoadmap(payload: unknown, deps: RoadmapHandlerDeps =
     return { status: 200, body: { roadmap: null, gaps: [], reason: 'candidate_declined_training' } };
   }
 
-  const gaps = deriveAdvisoryGaps(result);
+  const profile = (deps.profileStore ?? profileStore).get(result.candidateId);
+  if (!profile) return { status: 409, body: { error: 'profile_required' } };
+
+  const vacancy = noMatch.nearMatches[0]?.vacancy;
+  if (!vacancy) return { status: 409, body: { error: 'near_match_required' } };
+  const input = vacancyInput(vacancy);
+  const context = candidateContext(result.preferences);
+  const service = deps.service ?? matchingService();
+  const decision = await service.evaluatePair(profile, context, input, deps.now ? { now: deps.now } : {});
+  const gaps = deriveGaps({
+    candidate: toSolverCandidate(profile, context, DEFAULT_GEO_POINT),
+    vacancy: toSolverVacancy(input.document, input.context, DEFAULT_GEO_POINT),
+  });
   const catalog = deps.trainingCatalog ?? createSeedTrainingCatalog();
   const roadmap: Roadmap = await buildRoadmap(
     {
       candidateId: result.candidateId,
-      aptitude: 'not_currently_apt',
+      aptitude: decision.aptitude,
       gaps,
       heldSkills: [],
       preferences: {
