@@ -36,6 +36,6 @@ or organization would allow cross-role or cross-organization access.
 
 ## Links
 
-- Spec: `docs/reference/frontend/spec.md` (AC-65–AC-76, NG5, NG8)
-- Architecture: `docs/reference/frontend/architecture.md` (Authentication, role enforcement)
+- Spec: `docs/old/reference/frontend/spec.md` (AC-65–AC-76, NG5, NG8)
+- Architecture: `docs/old/reference/frontend/architecture.md` (Authentication, role enforcement)
 - Parent authorization decision: ADR-0003

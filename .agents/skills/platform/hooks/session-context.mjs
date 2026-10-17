@@ -47,7 +47,7 @@ async function main() {
     `[quirk skills] ${skills} canonical skills loaded from .agents/skills/ (platform tooling excluded).`,
     '[quirk skills] route ambiguous work: ask-to -> grill-with-docs -> to-spec -> to-tickets -> implement -> publish-open-pr -> review-pr -> ship-subissue.',
     '[quirk skills] validate before claiming done: node .agents/skills/platform/check-all.mjs',
-    '[quirk skills] vocabulary and conventions: CONTEXT.md; method reference: docs/explanation/quirk-method.md',
+    '[quirk skills] vocabulary and conventions: CONTEXT.md; method reference: docs/old/explanation/quirk-method.md',
   ];
   console.log(lines.join('\n'));
   return 0;
