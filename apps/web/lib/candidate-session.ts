@@ -1,3 +1,4 @@
+import { actorFromBetterAuthSession } from '@puente/agent-runtime';
 import { makeCandidateId } from '@puente/domain';
 import { getServerSession } from './auth';
 
@@ -15,14 +16,9 @@ export function candidateIdFromRequest(request: Request): string | undefined {
   const raw = request.headers.get('x-better-auth-session');
   if (!raw) return undefined;
   try {
-    const session = JSON.parse(raw) as CandidateSession;
-    if (session.user?.role !== 'candidate') return undefined;
-    const userId = session.user?.id ?? session.session?.userId;
-    if (typeof userId !== 'string' || userId.length === 0) return undefined;
-    const ownedCandidate = userId.startsWith('candidate_') ? userId : makeCandidateId(userId);
-    const candidate = session.user?.candidateId;
-    if (candidate !== undefined && candidate !== ownedCandidate) return undefined;
-    return ownedCandidate;
+    const session = JSON.parse(raw);
+    const actor = actorFromBetterAuthSession(session, new Date().toISOString(), process.env.BETTER_AUTH_SECRET ?? '');
+    return actor.role === 'candidate' ? makeCandidateId(actor.id) : undefined;
   } catch {
     return undefined;
   }

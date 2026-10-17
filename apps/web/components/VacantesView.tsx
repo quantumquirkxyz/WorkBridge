@@ -40,11 +40,6 @@ export function VacantesView({ result = null, loading = false, decisions = [], d
   const selected = orderedMatches.find((match) => match.vacancy.jobId === selectedId) ?? null;
 
   useEffect(() => {
-    const candidateId = window.localStorage.getItem('puente:candidateId');
-    const stored = candidateId ? window.localStorage.getItem(`puente:exploration:${candidateId}`) : null;
-    if (stored) {
-      try { setStoredResult(JSON.parse(stored) as ExplorationResult); } catch { window.localStorage.removeItem(`puente:exploration:${candidateId}`); }
-    }
     if (new URLSearchParams(window.location.search).get('save') === '1') {
       const pending = window.sessionStorage.getItem('puente:pending-save');
       if (pending) { try { const saved = JSON.parse(pending) as { label?: unknown; preferences?: unknown }; if (typeof saved.label === 'string' && saved.preferences) { window.localStorage.setItem('puente:preferences', JSON.stringify(saved.preferences)); setSaveLabel(saved.label); setPendingSave(true); setSaveOpen(true); } } catch { /* discard malformed pending state */ } window.sessionStorage.removeItem('puente:pending-save'); }
@@ -53,6 +48,10 @@ export function VacantesView({ result = null, loading = false, decisions = [], d
       .then((response) => response.ok ? response.json() : null)
       .then(async (candidate: { candidateId?: string } | null) => {
         if (!candidate?.candidateId) return null;
+        const stored = window.localStorage.getItem(`puente:exploration:${candidate.candidateId}`);
+        if (stored) {
+          try { setStoredResult(JSON.parse(stored) as ExplorationResult); } catch { window.localStorage.removeItem(`puente:exploration:${candidate.candidateId}`); }
+        }
         const response = await fetch(`/api/searches?candidateId=${encodeURIComponent(candidate.candidateId)}`);
         return response.ok ? { candidateId: candidate.candidateId, body: await response.json() } : null;
       })
