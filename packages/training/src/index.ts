@@ -40,6 +40,7 @@ export {
   gapDeficit,
   gapKindForSkill,
   gapLabel,
+  gapLabelForContribution,
   gapLabelForSkill,
   heldSkillLevel,
 } from "./gaps";

@@ -1,7 +1,7 @@
 import { PANAMA_SKILL_TAXONOMY } from "@puente/domain";
 import { bestSkillSignal, compareCodeUnits } from "@puente/solver";
 import type { SkillLevel } from "@puente/solver";
-import type { DeriveGapsInput, GapKind, HeldSkill, TrainingGap } from "./types";
+import type { DeriveGapsInput, GapContribution, GapKind, HeldSkill, TrainingGap } from "./types";
 
 const TAXONOMY_BY_ID = new Map(PANAMA_SKILL_TAXONOMY.skills.map((skill) => [skill.id, skill]));
 
@@ -20,6 +20,19 @@ export function gapLabelForSkill(skillId: string): string | null {
 /** Display label for a gap, falling back to its canonical skill id. */
 export function gapLabel(gap: TrainingGap): string {
   return gap.label ?? gap.skillId;
+}
+
+/**
+ * Display label for a gap contribution. Contributions always come from the
+ * request's gaps, but resolving the skill id is kept total so a stray
+ * contribution still yields a usable label.
+ */
+export function gapLabelForContribution(
+  gaps: readonly TrainingGap[],
+  contribution: GapContribution,
+): string {
+  const gap = gaps.find((item) => item.skillId === contribution.skillId);
+  return gap ? gapLabel(gap) : contribution.skillId;
 }
 
 /** Effective required level, defaulting to 1 when the vacancy left it unset. */

@@ -1,6 +1,6 @@
 import { assertRoadmap } from "./validate";
 import { freshnessLabelEs } from "./freshness";
-import { gapLabel } from "./gaps";
+import { gapLabelForContribution } from "./gaps";
 import { modalityLabelEs, typeLabelEs } from "./scoring";
 import { rankOpportunities } from "./rank";
 import { selectRoadmap, type SelectedOpportunity, type SelectionResult } from "./select";
@@ -30,10 +30,9 @@ export function explanationEs(
       `(${modalityLabelEs(opportunity.modality)}, ${opportunity.durationHours} h, ${formatUsd(opportunity.costUsd)}).`,
   ];
   if (selected.contributions.length > 0) {
-    const labels = selected.contributions.map((contribution) => {
-      const gap = gaps.find((item) => item.skillId === contribution.skillId)!;
-      return gapLabel(gap);
-    });
+    const labels = selected.contributions.map((contribution) =>
+      gapLabelForContribution(gaps, contribution),
+    );
     parts.push(`Cubre: ${labels.join(", ")}.`);
   }
   parts.push(`Fuente: ${opportunity.source}; ${freshnessLabelEs(selected.ranked.freshness)}.`);

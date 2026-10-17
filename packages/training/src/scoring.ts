@@ -6,7 +6,7 @@ import type {
   TrainingOpportunity,
   TrainingPreferences,
 } from "./types";
-import { gapDeficit, gapLabel } from "./gaps";
+import { gapDeficit, gapLabelForContribution } from "./gaps";
 
 export interface DimensionScore {
   rawScore: number;
@@ -75,10 +75,9 @@ export function gapCoverageScore(
   if (totalDeficit === 0) {
     reasons.push("No hay brechas pendientes por cubrir.");
   } else if (coveredDeficit > 0) {
-    const labels = coveredGaps.map((contribution) => {
-      const gap = gaps.find((item) => item.skillId === contribution.skillId)!;
-      return gapLabel(gap);
-    });
+    const labels = coveredGaps.map((contribution) =>
+      gapLabelForContribution(gaps, contribution),
+    );
     reasons.push(
       `Cubre ${coveredDeficit} de ${totalDeficit} niveles pendientes: ${labels.join(", ")}.`,
     );
@@ -169,7 +168,7 @@ export function durationScore(
     // A zero ceiling means a zero budget, consistently with `selectRoadmap`.
     return {
       rawScore: opportunity.durationHours > 0 ? 0 : 100,
-      reasons: ["Tu límite de duración es cero; ninguna oportunidad con horas cabe en él."],
+      reasons: ["Tu límite de duración es cero; solo caben oportunidades de 0 h."],
     };
   }
   const ratio = opportunity.durationHours / ceiling;
@@ -272,14 +271,14 @@ export function scheduleScore(
   opportunity: TrainingOpportunity,
   preferences: TrainingPreferences,
 ): DimensionScore {
-  const availability = preferences.availabilityWindow;
-  if (!opportunity.schedule || !availability) {
+  const availabilityWindow = preferences.availabilityWindow;
+  if (!opportunity.schedule || !availabilityWindow) {
     return {
       rawScore: 100,
       reasons: ["Horario flexible o no especificado."],
     };
   }
-  const { coverage, missingDays } = scheduleCoverage(opportunity.schedule, availability);
+  const { coverage, missingDays } = scheduleCoverage(opportunity.schedule, availabilityWindow);
   const reasons: string[] = [
     coverage >= 1
       ? "Tu disponibilidad cubre el horario completo."
