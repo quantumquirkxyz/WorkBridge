@@ -93,23 +93,29 @@ la matriz de confusión: `tp=3`, `tn=12`, `fp=0`, `fn=0`, precisión `1`, recall
 
 ## Bitácora de IA
 
-Se utilizó **OpenCode (GPT-5.6 Luna)** para explorar el repositorio, localizar
-fixtures y aserciones existentes, proponer la estructura de esta tabla y revisar
-la consistencia de las referencias. Las decisiones y cambios hechos a mano por
-el equipo fueron:
+### Herramientas usadas
 
-- **Intake:** definir los campos de perfil, sus contratos y el límite entre
-  extracción heurística y extracción con OpenRouter.
-- **Matching:** escoger las dimensiones, pesos, restricciones duras, estados de
-  aptitud y fixtures deterministas usados por el solver.
-- **Verificación de credenciales:** definir la semántica de evidencia declarada,
-  binding del holder, estados de verificación y fallback Certo → Accredible →
-  Credly → mock.
-- **Web handlers:** conectar las rutas con los servicios, validar entradas,
-  aplicar autorización y decidir los códigos/respuestas de error.
+La única herramienta generativa usada para este registro y para la asistencia de
+implementación fue **OpenCode (GPT-5.6 Luna)**. OpenCode se usó para explorar el
+repositorio, localizar fixtures y aserciones, proponer documentación y revisar
+la consistencia de las referencias. Esta asistencia y la revisión final de la
+trazabilidad quedan registradas en `.agents/skills/platform/artifacts/implement/102.md`
+y en el commit `6d48081`. Las decisiones de producto, contratos, revisión de
+cambios y escritura final fueron del equipo.
+
+### Asistencia por área
+
+| Área | AI-asistido | Hecho a mano por el equipo | Evidencia verificable |
+|---|---|---|---|
+| Intake | Explorar el código y localizar los puntos de extracción y persistencia. | Definir campos de perfil, contratos y el límite entre extracción heurística y OpenRouter. | `ef1ff1f` (persistencia de perfiles), `41a92b2` (fusión de fuentes), `.agents/skills/platform/artifacts/implement/4.md` |
+| Matching | Explorar fixtures y revisar la documentación de resultados. | Escoger dimensiones, pesos, restricciones duras, estados de aptitud y fixtures deterministas. | `73e232a` (seam del solver), `cf35082` (decisiones para borradores), `.agents/skills/platform/artifacts/implement/2.md` |
+| Verificación de credenciales | Revisar la matriz de casos y ubicar sus aserciones. | Definir evidencia declarada, binding del holder, estados y fallback Certo → Accredible → Credly → mock. | `8eea3e0` (credential verification), `.agents/skills/platform/artifacts/implement/56.md` |
+| Web | Proponer la organización del registro y comprobar referencias de rutas y handlers. | Conectar rutas con servicios, validar entradas, aplicar autorización y decidir códigos/respuestas de error. | `493129a` (integración web), `7acb1e3` (ruta de intake), `.agents/skills/platform/artifacts/implement/32.md` |
+| Docs | Localizar documentación existente y revisar enlaces y commits citados. | Redactar y mantener este registro, la tabla de evaluaciones y el diagrama de arquitectura. | `6d48081`, `.agents/skills/platform/artifacts/implement/102.md`, `bb86ef4`, `.agents/skills/platform/artifacts/implement/101.md` |
 
 La tabla y este registro documentan resultados ya comprobados por la suite; este
-ticket no añade casos de prueba ni cambia `npm test`.
+ticket solo añade trazabilidad documental y no añade casos de prueba ni cambia
+`npm test`; this scope statement is recorded in commit `45d8cac`.
 
 ---
 
