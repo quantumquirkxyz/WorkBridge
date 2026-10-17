@@ -1,5 +1,5 @@
-import { normalizeText, type Location } from "@puente/domain";
-import type { GeoPoint } from "@puente/solver";
+import { normalizeText, type Location } from "@workbridge/domain";
+import type { GeoPoint } from "@workbridge/solver";
 
 /**
  * Geocoding seam for the runtime → solver integration (issue #20).

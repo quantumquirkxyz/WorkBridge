@@ -15,7 +15,7 @@ domain vocabulary and boundaries only.
 
 ## Project brief
 
-**Puente Laboral Panamá** is a multi-agent employability system for young people. It evaluates
+**WorkBridge** is a multi-agent employability system for young people. It evaluates
 readiness for a job, recognizes formal and informal experience, identifies skill gaps, recommends
 training or internships, and prepares applications for human approval.
 

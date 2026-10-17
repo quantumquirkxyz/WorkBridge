@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://puentelaboral.pa/schemas/audit-event.schema.json",
+  "$id": "https://workbridge.pa/schemas/audit-event.schema.json",
   "title": "AuditEvent",
   "description": "Assumed signature of the issue #9 append-only audit record. Issue #12 writes one event for every approval, correction, rejection, and submission.",
   "type": "object",

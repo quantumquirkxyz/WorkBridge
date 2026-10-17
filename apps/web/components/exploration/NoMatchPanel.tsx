@@ -1,5 +1,5 @@
-import { EXCLUSION_LABELS, type ExplorationResult, type NoMatchCause } from '@puente/catalog';
-import type { Roadmap } from '@puente/training';
+import { EXCLUSION_LABELS, type ExplorationResult, type NoMatchCause } from '@workbridge/catalog';
+import type { Roadmap } from '@workbridge/training';
 import { NearMatchList } from './NearMatchList';
 import { RoadmapList } from './RoadmapList';
 import Link from 'next/link';

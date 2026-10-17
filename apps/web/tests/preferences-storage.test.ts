@@ -11,7 +11,7 @@ function memoryStorage(initial: Record<string, string> = {}) {
 
 describe('preferences storage', () => {
   it('scopes the key by candidate id', () => {
-    expect(preferencesStorageKey('candidate-a')).toBe('puente:preferences:candidate-a');
+    expect(preferencesStorageKey('candidate-a')).toBe('workbridge:preferences:candidate-a');
   });
 
   it('does not leak preferences between candidates', () => {

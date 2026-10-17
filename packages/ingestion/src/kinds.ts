@@ -1,4 +1,4 @@
-import type { IntakeSourceKind } from '@puente/domain';
+import type { IntakeSourceKind } from '@workbridge/domain';
 import { UnsupportedSourceError } from './errors';
 
 /** Guardrail limits: intake inputs are untrusted data, never instructions. */

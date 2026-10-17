@@ -4,7 +4,7 @@ import {
   type AgentEnvelope,
   type AgentId,
   type WorkflowRunRequest,
-} from "@puente/domain";
+} from "@workbridge/domain";
 import { runAgent, type WorkflowServices, type WorkflowStreamEvent } from "./agents";
 import { assertCarrier, carrierSchema, type Carrier } from "./carrier";
 import type { GuardrailDecision } from "./guardrails";
@@ -19,10 +19,10 @@ import {
   type Roadmap,
   type TrainingCatalog,
   type TrainingPreferences,
-} from "@puente/training";
+} from "@workbridge/training";
 import { CAPABILITY_CHAINS, ModelRouter, type ModelInvoke } from "./models";
 import { createExplorationAgent } from "../exploration/exploration-agent";
-import { createSeedCatalog } from "@puente/catalog";
+import { createSeedCatalog } from "@workbridge/catalog";
 import { createProfileAgent } from "../profile-agent";
 import {
   AppendOnlyAuditLog,
@@ -31,7 +31,7 @@ import {
   type LangfuseClient,
 } from "./observability";
 
-export const WORKFLOW_ID = "puente-employability";
+export const WORKFLOW_ID = "workbridge-employability";
 
 const AGENT_ORDER = [
   "exploration",
@@ -126,7 +126,7 @@ export class WorkflowRuntime {
     const steps = AGENT_ORDER.map((agent) =>
       createStep({
         id: agent,
-        description: `Puente ${agent} agent`,
+        description: `WorkBridge ${agent} agent`,
         inputSchema: carrierSchema,
         outputSchema: carrierSchema,
         execute: async ({ inputData }) => {

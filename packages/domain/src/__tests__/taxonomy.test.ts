@@ -3,7 +3,7 @@ import {
   PANAMA_SKILL_TAXONOMY,
   matchSkill,
   normalizeText,
-} from "@puente/domain";
+} from "@workbridge/domain";
 import escoResolution from "../taxonomy/fixtures/esco-v1.2.1-panama-resolution.json";
 import escoResponses from "../taxonomy/fixtures/esco-v1.2.1-captured-responses.json";
 

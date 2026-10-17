@@ -1,6 +1,6 @@
 # Local overlay for the Certo checkout at apps/certo.
 # Does not define the Nuxt frontend: that service publishes host port 3000,
-# which the Puente intake already uses. Start only postgres, mailhog, and backend.
+# which the WorkBridge intake already uses. Start only postgres, mailhog, and backend.
 services:
   backend:
     environment:

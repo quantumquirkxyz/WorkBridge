@@ -1,9 +1,9 @@
-import type { CandidatePreferences, CandidateProfile } from '@puente/domain';
-import { createSeedCatalog, type CachedVacancy } from '@puente/catalog';
+import type { CandidatePreferences, CandidateProfile } from '@workbridge/domain';
+import { createSeedCatalog, type CachedVacancy } from '@workbridge/catalog';
 import {
   type MatchingService,
-} from '@puente/agent-runtime';
-import type { MatchDecision } from '@puente/solver';
+} from '@workbridge/agent-runtime';
+import type { MatchDecision } from '@workbridge/solver';
 import { readCandidatePreferences, readCandidateProfile } from './neon-repository';
 import type { HandlerResult } from './handler-result';
 import { candidateContext, matchingService, vacancyInput } from './matching-input';

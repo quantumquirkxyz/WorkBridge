@@ -1,5 +1,5 @@
-import { normalizeText } from "@puente/domain";
-import type { AlertClassification } from "@puente/domain";
+import { normalizeText } from "@workbridge/domain";
+import type { AlertClassification } from "@workbridge/domain";
 
 export interface FairnessRule {
   id: string;

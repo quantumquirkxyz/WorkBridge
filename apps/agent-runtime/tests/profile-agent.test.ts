@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
-import { validateIntakeResult } from '@puente/domain';
-import { createResilientExtractor, heuristicProfileExtractor, type ProfileExtractor } from '@puente/profile';
+import { validateIntakeResult } from '@workbridge/domain';
+import { createResilientExtractor, heuristicProfileExtractor, type ProfileExtractor } from '@workbridge/profile';
 import { createLlmProfileExtractor } from '../src/extractors/llm-extractor';
 import type { ChatFn, ChatRequest } from '../src/llm/openrouter';
 import { createOpenRouterChat, OpenRouterError } from '../src/llm/openrouter';

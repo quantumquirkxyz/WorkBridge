@@ -1,6 +1,5 @@
 .agents/skills/platform/runs/
 node_modules/
-.env
 coverage/
 test-results/
 playwright-report/
@@ -20,8 +19,9 @@ coverage/
 # Next.js generated type references (recreated on build/dev)
 next-env.d.ts
 
-# Local environment and generated artifacts
+# Local environment. Templates and examples stay in the repository.
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
+!.env.template
 .neon

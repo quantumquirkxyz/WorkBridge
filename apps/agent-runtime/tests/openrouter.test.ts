@@ -2,6 +2,20 @@ import { describe, expect, it, vi } from 'vitest';
 import { createOpenRouterChat } from '../src/llm/openrouter';
 
 describe('createOpenRouterChat', () => {
+  it('uses the OpenRouter host when the base URL override is blank', async () => {
+    const fetchImpl = vi.fn(async () => new Response(JSON.stringify({ choices: [{ message: { content: '{}' } }] }), { status: 200 }));
+    const chat = createOpenRouterChat({
+      apiKey: 'k',
+      model: 'm',
+      baseUrl: '',
+      fetchImpl: fetchImpl as unknown as typeof fetch,
+    });
+    await chat({ messages: [{ role: 'user', content: 'hola' }] });
+    expect(((fetchImpl.mock.calls[0] as unknown) as [string, RequestInit])[0]).toBe(
+      'https://openrouter.ai/api/v1/chat/completions',
+    );
+  });
+
   it('forwards the caller abort signal to fetch', async () => {
     const fetchImpl = vi.fn(async () => new Response(JSON.stringify({ choices: [{ message: { content: '{}' } }] }), { status: 200 }));
     const chat = createOpenRouterChat({ apiKey: 'k', model: 'm', fetchImpl: fetchImpl as unknown as typeof fetch });

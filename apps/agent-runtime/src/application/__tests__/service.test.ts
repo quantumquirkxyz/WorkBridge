@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { MatchDecision } from "@puente/domain";
+import type { MatchDecision } from "@workbridge/domain";
 import { assertDocumentsGrounded, gapLine, vacancyIntro } from "../draft";
 import type { EvidenceItem } from "../evidence";
 import { sampleMatchDecision, sampleWorkflowEnvelope } from "../fixtures";
@@ -14,7 +14,7 @@ function session(role: "candidate" | "employer" | "counselor", id: string = role
   return signBetterAuthSession(
     {
       session: { id: `sess-${id}`, userId: id, expiresAt: "2027-01-01T00:00:00.000Z" },
-      user: { id, email: `${id}@puente.pa`, role, ...(role === "employer" ? { employerOrgId: "org-1" } : {}) },
+      user: { id, email: `${id}@workbridge.pa`, role, ...(role === "employer" ? { employerOrgId: "org-1" } : {}) },
     },
     SESSION_SECRET,
   );
@@ -268,14 +268,14 @@ describe("application approval and submission", () => {
     const app = service([TOKEN]);
     const expired = {
       session: { id: "s", userId: "candidate", expiresAt: "2020-01-01T00:00:00.000Z" },
-      user: { id: "candidate", email: "a@puente.pa", role: "candidate" as const },
+      user: { id: "candidate", email: "a@workbridge.pa", role: "candidate" as const },
     };
     expect(() =>
       app.createDraft({ ...expired, signature: sessionSignature(expired, SESSION_SECRET) }, draftInput()),
     ).toThrow(/expired/);
     const unknownRole = {
       session: { id: "s", userId: "candidate", expiresAt: "2027-01-01T00:00:00.000Z" },
-      user: { id: "candidate", email: "a@puente.pa", role: "admin" },
+      user: { id: "candidate", email: "a@workbridge.pa", role: "admin" },
     };
     expect(() =>
       app.createDraft({ ...unknownRole, signature: sessionSignature(unknownRole, SESSION_SECRET) }, draftInput()),

@@ -37,9 +37,9 @@ export function CandidateShell({ children }: { children: ReactNode }) {
   return (
     <div className="candidate-shell">
       <header className="candidate-header">
-        <Link className="candidate-brand" href="/vacantes" aria-label="Puente Laboral, ir a Vacantes">
+        <Link className="candidate-brand" href="/vacantes" aria-label="WorkBridge, ir a Vacantes">
           <span className="candidate-brand-mark" aria-hidden="true"><Map /></span>
-          <span>Puente Laboral</span>
+          <span>WorkBridge</span>
         </Link>
         <nav aria-label="Navegación principal">
           <ul className="candidate-nav candidate-nav-desktop">

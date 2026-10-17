@@ -1,4 +1,4 @@
-import type { CandidatePreferences } from '@puente/domain';
+import type { CandidatePreferences } from '@workbridge/domain';
 
 /** Persistence seam for validated preferences. */
 export interface PreferencesStore {

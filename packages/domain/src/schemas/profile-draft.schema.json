@@ -1,13 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://puente-laboral.pa/schemas/profile-draft/1.0.0",
+  "$id": "https://workbridge.pa/schemas/profile-draft/1.0.0",
   "title": "ProfileDraft",
   "description": "Un-normalized extraction produced by the Profile Agent (heuristic or LLM). Every upstream rule is re-applied deterministically during normalization, so this contract is deliberately permissive about levels and relevance.",
   "type": "object",
   "additionalProperties": false,
   "properties": {
     "full_name": { "type": "string", "maxLength": 200 },
-    "locale": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/language_tag" },
+    "locale": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/language_tag" },
     "target_roles": {
       "type": "array",
       "items": { "type": "string", "minLength": 1 },
@@ -26,10 +26,10 @@
       "required": ["claim", "source"],
       "properties": {
         "claim": { "type": "string", "minLength": 1, "maxLength": 2000 },
-        "source": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/provenance" },
+        "source": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/provenance" },
         "source_ref": { "type": "string", "maxLength": 500 },
         "excerpt": { "type": "string", "maxLength": 2000 },
-        "confidence": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/confidence" }
+        "confidence": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/confidence" }
       }
     },
     "draft_skill": {
@@ -39,9 +39,9 @@
       "properties": {
         "original_term": { "type": "string", "minLength": 1, "maxLength": 200 },
         "canonical_hint": { "type": "string", "maxLength": 200 },
-        "kind_hint": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/skill_kind" },
-        "level_hint": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/skill_level" },
-        "confidence": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/confidence" },
+        "kind_hint": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/skill_kind" },
+        "level_hint": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/skill_level" },
+        "confidence": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/confidence" },
         "evidence": { "type": "array", "items": { "$ref": "#/$defs/draft_evidence" } }
       }
     },
@@ -50,7 +50,7 @@
       "additionalProperties": false,
       "required": ["experience_type", "title", "description"],
       "properties": {
-        "experience_type": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/experience_type" },
+        "experience_type": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/experience_type" },
         "title": { "type": "string", "minLength": 1, "maxLength": 200 },
         "organization": { "type": "string", "maxLength": 200 },
         "description": { "type": "string", "maxLength": 4000 },
@@ -58,7 +58,7 @@
         "ended_at": { "type": "string", "format": "date" },
         "ongoing": { "type": "boolean" },
         "location": { "type": "string", "maxLength": 200 },
-        "confidence": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/confidence" },
+        "confidence": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/confidence" },
         "evidence": { "type": "array", "items": { "$ref": "#/$defs/draft_evidence" } }
       }
     },
@@ -76,7 +76,7 @@
         "started_at": { "type": "string", "format": "date" },
         "ended_at": { "type": "string", "format": "date" },
         "ongoing": { "type": "boolean" },
-        "confidence": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/confidence" },
+        "confidence": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/confidence" },
         "evidence": { "type": "array", "items": { "$ref": "#/$defs/draft_evidence" } }
       }
     },
@@ -90,7 +90,7 @@
         "issued_at": { "type": "string", "format": "date" },
         "expires_at": { "type": "string", "format": "date" },
         "credential_url": { "type": "string", "format": "uri" },
-        "confidence": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/confidence" },
+        "confidence": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/confidence" },
         "evidence": { "type": "array", "items": { "$ref": "#/$defs/draft_evidence" } }
       }
     }

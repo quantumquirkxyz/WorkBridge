@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://puentelaboral.pa/schemas/roadmap.schema.json",
+  "$id": "https://workbridge.pa/schemas/roadmap.schema.json",
   "title": "Roadmap",
   "description": "Specialization-aware training roadmap for an apt_with_gaps or not_currently_apt candidate. Contains only catalogued opportunities; each recommendation embeds the exact catalog entry and a Spanish explanation with source and freshness.",
   "type": "object",
@@ -132,7 +132,7 @@
         "retrievedAt": { "type": "string", "format": "date-time" },
         "freshness": { "enum": ["fresh", "stale", "expired"] },
         "opportunity": {
-          "$ref": "https://puentelaboral.pa/schemas/training-catalog.schema.json#/$defs/TrainingOpportunity"
+          "$ref": "https://workbridge.pa/schemas/training-catalog.schema.json#/$defs/TrainingOpportunity"
         }
       }
     },

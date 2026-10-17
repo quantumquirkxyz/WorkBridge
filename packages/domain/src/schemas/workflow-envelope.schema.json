@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://puentelaboral.pa/schemas/workflow-envelope.schema.json",
+  "$id": "https://workbridge.pa/schemas/workflow-envelope.schema.json",
   "title": "WorkflowEnvelope",
   "description": "Assumed signature of the issue #9 internal REST/SSE envelope. traceId and idempotencyKey are required. Issue #12 does not run Mastra; it only accepts work that already carries this envelope.",
   "type": "object",

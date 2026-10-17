@@ -1,6 +1,6 @@
-import { PANAMA_SKILL_TAXONOMY } from "@puente/domain";
-import { bestSkillSignal, compareCodeUnits } from "@puente/solver";
-import type { SkillLevel } from "@puente/solver";
+import { PANAMA_SKILL_TAXONOMY } from "@workbridge/domain";
+import { bestSkillSignal, compareCodeUnits } from "@workbridge/solver";
+import type { SkillLevel } from "@workbridge/solver";
 import type { DeriveGapsInput, GapContribution, GapKind, HeldSkill, TrainingGap } from "./types";
 
 const TAXONOMY_BY_ID = new Map(PANAMA_SKILL_TAXONOMY.skills.map((skill) => [skill.id, skill]));

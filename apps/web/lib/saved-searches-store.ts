@@ -1,4 +1,4 @@
-import type { CandidatePreferences, ExplorationResult } from '@puente/catalog';
+import type { CandidatePreferences, ExplorationResult } from '@workbridge/catalog';
 
 /**
  * A saved search. It persists the exact validated preferences the candidate

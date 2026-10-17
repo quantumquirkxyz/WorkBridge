@@ -1,4 +1,4 @@
-import type { MatchDecision } from "@puente/domain";
+import type { MatchDecision } from "@workbridge/domain";
 import { ApplicationError } from "./errors";
 import type { EvidenceItem } from "./evidence";
 

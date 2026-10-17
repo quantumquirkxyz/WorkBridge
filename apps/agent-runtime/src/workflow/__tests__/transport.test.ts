@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { WorkflowRunRequest } from "@puente/domain";
+import type { WorkflowRunRequest } from "@workbridge/domain";
 import { createWorkflowRuntime } from "../graph";
 import { encodeSseEvent, handleWorkflowRequest } from "../transport";
 

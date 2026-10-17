@@ -1,4 +1,4 @@
-import type { CandidateProfile } from '@puente/domain';
+import type { CandidateProfile } from '@workbridge/domain';
 
 /** Persistence seam for validated candidate profiles. */
 export interface ProfileStore {

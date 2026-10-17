@@ -58,7 +58,7 @@ describe("resolveReview", () => {
     const resolved = resolveReview(document, {
       reviewId: review!.reviewId,
       decision: "approved",
-      reviewer: "counselor@puente.pa",
+      reviewer: "counselor@workbridge.pa",
       resolvedAt: "2026-10-16T13:00:00.000Z",
     });
 
@@ -69,7 +69,7 @@ describe("resolveReview", () => {
     const alert = resolved.alerts.find((a) => a.id === review!.alertId);
     expect(alert?.resolved).toBe(true);
     expect(alert?.resolution?.decision).toBe("approved");
-    expect(alert?.resolution?.reviewer).toBe("counselor@puente.pa");
+    expect(alert?.resolution?.reviewer).toBe("counselor@workbridge.pa");
   });
 
   it("keeps a rejected requirement excluded from ranking", async () => {
@@ -79,7 +79,7 @@ describe("resolveReview", () => {
     const resolved = resolveReview(document, {
       reviewId: review.reviewId,
       decision: "rejected",
-      reviewer: "counselor@puente.pa",
+      reviewer: "counselor@workbridge.pa",
     });
 
     expect(resolved.status).toBe("accepted");
@@ -96,7 +96,7 @@ describe("resolveReview", () => {
     resolveReview(document, {
       reviewId: review.reviewId,
       decision: "approved",
-      reviewer: "counselor@puente.pa",
+      reviewer: "counselor@workbridge.pa",
     });
     expect(document.reviewQueue).toHaveLength(1);
     expect(document.status).toBe("requires_human_review");
@@ -108,7 +108,7 @@ describe("resolveReview", () => {
       resolveReview(document, {
         reviewId: "review-404",
         decision: "approved",
-        reviewer: "counselor@puente.pa",
+        reviewer: "counselor@workbridge.pa",
       }),
     ).toThrow(ReviewNotFoundError);
   });

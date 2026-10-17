@@ -87,7 +87,7 @@
     {
       "opportunityId": "TR-005",
       "title": "Proyecto: mesa de ayuda simulada",
-      "provider": "Puente Laboral",
+      "provider": "WorkBridge",
       "type": "project",
       "url": "https://example.org/training/tr-005",
       "language": "es",

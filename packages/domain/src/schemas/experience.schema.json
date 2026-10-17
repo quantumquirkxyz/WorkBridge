@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://puente-laboral.pa/schemas/experience/1.0.0",
+  "$id": "https://workbridge.pa/schemas/experience/1.0.0",
   "title": "CandidateExperience",
   "description": "A formal or informal experience entry with a deterministic relevance classification and evidence provenance.",
   "type": "object",
@@ -18,8 +18,8 @@
     "confidence"
   ],
   "properties": {
-    "id": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" },
-    "experience_type": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/experience_type" },
+    "id": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/identifier" },
+    "experience_type": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/experience_type" },
     "title": { "type": "string", "minLength": 1, "maxLength": 200 },
     "organization": { "type": "string", "maxLength": 200 },
     "description": { "type": "string", "maxLength": 4000 },
@@ -27,20 +27,20 @@
     "ended_at": { "type": "string", "format": "date" },
     "ongoing": { "type": "boolean" },
     "location": { "type": "string", "maxLength": 200 },
-    "source": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/provenance" },
-    "relevance": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/relevance" },
+    "source": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/provenance" },
+    "relevance": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/relevance" },
     "relevance_reason": { "type": "string", "minLength": 1, "maxLength": 1000 },
     "skill_ids": {
       "type": "array",
-      "items": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" },
+      "items": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/identifier" },
       "uniqueItems": true
     },
     "evidence_ids": {
       "type": "array",
-      "items": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" },
+      "items": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/identifier" },
       "uniqueItems": true
     },
-    "confidence": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/confidence" }
+    "confidence": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/confidence" }
   },
   "allOf": [
     {

@@ -1,5 +1,5 @@
-import { makeId, validateCandidatePreferences } from '@puente/domain';
-import type { ExplorationResult } from '@puente/catalog';
+import { makeId, validateCandidatePreferences } from '@workbridge/domain';
+import type { ExplorationResult } from '@workbridge/catalog';
 import { buildPreferences, type PreferencesDraft } from './preferences';
 import { MAX_CANDIDATE_ID_LENGTH } from './exploration-handler';
 import { preferencesStore, type PreferencesStore } from './preferences-store';

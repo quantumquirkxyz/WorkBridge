@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { validateJobRequirements } from "@puente/domain";
+import { validateJobRequirements } from "@workbridge/domain";
 import { ExtractionUnavailableError, VacancyInputError } from "../errors";
 import { normalizeVacancy } from "../normalize";
 import type { RawVacancy } from "../types";

@@ -1,4 +1,4 @@
-import { clampScore } from "@puente/solver";
+import { clampScore } from "@workbridge/solver";
 import type { RankingDimension } from "./types";
 
 /**

@@ -1,4 +1,4 @@
-import type { CandidatePreferences, ExplorationResult } from '@puente/catalog';
+import type { CandidatePreferences, ExplorationResult } from '@workbridge/catalog';
 
 /** Persisted saved search returned by POST /api/searches. */
 export interface SavedSearch {

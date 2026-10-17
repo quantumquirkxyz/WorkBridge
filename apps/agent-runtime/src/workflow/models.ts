@@ -1,4 +1,4 @@
-import type { AgentId } from "@puente/domain";
+import type { AgentId } from "@workbridge/domain";
 
 export type ModelCapability = "extraction" | "matching" | "planning";
 
@@ -158,7 +158,8 @@ export function createOpenRouterClient(options: {
   fetchImpl: typeof fetch;
   baseUrl?: string;
 }): { catalog: () => Promise<string[]>; complete: ModelInvoke } {
-  const baseUrl = options.baseUrl ?? "https://openrouter.ai/api/v1";
+  const trimmedBaseUrl = options.baseUrl?.trim();
+  const baseUrl = (trimmedBaseUrl ? trimmedBaseUrl : "https://openrouter.ai/api/v1").replace(/\/$/, "");
 
   return {
     async catalog() {

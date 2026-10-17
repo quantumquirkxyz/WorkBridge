@@ -1,11 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
-import type { CandidatePreferences } from '@puente/domain';
-import type { CandidateProfile } from '@puente/domain';
+import type { CandidatePreferences } from '@workbridge/domain';
+import type { CandidateProfile } from '@workbridge/domain';
 import {
   createSeedCatalog,
   exploreVacancies,
   type ExplorationResult,
-} from '@puente/catalog';
+} from '@workbridge/catalog';
 import { handleRoadmap, deriveAdvisoryGaps } from '../lib/roadmap-handler';
 import { createInMemoryProfileStore } from '../lib/profile-store';
 import preferencesFixture from '../../../packages/catalog/fixtures/preferences.json';

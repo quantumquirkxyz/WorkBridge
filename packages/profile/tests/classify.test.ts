@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { classifyExperience } from '../src/classify';
-import { resolveTargetRoles } from '@puente/domain';
+import { resolveTargetRoles } from '@workbridge/domain';
 
 const soporte = resolveTargetRoles(['Soporte técnico']);
 

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import type { Roadmap } from '@puente/training';
+import type { Roadmap } from '@workbridge/training';
 import { readExplorationSession } from '../lib/exploration-session';
 
 function formatCost(costUsd: number): string {

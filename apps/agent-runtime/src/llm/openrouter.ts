@@ -41,6 +41,14 @@ export interface OpenRouterOptions {
   title?: string;
 }
 
+const DEFAULT_OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1';
+
+/** Empty env overrides (`OPENROUTER_BASE_URL=`) must not replace the default host. */
+function resolveBaseUrl(baseUrl?: string): string {
+  const trimmed = baseUrl?.trim();
+  return (trimmed ? trimmed : DEFAULT_OPENROUTER_BASE_URL).replace(/\/$/, '');
+}
+
 export class OpenRouterError extends Error {
   readonly status?: number;
 
@@ -91,7 +99,7 @@ async function postJson<T extends OpenRouterErrorBody>(
 }
 
 export function createOpenRouterChat(options: OpenRouterOptions): ChatFn {
-  const baseUrl = (options.baseUrl ?? 'https://openrouter.ai/api/v1').replace(/\/$/, '');
+  const baseUrl = resolveBaseUrl(options.baseUrl);
   const doFetch = options.fetchImpl ?? fetch;
 
   return async (request) => {
@@ -142,7 +150,7 @@ interface VisionResponse extends OpenRouterErrorBody {
 
 /** Describe/transcribe an image through an OpenRouter vision model. */
 export function createOpenRouterVision(options: OpenRouterOptions): (input: { bytes: Uint8Array; mimeType?: string }) => Promise<{ text: string }> {
-  const baseUrl = (options.baseUrl ?? 'https://openrouter.ai/api/v1').replace(/\/$/, '');
+  const baseUrl = resolveBaseUrl(options.baseUrl);
   const doFetch = options.fetchImpl ?? fetch;
 
   return async ({ bytes, mimeType }) => {

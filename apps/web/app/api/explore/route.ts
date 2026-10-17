@@ -16,7 +16,7 @@ export async function POST(request: Request): Promise<Response> {
 
   const { status, body } = await handleExploration({ ...(parsed.payload as Record<string, unknown>), candidate_id: candidateId });
   if (status === 200 && typeof body === 'object' && body && 'preferences' in body) {
-    const preferences = body.preferences as import('@puente/domain').CandidatePreferences;
+    const preferences = body.preferences as import('@workbridge/domain').CandidatePreferences;
     const previous = preferencesStore.get(preferences.candidate_id);
     try {
       await persistCandidatePreferences(preferences);

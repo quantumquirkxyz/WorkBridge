@@ -18,11 +18,11 @@ function readPngDimensions(filePath: string): { width: number; height: number } 
 }
 
 describe('Web App Manifest and Mobile Viewport (#38)', () => {
-  it('serves a manifest with Puente Laboral metadata, standalone display, and token colors', () => {
+  it('serves a manifest with WorkBridge metadata, standalone display, and token colors', () => {
     const data = manifest();
 
-    expect(data.name).toBe('Puente Laboral');
-    expect(data.short_name).toBe('Puente');
+    expect(data.name).toBe('WorkBridge');
+    expect(data.short_name).toBe('WorkBridge');
     expect(data.display).toBe('standalone');
     expect(data.start_url).toBe('/');
     expect(data.theme_color).toBe('#0F766E');

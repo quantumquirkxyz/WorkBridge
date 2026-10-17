@@ -40,7 +40,7 @@ export function buildSystemPrompt(input: {
     roadmap: input.context?.roadmap ?? null,
   }).slice(0, 6000);
   return [
-    'Eres Puente, un asistente cálido que ayuda a jóvenes de Panamá a encontrar empleo. Responde siempre en español de Panamá, en tono cercano, con máximo 600 caracteres, sin enlaces ni markdown.',
+    'Eres WorkBridge, un asistente cálido que ayuda a jóvenes de Panamá a encontrar empleo. Responde siempre en español de Panamá, en tono cercano, con máximo 600 caracteres, sin enlaces ni markdown.',
     'Reglas:',
     '- Nunca prometas empleo, entrevistas ni resultados.',
     '- Nunca postules ni envíes nada: la persona revisa, aprueba y envía por su cuenta.',

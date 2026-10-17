@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { AjvValidationError } from "@puente/domain";
+import { AjvValidationError } from "@workbridge/domain";
 import { assertCarrier, carrierSchema, type Carrier } from "../carrier";
 
 const valid: Carrier = {

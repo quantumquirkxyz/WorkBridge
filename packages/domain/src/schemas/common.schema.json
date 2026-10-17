@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://puente-laboral.pa/schemas/common/1.0.0",
+  "$id": "https://workbridge.pa/schemas/common/1.0.0",
   "title": "Common definitions",
-  "description": "Shared enums and scalar definitions for the Puente Laboral Panamá agent contracts. Version 1.0.0, JSON Schema 2020-12.",
+  "description": "Shared enums and scalar definitions for the WorkBridge agent contracts. Version 1.0.0, JSON Schema 2020-12.",
   "$defs": {
     "identifier": {
       "type": "string",

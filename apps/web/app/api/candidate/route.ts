@@ -4,7 +4,7 @@ import { deleteCandidateData } from '../../../lib/neon-repository';
 import { handleDeleteCandidate } from '../../../lib/exploration-handler';
 import { profileStore } from '../../../lib/profile-store';
 import { getServerSession } from '../../../lib/auth';
-import { makeCandidateId } from '@puente/domain';
+import { makeCandidateId } from '@workbridge/domain';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';

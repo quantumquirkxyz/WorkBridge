@@ -1,4 +1,4 @@
-import { makeCandidateId, makeId, type CandidatePreferences } from '@puente/domain';
+import { makeCandidateId, makeId, type CandidatePreferences } from '@workbridge/domain';
 
 /**
  * The preference fields a candidate submits explicitly. Server-generated

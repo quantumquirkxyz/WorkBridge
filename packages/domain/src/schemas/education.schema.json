@@ -1,13 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://puente-laboral.pa/schemas/education/1.0.0",
+  "$id": "https://workbridge.pa/schemas/education/1.0.0",
   "title": "CandidateEducation",
   "description": "A formal or non-formal education record extracted from candidate intake.",
   "type": "object",
   "additionalProperties": false,
   "required": ["id", "institution", "program", "source", "evidence_ids", "confidence"],
   "properties": {
-    "id": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" },
+    "id": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/identifier" },
     "institution": { "type": "string", "minLength": 1, "maxLength": 200 },
     "program": { "type": "string", "minLength": 1, "maxLength": 200 },
     "level": {
@@ -17,12 +17,12 @@
     "started_at": { "type": "string", "format": "date" },
     "ended_at": { "type": "string", "format": "date" },
     "ongoing": { "type": "boolean" },
-    "source": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/provenance" },
+    "source": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/provenance" },
     "evidence_ids": {
       "type": "array",
-      "items": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" },
+      "items": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/identifier" },
       "uniqueItems": true
     },
-    "confidence": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/confidence" }
+    "confidence": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/confidence" }
   }
 }

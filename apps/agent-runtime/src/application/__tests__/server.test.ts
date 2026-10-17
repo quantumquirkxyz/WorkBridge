@@ -16,7 +16,7 @@ function session(role: "candidate" | "employer" | "counselor", id = role) {
   return signBetterAuthSession(
     {
       session: { id: `sess-${id}`, userId: id, expiresAt: "2027-01-01T00:00:00.000Z" },
-      user: { id, email: `${id}@puente.pa`, role, ...(role === "employer" ? { employerOrgId: "org-1" } : {}) },
+      user: { id, email: `${id}@workbridge.pa`, role, ...(role === "employer" ? { employerOrgId: "org-1" } : {}) },
     },
     SESSION_SECRET,
   );
@@ -242,7 +242,7 @@ describe("application HTTP surface", () => {
       signBetterAuthSession(
         {
           session: { id: `sess-${org}`, userId: `emp-${org}`, expiresAt: "2027-01-01T00:00:00.000Z" },
-          user: { id: `emp-${org}`, email: `${org}@puente.pa`, role: "employer", employerOrgId: org },
+          user: { id: `emp-${org}`, email: `${org}@workbridge.pa`, role: "employer", employerOrgId: org },
         },
         SESSION_SECRET,
       );
@@ -316,7 +316,7 @@ describe("application HTTP surface", () => {
       signBetterAuthSession(
         {
           session: { id: `sess-${org}`, userId: `emp-${org}`, expiresAt: "2027-01-01T00:00:00.000Z" },
-          user: { id: `emp-${org}`, email: `${org}@puente.pa`, role: "employer", employerOrgId: org },
+          user: { id: `emp-${org}`, email: `${org}@workbridge.pa`, role: "employer", employerOrgId: org },
         },
         SESSION_SECRET,
       );

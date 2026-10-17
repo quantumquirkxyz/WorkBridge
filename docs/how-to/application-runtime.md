@@ -7,8 +7,8 @@ documented in `docs/reference/assumed-contracts.md`.
 ## Local Docker (Alpine)
 
 ```bash
-docker build -t puente-application .
-docker run --rm -p 3000:3000 puente-application
+docker build -t workbridge-application .
+docker run --rm -p 3000:3000 workbridge-application
 ```
 
 The image is `node:22-alpine`. With neither database URL set, persistence stays

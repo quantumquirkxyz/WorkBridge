@@ -1,4 +1,4 @@
-import type { Roadmap, TrainingGap } from '@puente/training';
+import type { Roadmap, TrainingGap } from '@workbridge/training';
 
 function formatCost(costUsd: number): string {
   return costUsd === 0 ? 'Gratis' : `USD ${costUsd}`;

@@ -26,7 +26,7 @@ globalThis.__BUILD_MANIFEST = {
     "static/chunks/turbopack-apps_web_06rkbud3pyrlm._.js"
   ],
   "rootMainFilesTree": {
-    "/page": [
+    "/(candidate)/page": [
       "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_0qva5cupmdgep._.js",
       "static/chunks/1daa_next_dist_compiled_react-dom_cjs_react-dom-client_development_0mp0cp_t-ezj9.js",
       "static/chunks/1q96_modules_next_dist_compiled_react-dom_cjs_react-dom_development_1sqry0_53krp4.js",
@@ -39,7 +39,22 @@ globalThis.__BUILD_MANIFEST = {
       "static/chunks/node_modules_@swc_helpers_cjs_1r9vbqwj2323d._.js",
       "static/chunks/apps_web_1anvha4rlo79g._.js",
       "static/chunks/turbopack-apps_web_06rkbud3pyrlm._.js",
-      "static/chunks/apps_web_219uq1sj0q91c._.js"
+      "static/chunks/apps_web_0rrocn_au1l4e._.js"
+    ],
+    "/chat/page": [
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_0qva5cupmdgep._.js",
+      "static/chunks/1daa_next_dist_compiled_react-dom_cjs_react-dom-client_development_0mp0cp_t-ezj9.js",
+      "static/chunks/1q96_modules_next_dist_compiled_react-dom_cjs_react-dom_development_1sqry0_53krp4.js",
+      "static/chunks/node_modules_next_dist_compiled_react-dom_0grqycjrj6mju._.js",
+      "static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-67asdr9._.js",
+      "static/chunks/node_modules_next_dist_compiled_next-devtools_index_090k2jmam7qwg.js",
+      "static/chunks/node_modules_next_dist_compiled_1amofcmz--cdp._.js",
+      "static/chunks/node_modules_next_dist_client_1wygxxh5rwq0t._.js",
+      "static/chunks/node_modules_next_dist_05y3oi5z9mc_3._.js",
+      "static/chunks/node_modules_@swc_helpers_cjs_1r9vbqwj2323d._.js",
+      "static/chunks/apps_web_1anvha4rlo79g._.js",
+      "static/chunks/turbopack-apps_web_06rkbud3pyrlm._.js",
+      "static/chunks/apps_web_1oijiw57ubtpc._.js"
     ]
   },
   "pagesChunkGroupBootstrapParams": {},

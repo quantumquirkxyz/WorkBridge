@@ -1,4 +1,4 @@
-import { redactPii, type ChatFn } from '@puente/agent-runtime';
+import { redactPii, type ChatFn } from '@workbridge/agent-runtime';
 import type { HandlerResult } from './handler-result';
 import { ChatSessionConflictError, chatSessionStore, type ChatSession } from './chat-store';
 import { buildMessages, buildSystemPrompt, type CandidateContext } from './chat/prompt';

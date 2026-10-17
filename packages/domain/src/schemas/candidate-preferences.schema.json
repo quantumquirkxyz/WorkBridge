@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://puente-laboral.pa/schemas/candidate-preferences/1.0.0",
+  "$id": "https://workbridge.pa/schemas/candidate-preferences/1.0.0",
   "title": "CandidatePreferences",
   "description": "Work preferences captured explicitly from the candidate (ticket #7). Preferences are declared, never inferred by the LLM, and are persisted as a validated JSON document. They are deliberately separate from CandidateProfile version 1.0.0, which owns the extracted profile only.",
   "type": "object",
@@ -27,9 +27,9 @@
   ],
   "properties": {
     "schema_version": { "const": "1.0.0" },
-    "preferences_id": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" },
-    "candidate_id": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" },
-    "locale": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/language_tag" },
+    "preferences_id": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/identifier" },
+    "candidate_id": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/identifier" },
+    "locale": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/language_tag" },
     "origin": {
       "const": "candidate_explicit",
       "description": "Guard against inference: preferences may only enter the system from an explicit candidate action, never from an LLM."
@@ -42,8 +42,8 @@
       "minItems": 1,
       "uniqueItems": true
     },
-    "modality": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/work_modality" },
-    "max_location": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/location" },
+    "modality": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/work_modality" },
+    "max_location": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/location" },
     "max_travel_minutes": {
       "type": "integer",
       "minimum": 0,
@@ -63,13 +63,13 @@
     "availability": { "$ref": "#/$defs/availability" },
     "contract_types": {
       "type": "array",
-      "items": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/contract_type" },
+      "items": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/contract_type" },
       "minItems": 1,
       "uniqueItems": true
     },
     "transport_modes": {
       "type": "array",
-      "items": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/transport_mode" },
+      "items": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/transport_mode" },
       "minItems": 1,
       "uniqueItems": true
     },

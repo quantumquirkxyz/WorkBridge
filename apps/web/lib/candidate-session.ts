@@ -1,5 +1,5 @@
-import { actorFromBetterAuthSession } from '@puente/agent-runtime';
-import { makeCandidateId } from '@puente/domain';
+import { actorFromBetterAuthSession } from '@workbridge/agent-runtime';
+import { makeCandidateId } from '@workbridge/domain';
 import { getServerSession } from './auth';
 
 export interface CandidateSession {

@@ -1,4 +1,4 @@
-import type { ReviewItem, VacancyStatus } from "@puente/domain";
+import type { ReviewItem, VacancyStatus } from "@workbridge/domain";
 
 /**
  * Derive the vacancy status from its blockers and pending reviews. A blocked

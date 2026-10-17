@@ -3,8 +3,8 @@ import { THEME_COLORS } from './viewport-config';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Puente Laboral',
-    short_name: 'Puente',
+    name: 'WorkBridge',
+    short_name: 'WorkBridge',
     description: 'Captura de CV y experiencias para construir un perfil de candidato validado.',
     start_url: '/',
     display: 'standalone',

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import type { CandidatePreferences, ExplorationResult } from '@puente/catalog';
+import type { CandidatePreferences, ExplorationResult } from '@workbridge/catalog';
 import { createInMemoryPreferencesStore } from '../lib/preferences-store';
 import { createInMemorySavedSearchesStore } from '../lib/saved-searches-store';
 import { handleListSearches, handleMarkVacancyVisit, handleSaveSearch } from '../lib/searches-handler';
