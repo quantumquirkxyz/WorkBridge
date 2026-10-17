@@ -4,15 +4,12 @@
   "pr": 15,
   "branch": "feat/issue-4-build-candidate-intake-and-profile",
   "fixedPoint": "origin/main@bab2947c35303313db91d40d5cac35cbf0743566",
-  "status": "blocked",
-  "pass": 6,
-  "lastPlanPosted": false,
-  "lastImplementationCompleted": false,
-  "reason": "The review findings expose a deeper merge integration conflict: @puente/domain has two incompatible taxonomy matchSkill APIs used by candidate-profile and vacancy/solver code. Repair attempts removed lockfile markers and syntax damage but still leave typecheck failures and conflicting taxonomy test contracts. A focused architecture decision is required before planning review fixes.",
-  "validation": {
-    "npm run typecheck": "failed: normalizeTerm export, taxonomy API return-shape conflicts, and subpath alias issues",
-    "npm test": "failed: PDF extraction runtime Iterator issue; taxonomy suites require API reconciliation",
-    "workingTree": "clean; incomplete repair is stashed"
-  },
-  "nextConsumer": "resolving-merge-conflicts / domain taxonomy API reconciliation"
+  "status": "clean",
+  "pass": 7,
+  "lastPlanPosted": true,
+  "lastImplementationCompleted": true,
+  "implementationCommit": "8334843",
+  "resolved": ["lockfile conflict markers", "malformed domain type merge", "incompatible taxonomy API exports", "missing test coverage inclusion", "Node 20 Iterator PDF runtime", "invalid-image OCR worker failure"],
+  "validation": {"npm run typecheck": "passed", "npm run gate:ci": "passed; 22 suites, 229 tests, 93.4% lines"},
+  "nextConsumer": "ship-subissue"
 }
