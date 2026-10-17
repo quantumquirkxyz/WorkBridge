@@ -1,0 +1,24 @@
+{
+  "status": "completed",
+  "changes": [
+    "Created the issue branch feat/issue-48-surface-saved-search-matches.",
+    "Included the reviewed #41 candidate shell and /vacantes route needed by this ticket.",
+    "Adapted the prerequisite vacancy detail view to the current web package without unavailable UI dependencies."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": ["npm run gate:ci"],
+    "skipped": [],
+    "notes": "Saved-search views now track last visits, /vacantes renders newer matches, and the candidate shell exposes an accessible badge."
+  },
+  "commitSha": "266d09d",
+  "branch": "feat/issue-48-surface-saved-search-matches",
+  "nextConsumer": "publish-open-pr",
+  "blockedBy": [],
+  "riskRemaining": "Authentication remains a lightweight handoff page; durable stores remain in-process as in the existing MVP seams.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  }
+}

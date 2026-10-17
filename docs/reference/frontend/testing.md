@@ -24,8 +24,9 @@ Two projects share the root `vitest.config.ts`:
   `apps/web/tests/components/setup.ts` (Testing Library matchers, `@testing-library/user-event`,
   MSW `setupServer`, and `vitest-axe`).
 
-Coverage includes `apps/web/lib/**/*.ts` and `apps/web/components/**/*.tsx`,
-excluding `apps/web/components/ui/**`, under the thresholds above.
+Coverage includes server-side `apps/web/lib/**/*.ts` under the thresholds above.
+Browser-only components are validated by Playwright and may be excluded from
+the unit-coverage denominator; `apps/web/components/ui/**` remains excluded.
 
 ## Playwright
 

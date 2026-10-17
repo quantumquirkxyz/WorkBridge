@@ -1,0 +1,10 @@
+{
+  "identifier": "80",
+  "status": "resolved",
+  "branch": "feat/issue-48-surface-saved-search-matches",
+  "source": "origin/main",
+  "files": ["apps/web/components/VacantesView.tsx", "apps/web/lib/neon-repository.ts"],
+  "resolution": "Preserved saved-search notifications, session-based visit handling, decision ordering/readiness UI, and chat-session persistence from both branches.",
+  "validation": ["npm run typecheck"],
+  "remaining": []
+}

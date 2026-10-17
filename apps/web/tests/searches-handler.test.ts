@@ -2,8 +2,9 @@ import { describe, expect, it, vi } from 'vitest';
 import type { CandidatePreferences, ExplorationResult } from '@puente/catalog';
 import { createInMemoryPreferencesStore } from '../lib/preferences-store';
 import { createInMemorySavedSearchesStore } from '../lib/saved-searches-store';
-import { handleListSearches, handleSaveSearch } from '../lib/searches-handler';
+import { handleListSearches, handleMarkVacancyVisit, handleSaveSearch } from '../lib/searches-handler';
 import { type PreferencesDraft } from '../lib/preferences';
+import { createInMemoryVacancyVisitsStore } from '../lib/vacancy-visits-store';
 import preferencesFixture from '../../../packages/catalog/fixtures/preferences.json';
 
 const NOW = () => new Date('2026-10-16T12:00:00.000Z');
@@ -15,13 +16,13 @@ function draft(): PreferencesDraft {
 }
 
 /** Minimal ExplorationResult carrying only the fields the searches handler reads. */
-function resultWith(jobIds: string[]): ExplorationResult {
+function resultWith(jobIds: string[], postedAt = '2026-10-16T11:00:00.000Z'): ExplorationResult {
   return {
     schemaVersion: '1.0.0',
     candidateId: preferences.candidate_id,
     generatedAt: '2026-10-16T12:00:00.000Z',
     preferences,
-    matches: jobIds.map((jobId) => ({ vacancy: { jobId } })),
+    matches: jobIds.map((jobId) => ({ vacancy: { jobId, postedAt } })),
     excluded: [],
     summary: { considered: jobIds.length, matched: jobIds.length, excluded: 0, stale: 0 },
   } as unknown as ExplorationResult;
@@ -65,5 +66,36 @@ describe('handleSaveSearch / handleListSearches', () => {
 
   it('rejects a missing candidate id when listing', async () => {
     expect((await handleListSearches('')).status).toBe(400);
+  });
+
+  it('returns matches newer than the previous visit and marks the visit', async () => {
+    const visitsStore = createInMemoryVacancyVisitsStore();
+    const searchesStore = createInMemorySavedSearchesStore();
+    const agent = { run: vi.fn() };
+    const refreshed = resultWith(['a', 'b'], '2026-10-17T09:00:00.000Z');
+    (refreshed.matches[0]!.vacancy as { postedAt: string }).postedAt = '2026-10-16T11:00:00.000Z';
+    agent.run.mockResolvedValueOnce(resultWith(['a'], '2026-10-16T11:00:00.000Z'))
+      .mockResolvedValueOnce(refreshed)
+      .mockResolvedValueOnce(resultWith(['a', 'b'], '2026-10-17T09:00:00.000Z'));
+    await handleSaveSearch({ label: 'Nueva', preferences: draft() }, { agent, searchesStore, now: NOW });
+    handleMarkVacancyVisit(preferences.candidate_id, {
+      visitsStore,
+      now: () => new Date('2026-10-16T12:00:00.000Z'),
+    });
+    const first = await handleListSearches(preferences.candidate_id, {
+      agent,
+      searchesStore,
+      visitsStore,
+      now: () => new Date('2026-10-17T10:00:00.000Z'),
+    });
+    expect((first.body as { searches: Array<{ newSinceLastVisit: Array<{ vacancy: { jobId: string } }> }> }).searches[0]!.newSinceLastVisit.map((match) => match.vacancy.jobId)).toEqual(['b']);
+    handleMarkVacancyVisit(preferences.candidate_id, { visitsStore, now: () => new Date('2026-10-17T10:00:00.000Z') });
+    const second = await handleListSearches(preferences.candidate_id, {
+      agent,
+      searchesStore,
+      visitsStore,
+      now: () => new Date('2026-10-17T10:01:00.000Z'),
+    });
+    expect((second.body as { searches: Array<{ newSinceLastVisit: unknown[] }> }).searches[0]!.newSinceLastVisit).toHaveLength(0);
   });
 });

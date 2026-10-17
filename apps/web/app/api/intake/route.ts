@@ -5,13 +5,13 @@ import { handleIntake } from '../../../lib/intake-handler';
 import { persistCandidateProfile, readCandidateProfile } from '../../../lib/neon-repository';
 import { profileStore } from '../../../lib/profile-store';
 import { MAX_CANDIDATE_ID_LENGTH } from '../../../lib/exploration-handler';
-import { candidateIdFromRequest, unauthorized } from '../../../lib/candidate-session';
+import { candidateIdFromRequestOrSession, unauthorized } from '../../../lib/candidate-session';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request): Promise<Response> {
-  const candidateId = candidateIdFromRequest(request);
+  const candidateId = await candidateIdFromRequestOrSession(request);
   if (!candidateId) return unauthorized();
   if (candidateId.length > MAX_CANDIDATE_ID_LENGTH) return NextResponse.json({ error: 'invalid_candidate_id' }, { status: 400 });
   try {
@@ -23,7 +23,7 @@ export async function GET(request: Request): Promise<Response> {
 }
 
 export async function POST(request: Request): Promise<Response> {
-  const candidateId = candidateIdFromRequest(request);
+  const candidateId = await candidateIdFromRequestOrSession(request);
   if (!candidateId) return unauthorized();
   let payload: unknown;
   try {

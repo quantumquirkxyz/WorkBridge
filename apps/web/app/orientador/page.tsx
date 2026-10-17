@@ -1,16 +1,14 @@
 import { SignOutButton } from '../../components/SignOutButton';
-import { getServerSession } from '../../lib/auth';
+import { CounselorQueue } from '../../components/counselor/CounselorQueue';
 
-export default async function CounselorHomePage() {
-  const session = await getServerSession();
-
+export default function CounselorHomePage() {
   return (
-    <main>
-      <h1>Panel de orientador</h1>
-      <p>
-        Sesión activa con rol: <strong>{session?.user.role}</strong>
-      </p>
-      <SignOutButton />
+    <main className="mx-auto grid w-full max-w-3xl gap-4 p-4">
+      <header className="flex items-center justify-between gap-2">
+        <h1 className="text-xl font-bold">Pendientes de revisión</h1>
+        <SignOutButton />
+      </header>
+      <CounselorQueue />
     </main>
   );
 }

@@ -1,8 +1,15 @@
-import { matchSkill, resolveTargetRoles, type CandidatePreferences } from '@puente/domain';
+import { matchSkill, resolveTargetRoles, type CandidatePreferences, type CandidateProfile } from '@puente/domain';
 import { validateExplorationResult, type ExplorationResult } from '@puente/catalog';
+import {
+  DEFAULT_GEO_POINT,
+  toSolverCandidate,
+  toSolverVacancy,
+  type MatchingService,
+} from '@puente/agent-runtime';
 import {
   buildRoadmap,
   createSeedTrainingCatalog,
+  deriveGaps,
   type Modality,
   type Roadmap,
   type BuildRoadmapOptions,
@@ -10,12 +17,18 @@ import {
   type TrainingGap,
 } from '@puente/training';
 import type { HandlerResult } from './handler-result';
+import { profileStore, type ProfileStore } from './profile-store';
+import { readCandidateProfile } from './neon-repository';
+import { candidateContext, matchingService, vacancyInput } from './matching-input';
 
 export interface RoadmapHandlerDeps {
   /** Injected for tests; defaults to the bundled cached training catalogue. */
   trainingCatalog?: TrainingCatalog;
   now?: () => Date;
   routing?: BuildRoadmapOptions['routing'];
+  profileStore?: ProfileStore;
+  service?: MatchingService;
+  loadProfile?: (candidateId: string) => Promise<CandidateProfile | undefined>;
 }
 
 /** Role definition id → training specialization slug used by the catalogue. */
@@ -104,12 +117,29 @@ export async function handleRoadmap(payload: unknown, deps: RoadmapHandlerDeps =
     return { status: 200, body: { roadmap: null, gaps: [], reason: 'candidate_declined_training' } };
   }
 
-  const gaps = deriveAdvisoryGaps(result);
+  const stored = (deps.profileStore ?? profileStore).get(result.candidateId);
+  const profile = stored ?? (deps.loadProfile
+    ? await deps.loadProfile(result.candidateId)
+    : deps.profileStore
+      ? undefined
+      : await readCandidateProfile(result.candidateId));
+  if (!profile) return { status: 409, body: { error: 'profile_required' } };
+
+  const vacancy = noMatch.nearMatches[0]?.vacancy;
+  if (!vacancy) return { status: 409, body: { error: 'near_match_required' } };
+  const input = vacancyInput(vacancy);
+  const context = candidateContext(result.preferences);
+  const service = deps.service ?? matchingService();
+  const decision = await service.evaluatePair(profile, context, input, deps.now ? { now: deps.now } : {});
+  const gaps = deriveGaps({
+    candidate: toSolverCandidate(profile, context, DEFAULT_GEO_POINT),
+    vacancy: toSolverVacancy(input.document, input.context, DEFAULT_GEO_POINT),
+  });
   const catalog = deps.trainingCatalog ?? createSeedTrainingCatalog();
   const roadmap: Roadmap = await buildRoadmap(
     {
       candidateId: result.candidateId,
-      aptitude: 'not_currently_apt',
+      aptitude: decision.aptitude,
       gaps,
       heldSkills: [],
       preferences: {

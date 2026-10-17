@@ -1,16 +1,10 @@
-import { SignOutButton } from '../../components/SignOutButton';
-import { getServerSession } from '../../lib/auth';
+import { SubmissionQueue } from '../../components/employer/SubmissionQueue';
 
-export default async function EmployerHomePage() {
-  const session = await getServerSession();
-
+export default function EmployerHomePage() {
   return (
-    <main>
-      <h1>Panel de empresa</h1>
-      <p>
-        Sesión activa con rol: <strong>{session?.user.role}</strong>
-      </p>
-      <SignOutButton />
+    <main className="space-y-4 px-4 py-6 md:px-8">
+      <h1 className="text-xl font-semibold">Postulaciones</h1>
+      <SubmissionQueue />
     </main>
   );
 }

@@ -1,0 +1,23 @@
+{
+  "status": "completed",
+  "changes": [
+    "Added the candidate-scoped Mi perfil route and view.",
+    "Added editable preference loading and persistence using the existing validated preferences API.",
+    "Added profile summary and confirmed permanent data deletion for profile, preferences, and saved searches."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": ["bun x eslint .", "bun x tsc --noEmit", "bun x vitest run", "bun x vitest run --coverage"],
+    "skipped": ["No PR publication or push was performed; this task requested work only on the issue branch."],
+    "notes": "Lint, typecheck, and all 529 tests passed. The coverage command executes all tests but fails the repository's pre-existing global coverage thresholds (78.71% statements, 74.49% functions, 68.47% branches)."
+  },
+  "commitSha": "b71603f",
+  "branch": "issue/47-build-the-mi-perfil-view-with-editable-p",
+  "nextConsumer": "publish-open-pr",
+  "riskRemaining": "The new view has no dedicated component test yet; existing API and full regression suites pass.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "fail"
+  }
+}

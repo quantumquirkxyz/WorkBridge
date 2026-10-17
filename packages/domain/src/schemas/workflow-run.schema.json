@@ -34,6 +34,7 @@
       "type": "array",
       "items": { "type": "string", "minLength": 1 }
     },
+    "preferences": { "$ref": "https://puente-laboral.pa/schemas/candidate-preferences/1.0.0" },
     "matchingInput": {
       "type": "object"
     }

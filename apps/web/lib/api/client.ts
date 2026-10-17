@@ -1,6 +1,7 @@
 import type { IntakeRequest, IntakeResult, CandidateProfile, CandidatePreferences } from '@puente/domain';
 import type { ExplorationResult } from '@puente/catalog';
 import type { Roadmap, TrainingGap } from '@puente/training';
+import type { MatchDecision } from '@puente/solver';
 import type { PreferencesDraft } from '../preferences';
 import { ApiClientError } from './errors';
 import type { SavedSearch, SavedSearchView } from './contracts';
@@ -43,6 +44,11 @@ export interface ListSearchesResponse {
   searches: SavedSearchView[];
 }
 
+export interface MatchResponse {
+  decisions: MatchDecision[];
+  preferencesVersion: string;
+}
+
 export async function getCandidateProfile(candidateId: string): Promise<CandidateProfile> {
   const response = await fetch(`/api/intake?candidateId=${encodeURIComponent(candidateId)}`);
   return readJson<CandidateProfile>(response);
@@ -71,8 +77,8 @@ export async function postPreferences(draft: PreferencesDraft): Promise<Candidat
   return readJson<CandidatePreferences>(response);
 }
 
-export async function deleteCandidatePreferences(candidateId: string): Promise<DeletePreferencesResponse> {
-  const response = await fetch(`/api/preferences?candidateId=${encodeURIComponent(candidateId)}`, {
+export async function deleteCandidatePreferences(_candidateId: string): Promise<DeletePreferencesResponse> {
+  const response = await fetch('/api/candidate', {
     method: 'DELETE',
   });
   return readJson<DeletePreferencesResponse>(response);
@@ -85,6 +91,11 @@ export async function exploreVacancies(preferences: PreferencesDraft): Promise<E
     body: JSON.stringify(preferences),
   });
   return readJson<ExplorationResult>(response);
+}
+
+export async function matchVacancies(vacancyIds: string[]): Promise<MatchResponse> {
+  const response = await fetch('/api/match', { method: 'POST', headers: JSON_HEADERS, body: JSON.stringify({ vacancyIds }) });
+  return readJson<MatchResponse>(response);
 }
 
 export async function requestRoadmap(exploration: ExplorationResult): Promise<RoadmapResponse> {

@@ -38,7 +38,7 @@ describe('typed API client', () => {
       if (url.includes('/api/preferences') && init?.method === 'POST') {
         return jsonResponse(200, { candidateId: 'c1' });
       }
-      if (url.includes('/api/preferences') && init?.method === 'DELETE') {
+      if (url.includes('/api/candidate') && init?.method === 'DELETE') {
         return jsonResponse(200, { deleted: true, candidateId: 'c1' });
       }
       if (url.includes('/api/preferences')) return jsonResponse(200, { candidateId: 'c1' });

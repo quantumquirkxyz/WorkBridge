@@ -20,6 +20,8 @@ export interface ChatRequest {
   jsonSchema?: JsonSchemaRequest;
   temperature?: number;
   maxTokens?: number;
+  /** Aborts the underlying HTTP request (e.g. on a caller-side timeout). */
+  signal?: AbortSignal;
 }
 
 export interface ChatResult {
@@ -78,8 +80,9 @@ async function postJson<T extends OpenRouterErrorBody>(
   headers: Record<string, string>,
   body: unknown,
   errorLabel: string,
+  signal?: AbortSignal,
 ): Promise<T> {
-  const response = await doFetch(url, { method: 'POST', headers, body: JSON.stringify(body) });
+  const response = await doFetch(url, { method: 'POST', headers, body: JSON.stringify(body), signal });
   const parsed = (await response.json()) as T;
   if (!response.ok) {
     throw new OpenRouterError(parsed.error?.message ?? `${errorLabel} (${response.status})`, response.status);
@@ -115,6 +118,7 @@ export function createOpenRouterChat(options: OpenRouterOptions): ChatFn {
       authHeaders(options),
       body,
       'OpenRouter request failed',
+      request.signal,
     );
 
     const content = parsed.choices?.[0]?.message?.content;

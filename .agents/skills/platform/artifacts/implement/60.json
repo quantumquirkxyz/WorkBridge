@@ -1,0 +1,19 @@
+{
+  "status": "completed",
+  "changes": [
+    "WorkflowRunRequest now accepts validated optional CandidatePreferences.",
+    "Exploration and profile steps use deterministic agents and publish structured payloads.",
+    "Missing preferences records preferences_required without invoking the exploration agent."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": ["npm run typecheck", "npm run gate:ci"],
+    "skipped": [],
+    "notes": "All 55 test files and 502 tests pass; coverage gate passes."
+  },
+  "commitSha": "b520f26",
+  "branch": "feat/issue-60-structured-workflow-results",
+  "nextConsumer": "publish-open-pr",
+  "riskRemaining": "No known validation risk remains; publication/review is pending.",
+  "qualityGateResults": { "gateIde": "pass", "gatePreCommit": "pass", "gateCi": "pass" }
+}

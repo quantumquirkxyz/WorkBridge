@@ -21,6 +21,8 @@ export interface SavedSearchView {
   matches: ExplorationResult['matches'];
   /** Matches not present in `seenJobIds` — vacancies that appeared after saving. */
   newSinceSaved: ExplorationResult['matches'];
+  newSinceLastVisit: ExplorationResult['matches'];
+  lastVisitAt?: string;
   summary: ExplorationResult['summary'];
 }
 

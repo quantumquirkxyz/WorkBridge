@@ -43,7 +43,7 @@ export function PreferencesForm({ state, onChange, onSubmit, loading }: Preferen
   const set = (patch: Partial<PreferencesFormState>) => onChange(patch);
 
   return (
-    <form onSubmit={onSubmit} noValidate>
+    <form id="preferencias" onSubmit={onSubmit} noValidate>
       <div className="field">
         <Label htmlFor="pref-roles">Puestos objetivo (separados por coma)</Label>
         <Input
@@ -91,6 +91,8 @@ export function PreferencesForm({ state, onChange, onSubmit, loading }: Preferen
         </div>
       </div>
 
+      <details>
+        <summary>Más opciones</summary>
       <div className="field-row">
         <div className="field">
           <Label htmlFor="pref-travel">Traslado máximo (minutos)</Label>
@@ -205,20 +207,21 @@ export function PreferencesForm({ state, onChange, onSubmit, loading }: Preferen
               checked={state.willingTrain}
               onCheckedChange={(checked) => set({ willingTrain: checked === true })}
             />
-            Dispuesto a tomar cursos
+             Me interesa tomar cursos
           </Label>
           <Label>
             <Checkbox
               checked={state.willingIntern}
               onCheckedChange={(checked) => set({ willingIntern: checked === true })}
             />
-            Dispuesto a hacer pasantías
+             Me interesa hacer pasantías
           </Label>
         </div>
       </fieldset>
 
+      </details>
       <Button type="submit" disabled={loading}>
-        {loading ? 'Buscando…' : 'Guardar y buscar vacantes'}
+        {loading ? 'Guardando…' : 'Guardar cambios'}
       </Button>
     </form>
   );

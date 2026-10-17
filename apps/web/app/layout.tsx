@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans } from 'next/font/google';
 import { CandidateShell } from '../components/CandidateShell';
 import { QueryProvider } from '../components/query-provider';
 import { ThemeProvider } from '../components/theme-provider';
+import { Toaster } from '../components/ui/sonner';
 import { rootViewport } from './viewport-config';
 import './globals.css';
 
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <QueryProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <CandidateShell>{children}</CandidateShell>
+            <Toaster />
           </ThemeProvider>
         </QueryProvider>
       </body>

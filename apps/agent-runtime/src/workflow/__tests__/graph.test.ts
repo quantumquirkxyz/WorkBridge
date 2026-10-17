@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import type { WorkflowRunRequest } from "@puente/domain";
+import { validateCandidateProfile, type WorkflowRunRequest, type CandidatePreferences } from "@puente/domain";
+import { validateExplorationResult } from "@puente/catalog";
+import preferencesFixture from "../../../../../packages/catalog/fixtures/preferences.json";
+import { createSeedTrainingCatalog, type TrainingPreferences } from "@puente/training";
 import { CAPABILITY_CHAINS } from "../models";
 import { createWorkflowRuntime } from "../graph";
 import {
@@ -11,6 +14,7 @@ import {
 } from "../../matching/__tests__/helpers";
 
 const PRIMARY = CAPABILITY_CHAINS.planning.models[0];
+const PREFERENCES = preferencesFixture as CandidatePreferences;
 
 function request(overrides: Partial<WorkflowRunRequest> = {}): WorkflowRunRequest {
   return {
@@ -21,6 +25,7 @@ function request(overrides: Partial<WorkflowRunRequest> = {}): WorkflowRunReques
     declaredCredentials: [{ id: "cred-1", name: "Manipulación de alimentos" }],
     actor: { id: "cand-1", role: "candidate" },
     requestedTools: [],
+    preferences: PREFERENCES,
     ...overrides,
   };
 }
@@ -62,14 +67,14 @@ describe("employability workflow", () => {
       "response",
     ]);
     expect(result.envelopes.every((envelope) => envelope.trace_id === "trace-0001")).toBe(true);
-    expect(calls).toHaveLength(4);
+    expect(calls).toHaveLength(2);
     expect(engine.dql.list("trace-0001").every((record) => record.state === "success")).toBe(true);
     const completed = engine.audit.read().find((event) => event.action === "agent_completed");
     expect(completed).toMatchObject({
       trace_id: "trace-0001",
       actor: "cand-1",
       role: "candidate",
-      tool: "read_goals",
+      tool: "read_vacancy",
     });
     expect(engine.traces.tracesFor("trace-0001").spans[0]?.metadata).toMatchObject({
       trace_id: "trace-0001",
@@ -100,8 +105,175 @@ describe("employability workflow", () => {
     const result = await engine.run(request({ matchingInput }));
     const matching = result.agents.find((agent) => agent.agent === "market_and_matching");
     expect(matching?.summary).toContain('"candidateId"');
-    expect(calls).toHaveLength(3);
+    expect(calls).toHaveLength(1);
     expect(engine.audit.read().some((event) => event.action === "matching_completed")).toBe(true);
+  });
+
+  it("returns the structured match result in the workflow output", async () => {
+    const profile = candidateProfile();
+    const matchingInput = {
+      profile,
+      context: CANDIDATE_CONTEXT,
+      vacancies: [{ document: await objectiveDocument(), context: VACANCY_CONTEXT }],
+      now,
+    };
+    const engine = createWorkflowRuntime({
+      clock: () => "2026-10-16T12:00:00.000Z",
+      complete: async () => ({ text: "Plan de practica en caja" }),
+      matchingEnv: {},
+    });
+
+    const result = await engine.run(request({ matchingInput }));
+    expect(result.status).toBe("success");
+    expect(result.match).toBeDefined();
+    expect(result.match?.candidateId).toBe(profile.candidate_id);
+    expect(result.match?.result.decisions).toHaveLength(1);
+    expect(result.match?.result.solver).toBe("highs");
+    expect(result.match?.skippedVacancyIds).toEqual([]);
+    const decision = result.match?.result.decisions[0];
+    expect(decision?.candidateId).toBe(profile.candidate_id);
+    expect(decision?.vacancyId).toBe("vac-objective-001");
+    expect(["apt", "apt_with_gaps", "not_currently_apt"]).toContain(decision?.aptitude);
+    // The string summary is still emitted for the agent step
+    const matching = result.agents.find((agent) => agent.agent === "market_and_matching");
+    expect(matching?.summary).toContain('"candidateId"');
+  });
+
+  it("returns the structured roadmap result in the workflow output", async () => {
+    const profile = candidateProfile();
+    const matchingInput = {
+      profile,
+      context: CANDIDATE_CONTEXT,
+      vacancies: [{ document: await objectiveDocument(), context: VACANCY_CONTEXT }],
+      now,
+    };
+    const catalog = createSeedTrainingCatalog();
+    const preferences: TrainingPreferences = {
+      specializations: ["it_support"],
+      maxCostUsd: 200,
+      maxTotalHours: 100,
+    };
+    const engine = createWorkflowRuntime({
+      clock: () => "2026-10-16T12:00:00.000Z",
+      complete: async () => ({ text: "Plan de practica en caja" }),
+      matchingEnv: {},
+      trainingCatalog: catalog,
+      trainingPreferences: preferences,
+    });
+
+    const result = await engine.run(request({ matchingInput }));
+    expect(result.status).toBe("success");
+    expect(result.match).toBeDefined();
+    expect(result.roadmap).toBeDefined();
+    expect(result.roadmap?.schemaVersion).toBe("1.0.0");
+    expect(result.roadmap?.candidateId).toBe(profile.candidate_id);
+    expect(result.roadmap?.targetVacancyId).toBe("vac-objective-001");
+    expect(["apt", "apt_with_gaps", "not_currently_apt"]).toContain(result.roadmap?.aptitude);
+    expect(Array.isArray(result.roadmap?.gaps)).toBe(true);
+    expect(Array.isArray(result.roadmap?.recommendations)).toBe(true);
+    expect(result.roadmap?.totals).toMatchObject({
+      recommendationCount: expect.any(Number),
+      costUsd: expect.any(Number),
+      durationHours: expect.any(Number),
+    });
+  });
+
+  it("does not call the model router for training when carrier data is sufficient", async () => {
+    const profile = candidateProfile();
+    const matchingInput = {
+      profile,
+      context: CANDIDATE_CONTEXT,
+      vacancies: [{ document: await objectiveDocument(), context: VACANCY_CONTEXT }],
+      now,
+    };
+    const catalog = createSeedTrainingCatalog();
+    const preferences: TrainingPreferences = {
+      specializations: ["it_support"],
+      maxCostUsd: 200,
+      maxTotalHours: 100,
+    };
+    const calls: string[] = [];
+    const engine = createWorkflowRuntime({
+      clock: () => "2026-10-16T12:00:00.000Z",
+      complete: async (modelId) => {
+        calls.push(modelId);
+        return { text: "Plan de practica en caja" };
+      },
+      matchingEnv: {},
+      trainingCatalog: catalog,
+      trainingPreferences: preferences,
+    });
+
+    const result = await engine.run(request({ matchingInput }));
+    expect(result.status).toBe("success");
+    expect(result.match).toBeDefined();
+    expect(result.roadmap).toBeDefined();
+    // All workflow steps are deterministic when matching and training data are supplied.
+    expect(calls).toHaveLength(0);
+    expect(result.roadmap?.aptitude).toBe(result.match?.result.decisions[0]?.aptitude);
+  });
+
+  it("calls the router and builds no roadmap when training preferences are required but missing", async () => {
+    const profile = candidateProfile();
+    const matchingInput = {
+      profile,
+      context: CANDIDATE_CONTEXT,
+      vacancies: [{ document: await objectiveDocument(), context: VACANCY_CONTEXT }],
+      now,
+    };
+    const catalog = createSeedTrainingCatalog();
+    const calls: string[] = [];
+    const engine = createWorkflowRuntime({
+      clock: () => "2026-10-16T12:00:00.000Z",
+      complete: async (modelId) => {
+        calls.push(modelId);
+        return { text: "Plan de practica en caja" };
+      },
+      matchingEnv: {},
+      trainingCatalog: catalog,
+      // trainingPreferences intentionally undefined
+    });
+
+    const result = await engine.run(request({ matchingInput }));
+    expect(result.status).toBe("success");
+    expect(result.match).toBeDefined();
+    expect(result.roadmap).toBeUndefined();
+    // Training falls back to the router when training preferences are missing.
+    expect(calls).toHaveLength(1);
+  });
+
+  it("returns an empty roadmap for an already-apt candidate", async () => {
+    const profile = candidateProfile();
+    const matchingInput = {
+      profile,
+      context: CANDIDATE_CONTEXT,
+      vacancies: [{ document: await objectiveDocument(), context: VACANCY_CONTEXT }],
+      now,
+    };
+    const catalog = createSeedTrainingCatalog();
+    const preferences: TrainingPreferences = {
+      specializations: ["it_support"],
+      maxCostUsd: 200,
+      maxTotalHours: 100,
+    };
+    const engine = createWorkflowRuntime({
+      clock: () => "2026-10-16T12:00:00.000Z",
+      complete: async () => ({ text: "Plan de practica en caja" }),
+      matchingEnv: {},
+      trainingCatalog: catalog,
+      trainingPreferences: preferences,
+    });
+
+    const result = await engine.run(request({ matchingInput }));
+    expect(result.status).toBe("success");
+    expect(result.roadmap).toBeDefined();
+    const decision = result.match?.result.decisions[0];
+    expect(decision).toBeDefined();
+    expect(result.roadmap?.aptitude).toBe(decision?.aptitude);
+    if (decision?.aptitude === "apt") {
+      expect(result.roadmap?.recommendations).toEqual([]);
+      expect(result.roadmap?.reasons.join(" ")).toContain("ya es apto");
+    }
   });
 
   it("rejects malicious instructions injected through a CV and a scraped vacancy", async () => {
@@ -133,7 +305,7 @@ describe("employability workflow", () => {
     expect(result.modelFallbacks[0]?.from).toBe(PRIMARY);
     expect(calls).toContain(PRIMARY);
     expect(engine.audit.read().some((event) => event.action === "model_fallback")).toBe(true);
-    const exploration = engine.dql.list("trace-0001").find((record) => record.id.endsWith("exploration"));
+    const exploration = engine.dql.list("trace-0001").find((record) => record.id.endsWith("market_and_matching"));
     expect(exploration?.history.map((entry) => entry.state)).toContain("retrying");
   });
 
@@ -143,8 +315,10 @@ describe("employability workflow", () => {
     });
     const result = await engine.run(request());
     expect(result.status).toBe("dead_letter");
-    expect(result.agents).toEqual([]);
-    const exploration = engine.dql.list("trace-0001")[0];
+    expect(result.agents.map((agent) => agent.agent)).toEqual(["exploration", "profile_and_evidence"]);
+    expect(result.envelopes.some((envelope) => envelope.agent === "exploration" && envelope.kind === "response")).toBe(true);
+    expect(result.envelopes.some((envelope) => envelope.agent === "profile_and_evidence" && envelope.kind === "response")).toBe(true);
+    const exploration = engine.dql.list("trace-0001").find((record) => record.id.endsWith("market_and_matching"));
     expect(exploration?.history.map((entry) => entry.state)).toEqual([
       "pending",
       "failed",
@@ -158,6 +332,23 @@ describe("employability workflow", () => {
     expect(engine.audit.read().some((event) => event.action === "model_dead_letter")).toBe(true);
   });
 
+  it("publishes Ajv-valid structured exploration and profile payloads", async () => {
+    const { engine } = runtime(async () => ({ text: "Plan de practica en caja" }));
+    const result = await engine.run(request({ idempotency_key: "idem-structured" }));
+    const exploration = result.envelopes.find((envelope) => envelope.agent === "exploration" && envelope.kind === "response");
+    const profile = result.envelopes.find((envelope) => envelope.agent === "profile_and_evidence" && envelope.kind === "response");
+    expect(validateExplorationResult(exploration?.payload)).toBe(true);
+    expect(validateCandidateProfile(profile?.payload)).toEqual({ valid: true });
+  });
+
+  it("requires preferences without invoking the exploration agent or model", async () => {
+    const { engine, calls } = runtime(async () => ({ text: "should not run" }));
+    const result = await engine.run(request({ idempotency_key: "idem-no-preferences", preferences: undefined }));
+    expect(result.findings[0]?.code).toBe("preferences_required");
+    expect(calls).toHaveLength(2);
+    expect(result.envelopes.find((envelope) => envelope.agent === "exploration" && envelope.kind === "event")?.payload).toMatchObject({ status: "skipped" });
+  });
+
   it("replays a completed run for the same idempotency key", async () => {
     const { engine, calls } = runtime(async () => ({ text: "Plan de practica en caja" }));
     const first = await engine.run(request());
@@ -165,7 +356,7 @@ describe("employability workflow", () => {
     expect(first.idempotentReplay).toBe(false);
     expect(second.idempotentReplay).toBe(true);
     expect(second.trace_id).toBe(first.trace_id);
-    expect(calls).toHaveLength(4);
+    expect(calls).toHaveLength(2);
   });
 
   it("rejects an invented credential returned by the model", async () => {

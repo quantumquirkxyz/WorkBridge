@@ -1,0 +1,32 @@
+{
+  "status": "implemented",
+  "pr": 86,
+  "fixedPoint": "main",
+  "branch": "feat/issue-49-build-welcome-chat-ui",
+  "commitSha": "2694194",
+  "planSource": "https://github.com/HackathonFISC/equipo-02/pull/86#issuecomment-6232349238",
+  "completedItems": [
+    "An entirely empty chat session renders the greeting quick reply, so a new candidate can start the fallback journey without typing.",
+    "Explored preferences persist under the candidate-scoped key puente:preferences:<candidateId> across chat, dashboard, and the save-search flow; the global puente:preferences key is removed.",
+    "HMAC session expiry compares parsed timestamps (Date.parse) instead of ISO strings."
+  ],
+  "validation": {
+    "commands": [
+      "npx vitest run apps/web/tests/components/chat-screen.test.tsx",
+      "npx vitest run apps/agent-runtime/src/application/__tests__/roles.test.ts apps/web/tests/preferences-storage.test.ts",
+      "npx vitest run apps/web/tests/searches-handler.test.ts apps/web/tests/exploration-handler.test.ts apps/web/tests/chat-route.test.ts apps/web/tests/chat-handler.test.ts apps/agent-runtime/src/application/__tests__/service.test.ts apps/agent-runtime/src/application/__tests__/server.test.ts apps/web/tests/components/welcome-screen.test.tsx",
+      "npm run typecheck",
+      "npx eslint <changed files>",
+      "npm run gate:ci"
+    ],
+    "result": "pass",
+    "tests": "79 files passed, 1 skipped; 651 tests passed, 8 skipped; 92.51% line coverage.",
+    "skipped": [
+      "npx playwright test apps/web/e2e/intake-explore.spec.ts -g J1 --project=Desktop Chrome — Chromium cannot start because libnspr4.so is not installed in this environment."
+    ]
+  },
+  "remainingBlockers": [
+    "Browser e2e remains environment-blocked (missing libnspr4.so); the J1 and UC-07 updates were reviewed statically only."
+  ],
+  "nextConsumer": "review-pr"
+}

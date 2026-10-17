@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation';
+import { SignOutButton } from '../../components/SignOutButton';
 import { getServerSession } from '../../lib/auth';
 import { decideRoleGuard } from '../../lib/role-guard';
 
@@ -10,5 +11,13 @@ export default async function EmployerLayout({ children }: { children: React.Rea
   });
 
   if (decision.action === 'redirect') redirect(decision.location);
-  return children;
+  return (
+    <div className="min-h-dvh">
+      <header className="flex items-center justify-between gap-3 border-b px-4 py-3">
+        <span className="font-semibold">Puente · Empresas</span>
+        <SignOutButton />
+      </header>
+      {children}
+    </div>
+  );
 }

@@ -1,0 +1,14 @@
+{
+  "artifact": "ImplementReviewFixesArtifact",
+  "pr": 81,
+  "issue": 47,
+  "status": "implemented",
+  "branch": "issue/47-build-the-mi-perfil-view-with-editable-p",
+  "completedItems": [
+    "Accessible destructive AlertDialog with Cancel focused by default",
+    "Profile-only chat action, logout, exact save toast, details errors, and labeled experiences",
+    "Candidate deletion endpoint followed by sign-out and return to /"
+  ],
+  "validation": ["npm run lint", "npm run typecheck", "npm test -- --run", "npm run gate:ci"],
+  "remainingBlockers": []
+}

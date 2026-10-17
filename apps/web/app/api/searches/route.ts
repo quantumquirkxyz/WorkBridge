@@ -1,17 +1,21 @@
 import { NextResponse } from 'next/server';
-import { handleListSearches, handleSaveSearch } from '../../../lib/searches-handler';
+import { handleListSearches, handleMarkVacancyVisit, handleSaveSearch } from '../../../lib/searches-handler';
 import { readJsonBody } from '../../../lib/request-body';
 import { persistCandidatePreferences } from '../../../lib/neon-repository';
 import { preferencesStore } from '../../../lib/preferences-store';
 import { savedSearchesStore } from '../../../lib/saved-searches-store';
-import { candidateIdFromRequest, unauthorized } from '../../../lib/candidate-session';
-import { persistSavedSearch, readSavedSearches } from '../../../lib/neon-repository';
+import type { VacancyVisitsStore } from '../../../lib/vacancy-visits-store';
+import { unauthorized } from '../../../lib/candidate-session';
+import { getServerSession } from '../../../lib/auth';
+import { makeCandidateId } from '@puente/domain';
+import { markCandidateVacancyVisit, persistSavedSearch, readCandidateVacancyVisit, readSavedSearches } from '../../../lib/neon-repository';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request): Promise<Response> {
-  const candidateId = candidateIdFromRequest(request);
+  const session = await getServerSession();
+  const candidateId = session?.user.id ? makeCandidateId(session.user.id) : undefined;
   if (!candidateId) return unauthorized();
   const parsed = await readJsonBody(request);
   if (!parsed.ok) return parsed.response;
@@ -38,13 +42,25 @@ export async function POST(request: Request): Promise<Response> {
 }
 
 export async function GET(request: Request): Promise<Response> {
-  const candidateId = candidateIdFromRequest(request);
+  const session = await getServerSession();
+  const candidateId = session?.user.id ? makeCandidateId(session.user.id) : undefined;
   if (!candidateId) return unauthorized();
   try {
     for (const search of await readSavedSearches(candidateId)) savedSearchesStore.save(search);
   } catch {
     return NextResponse.json({ error: 'persistence_unavailable' }, { status: 503 });
   }
-  const { status, body } = await handleListSearches(candidateId);
+  const lastVisitAt = await readCandidateVacancyVisit(candidateId);
+  const visitsStore: VacancyVisitsStore = { get: () => lastVisitAt, mark: () => undefined };
+  const { status, body } = await handleListSearches(candidateId, { visitsStore });
   return NextResponse.json(body, { status });
+}
+
+export async function PUT(request: Request): Promise<Response> {
+  const session = await getServerSession();
+  const candidateId = session?.user.id ? makeCandidateId(session.user.id) : undefined;
+  if (!candidateId) return unauthorized();
+  try { await markCandidateVacancyVisit(candidateId); } catch { return NextResponse.json({ error: 'persistence_unavailable' }, { status: 503 }); }
+  const { status, body } = handleMarkVacancyVisit(candidateId);
+  return new NextResponse(null, { status, headers: body && typeof body === 'object' ? { 'content-type': 'application/json' } : undefined });
 }

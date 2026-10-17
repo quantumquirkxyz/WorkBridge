@@ -1,0 +1,31 @@
+{
+  "status": "completed",
+  "changes": [
+    "apps/agent-runtime/src/workflow/agents.ts",
+    "apps/agent-runtime/src/workflow/graph.ts",
+    "apps/agent-runtime/src/workflow/carrier.ts",
+    "apps/agent-runtime/src/workflow/carrier.schema.json",
+    "apps/agent-runtime/src/workflow/__tests__/graph.test.ts",
+    "apps/agent-runtime/package.json",
+    "apps/agent-runtime/vitest.config.ts"
+  ],
+  "validation": {
+    "testsPassed": 12,
+    "testFile": "apps/agent-runtime/src/workflow/__tests__/graph.test.ts",
+    "agentRuntimeTestsPassed": 163,
+    "allTestsPassed": 509,
+    "lintPassed": true,
+    "typecheckPassed": true,
+    "coverageThresholdsMet": true
+  },
+  "commitSha": null,
+  "branch": "fix/issue-63-market-training-no-router",
+  "nextConsumer": "publish-open-pr",
+  "blockedBy": [],
+  "riskRemaining": "None - all acceptance criteria implemented and verified",
+  "qualityGateResults": {
+    "gate-ide": "passed",
+    "gate-pre-commit": "passed",
+    "gate-ci": "passed"
+  }
+}

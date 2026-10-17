@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 import { CASOS, CV_TEXTO, type CasoVisual } from './casos';
+import { expectNoSeriousAxeViolations } from './helpers';
 
 const CAPTURE_DIR = 'test-results/e2e-web';
 const RESPUESTA = { timeout: 45_000 };
@@ -131,6 +132,36 @@ test('UC-05 guarda la búsqueda y la lista', async ({ page }) => {
   await guardarCaptura(page, 'UC-05');
 });
 
+test('UC-07 muestra coincidencias nuevas y registra la visita a Vacantes', async ({ page }) => {
+  let acknowledged = false;
+  await page.addInitScript(() => localStorage.setItem('puente:candidateId', 'candidate-e2e'));
+  await page.addInitScript(() => localStorage.setItem('puente:preferences:candidate-e2e', JSON.stringify({ candidate_id: 'candidate-e2e' })));
+  await page.route('**/api/searches**', async (route) => {
+    if (route.request().method() === 'POST') {
+      await route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify({ searchId: 'search-e2e' }) });
+      return;
+    }
+    if (route.request().method() === 'PUT') {
+      acknowledged = true;
+      await route.fulfill({ status: 204, body: '' });
+      return;
+    }
+    await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ searches: [{ matches: [], newSinceLastVisit: [{ vacancy: { jobId: 'new-1', title: 'Nueva vacante', company: 'Empresa', location: { raw: 'Panamá' }, salary: { minUsd: null, maxUsd: null }, modality: 'remote', provenance: { sourceUrl: 'https://example.test/job' } }, freshness: { label: 'Nueva' }, matchReasons: [] }], summary: { matched: 1 } }] }) });
+  });
+  await page.route('**/api/candidate', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ candidateId: 'candidate-e2e' }) }));
+  await page.goto('/vacantes');
+  await expect(page.getByRole('heading', { name: 'Nuevas desde tu última visita' })).toBeVisible(RESPUESTA);
+  await expect(page.getByText('Nueva vacante')).toBeVisible(RESPUESTA);
+  await expect.poll(() => acknowledged).toBe(true);
+  await page.goto('/ruta');
+  await expect(page.locator('.candidate-nav-link').filter({ hasText: 'Vacantes' }).first()).toContainText('1');
+  await page.goto('/vacantes');
+  await page.getByRole('button', { name: 'Guardar esta búsqueda' }).click();
+  await page.getByLabel('Nombre de la búsqueda').fill('Búsqueda e2e');
+  await page.getByRole('button', { name: 'Guardar', exact: true }).click();
+  await expect(page.getByText('Búsqueda guardada.', { exact: true })).toBeVisible(RESPUESTA);
+});
+
 test('UC-06 elimina los datos del candidato y vacía la lista', async ({ page }) => {
   await abrirInicio(page);
   await buscarVacantes(page);
@@ -142,4 +173,23 @@ test('UC-06 elimina los datos del candidato y vacía la lista', async ({ page })
   await expect(page.getByText('Tus preferencias y búsquedas guardadas fueron eliminadas.')).toBeVisible(RESPUESTA);
   await expect(page.getByText('Atención al cliente en Panamá', { exact: true })).toHaveCount(0);
   await guardarCaptura(page, 'UC-06');
+});
+
+test('J1 completa la captura de perfil y la primera exploración con el chat de fallback', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByRole('heading', { name: 'Puente Laboral Panamá' })).toBeVisible();
+  await page.getByRole('link', { name: /Empezar/ }).click();
+  await expect(page.getByRole('heading', { name: 'Conversemos sobre ti' })).toBeVisible();
+  await expectNoSeriousAxeViolations(page);
+
+  // The fallback agenda has eight profile chips and five preference chips.
+  for (let step = 0; step < 13; step += 1) {
+    const chip = page.locator('.chat-chip').last();
+    await expect(chip).toBeVisible({ timeout: 45_000 });
+    await chip.click();
+  }
+
+  await expect(page).toHaveURL(/\/vacantes$/, { timeout: 45_000 });
+  await expect(page.getByRole('heading', { name: 'Vacantes para ti' })).toBeVisible();
+  await expectNoSeriousAxeViolations(page);
 });

@@ -1,0 +1,29 @@
+{
+  "status": "completed",
+  "changes": [
+    "Roadmap handling now loads the stored candidate profile and evaluates the first near-match vacancy through MatchingService.",
+    "Roadmap gaps come exclusively from the canonical deriveGaps solver projections and the roadmap uses the solver aptitude.",
+    "Missing profiles return 409 profile_required without invoking matching or roadmap construction; viable matches retain their short-circuit response."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npx eslint apps/web/lib/roadmap-handler.ts apps/web/tests/roadmap-handler.test.ts",
+      "npm run typecheck",
+      "npm exec vitest run apps/web/tests/roadmap-handler.test.ts",
+      "npm test",
+      "npm run gate:ci"
+    ],
+    "skipped": [],
+    "notes": "Targeted tests pass (8 tests); full suite passes (631 tests, 8 skipped); gate-ci passes with 87.84% statement coverage. Repository-wide lint remains blocked by three pre-existing errors outside this change."
+  },
+  "commitSha": "80c9c92",
+  "branch": "feat/issue-61-build-no-match-roadmap-from-solver-gaps",
+  "nextConsumer": "publish-open-pr",
+  "riskRemaining": "Repository-wide lint has unrelated existing errors in agent-runtime; implementation-specific lint and all requested test/typecheck gates pass.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  }
+}
