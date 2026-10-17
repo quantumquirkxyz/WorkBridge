@@ -1,0 +1,22 @@
+{
+  "status": "implemented",
+  "pr": 53,
+  "issue": 17,
+  "branch": "feat/issue-17-verify-esco-concept-uris",
+  "planComment": "https://github.com/HackathonFISC/equipo-02/pull/53#issuecomment-6229733477",
+  "completed": [
+    "Added packages/domain/src/taxonomy/fixtures/esco-v1.2.1-panama-resolution.json with 23 pinned released ESCO concepts, version, URIs, and labels.",
+    "Updated the taxonomy contract test to compare every mapped skill with the pinned evidence.",
+    "Preserved the previously implemented discriminated unmapped-reason type and label checks."
+  ],
+  "validation": [
+    "npm exec -- vitest run packages/domain/src/__tests__/taxonomy.test.ts — pass (11/11)",
+    "npm exec -- tsc --noEmit — pass",
+    "npm test -- --run — previously pass (493/493, 54 files)"
+  ],
+  "skippedValidation": [
+    "pnpm was unavailable; equivalent npm tooling was used."
+  ],
+  "remaining": "None planned. A fresh review-pr pass is required; this implementation does not mark the PR clean.",
+  "scopeNotes": "Only taxonomy contract/type files and focused taxonomy fixtures are in scope. Existing unrelated working-tree changes were left untouched. No merge or issue closure."
+}

@@ -1,0 +1,31 @@
+{
+  "status": "completed",
+  "changes": [
+    "Resolved all 23 seed skills in packages/domain/src/taxonomy/panama-skills.taxonomy.json to released ESCO v1.2.1 concept URIs and recorded each concept's verified English preferred label in escoLabel.",
+    "Added escoVersion, escoResolvedAt, and escoResolution to the taxonomy and rewrote provenance to record the ESCO release and resolution method.",
+    "Extended SkillTaxonomy and TaxonomySkill with the ESCO provenance fields and an optional escoUnmappedReason for explicitly unmapped skills.",
+    "Added an ESCO taxonomy contract test covering URI format, uniqueness, recorded version, unmapped reasons, and preservation of localized labels."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npx vitest run packages/domain/src/__tests__/taxonomy.test.ts",
+      "npm run typecheck",
+      "npm test",
+      "npm run gate:ci",
+      "live ESCO API verification: 23/23 concepts returned status=released with matching preferred labels at selectedVersion=v1.2.1"
+    ],
+    "skipped": [],
+    "notes": "The taxonomy test passed 10/10, typecheck passed, the full suite passed 492/492 across 54 files, and gate:ci passed the coverage thresholds. All 23 URIs were re-fetched from https://ec.europa.eu/esco/api/resource/skill?selectedVersion=v1.2.1 and matched their recorded escoLabel with status=released. npm run lint still reports 8 pre-existing @typescript-eslint/no-unused-vars errors in apps/web/app/api/* routes; none are in the files changed here."
+  },
+  "commitSha": "e07752a",
+  "branch": "feat/issue-17-verify-esco-concept-uris",
+  "nextConsumer": "publish-open-pr",
+  "blockedBy": [],
+  "riskRemaining": "ESCO concept selection is semantic: several original seed labels were approximations, so escoLabel now records the matched ESCO preferred label rather than the original seed wording. Live re-verification needs network access; no resolver script was committed, so a future refresh must replay the recorded GET request against a pinned ESCO release. A later ESCO release may retire or replace concepts.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  }
+}

@@ -1,20 +1,33 @@
 import type { CanonicalSkill, MatchStrategy } from "./types";
 import taxonomyData from "./taxonomy/panama-skills.taxonomy.json";
 
-export interface TaxonomySkill {
+interface TaxonomySkillBase {
   id: string;
   labelEs: string;
   labelEn: string;
   escoLabel: string;
-  escoUri: string | null;
   kind: string;
   aliases: string[];
 }
+
+export type TaxonomySkill =
+  | (TaxonomySkillBase & { escoUri: string; escoUnmappedReason?: never })
+  | (TaxonomySkillBase & {
+      escoUri: null;
+      /** Required when the skill cannot be mapped to a released ESCO concept. */
+      escoUnmappedReason: string;
+    });
 
 export interface SkillTaxonomy {
   version: string;
   source: string;
   provenance: string;
+  /** ESCO release the concept URIs were resolved against (e.g. "v1.2.1"). */
+  escoVersion: string;
+  /** ISO date of the resolution run. */
+  escoResolvedAt?: string;
+  /** How concepts were resolved and verified against ESCO. */
+  escoResolution?: string;
   skills: TaxonomySkill[];
 }
 

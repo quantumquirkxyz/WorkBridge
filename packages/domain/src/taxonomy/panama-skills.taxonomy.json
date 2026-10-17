@@ -1,14 +1,17 @@
 {
   "version": "2026.10.0-pa-seed",
   "source": "ESCO-based Panamanian skills taxonomy (seed subset)",
-  "provenance": "Derived from the ESCO occupational skills pillar (v1.1 structure) and localized for the Panama Metro and Panama Oeste target roles: junior technical support, customer service, and administrative work. Each entry keeps an ESCO reference label and an `escoUri` slot; URIs are intentionally null in the seed because they must be verified against the ESCO API before production use (see ADR-0002). Local `id` values are stable and are the join key used by the application.",
+  "provenance": "Derived from the ESCO occupational skills pillar and localized for the Panama Metro and Panama Oeste target roles: junior technical support, customer service, and administrative work. Every entry keeps its localized Spanish/English labels and aliases; `escoLabel`/`escoUri` are additive references. Concept URIs were resolved against ESCO v1.2.1 on 2026-10-16 and each referenced concept had status=released. Local `id` values are stable and are the join key used by the application.",
+  "escoVersion": "v1.2.1",
+  "escoResolvedAt": "2026-10-16",
+  "escoResolution": "Resolved each concept with GET https://ec.europa.eu/esco/api/resource/skill?uri=<encoded-concept-uri>&selectedVersion=v1.2.1&language=en on 2026-10-16; only concepts with status=released were accepted. Per-concept captured responses are pinned in the taxonomy verification fixture.",
   "skills": [
     {
       "id": "PA-IT-0001",
       "labelEs": "Soporte técnico",
       "labelEn": "Technical support",
-      "escoLabel": "provide technical support",
-      "escoUri": null,
+      "escoLabel": "solve technical problems",
+      "escoUri": "http://data.europa.eu/esco/skill/14832d87-2f2f-4895-b290-e4760ebae42a",
       "kind": "skill",
       "aliases": [
         "soporte tecnico",
@@ -26,7 +29,7 @@
       "labelEs": "Mantenimiento de equipos de cómputo",
       "labelEn": "Computer hardware maintenance",
       "escoLabel": "maintain computer hardware",
-      "escoUri": null,
+      "escoUri": "http://data.europa.eu/esco/skill/c77db25e-bb51-4a10-b2ad-99b48b1b4a37",
       "kind": "skill",
       "aliases": [
         "mantenimiento de computadoras",
@@ -40,8 +43,8 @@
       "id": "PA-IT-0003",
       "labelEs": "Redes y conectividad básica",
       "labelEn": "Basic networking and connectivity",
-      "escoLabel": "maintain computer network",
-      "escoUri": null,
+      "escoLabel": "maintain information network hardware",
+      "escoUri": "http://data.europa.eu/esco/skill/19c0e68e-6e6c-4698-85dc-ef66a9de2c37",
       "kind": "skill",
       "aliases": [
         "redes",
@@ -56,8 +59,8 @@
       "id": "PA-IT-0004",
       "labelEs": "Sistemas operativos Windows",
       "labelEn": "Windows operating systems",
-      "escoLabel": "use operating systems",
-      "escoUri": null,
+      "escoLabel": "operating systems",
+      "escoUri": "http://data.europa.eu/esco/skill/f9a6f35b-01a7-40c9-8b61-b6ee46f97272",
       "kind": "skill",
       "aliases": ["windows", "windows 10", "windows 11", "sistema operativo windows"]
     },
@@ -65,8 +68,8 @@
       "id": "PA-OFF-0001",
       "labelEs": "Paquete de oficina",
       "labelEn": "Office productivity suite",
-      "escoLabel": "use office software",
-      "escoUri": null,
+      "escoLabel": "use microsoft office",
+      "escoUri": "http://data.europa.eu/esco/skill/f683ae1d-cb7c-4aa1-b9fe-205e1bd23535",
       "kind": "skill",
       "aliases": [
         "microsoft office",
@@ -81,8 +84,8 @@
       "id": "PA-OFF-0002",
       "labelEs": "Hoja de cálculo Excel",
       "labelEn": "Spreadsheet software",
-      "escoLabel": "manage spreadsheets",
-      "escoUri": null,
+      "escoLabel": "use spreadsheets software",
+      "escoUri": "http://data.europa.eu/esco/skill/1973c966-f236-40c9-b2d4-5d71a89019be",
       "kind": "skill",
       "aliases": ["excel", "hojas de calculo", "excel intermedio", "excel avanzado"]
     },
@@ -90,8 +93,8 @@
       "id": "PA-OFF-0003",
       "labelEs": "Digitación de datos",
       "labelEn": "Data entry",
-      "escoLabel": "enter data",
-      "escoUri": null,
+      "escoLabel": "process data",
+      "escoUri": "http://data.europa.eu/esco/skill/f2d57f41-43b4-4f5b-8100-3df5c21eda50",
       "kind": "skill",
       "aliases": [
         "digitacion",
@@ -105,8 +108,8 @@
       "id": "PA-OFF-0004",
       "labelEs": "Gestión de agenda y correspondencia",
       "labelEn": "Scheduling and correspondence management",
-      "escoLabel": "manage schedules",
-      "escoUri": null,
+      "escoLabel": "manage schedule of tasks",
+      "escoUri": "http://data.europa.eu/esco/skill/0e1fe34b-f4e7-4642-8c8b-5a05ac3438e5",
       "kind": "skill",
       "aliases": [
         "manejo de agenda",
@@ -120,8 +123,8 @@
       "id": "PA-CS-0001",
       "labelEs": "Atención al cliente",
       "labelEn": "Customer service",
-      "escoLabel": "provide customer service",
-      "escoUri": null,
+      "escoLabel": "maintain customer service",
+      "escoUri": "http://data.europa.eu/esco/skill/75dfe1ee-5935-42ce-b820-697f827825c3",
       "kind": "skill",
       "aliases": [
         "atencion al cliente",
@@ -136,8 +139,8 @@
       "id": "PA-CS-0002",
       "labelEs": "Manejo de caja",
       "labelEn": "Cash handling",
-      "escoLabel": "handle cash",
-      "escoUri": null,
+      "escoLabel": "operate cash register",
+      "escoUri": "http://data.europa.eu/esco/skill/0cb013af-6dd9-4fb2-b34e-63dda1a5cf82",
       "kind": "skill",
       "aliases": [
         "manejo de caja",
@@ -152,7 +155,7 @@
       "labelEs": "Ventas y cierre de ventas",
       "labelEn": "Sales and closing",
       "escoLabel": "sell products",
-      "escoUri": null,
+      "escoUri": "http://data.europa.eu/esco/skill/29a50780-f81b-429c-b410-7f23a492e19d",
       "kind": "skill",
       "aliases": ["ventas", "sales", "cierre de ventas", "promocion de productos"]
     },
@@ -160,8 +163,8 @@
       "id": "PA-CS-0004",
       "labelEs": "Gestión de relación con clientes (CRM)",
       "labelEn": "Customer relationship management",
-      "escoLabel": "manage customer relationships",
-      "escoUri": null,
+      "escoLabel": "use customer relationship management software",
+      "escoUri": "http://data.europa.eu/esco/skill/9889b795-d755-41b2-8afd-2e3c87a65a38",
       "kind": "skill",
       "aliases": ["crm", "gestion de clientes", "sistema crm", "salesforce", "hubspot"]
     },
@@ -169,8 +172,8 @@
       "id": "PA-CS-0005",
       "labelEs": "Telemercadeo y centro de llamadas",
       "labelEn": "Telemarketing and call center",
-      "escoLabel": "answer customer calls",
-      "escoUri": null,
+      "escoLabel": "telemarketing",
+      "escoUri": "http://data.europa.eu/esco/skill/16132f2b-cf61-4c53-ae8d-9023a8bab90b",
       "kind": "skill",
       "aliases": [
         "call center",
@@ -184,8 +187,8 @@
       "id": "PA-CS-0006",
       "labelEs": "Inventario y control de existencias",
       "labelEn": "Inventory control",
-      "escoLabel": "manage stock",
-      "escoUri": null,
+      "escoLabel": "manage inventory",
+      "escoUri": "http://data.europa.eu/esco/skill/ab6265f2-a9bf-49e8-a9a5-67cbab4de38b",
       "kind": "skill",
       "aliases": [
         "inventario",
@@ -199,8 +202,8 @@
       "id": "PA-CS-0007",
       "labelEs": "Punto de venta (POS)",
       "labelEn": "Point of sale operation",
-      "escoLabel": "operate point of sale",
-      "escoUri": null,
+      "escoLabel": "process payments",
+      "escoUri": "http://data.europa.eu/esco/skill/bdcac0c8-b77a-4640-9eaf-c0cf3efd1e23",
       "kind": "skill",
       "aliases": ["punto de venta", "pos", "terminal punto de venta", "tpv"]
     },
@@ -208,8 +211,8 @@
       "id": "PA-SOFT-0001",
       "labelEs": "Comunicación escrita",
       "labelEn": "Written communication",
-      "escoLabel": "communicate in writing",
-      "escoUri": null,
+      "escoLabel": "write work-related reports",
+      "escoUri": "http://data.europa.eu/esco/skill/918f5211-b99f-4b29-9a34-6e475583ef55",
       "kind": "skill",
       "aliases": [
         "comunicacion escrita",
@@ -222,8 +225,8 @@
       "id": "PA-SOFT-0002",
       "labelEs": "Comunicación oral",
       "labelEn": "Verbal communication",
-      "escoLabel": "communicate verbally",
-      "escoUri": null,
+      "escoLabel": "communicating",
+      "escoUri": "http://data.europa.eu/esco/skill/6f142deb-03a9-4cd7-94ce-e0f023ae2169",
       "kind": "skill",
       "aliases": [
         "comunicacion oral",
@@ -237,7 +240,7 @@
       "labelEs": "Trabajo en equipo",
       "labelEn": "Teamwork",
       "escoLabel": "work in teams",
-      "escoUri": null,
+      "escoUri": "http://data.europa.eu/esco/skill/60c78287-22eb-4103-9c8c-28deaa460da0",
       "kind": "skill",
       "aliases": ["trabajo en equipo", "teamwork", "colaboracion"]
     },
@@ -246,7 +249,7 @@
       "labelEs": "Resolución de problemas",
       "labelEn": "Problem solving",
       "escoLabel": "solve problems",
-      "escoUri": null,
+      "escoUri": "http://data.europa.eu/esco/skill/adc6dc11-3376-467b-96c5-9b0a21edc869",
       "kind": "skill",
       "aliases": [
         "resolucion de problemas",
@@ -260,7 +263,7 @@
       "labelEs": "Gestión del tiempo",
       "labelEn": "Time management",
       "escoLabel": "manage time",
-      "escoUri": null,
+      "escoUri": "http://data.europa.eu/esco/skill/d9013e0e-e937-43d5-ab71-0e917ee882b8",
       "kind": "skill",
       "aliases": ["gestion del tiempo", "organizacion del tiempo", "time management", "puntualidad"]
     },
@@ -268,8 +271,8 @@
       "id": "PA-SOFT-0006",
       "labelEs": "Atención al detalle",
       "labelEn": "Attention to detail",
-      "escoLabel": "pay attention to detail",
-      "escoUri": null,
+      "escoLabel": "attend to detail",
+      "escoUri": "http://data.europa.eu/esco/skill/83e6510b-ffeb-4aec-959c-4265fd0ff7b7",
       "kind": "skill",
       "aliases": [
         "atencion al detalle",
@@ -284,7 +287,7 @@
       "labelEs": "Idioma español",
       "labelEn": "Spanish language",
       "escoLabel": "Spanish",
-      "escoUri": null,
+      "escoUri": "http://data.europa.eu/esco/skill/14ee9f76-3524-43d5-8a1a-5ba8283f8bd7",
       "kind": "language",
       "aliases": ["espanol", "spanish", "idioma espanol"]
     },
@@ -293,7 +296,7 @@
       "labelEs": "Idioma inglés",
       "labelEn": "English language",
       "escoLabel": "English",
-      "escoUri": null,
+      "escoUri": "http://data.europa.eu/esco/skill/6d3edede-8951-4621-a835-e04323300fa0",
       "kind": "language",
       "aliases": ["ingles", "english", "idioma ingles", "bilingue"]
     }
