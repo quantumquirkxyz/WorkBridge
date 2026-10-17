@@ -20,5 +20,5 @@
     "remaining": "AC-54 remains unverified."
   },
   "blocker": "The local runner cannot launch Chromium because the required libnspr4.so shared library is unavailable. The blocker is environmental and cannot be repaired within this PR without broadening scope.",
-  "nextConsumer": "resolving-merge-conflicts"
+  "nextConsumer": "review-pr"
 }
