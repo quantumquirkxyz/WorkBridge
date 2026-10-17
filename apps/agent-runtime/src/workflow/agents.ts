@@ -1,7 +1,6 @@
-import { assertAgentEnvelope, type AgentEnvelope, type AgentId, type CandidatePreferences } from "@puente/domain";
+import { assertAgentEnvelope, type AgentEnvelope, type AgentId } from "@puente/domain";
 import { createExplorationAgent } from "../exploration/exploration-agent";
 import { createProfileAgent } from "../profile-agent";
-import { createSeedCatalog } from "@puente/catalog";
 import type { Carrier } from "./carrier";
 import {
   DEFAULT_AGENT_TOOL,
