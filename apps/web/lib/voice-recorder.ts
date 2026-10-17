@@ -344,8 +344,11 @@ type PermissionLike = {
  * `start`, `stop`, `abort`, and `requestPermission`.
  */
 export function useVoiceRecorder(options: VoiceRecorderOptions = {}) {
+  // Start unsupported so the server and the first client render match.
+  // SpeechRecognition only exists in the browser, and reading it during render
+  // hydrates a different composer than the one the server sent.
   const [state, setState] = useState<VoiceRecorderState>({
-    supported: supportsSpeechRecognition(),
+    supported: false,
     listening: false,
     transcript: '',
     final: false,
@@ -363,6 +366,7 @@ export function useVoiceRecorder(options: VoiceRecorderOptions = {}) {
 
   useEffect(() => {
     const recorder = recorderRef.current!;
+    updateState(recorder.getState());
     const unsubscribe = recorder.subscribe(updateState);
     return unsubscribe;
   }, [updateState]);
