@@ -5,6 +5,7 @@ Problem-oriented documentation for quirk Skills. Use these guides when you have 
 ## Contents
 
 - [Adoption](adoption.md) — Install and synchronize the bundle
+- [Authentication](authentication.md) — Configure Better Auth, Google OAuth, magic links, and seeded roles
 - [Installation](installation.md) — Complete installation guide
 - [Workflows](workflows.md) — Workflow overview and navigation
 - [Release](release.md) — Release checklist and gates

@@ -1,5 +1,5 @@
-import { IntakeForm } from '../components/IntakeForm';
-import { ExplorationDashboard } from '../components/ExplorationDashboard';
+import { IntakeForm } from '../../components/IntakeForm';
+import { ExplorationDashboard } from '../../components/ExplorationDashboard';
 
 export default function HomePage() {
   return (

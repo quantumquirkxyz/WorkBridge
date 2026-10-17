@@ -1,0 +1,25 @@
+{
+  "status": "completed",
+  "branch": "issue/37-add-better-auth-sessions-roles-anonymous",
+  "fixedPoint": "origin/main",
+  "pr": 67,
+  "conflicts": [
+    "apps/web/package.json",
+    "package-lock.json"
+  ],
+  "resolution": [
+    "Merged main's #35 web client dependencies and QueryProvider work with #37's Better Auth dependency and route/session work.",
+    "Regenerated package-lock.json from the merged manifest so both @tanstack/react-query and better-auth are represented.",
+    "Fixed the merged #35 matching adapter type import so repository typecheck passes."
+  ],
+  "validation": {
+    "commands": [
+      "npm exec -- vitest run apps/web/tests/auth-linking.test.ts apps/web/tests/role-guard.test.ts",
+      "node node_modules/typescript/bin/tsc --noEmit",
+      "node node_modules/eslint/bin/eslint.js apps/agent-runtime/src/matching/adapt.ts apps/web/lib/auth.ts apps/web/tests/auth-linking.test.ts apps/web/tests/role-guard.test.ts",
+      "git diff --check"
+    ],
+    "result": "pass"
+  },
+  "riskRemaining": "PR host mergeability still needs GitHub to recalculate after the merge commit is pushed."
+}
