@@ -1,4 +1,4 @@
-import type { IntakeResult } from '@puente/domain';
+import type { CandidateCertification, IntakeResult } from '@puente/domain';
 import {
   buildProfile,
   heuristicProfileExtractor,
@@ -6,12 +6,15 @@ import {
   type ProfileExtractor,
 } from '@puente/profile';
 import { extractText, type OcrAdapter, type PdfExtractor, type RawIntake } from '@puente/ingestion';
+import { verifyCredential, type CredentialInput, type VerifyDeps, type CredentialVerification } from './verification/index';
 
 export interface ProfileAgentOptions {
   extractor?: ProfileExtractor;
   pdf?: PdfExtractor;
   ocr?: OcrAdapter;
   now?: () => Date;
+  verificationDeps?: VerifyDeps;
+  verifyCredential?: (input: CredentialInput, deps: VerifyDeps) => Promise<CredentialVerification>;
 }
 
 export interface ProfileAgentRunContext {
@@ -45,7 +48,7 @@ export class ProfileAgent {
       now: this.options.now,
     });
 
-    return buildProfile(
+    const profileResult = await buildProfile(
       {
         text,
         source,
@@ -58,6 +61,65 @@ export class ProfileAgent {
       },
       { extractor: this.options.extractor, now: this.options.now },
     );
+
+    // Post-intake credential verification:
+    // - For certifications with a credential_url, call verifyCredential and
+    //   update the stored certification status.
+    // - For certifications without a credential_url, keep status as 'declared'
+    //   and do not call verifyCredential.
+    const verifiedProfile = await this._applyCredentialVerification(
+      profileResult,
+      context.traceId,
+    );
+
+    return verifiedProfile;
+  }
+
+  private async _applyCredentialVerification(
+    profileResult: IntakeResult,
+    traceId: string,
+  ): Promise<IntakeResult> {
+    const deps = this.options.verificationDeps ?? { fetch };
+    const verifier = this.options.verifyCredential ?? verifyCredential;
+    const updatedCertifications = await Promise.all(profileResult.profile.certifications.map(
+      async (certification): Promise<CandidateCertification> => {
+        if (certification.credential_url) {
+          const input: CredentialInput = {
+            credentialId: certification.credential_url,
+            traceId,
+            declaredOnly: false,
+          };
+          const verification = await verifier(input, deps);
+          // Map the verification status to the certification status
+           const statusMap: Record<string, CandidateCertification['status']> = {
+            verified: 'verified',
+            declared: 'declared',
+            unverified: 'unverified',
+            rejected: 'rejected',
+            partially_verified: 'partially_verified',
+          };
+          return {
+            ...certification,
+            status: statusMap[verification.status] ?? 'unverified',
+            source: verification.externally_verified ? 'verified' : 'declared',
+          };
+        }
+        // Certification without credential_url stays declared;
+        // verifyCredential is not called.
+        return {
+          ...certification,
+          status: 'declared',
+        };
+      },
+    ));
+
+    return {
+      ...profileResult,
+      profile: {
+        ...profileResult.profile,
+        certifications: updatedCertifications,
+      },
+    };
   }
 }
 

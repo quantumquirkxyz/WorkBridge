@@ -15,18 +15,18 @@
       { "skillId": "plp:communication", "labelEs": "Comunicación", "labelEn": "Communication", "required": true },
       { "skillId": "plp:teamwork", "labelEs": "Trabajo en equipo", "labelEn": "Teamwork", "required": false }
     ],
-    "postedAt": "2026-10-16T09:00:00.000Z",
-    "queriedAt": "2026-10-16T10:00:00.000Z",
+    "postedAt": "2026-10-31T09:00:00.000Z",
+    "queriedAt": "2026-10-31T10:00:00.000Z",
     "provenance": {
       "provider": "apify_linkedin_jobs",
       "source": "scraper",
       "sourceUrl": "https://www.linkedin.com/jobs/view/lnk-1001",
-      "retrievedAt": "2026-10-16T10:00:00.000Z"
+      "retrievedAt": "2026-10-31T10:00:00.000Z"
     },
     "scrapingInfo": {
       "provider": "apify_linkedin_jobs",
       "query": "atencion al cliente panama",
-      "scrapedAt": "2026-10-16T10:00:00.000Z",
+      "scrapedAt": "2026-10-31T10:00:00.000Z",
       "runId": "run_2026_10_16_a",
       "sourceJobId": "linkedin:lnk-1001",
       "pageUrl": "https://www.linkedin.com/jobs/search/?keywords=atencion%20al%20cliente"
@@ -47,18 +47,18 @@
       { "skillId": "plp:customer-service", "labelEs": "Atención al cliente", "labelEn": "Customer service", "required": true },
       { "skillId": "plp:point-of-sale", "labelEs": "Punto de venta", "labelEn": "Point of sale", "required": true }
     ],
-    "postedAt": "2026-10-15T12:00:00.000Z",
-    "queriedAt": "2026-10-16T10:00:00.000Z",
+    "postedAt": "2026-10-31T12:00:00.000Z",
+    "queriedAt": "2026-10-31T10:00:00.000Z",
     "provenance": {
       "provider": "apify_linkedin_jobs",
       "source": "scraper",
       "sourceUrl": "https://www.linkedin.com/jobs/view/lnk-1002",
-      "retrievedAt": "2026-10-16T10:00:00.000Z"
+      "retrievedAt": "2026-10-31T10:00:00.000Z"
     },
     "scrapingInfo": {
       "provider": "apify_linkedin_jobs",
       "query": "cajero panama",
-      "scrapedAt": "2026-10-16T10:00:00.000Z",
+      "scrapedAt": "2026-10-31T10:00:00.000Z",
       "runId": "run_2026_10_16_a",
       "sourceJobId": "linkedin:lnk-1002",
       "pageUrl": null
@@ -78,18 +78,18 @@
     "skills": [
       { "skillId": "plp:office-suite", "labelEs": "Ofimática", "labelEn": "Office suite", "required": true }
     ],
-    "postedAt": "2026-10-16T11:00:00.000Z",
-    "queriedAt": "2026-10-16T11:30:00.000Z",
+    "postedAt": "2026-10-31T11:00:00.000Z",
+    "queriedAt": "2026-10-31T11:30:00.000Z",
     "provenance": {
       "provider": "apify_linkedin_jobs",
       "source": "scraper",
       "sourceUrl": "https://www.linkedin.com/jobs/view/lnk-1003",
-      "retrievedAt": "2026-10-16T11:30:00.000Z"
+      "retrievedAt": "2026-10-31T11:30:00.000Z"
     },
     "scrapingInfo": {
       "provider": "apify_linkedin_jobs",
       "query": "asistente administrativo remoto",
-      "scrapedAt": "2026-10-16T11:30:00.000Z",
+      "scrapedAt": "2026-10-31T11:30:00.000Z",
       "runId": "run_2026_10_16_a",
       "sourceJobId": "linkedin:lnk-1003",
       "pageUrl": null
@@ -110,17 +110,17 @@
       { "skillId": "plp:customer-service", "labelEs": "Atención al cliente", "labelEn": "Customer service", "required": true }
     ],
     "postedAt": "2026-10-12T12:00:00.000Z",
-    "queriedAt": "2026-10-16T10:00:00.000Z",
+    "queriedAt": "2026-10-31T10:00:00.000Z",
     "provenance": {
       "provider": "apify_linkedin_jobs",
       "source": "scraper",
       "sourceUrl": "https://www.linkedin.com/jobs/view/lnk-1004",
-      "retrievedAt": "2026-10-16T10:00:00.000Z"
+      "retrievedAt": "2026-10-31T10:00:00.000Z"
     },
     "scrapingInfo": {
       "provider": "apify_linkedin_jobs",
       "query": "atencion al cliente panama",
-      "scrapedAt": "2026-10-16T10:00:00.000Z",
+      "scrapedAt": "2026-10-31T10:00:00.000Z",
       "runId": "run_2026_10_16_a",
       "sourceJobId": "linkedin:lnk-1004",
       "pageUrl": null
@@ -140,18 +140,18 @@
     "skills": [
       { "skillId": "plp:point-of-sale", "labelEs": "Punto de venta", "labelEn": "Point of sale", "required": true }
     ],
-    "postedAt": "2026-10-16T08:00:00.000Z",
-    "queriedAt": "2026-10-16T10:00:00.000Z",
+    "postedAt": "2026-10-31T08:00:00.000Z",
+    "queriedAt": "2026-10-31T10:00:00.000Z",
     "provenance": {
       "provider": "apify_linkedin_jobs",
       "source": "scraper",
       "sourceUrl": "https://www.linkedin.com/jobs/view/lnk-1005",
-      "retrievedAt": "2026-10-16T10:00:00.000Z"
+      "retrievedAt": "2026-10-31T10:00:00.000Z"
     },
     "scrapingInfo": {
       "provider": "apify_linkedin_jobs",
       "query": "ventas pasantia panama",
-      "scrapedAt": "2026-10-16T10:00:00.000Z",
+      "scrapedAt": "2026-10-31T10:00:00.000Z",
       "runId": "run_2026_10_16_a",
       "sourceJobId": "linkedin:lnk-1005",
       "pageUrl": null
@@ -171,18 +171,18 @@
     "skills": [
       { "skillId": "plp:customer-service", "labelEs": "Atención al cliente", "labelEn": "Customer service", "required": true }
     ],
-    "postedAt": "2026-10-16T06:00:00.000Z",
-    "queriedAt": "2026-10-16T10:00:00.000Z",
+    "postedAt": "2026-10-31T06:00:00.000Z",
+    "queriedAt": "2026-10-31T10:00:00.000Z",
     "provenance": {
       "provider": "apify_linkedin_jobs",
       "source": "scraper",
       "sourceUrl": "https://www.linkedin.com/jobs/view/lnk-1006",
-      "retrievedAt": "2026-10-16T10:00:00.000Z"
+      "retrievedAt": "2026-10-31T10:00:00.000Z"
     },
     "scrapingInfo": {
       "provider": "apify_linkedin_jobs",
       "query": "vendedor panama",
-      "scrapedAt": "2026-10-16T10:00:00.000Z",
+      "scrapedAt": "2026-10-31T10:00:00.000Z",
       "runId": "run_2026_10_16_a",
       "sourceJobId": "linkedin:lnk-1006",
       "pageUrl": null

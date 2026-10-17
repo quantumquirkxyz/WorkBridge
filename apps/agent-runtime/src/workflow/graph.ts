@@ -11,9 +11,15 @@ import type { GuardrailDecision } from "./guardrails";
 import {
   createMatchingService,
   matchingConfigFromEnv,
+  type CandidateNominationResult,
   type MatchingEnv,
   type MatchingService,
 } from "../matching";
+import {
+  type Roadmap,
+  type TrainingCatalog,
+  type TrainingPreferences,
+} from "@puente/training";
 import { CAPABILITY_CHAINS, ModelRouter, type ModelInvoke } from "./models";
 import { createExplorationAgent } from "../exploration/exploration-agent";
 import { createSeedCatalog } from "@puente/catalog";
@@ -44,6 +50,10 @@ export interface WorkflowResult {
   modelFallbacks: Array<{ capability: string; from: string; to: string }>;
   envelopes: AgentEnvelope[];
   mastraSteps: string[];
+  /** Structured deterministic match result, populated when matching ran. */
+  match?: CandidateNominationResult;
+  /** Structured training roadmap, populated when the candidate is not already apt. */
+  roadmap?: Roadmap;
 }
 
 export interface WorkflowDependencies {
@@ -54,6 +64,10 @@ export interface WorkflowDependencies {
   /** Matching service used when the caller supplies validated matching input. */
   matching?: MatchingService;
   matchingEnv?: MatchingEnv;
+  /** Cached training catalog used to build the roadmap. */
+  trainingCatalog?: TrainingCatalog;
+  /** Training preferences used to build the roadmap. */
+  trainingPreferences?: TrainingPreferences;
 }
 
 export interface WorkflowRunOptions {
@@ -89,6 +103,8 @@ export class WorkflowRuntime {
   private readonly clock: () => string;
   private readonly langfuse?: LangfuseClient;
   private readonly matching?: MatchingService;
+  private readonly trainingCatalog?: TrainingCatalog;
+  private readonly trainingPreferences?: TrainingPreferences;
   private readonly active = new Map<string, WorkflowServices>();
   private readonly cache = new Map<string, WorkflowResult>();
   private readonly workflow: ReturnType<WorkflowRuntime["build"]>;
@@ -99,6 +115,8 @@ export class WorkflowRuntime {
     this.matching = deps.matching ?? createMatchingService(
       matchingConfigFromEnv(deps.matchingEnv ?? (process.env as MatchingEnv)),
     );
+    this.trainingCatalog = deps.trainingCatalog;
+    this.trainingPreferences = deps.trainingPreferences;
     this.router = new ModelRouter(CAPABILITY_CHAINS, deps.complete);
     if (deps.catalog) this.router.preflight(deps.catalog);
     this.workflow = this.build();
@@ -154,6 +172,8 @@ export class WorkflowRuntime {
       traces: this.traces,
       router: this.router,
       ...(this.matching ? { matching: this.matching } : {}),
+      ...(this.trainingCatalog ? { trainingCatalog: this.trainingCatalog } : {}),
+      ...(this.trainingPreferences ? { trainingPreferences: this.trainingPreferences } : {}),
       clock: this.clock,
       envelopes: [],
       emit: options.onEvent,
@@ -198,6 +218,8 @@ export class WorkflowRuntime {
         modelFallbacks: carrier.modelFallbacks,
         envelopes: [...services.envelopes],
         mastraSteps: AGENT_ORDER.filter((agent) => agent in started.steps),
+        ...(carrier.matchResult ? { match: carrier.matchResult } : {}),
+        ...(carrier.roadmapResult ? { roadmap: carrier.roadmapResult } : {}),
       };
       this.lastIngestion = this.traces.flush();
       if (this.langfuse) await this.langfuse.ingest(this.lastIngestion);

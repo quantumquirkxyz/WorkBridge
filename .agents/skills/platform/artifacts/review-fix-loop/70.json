@@ -1,0 +1,18 @@
+{
+  "pr": 70,
+  "branch": "issue/38-make-the-mobile-web-installable-with-a-w",
+  "fixedPoint": "8eea3e07d4c0ba9814cb21ce54ae5321a928c807",
+  "passes": 1,
+  "status": "clean",
+  "planPosted": false,
+  "implementationPosted": false,
+  "validation": {
+    "build": "passed",
+    "gateCi": "passed",
+    "tests": 504,
+    "lineCoverage": 94.63,
+    "manifestCheck": "passed (/manifest.webmanifest static payload and PNG dimensions verified)"
+  },
+  "remaining": "No review findings on Standards or Spec axes.",
+  "nextConsumer": "ship-subissue"
+}

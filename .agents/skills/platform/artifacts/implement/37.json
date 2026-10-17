@@ -1,0 +1,35 @@
+{
+  "status": "completed",
+  "changes": [
+    "Configured Better Auth for apps/web with Postgres/Neon, server-only role and employerOrgId user fields, anonymous sessions, Google OAuth, and console magic-link delivery.",
+    "Added /api/auth/[...all], /ingresar, auth client helpers, anonymous account-link id preservation, and role-guarded candidate, counselor, and employer routes.",
+    "Added placeholder /orientador and /empresa pages with signed-in role display and Cerrar sesión.",
+    "Added Better Auth database migration, idempotent seeded counselor/employer roles with an employer organization, and auth setup documentation.",
+    "Added unit tests for role guard decisions."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npm run test -- apps/web/tests/role-guard.test.ts",
+      "npm run typecheck",
+      "npm run lint",
+      "npm run test",
+      "npm run gate:ci",
+      "git diff --check"
+    ],
+    "skipped": [
+      "Live web e2e sign-in flows were not run because Google OAuth credentials, a magic-link email transport, and a seeded Neon environment are not available in this worktree."
+    ],
+    "notes": "Issue #33 is closed. No secrets are committed; OAuth and email transport setup are documented with local console magic-link delivery."
+  },
+  "commitSha": "d68e1c898ebdb963f9fd641e9acc83aea2afe10e",
+  "branch": "issue/37-add-better-auth-sessions-roles-anonymous",
+  "nextConsumer": "publish-open-pr",
+  "blockedBy": [],
+  "riskRemaining": "Live OAuth and magic-link e2e coverage still needs an environment with Google credentials, email transport, migrated Better Auth tables, and seeded staff accounts.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  }
+}

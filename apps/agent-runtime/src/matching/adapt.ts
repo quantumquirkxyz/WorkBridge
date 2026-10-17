@@ -7,12 +7,14 @@ import {
   type Provenance,
   type Requirement,
 } from "@puente/domain";
+import type { MatchDecision as ApplicationMatchDecision } from "@puente/domain";
 import type {
   CandidateAvailability,
   CandidateSkillSignal,
   CandidateTransport,
   EvidenceSource,
   GeoPoint,
+  MatchDecision,
   SkillLevel,
   SolverCandidate,
   SolverVacancy,
@@ -49,6 +51,60 @@ export interface CandidateMatchContext {
   transport: Omit<CandidateTransport, "modes"> & { modes?: CandidateTransport["modes"] };
   expectedSalaryUsd: number;
   minimumSalaryUsd?: number;
+}
+
+export interface ApplicationDecisionProjectionOptions {
+  traceId?: string;
+  decisionId?: string;
+  strategy?: ApplicationMatchDecision["strategy"];
+}
+
+/** Project a solver decision onto the application drafting contract. */
+export function toApplicationMatchDecision(
+  decision: MatchDecision,
+  vacancy: JobRequirements,
+  options: ApplicationDecisionProjectionOptions = {},
+): ApplicationMatchDecision {
+  const failed = new Set(decision.failedConstraints);
+  const hardConstraints: ApplicationMatchDecision["hardConstraints"] = {
+    mandatorySkills: failed.has("mandatory_skills") || failed.has("mandatory_requirements_mapped") ? "fail" : "pass",
+    schedule: failed.has("schedule") ? "fail" : "pass",
+    salary: failed.has("salary") ? "fail" : "pass",
+    capacity: failed.has("capacity") ? "fail" : "pass",
+    geographic: failed.has("geographic_commute") || failed.has("geographic_accessibility") ? "fail" : "pass",
+  };
+  const byDimension = Object.fromEntries(decision.scoreBreakdown.map((item) => [item.dimension, item.rawScore]));
+  return {
+    schemaVersion: "1.0.0",
+    decisionId: options.decisionId ?? `decision-${decision.tieBreakKey}`,
+    traceId: options.traceId ?? decision.tieBreakKey,
+    candidateId: decision.candidateId,
+    vacancyId: decision.vacancyId,
+    strategy: options.strategy ?? "deterministic_greedy",
+    aptitude: decision.aptitude,
+    score: {
+      technicalRequirements: byDimension.technical ?? 0,
+      experienceEvidence: byDimension.experience ?? 0,
+      availability: byDimension.availability ?? 0,
+      transportAccessibility: byDimension.transport ?? 0,
+      salaryConditions: byDimension.salary ?? 0,
+      weightedTotal: decision.score,
+    },
+    hardConstraints,
+    transport: {
+      feasible: !failed.has("geographic_commute") && !failed.has("geographic_accessibility"),
+      source: decision.routing.source,
+    },
+    gaps: decision.hardConstraints.filter((item) => !item.satisfied).map((item) => ({
+      id: item.id,
+      severity: "critical" as const,
+      description: item.reason,
+    })),
+    biasAlerts: vacancy.alerts.map((alert) => ({ id: alert.id, reason: alert.reason })),
+    promotion: { applied: decision.promotion.applied, humanApproved: decision.promotion.applied },
+    tieBreak: { deterministic: true, usedProtectedAttributes: false, usedRandomness: false },
+    reasons: decision.reasons.map((message, index) => ({ code: `solver_reason_${index + 1}`, message })),
+  };
 }
 
 const EVIDENCE_SOURCE: Record<Provenance, EvidenceSource> = {

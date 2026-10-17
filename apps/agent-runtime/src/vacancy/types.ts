@@ -21,6 +21,7 @@ export interface RawVacancy {
   vacancyId?: string;
   title: string;
   employer?: string | null;
+  employerOrgId?: string;
   locale?: string;
   location?: Partial<Location> | string | null;
   rawText?: string;
@@ -40,6 +41,7 @@ export interface ExtractedVacancy {
   vacancyId: string | null;
   title: string;
   employer: string | null;
+  employerOrgId?: string;
   locale: string;
   location: Location;
   rawText: string | null;

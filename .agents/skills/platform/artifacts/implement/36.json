@@ -1,0 +1,31 @@
+{
+  "status": "completed",
+  "changes": [
+    "Added a Vitest jsdom project for apps/web/tests/components/**/*.test.tsx with Testing Library, user-event, MSW, and vitest-axe setup.",
+    "Extended coverage to apps/web/lib/**/*.ts and apps/web/components/**/*.tsx excluding components/ui/** under the existing thresholds.",
+    "Added Playwright web device projects Pixel 7, iPhone 14, and Desktop Chrome with per-project webServer arrays plus a top-level array so Playwright 1.64.1 launches @puente/web on port 4372 without OPENROUTER_API_KEY.",
+    "Added shared e2e helpers for serious/critical axe (light and dark), no horizontal scroll, and forbidden candidate vocabulary.",
+    "Added a Button component axe sample and a / smoke spec on all three devices; documented commands in docs/reference/frontend/testing.md."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npm run test",
+      "npm run test:coverage",
+      "npm run test:e2e",
+      "npm run typecheck",
+      "npm run lint"
+    ],
+    "skipped": [],
+    "notes": "jsdom Button axe test passed (501 tests). Coverage stayed above thresholds (84.53% statements, 86% lines, 82.14% functions, 73.75% branches). Playwright ran 6 tests: 3 runtime + 3 device smokes, all passed after WebKit appearance-none. #33 is closed; the existing shadcn Button was used."
+  },
+  "commitSha": "5beece9",
+  "branch": "issue/36-add-the-web-test-harness-jsdom-component",
+  "nextConsumer": "publish-open-pr",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  },
+  "riskRemaining": "Playwright 1.64.1 only launches top-level webServer entries; project arrays are declared for the ticket shape. Local port collisions with other worktrees required 4371/4372 instead of 4317/4318."
+}

@@ -149,6 +149,7 @@ function buildDocument(
     vacancyId,
     title: extracted.title,
     employer: extracted.employer,
+    ...(extracted.employerOrgId ? { employerOrgId: extracted.employerOrgId } : {}),
     source: extracted.source,
     capturedAt,
     locale: extracted.locale,

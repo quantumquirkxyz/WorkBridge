@@ -52,7 +52,9 @@
     },
     "matchingInput": {
       "type": "object"
-    }
+    },
+    "matchResult": { "type": "object" },
+    "roadmapResult": { "type": "object" }
   },
   "$defs": {
     "DeclaredCredentialClaim": {

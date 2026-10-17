@@ -1,0 +1,12 @@
+{
+  "status": "clean",
+  "prNumber": 69,
+  "prUrl": "https://github.com/HackathonFISC/equipo-02/pull/69",
+  "branch": "issue/36-add-the-web-test-harness-jsdom-component",
+  "fixedPoint": "origin/main",
+  "passCount": 1,
+  "standardsFindings": 0,
+  "specFindings": 0,
+  "blockedBy": [],
+  "nextConsumer": "ship-subissue"
+}

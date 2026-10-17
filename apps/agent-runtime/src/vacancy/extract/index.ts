@@ -21,6 +21,7 @@ function extractedFromText(
     vacancyId: null,
     title: parsed.title ?? "Vacante",
     employer: null,
+    employerOrgId: undefined,
     locale: "es-PA",
     location: { ...DEFAULT_LOCATION },
     rawText: text,

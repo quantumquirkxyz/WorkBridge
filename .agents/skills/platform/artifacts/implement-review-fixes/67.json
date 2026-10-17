@@ -1,0 +1,18 @@
+{
+  "status": "implemented",
+  "pr": 67,
+  "branch": "issue/37-add-better-auth-sessions-roles-anonymous",
+  "planComment": "https://github.com/HackathonFISC/equipo-02/pull/67#issuecomment-6230607243",
+  "completedItems": [
+    "Preserved linked staff role metadata when an anonymous session is upgraded to an existing counselor or employer account.",
+    "Kept candidate/new-account anonymous linking on the candidate default role.",
+    "Added focused tests for candidate fallback, counselor preservation, and employer organization preservation."
+  ],
+  "validation": [
+    "npm run test -- apps/web/tests/auth-linking.test.ts apps/web/tests/role-guard.test.ts",
+    "npm run typecheck",
+    "npm run lint",
+    "npm run gate:ci"
+  ],
+  "remainingBlockers": []
+}

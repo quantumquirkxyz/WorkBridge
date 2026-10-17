@@ -24,7 +24,9 @@ export {
   deriveExperienceLevel,
   toSolverCandidate,
   toSolverVacancy,
+  toApplicationMatchDecision,
   type CandidateMatchContext,
+  type ApplicationDecisionProjectionOptions,
   type VacancyMatchContext,
 } from "./adapt";
 

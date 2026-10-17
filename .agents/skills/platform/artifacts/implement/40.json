@@ -1,0 +1,27 @@
+{
+  "status": "completed",
+  "changes": [
+    "Added role- and ownership-scoped application draft and submission read endpoints.",
+    "Added employer organization propagation, signed-session coverage, and cross-organization rejection.",
+    "Added draft/submission history views without trace IDs.",
+    "Added the server-side web BFF at /api/applications/[...path].",
+    "Added employerOrgId to vacancy contracts and schema."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": ["bun run lint", "bun run typecheck", "bun run test:coverage"],
+    "skipped": [
+      "No PR publication or ship-subissue merge was performed because the user explicitly prohibited pushing and merging."
+    ],
+    "notes": "Runtime tests and full coverage suite passed. The BFF signs the session server-side and forwards trace/idempotency data without exposing the secret."
+  },
+  "commitSha": "9b1109c",
+  "branch": "issue/40-add-application-read-endpoints-employer",
+  "nextConsumer": "ship-subissue",
+  "riskRemaining": "The branch is validated locally but has not been pushed, reviewed, opened as a PR, or merged per instruction.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  }
+}

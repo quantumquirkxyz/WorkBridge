@@ -10,7 +10,7 @@ import { generateDocuments, type ApplicationDocuments } from "./draft";
 import { ApplicationError } from "./errors";
 import { parseEvidence, type EvidenceItem } from "./evidence";
 import { counselorGateReasons, type GateReason } from "./gates";
-import { actorFromBetterAuthSession, type Actor } from "./roles";
+import { actorFromBetterAuthSession, type Actor, type AuthRole } from "./roles";
 import { assertNoSecrets } from "./secrets";
 import { createMemoryIdempotencyStore, type IdempotencyStore } from "./store";
 
@@ -20,6 +20,8 @@ export interface DraftInput {
   candidateId: string;
   vacancyId: string;
   vacancyTitle: string;
+  employerOrgId?: string;
+  candidateDisplayName?: string;
   evidence: EvidenceItem[];
   match: MatchDecision;
 }
@@ -32,11 +34,19 @@ export interface ActionInput {
 
 export interface DraftView {
   draftId: string;
+  candidateId: string;
+  vacancyId: string;
+  employerOrgId?: string;
+  traceId: string;
+  vacancyTitle: string;
+  candidateDisplayName?: string;
+  evidence: EvidenceItem[];
   status: "open" | "rejected" | "submitted";
   documents: ApplicationDocuments;
   counselorGate: GateReason[];
   candidateApproved: boolean;
   counselorApproved: boolean;
+  history: HistoryEntry[];
 }
 
 export interface SubmitView {
@@ -44,10 +54,31 @@ export interface SubmitView {
   draftId: string;
   replayed: boolean;
   interview: "pending_employer_approval" | "approved" | "rejected";
+  employerOrgId?: string;
+  traceId?: string;
+  vacancyTitle?: string;
+  documents?: ApplicationDocuments;
+  evidence?: EvidenceItem[];
+  history?: HistoryEntry[];
+}
+
+export interface SubmissionSummary {
+  submissionId: string;
+  vacancyTitle: string;
+  interview: SubmitView["interview"];
+  traceId: string;
+}
+
+export interface HistoryEntry {
+  action: string;
+  actorRole: AuthRole;
+  timestamp: string;
+  reason: string;
 }
 
 interface Decision {
   actorId: string;
+  actorRole: AuthRole;
   reason: string;
   timestamp: string;
   evidenceIds: string[];
@@ -61,6 +92,7 @@ interface StoredDraft {
   status: "open" | "rejected" | "submitted";
   candidateApproval?: Decision;
   counselorApproval?: Decision;
+  history: HistoryEntry[];
 }
 
 interface StoredSubmission {
@@ -70,6 +102,7 @@ interface StoredSubmission {
   interview: SubmitView["interview"];
   employerApproval?: Decision;
   employerRejection?: Decision;
+  history: HistoryEntry[];
 }
 
 export interface ApplicationServiceOptions {
@@ -111,6 +144,7 @@ export class ApplicationService {
       input,
       selectedEvidenceIds: input.evidence.map((item) => item.id),
       status: "open",
+      history: [],
     };
     this.drafts.set(draft.id, draft);
     return this.draftView(draft);
@@ -133,6 +167,7 @@ export class ApplicationService {
       delete draft.counselorApproval;
     }
     this.audit(actor, "correction", action);
+    draft.history.push(this.historyEntry(actor, "correction", action.reason));
     return this.draftView(draft);
   }
 
@@ -148,6 +183,7 @@ export class ApplicationService {
       draft.counselorApproval = this.decision(actor, action.reason, draft.selectedEvidenceIds);
     }
     this.audit(actor, "approval", action);
+    draft.history.push(this.historyEntry(actor, "approval", action.reason));
     return this.draftView(draft);
   }
 
@@ -159,6 +195,7 @@ export class ApplicationService {
     this.requireDraftParty(actor, draft, "reject");
     draft.status = "rejected";
     this.audit(actor, "rejection", action);
+    draft.history.push(this.historyEntry(actor, "rejection", action.reason));
     return this.draftView(draft);
   }
 
@@ -193,7 +230,7 @@ export class ApplicationService {
       throw new ApplicationError("Candidate approval is required before submission.", 422, "candidate_approval_required");
     }
     if (
-      counselorGateReasons(draft.input.match, draft.input.evidence).length > 0 &&
+      this.hasCounselorGate(draft) &&
       !this.approvalCovers(draft.counselorApproval, draft.selectedEvidenceIds)
     ) {
       throw new ApplicationError("Counselor approval is required before submission.", 422, "counselor_approval_required");
@@ -203,17 +240,12 @@ export class ApplicationService {
       draftId: draft.id,
       fingerprint,
       interview: "pending_employer_approval",
+      history: [...draft.history, this.historyEntry(actor, "submission", action.reason)],
     };
     draft.status = "submitted";
     this.submissions.set(submission.id, submission);
     this.audit(actor, "submission", action);
-    const view: SubmitView = {
-      submissionId: submission.id,
-      draftId: draft.id,
-      replayed: false,
-      interview: submission.interview,
-    };
-    this.guard(view);
+    const view = this.submitView(submission, false);
     await this.idempotency.put({ key: action.idempotencyKey, fingerprint, response: view });
     return view;
   }
@@ -223,6 +255,7 @@ export class ApplicationService {
     this.requireRole(actor, "employer", "Only an employer can decide interview progression.");
     const submission = this.submissionById(submissionId);
     const draft = this.draftById(submission.draftId);
+    this.requireEmployerOrganization(actor, draft);
     const action = this.parseAction(raw, draft.input.traceId);
     const decision = this.decisionValue(raw);
     this.guard(action);
@@ -233,6 +266,7 @@ export class ApplicationService {
       submission.employerRejection = this.decision(actor, action.reason, []);
       submission.interview = "rejected";
       this.audit(actor, "rejection", action);
+      submission.history.push(this.historyEntry(actor, "rejection", action.reason));
     } else if (!submission.employerApproval) {
       throw new ApplicationError(
         "Employer approval is required before interview progression.",
@@ -242,6 +276,7 @@ export class ApplicationService {
     } else {
       submission.interview = "approved";
       this.audit(actor, "approval", action);
+      submission.history.push(this.historyEntry(actor, "approval", action.reason));
     }
     return this.submitView(submission, false);
   }
@@ -251,6 +286,7 @@ export class ApplicationService {
     this.requireRole(actor, "employer", "Only an employer can approve interview progression.");
     const submission = this.submissionById(submissionId);
     const draft = this.draftById(submission.draftId);
+    this.requireEmployerOrganization(actor, draft);
     const action = this.parseAction(raw, draft.input.traceId);
     this.guard(action);
     if (submission.employerRejection || submission.interview === "rejected") {
@@ -258,6 +294,7 @@ export class ApplicationService {
     }
     submission.employerApproval = this.decision(actor, action.reason, []);
     this.audit(actor, "approval", action);
+    submission.history.push(this.historyEntry(actor, "approval", action.reason));
     return this.submitView(submission, false);
   }
 
@@ -267,6 +304,67 @@ export class ApplicationService {
       throw new ApplicationError("traceId is required.", 422, "invalid_input");
     }
     return this.events.filter((event) => event.traceId === traceId).map((event) => ({ ...event }));
+  }
+
+  listDrafts(session: unknown, query: { candidateId?: string; gate?: string; pending?: boolean } = {}): DraftView[] {
+    const actor = this.actor(session);
+    let drafts: StoredDraft[];
+    if (query.gate === "counselor" && query.pending === true) {
+      this.requireRole(actor, "counselor", "Only a counselor can review gated drafts.");
+      drafts = [...this.drafts.values()].filter(
+        (draft) => draft.status === "open" && this.hasCounselorGate(draft) && !draft.counselorApproval,
+      );
+    } else {
+      this.requireRole(actor, "candidate", "Only the candidate can list their drafts.");
+      if (!query.candidateId || query.candidateId !== actor.id) {
+        throw new ApplicationError("A candidate can only list their own drafts.", 403, "forbidden");
+      }
+      drafts = [...this.drafts.values()].filter((draft) => draft.ownerId === actor.id);
+    }
+    return drafts.map((draft) => this.draftView(draft));
+  }
+
+  readDraft(session: unknown, draftId: string): DraftView {
+    const actor = this.actor(session);
+    const draft = this.draftById(draftId);
+    if (actor.role !== "counselor" && (actor.role !== "candidate" || actor.id !== draft.ownerId)) {
+      throw new ApplicationError("This draft is not available to the current actor.", 403, "forbidden");
+    }
+    if (actor.role === "counselor" && !this.hasCounselorGate(draft)) {
+      throw new ApplicationError("Counselors can only read drafts with gate reasons.", 403, "forbidden");
+    }
+    return this.draftView(draft);
+  }
+
+  listSubmissions(session: unknown, interview: string): SubmissionSummary[] {
+    const actor = this.actor(session);
+    this.requireRole(actor, "employer", "Only an employer can list submissions.");
+    if (interview !== "pending_employer_approval") {
+      throw new ApplicationError("Only pending employer approvals can be listed.", 422, "invalid_input");
+    }
+    return [...this.submissions.values()]
+      .filter((submission) => {
+        const draft = this.draftById(submission.draftId);
+        return submission.interview === interview && this.employerOwns(actor, draft);
+      })
+      .map((submission) => {
+        const draft = this.draftById(submission.draftId);
+        return {
+          submissionId: submission.id,
+          vacancyTitle: draft.input.vacancyTitle,
+          interview: submission.interview,
+          traceId: draft.input.traceId,
+        };
+      });
+  }
+
+  readSubmission(session: unknown, submissionId: string): SubmitView {
+    const actor = this.actor(session);
+    this.requireRole(actor, "employer", "Only an employer can read submissions.");
+    const submission = this.submissionById(submissionId);
+    const draft = this.draftById(submission.draftId);
+    this.requireEmployerOrganization(actor, draft);
+    return this.submitView(submission, false);
   }
 
   private actor(session: unknown): Actor {
@@ -327,6 +425,7 @@ export class ApplicationService {
     const candidateId = this.requiredString(body.candidateId, "candidateId");
     const vacancyId = this.requiredString(body.vacancyId, "vacancyId");
     const vacancyTitle = this.requiredString(body.vacancyTitle, "vacancyTitle");
+    const employerOrgId = body.employerOrgId === undefined ? undefined : this.requiredString(body.employerOrgId, "employerOrgId");
     const evidence = parseEvidence(body.evidence);
     assertMatchDecision(body.match);
     if (body.match.candidateId !== candidateId || body.match.vacancyId !== vacancyId) {
@@ -342,6 +441,8 @@ export class ApplicationService {
       candidateId,
       vacancyId,
       vacancyTitle,
+      employerOrgId,
+      candidateDisplayName: typeof body.candidateDisplayName === "string" && body.candidateDisplayName.trim() !== "" ? body.candidateDisplayName.trim() : undefined,
       evidence,
       match: body.match,
     };
@@ -418,7 +519,31 @@ export class ApplicationService {
   }
 
   private decision(actor: Actor, reason: string, evidenceIds: readonly string[]): Decision {
-    return { actorId: actor.id, reason, timestamp: this.clock(), evidenceIds: [...evidenceIds] };
+    return { actorId: actor.id, actorRole: actor.role, reason, timestamp: this.clock(), evidenceIds: [...evidenceIds] };
+  }
+
+  private historyEntry(actor: Actor, action: string, reason: string): HistoryEntry {
+    return { action, actorRole: actor.role, timestamp: this.clock(), reason };
+  }
+
+  private counselorGate(draft: StoredDraft): GateReason[] {
+    const selected = draft.input.evidence.filter((item) => draft.selectedEvidenceIds.includes(item.id));
+    return counselorGateReasons(draft.input.match, selected);
+  }
+
+  private hasCounselorGate(draft: StoredDraft): boolean {
+    return this.counselorGate(draft).length > 0;
+  }
+
+  /** Fail closed: a draft without an organization is never visible to an employer. */
+  private employerOwns(actor: Actor, draft: StoredDraft): boolean {
+    return draft.input.employerOrgId !== undefined && draft.input.employerOrgId === actor.employerOrgId;
+  }
+
+  private requireEmployerOrganization(actor: Actor, draft: StoredDraft): void {
+    if (!this.employerOwns(actor, draft)) {
+      throw new ApplicationError("This submission belongs to another employer organization.", 403, "forbidden");
+    }
   }
 
   private approvalCovers(decision: Decision | undefined, evidenceIds: readonly string[]): boolean {
@@ -434,22 +559,38 @@ export class ApplicationService {
     });
     const view: DraftView = {
       draftId: draft.id,
+      candidateId: draft.input.candidateId,
+      vacancyId: draft.input.vacancyId,
+      employerOrgId: draft.input.employerOrgId,
+      traceId: draft.input.traceId,
+      vacancyTitle: draft.input.vacancyTitle,
+      candidateDisplayName: draft.input.candidateDisplayName,
+      evidence: draft.input.evidence.filter((item) => draft.selectedEvidenceIds.includes(item.id)),
       status: draft.status,
       documents,
-      counselorGate: counselorGateReasons(draft.input.match, draft.input.evidence),
+      counselorGate: this.counselorGate(draft),
       candidateApproved: draft.candidateApproval !== undefined,
       counselorApproved: draft.counselorApproval !== undefined,
+      history: draft.history.map(({ actorRole, timestamp, reason, action }) => ({ actorRole, timestamp, reason, action })),
     };
     this.guard(view);
     return view;
   }
 
   private submitView(submission: StoredSubmission, replayed: boolean): SubmitView {
+    const draft = this.draftById(submission.draftId);
+    const approved = this.draftView(draft);
     const view: SubmitView = {
       submissionId: submission.id,
       draftId: submission.draftId,
       replayed,
       interview: submission.interview,
+      employerOrgId: draft.input.employerOrgId,
+      traceId: draft.input.traceId,
+      vacancyTitle: draft.input.vacancyTitle,
+      documents: approved.documents,
+      evidence: approved.evidence,
+      history: submission.history.map(({ actorRole, timestamp, reason, action }) => ({ actorRole, timestamp, reason, action })),
     };
     this.guard(view);
     return view;

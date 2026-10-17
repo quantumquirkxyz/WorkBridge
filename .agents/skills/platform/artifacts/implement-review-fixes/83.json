@@ -1,0 +1,20 @@
+{
+  "status": "implemented",
+  "pr": 83,
+  "branch": "issue/46-build-the-mi-ruta-view-and-the-no-match",
+  "completedItems": [
+    "Rendered zero-cost training opportunities as Gratis in both route views.",
+    "Explained why no route is generated when willing_to_train is false.",
+    "Added preference adjustment and training-enable actions that save and rebuild the exploration.",
+    "Provided both no-match actions: Ajustar mis preferencias and Ver mi ruta de capacitación when applicable."
+  ],
+  "validation": [
+    "bun run lint",
+    "bun run typecheck",
+    "bun x vitest run",
+    "bun run gate:ci (coverage blocked by @bcoe/v8-coverage stack overflow)"
+  ],
+  "remainingBlockers": [
+    "The repository coverage gate cannot complete in this environment because @bcoe/v8-coverage exceeds the call stack while merging coverage ranges."
+  ]
+}

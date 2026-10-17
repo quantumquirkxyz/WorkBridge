@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { IntakeResult, IntakeSourceKind } from '@puente/domain';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
@@ -8,12 +8,18 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Textarea } from './ui/textarea';
+import { AttachmentChip } from './AttachmentChip';
+import { VoiceRecorder } from './VoiceRecorder';
+import { validateAttachment, type AttachmentValidation } from '@/lib/attachments';
 
 type IntakeKind = IntakeSourceKind;
 
+/** Preferred recognition language for voice notes (Panama Spanish), with fallback handled by the engine. */
+const VOICE_LOCALE = 'es-PA';
+
 const KIND_OPTIONS: Array<{ value: IntakeKind; label: string; hint: string }> = [
   { value: 'text', label: 'Texto pegado', hint: 'Pega el contenido de tu CV o describe tus experiencias.' },
-  { value: 'audio_transcript', label: 'Audio transcrito', hint: 'Pega la transcripción de una nota de voz.' },
+  { value: 'audio_transcript', label: 'Audio transcrito', hint: 'Graba una nota de voz o pega su transcripción.' },
   { value: 'pdf', label: 'Archivo PDF', hint: 'Sube tu CV en PDF; se extrae el texto.' },
   { value: 'image', label: 'Imagen del CV', hint: 'Sube una foto o captura de tu CV.' },
 ];
@@ -61,6 +67,8 @@ export function IntakeForm() {
   const [kind, setKind] = useState<IntakeKind>('text');
   const [text, setText] = useState('');
   const [file, setFile] = useState<File | null>(null);
+  const [fileValidation, setFileValidation] = useState<AttachmentValidation | undefined>(undefined);
+  const [voiceLocale, setVoiceLocale] = useState<string | undefined>(undefined);
   const [altText, setAltText] = useState('');
   const [targetRoles, setTargetRoles] = useState('');
   const [status, setStatus] = useState<FormStatus>({ loading: false });
@@ -68,6 +76,12 @@ export function IntakeForm() {
 
   const activeKind = useMemo(() => KIND_OPTIONS.find((option) => option.value === kind), [kind]);
   const fileKind = isFileKind(kind);
+
+  // Keep per-kind transient state from leaking across source kinds.
+  useEffect(() => {
+    if (!fileKind) setFileValidation(undefined);
+    if (kind !== 'audio_transcript') setVoiceLocale(undefined);
+  }, [kind, fileKind]);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -82,10 +96,19 @@ export function IntakeForm() {
       if (roles.length > 0) {
         payload.targetRoles = roles;
       }
+      if (voiceLocale) {
+        payload.locale = voiceLocale;
+      }
 
       if (fileKind) {
         if (!file) {
           throw new Error('Selecciona un archivo PDF o imagen.');
+        }
+        const validation = validateAttachment(file, kind);
+        setFileValidation(validation);
+        if (!validation.ok) {
+          setStatus({ loading: false, error: validation.error });
+          return;
         }
         payload.fileName = file.name;
         payload.mimeType = file.type || undefined;
@@ -156,8 +179,27 @@ export function IntakeForm() {
                 id="intake-file"
                 type="file"
                 accept={kind === 'pdf' ? 'application/pdf' : 'image/*'}
-                onChange={(event) => setFile(event.target.files?.[0] ?? null)}
+                onChange={(event) => {
+                  const selected = event.target.files?.[0] ?? null;
+                  setFile(selected);
+                  if (selected) {
+                    setFileValidation(validateAttachment(selected, kind));
+                  } else {
+                    setFileValidation(undefined);
+                  }
+                }}
               />
+              {file && (
+                <AttachmentChip
+                  file={file}
+                  kind={kind}
+                  validation={fileValidation}
+                  onRemove={() => {
+                    setFile(null);
+                    setFileValidation(undefined);
+                  }}
+                />
+              )}
             </div>
             {kind === 'image' ? (
               <div className="field">
@@ -176,10 +218,27 @@ export function IntakeForm() {
             <Label htmlFor="intake-text">
               {kind === 'audio_transcript' ? 'Transcripción' : 'Texto del CV o experiencia'}
             </Label>
+            {kind === 'audio_transcript' ? (
+              <>
+                <VoiceRecorder
+                  locale={VOICE_LOCALE}
+                  onTranscript={(transcript) => {
+                    setText(transcript);
+                    setVoiceLocale(VOICE_LOCALE);
+                  }}
+                  autoRequestPermission
+                />
+                <div className="hint">La transcripción se graba con el idioma {VOICE_LOCALE}; el motor aplica su propio idioma de respaldo si no está disponible.</div>
+              </>
+            ) : null}
             <Textarea
               id="intake-text"
               value={text}
-              onChange={(event) => setText(event.target.value)}
+              onChange={(event) => {
+                setText(event.target.value);
+                // Editing the transcript manually clears the recorded voice locale.
+                if (kind === 'audio_transcript') setVoiceLocale(undefined);
+              }}
               placeholder="Ejemplo: Ayudaba en la tienda de mi familia los fines de semana, atendiendo clientes."
             />
           </div>

@@ -16,12 +16,14 @@ export interface BetterAuthSession {
     id: string;
     email: string;
     role: AuthRole;
+    employerOrgId?: string;
   };
 }
 
 export interface Actor {
   id: string;
   role: AuthRole;
+  employerOrgId?: string;
 }
 
 export interface SignedBetterAuthSession extends BetterAuthSession {
@@ -32,7 +34,7 @@ export interface SignedBetterAuthSession extends BetterAuthSession {
 export function sessionSignature(
   session: {
     session: { id: string; userId: string; expiresAt: string };
-    user: { id: string; email: string; role: string };
+    user: { id: string; email: string; role: string; employerOrgId?: string };
   },
   secret: string,
 ): string {
@@ -43,6 +45,7 @@ export function sessionSignature(
     session.user.id,
     session.user.email,
     session.user.role,
+    session.user.employerOrgId ?? "",
   ].join("\n");
   return createHmac("sha256", secret).update(payload).digest("hex");
 }
@@ -63,13 +66,14 @@ export function actorFromBetterAuthSession(value: unknown, nowIso: string, secre
   const body = value as {
     signature?: unknown;
     session?: { id?: unknown; userId?: unknown; expiresAt?: unknown };
-    user?: { id?: unknown; email?: unknown; role?: unknown };
+    user?: { id?: unknown; email?: unknown; role?: unknown; employerOrgId?: unknown };
   };
   const sessionId = body.session?.id;
   const userId = body.session?.userId;
   const id = body.user?.id;
   const email = body.user?.email;
   const role = body.user?.role;
+  const employerOrgId = body.user?.employerOrgId;
   const expiresAt = body.session?.expiresAt;
   if (
     typeof sessionId !== "string" ||
@@ -86,11 +90,14 @@ export function actorFromBetterAuthSession(value: unknown, nowIso: string, secre
       "invalid_session",
     );
   }
+  if (employerOrgId !== undefined && typeof employerOrgId !== "string") {
+    throw new ApplicationError("employerOrgId must be a string.", 401, "invalid_session");
+  }
   if (secret.length === 0 || typeof body.signature !== "string") {
     throw new ApplicationError("Better Auth session signature is missing.", 401, "invalid_session");
   }
   const expected = sessionSignature(
-    { session: { id: sessionId, userId, expiresAt }, user: { id, email, role } },
+    { session: { id: sessionId, userId, expiresAt }, user: { id, email, role, employerOrgId } },
     secret,
   );
   const provided = Buffer.from(body.signature);
@@ -108,5 +115,5 @@ export function actorFromBetterAuthSession(value: unknown, nowIso: string, secre
       "unknown_role",
     );
   }
-  return { id, role: role as AuthRole };
+  return { id, role: role as AuthRole, employerOrgId: employerOrgId as string | undefined };
 }
