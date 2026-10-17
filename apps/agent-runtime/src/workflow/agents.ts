@@ -172,25 +172,6 @@ export async function runAgent(
   services.emit?.({ event: "lifecycle", data: pending });
   publish(services, carrier, agent, "request", { tool, capability: AGENT_CAPABILITIES[agent] });
 
-  if (agent === "exploration" || agent === "profile_and_evidence") {
-    if (agent === "exploration" && !carrier.preferences) {
-      const finding: GuardrailDecision = { stage: "input", code: "preferences_required", source: "candidate", reason: "Candidate preferences are required for exploration.", allowed: false };
-      services.emit?.({ event: "lifecycle", data: finding });
-      publish(services, carrier, agent, "event", { status: "skipped", findings: [finding] });
-      return { ...carrier, findings: [...carrier.findings, finding] };
-    }
-    if (agent === "exploration" && services.explorationAgent && carrier.preferences) {
-      const exploration = await services.explorationAgent.run(carrier.preferences);
-      publish(services, carrier, agent, "response", exploration as unknown as Record<string, unknown>);
-      return { ...carrier, summaries: [...carrier.summaries, { agent, summary: JSON.stringify(exploration) }] };
-    }
-    if (agent === "profile_and_evidence" && services.profileAgent) {
-      const intake = await services.profileAgent.run({ kind: "text", ref: `${carrier.traceId}:candidate`, text: carrier.candidateText }, { traceId: carrier.traceId, candidateId: carrier.actorId, locale: "es-PA" });
-      publish(services, carrier, agent, "response", intake.profile as unknown as Record<string, unknown>);
-      return { ...carrier, summaries: [...carrier.summaries, { agent, summary: JSON.stringify(intake.profile) }] };
-    }
-  }
-
   if (agent === "exploration") {
     const findings = [
       ...carrier.requestedTools.map((requested) => screenRequestedTool(requested, carrier.actorRole)),
@@ -210,6 +191,34 @@ export async function runAgent(
   });
   if (!permission.allowed) {
     return reject(carrier, services, agent, span.id, dqlId, [permission]);
+  }
+
+  if (agent === "exploration" || agent === "profile_and_evidence") {
+    if (agent === "exploration" && !carrier.preferences) {
+      const finding: GuardrailDecision = { stage: "input", code: "preferences_required", source: "candidate", reason: "Candidate preferences are required for exploration.", allowed: false };
+      move(services, dqlId, "success", "exploration skipped: preferences required");
+      audit(services, carrier, agent, "preferences_required", { tool, constraint: finding.code });
+      const closed = services.traces.endSpan(span.id, { endTime: services.clock(), output: finding });
+      services.emit?.({ event: "trace", data: closed });
+      publish(services, carrier, agent, "event", { status: "skipped", findings: [finding] });
+      return { ...carrier, findings: [...carrier.findings, finding] };
+    }
+    if (agent === "exploration" && services.explorationAgent && carrier.preferences) {
+      const exploration = await services.explorationAgent.run(carrier.preferences);
+      move(services, dqlId, "success", "exploration completed deterministically");
+      const closed = services.traces.endSpan(span.id, { endTime: services.clock(), output: exploration, metadata: { deterministic: true } });
+      services.emit?.({ event: "trace", data: closed });
+      publish(services, carrier, agent, "response", exploration as unknown as Record<string, unknown>);
+      return { ...carrier, summaries: [...carrier.summaries, { agent, summary: JSON.stringify(exploration) }] };
+    }
+    if (agent === "profile_and_evidence" && services.profileAgent) {
+      const intake = await services.profileAgent.run({ kind: "text", ref: `${carrier.traceId}:candidate`, text: carrier.candidateText }, { traceId: carrier.traceId, candidateId: carrier.actorId, locale: "es-PA" });
+      move(services, dqlId, "success", "profile completed deterministically");
+      const closed = services.traces.endSpan(span.id, { endTime: services.clock(), output: intake.profile, metadata: { deterministic: true } });
+      services.emit?.({ event: "trace", data: closed });
+      publish(services, carrier, agent, "response", intake.profile as unknown as Record<string, unknown>);
+      return { ...carrier, summaries: [...carrier.summaries, { agent, summary: JSON.stringify(intake.profile) }] };
+    }
   }
 
   const prompt = promptFor(agent, carrier);

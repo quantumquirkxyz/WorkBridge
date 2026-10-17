@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
-import type { WorkflowRunRequest } from "@puente/domain";
+import { validateCandidateProfile, type WorkflowRunRequest, type CandidatePreferences } from "@puente/domain";
+import { validateExplorationResult } from "@puente/catalog";
+import preferencesFixture from "../../../../../packages/catalog/fixtures/preferences.json";
 import { CAPABILITY_CHAINS } from "../models";
 import { createWorkflowRuntime } from "../graph";
 import {
@@ -11,6 +13,7 @@ import {
 } from "../../matching/__tests__/helpers";
 
 const PRIMARY = CAPABILITY_CHAINS.planning.models[0];
+const PREFERENCES = preferencesFixture as CandidatePreferences;
 
 function request(overrides: Partial<WorkflowRunRequest> = {}): WorkflowRunRequest {
   return {
@@ -21,6 +24,7 @@ function request(overrides: Partial<WorkflowRunRequest> = {}): WorkflowRunReques
     declaredCredentials: [{ id: "cred-1", name: "Manipulación de alimentos" }],
     actor: { id: "cand-1", role: "candidate" },
     requestedTools: [],
+    preferences: PREFERENCES,
     ...overrides,
   };
 }
@@ -62,14 +66,14 @@ describe("employability workflow", () => {
       "response",
     ]);
     expect(result.envelopes.every((envelope) => envelope.trace_id === "trace-0001")).toBe(true);
-    expect(calls).toHaveLength(4);
+    expect(calls).toHaveLength(2);
     expect(engine.dql.list("trace-0001").every((record) => record.state === "success")).toBe(true);
     const completed = engine.audit.read().find((event) => event.action === "agent_completed");
     expect(completed).toMatchObject({
       trace_id: "trace-0001",
       actor: "cand-1",
       role: "candidate",
-      tool: "read_goals",
+      tool: "read_vacancy",
     });
     expect(engine.traces.tracesFor("trace-0001").spans[0]?.metadata).toMatchObject({
       trace_id: "trace-0001",
@@ -100,7 +104,7 @@ describe("employability workflow", () => {
     const result = await engine.run(request({ matchingInput }));
     const matching = result.agents.find((agent) => agent.agent === "market_and_matching");
     expect(matching?.summary).toContain('"candidateId"');
-    expect(calls).toHaveLength(3);
+    expect(calls).toHaveLength(1);
     expect(engine.audit.read().some((event) => event.action === "matching_completed")).toBe(true);
   });
 
@@ -133,7 +137,7 @@ describe("employability workflow", () => {
     expect(result.modelFallbacks[0]?.from).toBe(PRIMARY);
     expect(calls).toContain(PRIMARY);
     expect(engine.audit.read().some((event) => event.action === "model_fallback")).toBe(true);
-    const exploration = engine.dql.list("trace-0001").find((record) => record.id.endsWith("exploration"));
+    const exploration = engine.dql.list("trace-0001").find((record) => record.id.endsWith("market_and_matching"));
     expect(exploration?.history.map((entry) => entry.state)).toContain("retrying");
   });
 
@@ -143,8 +147,10 @@ describe("employability workflow", () => {
     });
     const result = await engine.run(request());
     expect(result.status).toBe("dead_letter");
-    expect(result.agents).toEqual([]);
-    const exploration = engine.dql.list("trace-0001")[0];
+    expect(result.agents.map((agent) => agent.agent)).toEqual(["exploration", "profile_and_evidence"]);
+    expect(result.envelopes.some((envelope) => envelope.agent === "exploration" && envelope.kind === "response")).toBe(true);
+    expect(result.envelopes.some((envelope) => envelope.agent === "profile_and_evidence" && envelope.kind === "response")).toBe(true);
+    const exploration = engine.dql.list("trace-0001").find((record) => record.id.endsWith("market_and_matching"));
     expect(exploration?.history.map((entry) => entry.state)).toEqual([
       "pending",
       "failed",
@@ -158,6 +164,23 @@ describe("employability workflow", () => {
     expect(engine.audit.read().some((event) => event.action === "model_dead_letter")).toBe(true);
   });
 
+  it("publishes Ajv-valid structured exploration and profile payloads", async () => {
+    const { engine } = runtime(async () => ({ text: "Plan de practica en caja" }));
+    const result = await engine.run(request({ idempotency_key: "idem-structured" }));
+    const exploration = result.envelopes.find((envelope) => envelope.agent === "exploration" && envelope.kind === "response");
+    const profile = result.envelopes.find((envelope) => envelope.agent === "profile_and_evidence" && envelope.kind === "response");
+    expect(validateExplorationResult(exploration?.payload)).toBe(true);
+    expect(validateCandidateProfile(profile?.payload)).toEqual({ valid: true });
+  });
+
+  it("requires preferences without invoking the exploration agent or model", async () => {
+    const { engine, calls } = runtime(async () => ({ text: "should not run" }));
+    const result = await engine.run(request({ idempotency_key: "idem-no-preferences", preferences: undefined }));
+    expect(result.findings[0]?.code).toBe("preferences_required");
+    expect(calls).toHaveLength(2);
+    expect(result.envelopes.find((envelope) => envelope.agent === "exploration" && envelope.kind === "event")?.payload).toMatchObject({ status: "skipped" });
+  });
+
   it("replays a completed run for the same idempotency key", async () => {
     const { engine, calls } = runtime(async () => ({ text: "Plan de practica en caja" }));
     const first = await engine.run(request());
@@ -165,7 +188,7 @@ describe("employability workflow", () => {
     expect(first.idempotentReplay).toBe(false);
     expect(second.idempotentReplay).toBe(true);
     expect(second.trace_id).toBe(first.trace_id);
-    expect(calls).toHaveLength(4);
+    expect(calls).toHaveLength(2);
   });
 
   it("rejects an invented credential returned by the model", async () => {

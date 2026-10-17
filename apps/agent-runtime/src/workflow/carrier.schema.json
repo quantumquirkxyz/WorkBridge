@@ -35,6 +35,7 @@
       "type": "array",
       "items": { "type": "string" }
     },
+    "preferences": { "$ref": "https://puente-laboral.pa/schemas/candidate-preferences/1.0.0" },
     "halted": { "type": "boolean" },
     "status": { "enum": ["running", "success", "rejected", "dead_letter"] },
     "findings": {
