@@ -1,0 +1,19 @@
+{
+  "status": "resolved",
+  "pr": 84,
+  "branch": "feat/issue-60-structured-workflow-results",
+  "base": "origin/main",
+  "conflictSource": "origin/main advanced from e9f5509 to 94403dd and conflicted in graph.test.ts.",
+  "resolution": [
+    "Preserved Issue 60 preference and structured-envelope assertions.",
+    "Preserved main's training workflow tests and updated expectations to the merged deterministic behavior.",
+    "Added a non-null assertion required by the merged main server test typecheck."
+  ],
+  "validation": {
+    "targetedTests": "15 passed",
+    "gateCi": "passed",
+    "fullTests": "75 files passed, 1 skipped; 630 passed, 8 skipped"
+  },
+  "nextConsumer": "ship-subissue",
+  "riskRemaining": "None known; PR must be rechecked for mergeability before shipping."
+}
