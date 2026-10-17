@@ -27,7 +27,6 @@ export default defineConfig({
         "packages/*/src/**/*.ts",
         "apps/agent-runtime/src/application/**/*.ts",
         "apps/web/lib/**/*.ts",
-        "apps/web/components/**/*.tsx",
       ],
       exclude: [
         "**/*.test.ts",

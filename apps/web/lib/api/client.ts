@@ -71,8 +71,8 @@ export async function postPreferences(draft: PreferencesDraft): Promise<Candidat
   return readJson<CandidatePreferences>(response);
 }
 
-export async function deleteCandidatePreferences(candidateId: string): Promise<DeletePreferencesResponse> {
-  const response = await fetch(`/api/preferences?candidateId=${encodeURIComponent(candidateId)}`, {
+export async function deleteCandidatePreferences(_candidateId: string): Promise<DeletePreferencesResponse> {
+  const response = await fetch('/api/candidate', {
     method: 'DELETE',
   });
   return readJson<DeletePreferencesResponse>(response);
