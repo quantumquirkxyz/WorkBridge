@@ -1,0 +1,30 @@
+{
+  "status": "completed",
+  "changes": [
+    "The seven execution-plane subissues of #56 are implemented and merged into main: solver decision projection, credential verification persistence, fresh demo catalogs, structured exploration/profile workflow results, solver-derived no-match roadmaps, structured match/training workflow results, and evaluation documentation.",
+    "The parent acceptance criteria are covered by the merged subissue implementations and their regression tests; no duplicate functional changes were required on the parent branch."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npm run typecheck",
+      "npx vitest run apps/agent-runtime/src/workflow/__tests__/graph.test.ts apps/web/tests/roadmap-handler.test.ts packages/training/src/__tests__/roadmap.test.ts",
+      "npm run gate:ci",
+      "git diff --check"
+    ],
+    "skipped": [
+      "The unconstrained npm test run is not a clean completion signal in this environment: two pre-existing PDF/OCR tests and one training beforeAll intermittently exceed Vitest timeouts under the full parallel suite. The same gate:ci run passed 635 tests with 8 skipped."
+    ],
+    "notes": "Focused execution-plane tests pass (42 tests). Typecheck passes. gate:ci passes with 635 tests, 8 skipped, and 92.6% line coverage."
+  },
+  "commitSha": "b4fd78987536adc4b30263ad25ebe07ceda0a9ec",
+  "branch": "feat/issue-56-refine-execution-plane",
+  "nextConsumer": "publish-open-pr",
+  "blockedBy": [],
+  "riskRemaining": "The full non-coverage test command remains sensitive to environment-dependent timeout behavior in unrelated PDF/OCR and training setup tests; publication should use the passing gate:ci result and retain this note.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  }
+}
