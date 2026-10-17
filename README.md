@@ -19,7 +19,8 @@ experiencia informal, certificaciones, transporte, horario, salario y equidad.
 
 ## Arquitectura de agentes
 
-The system uses four agents: Exploration, Profile and Evidence, Market and Matching, and Training.
+The system uses five workflow agents: Exploration, Profile and Evidence, Market and Matching, Bias
+Auditor, and Training.
 Mastra coordinates them through a workflow graph. Deterministic matching uses HiGHS; Google Maps
 handles routing; Certo is a separately deployed credential verifier with Accredible, Credly, and
 transparent mock fallbacks. Human approval is required before application submission.
