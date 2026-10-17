@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://puentelaboral.pa/schemas/workflow-carrier.schema.json",
+  "title": "WorkflowCarrier",
+  "description": "State carried between Mastra agent steps, validated with Ajv against JSON Schema 2020-12.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "traceId",
+    "idempotencyKey",
+    "candidateText",
+    "vacancyText",
+    "declaredCredentials",
+    "actorId",
+    "actorRole",
+    "requestedTools",
+    "halted",
+    "status",
+    "findings",
+    "summaries",
+    "modelFallbacks"
+  ],
+  "properties": {
+    "traceId": { "type": "string" },
+    "idempotencyKey": { "type": "string" },
+    "candidateText": { "type": "string" },
+    "vacancyText": { "type": "string" },
+    "declaredCredentials": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/DeclaredCredentialClaim" }
+    },
+    "actorId": { "type": "string" },
+    "actorRole": { "enum": ["candidate", "counselor", "employer", "system"] },
+    "requestedTools": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "halted": { "type": "boolean" },
+    "status": { "enum": ["running", "success", "rejected", "dead_letter"] },
+    "findings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/GuardrailFinding" }
+    },
+    "summaries": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/AgentSummary" }
+    },
+    "modelFallbacks": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ModelFallback" }
+    }
+  },
+  "$defs": {
+    "DeclaredCredentialClaim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" }
+      }
+    },
+    "GuardrailFinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed", "stage", "code", "reason", "source"],
+      "properties": {
+        "allowed": { "type": "boolean" },
+        "stage": { "enum": ["input", "tool_result", "permission", "output", "schema"] },
+        "code": {
+          "enum": [
+            "ok",
+            "prompt_injection",
+            "pii_leak",
+            "invalid_schema",
+            "invented_credential",
+            "unauthorized_tool"
+          ]
+        },
+        "reason": { "type": "string" },
+        "source": { "type": "string" }
+      }
+    },
+    "AgentSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["agent", "summary"],
+      "properties": {
+        "agent": {
+          "enum": ["exploration", "profile_and_evidence", "market_and_matching", "training"]
+        },
+        "summary": { "type": "string" }
+      }
+    },
+    "ModelFallback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["capability", "from", "to"],
+      "properties": {
+        "capability": { "type": "string" },
+        "from": { "type": "string" },
+        "to": { "type": "string" }
+      }
+    }
+  }
+}

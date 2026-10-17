@@ -67,10 +67,17 @@ export function tesseractOcrAdapter(langs = 'spa+eng'): OcrAdapter {
         request.bytes.slice(0, 8).every((byte, index) => byte === [137, 80, 78, 71, 13, 10, 26, 10][index]);
       const isJpeg = request.bytes.length >= 3 && request.bytes[0] === 0xff && request.bytes[1] === 0xd8 && request.bytes[2] === 0xff;
       if (!isPng && !isJpeg) throw new OcrUnavailableError();
-      let recognize: ((image: Uint8Array, lang: string) => Promise<{ data: { text: string; confidence?: number } }>) | undefined;
+      type Recognize = (
+        image: Uint8Array,
+        lang: string,
+      ) => Promise<{ data: { text: string; confidence?: number } }>;
+      let recognize: Recognize | undefined;
       try {
         const moduleName = 'tesseract.js';
-        const mod: any = await import(/* @vite-ignore */ moduleName);
+        const mod = (await import(/* @vite-ignore */ moduleName)) as {
+          recognize?: Recognize;
+          default?: { recognize?: Recognize };
+        };
         recognize = mod.recognize ?? mod.default?.recognize;
       } catch {
         recognize = undefined;

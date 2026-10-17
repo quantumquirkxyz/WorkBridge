@@ -119,3 +119,15 @@ export {
 export { inferKind, parseLevel, parseVacancyText, slugify } from "./vacancy/text";
 
 export { verificationConfigFromEnv, verifyCredential } from "./verification/index";
+
+export {
+  AGENT_CAPABILITIES,
+  CAPABILITY_CHAINS,
+  WORKFLOW_ID,
+  createOpenRouterClient,
+  createWorkflowRuntime,
+  encodeSseEvent,
+  handleWorkflowRequest,
+  type WorkflowDependencies,
+  type WorkflowResult,
+} from "./workflow";
