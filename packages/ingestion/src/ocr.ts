@@ -63,6 +63,10 @@ export function tesseractOcrAdapter(langs = 'spa+eng'): OcrAdapter {
   return {
     name: 'tesseract',
     async extract(request) {
+      const isPng = request.bytes.length >= 8 &&
+        request.bytes.slice(0, 8).every((byte, index) => byte === [137, 80, 78, 71, 13, 10, 26, 10][index]);
+      const isJpeg = request.bytes.length >= 3 && request.bytes[0] === 0xff && request.bytes[1] === 0xd8 && request.bytes[2] === 0xff;
+      if (!isPng && !isJpeg) throw new OcrUnavailableError();
       let recognize: ((image: Uint8Array, lang: string) => Promise<{ data: { text: string; confidence?: number } }>) | undefined;
       try {
         const moduleName = 'tesseract.js';
@@ -72,7 +76,12 @@ export function tesseractOcrAdapter(langs = 'spa+eng'): OcrAdapter {
         recognize = undefined;
       }
       if (!recognize) throw new OcrUnavailableError();
-      const result = await recognize(request.bytes, langs);
+       let result: { data: { text: string; confidence?: number } };
+       try {
+         result = await recognize(request.bytes, langs);
+       } catch {
+         throw new OcrUnavailableError();
+       }
       return {
         text: result.data.text.trim(),
         confidence: (result.data.confidence ?? 60) / 100,

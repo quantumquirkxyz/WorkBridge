@@ -169,7 +169,7 @@ const FUZZY_THRESHOLD = 0.8;
  * Map free-text wording to a canonical taxonomy skill. Original wording is
  * never modified by this function; callers keep it alongside the match.
  */
-export function matchSkill(
+export function matchVacancySkill(
   text: string,
   taxonomy: SkillTaxonomy = PANAMA_SKILL_TAXONOMY,
 ): CanonicalSkill {

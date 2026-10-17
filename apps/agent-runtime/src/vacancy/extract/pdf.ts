@@ -35,6 +35,11 @@ export async function defaultPdfExtractor(
   _filename?: string,
 ): Promise<TextExtractionResult> {
   try {
+    // unpdf's current PDF.js bundle targets Node 22's Iterator global. Keep
+    // the adapter usable on the repository's Node 20 test/runtime baseline.
+    if (typeof (globalThis as { Iterator?: unknown }).Iterator === "undefined") {
+      (globalThis as unknown as { Iterator: unknown }).Iterator = class Iterator {};
+    }
     const unpdf = await import("unpdf");
     const document = await unpdf.getDocumentProxy(new Uint8Array(data));
     const pages: string[] = [];

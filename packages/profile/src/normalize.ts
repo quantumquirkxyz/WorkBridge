@@ -12,7 +12,7 @@ import {
   SKILL_LEVEL_MIN,
   makeId,
   matchMentions,
-  matchSkill,
+  profileMatchSkill,
   normalizeTerm,
   resolveTargetRoles,
   TAXONOMY_BY_ID,
@@ -137,10 +137,10 @@ function resolveTaxonomy(draft: {
   if (hint) {
     const byId = TAXONOMY_BY_ID.get(hint);
     if (byId) return byId;
-    const byHint = matchSkill(hint);
+    const byHint = profileMatchSkill(hint);
     if (byHint) return byHint.skill;
   }
-  return matchSkill(draft.original_term)?.skill;
+  return profileMatchSkill(draft.original_term)?.skill;
 }
 
 interface SkillBuildResult {
