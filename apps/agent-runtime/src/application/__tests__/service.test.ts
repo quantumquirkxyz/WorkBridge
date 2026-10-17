@@ -375,6 +375,63 @@ describe("application approval and submission", () => {
     ).toThrow(/guardrail/);
   });
 
+  it("removes rejected and approved drafts from the counselor pending queue", () => {
+    const app = service();
+    const unverified: EvidenceItem = {
+      id: "cert-q",
+      kind: "certification",
+      text: "Certificado declarado, aún sin verificar.",
+      credentialStatus: "unverified",
+    };
+    const pending = (): string[] =>
+      app.listDrafts(session("counselor"), { gate: "counselor", pending: true }).map((draft) => draft.draftId);
+    const rejectedDraft = app.createDraft(
+      session("candidate"),
+      draftInput({ idempotencyKey: "idem-q1", evidence: [unverified], match: gatedMatch() }),
+    );
+    const approvedDraft = app.createDraft(
+      session("candidate"),
+      draftInput({ idempotencyKey: "idem-q2", evidence: [unverified], match: gatedMatch() }),
+    );
+    expect(pending()).toEqual([rejectedDraft.draftId, approvedDraft.draftId]);
+
+    app.rejectDraft(session("counselor"), rejectedDraft.draftId, action("no cumple", "idem-q3"));
+    expect(pending()).toEqual([approvedDraft.draftId]);
+
+    app.approveDraft(session("counselor"), approvedDraft.draftId, action("la brecha queda explícita", "idem-q4"));
+    expect(pending()).toEqual([]);
+  });
+
+  it("exposes trace, vacancy, candidate, and selected evidence in the draft view", () => {
+    const app = service();
+    const view = app.createDraft(session("candidate"), draftInput({ candidateDisplayName: "Ana Pérez" }));
+    expect(view.traceId).toBe("trace-1");
+    expect(view.vacancyTitle).toBe("Auxiliar administrativo");
+    expect(view.candidateDisplayName).toBe("Ana Pérez");
+    expect(view.evidence.map((item) => item.id)).toEqual(["ev-1"]);
+  });
+
+  it("computes the counselor gate over the selected evidence only", () => {
+    const app = service();
+    const unverified: EvidenceItem = {
+      id: "cert-g",
+      kind: "certification",
+      text: "Certificado declarado, aún sin verificar.",
+      credentialStatus: "unverified",
+    };
+    const created = app.createDraft(
+      session("candidate"),
+      draftInput({ evidence: [...evidence(), unverified], match: match() }),
+    );
+    expect(created.counselorGate.map((reason) => reason.code)).toEqual(["unverified_credential"]);
+    const corrected = app.correctDraft(session("candidate"), created.draftId, {
+      ...action("quito el certificado no verificado", "idem-g"),
+      includeEvidenceIds: ["ev-1"],
+    });
+    expect(corrected.evidence.map((item) => item.id)).toEqual(["ev-1"]);
+    expect(corrected.counselorGate).toEqual([]);
+  });
+
   it("lets a counselor review a clean draft without making that approval mandatory", async () => {
     const app = service();
     const created = app.createDraft(session("candidate"), draftInput());
