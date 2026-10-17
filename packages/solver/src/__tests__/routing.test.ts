@@ -94,7 +94,7 @@ describe("createRoutingPort", () => {
   it("uses the local matrix when Google Maps is not configured", async () => {
     const estimate = await createRoutingPort().route(request);
     expect(estimate.source).toBe("local_matrix");
-    expect(estimate.fallbackReason).toBeUndefined();
+    expect(estimate.fallbackReason).toBe("Google Maps is not configured; using the local matrix.");
   });
 
   it("prefers Google Maps when it succeeds", async () => {
