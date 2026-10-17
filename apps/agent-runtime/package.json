@@ -13,7 +13,11 @@
   },
   "dependencies": {
     "@puente/domain": "*",
+    "tesseract.js": "^5.1.1",
+    "unpdf": "^1.9.0",
     "@puente/ingestion": "*",
     "@puente/profile": "*"
-  }
+  },
+  "description": "Agent runtime seam. This issue delivers the vacancy normalization and fairness pipeline; the Mastra workflow graph is added by its own ticket.",
+  "devDependencies": {}
 }

@@ -1,0 +1,35 @@
+{
+  "vacancyId": "vac-metro-support",
+  "location": { "lat": 8.9833, "lng": -79.5167 },
+  "mandatory": [
+    {
+      "requirementId": "req-1",
+      "skillId": "PA-OFF-0002",
+      "wording": "Manejo de Excel",
+      "requiredLevel": 2
+    },
+    {
+      "requirementId": "req-2",
+      "skillId": "PA-CS-0001",
+      "wording": "Atención al cliente",
+      "requiredLevel": 2
+    }
+  ],
+  "desirable": [
+    {
+      "requirementId": "req-3",
+      "skillId": "PA-LANG-0002",
+      "wording": "Inglés básico",
+      "requiredLevel": 1
+    }
+  ],
+  "schedule": {
+    "days": [1, 2, 3, 4, 5],
+    "startMinute": 480,
+    "endMinute": 1020,
+    "weeklyHours": 45
+  },
+  "salaryMinUsd": 600,
+  "salaryMaxUsd": 800,
+  "capacity": 2
+}

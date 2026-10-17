@@ -1,43 +1,50 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "moduleDetection": "force",
-    "jsx": "react-jsx",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "types": [
+      "node"
+    ],
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
     "noFallthroughCasesInSwitch": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
     "skipLibCheck": true,
     "noEmit": true,
-    "types": ["node"],
     "baseUrl": ".",
     "paths": {
-      "@puente/domain": ["packages/domain/src/index.ts"],
-      "@puente/domain/*": ["packages/domain/src/*"],
-      "@puente/ingestion": ["packages/ingestion/src/index.ts"],
-      "@puente/ingestion/*": ["packages/ingestion/src/*"],
-      "@puente/profile": ["packages/profile/src/index.ts"],
-      "@puente/profile/*": ["packages/profile/src/*"],
-      "@puente/agent-runtime": ["apps/agent-runtime/src/index.ts"]
-    }
+      "@puente/domain": [
+        "packages/domain/src/index.ts"
+      ],
+      "@puente/solver": [
+        "packages/solver/src/index.ts"
+      ],
+      "@puente/ingestion": [
+        "packages/ingestion/src/index.ts"
+      ],
+      "@puente/profile": [
+        "packages/profile/src/index.ts"
+      ],
+      "@puente/agent-runtime": [
+        "apps/agent-runtime/src/index.ts"
+      ]
+    },
+    "moduleDetection": "force",
+    "jsx": "react-jsx"
   },
   "include": [
     "packages/**/*.ts",
     "apps/**/*.ts",
     "apps/**/*.tsx",
     "tests/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/node_modules/**",
-    "**/.next/**",
-    "**/dist/**"
   ]
 }

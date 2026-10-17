@@ -1,0 +1,301 @@
+{
+  "version": "2026.10.0-pa-seed",
+  "source": "ESCO-based Panamanian skills taxonomy (seed subset)",
+  "provenance": "Derived from the ESCO occupational skills pillar (v1.1 structure) and localized for the Panama Metro and Panama Oeste target roles: junior technical support, customer service, and administrative work. Each entry keeps an ESCO reference label and an `escoUri` slot; URIs are intentionally null in the seed because they must be verified against the ESCO API before production use (see ADR-0002). Local `id` values are stable and are the join key used by the application.",
+  "skills": [
+    {
+      "id": "PA-IT-0001",
+      "labelEs": "Soporte técnico",
+      "labelEn": "Technical support",
+      "escoLabel": "provide technical support",
+      "escoUri": null,
+      "kind": "skill",
+      "aliases": [
+        "soporte tecnico",
+        "soporte de ti",
+        "soporte it",
+        "mesa de ayuda",
+        "help desk",
+        "helpdesk",
+        "atencion de incidencias",
+        "resolucion de tickets"
+      ]
+    },
+    {
+      "id": "PA-IT-0002",
+      "labelEs": "Mantenimiento de equipos de cómputo",
+      "labelEn": "Computer hardware maintenance",
+      "escoLabel": "maintain computer hardware",
+      "escoUri": null,
+      "kind": "skill",
+      "aliases": [
+        "mantenimiento de computadoras",
+        "mantenimiento de equipos",
+        "reparacion de equipos",
+        "hardware",
+        "instalacion de hardware"
+      ]
+    },
+    {
+      "id": "PA-IT-0003",
+      "labelEs": "Redes y conectividad básica",
+      "labelEn": "Basic networking and connectivity",
+      "escoLabel": "maintain computer network",
+      "escoUri": null,
+      "kind": "skill",
+      "aliases": [
+        "redes",
+        "tcp/ip",
+        "tcp ip",
+        "cableado estructurado",
+        "configuracion de red",
+        "conectividad"
+      ]
+    },
+    {
+      "id": "PA-IT-0004",
+      "labelEs": "Sistemas operativos Windows",
+      "labelEn": "Windows operating systems",
+      "escoLabel": "use operating systems",
+      "escoUri": null,
+      "kind": "skill",
+      "aliases": ["windows", "windows 10", "windows 11", "sistema operativo windows"]
+    },
+    {
+      "id": "PA-OFF-0001",
+      "labelEs": "Paquete de oficina",
+      "labelEn": "Office productivity suite",
+      "escoLabel": "use office software",
+      "escoUri": null,
+      "kind": "skill",
+      "aliases": [
+        "microsoft office",
+        "ofimatica",
+        "paquete office",
+        "word",
+        "powerpoint",
+        "google workspace"
+      ]
+    },
+    {
+      "id": "PA-OFF-0002",
+      "labelEs": "Hoja de cálculo Excel",
+      "labelEn": "Spreadsheet software",
+      "escoLabel": "manage spreadsheets",
+      "escoUri": null,
+      "kind": "skill",
+      "aliases": ["excel", "hojas de calculo", "excel intermedio", "excel avanzado"]
+    },
+    {
+      "id": "PA-OFF-0003",
+      "labelEs": "Digitación de datos",
+      "labelEn": "Data entry",
+      "escoLabel": "enter data",
+      "escoUri": null,
+      "kind": "skill",
+      "aliases": [
+        "digitacion",
+        "captura de datos",
+        "ingreso de datos",
+        "data entry",
+        "transcripcion de datos"
+      ]
+    },
+    {
+      "id": "PA-OFF-0004",
+      "labelEs": "Gestión de agenda y correspondencia",
+      "labelEn": "Scheduling and correspondence management",
+      "escoLabel": "manage schedules",
+      "escoUri": null,
+      "kind": "skill",
+      "aliases": [
+        "manejo de agenda",
+        "agenda",
+        "gestion de correspondencia",
+        "recepcion de documentos",
+        "archivo"
+      ]
+    },
+    {
+      "id": "PA-CS-0001",
+      "labelEs": "Atención al cliente",
+      "labelEn": "Customer service",
+      "escoLabel": "provide customer service",
+      "escoUri": null,
+      "kind": "skill",
+      "aliases": [
+        "atencion al cliente",
+        "servicio al cliente",
+        "customer service",
+        "atencion al usuario",
+        "trato con clientes",
+        "servicio al usuario"
+      ]
+    },
+    {
+      "id": "PA-CS-0002",
+      "labelEs": "Manejo de caja",
+      "labelEn": "Cash handling",
+      "escoLabel": "handle cash",
+      "escoUri": null,
+      "kind": "skill",
+      "aliases": [
+        "manejo de caja",
+        "caja",
+        "manejo de efectivo",
+        "cuadre de caja",
+        "cash handling"
+      ]
+    },
+    {
+      "id": "PA-CS-0003",
+      "labelEs": "Ventas y cierre de ventas",
+      "labelEn": "Sales and closing",
+      "escoLabel": "sell products",
+      "escoUri": null,
+      "kind": "skill",
+      "aliases": ["ventas", "sales", "cierre de ventas", "promocion de productos"]
+    },
+    {
+      "id": "PA-CS-0004",
+      "labelEs": "Gestión de relación con clientes (CRM)",
+      "labelEn": "Customer relationship management",
+      "escoLabel": "manage customer relationships",
+      "escoUri": null,
+      "kind": "skill",
+      "aliases": ["crm", "gestion de clientes", "sistema crm", "salesforce", "hubspot"]
+    },
+    {
+      "id": "PA-CS-0005",
+      "labelEs": "Telemercadeo y centro de llamadas",
+      "labelEn": "Telemarketing and call center",
+      "escoLabel": "answer customer calls",
+      "escoUri": null,
+      "kind": "skill",
+      "aliases": [
+        "call center",
+        "centro de llamadas",
+        "telemercadeo",
+        "atencion telefonica",
+        "telefono"
+      ]
+    },
+    {
+      "id": "PA-CS-0006",
+      "labelEs": "Inventario y control de existencias",
+      "labelEn": "Inventory control",
+      "escoLabel": "manage stock",
+      "escoUri": null,
+      "kind": "skill",
+      "aliases": [
+        "inventario",
+        "control de inventario",
+        "manejo de inventario",
+        "existencias",
+        "stock"
+      ]
+    },
+    {
+      "id": "PA-CS-0007",
+      "labelEs": "Punto de venta (POS)",
+      "labelEn": "Point of sale operation",
+      "escoLabel": "operate point of sale",
+      "escoUri": null,
+      "kind": "skill",
+      "aliases": ["punto de venta", "pos", "terminal punto de venta", "tpv"]
+    },
+    {
+      "id": "PA-SOFT-0001",
+      "labelEs": "Comunicación escrita",
+      "labelEn": "Written communication",
+      "escoLabel": "communicate in writing",
+      "escoUri": null,
+      "kind": "skill",
+      "aliases": [
+        "comunicacion escrita",
+        "redaccion",
+        "escritura clara",
+        "written communication"
+      ]
+    },
+    {
+      "id": "PA-SOFT-0002",
+      "labelEs": "Comunicación oral",
+      "labelEn": "Verbal communication",
+      "escoLabel": "communicate verbally",
+      "escoUri": null,
+      "kind": "skill",
+      "aliases": [
+        "comunicacion oral",
+        "comunicacion efectiva",
+        "expresion oral",
+        "verbal communication"
+      ]
+    },
+    {
+      "id": "PA-SOFT-0003",
+      "labelEs": "Trabajo en equipo",
+      "labelEn": "Teamwork",
+      "escoLabel": "work in teams",
+      "escoUri": null,
+      "kind": "skill",
+      "aliases": ["trabajo en equipo", "teamwork", "colaboracion"]
+    },
+    {
+      "id": "PA-SOFT-0004",
+      "labelEs": "Resolución de problemas",
+      "labelEn": "Problem solving",
+      "escoLabel": "solve problems",
+      "escoUri": null,
+      "kind": "skill",
+      "aliases": [
+        "resolucion de problemas",
+        "problem solving",
+        "capacidad de analisis",
+        "pensamiento critico"
+      ]
+    },
+    {
+      "id": "PA-SOFT-0005",
+      "labelEs": "Gestión del tiempo",
+      "labelEn": "Time management",
+      "escoLabel": "manage time",
+      "escoUri": null,
+      "kind": "skill",
+      "aliases": ["gestion del tiempo", "organizacion del tiempo", "time management", "puntualidad"]
+    },
+    {
+      "id": "PA-SOFT-0006",
+      "labelEs": "Atención al detalle",
+      "labelEn": "Attention to detail",
+      "escoLabel": "pay attention to detail",
+      "escoUri": null,
+      "kind": "skill",
+      "aliases": [
+        "atencion al detalle",
+        "detalle",
+        "minuciosidad",
+        "attention to detail",
+        "cuidado con los detalles"
+      ]
+    },
+    {
+      "id": "PA-LANG-0001",
+      "labelEs": "Idioma español",
+      "labelEn": "Spanish language",
+      "escoLabel": "Spanish",
+      "escoUri": null,
+      "kind": "language",
+      "aliases": ["espanol", "spanish", "idioma espanol"]
+    },
+    {
+      "id": "PA-LANG-0002",
+      "labelEs": "Idioma inglés",
+      "labelEn": "English language",
+      "escoLabel": "English",
+      "escoUri": null,
+      "kind": "language",
+      "aliases": ["ingles", "english", "idioma ingles", "bilingue"]
+    }
+  ]
+}

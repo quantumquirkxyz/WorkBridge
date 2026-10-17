@@ -1,0 +1,10 @@
+{
+  "vacancyId": "vac-mixed-001",
+  "title": "Agente de Servicio al Cliente",
+  "mandatory": [
+    "Atención al cliente",
+    "Persona dinámica y proactiva",
+    "Edad máxima 30 años"
+  ],
+  "desirable": ["Buena presencia"]
+}
