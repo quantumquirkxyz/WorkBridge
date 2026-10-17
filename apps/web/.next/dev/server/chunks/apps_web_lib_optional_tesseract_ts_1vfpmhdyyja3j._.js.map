@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///D:/ProyectoAgentesIAHACKATONFISC/Agent-Hackathon/apps/web/lib/optional/tesseract.ts"],"sourcesContent":["// Optional-dependency stub for `tesseract.js`.\r\n//\r\n// The offline OCR fallback in `@puente/ingestion` lazily imports `tesseract.js`,\r\n// which is intentionally not installed. Aliasing it here keeps the bundler from\r\n// failing to resolve that import; at runtime the adapter finds no `recognize`\r\n// export and raises `OcrUnavailableError`, which the pipeline handles.\r\nexport {};\r\n"],"names":[],"mappings":"AAAA,+CAA+C;AAC/C,EAAE;AACF,iFAAiF;AACjF,gFAAgF;AAChF,8EAA8E;AAC9E,uEAAuE"}}]
+}
