@@ -10,7 +10,7 @@ import type { CachedVacancy } from '../src/index';
 import catalogFixture from '../fixtures/vacancy-catalog.json';
 import preferencesFixture from '../fixtures/preferences.json';
 
-const NOW = () => new Date('2026-10-16T12:00:00.000Z');
+const NOW = () => new Date('2026-11-01T00:00:00.000Z');
 const records = catalogFixture as CachedVacancy[];
 const preferences = preferencesFixture as CandidatePreferences;
 
@@ -33,9 +33,9 @@ describe('exploreVacancies', () => {
     const match = result.matches[0]!;
     expect(match.provenance.provider).toBe('apify_linkedin_jobs');
     expect(match.provenance.sourceUrl).toBe('https://www.linkedin.com/jobs/view/lnk-1001');
-    expect(match.freshness.ageHours).toBe(3);
+    expect(match.freshness.ageHours).toBe(15);
     expect(match.freshness.stale).toBe(false);
-    expect(match.freshness.label).toBe('Publicada hace 3 horas');
+    expect(match.freshness.label).toBe('Publicada hace 15 horas');
     expect(match.matchReasons.some((reason) => reason.includes('Habilidades afines'))).toBe(true);
   });
 
@@ -64,9 +64,9 @@ describe('exploreVacancies', () => {
         jobId: 'lnk-3001',
         jobUrl: 'https://example.com/jobs/lnk-3001',
         title: 'Pasantía administrativa',
-        postedAt: '2026-10-16T09:00:00.000Z',
-        queriedAt: '2026-10-16T10:00:00.000Z',
-        scrapingInfo: { provider: 'seed', query: 'pasantia', scrapedAt: '2026-10-16T10:00:00.000Z' },
+        postedAt: '2026-10-31T09:00:00.000Z',
+        queriedAt: '2026-10-31T10:00:00.000Z',
+        scrapingInfo: { provider: 'seed', query: 'pasantia', scrapedAt: '2026-10-31T10:00:00.000Z' },
         contractType: 'internship',
         salary: { minUsd: 700, maxUsd: 800 },
         skills: [{ skillId: 'plp:customer-service', labelEs: 'Atención al cliente', labelEn: null, required: true }],
@@ -107,9 +107,9 @@ describe('exploreVacancies', () => {
         jobId: 'lnk-3002',
         jobUrl: 'https://example.com/jobs/lnk-3002',
         title: 'Promotor de ventas',
-        postedAt: '2026-10-16T09:00:00.000Z',
-        queriedAt: '2026-10-16T10:00:00.000Z',
-        scrapingInfo: { provider: 'seed', query: 'ventas', scrapedAt: '2026-10-16T10:00:00.000Z' },
+        postedAt: '2026-10-31T09:00:00.000Z',
+        queriedAt: '2026-10-31T10:00:00.000Z',
+        scrapingInfo: { provider: 'seed', query: 'ventas', scrapedAt: '2026-10-31T10:00:00.000Z' },
         skills: [{ skillId: 'plp:customer-service', labelEs: 'Atención al cliente', labelEn: null, required: true }],
       },
       { now: NOW },

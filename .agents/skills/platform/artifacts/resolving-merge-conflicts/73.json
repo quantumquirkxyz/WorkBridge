@@ -1,0 +1,66 @@
+{
+  "schemaVersion": "2.0",
+  "artifactType": "plan",
+  "id": "resolve-conflict-73",
+  "skill": "resolving-merge-conflicts",
+  "skillVersion": "1",
+  "promptVersion": "2.0",
+  "createdAt": "2026-10-17T07:25:00.000Z",
+  "updatedAt": "2026-10-17T07:25:00.000Z",
+  "input": {
+    "branch": "issue/41-build-the-candidate-shell-and-the-vacant",
+    "conflictSource": "merge",
+    "conflictingFiles": [
+      "apps/web/app/layout.tsx",
+      "package-lock.json"
+    ]
+  },
+  "output": {
+    "status": "resolved",
+    "resolution": "Merged origin/main into the issue #41 branch. Root layout keeps QueryProvider, the theme provider, and the manifest viewport, and still wraps pages in CandidateShell. CandidateShell now skips /orientador and /empresa as well as /, /chat, and /ingresar so the role homes from main stay outside the candidate navigation. Removed the duplicated MatchDecision import left by the auto-merge of matching/adapt.ts. Regenerated package-lock.json from the merged package.json.",
+    "filesResolved": [
+      "apps/web/app/layout.tsx",
+      "apps/web/components/CandidateShell.tsx",
+      "apps/agent-runtime/src/matching/adapt.ts",
+      "package-lock.json"
+    ],
+    "filesRemaining": [],
+    "branchClean": true,
+    "nextConsumer": "ship-subissue"
+  },
+  "provenance": {
+    "sourceOfTruth": "PR #73 and origin/main",
+    "scope": [
+      "candidate vacancy shell",
+      "query provider and viewport from main",
+      "role routes from main"
+    ],
+    "outOfScope": [
+      "docs/frontend-spec PR #52"
+    ],
+    "nextConsumer": "ship-subissue",
+    "evidence": "npm run typecheck passed after the resolution",
+    "riskRemaining": "Candidate shell path exclusions are not covered by a component test."
+  },
+  "evaluation": {
+    "qualityBarScore": 86,
+    "artifactPassedQualityBar": true,
+    "evaluators": {
+      "behavioral": {
+        "passed": true,
+        "score": 88,
+        "notes": "Both layout intents are present and role homes are excluded from the candidate shell."
+      },
+      "traceability": {
+        "passed": true,
+        "score": 86,
+        "notes": "Resolution is tied to PR #73 and the conflicting files."
+      },
+      "quality-bar": {
+        "passed": true,
+        "score": 84,
+        "notes": "Typecheck passed. Full test suite was not re-run."
+      }
+    }
+  }
+}

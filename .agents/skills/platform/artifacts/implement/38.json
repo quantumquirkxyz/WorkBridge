@@ -1,0 +1,33 @@
+{
+  "status": "completed",
+  "changes": [
+    "Added apps/web/app/manifest.ts serving the Puente Laboral web app manifest with short_name Puente, display standalone, start_url /, and token colors (#0F766E theme_color, #FFF8F0 background_color).",
+    "Generated valid 192x192, 512x512, and 512x512 maskable PNG icons in apps/web/public/.",
+    "Exported root layout viewport configuration with light (#0F766E) and dark (#0B1416) themeColor media queries and interactiveWidget set to resizes-content.",
+    "Added unit and contract tests in apps/web/tests/manifest.test.ts verifying manifest metadata, PNG dimensions, viewport metadata, and absence of service worker registration."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npx vitest run apps/web/tests/manifest.test.ts",
+      "npm run lint",
+      "npm run typecheck",
+      "npm run build --workspace @puente/web",
+      "npm run gate:ci",
+      "git diff --check"
+    ],
+    "skipped": [
+      "Lighthouse against a deployed preview: no remote preview URL is deployed for this worktree; validated the prerendered /manifest.webmanifest payload and root HTML head tags from the local Next.js production build plus unit tests."
+    ],
+    "notes": "All 56 test files (504 tests) passed in gate:ci with 92.56% statements and 94.63% line coverage. Next.js production build statically generated /manifest.webmanifest and emitted the expected viewport and theme-color meta tags."
+  },
+  "commitSha": "ea79da4",
+  "branch": "issue/38-make-the-mobile-web-installable-with-a-w",
+  "nextConsumer": "publish-open-pr",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  },
+  "riskRemaining": "Remote preview Lighthouse audit was not run because no deployed preview URL is configured in this environment; local production build output for /manifest.webmanifest and PNG icon headers were verified."
+}

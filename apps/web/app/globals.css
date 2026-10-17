@@ -149,6 +149,8 @@
 
   button {
     cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
   }
 
   button:disabled {
@@ -167,6 +169,58 @@
     width: min(100% - 2rem, 70rem);
     margin-inline: auto;
     padding-block: 2rem 4rem;
+  }
+
+  .candidate-shell { min-height: 100svh; }
+  .candidate-header { display: flex; align-items: center; justify-content: space-between; min-height: 4.5rem; padding: .75rem max(1rem, calc((100% - 70rem) / 2)); border-bottom: 1px solid var(--line); background: var(--card); }
+  .candidate-brand { display: inline-flex; align-items: center; gap: .6rem; color: var(--ink); font-weight: 700; text-decoration: none; }
+  .candidate-brand-mark { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: .75rem; color: var(--primary-foreground); background: var(--primary); }
+  .candidate-brand-mark svg { width: 1.2rem; }
+  .candidate-nav { display: flex; align-items: center; gap: .25rem; list-style: none; margin: 0; padding: 0; }
+  .candidate-nav-link { position: relative; display: inline-flex; min-height: 2.75rem; align-items: center; gap: .45rem; padding: .5rem .75rem; border-radius: .75rem; color: var(--ink-muted); text-decoration: none; font-size: .875rem; font-weight: 600; }
+  .candidate-nav-link svg { width: 1.1rem; }
+  .candidate-nav-link.is-active { color: var(--primary); background: var(--teal-tint); }
+  .candidate-nav-link.is-active::after { content: ''; position: absolute; bottom: .2rem; left: 50%; width: 1.5rem; height: .2rem; border-radius: 999px; transform: translateX(-50%); background: var(--primary); }
+  .candidate-bottom-nav { display: none; }
+  .vacantes-page { max-width: 70rem; }
+  .vacantes-heading { display: flex; justify-content: space-between; align-items: end; gap: 1rem; margin-bottom: 2rem; }
+  .eyebrow { margin: 0 0 .35rem; color: var(--primary); font-size: .8rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .vacantes-heading h1 { margin: 0; }
+  .vacantes-count { padding: .5rem .75rem; border-radius: 999px; background: var(--teal-tint); color: var(--teal-700); font-size: .875rem; font-weight: 700; white-space: nowrap; }
+  .vacancy-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  .vacancy-card { display: flex; min-height: 15rem; flex-direction: column; align-items: flex-start; gap: .55rem; padding: 1.25rem; border: 1px solid var(--line); border-radius: 1rem; color: var(--ink); background: var(--card); text-align: left; box-shadow: 0 2px 8px #1a2b2e0a; transition: border-color .15s, transform .15s; }
+  .vacancy-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+  .vacancy-card-top, .vacancy-meta { display: flex; width: 100%; justify-content: space-between; gap: .5rem; color: var(--ink-muted); font-size: .8rem; }
+  .vacancy-modality { color: var(--teal-700); font-weight: 700; }
+  .vacancy-title { margin-top: .8rem; font-size: 1.15rem; }
+  .vacancy-company { color: var(--ink-muted); }
+  .vacancy-meta { display: block; margin-top: .5rem; line-height: 1.5; }
+  .vacancy-card-action { margin-top: auto; color: var(--primary); font-weight: 700; }
+  .vacancy-skeleton { height: 15rem; border-radius: 1rem; }
+  .vacantes-empty, .near-matches { margin-top: 1.5rem; padding: 1.5rem; border: 1px solid var(--line); border-radius: 1rem; background: var(--card); }
+  .vacantes-empty h2, .near-matches h2 { margin-top: 0; }
+  .near-list { display: grid; gap: .75rem; }
+  .near-list article { padding: .9rem; border-radius: .75rem; background: var(--coral-tint); }
+  .near-list p { margin: .25rem 0 0; color: var(--coral-ink); }
+  .excluded-summary { margin-top: 1.25rem; color: var(--ink-muted); font-size: .875rem; }
+  .vacancy-detail { width: min(100%, 32rem); overflow-y: auto; }
+  .vacancy-detail-body { margin-top: 1rem; }
+  .vacancy-detail-body p { margin: 0 0 1rem; }
+  .vacancy-detail-body ul { padding-left: 1.25rem; }
+  .vacancy-original { width: 100%; margin-top: auto; }
+  .toast-notice { position: fixed; z-index: 100; right: 1rem; bottom: 1rem; max-width: min(22rem, calc(100% - 2rem)); padding: .85rem 1rem; border-radius: .75rem; color: var(--primary-foreground); background: var(--primary); box-shadow: 0 8px 24px #1a2b2e33; font-weight: 600; }
+
+  @media (max-width: 767px) {
+    .candidate-header { min-height: 4rem; }
+    .candidate-nav-desktop { display: none; }
+    .candidate-bottom-nav { position: fixed; z-index: 40; right: 0; bottom: 0; left: 0; display: block; padding: .5rem 1rem calc(.5rem + env(safe-area-inset-bottom)); border-top: 1px solid var(--line); background: var(--card); }
+    .candidate-bottom-nav .candidate-nav { justify-content: space-between; }
+    .candidate-bottom-nav .candidate-nav-link { min-width: 4.25rem; flex-direction: column; gap: .15rem; padding: .35rem .25rem; font-size: .68rem; }
+    .candidate-bottom-nav .candidate-nav-link.is-active::after { bottom: 0; }
+    .candidate-content { padding-bottom: 5rem; }
+    .vacantes-heading { align-items: flex-start; flex-direction: column; }
+    .vacancy-grid { grid-template-columns: 1fr; }
+    .vacancy-detail { width: 100%; height: min(85svh, 42rem); top: auto; padding: 1.25rem; }
   }
 
   .lead {

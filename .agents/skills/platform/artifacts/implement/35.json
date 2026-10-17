@@ -1,0 +1,24 @@
+{
+  "status": "completed",
+  "changes": [
+    "Added apps/web/lib/api/client.ts with typed helpers for every /api/* route and lib/api/errors.ts for ApiError normalization.",
+    "Installed TanStack Query v5, wired QueryProvider in the root layout, and added lib/queries hooks for exploration, roadmap, searches, preferences, intake, and health.",
+    "Split ExplorationDashboard into exploration feature components (PreferencesForm, VacancyList, DiscardSummary, NearMatchList, RoadmapList, SavedSearches) with the orchestrator under 250 lines.",
+    "Enforced ESLint no-restricted-imports on client components for *-handler, *-store, and @puente/agent-runtime."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": ["npm run verify", "npm run gate:ci"],
+    "skipped": [],
+    "notes": "npm run verify passed with 504 tests. gate:ci passed with 94.63% line coverage."
+  },
+  "commitSha": "1041cdd",
+  "branch": "issue/35-add-the-typed-api-client-and-tanstack-qu",
+  "nextConsumer": "publish-open-pr",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  },
+  "riskRemaining": "IntakeForm still uses hand-rolled fetch; behavior unchanged and ESLint rule allows it because it does not import restricted modules."
+}
