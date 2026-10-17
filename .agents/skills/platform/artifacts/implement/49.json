@@ -1,0 +1,34 @@
+{
+  "status": "completed",
+  "changes": [
+    "Replaced the legacy IntakeForm home with an accessible welcome screen and profile-aware redirect to /vacantes.",
+    "Implemented ChatScreen with persisted transcript restoration, role=log/aria-live, quick replies, confirmation/change chips, typing states, keyboard composer behavior, intake summary, retry handling, and one-time exploration navigation.",
+    "Seeded known profile and preference slots, exposed browser Better Auth session resolution for candidate API routes, moved fileToBase64 to lib/files.ts, and removed IntakeForm.tsx.",
+    "Added ChatScreen and WelcomeScreen component coverage and replaced the obsolete form e2e with the fallback J1 journey across the three web device profiles."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npm run typecheck",
+      "npx eslint <changed files>",
+      "npx vitest run apps/web/tests/components/chat-screen.test.tsx apps/web/tests/components/welcome-screen.test.tsx apps/web/tests/chat-handler.test.ts apps/web/tests/chat-route.test.ts",
+      "npm test",
+      "npm run gate:ci"
+    ],
+    "skipped": [
+      "npx playwright test apps/web/e2e/intake-explore.spec.ts --project='Desktop Chrome' — Chromium could not start because the environment lacks libnspr4.so.",
+      "npm audit --audit-level=high — existing moderate sprintf-js advisories require a breaking dependency upgrade; no force fix applied."
+    ],
+    "notes": "The full unit suite passed: 77 files, 635 tests, 8 skipped. gate-ci passed with 92.21% line coverage. Changed-file lint and typecheck passed."
+  },
+  "commitSha": "895f869",
+  "branch": "feat/issue-49-build-welcome-chat-ui",
+  "nextConsumer": "publish-open-pr",
+  "blockedBy": [],
+  "riskRemaining": "Browser e2e remains unverified in this environment because Chromium lacks libnspr4.so. Existing moderate npm audit advisories remain in transitive dependencies; attachment and voice controls remain out of scope for the separate follow-up ticket.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  }
+}
