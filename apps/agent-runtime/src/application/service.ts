@@ -1,5 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
 import {
+  AjvValidationError,
   assertAuditEvent,
   assertMatchDecision,
   assertWorkflowEnvelope,
@@ -510,7 +511,14 @@ export class ApplicationService {
     const vacancyTitle = this.requiredString(body.vacancyTitle, "vacancyTitle");
     const employerOrgId = body.employerOrgId === undefined ? undefined : this.requiredString(body.employerOrgId, "employerOrgId");
     const evidence = parseEvidence(body.evidence);
-    assertMatchDecision(body.match);
+    try {
+      assertMatchDecision(body.match);
+    } catch (error) {
+      if (error instanceof AjvValidationError) {
+        throw new ApplicationError(error.message, 422, "invalid_match");
+      }
+      throw error;
+    }
     if (body.match.candidateId !== candidateId || body.match.vacancyId !== vacancyId) {
       throw new ApplicationError("Match decision does not belong to this candidate and vacancy.", 422, "inconsistent_match");
     }

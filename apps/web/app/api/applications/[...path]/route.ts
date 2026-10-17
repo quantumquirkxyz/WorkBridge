@@ -1,6 +1,8 @@
 import { randomUUID } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { signBetterAuthSession, type BetterAuthSession } from '@workbridge/agent-runtime';
+import { getServerSession } from '../../../../lib/auth';
+import { isAuthRole } from '../../../../lib/auth-types';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -14,7 +16,7 @@ async function handler(request: Request, context: RouteContext): Promise<Respons
     return NextResponse.json({ error: 'application_runtime_unavailable' }, { status: 503 });
   }
 
-  const session = readSession(request);
+  const session = await readSession(request);
   if (!session) return NextResponse.json({ error: 'unauthenticated' }, { status: 401 });
 
   const signedSession = signBetterAuthSession(session, secret);
@@ -54,7 +56,7 @@ async function handler(request: Request, context: RouteContext): Promise<Respons
   });
 }
 
-function readSession(request: Request): BetterAuthSession | undefined {
+function readForwardedSession(request: Request): BetterAuthSession | undefined {
   const raw = request.headers.get('x-better-auth-session') ?? readCookie(request, 'better-auth-session');
   if (!raw) return undefined;
   try {
@@ -63,6 +65,36 @@ function readSession(request: Request): BetterAuthSession | undefined {
       return undefined;
     }
     return value;
+  } catch {
+    return undefined;
+  }
+}
+
+/** Browser calls carry the Better Auth cookie, not the runtime's signed session header. */
+async function readSession(request: Request): Promise<BetterAuthSession | undefined> {
+  const forwarded = readForwardedSession(request);
+  if (forwarded) return forwarded;
+  try {
+    const current = await getServerSession();
+    if (!current?.user.id || !current.session.id || !current.session.userId) return undefined;
+    if (!isAuthRole(current.user.role)) return undefined;
+    const expiresAt = current.session.expiresAt instanceof Date
+      ? current.session.expiresAt
+      : new Date(current.session.expiresAt);
+    if (Number.isNaN(expiresAt.getTime())) return undefined;
+    return {
+      session: {
+        id: current.session.id,
+        userId: current.session.userId,
+        expiresAt: expiresAt.toISOString(),
+      },
+      user: {
+        id: current.user.id,
+        email: current.user.email,
+        role: current.user.role,
+        ...(current.user.employerOrgId ? { employerOrgId: current.user.employerOrgId } : {}),
+      },
+    };
   } catch {
     return undefined;
   }

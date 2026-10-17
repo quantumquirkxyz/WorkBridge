@@ -173,6 +173,9 @@ function writeJson(res: ServerResponse, status: number, body: unknown, secrets: 
 
 function writeError(res: ServerResponse, error: unknown, secrets: readonly string[]): void {
   const known = error instanceof ApplicationError ? error : undefined;
+  if (!known) {
+    console.error("application request failed", error instanceof Error ? error.message : error);
+  }
   const status = known?.status ?? 500;
   const body = {
     error: known?.code ?? "internal_error",

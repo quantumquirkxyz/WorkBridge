@@ -22,7 +22,28 @@ const profile: CandidateProfile = {
 afterEach(() => clearMatchCache());
 
 function decision(vacancyId: string): MatchDecision {
-  return { vacancyId, score: 73 } as MatchDecision;
+  return {
+    schemaVersion: '1.0.0',
+    candidateId,
+    vacancyId,
+    aptitude: 'apt_with_gaps',
+    score: 73,
+    baseScore: 73,
+    scoreBreakdown: [
+      { dimension: 'technical', weight: 0.3, rawScore: 73, weightedScore: 21.9, reasons: [] },
+      { dimension: 'experience', weight: 0.25, rawScore: 73, weightedScore: 18.25, reasons: [] },
+      { dimension: 'availability', weight: 0.15, rawScore: 73, weightedScore: 10.95, reasons: [] },
+      { dimension: 'transport', weight: 0.2, rawScore: 73, weightedScore: 14.6, reasons: [] },
+      { dimension: 'salary', weight: 0.1, rawScore: 73, weightedScore: 7.3, reasons: [] },
+    ],
+    hardConstraints: [],
+    failedConstraints: [],
+    reasons: ['Encaja en parte'],
+    tieBreakKey: `tie-${vacancyId}`,
+    promotion: { eligible: false, applied: false, requiresHumanApproval: false, reason: 'Sin promoción' },
+    routing: { commuteMinutes: 20, distanceKm: 5, accessible: true, source: 'local_matrix' },
+    decidedAt: '2026-10-16T12:00:00.000Z',
+  };
 }
 
 describe('handleMatch', () => {
@@ -34,7 +55,11 @@ describe('handleMatch', () => {
     const second = await handleMatch({ vacancyIds: [firstVacancy!.jobId, secondVacancy!.jobId] }, { profile, preferences, service: service as never });
 
     expect(first.status).toBe(200);
-    expect((first.body as { decisions: MatchDecision[] }).decisions.map((item) => item.vacancyId)).toEqual([firstVacancy!.jobId, secondVacancy!.jobId]);
+    const body = first.body as { decisions: MatchDecision[]; applicationDecisions: { vacancyId: string; traceId: string; score: { weightedTotal: number } }[] };
+    expect(body.decisions.map((item) => item.vacancyId)).toEqual([firstVacancy!.jobId, secondVacancy!.jobId]);
+    expect(body.applicationDecisions.map((item) => item.vacancyId)).toEqual([firstVacancy!.jobId, secondVacancy!.jobId]);
+    expect(body.applicationDecisions[0]?.score.weightedTotal).toBe(73);
+    expect(body.applicationDecisions[0]?.traceId).toEqual(expect.any(String));
     expect(second.body).toBe(first.body);
     expect(service.evaluatePair).toHaveBeenCalledTimes(2);
   });

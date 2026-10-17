@@ -162,7 +162,7 @@ export const SKILL_TAXONOMY: readonly SkillDefinition[] = [
     skill_id: 'plp:responsibility',
     canonical_name: 'Responsabilidad',
     kind: 'soft',
-    synonyms: ['responsabilidad', 'responsable', 'puntualidad', 'cumplimiento', 'compromiso'],
+    synonyms: ['responsabilidad', 'responsable', 'cumplimiento', 'compromiso'],
     esco_reference: 'reliability',
   },
   {
@@ -183,7 +183,7 @@ export const SKILL_TAXONOMY: readonly SkillDefinition[] = [
     skill_id: 'plp:organization',
     canonical_name: 'Organización',
     kind: 'soft',
-    synonyms: ['organizacion', 'organización', 'planificacion', 'planificación', 'gestion del tiempo', 'organizado'],
+    synonyms: ['organizacion', 'organización', 'planificacion', 'planificación', 'organizado'],
     esco_reference: 'time management',
   },
   {
@@ -199,6 +199,27 @@ export const SKILL_TAXONOMY: readonly SkillDefinition[] = [
     kind: 'soft',
     synonyms: ['disposicion para aprender', 'disposición para aprender', 'ganas de aprender', 'aprendizaje rapido', 'fast learner', 'proactivo'],
     esco_reference: 'willingness to learn',
+  },
+  {
+    skill_id: 'plp:punctuality',
+    canonical_name: 'Puntualidad',
+    kind: 'soft',
+    synonyms: ['puntualidad', 'puntual'],
+    esco_reference: 'punctuality',
+  },
+  {
+    skill_id: 'plp:time-management',
+    canonical_name: 'Manejo del tiempo',
+    kind: 'soft',
+    synonyms: ['manejo del tiempo', 'gestion del tiempo', 'gestión del tiempo'],
+    esco_reference: 'time management',
+  },
+  {
+    skill_id: 'plp:work-under-pressure',
+    canonical_name: 'Trabajo bajo presión',
+    kind: 'soft',
+    synonyms: ['trabajo bajo presion', 'trabajo bajo presión', 'bajo presion', 'bajo presión'],
+    esco_reference: 'work under pressure',
   },
 ] as const;
 

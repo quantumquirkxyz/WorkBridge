@@ -19,6 +19,13 @@ interface ChatAttachment {
   kind: 'pdf' | 'image';
 }
 
+function skillLabelsFrom(skills: Array<{ canonical_name?: unknown; original_term?: unknown }> | undefined): string[] {
+  return (skills ?? [])
+    .map((skill) => (typeof skill.original_term === 'string' && skill.original_term.trim()) || (typeof skill.canonical_name === 'string' ? skill.canonical_name : ''))
+    .filter((label) => label.length > 0)
+    .slice(0, 4);
+}
+
 interface ChatMessage {
   id: number;
   role: 'assistant' | 'user';
@@ -311,14 +318,11 @@ export function ChatScreen() {
       body: JSON.stringify({ kind: 'text', text: text || 'Experiencia declarada en conversación.' }),
     });
     if (!response.ok) throw new Error('intake_request_failed');
-    const body = await response.json() as { profile?: { skills?: Array<{ canonical_name?: unknown }>; experiences?: unknown[] }; extraction?: { needs_review?: boolean } };
+    const body = await response.json() as { profile?: { skills?: Array<{ canonical_name?: unknown; original_term?: unknown }>; experiences?: unknown[] }; extraction?: { needs_review?: boolean } };
     const skills = body.profile?.skills?.length ?? 0;
     const experiences = body.profile?.experiences?.length ?? 0;
     const review = body.extraction?.needs_review ? ' Algunos datos los vamos a confirmar contigo en Mi perfil.' : '';
-    const skillLabels = (body.profile?.skills ?? [])
-      .map((skill) => typeof skill.canonical_name === 'string' ? skill.canonical_name : '')
-      .filter((label): label is string => label.length > 0)
-      .slice(0, 4);
+    const skillLabels = skillLabelsFrom(body.profile?.skills);
     setIntakeRetryText(null);
     addMessage('assistant', resultMessage(nameRef.current, skills, experiences, review), undefined, skillLabels);
   }
@@ -347,7 +351,7 @@ export function ChatScreen() {
         }),
       });
       if (!response.ok) throw new Error('intake_request_failed');
-      const body = await response.json() as { profile?: { skills?: Array<{ canonical_name?: unknown }>; experiences?: unknown[] }; extraction?: { needs_review?: boolean } };
+      const body = await response.json() as { profile?: { skills?: Array<{ canonical_name?: unknown; original_term?: unknown }>; experiences?: unknown[] }; extraction?: { needs_review?: boolean } };
       cvRetry.current = null;
       setPendingAttachment(null);
       if (phase === 'profile') profileText.current.push(`Subí mi CV: ${file.name}`);
@@ -355,10 +359,7 @@ export function ChatScreen() {
       const skills = body.profile?.skills?.length ?? 0;
       const experiences = body.profile?.experiences?.length ?? 0;
       const review = body.extraction?.needs_review ? ' Algunos datos los vamos a confirmar contigo en Mi perfil.' : '';
-      const skillLabels = (body.profile?.skills ?? [])
-        .map((skill) => typeof skill.canonical_name === 'string' ? skill.canonical_name : '')
-        .filter((label) => label.length > 0)
-        .slice(0, 4);
+      const skillLabels = skillLabelsFrom(body.profile?.skills);
       addMessage('assistant', resultMessage(nameRef.current, skills, experiences, review), undefined, skillLabels);
       const cvOpen = slotState.cv_source.state !== 'filled';
       await postTurn({

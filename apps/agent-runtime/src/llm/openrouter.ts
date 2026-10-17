@@ -167,7 +167,7 @@ export function createOpenRouterVision(options: OpenRouterOptions): (input: { by
             content: [
               {
                 type: 'text',
-                text: 'Transcribe todo el texto legible de esta imagen de CV o documento. Devuelve solo el texto.',
+                text: 'Transcribe el texto de esta imagen de CV exactamente como está escrito. Incluye cada habilidad listada, técnicas y blandas. No resumas, no corrijas y no agregues datos que no estén en la imagen.',
               },
               { type: 'image_url', image_url: { url: dataUrl } },
             ],
