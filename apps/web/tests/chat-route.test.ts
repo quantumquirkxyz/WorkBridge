@@ -1,4 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { signBetterAuthSession } from '@puente/agent-runtime';
+import { makeCandidateId } from '@puente/domain';
 import { POST } from '../app/api/chat/route';
 import { readChatSession, deleteCandidateData, persistChatSession } from '../lib/neon-repository';
 
@@ -6,7 +8,10 @@ const session = { transcript: [], slotState: undefined as never, llmTurns: 0, ca
 
 function post(body: unknown, candidateId?: string): Request {
   const headers: Record<string, string> = { 'content-type': 'application/json' };
-  if (candidateId) headers['x-better-auth-session'] = JSON.stringify({ user: { id: 'u', candidateId } });
+  if (candidateId) headers['x-better-auth-session'] = JSON.stringify(signBetterAuthSession({
+    session: { id: 'session-u', userId: 'u', expiresAt: new Date(Date.now() + 60_000).toISOString() },
+    user: { id: 'u', email: 'u@example.test', role: 'candidate' },
+  }, process.env.BETTER_AUTH_SECRET ?? 'test-secret'));
   return new Request('http://localhost/api/chat', { method: 'POST', headers, body: JSON.stringify(body) });
 }
 
@@ -15,6 +20,7 @@ describe('POST /api/chat identity', () => {
   beforeAll(() => {
     previous = process.env.PUENTE_PERSISTENCE;
     process.env.PUENTE_PERSISTENCE = 'memory';
+    process.env.BETTER_AUTH_SECRET = 'test-secret';
   });
   afterAll(() => {
     if (previous === undefined) delete process.env.PUENTE_PERSISTENCE;
@@ -28,10 +34,21 @@ describe('POST /api/chat identity', () => {
   });
 
   it('uses the session candidate and never the candidate id from the body', async () => {
+    const owner = makeCandidateId('u');
     const res = await POST(post({ message: 'hola', candidateId: 'candidate_victim' }, 'candidate_owner'));
     expect(res.status).toBe(200);
-    expect(await readChatSession('candidate_owner')).toBeDefined();
+    expect(await readChatSession(owner)).toBeDefined();
     expect(await readChatSession('candidate_victim')).toBeUndefined();
+  });
+
+  it('rejects a non-candidate role and mismatched candidate identity', async () => {
+    const employerRequest = post({ message: 'hola' }, 'candidate_owner');
+    employerRequest.headers.set('x-better-auth-session', JSON.stringify({ user: { id: 'u', candidateId: makeCandidateId('u'), role: 'employer' } }));
+    expect((await POST(employerRequest)).status).toBe(401);
+
+    const mismatchedRequest = post({ message: 'hola' }, 'candidate_owner');
+    mismatchedRequest.headers.set('x-better-auth-session', JSON.stringify({ user: { id: 'u', candidateId: 'candidate_other', role: 'candidate' } }));
+    expect((await POST(mismatchedRequest)).status).toBe(401);
   });
 });
 

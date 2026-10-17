@@ -105,7 +105,9 @@ export function actorFromBetterAuthSession(value: unknown, nowIso: string, secre
   if (provided.length !== actual.length || !timingSafeEqual(provided, actual)) {
     throw new ApplicationError("Better Auth session signature is invalid.", 401, "invalid_session");
   }
-  if (Number.isNaN(Date.parse(expiresAt)) || expiresAt <= nowIso) {
+  const expiresAtMs = Date.parse(expiresAt);
+  const nowMs = Date.parse(nowIso);
+  if (!Number.isFinite(expiresAtMs) || !Number.isFinite(nowMs) || expiresAtMs <= nowMs) {
     throw new ApplicationError("Better Auth session is expired.", 401, "expired_session");
   }
   if (!ROLES.has(role)) {

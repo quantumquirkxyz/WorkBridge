@@ -150,7 +150,7 @@ export {
 
 export { ApplicationService } from "./application/service";
 export { createApplicationServer } from "./application/server";
-export { BETTER_AUTH_ROLES, signBetterAuthSession } from "./application/roles";
+export { BETTER_AUTH_ROLES, actorFromBetterAuthSession, signBetterAuthSession } from "./application/roles";
 export type { BetterAuthSession } from "./application/roles";
 export {
   toApplicationEvidence,

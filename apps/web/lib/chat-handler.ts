@@ -9,6 +9,7 @@ import {
   currentPhase,
   initialSlotState,
   pendingSlot,
+  type SlotState,
   type SlotUpdate,
   type UserAction,
 } from './chat/tracker';
@@ -39,8 +40,47 @@ export interface AsyncChatStore {
   save(candidateId: string, session: ChatSession): void | Promise<void>;
 }
 
-function freshSession(): ChatSession {
-  return { transcript: [], slotState: initialSlotState(), llmTurns: 0, capNoticeSent: false, version: 0 };
+function seededSlotState(context?: CandidateContext): SlotState {
+  const state = initialSlotState();
+  const profile = context?.profile && typeof context.profile === 'object' ? (context.profile as Record<string, unknown>) : undefined;
+  const preferences = context?.preferences && typeof context.preferences === 'object' ? (context.preferences as Record<string, unknown>) : undefined;
+  const targetRoles = [profile?.target_roles, preferences?.target_roles].find(
+    (roles): roles is unknown[] => Array.isArray(roles) && typeof roles[0] === 'string' && roles[0].trim().length > 0,
+  );
+  if (targetRoles && typeof targetRoles[0] === 'string') {
+    state.target_roles = { state: 'filled', value: targetRoles[0] };
+  }
+
+  const location = preferences?.max_location;
+  if (location && typeof location === 'object') {
+    const locationRecord = location as Record<string, unknown>;
+    const value = locationRecord.raw ?? locationRecord.district ?? locationRecord.province;
+    if (typeof value === 'string' && value.trim()) state.zone = { state: 'filled', value };
+  }
+  const availability = preferences?.availability;
+  if (availability && typeof availability === 'object') {
+    const scheduleRecord = availability as Record<string, unknown>;
+    const days = scheduleRecord.days;
+    const start = scheduleRecord.start_minute;
+    const end = scheduleRecord.end_minute;
+    const weeklyHours = scheduleRecord.weekly_hours;
+    if (Array.isArray(days) && days.every((day) => typeof day === 'number') && typeof start === 'number' && typeof end === 'number' && typeof weeklyHours === 'number') {
+      const time = (minutes: number) => `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;
+      const contracts = preferences?.contract_types;
+      state.schedule = {
+        state: 'filled',
+        value: { days, from: time(start), to: time(end), weekly_hours: weeklyHours, contract_type: Array.isArray(contracts) && typeof contracts[0] === 'string' ? contracts[0] : 'full_time' },
+      };
+    }
+  }
+  if (preferences?.modality !== undefined && isAllowedSlotValue('modality', preferences.modality)) state.modality = { state: 'filled', value: preferences.modality };
+  if (preferences?.minimum_salary_usd !== undefined && isAllowedSlotValue('minimum_salary_usd', preferences.minimum_salary_usd)) state.minimum_salary_usd = { state: 'filled', value: preferences.minimum_salary_usd };
+  if (preferences?.willing_to_train !== undefined && isAllowedSlotValue('willing_to_train', preferences.willing_to_train)) state.willing_to_train = { state: 'filled', value: preferences.willing_to_train };
+  return state;
+}
+
+function freshSession(context?: CandidateContext): ChatSession {
+  return { transcript: [], slotState: seededSlotState(context), llmTurns: 0, capNoticeSent: false, version: 0 };
 }
 
 /**
@@ -133,10 +173,12 @@ function fallbackReply(
   phaseChanged: boolean,
   phase: ChatTurn['phase'],
   pending: SlotId | null,
+  freeTextQuestion = false,
 ): string {
   if (phase === 'done') return ALL_DONE;
   const question = pending ? slotDefinition(pending).question : '';
   if (phaseChanged) return `${PROFILE_DONE} ${PREFERENCES_OPENER} ${question}`.trim();
+  if (freeTextQuestion) return `Ahora mismo solo puedo ayudarte a completar tu perfil. ¿Seguimos? ${question}`.trim();
   return question;
 }
 
@@ -165,7 +207,7 @@ export async function handleChatTurn(
 
   let session: ChatSession;
   try {
-    session = (await store.get(candidateId)) ?? freshSession();
+    session = (await store.get(candidateId)) ?? freshSession(deps.context);
   } catch {
     return { status: 503, body: { error: 'persistence_unavailable' } };
   }
@@ -191,12 +233,20 @@ export async function handleChatTurn(
     outcome = await callModel(deps.chat, buildMessages(system, redacted), deps.timeoutMs ?? LLM_TIMEOUT_MS);
     if (outcome.output) {
       updates = outcome.output.slotUpdates.filter((u) => afterAction[u.slot]?.state !== 'filled');
+      const proposed = updates.find((update) => update.state === 'proposed');
       const candidate: ChatTurn = {
         intent: phaseChanged || phase === 'done' ? 'complete_phase' : outcome.output.intent,
         reply: outcome.output.reply.trim(),
         pendingSlot: pending,
         slotUpdates: updates,
-        chips: pending ? slotDefinition(pending).chips : [],
+        chips: proposed
+          ? [
+              { label: 'Sí', value: proposed.value, kind: 'confirm' },
+              { label: 'Cambiar', kind: 'change' },
+            ]
+          : pending
+            ? slotDefinition(pending).chips
+            : [],
         phase,
         source: 'llm',
       };
@@ -211,7 +261,7 @@ export async function handleChatTurn(
   }
 
   if (!turn) {
-    let reply = fallbackReply(phaseChanged, phase, pending);
+    let reply = fallbackReply(phaseChanged, phase, pending, !deps.chat && action.kind === 'text' && message.includes('?'));
     if (capped && !session.capNoticeSent) {
       reply = CAP_MESSAGE;
       session.capNoticeSent = true;
@@ -261,11 +311,11 @@ export async function handleChatTurn(
 
 export async function readChatSessionView(
   candidateId: string,
-  deps: Pick<ChatHandlerDeps, 'store'> = {},
+  deps: Pick<ChatHandlerDeps, 'store' | 'context'> = {},
 ): Promise<HandlerResult> {
   try {
     const session = await (deps.store ?? chatSessionStore).get(candidateId);
-    const view = session ?? freshSession();
+    const view = session ?? freshSession(deps.context);
     return {
       status: 200,
       body: { transcript: view.transcript, slotState: view.slotState, pendingSlot: pendingSlot(view.slotState), phase: currentPhase(view.slotState) },

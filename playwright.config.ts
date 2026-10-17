@@ -53,7 +53,7 @@ const projects: ProjectWithWebServer[] = [
   {
     name: "Pixel 7",
     testDir: "./apps/web/e2e",
-    testMatch: "home.smoke.spec.ts",
+    testMatch: /(?:home\.smoke|intake-explore)\.spec\.ts/,
     timeout: 60_000,
     use: { ...devices["Pixel 7"], baseURL: `http://127.0.0.1:${webPort}`, ...webCapture },
     webServer: [webWebServer],
@@ -61,7 +61,7 @@ const projects: ProjectWithWebServer[] = [
   {
     name: "iPhone 14",
     testDir: "./apps/web/e2e",
-    testMatch: "home.smoke.spec.ts",
+    testMatch: /(?:home\.smoke|intake-explore)\.spec\.ts/,
     timeout: 60_000,
     use: { ...devices["iPhone 14"], baseURL: `http://127.0.0.1:${webPort}`, ...webCapture },
     webServer: [webWebServer],
@@ -69,7 +69,7 @@ const projects: ProjectWithWebServer[] = [
   {
     name: "Desktop Chrome",
     testDir: "./apps/web/e2e",
-    testMatch: "home.smoke.spec.ts",
+    testMatch: /(?:home\.smoke|intake-explore)\.spec\.ts/,
     timeout: 60_000,
     use: { ...devices["Desktop Chrome"], baseURL: `http://127.0.0.1:${webPort}`, ...webCapture },
     webServer: [webWebServer],

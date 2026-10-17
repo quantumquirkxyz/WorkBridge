@@ -7,6 +7,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { ApiClientError } from '../lib/api/errors';
 import type { PreferencesDraft } from '../lib/preferences';
+import { saveStoredPreferences } from '../lib/preferences-storage';
 import { useExploreVacancies } from '../lib/queries/exploration';
 import { useDeleteCandidateData } from '../lib/queries/preferences';
 import { useRequestRoadmap } from '../lib/queries/roadmap';
@@ -104,7 +105,7 @@ export function ExplorationDashboard() {
     try {
       const explored = await exploreMutation.mutateAsync(buildPayload(form));
       window.localStorage.setItem('puente:candidateId', explored.candidateId);
-      window.localStorage.setItem('puente:preferences', JSON.stringify(explored.preferences));
+      if (explored.preferences) saveStoredPreferences(explored.candidateId, explored.preferences);
       setResult(explored);
       setDecisions([]);
       void matchMutation.mutateAsync(explored.matches.map((match) => match.vacancy.jobId)).then((body) => setDecisions(body.decisions)).catch(() => setDecisions([]));

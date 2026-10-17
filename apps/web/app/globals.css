@@ -217,6 +217,34 @@
   .no-match-route-link a, .ruta-action { color: var(--primary); }
   .no-match-actions { margin-top: 1rem; }
   .no-match-actions p { margin-bottom: .5rem; }
+  .welcome-page { display: grid; max-width: 36rem; min-height: 80svh; align-content: center; justify-items: start; padding-block: 3rem 5rem; }
+  .welcome-mark { display: grid; width: 3.5rem; height: 3.5rem; place-items: center; margin-bottom: 2rem; border-radius: 1.25rem; color: var(--primary-foreground); background: var(--primary); }
+  .welcome-mark svg { width: 1.8rem; }
+  .welcome-page h1 { max-width: 10ch; margin: 0; font-size: clamp(2.5rem, 10vw, 4.5rem); line-height: 1.05; letter-spacing: -.04em; }
+  .welcome-copy { max-width: 34rem; margin: 1.25rem 0 2rem; color: var(--ink-muted); font-size: 1.1rem; }
+  .welcome-action { min-width: 10rem; }
+  .welcome-note { max-width: 30rem; margin-top: 1rem; color: var(--ink-muted); font-size: .875rem; }
+  .chat-page { display: flex; width: min(100% - 2rem, 48rem); min-height: 100svh; flex-direction: column; padding-block: 1.5rem calc(1rem + env(safe-area-inset-bottom)); }
+  .chat-header { padding-block: .5rem 1rem; }
+  .chat-header h1 { margin: 0; }
+  .chat-progress { display: flex; gap: .4rem; margin-top: 1rem; }
+  .chat-progress span { display: block; width: 2.5rem; height: .3rem; border-radius: 999px; background: var(--line); }
+  .chat-progress span.is-current, .chat-progress span.is-complete { background: var(--primary); }
+  .chat-transcript { display: flex; min-height: 20rem; flex: 1; flex-direction: column; gap: .75rem; padding-block: 1rem 1.25rem; overflow-wrap: anywhere; }
+  .chat-bubble { width: fit-content; max-width: min(90%, 36rem); padding: .8rem 1rem; border-radius: 1rem; }
+  .chat-bubble p { margin: 0; white-space: pre-wrap; }
+  .chat-bubble-assistant { border-bottom-left-radius: .25rem; background: var(--card); box-shadow: 0 1px 4px #1a2b2e12; }
+  .chat-bubble-user { align-self: flex-end; border-bottom-right-radius: .25rem; color: var(--primary-foreground); background: var(--primary); }
+  .chat-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .75rem; }
+  .chat-chip { min-height: 2.75rem; padding: .55rem .8rem; border: 1px solid var(--primary); border-radius: 999px; color: var(--primary); background: var(--card); font-weight: 600; }
+  .chat-chip:hover { background: var(--teal-tint); }
+  .chat-skill-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .75rem; }
+  .chat-skill-chip { padding: .35rem .65rem; border-radius: 999px; color: var(--teal-700); background: var(--teal-tint); font-size: .8rem; font-weight: 700; }
+  .chat-activity { align-self: flex-start; margin: 0; color: var(--ink-muted); font-size: .875rem; }
+  .typing-dots { color: var(--primary); letter-spacing: .15em; }
+  .chat-composer { position: sticky; bottom: 0; display: grid; grid-template-columns: 1fr auto; gap: .6rem; padding: .75rem 0 calc(.75rem + env(safe-area-inset-bottom)); border-top: 1px solid var(--line); background: var(--background); }
+  .chat-composer textarea { min-height: 3.25rem; resize: none; }
+  .chat-composer-hint { grid-column: 1 / -1; margin: 0; color: var(--ink-muted); font-size: .75rem; }
   .ruta-page { max-width: 70rem; }
   .ruta-heading { margin-bottom: 2rem; }
   .ruta-card, .ruta-empty { padding: 1.5rem; border: 1px solid var(--line); border-radius: 1rem; background: var(--card); }
@@ -240,6 +268,7 @@
     .vacantes-heading { align-items: flex-start; flex-direction: column; }
     .vacancy-grid { grid-template-columns: 1fr; }
     .vacancy-detail { width: 100%; height: min(85svh, 42rem); top: auto; padding: 1.25rem; }
+    .chat-page { width: min(100% - 1.25rem, 48rem); padding-top: 1rem; }
   }
 
   .lead {
