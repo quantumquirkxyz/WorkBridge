@@ -17,6 +17,8 @@
     "start": "node --env-file=.env --import tsx apps/agent-runtime/src/application/main.ts",
     "certo:up": "node scripts/certo.mjs up",
     "certo:down": "node scripts/certo.mjs down",
+    "local:up": "docker compose up --build -d",
+    "local:down": "docker compose down",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
