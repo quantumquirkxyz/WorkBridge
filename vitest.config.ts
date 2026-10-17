@@ -26,7 +26,7 @@ export default defineConfig({
     globals: false,
     coverage: {
       provider: "v8",
-      include: ["packages/*/src/**/*.ts"],
+      include: ["packages/*/src/**/*.ts", "apps/agent-runtime/src/application/**/*.ts"],
       exclude: ["**/*.test.ts", "**/index.ts", "**/types.ts", "packages/*/src/taxonomy/**"],
       // gate-ci requires an 80% line coverage minimum.
       thresholds: {

@@ -118,6 +118,10 @@ export {
 
 export { inferKind, parseLevel, parseVacancyText, slugify } from "./vacancy/text";
 
+export { ApplicationService } from "./application/service";
+export { createApplicationServer } from "./application/server";
+export { BETTER_AUTH_ROLES } from "./application/roles";
+
 export { verificationConfigFromEnv, verifyCredential } from "./verification/index";
 
 export {

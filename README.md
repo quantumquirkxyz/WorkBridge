@@ -34,16 +34,24 @@ Ajv, HiGHS, Google Maps, Apify LinkedIn Jobs scraper, Langfuse, Vitest, and Play
 Requiere Node.js ≥ 22. El proyecto es un monorepo de npm workspaces (`packages/*`, `apps/*`).
 
 ```bash
-npm install          # instala el workspace completo
-npm test             # Vitest: unitarias y contratos
-npm run typecheck    # tsc --noEmit
-npm run gate:ci      # typecheck + cobertura (umbral 80% de líneas)
-npm run dev          # interfaz de intake en http://localhost:3000
+npm ci
+npm test
+npm run typecheck
+npm run gate:ci
+npm run test:e2e
+npm start
+npm run dev
 ```
+
+`npm run dev` abre el intake en http://localhost:3000. `npm start` levanta el servicio de
+postulación. Los borradores y envíos con roles están en `docs/how-to/application-runtime.md`.
+Las firmas asumidas de matching (#8) y del plano de workflow (#9) están en
+`docs/reference/assumed-contracts.md`.
 
 Copia `apps/web/.env.example` a `apps/web/.env.local` para configurar OpenRouter. Sin
 `OPENROUTER_API_KEY` el intake usa el extractor heurístico determinista y aun así produce un
-`CandidateProfile` válido. El sistema nunca envía una postulación.
+`CandidateProfile` válido. Copia `.env.example` a `.env` para la postulación local. No
+commits de credenciales reales.
 
 ## Evals
 

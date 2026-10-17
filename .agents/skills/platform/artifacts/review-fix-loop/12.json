@@ -1,0 +1,82 @@
+{
+  "schemaVersion": "1.0",
+  "artifactType": "review-fix-loop",
+  "id": "review-fix-loop-12",
+  "skill": "review-fix-loop",
+  "createdAt": "2026-10-17T00:06:18.177Z",
+  "updatedAt": "2026-10-17T00:06:18.177Z",
+  "pr": "https://github.com/HackathonFISC/equipo-02/pull/21",
+  "branch": "feat/issue-12-build-role-based-approval-and-safe-application-submission",
+  "fixedPoint": "main",
+  "specSource": "GitHub issue #12 (parent spec #3)",
+  "reviewPassCount": 3,
+  "passes": [
+    {
+      "pass": 1,
+      "headReviewed": "09da7ce",
+      "reviewUrl": "https://github.com/HackathonFISC/equipo-02/pull/21#pullrequestreview-5554702331",
+      "standardsFindings": 8,
+      "specFindings": 8,
+      "blockerOrRequiredFindings": 9,
+      "planComment": "https://github.com/HackathonFISC/equipo-02/pull/21#issuecomment-6226808274",
+      "planStatus": "planned",
+      "implementationComment": "https://github.com/HackathonFISC/equipo-02/pull/21#issuecomment-6226890114",
+      "implementationCommit": "4cdaf1e",
+      "implementationStatus": "implemented",
+      "note": "Plan carried 8 executable items (7 Spec required + 1 Standards hard). Judgement-call smells were left out."
+    },
+    {
+      "pass": 2,
+      "headReviewed": "37c3ad6",
+      "reviewUrl": "https://github.com/HackathonFISC/equipo-02/pull/21#pullrequestreview-5554902846",
+      "standardsFindings": 2,
+      "specFindings": 1,
+      "blockerOrRequiredFindings": 1,
+      "planComment": "https://github.com/HackathonFISC/equipo-02/pull/21#issuecomment-6226981288",
+      "planStatus": "planned",
+      "implementationComment": "https://github.com/HackathonFISC/equipo-02/pull/21#issuecomment-6227008288",
+      "implementationCommit": "b68b9cd",
+      "implementationStatus": "implemented",
+      "note": "Pass-1 required findings were fixed. The new Spec finding was that ENSURE_IDEMPOTENCY_TABLE_SQL never ran. The two Standards findings were judgement-call Duplicated Code and were not planned."
+    },
+    {
+      "pass": 3,
+      "headReviewed": "0e85b41",
+      "reviewUrl": "https://github.com/HackathonFISC/equipo-02/pull/21#pullrequestreview-5554955085",
+      "standardsFindings": 0,
+      "specFindings": 0,
+      "blockerOrRequiredFindings": 0,
+      "implementationCommit": "b68b9cd",
+      "implementationStatus": "implemented",
+      "note": "The SQL store creates submission_idempotency before the first read or write. No new Standards or Spec findings."
+    }
+  ],
+  "loopState": {
+    "lastPlanPosted": true,
+    "lastImplementationCompleted": true,
+    "validation": [
+      "npx tsc --noEmit - pass",
+      "npx eslint on store.ts and server.test.ts - pass",
+      "npx vitest run --coverage - 100/100 pass; 92.88% lines / 84.11% branches",
+      "npx playwright test - 3/3 pass"
+    ],
+    "metadataAligned": {
+      "issue": 12,
+      "labels": ["ready-for-agent"],
+      "milestone": null,
+      "note": "No new tracker metadata invented on the PR; the linked issue label set is unchanged."
+    }
+  },
+  "exitCondition": "clean",
+  "deferred": [],
+  "residualAdvisory": [
+    "Standards (judgement): Repeated Switches in approveDraft and rejectDraft (service.ts).",
+    "Standards (judgement): Divergent Change in ApplicationService.",
+    "Standards (judgement): Primitive Obsession in errors.ts and evidence.ts.",
+    "Standards (judgement): Duplicated Code in the secret scan and in MatchDecision fixtures.",
+    "Standards (judgement): Shotgun Surgery for the signature copy in docs/reference/assumed-contracts.md.",
+    "Standards (judgement): duplicated envelope() helper in service.test.ts, server.test.ts, and e2e/submission.spec.ts.",
+    "Standards (judgement): signature is documented on BetterAuthSession while the code keeps it on SignedBetterAuthSession."
+  ],
+  "nextConsumer": "ship-subissue"
+}
