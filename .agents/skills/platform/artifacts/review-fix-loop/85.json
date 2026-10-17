@@ -1,0 +1,19 @@
+{
+  "status": "clean",
+  "pr": 85,
+  "branch": "feat/issue-61-build-no-match-roadmap-from-solver-gaps",
+  "fixedPoint": "main",
+  "reviewPasses": 3,
+  "plansPosted": 3,
+  "implementationCompleted": true,
+  "standardsFindings": 0,
+  "specFindings": 0,
+  "validation": [
+    "npm exec vitest run apps/web/tests/roadmap-handler.test.ts apps/web/tests/match-handler.test.ts",
+    "npx eslint changed files",
+    "npm run typecheck",
+    "npm run gate:ci — 634 tests passed; 8 skipped"
+  ],
+  "remainingBlockers": [],
+  "nextConsumer": "ship-subissue"
+}
