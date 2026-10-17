@@ -135,7 +135,10 @@ export function ExplorationDashboard() {
 
   async function requestRoadmap(explored: ExplorationResult) {
     setRoadmap(null);
-    if (explored.matches.length > 0) return;
+    // `noMatch` is the authoritative signal. An empty `matches` array can also
+    // mean a caller deliberately requested `limit: 0`; that is not a no-match
+    // exploration and must not trigger training.
+    if (!explored.noMatch?.roadmapRequested) return;
     try {
       const response = await fetch('/api/roadmap', {
         method: 'POST',
