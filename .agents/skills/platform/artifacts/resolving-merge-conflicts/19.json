@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "2.0",
+  "artifactType": "plan",
+  "id": "resolve-conflict-19",
+  "skill": "resolving-merge-conflicts",
+  "skillVersion": "1",
+  "promptVersion": "2.0",
+  "createdAt": "2026-10-17T00:45:00.000Z",
+  "updatedAt": "2026-10-17T00:45:00.000Z",
+  "input": {
+    "branch": "feat/issue-9-build-multi-agent-workflow-safety-observability",
+    "conflictSource": "merge",
+    "conflictingFiles": [
+      "apps/agent-runtime/package.json",
+      "apps/agent-runtime/src/index.ts",
+      "package-lock.json"
+    ]
+  },
+  "output": {
+    "status": "resolved",
+    "resolution": "Merged origin/main into the issue #9 branch. Kept candidate intake, profile, and solver from main together with the Mastra workflow. The runtime package depends on @mastra/core, @puente/domain, @puente/ingestion, and @puente/profile. The carrier remains JSON Schema 2020-12 validated with Ajv. The lockfile was regenerated from the merged manifests. A dynamic import in packages/ingestion/src/ocr.ts was typed so the shared ESLint config passes.",
+    "filesResolved": [
+      "apps/agent-runtime/package.json",
+      "apps/agent-runtime/src/index.ts",
+      "package-lock.json",
+      "packages/domain/src/types.ts",
+      "packages/ingestion/src/ocr.ts"
+    ],
+    "filesRemaining": [],
+    "branchClean": true,
+    "nextConsumer": "ship-subissue"
+  },
+  "provenance": {
+    "sourceOfTruth": "origin/main at 58805c5 and the issue #9 branch at 7e74eb5, resolved in fad6649",
+    "scope": [
+      "Merge conflict markers in the agent-runtime package, its public exports, and the lockfile",
+      "Preserve intake from main and the workflow plane from this branch"
+    ],
+    "outOfScope": [
+      "Reworking issue #4 or issue #8 behavior",
+      "Removing the Zod peer that @mastra/core loads at import time"
+    ],
+    "nextConsumer": "ship-subissue",
+    "blockedBy": [],
+    "evidence": "npm run lint pass; npm run typecheck pass; npm run test:coverage 276/276 pass, lines 93.46%, branches 79.17%. No conflict markers remain. Merge commit fad6649.",
+    "riskRemaining": "@mastra/core still peer-depends on Zod so the package stays installed. npm audit reports 5 moderate transitive advisories through @mastra/core."
+  },
+  "evaluation": {
+    "qualityBarScore": 90,
+    "artifactPassedQualityBar": true,
+    "evaluators": {
+      "behavioral": {
+        "passed": true,
+        "score": 90,
+        "notes": "Inspected both sides, kept compatible intents, finished the merge, and re-ran lint, typecheck, and coverage."
+      },
+      "traceability": {
+        "passed": true,
+        "score": 90,
+        "notes": "Conflicts map to PR #19 and issue #9. Resolution commit is fad6649."
+      },
+      "quality-bar": {
+        "passed": true,
+        "score": 90,
+        "notes": "276 tests passed and coverage stayed above the 80% lines / 70% branches gate."
+      }
+    }
+  }
+}
