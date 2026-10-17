@@ -278,10 +278,15 @@ describe("application HTTP surface", () => {
       });
       expect(read.status).toBe(200);
       const text = await read.text();
-      const view = JSON.parse(text) as Record<string, any>;
+      const view = JSON.parse(text) as {
+        traceId: string;
+        vacancyTitle: string;
+        documents: { cv: Array<{ text: string }> };
+        evidence: Array<{ id: string }>;
+      };
       expect(view.traceId).toBe("trace-http");
       expect(view.vacancyTitle).toBe("Cajero");
-      expect(view.documents.cv[0].text).toBe("Atendí la caja del kiosco familiar.");
+      expect(view.documents.cv[0]?.text).toBe("Atendí la caja del kiosco familiar.");
       expect(view.evidence.map((item: { id: string }) => item.id)).toEqual(["ev-1"]);
       expect(text).not.toContain("descartado");
       for (const key of ["age", "gender", "address", "photo", "Calle 1"]) expect(text).not.toContain(key);

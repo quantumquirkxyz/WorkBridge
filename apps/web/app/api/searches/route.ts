@@ -41,7 +41,7 @@ export async function POST(request: Request): Promise<Response> {
   return NextResponse.json(body, { status });
 }
 
-export async function GET(request: Request): Promise<Response> {
+export async function GET(_request: Request): Promise<Response> {
   const session = await getServerSession();
   const candidateId = session?.user.id ? makeCandidateId(session.user.id) : undefined;
   if (!candidateId) return unauthorized();
@@ -56,7 +56,7 @@ export async function GET(request: Request): Promise<Response> {
   return NextResponse.json(body, { status });
 }
 
-export async function PUT(request: Request): Promise<Response> {
+export async function PUT(_request: Request): Promise<Response> {
   const session = await getServerSession();
   const candidateId = session?.user.id ? makeCandidateId(session.user.id) : undefined;
   if (!candidateId) return unauthorized();

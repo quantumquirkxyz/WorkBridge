@@ -1,7 +1,6 @@
-import { assertAgentEnvelope, type AgentEnvelope, type AgentId, type CandidatePreferences } from "@workbridge/domain";
+import { assertAgentEnvelope, type AgentEnvelope, type AgentId } from "@workbridge/domain";
 import { createExplorationAgent } from "../exploration/exploration-agent";
 import { createProfileAgent } from "../profile-agent";
-import { createSeedCatalog } from "@workbridge/catalog";
 import type { Carrier } from "./carrier";
 import {
   DEFAULT_AGENT_TOOL,
