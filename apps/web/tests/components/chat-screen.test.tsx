@@ -2,6 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { initialSlotState } from '@/lib/chat/tracker';
+import { SLOTS } from '@/lib/chat/slots';
 import { ChatScreen } from '@/components/ChatScreen';
 import { server, userEvent } from './setup';
 
@@ -48,6 +49,35 @@ describe('ChatScreen', () => {
     await screen.findByText('¿En qué zona?');
     expect(screen.getByLabelText('Fase preferencias')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'San Miguelito' })).toBeInTheDocument();
+  });
+
+  it('starts a seeded empty session at the next unanswered slot', async () => {
+    const slotState = initialSlotState();
+    for (const slot of SLOTS.filter((item) => item.phase === 'profile')) slotState[slot.id] = { state: 'filled', value: 'known' };
+    slotState.target_roles = { state: 'filled', value: 'Ventas' };
+    server.use(http.get('/api/chat', () => HttpResponse.json({ transcript: [], slotState, pendingSlot: 'zone', phase: 'preferences' })));
+    render(<ChatScreen />);
+    expect(await screen.findByText('¿En qué zona te queda bien trabajar?')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'San Miguelito' })).toBeInTheDocument();
+    expect(screen.queryByText('¿Cómo te llamo?')).not.toBeInTheDocument();
+  });
+
+  it('runs intake before exploration when profile completion reports done', async () => {
+    const slotState = initialSlotState();
+    for (const slot of SLOTS) slotState[slot.id] = { state: 'filled', value: 'known' };
+    const calls: string[] = [];
+    server.use(
+      http.get('/api/chat', () => HttpResponse.json({ transcript: [{ role: 'assistant', content: 'Listo para buscar.' }], slotState, phase: 'profile' })),
+      http.post('/api/chat', () => HttpResponse.json(turn({ phase: 'done', pendingSlot: null, chips: [], reply: 'Listo.' }))),
+      http.post('/api/intake', () => { calls.push('intake'); return HttpResponse.json({ profile: { skills: [], experiences: [] } }); }),
+      http.post('/api/explore', () => { calls.push('explore'); return HttpResponse.json({ preferences: {} }); }),
+    );
+    render(<ChatScreen />);
+    const input = await screen.findByRole('textbox', { name: 'Escribe tu respuesta' });
+    await userEvent.type(input, 'continuemos');
+    await userEvent.keyboard('{Enter}');
+    await waitFor(() => expect(push).toHaveBeenCalledWith('/vacantes'));
+    expect(calls).toEqual(['intake', 'explore']);
   });
 
   it('shows confirmation chips and sends Sí for a proposed value', async () => {

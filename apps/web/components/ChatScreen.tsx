@@ -89,7 +89,12 @@ export function ChatScreen() {
           })));
           profileText.current = restored.filter((message) => message.role === 'user').map((message) => message.content);
         } else {
-          setMessages([{ id: nextId(), role: 'assistant', content: WELCOME_MESSAGE }]);
+          const seededState = snapshot?.slotState;
+          const hasKnownSlots = seededState && Object.values(seededState).some((entry) => entry.state === 'filled' || entry.state === 'proposed');
+          const seededSlot = hasKnownSlots ? snapshot?.pendingSlot ?? pendingSlot(seededState) : null;
+          const seededDefinition = seededSlot ? SLOTS.find((slot) => slot.id === seededSlot) : undefined;
+          const seededChips = seededDefinition?.chips.map((chip) => ({ ...chip, slot: seededSlot ?? undefined }));
+          setMessages([{ id: nextId(), role: 'assistant', content: seededDefinition?.question ?? WELCOME_MESSAGE, ...(seededChips?.length ? { chips: seededChips } : {}) }]);
         }
         if (snapshot?.slotState) setSlotState(snapshot.slotState);
         if (snapshot?.phase) setPhase(snapshot.phase);
@@ -176,7 +181,8 @@ export function ChatScreen() {
       } else {
         addMessage('assistant', turn.reply, chips.length > 0 ? chips : undefined);
       }
-      if (turn.phase === 'preferences' && !intakeStarted.current) {
+      const profileComplete = SLOTS.filter((slot) => slot.phase === 'profile').every((slot) => nextState[slot.id].state === 'filled');
+      if ((profileComplete || turn.phase === 'preferences') && !intakeStarted.current) {
         intakeStarted.current = true;
         const text = profileText.current.join('\n');
         try {
