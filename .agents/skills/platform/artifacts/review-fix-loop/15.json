@@ -3,13 +3,16 @@
   "identifier": "15",
   "pr": 15,
   "branch": "feat/issue-4-build-candidate-intake-and-profile",
-  "fixedPoint": "main",
+  "fixedPoint": "origin/main@bab2947c35303313db91d40d5cac35cbf0743566",
   "status": "blocked",
   "pass": 6,
-  "reason": "The post-conflict-resolution branch is not typecheck-clean. The merge combines incompatible public taxonomy APIs in @puente/domain (candidate profile expects TermMatch.skill; vacancy code expects CanonicalSkill), and the merged lockfile required regeneration. A focused merge repair is required before review-pr can provide a valid clean/unclean result.",
+  "lastPlanPosted": false,
+  "lastImplementationCompleted": false,
+  "reason": "The review findings expose a deeper merge integration conflict: @puente/domain has two incompatible taxonomy matchSkill APIs used by candidate-profile and vacancy/solver code. Repair attempts removed lockfile markers and syntax damage but still leave typecheck failures and conflicting taxonomy test contracts. A focused architecture decision is required before planning review fixes.",
   "validation": {
-    "npm run typecheck": "failed: taxonomy API incompatibility, missing highs and tesseract.js dependencies",
-    "git diff --check": "failed before repair: unresolved package-lock conflict markers"
+    "npm run typecheck": "failed: normalizeTerm export, taxonomy API return-shape conflicts, and subpath alias issues",
+    "npm test": "failed: PDF extraction runtime Iterator issue; taxonomy suites require API reconciliation",
+    "workingTree": "clean; incomplete repair is stashed"
   },
-  "nextConsumer": "resolving-merge-conflicts / focused merge repair"
+  "nextConsumer": "resolving-merge-conflicts / domain taxonomy API reconciliation"
 }
