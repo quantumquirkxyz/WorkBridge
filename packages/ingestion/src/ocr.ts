@@ -70,7 +70,13 @@ export function tesseractOcrAdapter(langs = 'spa+eng'): OcrAdapter {
       let recognize: ((image: Uint8Array, lang: string) => Promise<{ data: { text: string; confidence?: number } }>) | undefined;
       try {
         const moduleName = 'tesseract.js';
-        const mod: any = await import(/* @vite-ignore */ moduleName);
+        type TesseractModule = {
+          recognize?: (image: Uint8Array, lang: string) => Promise<{ data: { text: string; confidence?: number } }>;
+          default?: {
+            recognize?: (image: Uint8Array, lang: string) => Promise<{ data: { text: string; confidence?: number } }>;
+          };
+        };
+        const mod = (await import(/* @vite-ignore */ moduleName)) as TesseractModule;
         recognize = mod.recognize ?? mod.default?.recognize;
       } catch {
         recognize = undefined;

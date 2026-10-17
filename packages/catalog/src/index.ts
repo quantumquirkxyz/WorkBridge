@@ -1,0 +1,37 @@
+export type {
+  CachedVacancy,
+  CandidatePreferences,
+  CatalogOptions,
+  ExcludedVacancy,
+  ExclusionReason,
+  ExplorationQueryOptions,
+  ExplorationResult,
+  ExplorationSummary,
+  Freshness,
+  ScrapingInfo,
+  TransportMode,
+  VacancyMatch,
+  VacancyProvenance,
+  VacancySalary,
+  VacancySchedule,
+  VacancySkill,
+} from './types';
+
+export type { RawScrapedVacancy, VacancyCatalog } from './catalog';
+
+export { CatalogError, InvalidVacancyError } from './errors';
+
+export {
+  CATALOG_SCHEMA_IDS,
+  CatalogContractError,
+  assertCachedVacancy,
+  assertExplorationResult,
+  validateCachedVacancy,
+  validateExplorationResult,
+} from './ajv';
+
+export { DEFAULT_MAX_AGE_HOURS, computeFreshness } from './freshness';
+
+export { createVacancyCatalog, loadCatalogFromScraped, toCachedVacancy } from './catalog';
+
+export { exploreVacancies } from './explore';

@@ -7,6 +7,8 @@ export default tseslint.config(
       "**/dist/**",
       "**/node_modules/**",
       "**/coverage/**",
+      "**/.next/**",
+      "**/out/**",
       ".agents/**",
       ".claude/**",
       ".opencode/**",

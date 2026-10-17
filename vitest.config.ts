@@ -11,6 +11,7 @@ export default defineConfig({
       "@puente/profile": r("./packages/profile/src/index.ts"),
       "@puente/agent-runtime": r("./apps/agent-runtime/src/index.ts"),
       "@puente/solver": r("./packages/solver/src/index.ts"),
+      "@puente/catalog": r("./packages/catalog/src/index.ts"),
     },
   },
   test: {
