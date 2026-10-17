@@ -1,0 +1,17 @@
+{
+  "status": "implemented",
+  "pr": 85,
+  "branch": "feat/issue-61-build-no-match-roadmap-from-solver-gaps",
+  "completedItems": [
+    "Preserved the cached vacancy skill ID when building roadmap matching requirements, with label fallback.",
+    "Added a regression test for stored skill aliases whose display label is unmappable.",
+    "Injected a viable-match service spy and asserted MatchingService is not called."
+  ],
+  "validation": [
+    "npm exec vitest run apps/web/tests/roadmap-handler.test.ts — passed: 9 tests",
+    "npx eslint apps/web/lib/roadmap-handler.ts apps/web/tests/roadmap-handler.test.ts — passed",
+    "npm run typecheck — passed",
+    "npm run gate:ci — passed: 75 files, 632 tests passed; 8 skipped"
+  ],
+  "remainingBlockers": []
+}
