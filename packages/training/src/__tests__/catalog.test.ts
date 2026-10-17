@@ -3,27 +3,13 @@ import { loadCatalog } from "../catalog";
 import { InvalidTrainingCatalogError } from "../errors";
 import { validateTrainingCatalog } from "../validate";
 import type { TrainingCatalog } from "../types";
-import catalogSchema from "../schemas/training-catalog.schema.json";
 import { loadFixture } from "../../test/load-fixture";
 
 const catalogFixture = loadFixture<TrainingCatalog>("catalog/panama-training-catalog.json");
 
-const opportunityBounds = (
-  catalogSchema as {
-    properties: { opportunities: { minItems: number; maxItems: number } };
-  }
-).properties.opportunities;
-
 describe("TrainingCatalog contract", () => {
   it("validates the cached catalog fixture", () => {
     expect(validateTrainingCatalog(catalogFixture)).toBe(true);
-  });
-
-  it("enforces the 15-30 entry bound in the schema contract", () => {
-    expect(opportunityBounds.minItems).toBe(15);
-    expect(opportunityBounds.maxItems).toBe(30);
-    expect(catalogFixture.opportunities.length).toBeGreaterThanOrEqual(opportunityBounds.minItems);
-    expect(catalogFixture.opportunities.length).toBeLessThanOrEqual(opportunityBounds.maxItems);
   });
 
   it("loads the validated catalog snapshot", () => {
@@ -32,11 +18,20 @@ describe("TrainingCatalog contract", () => {
     expect(catalog.opportunities).toHaveLength(21);
   });
 
-  it("rejects a catalog below the 15-entry minimum", () => {
+  it("rejects a catalog below the 15-entry lower bound", () => {
     const tooSmall = structuredClone(catalogFixture);
     tooSmall.opportunities = tooSmall.opportunities.slice(0, 14);
     expect(validateTrainingCatalog(tooSmall)).toBe(false);
     expect(() => loadCatalog(tooSmall)).toThrow(InvalidTrainingCatalogError);
+  });
+
+  it("rejects a catalog above the 30-entry upper bound", () => {
+    const tooLarge = structuredClone(catalogFixture);
+    while (tooLarge.opportunities.length <= 30) {
+      tooLarge.opportunities.push(structuredClone(tooLarge.opportunities[0]!));
+    }
+    expect(validateTrainingCatalog(tooLarge)).toBe(false);
+    expect(() => loadCatalog(tooLarge)).toThrow(InvalidTrainingCatalogError);
   });
 
   it("rejects a catalog with a malformed opportunity", () => {

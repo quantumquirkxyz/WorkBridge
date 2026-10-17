@@ -68,6 +68,7 @@ export {
   modalityScore,
   scheduleCoverage,
   scheduleScore,
+  specializationOverlap,
   specializationScore,
   typeLabelEs,
   type DimensionScore,

@@ -111,8 +111,6 @@ export interface TrainingPreferences {
   home?: GeoPoint;
   /** Maximum acceptable one-way commute in minutes. */
   maxCommuteMinutes?: number;
-  /** When true, only certificate-bearing opportunities are considered (advisory). */
-  requireCredential?: boolean;
 }
 
 export interface RoadmapRequest {

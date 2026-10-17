@@ -140,6 +140,17 @@ describe("buildRoadmap — edge cases", () => {
     expect(roadmap.reasons[0]).toContain("No hay brechas");
   });
 
+  it("returns an empty roadmap for an already-apt candidate", () => {
+    const roadmap = buildRoadmap(
+      { ...request("missing-technical"), aptitude: "apt" },
+      catalog,
+      { now },
+    );
+    expect(validateRoadmap(roadmap)).toBe(true);
+    expect(roadmap.recommendations).toEqual([]);
+    expect(roadmap.reasons[0]).toContain("ya es apto");
+  });
+
   it("rejects a request without a candidate id", () => {
     expect(() => buildRoadmap({ ...request("missing-technical"), candidateId: "" }, catalog, { now })).toThrow(
       TrainingInputError,

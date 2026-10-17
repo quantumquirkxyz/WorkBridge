@@ -94,6 +94,15 @@ export function gapCoverageScore(
   };
 }
 
+/** Target specializations this opportunity matches; empty when none match. */
+export function specializationOverlap(
+  opportunity: TrainingOpportunity,
+  preferences: TrainingPreferences,
+): string[] {
+  const targets = preferences.specializations;
+  return opportunity.specializations.filter((slug) => targets.includes(slug));
+}
+
 /** Specialization fit: share of the candidate's target areas this covers. */
 export function specializationScore(
   opportunity: TrainingOpportunity,
@@ -106,7 +115,7 @@ export function specializationScore(
       reasons: ["Sin especialización objetivo: no restringe el ordenamiento."],
     };
   }
-  const overlap = opportunity.specializations.filter((slug) => targets.includes(slug));
+  const overlap = specializationOverlap(opportunity, preferences);
   const rawScore = clampScore((overlap.length / targets.length) * 100);
   return {
     rawScore,
@@ -236,20 +245,20 @@ function overlapMinutes(aStart: number, aEnd: number, bStart: number, bEnd: numb
 /** Weekly window coverage shared by the schedule dimension and its constraint. */
 export function scheduleCoverage(
   schedule: OpportunitySchedule,
-  availability: OpportunitySchedule,
+  availabilityWindow: OpportunitySchedule,
 ): ScheduleCoverage {
   const perDayMinutes = Math.max(0, schedule.endMinute - schedule.startMinute);
   const totalMinutes = schedule.days.length * perDayMinutes;
   let covered = 0;
   const missingDays: number[] = [];
   for (const day of schedule.days) {
-    if (!availability.days.includes(day)) {
+    if (!availabilityWindow.days.includes(day)) {
       missingDays.push(day);
       continue;
     }
     covered += overlapMinutes(
-      availability.startMinute,
-      availability.endMinute,
+      availabilityWindow.startMinute,
+      availabilityWindow.endMinute,
       schedule.startMinute,
       schedule.endMinute,
     );

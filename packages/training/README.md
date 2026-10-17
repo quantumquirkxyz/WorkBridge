@@ -70,6 +70,10 @@ opportunity that addresses the most outstanding gap levels, subject to:
 Ties between picks break by ranking score and then opportunity id. Gaps that no
 catalogued opportunity can close are reported in `unresolvedGaps`.
 
+Issue #11 defines roadmaps for `apt_with_gaps` and `not_currently_apt`. An `apt`
+request is accepted but yields an empty roadmap, since an already-apt candidate
+needs no training plan.
+
 ## Freshness
 
 | State | Age |

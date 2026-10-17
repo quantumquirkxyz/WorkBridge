@@ -3,7 +3,7 @@ import { freshnessLabelEs } from "./freshness";
 import { gapLabel } from "./gaps";
 import { modalityLabelEs, typeLabelEs } from "./scoring";
 import { rankOpportunities } from "./rank";
-import { selectRoadmap, type SelectedOpportunity } from "./select";
+import { selectRoadmap, type SelectedOpportunity, type SelectionResult } from "./select";
 import { TrainingInputError } from "./errors";
 import type {
   BuildRoadmapOptions,
@@ -31,8 +31,8 @@ export function explanationEs(
   ];
   if (selected.contributions.length > 0) {
     const labels = selected.contributions.map((contribution) => {
-      const gap = gaps.find((item) => item.skillId === contribution.skillId);
-      return gap ? gapLabel(gap) : contribution.skillId;
+      const gap = gaps.find((item) => item.skillId === contribution.skillId)!;
+      return gapLabel(gap);
     });
     parts.push(`Cubre: ${labels.join(", ")}.`);
   }
@@ -45,6 +45,9 @@ function summaryReasons(
   recommendationCount: number,
   unresolvedSkillIds: readonly string[],
 ): string[] {
+  if (request.aptitude === "apt") {
+    return ["El candidato ya es apto; no se requiere un roadmap de formación."];
+  }
   if (request.gaps.length === 0) {
     return ["No hay brechas que cerrar; no se requiere un roadmap de formación."];
   }
@@ -57,9 +60,6 @@ function summaryReasons(
       `Sin opción en el catálogo para: ${unresolvedSkillIds.join(", ")}. Se requiere ampliar el catálogo.`,
     );
   }
-  if (request.aptitude === "apt") {
-    reasons.push("El candidato ya es apto; el roadmap es opcional.");
-  }
   return reasons;
 }
 
@@ -67,6 +67,10 @@ function summaryReasons(
  * Build a deterministic, validated `Roadmap` from a cached catalog snapshot and
  * the candidate's gaps. Only catalogued opportunities are ever recommended;
  * each recommendation embeds the exact catalog entry it came from.
+ *
+ * Issue #11 defines roadmaps for `apt_with_gaps` and `not_currently_apt`. An
+ * `apt` request is accepted but yields an empty roadmap, because an already-apt
+ * candidate needs no training plan.
  */
 export function buildRoadmap(
   request: RoadmapRequest,
@@ -82,9 +86,14 @@ export function buildRoadmap(
   const gaps = request.gaps ?? [];
   const heldSkills = request.heldSkills ?? [];
   const now = (options.now ?? (() => new Date()))();
+  const needsTraining = request.aptitude !== "apt";
 
-  const ranked = rankOpportunities({ catalog, gaps, preferences: request.preferences, now });
-  const selection = selectRoadmap(ranked, gaps, request.preferences, heldSkills);
+  const ranked = needsTraining
+    ? rankOpportunities({ catalog, gaps, preferences: request.preferences, now })
+    : [];
+  const selection: SelectionResult = needsTraining
+    ? selectRoadmap(ranked, gaps, request.preferences, heldSkills)
+    : { selected: [], unresolvedGaps: gaps, omitted: [] };
 
   const recommendations: RoadmapRecommendation[] = selection.selected.map(
     (selected, index) => ({

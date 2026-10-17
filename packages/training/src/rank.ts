@@ -10,6 +10,7 @@ import {
   modalityScore,
   scheduleCoverage,
   scheduleScore,
+  specializationOverlap,
   specializationScore,
   type DimensionScore,
 } from "./scoring";
@@ -46,7 +47,7 @@ export function staticExclusionReasons(
   const reasons: string[] = [];
   if (
     preferences.specializations.length > 0 &&
-    !opportunity.specializations.some((slug) => preferences.specializations.includes(slug))
+    specializationOverlap(opportunity, preferences).length === 0
   ) {
     reasons.push(
       `No pertenece a tu especialización objetivo (${preferences.specializations.join(", ")}).`,
