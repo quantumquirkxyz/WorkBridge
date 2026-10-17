@@ -110,12 +110,16 @@ async function dispatch(req: IncomingMessage, res: ServerResponse, context: Requ
 }
 
 function writeJson(res: ServerResponse, status: number, body: unknown, secrets: readonly string[]): void {
-  const payload = JSON.stringify(body);
-  const leaked = secrets.find((secret) => payload.includes(secret));
-  if (leaked) {
-    writeError(res, new ApplicationError("A secret was rejected and was not stored.", 422, "secret_rejected"), []);
-    return;
+  try {
+    assertNoSecrets(body, secrets);
+  } catch (error) {
+    if (error instanceof ApplicationError) {
+      writeError(res, error, []);
+      return;
+    }
+    throw error;
   }
+  const payload = JSON.stringify(body);
   if (!res.headersSent) {
     res.writeHead(status, { "content-type": "application/json; charset=utf-8" });
   }

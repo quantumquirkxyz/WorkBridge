@@ -144,11 +144,18 @@ export interface BetterAuthSession {
     email: string;
     role: "candidate" | "employer" | "counselor";
   };
+}
+
+export interface SignedBetterAuthSession extends BetterAuthSession {
   signature: string;
 }
 ```
 
-The server reads the role only from `session.user.role` after `signature`
-matches an HMAC of the session fields with `BETTER_AUTH_SECRET`. `session.userId`
-must equal `user.id`. An `expiresAt` in the past is rejected. A client cannot
-change the role without invalidating the signature.
+The server reads the role only from `session.user.role` after `signature` on
+`SignedBetterAuthSession` matches an HMAC of `session.id`, `session.userId`,
+`session.expiresAt`, `user.id`, `user.email`, and `user.role` with
+`BETTER_AUTH_SECRET`. `session.userId` must equal `user.id`. An `expiresAt` in
+the past is rejected. A client cannot change the role without invalidating the
+signature. The JSON Schemas remain the source of truth for `MatchDecision`,
+`WorkflowEnvelope`, and `AuditEvent`; this page is checked against their
+required fields.

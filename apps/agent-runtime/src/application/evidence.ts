@@ -1,14 +1,20 @@
 import { ApplicationError } from "./errors";
 
+export const EVIDENCE_KINDS = ["experience", "skill", "education", "certification"] as const;
+export const CREDENTIAL_STATUSES = ["verified", "unverified", "not_applicable"] as const;
+
+export type EvidenceKind = (typeof EVIDENCE_KINDS)[number];
+export type CredentialStatus = (typeof CREDENTIAL_STATUSES)[number];
+
 export interface EvidenceItem {
   id: string;
-  kind: "experience" | "skill" | "education" | "certification";
+  kind: EvidenceKind;
   text: string;
-  credentialStatus: "verified" | "unverified" | "not_applicable";
+  credentialStatus: CredentialStatus;
 }
 
-const KINDS = new Set(["experience", "skill", "education", "certification"]);
-const STATUSES = new Set(["verified", "unverified", "not_applicable"]);
+const KINDS = new Set<string>(EVIDENCE_KINDS);
+const STATUSES = new Set<string>(CREDENTIAL_STATUSES);
 
 export function parseEvidence(value: unknown): EvidenceItem[] {
   if (!Array.isArray(value)) {
@@ -39,8 +45,8 @@ export function parseEvidence(value: unknown): EvidenceItem[] {
     return {
       id: row.id,
       text: row.text,
-      kind: row.kind as EvidenceItem["kind"],
-      credentialStatus: row.credentialStatus as EvidenceItem["credentialStatus"],
+      kind: row.kind as EvidenceKind,
+      credentialStatus: row.credentialStatus as CredentialStatus,
     };
   });
 }

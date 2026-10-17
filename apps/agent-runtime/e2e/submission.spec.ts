@@ -1,18 +1,9 @@
 import { expect, test } from "@playwright/test";
+import type { MatchDecision } from "@puente/domain";
+import { sampleMatchDecision, sampleWorkflowEnvelope } from "../src/application/fixtures";
 import { signBetterAuthSession } from "../src/application/roles";
 
 const SESSION_SECRET = "better-auth-test-secret";
-
-function envelope(traceId: string, idempotencyKey: string) {
-  return {
-    traceId,
-    idempotencyKey,
-    agent: "market_and_matching" as const,
-    schemaId: "https://puentelaboral.pa/schemas/match-decision.schema.json",
-    guardrails: [{ stage: "output" as const, allowed: true, code: "ok" as const }],
-    dqlState: "validated" as const,
-  };
-}
 
 function session(role: "candidate" | "employer" | "counselor", id = role) {
   return signBetterAuthSession(
@@ -24,36 +15,13 @@ function session(role: "candidate" | "employer" | "counselor", id = role) {
   );
 }
 
-function match(traceId: string, extras: Record<string, unknown> = {}) {
+function match(traceId: string, extras: Partial<MatchDecision> = {}): MatchDecision {
   return {
-    schemaVersion: "1.0.0",
-    decisionId: `dec-${traceId}`,
-    traceId,
-    candidateId: "candidate",
-    vacancyId: "vac-1",
-    strategy: "highs_milp",
-    aptitude: "apt",
-    score: {
-      technicalRequirements: 82,
-      experienceEvidence: 82,
-      availability: 82,
-      transportAccessibility: 82,
-      salaryConditions: 82,
-      weightedTotal: 82,
-    },
-    hardConstraints: {
-      mandatorySkills: "pass",
-      schedule: "pass",
-      salary: "pass",
-      capacity: "pass",
-      geographic: "pass",
-    },
-    transport: { feasible: true, source: "google_maps" },
-    gaps: [],
-    biasAlerts: [],
-    promotion: null,
-    tieBreak: { deterministic: true, usedProtectedAttributes: false, usedRandomness: false },
-    reasons: [{ code: "score", message: "apto" }],
+    ...sampleMatchDecision({
+      traceId,
+      total: 82,
+      transport: { feasible: true, source: "google_maps" },
+    }),
     ...extras,
   };
 }
@@ -75,7 +43,7 @@ function draftBody(traceId: string, extras: Record<string, unknown> = {}) {
       },
     ],
     match: match(traceId),
-    envelope: envelope(traceId, `${traceId}-draft`),
+    envelope: sampleWorkflowEnvelope(traceId, `${traceId}-draft`),
     ...extras,
   };
 }
@@ -96,7 +64,7 @@ test("candidate drafts, corrects, approves, retries, and submits", async ({ requ
       session: session("candidate"),
       traceId,
       idempotencyKey: `${traceId}-correct`,
-      envelope: envelope(traceId, `${traceId}-correct`),
+      envelope: sampleWorkflowEnvelope(traceId, `${traceId}-correct`),
       reason: "mantengo solo la experiencia declarada",
       includeEvidenceIds: ["ev-1"],
     },
@@ -108,7 +76,7 @@ test("candidate drafts, corrects, approves, retries, and submits", async ({ requ
       session: session("candidate"),
       traceId,
       idempotencyKey: `${traceId}-approve`,
-      envelope: envelope(traceId, `${traceId}-approve`),
+      envelope: sampleWorkflowEnvelope(traceId, `${traceId}-approve`),
       reason: "apruebo mi postulación",
     },
   });
@@ -119,7 +87,7 @@ test("candidate drafts, corrects, approves, retries, and submits", async ({ requ
       session: session("employer"),
       traceId,
       idempotencyKey: `${traceId}-blocked`,
-      envelope: envelope(traceId, `${traceId}-blocked`),
+      envelope: sampleWorkflowEnvelope(traceId, `${traceId}-blocked`),
       reason: "un empleador no envía la postulación",
     },
   });
@@ -129,7 +97,7 @@ test("candidate drafts, corrects, approves, retries, and submits", async ({ requ
     session: session("candidate"),
     traceId,
     idempotencyKey: `${traceId}-submit`,
-    envelope: envelope(traceId, `${traceId}-submit`),
+    envelope: sampleWorkflowEnvelope(traceId, `${traceId}-submit`),
     reason: "envío la postulación",
   };
   const submitted = await request.post(`/drafts/${draft.draftId}/submissions`, { data: submitData });
@@ -145,7 +113,7 @@ test("candidate drafts, corrects, approves, retries, and submits", async ({ requ
       session: session("employer"),
       traceId,
       idempotencyKey: `${traceId}-employer`,
-      envelope: envelope(traceId, `${traceId}-employer`),
+      envelope: sampleWorkflowEnvelope(traceId, `${traceId}-employer`),
       reason: "aprobamos pasar a entrevista",
     },
   });
@@ -155,7 +123,7 @@ test("candidate drafts, corrects, approves, retries, and submits", async ({ requ
       session: session("employer"),
       traceId,
       idempotencyKey: `${traceId}-interview`,
-      envelope: envelope(traceId, `${traceId}-interview`),
+      envelope: sampleWorkflowEnvelope(traceId, `${traceId}-interview`),
       reason: "la entrevista queda habilitada",
       decision: "approved",
     },
@@ -173,7 +141,7 @@ test("candidate, counselor, and employer can each reject", async ({ request }) =
       session: session("candidate"),
       traceId: candidateTrace,
       idempotencyKey: `${candidateTrace}-reject`,
-      envelope: envelope(candidateTrace, `${candidateTrace}-reject`),
+      envelope: sampleWorkflowEnvelope(candidateTrace, `${candidateTrace}-reject`),
       reason: "retiro la postulación",
     },
   });
@@ -210,7 +178,7 @@ test("candidate, counselor, and employer can each reject", async ({ request }) =
       session: session("counselor"),
       traceId: counselorTrace,
       idempotencyKey: `${counselorTrace}-reject`,
-      envelope: envelope(counselorTrace, `${counselorTrace}-reject`),
+      envelope: sampleWorkflowEnvelope(counselorTrace, `${counselorTrace}-reject`),
       reason: "la credencial sigue sin verificar",
     },
   });
@@ -224,7 +192,7 @@ test("candidate, counselor, and employer can each reject", async ({ request }) =
       session: session("candidate"),
       traceId: employerTrace,
       idempotencyKey: `${employerTrace}-approve`,
-      envelope: envelope(employerTrace, `${employerTrace}-approve`),
+      envelope: sampleWorkflowEnvelope(employerTrace, `${employerTrace}-approve`),
       reason: "apruebo el borrador",
     },
   });
@@ -233,7 +201,7 @@ test("candidate, counselor, and employer can each reject", async ({ request }) =
       session: session("candidate"),
       traceId: employerTrace,
       idempotencyKey: `${employerTrace}-submit`,
-      envelope: envelope(employerTrace, `${employerTrace}-submit`),
+      envelope: sampleWorkflowEnvelope(employerTrace, `${employerTrace}-submit`),
       reason: "envío para revisión del empleador",
     },
   });
@@ -243,7 +211,7 @@ test("candidate, counselor, and employer can each reject", async ({ request }) =
       session: session("employer"),
       traceId: employerTrace,
       idempotencyKey: `${employerTrace}-reject`,
-      envelope: envelope(employerTrace, `${employerTrace}-reject`),
+      envelope: sampleWorkflowEnvelope(employerTrace, `${employerTrace}-reject`),
       reason: "no avanzamos a entrevista",
       decision: "rejected",
     },
@@ -287,7 +255,7 @@ test("counselor approval allows a gated draft to be submitted and retried", asyn
       session: session("candidate"),
       traceId,
       idempotencyKey: `${traceId}-candidate`,
-      envelope: envelope(traceId, `${traceId}-candidate`),
+      envelope: sampleWorkflowEnvelope(traceId, `${traceId}-candidate`),
       reason: "apruebo mi postulación con la brecha visible",
     },
   });
@@ -298,7 +266,7 @@ test("counselor approval allows a gated draft to be submitted and retried", asyn
       session: session("counselor"),
       traceId,
       idempotencyKey: `${traceId}-counselor`,
-      envelope: envelope(traceId, `${traceId}-counselor`),
+      envelope: sampleWorkflowEnvelope(traceId, `${traceId}-counselor`),
       reason: "la credencial no verificada queda explícita",
     },
   });
@@ -308,7 +276,7 @@ test("counselor approval allows a gated draft to be submitted and retried", asyn
     session: session("candidate"),
     traceId,
     idempotencyKey: `${traceId}-submit`,
-    envelope: envelope(traceId, `${traceId}-submit`),
+    envelope: sampleWorkflowEnvelope(traceId, `${traceId}-submit`),
     reason: "envío después de la revisión",
   };
   const submitted = await request.post(`/drafts/${draft.draftId}/submissions`, { data: submitData });

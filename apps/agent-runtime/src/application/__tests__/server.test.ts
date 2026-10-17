@@ -4,23 +4,13 @@ import { describe, expect, it } from "vitest";
 import { resolveDatabaseMode } from "../database";
 import { signBetterAuthSession } from "../roles";
 import { createApplicationServer } from "../server";
+import { sampleMatchDecision, sampleWorkflowEnvelope } from "../fixtures";
 import { createSqlIdempotencyStore, ENSURE_IDEMPOTENCY_TABLE_SQL, type SqlQuery } from "../store";
 import { startApplicationServer } from "../main";
 import handler from "../vercel";
 
 const TOKEN = "certo-token-value-123456";
 const SESSION_SECRET = "better-auth-test-secret";
-
-function envelope(traceId: string, idempotencyKey: string) {
-  return {
-    traceId,
-    idempotencyKey,
-    agent: "market_and_matching" as const,
-    schemaId: "https://puentelaboral.pa/schemas/match-decision.schema.json",
-    guardrails: [{ stage: "output" as const, allowed: true, code: "ok" as const }],
-    dqlState: "validated" as const,
-  };
-}
 
 function session(role: "candidate" | "employer" | "counselor", id = role) {
   return signBetterAuthSession(
@@ -48,37 +38,8 @@ function payload(extra: Record<string, unknown> = {}) {
         credentialStatus: "not_applicable",
       },
     ],
-    match: {
-      schemaVersion: "1.0.0",
-      decisionId: "dec-http",
-      traceId: "trace-http",
-      candidateId: "candidate",
-      vacancyId: "vac-1",
-      strategy: "highs_milp",
-      aptitude: "apt",
-      score: {
-        technicalRequirements: 80,
-        experienceEvidence: 80,
-        availability: 80,
-        transportAccessibility: 80,
-        salaryConditions: 80,
-        weightedTotal: 80,
-      },
-      hardConstraints: {
-        mandatorySkills: "pass",
-        schedule: "pass",
-        salary: "pass",
-        capacity: "pass",
-        geographic: "pass",
-      },
-      transport: { feasible: true, source: "local_matrix" },
-      gaps: [],
-      biasAlerts: [],
-      promotion: null,
-      tieBreak: { deterministic: true, usedProtectedAttributes: false, usedRandomness: false },
-      reasons: [{ code: "score", message: "apto" }],
-    },
-    envelope: envelope("trace-http", "idem-http"),
+    match: sampleMatchDecision({ traceId: "trace-http", decisionId: "dec-http" }),
+    envelope: sampleWorkflowEnvelope("trace-http", "idem-http"),
     ...extra,
   };
 }
@@ -133,7 +94,7 @@ describe("application HTTP surface", () => {
           session: session("candidate"),
           traceId: "trace-http",
           idempotencyKey: "idem-sql-approve",
-          envelope: envelope("trace-http", "idem-sql-approve"),
+          envelope: sampleWorkflowEnvelope("trace-http", "idem-sql-approve"),
           reason: "apruebo",
         }),
       });
@@ -144,7 +105,7 @@ describe("application HTTP surface", () => {
           session: session("candidate"),
           traceId: "trace-http",
           idempotencyKey: "idem-sql-submit",
-          envelope: envelope("trace-http", "idem-sql-submit"),
+          envelope: sampleWorkflowEnvelope("trace-http", "idem-sql-submit"),
           reason: "envío",
         }),
       });
@@ -172,7 +133,7 @@ describe("application HTTP surface", () => {
           session: session("candidate"),
           traceId: "trace-http",
           idempotencyKey: "idem-correct",
-          envelope: envelope("trace-http", "idem-correct"),
+          envelope: sampleWorkflowEnvelope("trace-http", "idem-correct"),
           reason: "dejo solo la experiencia declarada",
           includeEvidenceIds: ["ev-1"],
         }),
@@ -186,7 +147,7 @@ describe("application HTTP surface", () => {
           session: session("candidate"),
           traceId: "trace-http",
           idempotencyKey: "idem-approve",
-          envelope: envelope("trace-http", "idem-approve"),
+          envelope: sampleWorkflowEnvelope("trace-http", "idem-approve"),
           reason: "apruebo el envío",
         }),
       });
@@ -199,7 +160,7 @@ describe("application HTTP surface", () => {
           session: session("employer"),
           traceId: "trace-http",
           idempotencyKey: "idem-submit",
-          envelope: envelope("trace-http", "idem-submit"),
+          envelope: sampleWorkflowEnvelope("trace-http", "idem-submit"),
           reason: "intento de un empleador",
         }),
       });
@@ -209,7 +170,7 @@ describe("application HTTP surface", () => {
         session: session("candidate"),
         traceId: "trace-http",
         idempotencyKey: "idem-submit",
-        envelope: envelope("trace-http", "idem-submit"),
+        envelope: sampleWorkflowEnvelope("trace-http", "idem-submit"),
         reason: "envío confirmado",
       };
       const submitted = await fetch(`${base}/drafts/${draft.draftId}/submissions`, {
@@ -234,7 +195,7 @@ describe("application HTTP surface", () => {
           session: session("employer"),
           traceId: "trace-http",
           idempotencyKey: "idem-interview",
-          envelope: envelope("trace-http", "idem-interview"),
+          envelope: sampleWorkflowEnvelope("trace-http", "idem-interview"),
           reason: "todavía no hay aprobación",
           decision: "approved",
         }),
@@ -248,7 +209,7 @@ describe("application HTTP surface", () => {
           session: session("employer"),
           traceId: "trace-http",
           idempotencyKey: "idem-employer",
-          envelope: envelope("trace-http", "idem-employer"),
+          envelope: sampleWorkflowEnvelope("trace-http", "idem-employer"),
           reason: "aprobamos entrevista",
         }),
       });

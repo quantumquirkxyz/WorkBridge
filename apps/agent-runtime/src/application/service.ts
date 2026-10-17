@@ -141,15 +141,11 @@ export class ApplicationService {
     const draft = this.openDraft(draftId);
     const action = this.parseAction(raw, draft.input.traceId);
     this.guard(action);
+    this.requireDraftParty(actor, draft, "approve");
     if (actor.role === "candidate") {
-      if (actor.id !== draft.ownerId) {
-        throw new ApplicationError("A candidate can only approve their own draft.", 403, "forbidden");
-      }
       draft.candidateApproval = this.decision(actor, action.reason, draft.selectedEvidenceIds);
-    } else if (actor.role === "counselor") {
-      draft.counselorApproval = this.decision(actor, action.reason, draft.selectedEvidenceIds);
     } else {
-      throw new ApplicationError("An employer cannot approve an application draft.", 403, "forbidden");
+      draft.counselorApproval = this.decision(actor, action.reason, draft.selectedEvidenceIds);
     }
     this.audit(actor, "approval", action);
     return this.draftView(draft);
@@ -160,13 +156,7 @@ export class ApplicationService {
     const draft = this.openDraft(draftId);
     const action = this.parseAction(raw, draft.input.traceId);
     this.guard(action);
-    if (actor.role === "candidate") {
-      if (actor.id !== draft.ownerId) {
-        throw new ApplicationError("A candidate can only reject their own draft.", 403, "forbidden");
-      }
-    } else if (actor.role !== "counselor") {
-      throw new ApplicationError("An employer cannot reject an application draft.", 403, "forbidden");
-    }
+    this.requireDraftParty(actor, draft, "reject");
     draft.status = "rejected";
     this.audit(actor, "rejection", action);
     return this.draftView(draft);
@@ -285,6 +275,20 @@ export class ApplicationService {
 
   private requireRole(actor: Actor, role: Actor["role"], message: string): void {
     if (actor.role !== role) throw new ApplicationError(message, 403, "forbidden");
+  }
+
+  /** Candidate owner or counselor. Employer is refused for both approval and rejection. */
+  private requireDraftParty(actor: Actor, draft: StoredDraft, action: "approve" | "reject"): void {
+    if (actor.role === "counselor") return;
+    if (actor.role === "candidate") {
+      if (actor.id !== draft.ownerId) {
+        const verb = action === "approve" ? "approve" : "reject";
+        throw new ApplicationError(`A candidate can only ${verb} their own draft.`, 403, "forbidden");
+      }
+      return;
+    }
+    const verb = action === "approve" ? "approve" : "reject";
+    throw new ApplicationError(`An employer cannot ${verb} an application draft.`, 403, "forbidden");
   }
 
   private draftById(draftId: string): StoredDraft {

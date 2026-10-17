@@ -1,24 +1,14 @@
 import { describe, expect, it } from "vitest";
 import type { MatchDecision } from "@puente/domain";
 import { assertDocumentsGrounded, gapLine, vacancyIntro } from "../draft";
+import type { EvidenceItem } from "../evidence";
+import { sampleMatchDecision, sampleWorkflowEnvelope } from "../fixtures";
 import { signBetterAuthSession, sessionSignature } from "../roles";
 import { ApplicationService } from "../service";
-import type { EvidenceItem } from "../evidence";
 
 const NOW = "2026-10-16T18:00:00.000Z";
 const TOKEN = "certo-token-value-123456";
 const SESSION_SECRET = "better-auth-test-secret";
-
-function envelope(traceId: string, idempotencyKey: string) {
-  return {
-    traceId,
-    idempotencyKey,
-    agent: "market_and_matching" as const,
-    schemaId: "https://puentelaboral.pa/schemas/match-decision.schema.json",
-    guardrails: [{ stage: "output" as const, allowed: true, code: "ok" as const }],
-    dqlState: "validated" as const,
-  };
-}
 
 function session(role: "candidate" | "employer" | "counselor", id: string = role) {
   return signBetterAuthSession(
@@ -42,36 +32,15 @@ function evidence(): EvidenceItem[] {
 }
 
 function match(total = 80, aptitude: MatchDecision["aptitude"] = "apt"): MatchDecision {
-  return {
-    schemaVersion: "1.0.0",
-    decisionId: "dec-1",
+  return sampleMatchDecision({
     traceId: "trace-1",
-    candidateId: "candidate",
-    vacancyId: "vac-1",
-    strategy: "deterministic_greedy",
+    decisionId: "dec-1",
+    total,
     aptitude,
-    score: {
-      technicalRequirements: total,
-      experienceEvidence: total,
-      availability: total,
-      transportAccessibility: total,
-      salaryConditions: total,
-      weightedTotal: total,
-    },
-    hardConstraints: {
-      mandatorySkills: "pass",
-      schedule: "pass",
-      salary: "pass",
-      capacity: "pass",
-      geographic: "pass",
-    },
+    strategy: "deterministic_greedy",
     transport: { feasible: true, source: "google_maps" },
-    gaps: [],
-    biasAlerts: [],
-    promotion: null,
-    tieBreak: { deterministic: true, usedProtectedAttributes: false, usedRandomness: false },
-    reasons: [{ code: "score", message: "total registrado" }],
-  };
+    reason: "total registrado",
+  });
 }
 
 function gatedMatch(): MatchDecision {
@@ -95,12 +64,12 @@ function draftInput(overrides: Record<string, unknown> = {}) {
     evidence: evidence(),
     match: match(),
     ...overrides,
-    envelope: overrides.envelope ?? envelope(traceId, idempotencyKey),
+    envelope: overrides.envelope ?? sampleWorkflowEnvelope(traceId, idempotencyKey),
   };
 }
 
 function action(reason: string, idempotencyKey = "idem-action", traceId = "trace-1") {
-  return { traceId, idempotencyKey, reason, envelope: envelope(traceId, idempotencyKey) };
+  return { traceId, idempotencyKey, reason, envelope: sampleWorkflowEnvelope(traceId, idempotencyKey) };
 }
 
 function service(secrets: string[] = []) {
@@ -399,7 +368,7 @@ describe("application approval and submission", () => {
       app.approveDraft(session("candidate"), created.draftId, {
         ...action("bloqueado", "idem-block"),
         envelope: {
-          ...envelope("trace-1", "idem-block"),
+          ...sampleWorkflowEnvelope("trace-1", "idem-block"),
           guardrails: [{ stage: "output", allowed: false, code: "prompt_injection" }],
         },
       }),

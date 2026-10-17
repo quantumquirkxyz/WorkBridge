@@ -1,4 +1,9 @@
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
+import auditEventSchema from "../schemas/audit-event.schema.json";
+import matchDecisionSchema from "../schemas/match-decision.schema.json";
+import workflowEnvelopeSchema from "../schemas/workflow-envelope.schema.json";
 import {
   APTITUDE_THRESHOLDS,
   MATCH_WEIGHTS,
@@ -126,5 +131,23 @@ describe("assumed #8 and #9 signatures", () => {
         timestamp: "2026-10-16T18:00:00.000Z",
       }),
     ).toThrow(/traceId/);
+  });
+
+  it("reads the reference page and checks it against the schema required fields", () => {
+    const pagePath = fileURLToPath(new URL("../../../../docs/reference/assumed-contracts.md", import.meta.url));
+    const page = readFileSync(pagePath, "utf8");
+    const required = [
+      ...matchDecisionSchema.required,
+      ...auditEventSchema.required,
+      ...workflowEnvelopeSchema.required,
+    ];
+    for (const name of required) {
+      expect(page).toContain(name);
+    }
+    const session = page.slice(page.indexOf("## Better Auth session"));
+    const signedAt = session.indexOf("export interface SignedBetterAuthSession");
+    expect(signedAt).toBeGreaterThan(0);
+    expect(session.slice(0, signedAt)).not.toContain("signature:");
+    expect(session.slice(signedAt)).toContain("signature: string");
   });
 });
