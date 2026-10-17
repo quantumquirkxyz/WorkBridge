@@ -1,0 +1,29 @@
+{
+  "status": "completed",
+  "changes": [
+    "Completed the #32 integration pass on the dedicated issue branch.",
+    "Removed unused workflow imports and corrected unused route handler parameters.",
+    "Replaced an explicit any assertion in the application server test with a typed response shape."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npm run lint",
+      "npm run typecheck",
+      "npm test",
+      "npm run gate:ci",
+      "npm run build --workspace @puente/web"
+    ],
+    "skipped": [],
+    "notes": "All existing sub-issues in the #32 wave plan are closed. The integration pass found and fixed five lint failures; 79 test files passed, one was skipped, and coverage was 90.37% statements / 92.5% lines."
+  },
+  "commitSha": "4e234d6c26860d60cc5ed19c3fcd137a23fb7224",
+  "branch": "feat/issue-32-puente-laboral-web-experience",
+  "nextConsumer": "publish-open-pr",
+  "riskRemaining": "The production build emits Better Auth warnings when local auth environment variables are absent; this is environment configuration, not a build failure.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  }
+}
