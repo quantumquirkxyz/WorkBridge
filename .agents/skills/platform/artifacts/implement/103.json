@@ -1,0 +1,29 @@
+{
+  "status": "completed",
+  "changes": [
+    "Added docs/reference/metodologia.md covering architecture, Docker and Vercel deployment, runtime operation, and validation.",
+    "Linked the methodology from README.md and linked the architecture diagram from the methodology."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npm run typecheck",
+      "npm test",
+      "npm run lint",
+      "npm run gate:ci",
+      "git diff --check",
+      "Verified referenced documentation files exist"
+    ],
+    "skipped": [],
+    "notes": "Documentation-only change; deployment commands and links were reviewed against Dockerfile, vercel.json, package.json, and existing runtime documentation."
+  },
+  "commitSha": "26cc2d5",
+  "branch": "docs/issue-103-methodology",
+  "nextConsumer": "publish-open-pr",
+  "riskRemaining": "The deployed environment itself was not exercised; local repository validation passed.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  }
+}
