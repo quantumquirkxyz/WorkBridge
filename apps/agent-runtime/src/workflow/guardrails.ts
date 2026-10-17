@@ -15,7 +15,8 @@ export type GuardrailCode =
   | "pii_leak"
   | "invalid_schema"
   | "invented_credential"
-  | "unauthorized_tool";
+  | "unauthorized_tool"
+  | "preferences_required";
 
 export interface GuardrailDecision {
   allowed: boolean;

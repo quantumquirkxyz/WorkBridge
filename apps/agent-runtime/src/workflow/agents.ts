@@ -1,4 +1,7 @@
-import { assertAgentEnvelope, type AgentEnvelope, type AgentId } from "@puente/domain";
+import { assertAgentEnvelope, type AgentEnvelope, type AgentId, type CandidatePreferences } from "@puente/domain";
+import { createExplorationAgent } from "../exploration/exploration-agent";
+import { createProfileAgent } from "../profile-agent";
+import { createSeedCatalog } from "@puente/catalog";
 import type { Carrier } from "./carrier";
 import {
   DEFAULT_AGENT_TOOL,
@@ -52,6 +55,8 @@ export interface WorkflowServices {
   clock: () => string;
   envelopes: AgentEnvelope[];
   emit?: (event: WorkflowStreamEvent) => void;
+  explorationAgent?: ReturnType<typeof createExplorationAgent>;
+  profileAgent?: ReturnType<typeof createProfileAgent>;
 }
 
 function publish(
@@ -71,6 +76,26 @@ function publish(
   assertAgentEnvelope(envelope);
   services.envelopes.push(envelope);
   services.emit?.({ event: "envelope", data: envelope });
+}
+
+function completeDeterministic(
+  services: WorkflowServices,
+  carrier: Carrier,
+  agent: AgentId,
+  spanId: string,
+  dqlId: string,
+  payload: Record<string, unknown>,
+  summary: string,
+): Carrier {
+  move(services, dqlId, "success", `${agent} completed deterministically`);
+  const closed = services.traces.endSpan(spanId, {
+    endTime: services.clock(),
+    output: payload,
+    metadata: { deterministic: true },
+  });
+  services.emit?.({ event: "trace", data: closed });
+  publish(services, carrier, agent, "response", payload);
+  return { ...carrier, summaries: [...carrier.summaries, { agent, summary }] };
 }
 
 function move(
@@ -265,6 +290,26 @@ export async function runAgent(
   });
   if (!permission.allowed) {
     return reject(carrier, services, agent, span.id, dqlId, [permission]);
+  }
+
+  if (agent === "exploration" || agent === "profile_and_evidence") {
+    if (agent === "exploration" && !carrier.preferences) {
+      const finding: GuardrailDecision = { stage: "input", code: "preferences_required", source: "candidate", reason: "Candidate preferences are required for exploration.", allowed: false };
+      move(services, dqlId, "success", "exploration skipped: preferences required");
+      audit(services, carrier, agent, "preferences_required", { tool, constraint: finding.code });
+      const closed = services.traces.endSpan(span.id, { endTime: services.clock(), output: finding });
+      services.emit?.({ event: "trace", data: closed });
+      publish(services, carrier, agent, "event", { status: "skipped", findings: [finding] });
+      return { ...carrier, findings: [...carrier.findings, finding] };
+    }
+    if (agent === "exploration" && services.explorationAgent && carrier.preferences) {
+      const exploration = await services.explorationAgent.run(carrier.preferences);
+      return completeDeterministic(services, carrier, agent, span.id, dqlId, exploration as unknown as Record<string, unknown>, JSON.stringify(exploration));
+    }
+    if (agent === "profile_and_evidence" && services.profileAgent) {
+      const intake = await services.profileAgent.run({ kind: "text", ref: `${carrier.traceId}:candidate`, text: carrier.candidateText }, { traceId: carrier.traceId, candidateId: carrier.actorId, locale: "es-PA" });
+      return completeDeterministic(services, carrier, agent, span.id, dqlId, intake.profile as unknown as Record<string, unknown>, JSON.stringify(intake.profile));
+    }
   }
 
   const prompt = promptFor(agent, carrier);

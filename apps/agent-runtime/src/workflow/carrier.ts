@@ -1,4 +1,4 @@
-import { AjvValidationError, ajv, type ActorRole, type AgentId, type DeclaredCredentialClaim } from "@puente/domain";
+import { AjvValidationError, ajv, type ActorRole, type AgentId, type CandidatePreferences, type DeclaredCredentialClaim } from "@puente/domain";
 import type { GuardrailDecision } from "./guardrails";
 import type { CandidateNominationResult } from "../matching";
 import type { Roadmap } from "@puente/training";
@@ -13,6 +13,7 @@ export interface Carrier {
   actorId: string;
   actorRole: ActorRole;
   requestedTools: string[];
+  preferences?: CandidatePreferences;
   matchingInput?: unknown;
   /** Structured deterministic match result, populated by market_and_matching. */
   matchResult?: CandidateNominationResult;
