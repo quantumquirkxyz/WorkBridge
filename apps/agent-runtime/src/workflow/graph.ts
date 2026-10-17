@@ -6,7 +6,7 @@ import {
   type WorkflowRunRequest,
 } from "@puente/domain";
 import { runAgent, type WorkflowServices, type WorkflowStreamEvent } from "./agents";
-import { carrierSchema, type Carrier } from "./carrier";
+import { assertCarrier, carrierSchema, type Carrier } from "./carrier";
 import type { GuardrailDecision } from "./guardrails";
 import { CAPABILITY_CHAINS, ModelRouter, type ModelInvoke } from "./models";
 import {
@@ -162,7 +162,8 @@ export class WorkflowRuntime {
         const message = started.status === "failed" ? started.error.message : started.status;
         throw new Error(`Mastra workflow ${started.status}: ${message}`);
       }
-      const carrier = carrierSchema.parse(started.result);
+      assertCarrier(started.result);
+      const carrier = started.result;
       if (carrier.status === "running") {
         throw new Error("Mastra workflow finished without a terminal status");
       }

@@ -1,50 +1,52 @@
-import { z } from "zod";
+import { AjvValidationError, ajv, type ActorRole, type AgentId, type DeclaredCredentialClaim } from "@puente/domain";
+import type { GuardrailDecision } from "./guardrails";
+import carrierJsonSchema from "./carrier.schema.json";
 
-export const carrierSchema = z.object({
-  traceId: z.string(),
-  idempotencyKey: z.string(),
-  candidateText: z.string(),
-  vacancyText: z.string(),
-  declaredCredentials: z.array(z.object({ id: z.string(), name: z.string() })),
-  actorId: z.string(),
-  actorRole: z.enum(["candidate", "counselor", "employer", "system"]),
-  requestedTools: z.array(z.string()),
-  halted: z.boolean(),
-  status: z.enum(["running", "success", "rejected", "dead_letter"]),
-  findings: z.array(
-    z.object({
-      allowed: z.boolean(),
-      stage: z.enum(["input", "tool_result", "permission", "output", "schema"]),
-      code: z.enum([
-        "ok",
-        "prompt_injection",
-        "pii_leak",
-        "invalid_schema",
-        "invented_credential",
-        "unauthorized_tool",
-      ]),
-      reason: z.string(),
-      source: z.string(),
-    }),
-  ),
-  summaries: z.array(
-    z.object({
-      agent: z.enum([
-        "exploration",
-        "profile_and_evidence",
-        "market_and_matching",
-        "training",
-      ]),
-      summary: z.string(),
-    }),
-  ),
-  modelFallbacks: z.array(
-    z.object({
-      capability: z.string(),
-      from: z.string(),
-      to: z.string(),
-    }),
-  ),
-});
+export interface Carrier {
+  traceId: string;
+  idempotencyKey: string;
+  candidateText: string;
+  vacancyText: string;
+  declaredCredentials: DeclaredCredentialClaim[];
+  actorId: string;
+  actorRole: ActorRole;
+  requestedTools: string[];
+  halted: boolean;
+  status: "running" | "success" | "rejected" | "dead_letter";
+  findings: GuardrailDecision[];
+  summaries: Array<{ agent: AgentId; summary: string }>;
+  modelFallbacks: Array<{ capability: string; from: string; to: string }>;
+}
 
-export type Carrier = z.infer<typeof carrierSchema>;
+const validateCarrier = ajv.compile<Carrier>(carrierJsonSchema);
+
+export function assertCarrier(value: unknown): asserts value is Carrier {
+  if (!validateCarrier(value)) {
+    throw new AjvValidationError("WorkflowCarrier", validateCarrier.errors);
+  }
+}
+
+function validateStandard(value: unknown): { value: Carrier } | { issues: Array<{ message: string }> } {
+  if (validateCarrier(value)) return { value };
+  return {
+    issues: (validateCarrier.errors ?? []).map((error) => ({
+      message: `${error.instancePath || "/"} ${error.message ?? "is invalid"}`,
+    })),
+  };
+}
+
+/**
+ * Mastra step schema. Validation runs through the compiled Ajv 2020-12 function.
+ */
+export const carrierSchema = {
+  "~standard": {
+    version: 1 as const,
+    vendor: "ajv",
+    types: undefined as { input: Carrier; output: Carrier } | undefined,
+    validate: validateStandard,
+    jsonSchema: {
+      input: () => carrierJsonSchema,
+      output: () => carrierJsonSchema,
+    },
+  },
+};

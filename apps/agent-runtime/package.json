@@ -13,7 +13,6 @@
     "@mastra/core": "^1.78.0",
     "@puente/domain": "*",
     "tesseract.js": "^5.1.1",
-    "unpdf": "^1.9.0",
-    "zod": "^3.25.76"
+    "unpdf": "^1.9.0"
   }
 }
