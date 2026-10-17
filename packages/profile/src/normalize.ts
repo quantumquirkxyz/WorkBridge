@@ -31,6 +31,7 @@ import {
 } from '@puente/domain';
 import { classifyExperience } from './classify';
 import { inferExperienceType } from './experience-type';
+import { mergeSkillLists } from './merge-profile';
 
 export interface NormalizeOptions {
   traceId: string;
@@ -208,21 +209,7 @@ function buildSkill(
 }
 
 function mergeSkills(skills: readonly CandidateSkill[]): CandidateSkill[] {
-  const merged = new Map<string, CandidateSkill>();
-  for (const skill of skills) {
-    const existing = merged.get(skill.skill_id);
-    if (!existing) {
-      merged.set(skill.skill_id, { ...skill });
-      continue;
-    }
-    existing.level = Math.max(existing.level, skill.level) as SkillLevel;
-    existing.evidence_ids = [...new Set([...existing.evidence_ids, ...skill.evidence_ids])];
-    existing.confidence = Number(Math.max(existing.confidence, skill.confidence).toFixed(2));
-    if (provenanceRank(skill.source) > provenanceRank(existing.source)) existing.source = skill.source;
-    const notes = [...(existing.normalization_notes ?? []), ...(skill.normalization_notes ?? [])];
-    if (notes.length) existing.normalization_notes = [...new Set(notes)];
-  }
-  return [...merged.values()].sort((a, b) => a.skill_id.localeCompare(b.skill_id));
+  return mergeSkillLists(skills);
 }
 
 function buildExperience(

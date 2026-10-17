@@ -2,9 +2,11 @@ import {
   makeTraceId,
   validateIntakeRequest,
   type IntakeRequest,
+  type IntakeResult,
 } from '@puente/domain';
 import { createProfileAgent, type ProfileAgent } from '@puente/agent-runtime';
 import type { RawIntake } from '@puente/ingestion';
+import { mergeCandidateProfiles, profileNeedsReview } from '@puente/profile';
 import { profileStore, type ProfileStore } from './profile-store';
 
 export interface IntakeHandlerDeps {
@@ -66,8 +68,26 @@ export async function handleIntake(
       candidateId: request.candidateId,
       locale: request.locale,
     });
-    (deps.profileStore ?? profileStore).save(result.profile);
-    return { status: 200, body: result };
+    const store = deps.profileStore ?? profileStore;
+    let profile = result.profile;
+    let body: IntakeResult = result;
+    if (request.candidateId) {
+      const existing = store.get(result.profile.candidate_id);
+      if (existing) {
+        profile = mergeCandidateProfiles(existing, result.profile);
+        body = {
+          ...result,
+          profile,
+          extraction: {
+            ...result.extraction,
+            needs_review: profileNeedsReview(profile),
+            warnings: profile.warnings ?? [],
+          },
+        };
+      }
+    }
+    store.save(profile);
+    return { status: 200, body };
   } catch (error) {
     return {
       status: 422,

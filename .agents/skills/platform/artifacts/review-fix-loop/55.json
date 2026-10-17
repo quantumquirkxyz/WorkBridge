@@ -1,0 +1,15 @@
+{
+  "pr": 55,
+  "branch": "issue/34-merge-intake-sources",
+  "fixedPoint": "origin/main",
+  "passes": 1,
+  "status": "stopped-no-executable-fixes",
+  "planPosted": true,
+  "implementationPosted": false,
+  "validation": {
+    "tests": "npx vitest run packages/profile/tests/merge-profile.test.ts packages/profile/tests/normalize.test.ts packages/profile/tests/build-profile.test.ts apps/web/tests/intake-handler.test.ts",
+    "result": "31 passed"
+  },
+  "remaining": "Three judgement-call smells were kept out of the executable plan. Two spec notes match the approved plan and were not treated as defects.",
+  "nextConsumer": "ship-subissue"
+}

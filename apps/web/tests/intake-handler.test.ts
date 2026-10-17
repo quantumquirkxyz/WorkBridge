@@ -95,6 +95,47 @@ describe('handleIntake', () => {
     expect(body).toEqual({ error: 'intake_failed', message: 'provider down', trace_id: 'trace_manual' });
   });
 
+  it('merges a later intake for the same candidate instead of replacing the profile', async () => {
+    const store = createInMemoryProfileStore();
+    const candidateId = 'candidate_merge';
+    const pdfText = 'Trabajé en una oficina usando Word y Python para reportes.';
+    const textAgent = createProfileAgent({ now: () => new Date('2026-01-01T00:00:00.000Z') });
+    const pdfAgent = createProfileAgent({
+      now: () => new Date('2026-02-01T00:00:00.000Z'),
+      pdf: async () => ({ text: pdfText, pageCount: 1 }),
+    });
+
+    const first = await handleIntake(
+      { kind: 'text', text: CV, candidateId },
+      { agent: textAgent, profileStore: store },
+    );
+    const firstProfile = (first.body as { profile: CandidateProfile }).profile;
+    expect(first.status).toBe(200);
+    expect(firstProfile.sources).toHaveLength(1);
+    expect(firstProfile.created_at).toBe(firstProfile.updated_at);
+
+    const second = await handleIntake(
+      {
+        kind: 'pdf',
+        fileName: 'cv.pdf',
+        mimeType: 'application/pdf',
+        contentBase64: 'aGVsbG8=',
+        candidateId,
+      },
+      { agent: pdfAgent, profileStore: store },
+    );
+
+    expect(second.status).toBe(200);
+    const profile = (second.body as { profile: CandidateProfile }).profile;
+    expect(profile.sources.map((item) => item.kind)).toEqual(['text', 'pdf']);
+    expect(profile.created_at).toBe(firstProfile.created_at);
+    expect(profile.updated_at).toBe('2026-02-01T00:00:00.000Z');
+    expect(profile.skills.map((skill) => skill.skill_id)).toEqual(
+      expect.arrayContaining(['plp:excel', 'plp:customer-service', 'plp:word', 'plp:python']),
+    );
+    expect(store.get(profile.candidate_id)).toEqual(profile);
+  });
+
   it('derives a deterministic trace id when none is supplied', async () => {
     const agent = stubAgent({
       run: vi.fn(async () => {
