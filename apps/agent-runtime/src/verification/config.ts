@@ -1,7 +1,7 @@
 import type { VerifierConfig } from "./verify.js";
 
 export function verificationConfigFromEnv(
-  env: Record<string, string | undefined>,
+  env: Record<string, string | undefined> = process.env,
 ): VerifierConfig {
   return {
     certoBaseUrl: present(env.CERTO_BASE_URL),

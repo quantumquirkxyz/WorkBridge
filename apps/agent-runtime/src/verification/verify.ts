@@ -1,6 +1,7 @@
 import { accredibleEvidence, parseAccredibleCredential, signalsFromAccredible } from "./accredible.js";
 import { evidenceFromCerto, parseCertoVerifyResult, signalsFromCerto } from "./certo-mapper.js";
 import { createCircuitBreaker, type CircuitBreaker } from "./circuit-breaker.js";
+import { verificationConfigFromEnv } from "./config.js";
 import { credlyEvidence, parseCredlyAssertion, signalsFromCredly } from "./credly.js";
 import { fetchJsonWithRetry, traceHeaders } from "./http.js";
 import { mockSignalsFor } from "./mock-fixtures.js";
@@ -31,7 +32,8 @@ export type FetchLike = (input: string, init?: RequestInit) => Promise<Response>
 
 export interface VerifyDeps {
   fetch: FetchLike;
-  config: VerifierConfig;
+  /** Injected in tests. Omitted calls read `process.env` for the Certo deployment. */
+  config?: VerifierConfig;
   circuitBreaker?: CircuitBreaker;
 }
 
@@ -117,8 +119,9 @@ async function attemptProvider(
 }
 
 async function queryCerto(input: CredentialInput, deps: VerifyDeps): Promise<ProviderAttempt> {
-  const baseUrl = deps.config.certoBaseUrl?.replace(/\/$/, "");
-  if (!baseUrl || !deps.config.certoApiToken) {
+  const config = configOf(deps);
+  const baseUrl = config.certoBaseUrl?.replace(/\/$/, "");
+  if (!baseUrl?.startsWith("https://") || !config.certoApiToken) {
     return { kind: "unavailable", reason: "certo_unavailable", outage: false };
   }
   if (!input.credentialId && !input.document) {
@@ -134,7 +137,7 @@ async function queryCerto(input: CredentialInput, deps: VerifyDeps): Promise<Pro
       headers: certoHeaders(deps, input.traceId, Boolean(input.document)),
       body: input.document ? JSON.stringify({ credential: input.document }) : undefined,
     },
-    deps.config.timeoutMs,
+    config.timeoutMs,
   );
   if (response.kind === "unavailable") return response;
 
@@ -145,14 +148,14 @@ async function queryCerto(input: CredentialInput, deps: VerifyDeps): Promise<Pro
     verification: normalizeVerification({
       signals: signalsFromCerto(parsed, input.holderId),
       provider: "certo",
-      evidence: evidenceFromCerto(parsed, deps.config.certoApiToken),
+      evidence: evidenceFromCerto(parsed, config.certoApiToken),
     }),
   };
 }
 
 async function queryAccredible(input: CredentialInput, deps: VerifyDeps): Promise<ProviderAttempt> {
   if (!input.credentialId) return { kind: "skipped" };
-  const token = deps.config.accredibleApiToken;
+  const token = configOf(deps).accredibleApiToken;
   if (!token) return { kind: "unavailable", reason: "accredible_unavailable", outage: false };
   return queryCredentialGet(input, deps, {
     provider: "accredible",
@@ -198,7 +201,7 @@ async function queryCredentialGet<T>(
       method: "GET",
       headers: traceHeaders(input.traceId, options.authorization),
     },
-    deps.config.timeoutMs,
+    configOf(deps).timeoutMs,
   );
   if (response.kind === "unavailable") return response;
   const parsed = options.parse(response.body);
@@ -213,17 +216,20 @@ async function queryCredentialGet<T>(
   };
 }
 
+function configOf(deps: VerifyDeps): VerifierConfig {
+  return deps.config ?? verificationConfigFromEnv();
+}
+
 function certoUrl(baseUrl: string, input: CredentialInput): string {
   if (input.document) return `${baseUrl}/api/credentials/validate`;
   return `${baseUrl}/api/credentials/${encodeURIComponent(input.credentialId ?? "")}/verify`;
 }
 
 function certoHeaders(deps: VerifyDeps, traceId: string, jsonBody: boolean): Headers {
+  const token = configOf(deps).certoApiToken;
   const headers = traceHeaders(
     traceId,
-    deps.config.certoApiToken
-      ? { name: "authorization", value: `Bearer ${deps.config.certoApiToken}` }
-      : undefined,
+    token ? { name: "authorization", value: `Bearer ${token}` } : undefined,
   );
   if (jsonBody) headers.set("content-type", "application/json");
   return headers;

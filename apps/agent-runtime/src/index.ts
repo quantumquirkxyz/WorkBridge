@@ -49,3 +49,8 @@ export {
 } from "./vacancy/extract/adapters";
 
 export { inferKind, parseLevel, parseVacancyText, slugify } from "./vacancy/text";
+
+export {
+  verificationConfigFromEnv,
+  verifyCredential,
+} from "./verification/index";
