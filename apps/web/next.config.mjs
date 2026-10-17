@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Playwright opens the suite at 127.0.0.1. Next otherwise blocks that dev origin.
+  allowedDevOrigins: ['127.0.0.1'],
   transpilePackages: [
     '@puente/domain',
     '@puente/ingestion',
