@@ -61,6 +61,26 @@ function publish(
   services.emit?.({ event: "envelope", data: envelope });
 }
 
+function completeDeterministic(
+  services: WorkflowServices,
+  carrier: Carrier,
+  agent: AgentId,
+  spanId: string,
+  dqlId: string,
+  payload: Record<string, unknown>,
+  summary: string,
+): Carrier {
+  move(services, dqlId, "success", `${agent} completed deterministically`);
+  const closed = services.traces.endSpan(spanId, {
+    endTime: services.clock(),
+    output: payload,
+    metadata: { deterministic: true },
+  });
+  services.emit?.({ event: "trace", data: closed });
+  publish(services, carrier, agent, "response", payload);
+  return { ...carrier, summaries: [...carrier.summaries, { agent, summary }] };
+}
+
 function move(
   services: WorkflowServices,
   id: string,
@@ -205,19 +225,11 @@ export async function runAgent(
     }
     if (agent === "exploration" && services.explorationAgent && carrier.preferences) {
       const exploration = await services.explorationAgent.run(carrier.preferences);
-      move(services, dqlId, "success", "exploration completed deterministically");
-      const closed = services.traces.endSpan(span.id, { endTime: services.clock(), output: exploration, metadata: { deterministic: true } });
-      services.emit?.({ event: "trace", data: closed });
-      publish(services, carrier, agent, "response", exploration as unknown as Record<string, unknown>);
-      return { ...carrier, summaries: [...carrier.summaries, { agent, summary: JSON.stringify(exploration) }] };
+      return completeDeterministic(services, carrier, agent, span.id, dqlId, exploration as unknown as Record<string, unknown>, JSON.stringify(exploration));
     }
     if (agent === "profile_and_evidence" && services.profileAgent) {
       const intake = await services.profileAgent.run({ kind: "text", ref: `${carrier.traceId}:candidate`, text: carrier.candidateText }, { traceId: carrier.traceId, candidateId: carrier.actorId, locale: "es-PA" });
-      move(services, dqlId, "success", "profile completed deterministically");
-      const closed = services.traces.endSpan(span.id, { endTime: services.clock(), output: intake.profile, metadata: { deterministic: true } });
-      services.emit?.({ event: "trace", data: closed });
-      publish(services, carrier, agent, "response", intake.profile as unknown as Record<string, unknown>);
-      return { ...carrier, summaries: [...carrier.summaries, { agent, summary: JSON.stringify(intake.profile) }] };
+      return completeDeterministic(services, carrier, agent, span.id, dqlId, intake.profile as unknown as Record<string, unknown>, JSON.stringify(intake.profile));
     }
   }
 
