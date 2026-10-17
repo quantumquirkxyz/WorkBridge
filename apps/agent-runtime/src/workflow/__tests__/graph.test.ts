@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { WorkflowRunRequest } from "@puente/domain";
+import { createSeedTrainingCatalog, type TrainingPreferences } from "@puente/training";
 import { CAPABILITY_CHAINS } from "../models";
 import { createWorkflowRuntime } from "../graph";
 import {
@@ -102,6 +103,174 @@ describe("employability workflow", () => {
     expect(matching?.summary).toContain('"candidateId"');
     expect(calls).toHaveLength(3);
     expect(engine.audit.read().some((event) => event.action === "matching_completed")).toBe(true);
+  });
+
+  it("returns the structured match result in the workflow output", async () => {
+    const profile = candidateProfile();
+    const matchingInput = {
+      profile,
+      context: CANDIDATE_CONTEXT,
+      vacancies: [{ document: await objectiveDocument(), context: VACANCY_CONTEXT }],
+      now,
+    };
+    const engine = createWorkflowRuntime({
+      clock: () => "2026-10-16T12:00:00.000Z",
+      complete: async () => ({ text: "Plan de practica en caja" }),
+      matchingEnv: {},
+    });
+
+    const result = await engine.run(request({ matchingInput }));
+    expect(result.status).toBe("success");
+    expect(result.match).toBeDefined();
+    expect(result.match?.candidateId).toBe(profile.candidate_id);
+    expect(result.match?.result.decisions).toHaveLength(1);
+    expect(result.match?.result.solver).toBe("highs");
+    expect(result.match?.skippedVacancyIds).toEqual([]);
+    const decision = result.match?.result.decisions[0];
+    expect(decision?.candidateId).toBe(profile.candidate_id);
+    expect(decision?.vacancyId).toBe("vac-objective-001");
+    expect(["apt", "apt_with_gaps", "not_currently_apt"]).toContain(decision?.aptitude);
+    // The string summary is still emitted for the agent step
+    const matching = result.agents.find((agent) => agent.agent === "market_and_matching");
+    expect(matching?.summary).toContain('"candidateId"');
+  });
+
+  it("returns the structured roadmap result in the workflow output", async () => {
+    const profile = candidateProfile();
+    const matchingInput = {
+      profile,
+      context: CANDIDATE_CONTEXT,
+      vacancies: [{ document: await objectiveDocument(), context: VACANCY_CONTEXT }],
+      now,
+    };
+    const catalog = createSeedTrainingCatalog();
+    const preferences: TrainingPreferences = {
+      specializations: ["it_support"],
+      maxCostUsd: 200,
+      maxTotalHours: 100,
+    };
+    const engine = createWorkflowRuntime({
+      clock: () => "2026-10-16T12:00:00.000Z",
+      complete: async () => ({ text: "Plan de practica en caja" }),
+      matchingEnv: {},
+      trainingCatalog: catalog,
+      trainingPreferences: preferences,
+    });
+
+    const result = await engine.run(request({ matchingInput }));
+    expect(result.status).toBe("success");
+    expect(result.match).toBeDefined();
+    expect(result.roadmap).toBeDefined();
+    expect(result.roadmap?.schemaVersion).toBe("1.0.0");
+    expect(result.roadmap?.candidateId).toBe(profile.candidate_id);
+    expect(result.roadmap?.targetVacancyId).toBe("vac-objective-001");
+    expect(["apt", "apt_with_gaps", "not_currently_apt"]).toContain(result.roadmap?.aptitude);
+    expect(Array.isArray(result.roadmap?.gaps)).toBe(true);
+    expect(Array.isArray(result.roadmap?.recommendations)).toBe(true);
+    expect(result.roadmap?.totals).toMatchObject({
+      recommendationCount: expect.any(Number),
+      costUsd: expect.any(Number),
+      durationHours: expect.any(Number),
+    });
+  });
+
+  it("does not call the model router for training when carrier data is sufficient", async () => {
+    const profile = candidateProfile();
+    const matchingInput = {
+      profile,
+      context: CANDIDATE_CONTEXT,
+      vacancies: [{ document: await objectiveDocument(), context: VACANCY_CONTEXT }],
+      now,
+    };
+    const catalog = createSeedTrainingCatalog();
+    const preferences: TrainingPreferences = {
+      specializations: ["it_support"],
+      maxCostUsd: 200,
+      maxTotalHours: 100,
+    };
+    const calls: string[] = [];
+    const engine = createWorkflowRuntime({
+      clock: () => "2026-10-16T12:00:00.000Z",
+      complete: async (modelId) => {
+        calls.push(modelId);
+        return { text: "Plan de practica en caja" };
+      },
+      matchingEnv: {},
+      trainingCatalog: catalog,
+      trainingPreferences: preferences,
+    });
+
+    const result = await engine.run(request({ matchingInput }));
+    expect(result.status).toBe("success");
+    expect(result.match).toBeDefined();
+    expect(result.roadmap).toBeDefined();
+    // exploration (planning) and profile (extraction) call the router;
+    // market_and_matching and training are deterministic and must not.
+    expect(calls).toHaveLength(2);
+    expect(result.roadmap?.aptitude).toBe(result.match?.result.decisions[0]?.aptitude);
+  });
+
+  it("calls the router and builds no roadmap when training preferences are required but missing", async () => {
+    const profile = candidateProfile();
+    const matchingInput = {
+      profile,
+      context: CANDIDATE_CONTEXT,
+      vacancies: [{ document: await objectiveDocument(), context: VACANCY_CONTEXT }],
+      now,
+    };
+    const catalog = createSeedTrainingCatalog();
+    const calls: string[] = [];
+    const engine = createWorkflowRuntime({
+      clock: () => "2026-10-16T12:00:00.000Z",
+      complete: async (modelId) => {
+        calls.push(modelId);
+        return { text: "Plan de practica en caja" };
+      },
+      matchingEnv: {},
+      trainingCatalog: catalog,
+      // trainingPreferences intentionally undefined
+    });
+
+    const result = await engine.run(request({ matchingInput }));
+    expect(result.status).toBe("success");
+    expect(result.match).toBeDefined();
+    expect(result.roadmap).toBeUndefined();
+    // exploration, profile, and training call the router; matching is deterministic.
+    expect(calls).toHaveLength(3);
+  });
+
+  it("returns an empty roadmap for an already-apt candidate", async () => {
+    const profile = candidateProfile();
+    const matchingInput = {
+      profile,
+      context: CANDIDATE_CONTEXT,
+      vacancies: [{ document: await objectiveDocument(), context: VACANCY_CONTEXT }],
+      now,
+    };
+    const catalog = createSeedTrainingCatalog();
+    const preferences: TrainingPreferences = {
+      specializations: ["it_support"],
+      maxCostUsd: 200,
+      maxTotalHours: 100,
+    };
+    const engine = createWorkflowRuntime({
+      clock: () => "2026-10-16T12:00:00.000Z",
+      complete: async () => ({ text: "Plan de practica en caja" }),
+      matchingEnv: {},
+      trainingCatalog: catalog,
+      trainingPreferences: preferences,
+    });
+
+    const result = await engine.run(request({ matchingInput }));
+    expect(result.status).toBe("success");
+    expect(result.roadmap).toBeDefined();
+    const decision = result.match?.result.decisions[0];
+    expect(decision).toBeDefined();
+    expect(result.roadmap?.aptitude).toBe(decision?.aptitude);
+    if (decision?.aptitude === "apt") {
+      expect(result.roadmap?.recommendations).toEqual([]);
+      expect(result.roadmap?.reasons.join(" ")).toContain("ya es apto");
+    }
   });
 
   it("rejects malicious instructions injected through a CV and a scraped vacancy", async () => {
