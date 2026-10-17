@@ -1,6 +1,6 @@
 {
   "app": {
-    "[project]/apps/web/app/page": [
+    "[project]/apps/web/app/chat/page": [
       "static/media/1a099d89ee94ee96-s.p.35a5cae5tspm2.woff2",
       "static/media/fba5a26ea33df6a3-s.p.18rizl4rsrl42.woff2"
     ]

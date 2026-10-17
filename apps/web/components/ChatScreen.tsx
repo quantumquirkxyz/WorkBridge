@@ -63,7 +63,11 @@ export function ChatScreen() {
     async function loadSession(): Promise<ChatSnapshot | null> {
       let response = await fetch('/api/chat');
       if (response.status === 401) {
-        await fetch('/api/auth/sign-in/anonymous', { method: 'POST', headers: { 'content-type': 'application/json' } });
+        await fetch('/api/auth/sign-in/anonymous', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: '{}',
+        });
         response = await fetch('/api/chat');
       }
       return response.ok ? await response.json() as ChatSnapshot : null;
