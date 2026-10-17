@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { createAgentFromEnv } from '@puente/agent-runtime';
 import { handleIntake } from '../../../lib/intake-handler';
 import { persistCandidateProfile, readCandidateProfile } from '../../../lib/neon-repository';
+import { profileStore } from '../../../lib/profile-store';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -35,9 +36,13 @@ export async function POST(request: Request): Promise<Response> {
   });
   const { status, body } = await handleIntake(payload, { agent });
   if (status === 200 && typeof body === 'object' && body && 'profile' in body) {
+    const profile = body.profile as import('@puente/domain').CandidateProfile;
+    const previous = profileStore.get(profile.candidate_id);
     try {
-      await persistCandidateProfile(body.profile as import('@puente/domain').CandidateProfile);
+      await persistCandidateProfile(profile);
     } catch (error) {
+      if (previous) profileStore.save(previous);
+      else profileStore.delete(profile.candidate_id);
       return NextResponse.json({ error: 'persistence_unavailable', message: error instanceof Error ? error.message : String(error) }, { status: 503 });
     }
   }

@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { handleDeleteCandidate, handleSavePreferences } from '../../../lib/exploration-handler';
 import { readJsonBody } from '../../../lib/request-body';
 import { persistCandidatePreferences, deleteCandidateData, readCandidatePreferences, readCandidateProfile } from '../../../lib/neon-repository';
-import { profileStore } from '../../../lib/profile-store';
 import { preferencesStore } from '../../../lib/preferences-store';
 
 export const runtime = 'nodejs';
@@ -45,22 +44,20 @@ export async function DELETE(request: Request): Promise<Response> {
     return NextResponse.json({ error: 'missing_candidate_id' }, { status: 400 });
   }
   const candidateId = params.get('candidateId') ?? '';
-  const { status, body } = handleDeleteCandidate(candidateId);
   let durableExists = false;
-  if (status === 404) {
-    try {
-      durableExists = Boolean(await readCandidatePreferences(candidateId) ?? await readCandidateProfile(candidateId));
-    } catch (error) {
-      return NextResponse.json({ error: 'persistence_unavailable', message: error instanceof Error ? error.message : String(error) }, { status: 503 });
-    }
+  try {
+    durableExists = Boolean(await readCandidatePreferences(candidateId) ?? await readCandidateProfile(candidateId));
+  } catch (error) {
+    return NextResponse.json({ error: 'persistence_unavailable', message: error instanceof Error ? error.message : String(error) }, { status: 503 });
   }
-  if (status === 200 || durableExists) {
+  if (durableExists) {
     try {
       await deleteCandidateData(candidateId);
     } catch (error) {
       return NextResponse.json({ error: 'persistence_unavailable', message: error instanceof Error ? error.message : String(error) }, { status: 503 });
     }
   }
-  if (status === 200) profileStore.delete(candidateId);
-  return NextResponse.json(durableExists ? { deleted: true, candidateId, preferencesDeleted: false, searchesDeleted: 0 } : body, { status: durableExists ? 200 : status });
+  const { status, body } = handleDeleteCandidate(candidateId);
+  if (durableExists && status === 404) return NextResponse.json({ deleted: true, candidateId, preferencesDeleted: true, searchesDeleted: 0 }, { status: 200 });
+  return NextResponse.json(body, { status });
 }
