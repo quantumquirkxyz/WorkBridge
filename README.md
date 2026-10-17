@@ -57,6 +57,8 @@ commits de credenciales reales.
 
 ## Evals
 
+La matriz de cumplimiento, metodología, límites de alcance y checklist de entregables oficiales están en [docs/competition/README.md](docs/competition/README.md). La metodología técnica está en [docs/competition/metodologia.md](docs/competition/metodologia.md).
+
 Los resultados siguientes salen de aserciones existentes en Vitest; no son una
 evaluación nueva ni datos generados manualmente. En verificación, la métrica es
 el estado predicho (y el proveedor cuando aplica). En matching y perfil, es la
@@ -121,9 +123,9 @@ ticket solo añade trazabilidad documental y no añade casos de prueba ni cambia
 
 Entrega: tag de git `final-24h` sobre el último commit válido, al cumplirse la hora 24.
 
-# Agent-Hackathon
+# Documentación interna del repositorio
 
-Working repository for an agent-focused build, developed with the
+This repository is WorkBridge, an agent-focused employability system, developed with the
 [quirk Skills](https://github.com/quantumquirkxyz/skills-quirk) workflow.
 
 ## How this repo is organized
@@ -157,8 +159,8 @@ node .agents/skills/platform/check-all.mjs   # expected: status: "pass"
 
 ## Status
 
-Bootstrapped: the skills bundle is installed and validated. The project brief and domain
-vocabulary are **not yet defined** — see `CONTEXT.md`.
+WorkBridge is scoped to challenge 3 (Empleabilidad). The official delivery checklist and
+known implementation limits are maintained in `docs/competition/README.md`.
 
 ## License
 

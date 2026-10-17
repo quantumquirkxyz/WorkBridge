@@ -19,6 +19,10 @@ domain vocabulary and boundaries only.
 readiness for a job, recognizes formal and informal experience, identifies skill gaps, recommends
 training or internships, and prepares applications for human approval.
 
+The competition scope is challenge 3, Empleabilidad. Official delivery requirements, evidence,
+known limits, and the hour-24 checklist live in `docs/competition/README.md`; the technical
+methodology lives in `docs/competition/metodologia.md`.
+
 ## Project vocabulary
 
 | Term | Meaning |
