@@ -290,31 +290,36 @@ export function ChatScreen() {
         if (!retryable) throw new Error(error?.error?.message ?? 'chat_request_failed');
         throw new Error('chat_request_retryable');
       }
-      const handle = await response.json() as { jobId?: string; status?: string; statusUrl?: string; pollAfterMs?: number; result?: ChatTurn; reply?: string };
+      const handle = await response.json() as { jobId?: string; status?: string; statusUrl?: string; pollAfterMs?: number; result?: ChatTurn; reply?: string; sessionVersion?: number };
       let turn = handle.result;
       let observedServerVersion = false;
+      const adoptCommittedVersion = (appliedVersion: number) => {
+        sessionVersion.current = appliedVersion + 1;
+        observedServerVersion = true;
+      };
       // The compatibility adapter returns a ChatTurn directly.
       if (handle.reply && !handle.jobId) {
         sessionVersion.current += 1;
+        observedServerVersion = true;
         turn = handle as unknown as ChatTurn;
       }
       while (!turn && handle.jobId && activeRequest.current === requestId) {
         setActivity(handle.status === 'running' ? 'Estoy procesando tu respuesta…' : 'Tu respuesta está en cola…');
         await new Promise((resolve) => window.setTimeout(resolve, Math.max(250, handle.pollAfterMs ?? 1000)));
         const statusResponse = await fetch(handle.statusUrl ?? `/api/v1/chat/turns/${encodeURIComponent(handle.jobId)}`, { headers: { 'x-request-id': crypto.randomUUID() } });
-        const statusBody = await statusResponse.json() as { status?: string; sessionVersion?: number; version?: number; result?: ChatTurn; error?: { retryable?: boolean; message?: string }; pollAfterMs?: number };
+        const statusBody = await statusResponse.json() as { status?: string; sessionVersion?: number; result?: ChatTurn; error?: { retryable?: boolean; message?: string }; pollAfterMs?: number };
         if (!statusResponse.ok || statusBody.status === 'failed') {
           if (statusBody.error?.retryable) throw new Error('chat_request_retryable');
           throw new Error(statusBody.error?.message ?? 'chat_request_failed');
         }
-        if (typeof statusBody.sessionVersion === 'number') { sessionVersion.current = statusBody.sessionVersion; observedServerVersion = true; }
-        else if (typeof statusBody.version === 'number') { sessionVersion.current = statusBody.version; observedServerVersion = true; }
+        if (statusBody.status === 'succeeded' && typeof statusBody.sessionVersion === 'number') adoptCommittedVersion(statusBody.sessionVersion);
         if (statusBody.result) turn = statusBody.result;
         handle.status = statusBody.status;
         handle.pollAfterMs = statusBody.pollAfterMs ?? handle.pollAfterMs;
       }
       if (!turn) throw new Error('chat_request_failed');
-      if (!observedServerVersion && typeof (handle as { sessionVersion?: number; version?: number }).sessionVersion !== 'number' && typeof (handle as { sessionVersion?: number; version?: number }).version !== 'number') sessionVersion.current += 1;
+      if (!observedServerVersion && handle.result && typeof handle.sessionVersion === 'number') adoptCommittedVersion(handle.sessionVersion);
+      else if (!observedServerVersion) sessionVersion.current += 1;
       const nextState = applyTurn(slotState, turn.slotUpdates, request.action);
       setSlotState(nextState);
       setPhase(turn.phase);

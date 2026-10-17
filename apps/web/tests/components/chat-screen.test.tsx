@@ -29,6 +29,33 @@ describe('ChatScreen', () => {
     server.use(http.get('/api/chat', () => HttpResponse.json({ transcript: [], slotState: initialSlotState() })));
   });
 
+  it('sends the next chat turn with the version after a committed job', async () => {
+    const versions: number[] = [];
+    server.use(
+      http.post('/api/v1/chat/turns', async ({ request }) => {
+        const body = await request.json() as { sessionVersion?: number };
+        versions.push(body.sessionVersion ?? -1);
+        const jobId = `chatjob-${versions.length}`;
+        return HttpResponse.json({ jobId, status: 'queued', statusUrl: `/api/v1/chat/turns/${jobId}`, sessionVersion: body.sessionVersion, pollAfterMs: 1 }, { status: 202 });
+      }),
+      http.get('/api/v1/chat/turns/:jobId', ({ params }) => HttpResponse.json({
+        jobId: params.jobId,
+        status: 'succeeded',
+        sessionVersion: versions.at(-1) ?? 0,
+        result: turn({ reply: `respuesta ${versions.length}` }),
+      })),
+    );
+    render(<ChatScreen />);
+    const input = await screen.findByRole('textbox', { name: 'Escribe tu respuesta' });
+    await userEvent.type(input, 'hola');
+    await userEvent.keyboard('{Enter}');
+    expect(await screen.findByText('respuesta 1')).toBeInTheDocument();
+    await userEvent.type(input, 'sigo');
+    await userEvent.keyboard('{Enter}');
+    expect(await screen.findByText('respuesta 2')).toBeInTheDocument();
+    expect(versions).toEqual([0, 1]);
+  });
+
   it('renders an accessible transcript, quick replies, and keeps focus in the composer', async () => {
     server.use(http.post('/api/chat', () => HttpResponse.json(turn())));
     const { container } = render(<ChatScreen />);
