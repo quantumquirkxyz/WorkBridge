@@ -2,6 +2,7 @@
   "/api/auth/[...all]/route": "app/api/auth/[...all]/route.js",
   "/api/candidate/route": "app/api/candidate/route.js",
   "/api/chat/route": "app/api/chat/route.js",
+  "/api/searches/route": "app/api/searches/route.js",
   "/chat/page": "app/chat/page.js",
   "/manifest.webmanifest/route": "app/manifest.webmanifest/route.js"
 }
