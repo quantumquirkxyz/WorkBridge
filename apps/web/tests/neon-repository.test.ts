@@ -4,12 +4,15 @@ import {
   deleteCandidateData,
   persistCandidatePreferences,
   persistCandidateProfile,
+  persistSavedSearch,
   persistenceMode,
   readCandidatePreferences,
   readCandidateProfile,
+  readSavedSearches,
 } from '../lib/neon-repository';
 import { preferencesStore } from '../lib/preferences-store';
 import { profileStore } from '../lib/profile-store';
+import { savedSearchesStore, type SavedSearch } from '../lib/saved-searches-store';
 
 const CANDIDATE_ID = 'candidate_memory_suite';
 
@@ -59,6 +62,7 @@ afterEach(() => {
   else process.env.DATABASE_URL = previousDatabaseUrl;
   profileStore.delete(CANDIDATE_ID);
   preferencesStore.delete(CANDIDATE_ID);
+  savedSearchesStore.deleteByCandidate(CANDIDATE_ID);
 });
 
 describe('persistenceMode', () => {
@@ -84,9 +88,22 @@ describe('memory persistence', () => {
     await expect(readCandidateProfile(CANDIDATE_ID)).resolves.toEqual(profile);
     await expect(readCandidatePreferences(CANDIDATE_ID)).resolves.toEqual(preferences);
 
+    const search: SavedSearch = {
+      searchId: 'search_memory_suite',
+      candidateId: CANDIDATE_ID,
+      label: 'Atención al cliente',
+      savedAt: '2026-10-16T12:00:00.000Z',
+      preferences,
+      seenJobIds: [],
+    };
+    savedSearchesStore.save(search);
+    await expect(persistSavedSearch(search)).resolves.toBeUndefined();
+    await expect(readSavedSearches(CANDIDATE_ID)).resolves.toEqual([search]);
+
     await deleteCandidateData(CANDIDATE_ID);
     await expect(readCandidateProfile(CANDIDATE_ID)).resolves.toBeUndefined();
     await expect(readCandidatePreferences(CANDIDATE_ID)).resolves.toBeUndefined();
+    await expect(readSavedSearches(CANDIDATE_ID)).resolves.toEqual([]);
   });
 
   it('still requires DATABASE_URL when the flag is absent', async () => {
