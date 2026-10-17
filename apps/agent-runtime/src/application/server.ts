@@ -1,6 +1,7 @@
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { createPgQuery, resolveDatabaseMode, type DatabaseMode } from "./database";
 import { ApplicationError } from "./errors";
+import { createSqlNotificationOutbox } from "./notification";
 import { assertNoSecrets, collectSecretValues } from "./secrets";
 import { ApplicationService } from "./service";
 import { createSqlIdempotencyStore, type SqlQuery } from "./store";
@@ -27,13 +28,15 @@ export function createApplicationServer(options: ServerOptions = {}) {
   const databaseUrl = env.DATABASE_URL || env.NEON_DATABASE_URL || "";
   const useSql = databaseMode !== "memory" && databaseUrl.length > 0;
   const persistence = useSql ? "sql" : "memory";
+  const sql = useSql ? (options.query ?? createPgQuery(databaseUrl)) : undefined;
   const service =
     options.service ??
     new ApplicationService({
       secrets,
       clock: options.clock,
       sessionSecret: env.BETTER_AUTH_SECRET ?? "",
-      idempotency: useSql ? createSqlIdempotencyStore(options.query ?? createPgQuery(databaseUrl)) : undefined,
+      idempotency: sql ? createSqlIdempotencyStore(sql) : undefined,
+      outbox: sql ? createSqlNotificationOutbox(sql) : undefined,
     });
   const context: RequestContext = { service, secrets, databaseMode, persistence };
   return createServer((req, res) => {
@@ -134,7 +137,7 @@ async function dispatch(req: IncomingMessage, res: ServerResponse, context: Requ
       writeJson(res, 200, context.service.approveInterview(session, submissionId, body), context.secrets);
       return;
     }
-    writeJson(res, 200, context.service.decideInterview(session, submissionId, body), context.secrets);
+    writeJson(res, 200, await context.service.decideInterview(session, submissionId, body), context.secrets);
     return;
   }
 
