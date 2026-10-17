@@ -1,7 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { validateIntakeResult } from '@puente/domain';
-import type { ProfileAgent } from '@puente/agent-runtime';
-import type { IntakeResult } from '@puente/domain';
+import { createProfileAgent, type ProfileAgent } from '@puente/agent-runtime';
 import { handleIntake } from '../lib/intake-handler';
 
 const CV = [
@@ -31,34 +30,20 @@ describe('handleIntake', () => {
 
   it.each([
     ['audio_transcript', { kind: 'audio_transcript', text: CV }],
-    ['image', { kind: 'image', fileName: 'cv.png', mimeType: 'image/png', contentBase64: 'aGVsbG8=' }],
-  ] as const)('accepts %s intake through the API seam', async (_label, payload) => {
-    const run: ProfileAgent['run'] = vi.fn(async (): Promise<IntakeResult> => ({
-      trace_id: 'trace_intake',
-      profile: {
-        schema_version: '1.0.0',
-        candidate_id: 'candidate_default',
-        locale: 'es-PA',
-        created_at: '2026-01-01T00:00:00.000Z',
-        updated_at: '2026-01-01T00:00:00.000Z',
-        sources: [],
-        skills: [],
-        experiences: [],
-        education: [],
-        certifications: [],
-        evidence: [],
-        trace_id: 'trace_intake',
-      },
-      extraction: { extractor: 'heuristic', needs_review: false, warnings: [] },
-    }));
+    ['image', { kind: 'image', fileName: 'cv.png', mimeType: 'image/png', contentBase64: 'aGVsbG8=', altText: CV }],
+    ['pdf', { kind: 'pdf', fileName: 'cv.pdf', mimeType: 'application/pdf', contentBase64: 'aGVsbG8=' }],
+  ] as const)('accepts %s intake through the profile seam', async (_label, payload) => {
+    const agent = createProfileAgent({
+      now: () => new Date('2026-01-01T00:00:00.000Z'),
+      ocr: { name: 'test-ocr', extract: async () => ({ text: CV, confidence: 1, method: 'test-ocr' }) },
+      pdf: async () => ({ text: CV, pageCount: 1 }),
+    });
 
-    const { status } = await handleIntake(payload, { agent: stubAgent({ run }) });
+    const { status, body } = await handleIntake(payload, { agent });
 
     expect(status).toBe(200);
-    expect(run).toHaveBeenCalledWith(
-      expect.objectContaining({ kind: payload.kind }),
-      expect.objectContaining({ traceId: expect.any(String) }),
-    );
+    expect(validateIntakeResult(body)).toEqual({ valid: true });
+    expect((body as { profile: { sources: Array<{ kind: string }> } }).profile.sources[0]?.kind).toBe(payload.kind);
   });
 
   it('rejects a request that violates the IntakeRequest contract', async () => {
