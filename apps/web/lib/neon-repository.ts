@@ -23,6 +23,16 @@ export async function persistCandidatePreferences(preferences: CandidatePreferen
   `;
 }
 
+export async function readCandidatePreferences(candidateId: string): Promise<CandidatePreferences | undefined> {
+  const rows = await database()`select preferences from candidate_preferences where candidate_id = ${candidateId}`;
+  return (rows[0] as { preferences?: CandidatePreferences } | undefined)?.preferences;
+}
+
+export async function readCandidateProfile(candidateId: string): Promise<CandidateProfile | undefined> {
+  const rows = await database()`select profile from candidate_profiles where candidate_id = ${candidateId}`;
+  return (rows[0] as { profile?: CandidateProfile } | undefined)?.profile;
+}
+
 export async function deleteCandidateData(candidateId: string): Promise<void> {
   await database()`delete from candidate_profiles where candidate_id = ${candidateId}`;
   await database()`delete from candidate_preferences where candidate_id = ${candidateId}`;

@@ -22,6 +22,7 @@
     "build": "npm run build --workspaces --if-present",
     "dev": "npm run dev --workspace @puente/web",
     "gate:ci": "npm run typecheck && npm run test:coverage",
+    "db:migrate": "NODE_OPTIONS=--no-network-family-autoselection neon psql production -- -f migrations/001_initial.sql",
     "verify": "npm run lint && npm run typecheck && npm run test"
   },
   "devDependencies": {
