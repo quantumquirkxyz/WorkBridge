@@ -1,0 +1,31 @@
+{
+  "status": "completed",
+  "changes": [
+    "Validated the existing vacancy normalization and fairness seam for manual, JSON, PDF, and image inputs.",
+    "Validated the deterministic solver seam, hard constraints, weighted scores, routing fallback, promotion rule, and deterministic ties.",
+    "Validated the catalog-only, specialization-aware training roadmap seam and Roadmap JSON contract.",
+    "Recorded the implementation evidence for parent issue #2."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npm run lint",
+      "npm run typecheck",
+      "npm test",
+      "npm run gate:ci"
+    ],
+    "skipped": [],
+    "notes": "The implementation is already integrated on the starting branch through the completed child tickets #5, #8, and #11. Validation covered 54 test files and 486 tests; coverage was 92.61% statements and 94.37% lines."
+  },
+  "commitSha": "6bec2b8fcf2b7943aa15b09020ce594eeb42ffc6",
+  "branch": "feat/issue-2-market-matching-training-roadmap",
+  "nextConsumer": "publish-open-pr",
+  "blockedBy": [],
+  "riskRemaining": "No known acceptance-criteria gaps. External provider freshness and route fallback warnings remain operational concerns covered by the existing contracts.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass",
+    "gateCI": "passed"
+  }
+}
