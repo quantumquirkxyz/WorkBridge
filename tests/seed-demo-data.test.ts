@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { assertCandidatePreferences, assertCandidateProfile, makeCandidateId } from '@workbridge/domain';
-import { seedAccounts, seedCounselors, seedEmployers, seedStudents } from '../scripts/seed/demo-data.ts';
+import { seedAccounts, seedCounselors, seedEmployers, seedStudents } from '../scripts/seed/demo-data';
 
 const STUDENT_FLOWS = [
   'j1_bienvenida',

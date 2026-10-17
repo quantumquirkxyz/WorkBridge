@@ -15,7 +15,7 @@ import {
   type SkillKind,
   type SkillLevel,
   type WorkModality,
-} from '../../packages/domain/src/index.ts';
+} from '../../packages/domain/src/index';
 
 /**
  * Synthetic WorkBridge accounts for local and demo databases.
@@ -820,30 +820,32 @@ export const seedStudents: SeedStudent[] = [
   ),
 ];
 
-export const seedEmployers: SeedEmployer[] = [
-  ['01', 'Banco Delta', 'Rosa Méndez', 'j9_pendientes_atencion', 'Cola de atención al cliente en la ciudad. Revisar, aprobar entrevista o no avanzar.'],
-  ['02', 'Supermercado Central', 'Carlos Vidal', 'j9_caja_fin_de_semana', 'Caja de medio tiempo y fines de semana. Probar filtro por título de vacante.'],
-  ['03', 'Consultora Istmo', 'Laura Quiel', 'j9_remoto_administrativo', 'Asistencia administrativa remota. Decidir una postulación ya enviada.'],
-  ['04', 'Farmacias Del Istmo', 'Helena Ponce', 'j9_farmacia_presencial', 'Auxiliar presencial de servicio al cliente.'],
-  ['05', 'Grupo Mar', 'Andrés Cedeño', 'j9_pasantias', 'Pasantía de ventas. La evidencia debe ser la que la persona aprobó.'],
-  ['06', 'Ferretería El Tornillo', 'Miriam Batista', 'j9_arraijan', 'Ventas en Arraiján. Confirmar que no ve postulaciones de otra empresa.'],
-  ['07', 'Cable Oeste', 'Pedro Samaniego', 'j9_soporte_tecnico', 'Soporte técnico en La Chorrera. Cola propia, vacía hasta que haya envíos.'],
-  ['08', 'Clínica San Miguel', 'Dra. Irene Vásquez', 'j9_clinica_administrativa', 'Apoyo administrativo en San Miguelito.'],
-  ['09', 'Hotel Bahía', 'Sergio Alonso', 'j9_hoteleria', 'Recepción y atención en el Casco Antiguo.'],
-  ['10', 'Logística Canal', 'Nadia Franco', 'j9_logistica', 'Inventario y bodega en Balboa. Ordenar la lista de más reciente a más antigua.'],
-  ['11', 'Academia Código', 'Iván Tejada', 'j9_cola_vacia', 'Empresa sin postulaciones: la bandeja debe verse vacía, no rota.'],
-  ['12', 'Cooperativa Sol', 'Yolanda Marín', 'j9_medio_tiempo', 'Contratos de medio tiempo en Juan Díaz.'],
-  ['13', 'Taller Bytes', 'Hugo Chen', 'j9_taller_hibrido', 'Reparación de equipos, modalidad híbrida.'],
-  ['14', 'Almacén Don Pedro', 'Don Pedro Ríos', 'j9_comercio_familiar', 'Mostrador de fin de semana en un comercio de barrio.'],
-  ['15', 'Fundación Puente', 'Lucía Ortega', 'j9_primera_experiencia', 'Pasantías y primera experiencia. Motivo obligatorio al no avanzar.'],
-].map(([n, orgName, contact, flow, expect]) => ({
-  flow: flow ?? '',
-  expect: expect ?? '',
-  organization: { id: `seed_org_${n}`, name: orgName ?? '' },
+export const seedEmployers: SeedEmployer[] = (
+  [
+    ['01', 'Banco Delta', 'Rosa Méndez', 'rosa.mendez@seed.workbridge.test', 'j9_pendientes_atencion', 'Cola de atención al cliente en la ciudad. Revisar, aprobar entrevista o no avanzar.'],
+    ['02', 'Supermercado Central', 'Carlos Vidal', 'carlos.vidal@seed.workbridge.test', 'j9_caja_fin_de_semana', 'Caja de medio tiempo y fines de semana. Probar filtro por título de vacante.'],
+    ['03', 'Consultora Istmo', 'Laura Quiel', 'laura.quiel@seed.workbridge.test', 'j9_remoto_administrativo', 'Asistencia administrativa remota. Decidir una postulación ya enviada.'],
+    ['04', 'Farmacias Del Istmo', 'Helena Ponce', 'helena.ponce@seed.workbridge.test', 'j9_farmacia_presencial', 'Auxiliar presencial de servicio al cliente.'],
+    ['05', 'Grupo Mar', 'Andrés Cedeño', 'andres.cedeno@seed.workbridge.test', 'j9_pasantias', 'Pasantía de ventas. La evidencia debe ser la que la persona aprobó.'],
+    ['06', 'Ferretería El Tornillo', 'Miriam Batista', 'miriam.batista@seed.workbridge.test', 'j9_arraijan', 'Ventas en Arraiján. Confirmar que no ve postulaciones de otra empresa.'],
+    ['07', 'Cable Oeste', 'Pedro Samaniego', 'pedro.samaniego@seed.workbridge.test', 'j9_soporte_tecnico', 'Soporte técnico en La Chorrera. Cola propia, vacía hasta que haya envíos.'],
+    ['08', 'Clínica San Miguel', 'Irene Vásquez', 'irene.vasquez@seed.workbridge.test', 'j9_clinica_administrativa', 'Apoyo administrativo en San Miguelito.'],
+    ['09', 'Hotel Bahía', 'Sergio Alonso', 'sergio.alonso@seed.workbridge.test', 'j9_hoteleria', 'Recepción y atención en el Casco Antiguo.'],
+    ['10', 'Logística Canal', 'Nadia Franco', 'nadia.franco@seed.workbridge.test', 'j9_logistica', 'Inventario y bodega en Balboa. Ordenar la lista de más reciente a más antigua.'],
+    ['11', 'Academia Código', 'Iván Tejada', 'ivan.tejada@seed.workbridge.test', 'j9_cola_vacia', 'Empresa sin postulaciones: la bandeja debe verse vacía, no rota.'],
+    ['12', 'Cooperativa Sol', 'Yolanda Marín', 'yolanda.marin@seed.workbridge.test', 'j9_medio_tiempo', 'Contratos de medio tiempo en Juan Díaz.'],
+    ['13', 'Taller Bytes', 'Hugo Chen', 'hugo.chen@seed.workbridge.test', 'j9_taller_hibrido', 'Reparación de equipos, modalidad híbrida.'],
+    ['14', 'Almacén Don Pedro', 'Pedro Ríos', 'pedro.rios@seed.workbridge.test', 'j9_comercio_familiar', 'Mostrador de fin de semana en un comercio de barrio.'],
+    ['15', 'Fundación Puente', 'Lucía Ortega', 'lucia.ortega@seed.workbridge.test', 'j9_primera_experiencia', 'Pasantías y primera experiencia. Motivo obligatorio al no avanzar.'],
+  ] as const
+).map(([n, orgName, contact, email, flow, expect]) => ({
+  flow,
+  expect,
+  organization: { id: `seed_org_${n}`, name: orgName },
   account: {
     userId: `seed_employer_${n}`,
-    name: contact ?? '',
-    email: `${(contact ?? 'empresa').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]+/g, '.').replace(/^\.|\.$/g, '')}@seed.workbridge.test`,
+    name: contact,
+    email,
     role: 'employer' as const,
     employerOrgId: `seed_org_${n}`,
   },

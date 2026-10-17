@@ -1,8 +1,8 @@
 import { createRequire } from 'node:module';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { Pool, type PoolClient } from 'pg';
-import { makeCandidateId } from '../packages/domain/src/index.ts';
+import { makeCandidateId } from '../packages/domain/src/index';
 import {
   DEMO_PASSWORD,
   seedCounselors,
@@ -11,13 +11,13 @@ import {
   type SeedAccount,
   type SeedChatSession,
   type SeedSavedSearch,
-} from './seed/demo-data.ts';
+} from './seed/demo-data';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const requireFromWeb = createRequire(path.join(root, 'apps/web/package.json'));
 
 async function hashDemoPassword(): Promise<string> {
-  const crypto = (await import(requireFromWeb.resolve('better-auth/crypto'))) as {
+  const crypto = (await import(pathToFileURL(requireFromWeb.resolve('better-auth/crypto')).href)) as {
     hashPassword: (password: string) => Promise<string>;
   };
   return crypto.hashPassword(DEMO_PASSWORD);
