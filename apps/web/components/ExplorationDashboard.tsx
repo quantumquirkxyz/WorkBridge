@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import type { ContractType, TransportMode, WorkModality } from '@puente/domain';
-import { CONTRACT_LABELS, MODALITY_LABELS, type ExplorationResult } from '@puente/catalog';
+import { CONTRACT_LABELS, DEFAULT_MAX_AGE_HOURS, MODALITY_LABELS, type ExplorationResult } from '@puente/catalog';
 
 const DAY_LABELS: Array<{ value: number; label: string }> = [
   { value: 1, label: 'Lun' },
@@ -15,18 +15,18 @@ const DAY_LABELS: Array<{ value: number; label: string }> = [
 ];
 
 const MODALITY_OPTIONS: Array<{ value: WorkModality; label: string }> = [
-  { value: 'onsite', label: 'Presencial' },
-  { value: 'hybrid', label: 'Híbrida' },
-  { value: 'remote', label: 'Remota' },
+  { value: 'onsite', label: MODALITY_LABELS.onsite },
+  { value: 'hybrid', label: MODALITY_LABELS.hybrid },
+  { value: 'remote', label: MODALITY_LABELS.remote },
 ];
 
 const CONTRACT_OPTIONS: Array<{ value: ContractType; label: string }> = [
-  { value: 'full_time', label: 'Tiempo completo' },
-  { value: 'part_time', label: 'Medio tiempo' },
-  { value: 'fixed_term', label: 'Plazo fijo' },
-  { value: 'internship', label: 'Pasantía' },
-  { value: 'temporary', label: 'Temporal' },
-  { value: 'freelance', label: 'Independiente' },
+  { value: 'full_time', label: CONTRACT_LABELS.full_time },
+  { value: 'part_time', label: CONTRACT_LABELS.part_time },
+  { value: 'fixed_term', label: CONTRACT_LABELS.fixed_term },
+  { value: 'internship', label: CONTRACT_LABELS.internship },
+  { value: 'temporary', label: CONTRACT_LABELS.temporary },
+  { value: 'freelance', label: CONTRACT_LABELS.freelance },
 ];
 
 const TRANSPORT_OPTIONS: Array<{ value: TransportMode; label: string }> = [
@@ -326,7 +326,7 @@ function ExplorationResultView({ result }: { result: ExplorationResult }) {
       <h3>Vacantes para ti</h3>
       <p className="hint">
         Revisadas: {summary.considered} · Compatibles: {summary.matched} · Descartadas: {summary.excluded} ·
-        Desactualizadas (más de 72 h): {summary.stale}
+        Desactualizadas (más de {DEFAULT_MAX_AGE_HOURS} h): {summary.stale}
       </p>
 
       {result.matches.length === 0 ? (

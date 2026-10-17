@@ -9,7 +9,6 @@ export type {
   ExplorationSummary,
   Freshness,
   ScrapingInfo,
-  TransportMode,
   VacancyMatch,
   VacancyProvenance,
   VacancySalary,

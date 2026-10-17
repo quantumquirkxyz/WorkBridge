@@ -2,7 +2,6 @@ import type {
   CandidatePreferences,
   ContractType,
   PreferenceLocation,
-  TransportMode,
   WorkModality,
 } from '@puente/domain';
 
@@ -134,4 +133,4 @@ export interface ExplorationQueryOptions extends CatalogOptions {
   limit?: number;
 }
 
-export type { CandidatePreferences, ContractType, PreferenceLocation, TransportMode, WorkModality };
+export type { CandidatePreferences, ContractType, PreferenceLocation, WorkModality };
