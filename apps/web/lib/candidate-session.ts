@@ -17,11 +17,12 @@ export function candidateIdFromRequest(request: Request): string | undefined {
   try {
     const session = JSON.parse(raw) as CandidateSession;
     if (session.user?.role !== undefined && session.user.role !== 'candidate') return undefined;
-    const candidate = session.user?.candidateId;
     const userId = session.user?.id ?? session.session?.userId;
-    if (typeof candidate === 'string' && candidate.length > 0) return candidate;
     if (typeof userId !== 'string' || userId.length === 0) return undefined;
-    return userId.startsWith('candidate_') ? userId : makeCandidateId(userId);
+    const ownedCandidate = userId.startsWith('candidate_') ? userId : makeCandidateId(userId);
+    const candidate = session.user?.candidateId;
+    if (candidate !== undefined && candidate !== ownedCandidate) return undefined;
+    return ownedCandidate;
   } catch {
     return undefined;
   }
