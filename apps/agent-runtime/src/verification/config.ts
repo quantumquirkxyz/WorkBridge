@@ -1,4 +1,4 @@
-import type { VerifierConfig } from "./verify.js";
+import type { VerifierConfig } from "./verify";
 
 export function verificationConfigFromEnv(
   env: Record<string, string | undefined> = process.env,

@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.2.0",
     "@puente/agent-runtime": "*",
     "@puente/catalog": "*",
     "@puente/domain": "*",

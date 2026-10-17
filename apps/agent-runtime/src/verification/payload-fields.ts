@@ -1,4 +1,4 @@
-import type { RevocationStatus } from "./status.js";
+import type { RevocationStatus } from "./status";
 
 export function isPast(value: string | null | undefined, now: Date): boolean {
   if (!value) return false;

@@ -1,7 +1,7 @@
 import { Ajv2020 } from "ajv/dist/2020.js";
-import { holderBindingFor } from "./holder.js";
-import { isPast, optionalBoolean, revocationFrom } from "./payload-fields.js";
-import type { EvidenceItem, VerificationSignals } from "./status.js";
+import { holderBindingFor } from "./holder";
+import { isPast, optionalBoolean, revocationFrom } from "./payload-fields";
+import type { EvidenceItem, VerificationSignals } from "./status";
 
 const schema = {
   type: "object",
