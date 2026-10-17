@@ -1,0 +1,19 @@
+{
+  "status": "partial",
+  "changes": [
+    "WorkflowRunRequest now accepts validated optional CandidatePreferences.",
+    "Exploration and profile steps use deterministic agents and publish structured payloads.",
+    "Missing preferences records preferences_required without invoking a model."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": false,
+    "commands": ["npm run typecheck", "npm test -- --run apps/agent-runtime/src/workflow/__tests__/graph.test.ts"],
+    "skipped": ["Full suite and CI gate pending updated issue-60 graph tests."],
+    "notes": "Typecheck passes. Existing graph tests target the pre-ticket model-driven behavior and fail against the new deterministic workflow contract."
+  },
+  "commitSha": "4a2b14525076a8d62b1af4ae0602ea4d69168d35",
+  "branch": "feat/issue-60-structured-workflow-results",
+  "nextConsumer": "tdd",
+  "riskRemaining": "Issue-specific graph tests and full CI validation remain to be updated and run.",
+  "qualityGateResults": { "gateIde": "pass", "gatePreCommit": "skipped", "gateCi": "fail" }
+}
