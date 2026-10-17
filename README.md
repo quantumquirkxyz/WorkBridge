@@ -114,6 +114,33 @@ con `npm run seed:demo` a partir de `scripts/seed/demo-data.ts`; son datos de de
 credenciales de ningún servicio real. Las claves de OpenRouter, Google Maps, Langfuse y Certo
 son opcionales y se configuran solo por variables de entorno.
 
+Todas las cuentas de `seed:demo` usan la contraseña `Semilla2026!`. Las postulaciones no
+quedan guardadas en la base: se arman al usar la cuenta.
+
+Empresas con vacante publicada en el catálogo (`packages/catalog/fixtures/vacancy-catalog.json`):
+
+| Usuario | Empresa |
+|---|---|
+| rosa.mendez@seed.workbridge.test | Banco Delta |
+| carlos.vidal@seed.workbridge.test | Supermercado Central |
+| laura.quiel@seed.workbridge.test | Consultora Istmo |
+| helena.ponce@seed.workbridge.test | Farmacias Del Istmo |
+| andres.cedeno@seed.workbridge.test | Grupo Mar |
+| miriam.batista@seed.workbridge.test | Ferretería El Tornillo |
+
+El resto de empresas del seed no tiene vacante en el catálogo.
+
+Estudiantes con perfil completo (experiencia y estudios) y una vacante del catálogo con la que coinciden:
+
+| Usuario | Vacante |
+|---|---|
+| camila.ortega@seed.workbridge.test | Atención al cliente en la ciudad |
+| diego.sanchez@seed.workbridge.test | Caja de fin de semana |
+| valeria.perez@seed.workbridge.test | Asistencia administrativa remota |
+| kevin.batista@seed.workbridge.test | Ventas en Arraiján |
+| sofia.herrera@seed.workbridge.test | Pasantía de ventas |
+| elena.castillo@seed.workbridge.test | Atención al cliente, con búsquedas guardadas |
+
 ### Pruebas
 
 ```bash

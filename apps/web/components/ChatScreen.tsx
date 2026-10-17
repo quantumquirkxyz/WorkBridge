@@ -19,6 +19,11 @@ interface ChatAttachment {
   kind: 'pdf' | 'image';
 }
 
+interface PreparedAttachment extends ChatAttachment {
+  progress: number;
+  contentBase64: string | null;
+}
+
 function skillLabelsFrom(skills: Array<{ canonical_name?: unknown; original_term?: unknown }> | undefined): string[] {
   return (skills ?? [])
     .map((skill) => (typeof skill.original_term === 'string' && skill.original_term.trim()) || (typeof skill.canonical_name === 'string' ? skill.canonical_name : ''))
@@ -76,10 +81,15 @@ function attachmentError(file: File, kind: ChatAttachment['kind'] | null): strin
   return 'Solo puedo leer PDF o fotos.';
 }
 
-function fileToBase64(file: File): Promise<string> {
+function fileToBase64(file: File, onProgress: (percent: number) => void): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
+    reader.onprogress = (event) => {
+      if (!event.lengthComputable || event.total <= 0) return;
+      onProgress(Math.min(99, Math.round((event.loaded / event.total) * 100)));
+    };
     reader.onload = () => {
+      onProgress(100);
       const result = String(reader.result ?? '');
       const comma = result.indexOf(',');
       resolve(comma >= 0 ? result.slice(comma + 1) : result);
@@ -111,7 +121,9 @@ export function ChatScreen() {
   const [intakeRetryText, setIntakeRetryText] = useState<string | null>(null);
   const [intakeExplorationRetry, setIntakeExplorationRetry] = useState<PreferencesDraft | null>(null);
   const [explorationRetry, setExplorationRetry] = useState<PreferencesDraft | null>(null);
-  const [pendingAttachment, setPendingAttachment] = useState<ChatAttachment | null>(null);
+  const [pendingAttachment, setPendingAttachment] = useState<PreparedAttachment | null>(null);
+  const preloadGeneration = useRef(0);
+  const stagedComment = useRef('');
   const voice = useVoiceRecorder({ locale: 'es-PA' });
   const nameRef = useRef<string | null>(null);
   const greetingValue = slotState.greeting.value;
@@ -382,7 +394,32 @@ export function ChatScreen() {
     addMessage('assistant', resultMessage(nameRef.current, skills, experiences, review), undefined, skillLabels);
   }
 
-  async function uploadCv(file: File): Promise<void> {
+  function stageAttachment(file: File): void {
+    const kind = attachmentKind(file);
+    const error = attachmentError(file, kind);
+    if (!kind || error) {
+      preloadGeneration.current += 1;
+      setPendingAttachment(null);
+      addMessage('assistant', error ?? 'Solo puedo leer PDF o fotos.');
+      return;
+    }
+    const generation = preloadGeneration.current + 1;
+    preloadGeneration.current = generation;
+    setPendingAttachment({ file, kind, progress: 0, contentBase64: null });
+    void fileToBase64(file, (progress) => {
+      if (generation !== preloadGeneration.current) return;
+      setPendingAttachment((current) => current && current.file === file ? { ...current, progress } : current);
+    }).then((contentBase64) => {
+      if (generation !== preloadGeneration.current) return;
+      setPendingAttachment({ file, kind, progress: 100, contentBase64 });
+    }).catch(() => {
+      if (generation !== preloadGeneration.current) return;
+      setPendingAttachment(null);
+      addMessage('assistant', 'No pude preparar ese archivo. Elige otro PDF o foto.');
+    });
+  }
+
+  async function uploadCv(file: File, comment = stagedComment.current, contentBase64?: string): Promise<void> {
     const kind = attachmentKind(file);
     const error = attachmentError(file, kind);
     if (!kind || error) {
@@ -390,11 +427,14 @@ export function ChatScreen() {
       addMessage('assistant', error ?? 'Solo puedo leer PDF o fotos.');
       return;
     }
-    setPendingAttachment({ file, kind });
+    const generation = preloadGeneration.current;
+    const encoded = contentBase64 ?? pendingAttachment?.contentBase64 ?? await fileToBase64(file, () => undefined);
+    const note = comment.trim();
+    const label = note || `Subí mi CV: ${file.name}`;
+    stagedComment.current = note;
     setLoading(true);
     setActivity('Estoy leyendo tu CV…');
     try {
-      const contentBase64 = await fileToBase64(file);
       const response = await fetch('/api/intake', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
@@ -402,15 +442,18 @@ export function ChatScreen() {
           kind,
           fileName: file.name,
           mimeType: file.type || (kind === 'pdf' ? 'application/pdf' : 'image/jpeg'),
-          contentBase64,
+          contentBase64: encoded,
+          ...(note ? { text: note, ...(kind === 'image' ? { altText: note } : {}) } : {}),
         }),
       });
       if (!response.ok) throw new Error('intake_request_failed');
       const body = await response.json() as { profile?: { skills?: Array<{ canonical_name?: unknown; original_term?: unknown }>; experiences?: unknown[] }; extraction?: { needs_review?: boolean } };
       cvRetry.current = null;
+      stagedComment.current = '';
       setPendingAttachment(null);
-      if (phase === 'profile') profileText.current.push(`Subí mi CV: ${file.name}`);
-      addMessage('user', `Subí mi CV: ${file.name}`, undefined, undefined, { file, kind });
+      setDraft('');
+      if (phase === 'profile') profileText.current.push(label);
+      addMessage('user', label, undefined, undefined, { file, kind });
       const skills = body.profile?.skills?.length ?? 0;
       const experiences = body.profile?.experiences?.length ?? 0;
       const review = body.extraction?.needs_review ? ' Algunos datos los vamos a confirmar contigo en Mi perfil.' : '';
@@ -418,11 +461,13 @@ export function ChatScreen() {
       addMessage('assistant', resultMessage(nameRef.current, skills, experiences, review), undefined, skillLabels);
       const cvOpen = slotState.cv_source.state !== 'filled';
       await postTurn({
-        message: `Subí mi CV: ${file.name}`,
+        message: label,
         action: cvOpen ? { kind: 'chip', slot: 'cv_source', value: 'uploaded' } : { kind: 'text' },
       });
     } catch {
+      if (generation !== preloadGeneration.current) return;
       cvRetry.current = file;
+      setPendingAttachment({ file, kind, progress: 100, contentBase64: encoded });
       addMessage('assistant', 'No pude leer tu CV. Conservé el archivo; puedes intentarlo de nuevo.', [
         { label: 'Reintentar', kind: 'retry' },
       ]);
@@ -460,6 +505,10 @@ export function ChatScreen() {
 
   function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (pendingAttachment?.contentBase64) {
+      void uploadCv(pendingAttachment.file, draft, pendingAttachment.contentBase64);
+      return;
+    }
     void send(draft, { kind: 'text' });
   }
 
@@ -472,7 +521,7 @@ export function ChatScreen() {
       if (cvRetry.current) {
         const file = cvRetry.current;
         cvRetry.current = null;
-        void uploadCv(file);
+        void uploadCv(file, stagedComment.current);
         return;
       }
       if (explorationRetry) {
@@ -540,18 +589,28 @@ export function ChatScreen() {
         <div ref={messagesEndRef} />
       </section>
       <form className="chat-composer" onSubmit={submit}>
-        {pendingAttachment ? <div className="chat-pending"><AttachmentChip file={pendingAttachment.file} kind={pendingAttachment.kind} onRemove={() => { cvRetry.current = null; setPendingAttachment(null); }} /></div> : null}
+        {pendingAttachment ? (
+          <div className="chat-pending">
+            <AttachmentChip file={pendingAttachment.file} kind={pendingAttachment.kind} onRemove={() => { preloadGeneration.current += 1; cvRetry.current = null; stagedComment.current = ''; setPendingAttachment(null); }} />
+            <div className="chat-preload">
+              <div className="chat-preload-track" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={pendingAttachment.progress} aria-label={pendingAttachment.contentBase64 ? 'Archivo listo para enviar' : 'Precargando archivo'}>
+                <span style={{ width: `${pendingAttachment.progress}%` }} />
+              </div>
+              <p>{pendingAttachment.contentBase64 ? 'Listo. Puedes escribir un comentario y pulsar Enviar.' : `Precargando archivo… ${pendingAttachment.progress}%`}</p>
+            </div>
+          </div>
+        ) : null}
         <label className="sr-only" htmlFor="chat-message">Escribe tu respuesta</label>
-        <input ref={fileRef} className="sr-only" type="file" accept="application/pdf,image/*" aria-label="Archivo de CV" onChange={(event) => { const file = event.target.files?.[0]; event.target.value = ''; if (file) void uploadCv(file); }} />
+        <input ref={fileRef} className="sr-only" type="file" accept="application/pdf,image/*" aria-label="Archivo de CV" onChange={(event) => { const file = event.target.files?.[0]; event.target.value = ''; if (file) stageAttachment(file); }} />
         {/* One compact bar: attach, input and send share a single bordered surface. */}
         {voice.supported ? <VoiceStatus listening={voice.listening} error={voice.error} /> : null}
         <div className="chat-bar">
           <button type="button" className="chat-attach" aria-label="Adjuntar CV" disabled={loading} onClick={() => fileRef.current?.click()}><Paperclip aria-hidden="true" /></button>
           <textarea className="chat-input" ref={composerRef} id="chat-message" value={draft} onChange={(event) => setDraft(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); event.currentTarget.form?.requestSubmit(); } }} placeholder="Escribe tu respuesta…" rows={1} disabled={loading} />
           {voice.supported ? <VoiceButton listening={voice.listening} disabled={loading} onToggle={toggleVoice} /> : null}
-          <button type="submit" className="chat-send" aria-label="Enviar" disabled={loading || !draft.trim()}><SendHorizontal aria-hidden="true" /><span className="chat-send-label">Enviar</span></button>
+          <button type="submit" className="chat-send" aria-label="Enviar" disabled={loading || (pendingAttachment != null && pendingAttachment.contentBase64 == null) || (!draft.trim() && pendingAttachment?.contentBase64 == null)}><SendHorizontal aria-hidden="true" /><span className="chat-send-label">Enviar</span></button>
         </div>
-        <p className="chat-composer-hint">Enter envía · Shift+Enter agrega una línea · el clip adjunta un PDF o una foto · el micrófono dicta</p>
+        <p className="chat-composer-hint">Enter envía · Shift+Enter agrega una línea · el archivo se precarga y sale cuando pulsas Enviar</p>
       </form>
     </main>
   );
