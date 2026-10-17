@@ -489,7 +489,7 @@ describe("application approval and submission", () => {
     expect(open.submissionId).toBe(submitted.submissionId);
     expect(open.history.some((entry) => entry.action === "submission")).toBe(true);
 
-    app.decideInterview(session("employer"), submitted.submissionId, {
+    await app.decideInterview(session("employer"), submitted.submissionId, {
       ...action("no avanzamos", "idem-own-3"),
       decision: "rejected",
     });

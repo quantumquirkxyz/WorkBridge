@@ -20,6 +20,7 @@ export const APPLICATION_ERROR_CODES = [
   "not_found",
   "payload_too_large",
   "secret_rejected",
+  "shortlist_unavailable",
   "trace_mismatch",
   "unknown_evidence",
   "unknown_role",
@@ -27,7 +28,7 @@ export const APPLICATION_ERROR_CODES = [
 
 export type ApplicationErrorCode = (typeof APPLICATION_ERROR_CODES)[number];
 
-export type ApplicationErrorStatus = 400 | 401 | 403 | 404 | 409 | 413 | 422;
+export type ApplicationErrorStatus = 400 | 401 | 403 | 404 | 409 | 413 | 422 | 503;
 
 export class ApplicationError extends Error {
   readonly status: ApplicationErrorStatus;
