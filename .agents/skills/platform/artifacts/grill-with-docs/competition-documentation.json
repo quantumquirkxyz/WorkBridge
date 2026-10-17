@@ -1,0 +1,33 @@
+{
+  "identifier": "competition-documentation",
+  "status": "refined",
+  "sourceOfTruth": [
+    "Reto oficial de Empleabilidad de la hackathon",
+    "CONTEXT.md",
+    "README.md",
+    "docs/reference/agents/architecture.md",
+    "tests and implementation on main"
+  ],
+  "decisions": [
+    "The official demo is a complete candidate-to-application flow.",
+    "Only code and tests verifiable on main may be described as implemented.",
+    "Official Panamanian sources are recorded with URL, date, and purpose.",
+    "Cleanup removes only generated artifacts and preserves source, tests, configuration, and docs."
+  ],
+  "documentationChanges": [
+    "Updated the competition compliance matrix.",
+    "Updated the architecture from four to five workflow agents.",
+    "Documented the shipped bias auditor and the boundary around simulated interviews.",
+    "Added INEC, MITRADEL, and INADEH sources."
+  ],
+  "cleanup": {
+    "removed": [".reports/", "test-results/"],
+    "preserved": ["apps/web/.next/ because it is tracked build output on main", "unrelated local source changes"]
+  },
+  "unresolved": [
+    "The team must attach the final video URL.",
+    "The team must verify the final-24h tag and record final eval output.",
+    "Transport evidence remains a reproducible fixture until an official operational source is selected."
+  ],
+  "nextConsumer": "implement"
+}
