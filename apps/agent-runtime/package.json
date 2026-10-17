@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "@mastra/core": "^1.78.0",
+    "@mastra/pg": "^1.31.2",
+    "@mastra/pg": "^1.31.2",
     "@workbridge/catalog": "*",
     "@workbridge/domain": "*",
     "@workbridge/ingestion": "*",

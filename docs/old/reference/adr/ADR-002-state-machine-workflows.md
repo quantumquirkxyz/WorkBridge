@@ -7,19 +7,19 @@ Accepted
 The original quirk method used linear flowcharts (ask-to → grill → to-spec → to-tickets → implement → review → ship). This works for simple cases but cannot express conditional branches (conflicts, findings, escalations) or persist workflow state across sessions.
 
 ## Decision
-Redesign workflows as explicit state machines defined in YAML, executed by `workflow-state-machine.mjs`. Each workflow has named states, typed transitions, and persistent checkpoints.
+Redesign workflows as explicit state machines defined in YAML and loaded by the runtime. WorkBridge's production execution remains Mastra-based, while its ordered agent states and transitions are declared in `apps/agent-runtime/src/workflow/workbridge-employability.yaml`; Mastra snapshots are enabled for persistent run checkpoints.
 
 ## Consequences
 
 ### Positive
 - Ramas condicionales: conflict → resolving-merge-conflicts → review
-- Checkpoints persistentes: el estado se guarda en `.agents/skills/platform/state/`
+- Checkpoints persistentes: Mastra persiste snapshots cuando se configura un storage adapter.
 - Transiciones explícitas: no hay routing implícito en el texto del skill
 - Ciclos controlados: review-fix-loop tiene `maxIterations`
 
 ### Negative
 - Complejidad de implementación: requiere parser YAML + executor
-- Fricción de authoring: los skills ya no contienen el flujo, solo referencian el workflow
+- Fricción de authoring: el runtime debe validar el subconjunto YAML soportado.
 - Debugging: las transiciones son archivos externos, no visibles en el skill
 
 ## Alternatives Considered
