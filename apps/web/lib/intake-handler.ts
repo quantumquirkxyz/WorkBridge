@@ -5,10 +5,12 @@ import {
 } from '@puente/domain';
 import { createProfileAgent, type ProfileAgent } from '@puente/agent-runtime';
 import type { RawIntake } from '@puente/ingestion';
+import { profileStore, type ProfileStore } from './profile-store';
 
 export interface IntakeHandlerDeps {
   agent?: ProfileAgent;
   now?: () => Date;
+  profileStore?: ProfileStore;
 }
 
 export interface IntakeHandlerResult {
@@ -64,6 +66,7 @@ export async function handleIntake(
       candidateId: request.candidateId,
       locale: request.locale,
     });
+    (deps.profileStore ?? profileStore).save(result.profile);
     return { status: 200, body: result };
   } catch (error) {
     return {

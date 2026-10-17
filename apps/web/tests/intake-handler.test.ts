@@ -1,7 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
-import { validateIntakeResult } from '@puente/domain';
+import { validateIntakeResult, type CandidateProfile } from '@puente/domain';
 import { createProfileAgent, type ProfileAgent } from '@puente/agent-runtime';
 import { handleIntake } from '../lib/intake-handler';
+import { createInMemoryProfileStore } from '../lib/profile-store';
 
 const CV = [
   'Ayudaba en la tienda de mi familia los fines de semana, atendiendo clientes y manejando la caja.',
@@ -44,6 +45,25 @@ describe('handleIntake', () => {
     expect(status).toBe(200);
     expect(validateIntakeResult(body)).toEqual({ valid: true });
     expect((body as { profile: { sources: Array<{ kind: string }> } }).profile.sources[0]?.kind).toBe(payload.kind);
+    const profile = (body as { profile: CandidateProfile }).profile;
+    expect(profile.sources[0]?.ref).toContain('intake:');
+    expect(profile.sources[0]?.extraction_method).toBeTruthy();
+    expect(profile.experiences.some((experience) => ['relevant', 'partially_relevant', 'not_relevant', 'requires_additional_evidence'].includes(experience.relevance))).toBe(true);
+    for (const skill of profile.skills) {
+      expect(skill.level).toBeGreaterThanOrEqual(0);
+      expect(skill.level).toBeLessThanOrEqual(4);
+      expect(skill.evidence_ids.length).toBeGreaterThan(0);
+      expect(skill.source).toBeTruthy();
+      expect(skill.confidence).toBeGreaterThanOrEqual(0);
+    }
+  });
+
+  it('persists the validated profile JSON document', async () => {
+    const store = createInMemoryProfileStore();
+    const { body } = await handleIntake({ kind: 'text', text: CV, candidateId: 'candidate_persisted' }, { profileStore: store });
+    const profile = (body as { profile: CandidateProfile }).profile;
+    expect(store.get(profile.candidate_id)).toEqual(profile);
+    expect(store.get(profile.candidate_id)).not.toBe(profile);
   });
 
   it('rejects a request that violates the IntakeRequest contract', async () => {
