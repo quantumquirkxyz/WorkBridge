@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { ChatFn, ChatRequest } from '@puente/agent-runtime';
-import { CAP_MESSAGE, MAX_LLM_TURNS, MAX_TRANSCRIPT_MESSAGES, handleChatTurn } from '../lib/chat-handler';
+import { CAP_MESSAGE, MAX_LLM_TURNS, MAX_TRANSCRIPT_MESSAGES, handleChatTurn, readChatSessionView } from '../lib/chat-handler';
 import { createInMemoryChatSessionStore } from '../lib/chat-store';
 import type { ChatTurn } from '../lib/chat/schema';
 import { SLOTS } from '../lib/chat/slots';
@@ -23,6 +23,22 @@ function setup(chat?: ChatFn, extra: Record<string, unknown> = {}) {
 const bodyOf = (r: { body: unknown }) => r.body as ChatTurn;
 
 describe('handleChatTurn', () => {
+  it('seeds a known schedule from stored preferences (AC-14)', async () => {
+    const res = await readChatSessionView('candidate_a', {
+      store: createInMemoryChatSessionStore(),
+      context: {
+        preferences: {
+          availability: { days: [1, 2, 3, 4, 5], start_minute: 540, end_minute: 1020, weekly_hours: 40 },
+          contract_types: ['full_time'],
+        },
+      },
+    });
+    expect((res.body as { slotState: Record<string, { state: string; value?: unknown }> }).slotState.schedule).toEqual({
+      state: 'filled',
+      value: { days: [1, 2, 3, 4, 5], from: '09:00', to: '17:00', weekly_hours: 40, contract_type: 'full_time' },
+    });
+  });
+
   it('returns a valid LLM turn with tracker-owned pendingSlot and chips', async () => {
     const { turn } = setup(ok(validReply()));
     const res = await turn('hola');

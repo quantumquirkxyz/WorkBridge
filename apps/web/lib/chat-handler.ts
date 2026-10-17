@@ -55,6 +55,22 @@ function seededSlotState(context?: CandidateContext): SlotState {
     const value = locationRecord.raw ?? locationRecord.district ?? locationRecord.province;
     if (typeof value === 'string' && value.trim()) state.zone = { state: 'filled', value };
   }
+  const availability = preferences?.availability;
+  if (availability && typeof availability === 'object') {
+    const scheduleRecord = availability as Record<string, unknown>;
+    const days = scheduleRecord.days;
+    const start = scheduleRecord.start_minute;
+    const end = scheduleRecord.end_minute;
+    const weeklyHours = scheduleRecord.weekly_hours;
+    if (Array.isArray(days) && days.every((day) => typeof day === 'number') && typeof start === 'number' && typeof end === 'number' && typeof weeklyHours === 'number') {
+      const time = (minutes: number) => `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;
+      const contracts = preferences?.contract_types;
+      state.schedule = {
+        state: 'filled',
+        value: { days, from: time(start), to: time(end), weekly_hours: weeklyHours, contract_type: Array.isArray(contracts) && typeof contracts[0] === 'string' ? contracts[0] : 'full_time' },
+      };
+    }
+  }
   if (preferences?.modality !== undefined && isAllowedSlotValue('modality', preferences.modality)) state.modality = { state: 'filled', value: preferences.modality };
   if (preferences?.minimum_salary_usd !== undefined && isAllowedSlotValue('minimum_salary_usd', preferences.minimum_salary_usd)) state.minimum_salary_usd = { state: 'filled', value: preferences.minimum_salary_usd };
   if (preferences?.willing_to_train !== undefined && isAllowedSlotValue('willing_to_train', preferences.willing_to_train)) state.willing_to_train = { state: 'filled', value: preferences.willing_to_train };

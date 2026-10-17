@@ -6,6 +6,7 @@ test('J1 completes profile capture and first exploration with the fallback chat'
   await expect(page.getByRole('heading', { name: 'Puente Laboral Panamá' })).toBeVisible();
   await page.getByRole('link', { name: /Empezar/ }).click();
   await expect(page.getByRole('heading', { name: 'Conversemos sobre ti' })).toBeVisible();
+  await expectNoSeriousAxeViolations(page);
 
   // The fallback agenda has eight profile chips and five preference chips.
   for (let step = 0; step < 13; step += 1) {

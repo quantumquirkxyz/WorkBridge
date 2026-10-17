@@ -238,6 +238,8 @@
   .chat-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .75rem; }
   .chat-chip { min-height: 2.75rem; padding: .55rem .8rem; border: 1px solid var(--primary); border-radius: 999px; color: var(--primary); background: var(--card); font-weight: 600; }
   .chat-chip:hover { background: var(--teal-tint); }
+  .chat-skill-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .75rem; }
+  .chat-skill-chip { padding: .35rem .65rem; border-radius: 999px; color: var(--teal-700); background: var(--teal-tint); font-size: .8rem; font-weight: 700; }
   .chat-activity { align-self: flex-start; margin: 0; color: var(--ink-muted); font-size: .875rem; }
   .typing-dots { color: var(--primary); letter-spacing: .15em; }
   .chat-composer { position: sticky; bottom: 0; display: grid; grid-template-columns: 1fr auto; gap: .6rem; padding: .75rem 0 calc(.75rem + env(safe-area-inset-bottom)); border-top: 1px solid var(--line); background: var(--background); }

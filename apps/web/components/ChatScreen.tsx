@@ -14,6 +14,7 @@ interface ChatMessage {
   role: 'assistant' | 'user';
   content: string;
   chips?: Array<SlotChip & { slot?: SlotId }>;
+  skillLabels?: string[];
 }
 
 type RenderedChip = SlotChip & { slot?: SlotId };
@@ -46,6 +47,7 @@ export function ChatScreen() {
   const [activity, setActivity] = useState<string | null>(null);
   const [retry, setRetry] = useState<RetryRequest | null>(null);
   const [intakeRetryText, setIntakeRetryText] = useState<string | null>(null);
+  const [explorationRetry, setExplorationRetry] = useState<PreferencesDraft | null>(null);
 
   function nextId() {
     messageId.current += 1;
@@ -85,8 +87,8 @@ export function ChatScreen() {
     messagesEndRef.current?.scrollIntoView?.({ block: 'nearest' });
   }, [messages, activity]);
 
-  function addMessage(role: ChatMessage['role'], content: string, chips?: ChatMessage['chips']) {
-    setMessages((current) => [...current, { id: nextId(), role, content, ...(chips ? { chips } : {}) }]);
+  function addMessage(role: ChatMessage['role'], content: string, chips?: ChatMessage['chips'], skillLabels?: string[]) {
+    setMessages((current) => [...current, { id: nextId(), role, content, ...(chips ? { chips } : {}), ...(skillLabels ? { skillLabels } : {}) }]);
   }
 
   function preferencesFromState(state: SlotState): PreferencesDraft {
@@ -147,7 +149,15 @@ export function ChatScreen() {
       setPhase(turn.phase);
       const proposalSlot = turn.slotUpdates.find((update) => update.state === 'proposed')?.slot;
       const chips = turn.chips.map((chip) => ({ ...chip, slot: proposalSlot ?? turn.pendingSlot ?? undefined }));
-      addMessage('assistant', turn.reply, chips.length > 0 ? chips : undefined);
+      if (proposalSlot && chips.length > 0) {
+        setMessages((current) => {
+          const lastUser = [...current].map((message, index) => ({ message, index })).reverse().find(({ message }) => message.role === 'user')?.index;
+          return current.map((message, index) => index === lastUser ? { ...message, chips } : message);
+        });
+        addMessage('assistant', turn.reply);
+      } else {
+        addMessage('assistant', turn.reply, chips.length > 0 ? chips : undefined);
+      }
       if (turn.phase === 'preferences' && !intakeStarted.current) {
         intakeStarted.current = true;
         const text = profileText.current.join('\n');
@@ -163,16 +173,16 @@ export function ChatScreen() {
       }
       if (turn.phase === 'done' && !explorationStarted.current) {
         explorationStarted.current = true;
-        const exploreResponse = await fetch('/api/explore', {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify(preferencesFromState(nextState)),
-        });
-        if (!exploreResponse.ok) throw new Error('explore_request_failed');
-        const explored = await exploreResponse.json() as { preferences?: unknown };
-        window.localStorage.setItem('puente:exploration', JSON.stringify(explored));
-        if (explored.preferences) window.localStorage.setItem('puente:preferences', JSON.stringify(explored.preferences));
-        router.push('/vacantes');
+        const preferences = preferencesFromState(nextState);
+        try {
+          await submitExploration(preferences);
+        } catch {
+          explorationStarted.current = false;
+          setExplorationRetry(preferences);
+          addMessage('assistant', 'No pude buscar vacantes ahora. Conservé tus respuestas; puedes intentarlo de nuevo.', [
+            { label: 'Reintentar', kind: 'retry' },
+          ]);
+        }
       }
     } catch {
       addMessage('assistant', 'No pude continuar ahora. Conservé nuestra conversación; puedes intentarlo de nuevo.', [
@@ -195,12 +205,30 @@ export function ChatScreen() {
       body: JSON.stringify({ kind: 'text', text: text || 'Experiencia declarada en conversación.' }),
     });
     if (!response.ok) throw new Error('intake_request_failed');
-    const body = await response.json() as { profile?: { skills?: unknown[]; experiences?: unknown[] }; extraction?: { needs_review?: boolean } };
+    const body = await response.json() as { profile?: { skills?: Array<{ canonical_name?: unknown }>; experiences?: unknown[] }; extraction?: { needs_review?: boolean } };
     const skills = body.profile?.skills?.length ?? 0;
     const experiences = body.profile?.experiences?.length ?? 0;
     const review = body.extraction?.needs_review ? ' Algunos datos los vamos a confirmar contigo en Mi perfil.' : '';
+    const skillLabels = (body.profile?.skills ?? [])
+      .map((skill) => typeof skill.canonical_name === 'string' ? skill.canonical_name : '')
+      .filter((label): label is string => label.length > 0)
+      .slice(0, 4);
     setIntakeRetryText(null);
-    addMessage('assistant', `Encontré ${skills} ${skills === 1 ? 'habilidad' : 'habilidades'} y ${experiences} ${experiences === 1 ? 'experiencia' : 'experiencias'}.${review}`);
+    addMessage('assistant', `Encontré ${skills} ${skills === 1 ? 'habilidad' : 'habilidades'} y ${experiences} ${experiences === 1 ? 'experiencia' : 'experiencias'}.${review}`, undefined, skillLabels);
+  }
+
+  async function submitExploration(preferences: PreferencesDraft): Promise<void> {
+    const response = await fetch('/api/explore', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(preferences),
+    });
+    if (!response.ok) throw new Error('explore_request_failed');
+    const explored = await response.json() as { preferences?: unknown };
+    window.localStorage.setItem('puente:exploration', JSON.stringify(explored));
+    if (explored.preferences) window.localStorage.setItem('puente:preferences', JSON.stringify(explored.preferences));
+    setExplorationRetry(null);
+    router.push('/vacantes');
   }
 
   async function send(message: string, action: UserAction, addUserBubble = true): Promise<void> {
@@ -221,7 +249,20 @@ export function ChatScreen() {
 
   function chooseChip(chip: RenderedChip) {
     if (chip.kind === 'retry') {
-      if (intakeRetryText) {
+      if (explorationRetry) {
+        const preferences = explorationRetry;
+        setLoading(true);
+        setActivity('Estoy buscando vacantes…');
+        void submitExploration(preferences).catch(() => {
+          explorationStarted.current = false;
+          setExplorationRetry(preferences);
+          addMessage('assistant', 'No pude buscar vacantes todavía. Puedes intentarlo de nuevo.', [{ label: 'Reintentar', kind: 'retry' }]);
+        }).finally(() => {
+          setLoading(false);
+          setActivity(null);
+          window.requestAnimationFrame(() => composerRef.current?.focus());
+        });
+      } else if (intakeRetryText) {
         setLoading(true);
         setActivity('Estoy leyendo lo que me contaste…');
         void submitIntake(intakeRetryText).catch(() => {
@@ -257,6 +298,7 @@ export function ChatScreen() {
         {messages.map((message) => (
           <article key={message.id} className={`chat-bubble chat-bubble-${message.role}`}>
             <p>{message.content}</p>
+            {message.skillLabels ? <div className="chat-skill-chips" aria-label="Habilidades encontradas">{message.skillLabels.map((skill) => <span key={skill} className="chat-skill-chip">{skill}</span>)}</div> : null}
             {message.chips ? <div className="chat-chips">{message.chips.map((chip, index) => <button key={`${chip.label}-${index}`} type="button" className="chat-chip" onClick={() => chooseChip(chip)} disabled={loading}>{chip.label}</button>)}</div> : null}
           </article>
         ))}
