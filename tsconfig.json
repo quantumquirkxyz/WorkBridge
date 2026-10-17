@@ -17,7 +17,8 @@
     "baseUrl": ".",
     "paths": {
       "@puente/domain": ["packages/domain/src/index.ts"],
-      "@puente/solver": ["packages/solver/src/index.ts"]
+      "@puente/solver": ["packages/solver/src/index.ts"],
+      "@puente/training": ["packages/training/src/index.ts"]
     }
   },
   "include": [

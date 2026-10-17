@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://puentelaboral.pa/schemas/training-catalog.schema.json",
+  "title": "TrainingCatalog",
+  "description": "Last valid cached snapshot of the specialization-aware training catalog. Each entry is a course, certification, project, or internship. The Training Agent refreshes it out of band; the roadmap engine only reads it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "catalogVersion", "source", "retrievedAt", "opportunities"],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "catalogVersion": { "type": "string", "minLength": 1 },
+    "source": { "type": "string", "minLength": 1 },
+    "retrievedAt": { "type": "string", "format": "date-time" },
+    "opportunities": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/TrainingOpportunity" }
+    }
+  },
+  "$defs": {
+    "GeoPoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lat", "lng"],
+      "properties": {
+        "lat": { "type": "number", "minimum": -90, "maximum": 90 },
+        "lng": { "type": "number", "minimum": -180, "maximum": 180 }
+      }
+    },
+    "CoveredSkill": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["skillId", "level"],
+      "properties": {
+        "skillId": { "type": "string", "minLength": 1 },
+        "level": { "type": "integer", "minimum": 0, "maximum": 4 }
+      }
+    },
+    "OpportunitySchedule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["days", "startMinute", "endMinute", "weeklyHours"],
+      "properties": {
+        "days": {
+          "type": "array",
+          "items": { "type": "integer", "minimum": 0, "maximum": 6 }
+        },
+        "startMinute": { "type": "integer", "minimum": 0, "maximum": 1440 },
+        "endMinute": { "type": "integer", "minimum": 0, "maximum": 1440 },
+        "weeklyHours": { "type": "number", "minimum": 0 }
+      }
+    },
+    "TrainingOpportunity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "opportunityId",
+        "title",
+        "provider",
+        "type",
+        "url",
+        "language",
+        "specializations",
+        "coveredSkills",
+        "prerequisites",
+        "costUsd",
+        "durationHours",
+        "modality",
+        "location",
+        "schedule",
+        "seatsAvailable",
+        "credentialRelevance",
+        "source",
+        "retrievedAt"
+      ],
+      "properties": {
+        "opportunityId": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "minLength": 1 },
+        "type": { "enum": ["course", "certification", "project", "internship"] },
+        "url": { "type": "string", "format": "uri" },
+        "language": { "enum": ["es", "en", "other"] },
+        "specializations": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "coveredSkills": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/CoveredSkill" }
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "costUsd": { "type": "number", "minimum": 0 },
+        "durationHours": { "type": "number", "minimum": 0 },
+        "modality": { "enum": ["online", "onsite", "hybrid"] },
+        "location": {
+          "oneOf": [{ "$ref": "#/$defs/GeoPoint" }, { "type": "null" }]
+        },
+        "schedule": {
+          "oneOf": [{ "$ref": "#/$defs/OpportunitySchedule" }, { "type": "null" }]
+        },
+        "seatsAvailable": { "type": "integer", "minimum": 0 },
+        "credentialRelevance": { "type": "number", "minimum": 0, "maximum": 1 },
+        "source": { "type": "string", "minLength": 1 },
+        "retrievedAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}

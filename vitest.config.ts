@@ -9,11 +9,16 @@ const solverEntry = fileURLToPath(
   new URL("./packages/solver/src/index.ts", import.meta.url),
 );
 
+const trainingEntry = fileURLToPath(
+  new URL("./packages/training/src/index.ts", import.meta.url),
+);
+
 export default defineConfig({
   resolve: {
     alias: {
       "@puente/domain": domainEntry,
       "@puente/solver": solverEntry,
+      "@puente/training": trainingEntry,
     },
   },
   test: {
