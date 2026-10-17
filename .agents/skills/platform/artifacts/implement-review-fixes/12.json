@@ -1,21 +1,18 @@
 {
   "status": "implemented",
   "completed": [
-    "Spec required: Better Auth sessions are HMAC-signed with BETTER_AUTH_SECRET. A forged role fails signature verification and cannot submit.",
-    "Spec required: every non-empty Certo token, provider key, and database URL is rejected.",
-    "Spec required: a correction that changes the evidence subset clears candidate and counselor approvals. Submit checks the approved evidence ids.",
-    "Spec required: approval, correction, rejection, submission, and interview actions must use the draft traceId.",
-    "Spec required: DATABASE_URL or NEON_DATABASE_URL selects the SQL idempotency store. Health reports persistence sql and does not echo the URL.",
-    "Spec required: Playwright covers counselor approval, gated submission, and retry.",
-    "Spec required: a counselor can approve or reject a clean draft. Submission still requires counselor approval only when a gate reason exists.",
-    "Standards required: draft and action parsing call assertWorkflowEnvelope and reject a blocked guardrail."
+    "Spec partial: createSqlIdempotencyStore runs ENSURE_IDEMPOTENCY_TABLE_SQL before the first read or write. A fresh Neon database gets submission_idempotency without a live connection in tests. Health still does not query or echo the URL."
   ],
   "validation": [
     "npx tsc --noEmit - pass",
-    "npx eslint on the application, e2e, and playwright config - pass",
-    "npx vitest run --coverage - 100/100 pass; 92.83% lines / 84.11% branches",
+    "npx eslint on store.ts and server.test.ts - pass",
+    "npx vitest run --coverage - 100/100 pass; 92.88% lines / 84.11% branches",
     "npx playwright test - 3/3 pass"
   ],
-  "remaining": "Judgement-call smells from pass 1 were not in the executable plan: Repeated Switches, Divergent Change, Primitive Obsession, duplicated secret scan, duplicated fixtures, and the signature copy in docs/reference/assumed-contracts.md.",
-  "scopeNotes": "Fixes stay inside the application approval flow, its tests, the Neon store selection, and the session signature note. Plan comment: https://github.com/HackathonFISC/equipo-02/pull/21#issuecomment-6226808274. Commit 4cdaf1e."
+  "remaining": "Pass-2 judgement calls were not in the executable plan: duplicated envelope() helpers, and the session signature documented on BetterAuthSession while the code keeps it on SignedBetterAuthSession. Pass-1 advisories remain: Repeated Switches, Divergent Change, Primitive Obsession, duplicated secret scan, and duplicated fixtures.",
+  "scopeNotes": "Pass 2 plan: https://github.com/HackathonFISC/equipo-02/pull/21#issuecomment-6226981288. Commit b68b9cd. Earlier pass-1 implementation remains at 4cdaf1e.",
+  "previous": {
+    "commit": "4cdaf1e",
+    "planComment": "https://github.com/HackathonFISC/equipo-02/pull/21#issuecomment-6226808274"
+  }
 }
