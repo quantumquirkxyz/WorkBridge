@@ -1,24 +1,18 @@
 import { NextResponse } from 'next/server';
 import { createAgentFromEnv } from '@puente/agent-runtime';
-import { makeCandidateId, type CandidateProfile } from '@puente/domain';
+import { type CandidateProfile } from '@puente/domain';
 import { handleIntake } from '../../../lib/intake-handler';
 import { persistCandidateProfile, readCandidateProfile } from '../../../lib/neon-repository';
 import { profileStore } from '../../../lib/profile-store';
 import { MAX_CANDIDATE_ID_LENGTH } from '../../../lib/exploration-handler';
-
-function candidateKeyFromPayload(payload: unknown): string | undefined {
-  if (!payload || typeof payload !== 'object') return undefined;
-  const candidateId = (payload as { candidateId?: unknown }).candidateId;
-  if (typeof candidateId !== 'string' || candidateId.length === 0) return undefined;
-  return makeCandidateId(candidateId);
-}
+import { candidateIdFromRequest, unauthorized } from '../../../lib/candidate-session';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request): Promise<Response> {
-  const candidateId = new URL(request.url).searchParams.get('candidateId');
-  if (!candidateId) return NextResponse.json({ error: 'missing_candidate_id' }, { status: 400 });
+  const candidateId = candidateIdFromRequest(request);
+  if (!candidateId) return unauthorized();
   if (candidateId.length > MAX_CANDIDATE_ID_LENGTH) return NextResponse.json({ error: 'invalid_candidate_id' }, { status: 400 });
   try {
     const profile = await readCandidateProfile(candidateId);
@@ -29,6 +23,8 @@ export async function GET(request: Request): Promise<Response> {
 }
 
 export async function POST(request: Request): Promise<Response> {
+  const candidateId = candidateIdFromRequest(request);
+  if (!candidateId) return unauthorized();
   let payload: unknown;
   try {
     payload = await request.json();
@@ -36,7 +32,8 @@ export async function POST(request: Request): Promise<Response> {
     return NextResponse.json({ error: 'invalid_json' }, { status: 400 });
   }
 
-  const candidateKey = candidateKeyFromPayload(payload);
+  payload = { ...(payload as Record<string, unknown>), candidateId };
+  const candidateKey = candidateId;
   if (candidateKey && !profileStore.get(candidateKey)) {
     try {
       const durable = await readCandidateProfile(candidateKey);
