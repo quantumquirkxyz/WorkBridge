@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import type { ContractType, TransportMode, WorkModality } from '@puente/domain';
-import type { ExplorationResult } from '@puente/catalog';
+import { CONTRACT_LABELS, MODALITY_LABELS, type ExplorationResult } from '@puente/catalog';
 
 const DAY_LABELS: Array<{ value: number; label: string }> = [
   { value: 1, label: 'Lun' },
@@ -43,16 +43,6 @@ const EXCLUSION_LABELS: Record<string, string> = {
   salary: 'Salario',
   contract: 'Contrato',
   schedule: 'Horario',
-};
-
-const MODALITY_LABELS: Record<string, string> = { onsite: 'Presencial', hybrid: 'Híbrida', remote: 'Remota' };
-const CONTRACT_LABELS: Record<string, string> = {
-  full_time: 'Tiempo completo',
-  part_time: 'Medio tiempo',
-  fixed_term: 'Plazo fijo',
-  internship: 'Pasantía',
-  temporary: 'Temporal',
-  freelance: 'Independiente',
 };
 
 function timeToMinutes(value: string): number {

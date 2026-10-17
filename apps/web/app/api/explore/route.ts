@@ -1,17 +1,14 @@
 import { NextResponse } from 'next/server';
 import { handleExploration } from '../../../lib/exploration-handler';
+import { readJsonBody } from '../../../lib/request-body';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request): Promise<Response> {
-  let payload: unknown;
-  try {
-    payload = await request.json();
-  } catch {
-    return NextResponse.json({ error: 'invalid_json' }, { status: 400 });
-  }
+  const parsed = await readJsonBody(request);
+  if (!parsed.ok) return parsed.response;
 
-  const { status, body } = await handleExploration(payload);
+  const { status, body } = await handleExploration(parsed.payload);
   return NextResponse.json(body, { status });
 }

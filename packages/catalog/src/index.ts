@@ -37,3 +37,5 @@ export { createVacancyCatalog, loadCatalogFromScraped, toCachedVacancy } from '.
 export { createSeedCatalog, seedVacancies } from './seed';
 
 export { exploreVacancies } from './explore';
+
+export { CONTRACT_LABELS, MODALITY_LABELS } from './labels';

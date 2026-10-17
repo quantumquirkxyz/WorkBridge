@@ -44,7 +44,7 @@
       "additionalProperties": false,
       "required": ["jobId", "reason", "detail", "freshness"],
       "properties": {
-        "jobId": { "type": "string", "minLength": 1 },
+        "jobId": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" },
         "reason": { "enum": ["stale", "modality", "location", "salary", "contract", "schedule"] },
         "detail": { "type": "string", "minLength": 1 },
         "freshness": { "$ref": "#/$defs/freshness" }

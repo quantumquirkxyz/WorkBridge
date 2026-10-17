@@ -7,6 +7,7 @@ import {
 import type { VacancyCatalog } from './catalog';
 import { assertExplorationResult } from './ajv';
 import { DEFAULT_MAX_AGE_HOURS, computeFreshness } from './freshness';
+import { CONTRACT_LABELS, MODALITY_LABELS } from './labels';
 import type {
   CachedVacancy,
   ExcludedVacancy,
@@ -17,22 +18,12 @@ import type {
   VacancyMatch,
 } from './types';
 
-const MODALITY_LABELS: Record<string, string> = {
-  onsite: 'presencial',
-  hybrid: 'híbrida',
-  remote: 'remota',
-};
+/** Lower-case a shared display label for use inside a Spanish sentence. */
+function lower(labels: Record<string, string>, key: string): string {
+  return (labels[key] ?? key).toLowerCase();
+}
 
-const CONTRACT_LABELS: Record<string, string> = {
-  full_time: 'tiempo completo',
-  part_time: 'medio tiempo',
-  fixed_term: 'plazo fijo',
-  internship: 'pasantía',
-  temporary: 'temporal',
-  freelance: 'independiente',
-};
-
-function pct(value: number): number {
+function clampRatio(value: number): number {
   return Math.max(0, Math.min(1, value));
 }
 
@@ -73,7 +64,7 @@ function evaluate(vacancy: CachedVacancy, preferences: CandidatePreferences, fre
   if (vacancy.modality !== preferences.modality) {
     return {
       reason: 'modality',
-      detail: `Modalidad ${MODALITY_LABELS[vacancy.modality] ?? vacancy.modality}; buscas ${MODALITY_LABELS[preferences.modality] ?? preferences.modality}.`,
+      detail: `Modalidad ${lower(MODALITY_LABELS, vacancy.modality)}; buscas ${lower(MODALITY_LABELS, preferences.modality)}.`,
       score: 0,
       reasons,
     };
@@ -110,7 +101,7 @@ function evaluate(vacancy: CachedVacancy, preferences: CandidatePreferences, fre
   if (preferences.contract_types.length > 0 && !preferences.contract_types.includes(vacancy.contractType)) {
     return {
       reason: 'contract',
-      detail: `Tipo de contrato ${CONTRACT_LABELS[vacancy.contractType] ?? vacancy.contractType}, que no está en tu lista.`,
+      detail: `Tipo de contrato ${lower(CONTRACT_LABELS, vacancy.contractType)}, que no está en tu lista.`,
       score: 0,
       reasons,
     };
@@ -135,27 +126,27 @@ function evaluate(vacancy: CachedVacancy, preferences: CandidatePreferences, fre
     };
   }
 
-  reasons.push(`Modalidad ${MODALITY_LABELS[vacancy.modality] ?? vacancy.modality} y ubicación compatibles.`);
-  reasons.push(`Contrato de ${CONTRACT_LABELS[vacancy.contractType] ?? vacancy.contractType}.`);
+  reasons.push(`Modalidad ${lower(MODALITY_LABELS, vacancy.modality)} y ubicación compatibles.`);
+  reasons.push(`Contrato de ${lower(CONTRACT_LABELS, vacancy.contractType)}.`);
   reasons.push(`Coincidencia de horario en ${overlapDays.length} día(s).`);
 
   const { covered, missing } = skillOverlap(preferences, vacancy);
   const skillFit = vacancy.skills.filter((skill) => skill.required).length === 0
     ? 0.5
-    : pct(covered.length / vacancy.skills.filter((skill) => skill.required).length);
+    : clampRatio(covered.length / vacancy.skills.filter((skill) => skill.required).length);
   if (covered.length > 0) reasons.push(`Habilidades afines: ${covered.join(', ')}.`);
   if (missing.length > 0) reasons.push(`Por revisar (no en tus puestos objetivo): ${missing.join(', ')}.`);
 
   let salaryFit = 1;
   if (floor > 0 && vacancy.salary.maxUsd !== null) {
-    salaryFit = pct(vacancy.salary.maxUsd / floor - 1);
+    salaryFit = clampRatio(vacancy.salary.maxUsd / floor - 1);
     reasons.push(`Salario máximo USD ${vacancy.salary.maxUsd} frente a tu mínimo USD ${floor}.`);
   } else {
     reasons.push('Salario no publicado; se revisa como coincidencia aproximada.');
   }
 
-  const scheduleFit = pct(overlapDays.length / preferences.availability.days.length);
-  const freshnessFit = pct(1 - freshness.ageHours / freshness.maxAgeHours);
+  const scheduleFit = clampRatio(overlapDays.length / preferences.availability.days.length);
+  const freshnessFit = clampRatio(1 - freshness.ageHours / freshness.maxAgeHours);
   reasons.push(freshness.label + '.');
 
   const score = Math.round(

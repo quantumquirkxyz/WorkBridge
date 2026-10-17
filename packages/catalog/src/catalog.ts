@@ -5,7 +5,6 @@ import type {
   ContractType,
   PreferenceLocation,
   ScrapingInfo,
-  TransportMode,
   VacancySalary,
   VacancySchedule,
   VacancySkill,
@@ -31,7 +30,6 @@ export interface RawScrapedVacancy {
   salary?: Partial<VacancySalary>;
   schedule?: Partial<VacancySchedule>;
   skills?: Array<VacancySkill | string>;
-  transportModes?: TransportMode[];
 }
 
 const DEFAULT_LOCATION: PreferenceLocation = { country: 'PA', province: null, district: null, raw: null };
