@@ -344,7 +344,7 @@ describe("application HTTP surface", () => {
         }).submissions;
       const orgA = await listOf(orgSession("org-a"));
       expect(orgA.map((item) => item.submissionId)).toEqual([subA]);
-      expect(Object.keys(orgA[0]).sort()).toEqual(["interview", "submissionId", "traceId", "vacancyTitle"]);
+      expect(Object.keys(orgA[0]!).sort()).toEqual(["interview", "submissionId", "traceId", "vacancyTitle"]);
       expect(await listOf(orgSession("org-b"))).toEqual([]);
 
       expect((await post(base, `/submissions/${subA}/interview`, action("x1", { session: orgSession("org-b"), decision: "rejected" }))).status).toBe(403);

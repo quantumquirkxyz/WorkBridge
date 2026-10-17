@@ -208,9 +208,8 @@ describe("employability workflow", () => {
     expect(result.status).toBe("success");
     expect(result.match).toBeDefined();
     expect(result.roadmap).toBeDefined();
-    // exploration (planning) and profile (extraction) call the router;
-    // market_and_matching and training are deterministic and must not.
-    expect(calls).toHaveLength(2);
+    // All workflow steps are deterministic when matching and training data are supplied.
+    expect(calls).toHaveLength(0);
     expect(result.roadmap?.aptitude).toBe(result.match?.result.decisions[0]?.aptitude);
   });
 
@@ -239,8 +238,8 @@ describe("employability workflow", () => {
     expect(result.status).toBe("success");
     expect(result.match).toBeDefined();
     expect(result.roadmap).toBeUndefined();
-    // exploration, profile, and training call the router; matching is deterministic.
-    expect(calls).toHaveLength(3);
+    // Training falls back to the router when training preferences are missing.
+    expect(calls).toHaveLength(1);
   });
 
   it("returns an empty roadmap for an already-apt candidate", async () => {
