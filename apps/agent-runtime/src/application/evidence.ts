@@ -5,6 +5,11 @@ export const CREDENTIAL_STATUSES = ["verified", "unverified", "not_applicable"] 
 
 export type EvidenceKind = (typeof EVIDENCE_KINDS)[number];
 export type CredentialStatus = (typeof CREDENTIAL_STATUSES)[number];
+export type ProfileCredentialStatus =
+  | CredentialStatus
+  | "declared"
+  | "partially_verified"
+  | "rejected";
 
 export interface EvidenceItem {
   id: string;
@@ -49,4 +54,38 @@ export function parseEvidence(value: unknown): EvidenceItem[] {
       credentialStatus: row.credentialStatus as CredentialStatus,
     };
   });
+}
+
+/**
+ * Maps evidence credentialStatus based on the evidence kind:
+ * - For certification evidence: maps verified → "verified",
+ *   declared/partially_verified/unverified/rejected → "unverified"
+ * - For non-certification evidence: maps to "not_applicable"
+ */
+export function toApplicationEvidence(
+  evidence: readonly (Omit<EvidenceItem, "credentialStatus"> & {
+    credentialStatus: ProfileCredentialStatus;
+  })[],
+): EvidenceItem[] {
+  const result = evidence.map((item) => {
+    if (item.kind === 'certification') {
+      const statusMap: Record<string, CredentialStatus> = {
+        verified: 'verified',
+        declared: 'unverified',
+        partially_verified: 'unverified',
+        unverified: 'unverified',
+        rejected: 'unverified',
+      };
+      return {
+        ...item,
+       credentialStatus: (statusMap[item.credentialStatus] ?? 'unverified') as CredentialStatus,
+      };
+    }
+    // Non-certification evidence gets "not_applicable"
+    return {
+      ...item,
+       credentialStatus: 'not_applicable' as const,
+    };
+  });
+  return result;
 }
