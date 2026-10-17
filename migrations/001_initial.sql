@@ -20,6 +20,11 @@ create table if not exists candidate_saved_searches (
   updated_at timestamptz not null default now()
 );
 
+create table if not exists candidate_vacancy_visits (
+  candidate_id text primary key,
+  visited_at timestamptz not null default now()
+);
+
 create index if not exists candidate_profiles_updated_at_idx on candidate_profiles (updated_at);
 create index if not exists candidate_preferences_updated_at_idx on candidate_preferences (updated_at);
 create index if not exists candidate_saved_searches_candidate_id_idx on candidate_saved_searches (candidate_id);

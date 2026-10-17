@@ -420,3 +420,10 @@
     outline-color: Highlight;
   }
 }
+
+.save-dialog-backdrop { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 1rem; background: #1a2b2e66; }
+.save-dialog { width: min(100%, 30rem); padding: 1.5rem; border-radius: 1rem; background: var(--card); box-shadow: 0 1rem 3rem #1a2b2e33; }
+.save-dialog h2 { margin-top: 0; }
+.nav-badge { display: inline-grid; min-width: 1.2rem; min-height: 1.2rem; place-items: center; margin-left: .35rem; padding: 0 .3rem; border-radius: 999px; color: white; background: var(--primary); font-size: .7rem; }
+.new-vacancies { margin-bottom: 1.5rem; padding: 1rem; border: 2px solid var(--primary); border-radius: 1rem; background: var(--teal-tint); }
+.new-vacancies h2 { margin-top: 0; }

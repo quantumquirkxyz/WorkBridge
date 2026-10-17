@@ -1,0 +1,16 @@
+{
+  "status": "blocked",
+  "pr": 80,
+  "fixedPoint": "main",
+  "passes": 2,
+  "lastImplementationCommit": "e69fcc8",
+  "validation": {
+    "commands": ["npm exec --workspace @puente/web -- tsc --noEmit", "npm exec --workspace @puente/web -- vitest run tests/searches-handler.test.ts", "npm run gate:ci"],
+    "result": "pass"
+  },
+  "remainingFindings": [
+    "Better Auth account linking and deferred save are not available in the current web app.",
+    "The issue-requested browser e2e flow is not present."
+  ],
+  "nextConsumer": "auth implementation and e2e setup"
+}

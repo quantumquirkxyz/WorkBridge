@@ -103,6 +103,8 @@ export function ExplorationDashboard() {
 
     try {
       const explored = await exploreMutation.mutateAsync(buildPayload(form));
+      window.localStorage.setItem('puente:candidateId', explored.candidateId);
+      window.localStorage.setItem('puente:preferences', JSON.stringify(explored.preferences));
       setResult(explored);
       setDecisions([]);
       void matchMutation.mutateAsync(explored.matches.map((match) => match.vacancy.jobId)).then((body) => setDecisions(body.decisions)).catch(() => setDecisions([]));

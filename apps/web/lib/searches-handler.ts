@@ -5,6 +5,7 @@ import { MAX_CANDIDATE_ID_LENGTH } from './exploration-handler';
 import { preferencesStore, type PreferencesStore } from './preferences-store';
 import { resolveExplorationAgent, type ExplorationSeamDeps } from './exploration-seam';
 import type { HandlerResult } from './handler-result';
+import { vacancyVisitsStore, type VacancyVisitsStore } from './vacancy-visits-store';
 import {
   savedSearchesStore,
   type SavedSearch,
@@ -15,6 +16,7 @@ import {
 export interface SearchesHandlerDeps extends ExplorationSeamDeps {
   preferencesStore?: PreferencesStore;
   searchesStore?: SavedSearchesStore;
+  visitsStore?: VacancyVisitsStore;
 }
 
 export interface SaveSearchPayload {
@@ -70,6 +72,8 @@ export async function handleListSearches(
     return { status: 400, body: { error: 'invalid_candidate_id' } };
   }
   const searches = (deps.searchesStore ?? savedSearchesStore).list(candidateId);
+  const visits = deps.visitsStore ?? vacancyVisitsStore;
+  const lastVisitAt = visits.get(candidateId);
   const agent = resolveExplorationAgent(deps);
   const views: SavedSearchView[] = [];
   for (const search of searches) {
@@ -79,8 +83,21 @@ export async function handleListSearches(
       search,
       matches: result.matches,
       newSinceSaved: result.matches.filter((match) => !seen.has(match.vacancy.jobId)),
+      newSinceLastVisit: result.matches.filter((match) => {
+        if (!lastVisitAt) return false;
+        return new Date(match.vacancy.postedAt).getTime() > new Date(lastVisitAt).getTime();
+      }),
+      lastVisitAt,
       summary: result.summary,
     });
   }
   return { status: 200, body: { searches: views } };
+}
+
+export function handleMarkVacancyVisit(candidateId: string, deps: SearchesHandlerDeps = {}): HandlerResult {
+  if (!candidateId || candidateId.length > MAX_CANDIDATE_ID_LENGTH) {
+    return { status: 400, body: { error: 'invalid_candidate_id' } };
+  }
+  (deps.visitsStore ?? vacancyVisitsStore).mark(candidateId, (deps.now ?? (() => new Date()))().toISOString());
+  return { status: 204, body: null };
 }

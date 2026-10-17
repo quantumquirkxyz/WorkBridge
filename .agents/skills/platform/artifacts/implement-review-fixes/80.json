@@ -1,0 +1,18 @@
+{
+  "status": "implemented",
+  "pr": 80,
+  "fixedPoint": "main",
+  "changes": [
+    "Added a dedicated /vacantes save dialog and API submission.",
+    "Separated vacancy visit acknowledgement from saved-search reads.",
+    "Added a real newer-match handler test and preserved the redirect destination.",
+    "Removed the unused VacancyDetail open prop."
+  ],
+  "validation": {
+    "commands": ["npm exec --workspace @puente/web -- vitest run tests/searches-handler.test.ts", "npm run gate:ci"],
+    "result": "pass",
+    "tests": "56 files, 510 tests passed"
+  },
+  "nextConsumer": "review-pr",
+  "remainingBlockers": ["No browser e2e test was added in this pass; local unit and CI coverage pass."]
+}

@@ -15,5 +15,6 @@ export interface SavedSearchView {
   search: SavedSearch;
   matches: ExplorationResult['matches'];
   newSinceSaved: ExplorationResult['matches'];
+  newSinceLastVisit: ExplorationResult['matches'];
   summary: ExplorationResult['summary'];
 }

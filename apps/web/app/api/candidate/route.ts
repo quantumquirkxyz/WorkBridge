@@ -3,9 +3,17 @@ import { candidateIdFromRequest, unauthorized } from '../../../lib/candidate-ses
 import { deleteCandidateData } from '../../../lib/neon-repository';
 import { handleDeleteCandidate } from '../../../lib/exploration-handler';
 import { profileStore } from '../../../lib/profile-store';
+import { getServerSession } from '../../../lib/auth';
+import { makeCandidateId } from '@puente/domain';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+
+export async function GET(): Promise<Response> {
+  const session = await getServerSession();
+  if (!session?.user.id) return unauthorized();
+  return NextResponse.json({ candidateId: makeCandidateId(session.user.id) });
+}
 
 export async function DELETE(request: Request): Promise<Response> {
   const candidateId = candidateIdFromRequest(request);

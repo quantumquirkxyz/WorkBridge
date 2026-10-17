@@ -25,12 +25,53 @@ const money = (min: number | null, max: number | null) => {
 };
 
 export function VacantesView({ result = null, loading = false, decisions = [], decisionsLoading = false }: VacantesViewProps) {
+  const [newMatches, setNewMatches] = useState<VacancyMatch[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [saveOpen, setSaveOpen] = useState(false);
+  const [saveLabel, setSaveLabel] = useState('');
+  const [saveMessage, setSaveMessage] = useState<string | null>(null);
+  const [pendingSave, setPendingSave] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const cardRefs = useRef(new Map<string, HTMLButtonElement>());
   const matches = result?.matches ?? [];
   const orderedMatches = orderMatchesByDecision(matches, decisions, decisionsLoading);
   const selected = orderedMatches.find((match) => match.vacancy.jobId === selectedId) ?? null;
+
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('save') === '1') {
+      const pending = window.sessionStorage.getItem('puente:pending-save');
+      if (pending) { try { const saved = JSON.parse(pending) as { label?: unknown; preferences?: unknown }; if (typeof saved.label === 'string' && saved.preferences) { window.localStorage.setItem('puente:preferences', JSON.stringify(saved.preferences)); setSaveLabel(saved.label); setPendingSave(true); setSaveOpen(true); } } catch { /* discard malformed pending state */ } window.sessionStorage.removeItem('puente:pending-save'); }
+    }
+    fetch('/api/candidate')
+      .then((response) => response.ok ? response.json() : null)
+      .then(async (candidate: { candidateId?: string } | null) => {
+        if (!candidate?.candidateId) return null;
+        const response = await fetch(`/api/searches?candidateId=${encodeURIComponent(candidate.candidateId)}`);
+        return response.ok ? { candidateId: candidate.candidateId, body: await response.json() } : null;
+      })
+      .then(async (result: { candidateId: string; body: { searches?: Array<{ newSinceLastVisit?: VacancyMatch[] }> } } | null) => {
+        setNewMatches(result?.body.searches?.flatMap((view) => view.newSinceLastVisit ?? []) ?? []);
+        if (result) await fetch(`/api/searches?candidateId=${encodeURIComponent(result.candidateId)}`, { method: 'PUT' });
+      })
+      .catch(() => undefined);
+  }, []);
+
+  useEffect(() => {
+    if (pendingSave && saveOpen) void saveSearch();
+  }, [pendingSave, saveOpen]);
+
+  async function saveSearch() {
+    const rawPreferences = window.localStorage.getItem('puente:preferences');
+    if (!rawPreferences) return;
+    const response = await fetch('/api/searches', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ label: saveLabel, preferences: JSON.parse(rawPreferences) }) });
+    if (response.status === 401) {
+      window.sessionStorage.setItem('puente:pending-save', JSON.stringify({ label: saveLabel, preferences: JSON.parse(rawPreferences) }));
+      window.location.href = `/ingresar?next=${encodeURIComponent('/vacantes?save=1')}`;
+      return;
+    }
+    setSaveMessage(response.ok ? 'Búsqueda guardada.' : 'No se pudo guardar la búsqueda.');
+    if (response.ok) { setSaveOpen(false); setPendingSave(false); }
+  }
 
   useEffect(() => {
     const fromUrl = new URLSearchParams(window.location.search).get('v');
@@ -74,6 +115,10 @@ export function VacantesView({ result = null, loading = false, decisions = [], d
       <div><p className="eyebrow">Explora oportunidades</p><h1>Vacantes para ti</h1><p className="lead">Encontramos oportunidades que se ajustan a lo que buscas.</p></div>
       <span className="vacantes-count">{result?.summary.matched ?? 0} compatibles</span>
     </div>
+    <button type="button" onClick={() => setSaveOpen(true)}>Guardar esta búsqueda</button>
+    {saveOpen ? <div role="presentation" className="save-dialog-backdrop"><section role="dialog" aria-modal="true" aria-labelledby="save-search-title" className="save-dialog"><h2 id="save-search-title">Guardar esta búsqueda</h2><label htmlFor="vacantes-save-label">Nombre de la búsqueda</label><input id="vacantes-save-label" value={saveLabel} onChange={(event) => setSaveLabel(event.target.value)} /><button type="button" onClick={saveSearch} disabled={!saveLabel.trim()}>Guardar</button><button type="button" onClick={() => setSaveOpen(false)}>Cancelar</button></section></div> : null}
+    {saveMessage ? <p role="status">{saveMessage}</p> : null}
+    {newMatches.length > 0 ? <section className="new-vacancies" aria-labelledby="new-vacancies-heading"><h2 id="new-vacancies-heading">Nuevas desde tu última visita</h2><div className="vacancy-grid">{newMatches.map((match) => <VacancyCard key={match.vacancy.jobId} match={match} decisionsLoading={false} onOpen={open} />)}</div></section> : null}
     {loading ? <div className="vacancy-grid" aria-label="Cargando vacantes">{[1, 2, 3].map((id) => <Skeleton key={id} className="vacancy-skeleton" />)}</div> : <>
        {matches.length ? <div className="vacancy-grid" aria-label="Vacantes compatibles">{orderedMatches.map((match) => <VacancyCard key={match.vacancy.jobId} match={match} decision={decisions.find((d) => d.vacancyId === match.vacancy.jobId)} decisionsLoading={decisionsLoading} onOpen={open} ref={(node) => { if (node) cardRefs.current.set(match.vacancy.jobId, node); }} />)}</div> : <div className="vacantes-empty" role="status"><h2>Aún no hay vacantes compatibles</h2><p>Completa tus preferencias para descubrir oportunidades hechas para ti.</p></div>}
       {result?.noMatch?.nearMatches.length ? <NearMatches matches={result.noMatch.nearMatches} /> : null}
@@ -88,8 +133,8 @@ const VacancyCard = forwardRef<HTMLButtonElement, { match: VacancyMatch; decisio
   return <button ref={ref} className="vacancy-card" onClick={() => onOpen(match)} aria-label={`Ver detalles de ${vacancy.title}`}>
     <span className="vacancy-card-top"><span className="vacancy-modality">{MODALITY_LABELS[vacancy.modality]}</span><span>{freshness.label}</span></span>
     <strong className="vacancy-title">{vacancy.title}</strong><span className="vacancy-company">{vacancy.company ?? 'Empresa no indicada'}</span>
-     <span className="vacancy-meta">{vacancy.location.raw ?? vacancy.location.district ?? 'Ubicación no indicada'} · {money(vacancy.salary.minUsd, vacancy.salary.maxUsd)}</span>
-     {decisionsLoading ? <span className="readiness-skeleton" aria-label="Cargando preparación" /> : decision ? <Readiness decision={decision} /> : null}
+    <span className="vacancy-meta">{vacancy.location?.raw ?? vacancy.location?.district ?? 'Ubicación no indicada'} · {money(vacancy.salary?.minUsd ?? null, vacancy.salary?.maxUsd ?? null)}</span>
+      {decisionsLoading ? <span className="readiness-skeleton" aria-label="Cargando preparación" /> : decision ? <Readiness decision={decision} /> : null}
     <span className="vacancy-card-action">Ver detalles <span aria-hidden="true">→</span></span>
   </button>;
 });
