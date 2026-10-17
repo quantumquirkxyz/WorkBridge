@@ -17,7 +17,7 @@
     ],
     "notes": "Focused execution-plane tests pass (42 tests). Typecheck passes. gate:ci passes with 635 tests, 8 skipped, and 92.6% line coverage."
   },
-  "commitSha": "3ce073c",
+  "commitSha": "b4fd78987536adc4b30263ad25ebe07ceda0a9ec",
   "branch": "feat/issue-56-refine-execution-plane",
   "nextConsumer": "publish-open-pr",
   "blockedBy": [],
