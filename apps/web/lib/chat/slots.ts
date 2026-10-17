@@ -89,13 +89,24 @@ export const SLOTS: readonly SlotDefinition[] = [
     id: 'target_roles',
     phase: 'profile',
     question: '¿En qué te gustaría trabajar?',
-    chips: labels('Atención al cliente', 'Soporte técnico', 'Administrativo', 'Ventas', 'Otro'),
+    chips: [
+      answer('Atención al cliente', 'Atención al cliente'),
+      answer('Soporte técnico', 'Soporte técnico'),
+      answer('Administrativo', 'Administrativo'),
+      answer('Ventas', 'Ventas'),
+      answer('Otro', 'Otro'),
+    ],
   },
   {
     id: 'zone',
     phase: 'preferences',
     question: '¿En qué zona te queda bien trabajar?',
-    chips: labels('Panamá (ciudad)', 'San Miguelito', 'Panamá Oeste', 'Otra'),
+    chips: [
+      answer('Panamá (ciudad)', 'Panamá (ciudad)'),
+      answer('San Miguelito', 'San Miguelito'),
+      answer('Panamá Oeste', 'Panamá Oeste'),
+      answer('Otra', 'Otra'),
+    ],
   },
   {
     id: 'modality',

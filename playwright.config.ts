@@ -74,6 +74,14 @@ const projects: ProjectWithWebServer[] = [
     use: { ...devices["Desktop Chrome"], baseURL: `http://127.0.0.1:${webPort}`, ...webCapture },
     webServer: [webWebServer],
   },
+  {
+    name: "web",
+    testDir: "./apps/web/e2e",
+    testMatch: "intake-explore.spec.ts",
+    timeout: 60_000,
+    use: { ...devices["Desktop Chrome"], baseURL: `http://127.0.0.1:${webPort}`, ...webCapture },
+    webServer: [webWebServer],
+  },
 ];
 
 export default defineConfig({
