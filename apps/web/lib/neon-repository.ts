@@ -5,6 +5,7 @@ import { preferencesStore } from './preferences-store';
 import { profileStore } from './profile-store';
 import { vacancyVisitsStore } from './vacancy-visits-store';
 import { ChatSessionConflictError, chatSessionStore, type ChatSession } from './chat-store';
+import { getChatJobStore } from './chat-jobs';
 
 export function persistenceMode(env: NodeJS.ProcessEnv = process.env): 'neon' | 'memory' {
   return env.WORKBRIDGE_PERSISTENCE === 'memory' ? 'memory' : 'neon';
@@ -62,8 +63,10 @@ export async function deleteCandidateData(candidateId: string): Promise<void> {
     preferencesStore.delete(candidateId);
     savedSearchesStore.deleteByCandidate(candidateId);
     chatSessionStore.delete(candidateId);
+    await getChatJobStore().deleteByCandidate(candidateId);
     return;
   }
+  await database()`delete from chat_jobs where candidate_id = ${candidateId}`;
   await database()`delete from candidate_chat_sessions where candidate_id = ${candidateId}`;
   await database()`delete from candidate_saved_searches where candidate_id = ${candidateId}`;
   await database()`delete from candidate_profiles where candidate_id = ${candidateId}`;

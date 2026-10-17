@@ -1,0 +1,24 @@
+{
+  "status": "blocked",
+  "prNumber": 89,
+  "branch": "feat/issue-32-puente-laboral-web-experience",
+  "fixedPoint": "main",
+  "reviewPass": 5,
+  "lastPlanPosted": true,
+  "lastImplementationCompleted": true,
+  "validation": {
+    "commands": [
+      "node JSON artifact validation",
+      "git diff --check",
+      "npm run test:e2e:web"
+    ],
+    "results": "Artifact validation and diff check passed. Playwright validation remains blocked before browser launch because libnspr4.so is missing from the runner."
+  },
+  "findings": {
+    "standards": 0,
+    "spec": 1,
+    "remaining": "AC-54 remains unverified."
+  },
+  "blocker": "The local runner cannot launch Chromium because the required libnspr4.so shared library is unavailable. The blocker is environmental and cannot be repaired within this PR without broadening scope.",
+  "nextConsumer": "environment-repair"
+}

@@ -54,6 +54,14 @@
       "type": "object"
     },
     "matchResult": { "type": "object" },
+    "biasAlerts": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "auditedVacancies": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
     "roadmapResult": { "type": "object" }
   },
   "$defs": {
@@ -94,7 +102,7 @@
       "required": ["agent", "summary"],
       "properties": {
         "agent": {
-          "enum": ["exploration", "profile_and_evidence", "market_and_matching", "training"]
+          "enum": ["exploration", "profile_and_evidence", "market_and_matching", "bias_auditor", "training"]
         },
         "summary": { "type": "string" }
       }

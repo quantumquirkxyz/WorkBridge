@@ -1,4 +1,5 @@
-import { AjvValidationError, ajv, type ActorRole, type AgentId, type CandidatePreferences, type DeclaredCredentialClaim } from "@workbridge/domain";
+import { AjvValidationError, ajv, type ActorRole, type AgentId, type CandidatePreferences, type DeclaredCredentialClaim, type JobRequirements } from "@workbridge/domain";
+import type { BiasAlert } from "../bias/audit";
 import type { GuardrailDecision } from "./guardrails";
 import type { CandidateNominationResult } from "../matching";
 import type { Roadmap } from "@workbridge/training";
@@ -17,6 +18,10 @@ export interface Carrier {
   matchingInput?: unknown;
   /** Structured deterministic match result, populated by market_and_matching. */
   matchResult?: CandidateNominationResult;
+  /** Counterfactual flips recorded by bias_auditor. */
+  biasAlerts?: BiasAlert[];
+  /** Vacancy documents after the bias audit, including any newly blocked vacancy. */
+  auditedVacancies?: JobRequirements[];
   /** Structured training roadmap, populated by training. */
   roadmapResult?: Roadmap;
   halted: boolean;

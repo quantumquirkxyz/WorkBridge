@@ -39,11 +39,19 @@ export interface VacancyMatchInput {
   context: VacancyMatchContext;
 }
 
+export interface BiasSubjectInput {
+  holderName: string;
+  genderMarker: string;
+  corregimiento: string;
+}
+
 export interface CandidateNominationInput {
   profile: CandidateProfile;
   context: CandidateMatchContext;
   vacancies: readonly VacancyMatchInput[];
   approvals?: readonly HumanApprovalDecision[];
+  /** Protected attributes the bias auditor counterfactually substitutes. */
+  biasSubject?: BiasSubjectInput;
   now?: () => Date;
 }
 

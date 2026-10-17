@@ -1,0 +1,28 @@
+{
+  "status": "completed",
+  "changes": [
+    "Added docs/reference/agents/architecture.md with a Mermaid diagram of the four shipped agents, tools, data plane, execution plane, traces, audit log, and human approval points.",
+    "Linked the architecture diagram from README.md."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "git diff --check",
+      "test -f docs/reference/agents/architecture.md",
+      "grep -F 'docs/reference/agents/architecture.md' README.md"
+    ],
+    "skipped": [
+      "node .agents/skills/platform/check-all.mjs — repository is missing policy/tool-risk-budget.json"
+    ],
+    "notes": "The shipped agent set is exploration, profile_and_evidence, market_and_matching, and training. Issues #94 and #98 remain open and are explicitly identified as not shipped."
+  },
+  "commitSha": "edf4a1f939dda1bc7ee381488b12b93973a74065",
+  "branch": "feat/issue-101-publish-agent-architecture-diagram",
+  "nextConsumer": "publish-open-pr",
+  "riskRemaining": "Global quality check could not run because policy/tool-risk-budget.json is absent from the repository.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "fail"
+  }
+}

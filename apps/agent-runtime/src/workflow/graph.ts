@@ -3,10 +3,12 @@ import {
   assertWorkflowRun,
   type AgentEnvelope,
   type AgentId,
+  type JobRequirements,
   type WorkflowRunRequest,
 } from "@workbridge/domain";
 import { runAgent, type WorkflowServices, type WorkflowStreamEvent } from "./agents";
 import { assertCarrier, carrierSchema, type Carrier } from "./carrier";
+import type { BiasAlert } from "../bias/audit";
 import type { GuardrailDecision } from "./guardrails";
 import {
   createMatchingService,
@@ -37,6 +39,7 @@ const AGENT_ORDER = [
   "exploration",
   "profile_and_evidence",
   "market_and_matching",
+  "bias_auditor",
   "training",
 ] as const satisfies readonly AgentId[];
 
@@ -52,6 +55,10 @@ export interface WorkflowResult {
   mastraSteps: string[];
   /** Structured deterministic match result, populated when matching ran. */
   match?: CandidateNominationResult;
+  /** Counterfactual flips recorded by the bias auditor. Empty when nothing flipped. */
+  biasAlerts: BiasAlert[];
+  /** Vacancy documents after the bias audit. */
+  auditedVacancies: JobRequirements[];
   /** Structured training roadmap, populated when the candidate is not already apt. */
   roadmap?: Roadmap;
 }
@@ -138,13 +145,13 @@ export class WorkflowRuntime {
         },
       }),
     );
-    const [exploration, profile, market, training] = steps;
-    if (!exploration || !profile || !market || !training) {
+    const [exploration, profile, market, biasAuditor, training] = steps;
+    if (!exploration || !profile || !market || !biasAuditor || !training) {
       throw new Error("Mastra workflow is missing an agent step");
     }
     return createWorkflow({
       id: WORKFLOW_ID,
-      description: "Coordinates Exploration, Profile and Evidence, Market and Matching, and Training.",
+      description: "Coordinates Exploration, Profile and Evidence, Market and Matching, the counterfactual bias auditor, and Training.",
       inputSchema: carrierSchema,
       outputSchema: carrierSchema,
       options: { shouldPersistSnapshot: () => false },
@@ -152,6 +159,7 @@ export class WorkflowRuntime {
       .then(exploration)
       .then(profile)
       .then(market)
+      .then(biasAuditor)
       .then(training)
       .commit();
   }
@@ -219,6 +227,8 @@ export class WorkflowRuntime {
         envelopes: [...services.envelopes],
         mastraSteps: AGENT_ORDER.filter((agent) => agent in started.steps),
         ...(carrier.matchResult ? { match: carrier.matchResult } : {}),
+        biasAlerts: carrier.biasAlerts ?? [],
+        auditedVacancies: carrier.auditedVacancies ?? [],
         ...(carrier.roadmapResult ? { roadmap: carrier.roadmapResult } : {}),
       };
       this.lastIngestion = this.traces.flush();

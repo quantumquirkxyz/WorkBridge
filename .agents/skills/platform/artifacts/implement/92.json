@@ -1,0 +1,19 @@
+{
+  "status": "partial",
+  "changes": [
+    "Added a bounded global queue admission limit of 1000 active jobs.",
+    "Added queue metrics, redacted candidate hashing, and alert rule definitions.",
+    "Added worker attempt, duration, and session-conflict observations with request/job/trace identifiers."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": false,
+    "commands": ["npm test -- --run apps/web/tests/chat-jobs.test.ts apps/web/tests/chat-worker.test.ts apps/web/tests/chat-turns-route.test.ts", "npm run typecheck", "npm run lint"],
+    "skipped": ["Full npm test and gate-ci were not run because lint has pre-existing failures outside this change.", "Alert export wiring and dedicated metrics tests remain."],
+    "notes": "The durable queue and retry behavior came from issue #91. This issue's observability seam is implemented, but the branch is not complete until metrics are wired to an operator endpoint/exporter and alert tests are added."
+  },
+  "branch": "feat/issue-92-chat-queue-reliability",
+  "nextConsumer": "review-pr",
+  "blockedBy": [],
+  "riskRemaining": "Existing lint failures remain in unrelated files; SQL queue depth metrics need periodic refresh after completion/reclaim transitions.",
+  "qualityGateResults": { "gateIde": "pass", "gatePreCommit": "skipped", "gateCi": "fail" }
+}

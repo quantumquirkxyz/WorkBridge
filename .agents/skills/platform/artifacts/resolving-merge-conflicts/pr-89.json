@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "2.0",
+  "artifactType": "ResolvingMergeConflictsArtifact",
+  "id": "resolve-conflict-pr-89",
+  "skill": "resolving-merge-conflicts",
+  "skillVersion": "1",
+  "createdAt": "2026-10-17T06:22:00Z",
+  "input": {
+    "pullRequest": "https://github.com/HackathonFISC/equipo-02/pull/89",
+    "branch": "feat/issue-32-puente-laboral-web-experience",
+    "base": "main",
+    "conflictSource": "merge",
+    "conflictingFiles": ["apps/agent-runtime/src/workflow/agents.ts"]
+  },
+  "output": {
+    "status": "resolved",
+    "resolution": "Merged origin/main and resolved the package namespace conflict using @workbridge imports; removed unused conflicting imports.",
+    "filesResolved": ["apps/agent-runtime/src/workflow/agents.ts"],
+    "filesRemaining": [],
+    "mergeCompleted": true,
+    "nextConsumer": "PR #89"
+  },
+  "validation": {
+    "conflictMarkers": "passed",
+    "runtimeTests": "blocked: workspace package links are unavailable and Vitest also discovers Playwright tests",
+    "runtimeTypecheck": "blocked: existing tsconfig rootDir excludes tests/",
+    "diffCheck": "blocked by generated .next whitespace"
+  },
+  "riskRemaining": "Repository-wide validation requires the workspace dependency links and existing test configuration to be repaired separately."
+}
