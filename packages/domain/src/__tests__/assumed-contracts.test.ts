@@ -92,7 +92,7 @@ describe("assumed #8 and #9 signatures", () => {
         traceId: "trace-1",
         idempotencyKey: "idem-1",
         agent: "market_and_matching",
-        schemaId: "https://puentelaboral.pa/schemas/match-decision.schema.json",
+        schemaId: "https://puentelaboral.pa/schemas/assumed-match-decision.schema.json",
         guardrails: [{ stage: "output", allowed: true, code: "ok" }],
         dqlState: "validated",
       }),

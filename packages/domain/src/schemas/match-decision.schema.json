@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://puentelaboral.pa/schemas/match-decision.schema.json",
-  "title": "MatchDecision",
-  "description": "Assumed signature of issue #8. This repository does not implement the HiGHS solver; consumers must accept only documents that satisfy this contract.",
+  "$id": "https://puentelaboral.pa/schemas/assumed-match-decision.schema.json",
+  "title": "AssumedMatchDecision",
+  "description": "Consumer contract issue #12 validates. Issue #8 shipped a different MatchDecision at https://puentelaboral.pa/schemas/match-decision.schema.json; this document keeps a separate id so both can load on the one Ajv instance.",
   "type": "object",
   "additionalProperties": false,
   "required": [

@@ -31,17 +31,27 @@ Ajv, HiGHS, Google Maps, Apify LinkedIn Jobs scraper, Langfuse, Vitest, and Play
 
 ## Instalación y ejecución
 
+Requiere Node.js ≥ 22. El proyecto es un monorepo de npm workspaces (`packages/*`, `apps/*`).
+
 ```bash
 npm ci
 npm test
+npm run typecheck
+npm run gate:ci
 npm run test:e2e
 npm start
+npm run dev
 ```
 
-Role-gated drafts and submissions are documented in `docs/how-to/application-runtime.md`.
-Assumed signatures for matching (#8) and the workflow plane (#9) are in
-`docs/reference/assumed-contracts.md`. Copy `.env.example` to `.env` for local
-runs; never commit real credentials.
+`npm run dev` abre el intake en http://localhost:3000. `npm start` levanta el servicio de
+postulación. Los borradores y envíos con roles están en `docs/how-to/application-runtime.md`.
+Las firmas asumidas de matching (#8) y del plano de workflow (#9) están en
+`docs/reference/assumed-contracts.md`.
+
+Copia `apps/web/.env.example` a `apps/web/.env.local` para configurar OpenRouter. Sin
+`OPENROUTER_API_KEY` el intake usa el extractor heurístico determinista y aun así produce un
+`CandidateProfile` válido. Copia `.env.example` a `.env` para la postulación local. No
+commits de credenciales reales.
 
 ## Evals
 

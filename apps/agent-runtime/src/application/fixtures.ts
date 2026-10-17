@@ -6,7 +6,7 @@ export function sampleWorkflowEnvelope(traceId: string, idempotencyKey: string):
     traceId,
     idempotencyKey,
     agent: "market_and_matching",
-    schemaId: "https://puentelaboral.pa/schemas/match-decision.schema.json",
+    schemaId: "https://puentelaboral.pa/schemas/assumed-match-decision.schema.json",
     guardrails: [{ stage: "output", allowed: true, code: "ok" }],
     dqlState: "validated",
   };

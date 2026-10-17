@@ -3,12 +3,19 @@
 Issue #12 consumes these contracts. It does not implement the HiGHS solver,
 the Google Maps routing call, the Mastra workflow, or the model guardrail
 runner. The JSON Schemas under `packages/domain/src/schemas/` are the source
-of truth; the TypeScript below is the signature application code imports.
+of truth for this consumer; the TypeScript below is the signature application
+code imports.
 
-## Issue #8 — `MatchDecision`
+Issue #8 has since shipped its own `MatchDecision` in `packages/solver` at
+`https://puentelaboral.pa/schemas/match-decision.schema.json`. That document
+uses a different shape (`score` is an integer, `routing` replaces `transport`).
+The #12 consumer schema keeps a separate id so both can load on the one Ajv
+instance.
+
+## Issue #8 — assumed `MatchDecision` consumed by #12
 
 Schema: `packages/domain/src/schemas/match-decision.schema.json`  
-`$id`: `https://puentelaboral.pa/schemas/match-decision.schema.json`
+`$id`: `https://puentelaboral.pa/schemas/assumed-match-decision.schema.json`
 
 ```ts
 export const MATCH_WEIGHTS = {
