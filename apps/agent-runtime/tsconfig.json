@@ -1,13 +1,7 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "strict": true,
-    "skipLibCheck": true,
-    "noEmit": true,
-    "rootDir": ".",
-    "types": ["node"]
+    "rootDir": "src"
   },
-  "include": ["src/verification", "test", "vitest.config.ts"]
+  "include": ["src/**/*.ts", "tests/**/*.ts"]
 }

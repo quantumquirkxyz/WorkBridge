@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://puente-laboral.pa/schemas/candidate-profile/1.0.0",
+  "title": "CandidateProfile",
+  "description": "The validated candidate profile document persisted by the intake pipeline. Preferences are a separate concern owned by ticket #7 and are intentionally not part of version 1.0.0.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "candidate_id",
+    "locale",
+    "created_at",
+    "updated_at",
+    "sources",
+    "skills",
+    "experiences",
+    "education",
+    "certifications",
+    "evidence",
+    "trace_id"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "candidate_id": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" },
+    "locale": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/language_tag" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "target_roles": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "sources": {
+      "type": "array",
+      "items": { "$ref": "https://puente-laboral.pa/schemas/intake-source/1.0.0" },
+      "minItems": 1
+    },
+    "skills": {
+      "type": "array",
+      "items": { "$ref": "https://puente-laboral.pa/schemas/skill/1.0.0" }
+    },
+    "experiences": {
+      "type": "array",
+      "items": { "$ref": "https://puente-laboral.pa/schemas/experience/1.0.0" }
+    },
+    "education": {
+      "type": "array",
+      "items": { "$ref": "https://puente-laboral.pa/schemas/education/1.0.0" }
+    },
+    "certifications": {
+      "type": "array",
+      "items": { "$ref": "https://puente-laboral.pa/schemas/certification/1.0.0" }
+    },
+    "evidence": {
+      "type": "array",
+      "items": { "$ref": "https://puente-laboral.pa/schemas/evidence/1.0.0" }
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "trace_id": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" }
+  }
+}
