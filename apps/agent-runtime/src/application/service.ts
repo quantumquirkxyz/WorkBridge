@@ -55,7 +55,18 @@ export interface SubmitView {
   replayed: boolean;
   interview: "pending_employer_approval" | "approved" | "rejected";
   employerOrgId?: string;
+  traceId?: string;
+  vacancyTitle?: string;
+  documents?: ApplicationDocuments;
+  evidence?: EvidenceItem[];
   history?: HistoryEntry[];
+}
+
+export interface SubmissionSummary {
+  submissionId: string;
+  vacancyTitle: string;
+  interview: SubmitView["interview"];
+  traceId: string;
 }
 
 export interface HistoryEntry {
@@ -234,13 +245,7 @@ export class ApplicationService {
     draft.status = "submitted";
     this.submissions.set(submission.id, submission);
     this.audit(actor, "submission", action);
-    const view: SubmitView = {
-      submissionId: submission.id,
-      draftId: draft.id,
-      replayed: false,
-      interview: submission.interview,
-    };
-    this.guard(view);
+    const view = this.submitView(submission, false);
     await this.idempotency.put({ key: action.idempotencyKey, fingerprint, response: view });
     return view;
   }
@@ -331,7 +336,7 @@ export class ApplicationService {
     return this.draftView(draft);
   }
 
-  listSubmissions(session: unknown, interview: string): SubmitView[] {
+  listSubmissions(session: unknown, interview: string): SubmissionSummary[] {
     const actor = this.actor(session);
     this.requireRole(actor, "employer", "Only an employer can list submissions.");
     if (interview !== "pending_employer_approval") {
@@ -340,10 +345,17 @@ export class ApplicationService {
     return [...this.submissions.values()]
       .filter((submission) => {
         const draft = this.draftById(submission.draftId);
-        return submission.interview === interview &&
-          (draft.input.employerOrgId === undefined || draft.input.employerOrgId === actor.employerOrgId);
+        return submission.interview === interview && this.employerOwns(actor, draft);
       })
-      .map((submission) => this.submitView(submission, false));
+      .map((submission) => {
+        const draft = this.draftById(submission.draftId);
+        return {
+          submissionId: submission.id,
+          vacancyTitle: draft.input.vacancyTitle,
+          interview: submission.interview,
+          traceId: draft.input.traceId,
+        };
+      });
   }
 
   readSubmission(session: unknown, submissionId: string): SubmitView {
@@ -523,8 +535,13 @@ export class ApplicationService {
     return this.counselorGate(draft).length > 0;
   }
 
+  /** Fail closed: a draft without an organization is never visible to an employer. */
+  private employerOwns(actor: Actor, draft: StoredDraft): boolean {
+    return draft.input.employerOrgId !== undefined && draft.input.employerOrgId === actor.employerOrgId;
+  }
+
   private requireEmployerOrganization(actor: Actor, draft: StoredDraft): void {
-    if (draft.input.employerOrgId !== undefined && draft.input.employerOrgId !== actor.employerOrgId) {
+    if (!this.employerOwns(actor, draft)) {
       throw new ApplicationError("This submission belongs to another employer organization.", 403, "forbidden");
     }
   }
@@ -561,12 +578,18 @@ export class ApplicationService {
   }
 
   private submitView(submission: StoredSubmission, replayed: boolean): SubmitView {
+    const draft = this.draftById(submission.draftId);
+    const approved = this.draftView(draft);
     const view: SubmitView = {
       submissionId: submission.id,
       draftId: submission.draftId,
       replayed,
       interview: submission.interview,
-      employerOrgId: this.draftById(submission.draftId).input.employerOrgId,
+      employerOrgId: draft.input.employerOrgId,
+      traceId: draft.input.traceId,
+      vacancyTitle: draft.input.vacancyTitle,
+      documents: approved.documents,
+      evidence: approved.evidence,
       history: submission.history.map(({ actorRole, timestamp, reason, action }) => ({ actorRole, timestamp, reason, action })),
     };
     this.guard(view);

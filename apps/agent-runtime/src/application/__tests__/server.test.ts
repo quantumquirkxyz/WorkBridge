@@ -16,7 +16,7 @@ function session(role: "candidate" | "employer" | "counselor", id = role) {
   return signBetterAuthSession(
     {
       session: { id: `sess-${id}`, userId: id, expiresAt: "2027-01-01T00:00:00.000Z" },
-      user: { id, email: `${id}@puente.pa`, role },
+      user: { id, email: `${id}@puente.pa`, role, ...(role === "employer" ? { employerOrgId: "org-1" } : {}) },
     },
     SESSION_SECRET,
   );
@@ -40,6 +40,7 @@ function payload(extra: Record<string, unknown> = {}) {
     ],
     match: sampleMatchDecision({ traceId: "trace-http", decisionId: "dec-http" }),
     envelope: sampleWorkflowEnvelope("trace-http", "idem-http"),
+    employerOrgId: "org-1",
     ...extra,
   };
 }
@@ -233,6 +234,140 @@ describe("application HTTP surface", () => {
         "candidate:submission",
         "employer:approval",
       ]);
+    });
+  });
+
+  it("exposes the employer submission view with trace, documents, title and approved evidence only", async () => {
+    const orgSession = (org: string) =>
+      signBetterAuthSession(
+        {
+          session: { id: `sess-${org}`, userId: `emp-${org}`, expiresAt: "2027-01-01T00:00:00.000Z" },
+          user: { id: `emp-${org}`, email: `${org}@puente.pa`, role: "employer", employerOrgId: org },
+        },
+        SESSION_SECRET,
+      );
+    const post = (base: string, path: string, body: unknown) =>
+      fetch(`${base}${path}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+    const action = (key: string, extra: Record<string, unknown> = {}) => ({
+      session: session("candidate"),
+      traceId: "trace-http",
+      idempotencyKey: key,
+      envelope: sampleWorkflowEnvelope("trace-http", key),
+      reason: "ok",
+      ...extra,
+    });
+    await withServer({}, async (base) => {
+      const evidence = [
+        { id: "ev-1", kind: "experience", text: "Atendí la caja del kiosco familiar.", credentialStatus: "not_applicable" },
+        { id: "ev-2", kind: "skill", text: "Dato descartado por la candidata.", credentialStatus: "not_applicable" },
+      ];
+      const created = await post(
+        base,
+        "/drafts",
+        payload({ evidence, employerOrgId: "org-a", age: 30, gender: "f", address: "Calle 1", photo: "p.png" }),
+      );
+      const draft = (await created.json()) as { draftId: string };
+      await post(base, `/drafts/${draft.draftId}/corrections`, action("idem-c", { includeEvidenceIds: ["ev-1"] }));
+      await post(base, `/drafts/${draft.draftId}/approvals`, action("idem-a"));
+      const submitted = await post(base, `/drafts/${draft.draftId}/submissions`, action("idem-s"));
+      const sbody = (await submitted.json()) as { submissionId: string };
+      const { submissionId } = sbody;
+
+      const read = await fetch(`${base}/submissions/${submissionId}`, {
+        headers: { "x-better-auth-session": JSON.stringify(orgSession("org-a")) },
+      });
+      expect(read.status).toBe(200);
+      const text = await read.text();
+      const view = JSON.parse(text) as Record<string, any>;
+      expect(view.traceId).toBe("trace-http");
+      expect(view.vacancyTitle).toBe("Cajero");
+      expect(view.documents.cv[0].text).toBe("Atendí la caja del kiosco familiar.");
+      expect(view.evidence.map((item: { id: string }) => item.id)).toEqual(["ev-1"]);
+      expect(text).not.toContain("descartado");
+      for (const key of ["age", "gender", "address", "photo", "Calle 1"]) expect(text).not.toContain(key);
+
+      const list = await fetch(`${base}/submissions?interview=pending_employer_approval`, {
+        headers: { "x-better-auth-session": JSON.stringify(orgSession("org-a")) },
+      });
+      const listed = (await list.json()) as { submissions: Array<{ vacancyTitle: string; traceId: string }> };
+      expect(listed.submissions[0]).toMatchObject({ vacancyTitle: "Cajero", traceId: "trace-http" });
+
+      const other = await fetch(`${base}/submissions/${submissionId}`, {
+        headers: { "x-better-auth-session": JSON.stringify(orgSession("org-b")) },
+      });
+      expect(other.status).toBe(403);
+
+      const decide = (key: string, decision: string) =>
+        post(base, `/submissions/${submissionId}/interview`, action(key, { session: orgSession("org-a"), decision }));
+      expect((await post(base, `/submissions/${submissionId}/approvals`, action("idem-e", { session: orgSession("org-a") }))).status).toBe(200);
+      const decided = await decide("idem-d", "approved");
+      expect(decided.status).toBe(200);
+      expect(((await decided.json()) as { interview: string }).interview).toBe("approved");
+    });
+  });
+
+  it("scopes employer submissions by organization, fails closed without one, and records declines", async () => {
+    const orgSession = (org: string) =>
+      signBetterAuthSession(
+        {
+          session: { id: `sess-${org}`, userId: `emp-${org}`, expiresAt: "2027-01-01T00:00:00.000Z" },
+          user: { id: `emp-${org}`, email: `${org}@puente.pa`, role: "employer", employerOrgId: org },
+        },
+        SESSION_SECRET,
+      );
+    const post = (base: string, path: string, body: unknown) =>
+      fetch(`${base}${path}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+    const get = (base: string, path: string, who: unknown) =>
+      fetch(`${base}${path}`, { headers: { "x-better-auth-session": JSON.stringify(who) } });
+    const action = (key: string, extra: Record<string, unknown> = {}) => ({
+      session: session("candidate"),
+      traceId: "trace-http",
+      idempotencyKey: key,
+      envelope: sampleWorkflowEnvelope("trace-http", key),
+      reason: "ok",
+      ...extra,
+    });
+    await withServer({}, async (base) => {
+      const submit = async (tag: string, extra: Record<string, unknown>) => {
+        const created = await post(base, "/drafts", payload({ idempotencyKey: `idem-${tag}`, envelope: sampleWorkflowEnvelope("trace-http", `idem-${tag}`), ...extra }));
+        const { draftId } = (await created.json()) as { draftId: string };
+        await post(base, `/drafts/${draftId}/approvals`, action(`a-${tag}`));
+        const submitted = await post(base, `/drafts/${draftId}/submissions`, action(`s-${tag}`));
+        return ((await submitted.json()) as { submissionId: string }).submissionId;
+      };
+      const subA = await submit("a", { employerOrgId: "org-a" });
+      const subNone = await submit("n", { employerOrgId: undefined });
+
+      const listOf = async (who: unknown) =>
+        ((await (await get(base, "/submissions?interview=pending_employer_approval", who)).json()) as {
+          submissions: Array<Record<string, unknown>>;
+        }).submissions;
+      const orgA = await listOf(orgSession("org-a"));
+      expect(orgA.map((item) => item.submissionId)).toEqual([subA]);
+      expect(Object.keys(orgA[0]).sort()).toEqual(["interview", "submissionId", "traceId", "vacancyTitle"]);
+      expect(await listOf(orgSession("org-b"))).toEqual([]);
+
+      expect((await post(base, `/submissions/${subA}/interview`, action("x1", { session: orgSession("org-b"), decision: "rejected" }))).status).toBe(403);
+      expect((await post(base, `/submissions/${subA}/approvals`, action("x2", { session: orgSession("org-b") }))).status).toBe(403);
+
+      expect((await get(base, `/submissions/${subNone}`, orgSession("org-a"))).status).toBe(403);
+      expect((await post(base, `/submissions/${subNone}/interview`, action("x3", { session: orgSession("org-a"), decision: "rejected" }))).status).toBe(403);
+      expect((await post(base, `/submissions/${subNone}/approvals`, action("x4", { session: orgSession("org-a") }))).status).toBe(403);
+
+      const empty = await post(base, `/submissions/${subA}/interview`, action("x5", { session: orgSession("org-a"), decision: "rejected", reason: "  " }));
+      expect(empty.status).toBeGreaterThanOrEqual(400);
+      expect(empty.status).toBeLessThan(500);
+
+      const declined = await post(base, `/submissions/${subA}/interview`, action("x6", { session: orgSession("org-a"), decision: "rejected", reason: "Falta experiencia" }));
+      expect(declined.status).toBe(200);
+      const view = (await declined.json()) as { interview: string; history: Array<Record<string, string>> };
+      expect(view.interview).toBe("rejected");
+      expect(view.history.at(-1)).toMatchObject({
+        action: "rejection",
+        actorRole: "employer",
+        reason: "Falta experiencia",
+        timestamp: "2026-10-16T18:00:00.000Z",
+      });
     });
   });
 

@@ -10,7 +10,6 @@ import {
 import type { MatchDecision as ApplicationMatchDecision } from "@puente/domain";
 import type {
   CandidateAvailability,
-  MatchDecision,
   CandidateSkillSignal,
   CandidateTransport,
   EvidenceSource,

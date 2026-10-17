@@ -14,7 +14,7 @@ function session(role: "candidate" | "employer" | "counselor", id: string = role
   return signBetterAuthSession(
     {
       session: { id: `sess-${id}`, userId: id, expiresAt: "2027-01-01T00:00:00.000Z" },
-      user: { id, email: `${id}@puente.pa`, role },
+      user: { id, email: `${id}@puente.pa`, role, ...(role === "employer" ? { employerOrgId: "org-1" } : {}) },
     },
     SESSION_SECRET,
   );
@@ -63,6 +63,7 @@ function draftInput(overrides: Record<string, unknown> = {}) {
     vacancyTitle: "Auxiliar administrativo",
     evidence: evidence(),
     match: match(),
+    employerOrgId: "org-1",
     ...overrides,
     envelope: overrides.envelope ?? sampleWorkflowEnvelope(traceId, idempotencyKey),
   };
