@@ -173,12 +173,13 @@ Enlace al video: _pendiente_.
 
 ## Congelamiento
 
-**Estado: el tag `final-24h` todavía no existe.** Se creará sobre el último commit válido de
-la entrega, después de los bloqueantes del issue #104, y su hash se anotará aquí. Mientras no
-esté creado, los comandos siguientes no devuelven nada. Para comprobarlo una vez creado:
+**Estado: el tag `final-24h` está creado y publicado.** Es un tag anotado sobre el último
+commit válido de la entrega: el commit que incluye esta sección. Lo que se commitee después
+del tag no cuenta para la evaluación. Para comprobarlo:
 
 ```bash
 git tag -l final-24h
+git rev-parse final-24h^{commit}    # hash del commit congelado
 git show --stat final-24h
 ```
 

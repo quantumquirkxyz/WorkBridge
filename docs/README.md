@@ -17,7 +17,7 @@ frontend, galería de previews y la primera versión de la entrega) se conserva 
 | Bitácora de IA | [`bitacora-ia.md`](bitacora-ia.md) | Qué se hizo con IA, con qué herramienta y qué se modificó a mano |
 | Documento de metodología | [`metodologia.md`](metodologia.md) | Despliegue, funcionamiento y arquitectura |
 | Video demo (≤ 3 min) | [`runbook-demo.md`](runbook-demo.md) | Guion minuto a minuto y checklist del congelamiento |
-| Tag de congelamiento | `final-24h` | Pendiente: aún no creado; marcará el último commit válido (ver README) |
+| Tag de congelamiento | `final-24h` | Creado y publicado; marca el último commit válido (ver README) |
 
 ## Lectura recomendada (10 minutos)
 

@@ -34,8 +34,13 @@ test('offers retry after a retryable async failure', async ({ page }) => {
   });
   await page.route('**/api/v1/chat/turns', async (route) => {
     attempts += 1;
-    requestIds.push(route.request().headers()['x-request-id']);
-    idempotencyKeys.push(route.request().headers()['idempotency-key']);
+    const requestId = route.request().headers()['x-request-id'];
+    const idempotencyKey = route.request().headers()['idempotency-key'];
+    if (!requestId || !idempotencyKey) {
+      throw new Error('Expected x-request-id and idempotency-key headers.');
+    }
+    requestIds.push(requestId);
+    idempotencyKeys.push(idempotencyKey);
     if (attempts === 1) {
       await route.fulfill({ status: 503, json: { error: { retryable: true, message: 'temporary failure' } } });
       return;
