@@ -1,5 +1,5 @@
-import { neon } from '@neondatabase/serverless';
 import type { CandidatePreferences, CandidateProfile } from '@puente/domain';
+import { neon } from '@neondatabase/serverless';
 
 function database() {
   const url = process.env.DATABASE_URL;
@@ -21,6 +21,16 @@ export async function persistCandidatePreferences(preferences: CandidatePreferen
     values (${preferences.candidate_id}, ${JSON.stringify(preferences)}::jsonb)
     on conflict (candidate_id) do update set preferences = excluded.preferences, updated_at = now()
   `;
+}
+
+export async function readCandidatePreferences(candidateId: string): Promise<CandidatePreferences | undefined> {
+  const rows = await database()`select preferences from candidate_preferences where candidate_id = ${candidateId}`;
+  return (rows[0] as { preferences?: CandidatePreferences } | undefined)?.preferences;
+}
+
+export async function readCandidateProfile(candidateId: string): Promise<CandidateProfile | undefined> {
+  const rows = await database()`select profile from candidate_profiles where candidate_id = ${candidateId}`;
+  return (rows[0] as { profile?: CandidateProfile } | undefined)?.profile;
 }
 
 export async function deleteCandidateData(candidateId: string): Promise<void> {
