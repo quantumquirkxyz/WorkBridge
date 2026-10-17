@@ -2,7 +2,7 @@ import { makeCandidateId } from '@puente/domain';
 import { getServerSession } from './auth';
 
 export interface CandidateSession {
-  user?: { id?: unknown; candidateId?: unknown };
+  user?: { id?: unknown; candidateId?: unknown; role?: unknown };
   session?: { userId?: unknown };
 }
 
@@ -16,6 +16,7 @@ export function candidateIdFromRequest(request: Request): string | undefined {
   if (!raw) return undefined;
   try {
     const session = JSON.parse(raw) as CandidateSession;
+    if (session.user?.role !== undefined && session.user.role !== 'candidate') return undefined;
     const candidate = session.user?.candidateId;
     const userId = session.user?.id ?? session.session?.userId;
     if (typeof candidate === 'string' && candidate.length > 0) return candidate;
@@ -32,7 +33,7 @@ export async function candidateIdFromRequestOrSession(request: Request): Promise
   if (headerCandidate) return headerCandidate;
   try {
     const session = await getServerSession();
-    return session?.user.id ? makeCandidateId(session.user.id) : undefined;
+    return session?.user.role === 'candidate' && session.user.id ? makeCandidateId(session.user.id) : undefined;
   } catch {
     return undefined;
   }

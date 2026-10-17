@@ -6,7 +6,7 @@ const session = { transcript: [], slotState: undefined as never, llmTurns: 0, ca
 
 function post(body: unknown, candidateId?: string): Request {
   const headers: Record<string, string> = { 'content-type': 'application/json' };
-  if (candidateId) headers['x-better-auth-session'] = JSON.stringify({ user: { id: 'u', candidateId } });
+  if (candidateId) headers['x-better-auth-session'] = JSON.stringify({ user: { id: 'u', candidateId, role: 'candidate' } });
   return new Request('http://localhost/api/chat', { method: 'POST', headers, body: JSON.stringify(body) });
 }
 

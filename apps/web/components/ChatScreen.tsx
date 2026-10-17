@@ -80,10 +80,12 @@ export function ChatScreen() {
           const restoredChips = proposedSlot
             ? [{ label: 'Sí', kind: 'confirm' as const, slot: proposedSlot }, { label: 'Cambiar', kind: 'change' as const, slot: proposedSlot }]
             : answerDefinition?.chips.map((chip) => ({ ...chip, slot: answerSlot ?? undefined }));
+          const chipMessageIndex = [...restored].map((message, index) => ({ message, index })).reverse()
+            .find(({ message }) => message.role === (proposedSlot ? 'user' : 'assistant'))?.index;
           setMessages(restored.map((message, index) => ({
             ...message,
             id: nextId(),
-            ...(index === restored.length - 1 && message.role === 'assistant' && restoredChips?.length ? { chips: restoredChips } : {}),
+            ...(index === chipMessageIndex && restoredChips?.length ? { chips: restoredChips } : {}),
           })));
           profileText.current = restored.filter((message) => message.role === 'user').map((message) => message.content);
         } else {
