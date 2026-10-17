@@ -1,0 +1,18 @@
+{
+  "status": "clean",
+  "pr": 87,
+  "branch": "feat/issue-62-record-evaluation-results-ai-log",
+  "fixedPoint": "main",
+  "reviewPasses": 2,
+  "plansPosted": 0,
+  "implementationCompleted": true,
+  "standardsFindings": 0,
+  "specFindings": 0,
+  "validation": [
+    "npm run gate:ci — passed; 635 tests passed; 8 skipped; 92.6% line coverage",
+    "Targeted evaluation tests — 22 passed",
+    "Clean review published to PR #87 after the final artifact commit"
+  ],
+  "remainingBlockers": [],
+  "nextConsumer": "ship-subissue"
+}
