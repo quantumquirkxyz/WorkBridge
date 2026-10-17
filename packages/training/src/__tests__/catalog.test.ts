@@ -1,34 +1,42 @@
 import { describe, expect, it } from "vitest";
-import {
-  CATALOG_MAX_SIZE,
-  CATALOG_MIN_SIZE,
-  catalogIndex,
-  catalogSizeWithinBounds,
-  loadCatalog,
-} from "../catalog";
+import { loadCatalog } from "../catalog";
 import { InvalidTrainingCatalogError } from "../errors";
 import { validateTrainingCatalog } from "../validate";
 import type { TrainingCatalog } from "../types";
+import catalogSchema from "../schemas/training-catalog.schema.json";
 import { loadFixture } from "../../test/load-fixture";
 
 const catalogFixture = loadFixture<TrainingCatalog>("catalog/panama-training-catalog.json");
+
+const opportunityBounds = (
+  catalogSchema as {
+    properties: { opportunities: { minItems: number; maxItems: number } };
+  }
+).properties.opportunities;
 
 describe("TrainingCatalog contract", () => {
   it("validates the cached catalog fixture", () => {
     expect(validateTrainingCatalog(catalogFixture)).toBe(true);
   });
 
-  it("holds between 15 and 30 opportunities", () => {
-    expect(catalogFixture.opportunities.length).toBeGreaterThanOrEqual(CATALOG_MIN_SIZE);
-    expect(catalogFixture.opportunities.length).toBeLessThanOrEqual(CATALOG_MAX_SIZE);
-    expect(catalogSizeWithinBounds(catalogFixture)).toBe(true);
+  it("enforces the 15-30 entry bound in the schema contract", () => {
+    expect(opportunityBounds.minItems).toBe(15);
+    expect(opportunityBounds.maxItems).toBe(30);
+    expect(catalogFixture.opportunities.length).toBeGreaterThanOrEqual(opportunityBounds.minItems);
+    expect(catalogFixture.opportunities.length).toBeLessThanOrEqual(opportunityBounds.maxItems);
   });
 
-  it("loads and indexes the catalog by opportunity id", () => {
+  it("loads the validated catalog snapshot", () => {
     const catalog = loadCatalog(catalogFixture);
-    const index = catalogIndex(catalog);
-    expect(index.size).toBe(catalog.opportunities.length);
-    expect(index.get("TR-001")?.title).toBe("Fundamentos de soporte técnico");
+    expect(catalog).toBe(catalogFixture);
+    expect(catalog.opportunities).toHaveLength(21);
+  });
+
+  it("rejects a catalog below the 15-entry minimum", () => {
+    const tooSmall = structuredClone(catalogFixture);
+    tooSmall.opportunities = tooSmall.opportunities.slice(0, 14);
+    expect(validateTrainingCatalog(tooSmall)).toBe(false);
+    expect(() => loadCatalog(tooSmall)).toThrow(InvalidTrainingCatalogError);
   });
 
   it("rejects a catalog with a malformed opportunity", () => {

@@ -1,6 +1,6 @@
+import { compareCodeUnits } from "@puente/solver";
 import { coveredSkillLevel } from "./scoring";
 import { gapDeficit, heldSkillLevel } from "./gaps";
-import { compareCodeUnits } from "./order";
 import type {
   GapContribution,
   HeldSkill,
@@ -59,11 +59,11 @@ export function selectRoadmap(
   let remainingBudget = preferences.maxCostUsd ?? Number.POSITIVE_INFINITY;
   let remainingHours = preferences.maxTotalHours ?? Number.POSITIVE_INFINITY;
 
+  const prerequisiteSatisfied = (skillId: string): boolean =>
+    heldSkillLevel(heldSkills, skillId) >= 1 || (currentLevel.get(skillId) ?? 0) >= 1;
+
   const prerequisitesMet = (rankedOpportunity: RankedOpportunity): boolean =>
-    rankedOpportunity.opportunity.prerequisites.every(
-      (skillId) =>
-        heldSkillLevel(heldSkills, skillId) >= 1 || (currentLevel.get(skillId) ?? 0) >= 1,
-    );
+    rankedOpportunity.opportunity.prerequisites.every(prerequisiteSatisfied);
 
   const marginalContributions = (
     rankedOpportunity: RankedOpportunity,
@@ -127,10 +127,7 @@ export function selectRoadmap(
   const unresolvedGaps = gaps.filter((gap) => (remainingDeficit.get(gap.skillId) ?? 0) > 0);
 
   const unmetPrerequisites = (item: RankedOpportunity): string[] =>
-    item.opportunity.prerequisites.filter(
-      (skillId) =>
-        heldSkillLevel(heldSkills, skillId) < 1 && (currentLevel.get(skillId) ?? 0) < 1,
-    );
+    item.opportunity.prerequisites.filter((skillId) => !prerequisiteSatisfied(skillId));
 
   const omitted: OmittedOpportunity[] = ranked
     .filter((item) => !chosen.has(item.opportunity.opportunityId))

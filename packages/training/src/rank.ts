@@ -1,3 +1,4 @@
+import { compareCodeUnits } from "@puente/solver";
 import { opportunityFreshness } from "./freshness";
 import {
   availabilityScore,
@@ -12,7 +13,6 @@ import {
   specializationScore,
   type DimensionScore,
 } from "./scoring";
-import { compareCodeUnits } from "./order";
 import { RANKING_DIMENSIONS, TRAINING_WEIGHTS, weightedTrainingScore } from "./weights";
 import type {
   GapContribution,
@@ -33,9 +33,10 @@ export interface RankInput {
 }
 
 /**
- * Static feasibility reasons, independent of the running budget. Prerequisite
- * satisfaction is evaluated during selection because an earlier pick can unlock
- * a later opportunity, so it is not a static exclusion.
+ * Static feasibility reasons, independent of the running budget. The candidate's
+ * target specializations act as a filter: an opportunity that shares none is
+ * excluded. Prerequisite satisfaction is evaluated during selection because an
+ * earlier pick can unlock a later opportunity, so it is not a static exclusion.
  */
 export function staticExclusionReasons(
   opportunity: TrainingOpportunity,
@@ -43,6 +44,14 @@ export function staticExclusionReasons(
   now: Date,
 ): string[] {
   const reasons: string[] = [];
+  if (
+    preferences.specializations.length > 0 &&
+    !opportunity.specializations.some((slug) => preferences.specializations.includes(slug))
+  ) {
+    reasons.push(
+      `No pertenece a tu especialización objetivo (${preferences.specializations.join(", ")}).`,
+    );
+  }
   if (opportunityFreshness(opportunity.retrievedAt, now) === "expired") {
     reasons.push("Datos del catálogo vencidos (más de 72 h): requiere actualización.");
   }
@@ -54,8 +63,11 @@ export function staticExclusionReasons(
       `Cuesta USD ${opportunity.costUsd}, por encima de tu límite de USD ${preferences.maxCostUsd}.`,
     );
   }
-  if (opportunity.schedule && preferences.availability) {
-    const { coverage, missingDays } = scheduleCoverage(opportunity.schedule, preferences.availability);
+  if (opportunity.schedule && preferences.availabilityWindow) {
+    const { coverage, missingDays } = scheduleCoverage(
+      opportunity.schedule,
+      preferences.availabilityWindow,
+    );
     if (coverage < 1) {
       const days = missingDays.length > 0 ? ` (días no disponibles: ${missingDays.join(", ")})` : "";
       reasons.push(`El horario no coincide con tu disponibilidad${days}.`);

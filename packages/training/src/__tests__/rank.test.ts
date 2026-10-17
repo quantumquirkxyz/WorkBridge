@@ -88,7 +88,7 @@ describe("dimension scorers", () => {
   it("scores duration against the effort ceiling", () => {
     expect(durationScore(opportunity("TR-016"), { specializations: [], maxTotalHours: 200 }).rawScore).toBe(97);
     expect(durationScore(opportunity("TR-019"), { specializations: [], maxTotalHours: 160 }).rawScore).toBe(50);
-    expect(durationScore(opportunity("TR-019"), { specializations: [], maxTotalHours: 0 }).rawScore).toBe(100);
+    expect(durationScore(opportunity("TR-019"), { specializations: [], maxTotalHours: 0 }).rawScore).toBe(0);
   });
 
   it("scores modality against the preferred list", () => {
@@ -124,7 +124,7 @@ describe("dimension scorers", () => {
     expect(scheduleScore(opportunity("TR-001"), { specializations: [] }).rawScore).toBe(100);
     const conflict = scheduleScore(opportunity("TR-001"), {
       specializations: [],
-      availability: { days: [1, 2, 3], startMinute: 480, endMinute: 1020, weeklyHours: 45 },
+      availabilityWindow: { days: [1, 2, 3], startMinute: 480, endMinute: 1020, weeklyHours: 45 },
     });
     expect(conflict.rawScore).toBe(0);
   });
@@ -202,8 +202,28 @@ describe("rankOpportunities", () => {
     expect(pricey.eligible).toBe(false);
     expect(pricey.exclusionReasons.join(" ")).toContain("límite");
 
-    const stale = ranked.find((item) => item.opportunity.opportunityId === "TR-018")!;
+    const stale = rankOpportunities({
+      catalog,
+      gaps: [excelGap],
+      preferences: { specializations: ["it_support"] },
+      now,
+    }).find((item) => item.opportunity.opportunityId === "TR-018")!;
     expect(stale.freshness).toBe("stale");
     expect(stale.eligible).toBe(true);
+  });
+
+  it("excludes opportunities outside the target specializations", () => {
+    const ranked = rankOpportunities({
+      catalog,
+      gaps: [excelGap],
+      preferences: { specializations: ["administration"] },
+      now,
+    });
+    const offTarget = ranked.find((item) => item.opportunity.opportunityId === "TR-001")!;
+    expect(offTarget.eligible).toBe(false);
+    expect(offTarget.exclusionReasons.join(" ")).toContain("especialización");
+
+    const onTarget = ranked.find((item) => item.opportunity.opportunityId === "TR-006")!;
+    expect(onTarget.eligible).toBe(true);
   });
 });

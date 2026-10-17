@@ -57,9 +57,11 @@ randomness.
 `selectRoadmap` is a deterministic greedy set cover: repeatedly take the
 opportunity that addresses the most outstanding gap levels, subject to:
 
+- target specialization (an opportunity that shares none with the candidate's
+  targets is excluded);
 - seats available (`>= 1`);
 - cost ceiling and running budget;
-- duration ceiling and running budget;
+- duration ceiling and running budget (a zero ceiling means a zero budget);
 - schedule compatibility with the candidate's availability;
 - catalog freshness (expired entries, more than 72 h old, are excluded);
 - prerequisites, which can be unlocked by an earlier pick (a prerequisite chain

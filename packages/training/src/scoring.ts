@@ -6,7 +6,7 @@ import type {
   TrainingOpportunity,
   TrainingPreferences,
 } from "./types";
-import { gapDeficit } from "./gaps";
+import { gapDeficit, gapLabel } from "./gaps";
 
 export interface DimensionScore {
   rawScore: number;
@@ -48,10 +48,6 @@ export function coveredSkillLevel(
   return best;
 }
 
-function labelFor(gap: TrainingGap): string {
-  return gap.label ?? gap.skillId;
-}
-
 /**
  * Gap coverage: the fraction of the candidate's outstanding levels that this
  * opportunity can address. Partial coverage (a level below the requirement)
@@ -81,7 +77,7 @@ export function gapCoverageScore(
   } else if (coveredDeficit > 0) {
     const labels = coveredGaps.map((contribution) => {
       const gap = gaps.find((item) => item.skillId === contribution.skillId)!;
-      return labelFor(gap);
+      return gapLabel(gap);
     });
     reasons.push(
       `Cubre ${coveredDeficit} de ${totalDeficit} niveles pendientes: ${labels.join(", ")}.`,
@@ -153,11 +149,21 @@ export function durationScore(
   opportunity: TrainingOpportunity,
   preferences: TrainingPreferences,
 ): DimensionScore {
-  const reference = preferences.maxTotalHours ?? DURATION_REFERENCE_HOURS;
-  if (reference <= 0) {
-    return { rawScore: 100, reasons: ["Sin límite de duración definido."] };
+  const ceiling = preferences.maxTotalHours;
+  if (ceiling === undefined) {
+    return {
+      rawScore: clampScore(100 - 50 * (opportunity.durationHours / DURATION_REFERENCE_HOURS)),
+      reasons: [`Duración de ${opportunity.durationHours} h.`],
+    };
   }
-  const ratio = opportunity.durationHours / reference;
+  if (ceiling <= 0) {
+    // A zero ceiling means a zero budget, consistently with `selectRoadmap`.
+    return {
+      rawScore: opportunity.durationHours > 0 ? 0 : 100,
+      reasons: ["Tu límite de duración es cero; ninguna oportunidad con horas cabe en él."],
+    };
+  }
+  const ratio = opportunity.durationHours / ceiling;
   const rawScore = clampScore(100 - 50 * ratio);
   return {
     rawScore,
@@ -171,12 +177,7 @@ export function modalityScore(
   preferences: TrainingPreferences,
 ): DimensionScore {
   const preferred = preferences.preferredModalities;
-  const label =
-    opportunity.modality === "online"
-      ? "en línea"
-      : opportunity.modality === "onsite"
-        ? "presencial"
-        : "híbrida";
+  const label = modalityLabelEs(opportunity.modality);
   if (!preferred || preferred.length === 0) {
     return { rawScore: 100, reasons: [`Modalidad ${label}.`] };
   }
@@ -235,7 +236,7 @@ function overlapMinutes(aStart: number, aEnd: number, bStart: number, bEnd: numb
 /** Weekly window coverage shared by the schedule dimension and its constraint. */
 export function scheduleCoverage(
   schedule: OpportunitySchedule,
-  availability: NonNullable<TrainingPreferences["availability"]>,
+  availability: OpportunitySchedule,
 ): ScheduleCoverage {
   const perDayMinutes = Math.max(0, schedule.endMinute - schedule.startMinute);
   const totalMinutes = schedule.days.length * perDayMinutes;
@@ -262,7 +263,7 @@ export function scheduleScore(
   opportunity: TrainingOpportunity,
   preferences: TrainingPreferences,
 ): DimensionScore {
-  const availability = preferences.availability;
+  const availability = preferences.availabilityWindow;
   if (!opportunity.schedule || !availability) {
     return {
       rawScore: 100,

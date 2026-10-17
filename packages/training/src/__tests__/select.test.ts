@@ -73,7 +73,7 @@ describe("selectRoadmap", () => {
   it("never selects an opportunity that conflicts with the schedule", () => {
     const result = select([gap("PA-IT-0001", 2)], {
       specializations: ["it_support"],
-      availability: { days: [1, 2, 3, 4, 5], startMinute: 480, endMinute: 1020, weeklyHours: 45 },
+      availabilityWindow: { days: [1, 2, 3, 4, 5], startMinute: 480, endMinute: 1020, weeklyHours: 45 },
     });
     expect(selectedIds(result)).toEqual([]);
     const omitted = result.omitted.find((item) => item.ranked.opportunity.opportunityId === "TR-001");

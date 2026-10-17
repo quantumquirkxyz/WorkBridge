@@ -15,6 +15,6 @@
   "heldSkills": [],
   "preferences": {
     "specializations": ["it_support"],
-    "availability": { "days": [1, 2, 3, 4, 5], "startMinute": 480, "endMinute": 1020, "weeklyHours": 45 }
+    "availabilityWindow": { "days": [1, 2, 3, 4, 5], "startMinute": 480, "endMinute": 1020, "weeklyHours": 45 }
   }
 }

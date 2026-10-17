@@ -93,13 +93,8 @@ export interface HeldSkill {
   level: SkillLevel;
 }
 
-export interface AvailabilityWindow {
-  /** ISO weekdays, 0 = Sunday … 6 = Saturday. */
-  days: number[];
-  startMinute: number;
-  endMinute: number;
-  weeklyHours: number;
-}
+/** The candidate's weekly availability window, shared with opportunity schedules. */
+export type AvailabilityWindow = OpportunitySchedule;
 
 export interface TrainingPreferences {
   /** Target specialization slugs. Empty means "no preference". */
@@ -111,7 +106,7 @@ export interface TrainingPreferences {
   /** Preferred modalities; other modalities are still usable but rank lower. */
   preferredModalities?: Modality[];
   /** Candidate's weekly availability, used for the schedule dimension and constraint. */
-  availability?: AvailabilityWindow;
+  availabilityWindow?: AvailabilityWindow;
   /** Candidate's home location, used to score on-site access. */
   home?: GeoPoint;
   /** Maximum acceptable one-way commute in minutes. */

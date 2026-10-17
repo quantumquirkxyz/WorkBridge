@@ -25,13 +25,7 @@ export type {
   TrainingPreferences,
 } from "./types";
 
-export {
-  CATALOG_MAX_SIZE,
-  CATALOG_MIN_SIZE,
-  catalogIndex,
-  catalogSizeWithinBounds,
-  loadCatalog,
-} from "./catalog";
+export { loadCatalog } from "./catalog";
 
 export {
   FRESH_HOURS,
@@ -45,6 +39,7 @@ export {
   effectiveRequiredLevel,
   gapDeficit,
   gapKindForSkill,
+  gapLabel,
   gapLabelForSkill,
   heldSkillLevel,
 } from "./gaps";
