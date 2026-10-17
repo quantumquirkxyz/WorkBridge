@@ -12,6 +12,7 @@ export interface ChatTranscriptMessage {
 /** Only this candidate's own data may appear here (AC-50). */
 export interface CandidateContext {
   profile?: unknown;
+  preferences?: unknown;
   exploration?: unknown;
   matchDecisions?: unknown;
   roadmap?: unknown;
@@ -33,6 +34,7 @@ export function buildSystemPrompt(input: {
   const pending = input.pending ? slotDefinition(input.pending) : undefined;
   const context = JSON.stringify({
     profile: input.context?.profile ?? null,
+    preferences: input.context?.preferences ?? null,
     exploration: input.context?.exploration ?? null,
     matchDecisions: input.context?.matchDecisions ?? null,
     roadmap: input.context?.roadmap ?? null,

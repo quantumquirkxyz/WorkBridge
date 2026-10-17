@@ -1,4 +1,5 @@
 import { makeCandidateId } from '@puente/domain';
+import { getServerSession } from './auth';
 
 export interface CandidateSession {
   user?: { id?: unknown; candidateId?: unknown };
@@ -20,6 +21,18 @@ export function candidateIdFromRequest(request: Request): string | undefined {
     if (typeof candidate === 'string' && candidate.length > 0) return candidate;
     if (typeof userId !== 'string' || userId.length === 0) return undefined;
     return userId.startsWith('candidate_') ? userId : makeCandidateId(userId);
+  } catch {
+    return undefined;
+  }
+}
+
+/** Resolve browser requests from the Better Auth cookie, while retaining the signed-header seam for tests/BFF calls. */
+export async function candidateIdFromRequestOrSession(request: Request): Promise<string | undefined> {
+  const headerCandidate = candidateIdFromRequest(request);
+  if (headerCandidate) return headerCandidate;
+  try {
+    const session = await getServerSession();
+    return session?.user.id ? makeCandidateId(session.user.id) : undefined;
   } catch {
     return undefined;
   }
