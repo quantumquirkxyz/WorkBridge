@@ -1,12 +1,12 @@
 {
-  "status": "completed",
+  "status": "partial",
   "changes": [
     "Completed the #32 integration pass on the dedicated issue branch.",
     "Removed unused workflow imports and corrected unused route handler parameters.",
     "Replaced an explicit any assertion in the application server test with a typed response shape."
   ],
   "validation": {
-    "acceptanceCriteriaMet": true,
+    "acceptanceCriteriaMet": false,
     "commands": [
       "npm run lint",
       "npm run typecheck",
@@ -14,13 +14,15 @@
       "npm run gate:ci",
       "npm run build --workspace @puente/web"
     ],
-    "skipped": [],
-    "notes": "All existing sub-issues in the #32 wave plan are closed. The integration pass found and fixed five lint failures; 79 test files passed, one was skipped, and coverage was 90.37% statements / 92.5% lines."
+    "skipped": [
+      "npm run test:e2e:web — blocked because the Playwright Chromium binary cannot load the runner's missing libnspr4.so dependency; all 8 web tests failed before browser launch. AC-54 remains unverified."
+    ],
+    "notes": "All existing sub-issues in the #32 wave plan are closed. The integration pass found and fixed five lint failures; 79 test files passed, one was skipped, and coverage was 90.37% statements / 92.5% lines. AC-54 is explicitly unverified because the local runner lacks libnspr4.so."
   },
   "commitSha": "4e234d6c26860d60cc5ed19c3fcd137a23fb7224",
   "branch": "feat/issue-32-puente-laboral-web-experience",
-  "nextConsumer": "publish-open-pr",
-  "riskRemaining": "The production build emits Better Auth warnings when local auth environment variables are absent; this is environment configuration, not a build failure.",
+  "nextConsumer": "review-pr",
+  "riskRemaining": "AC-54 still requires Playwright validation in an environment with the required browser shared libraries. The production build emits Better Auth warnings when local auth environment variables are absent; this is environment configuration, not a build failure.",
   "qualityGateResults": {
     "gateIde": "pass",
     "gatePreCommit": "pass",
