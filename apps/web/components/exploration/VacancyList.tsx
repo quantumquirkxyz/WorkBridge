@@ -5,9 +5,11 @@ import {
   type ExplorationResult,
 } from '@puente/catalog';
 import { DiscardSummary } from './DiscardSummary';
-import { money } from './utils';
+import { money, orderMatchesByDecision } from './utils';
+import type { MatchDecision } from '@puente/solver';
+import { Progress } from '../ui/progress';
 
-export function VacancyList({ result }: { result: ExplorationResult }) {
+export function VacancyList({ result, decisions = [], decisionsLoading = false }: { result: ExplorationResult; decisions?: MatchDecision[]; decisionsLoading?: boolean }) {
   const { summary } = result;
   return (
     <div className="result">
@@ -34,7 +36,7 @@ export function VacancyList({ result }: { result: ExplorationResult }) {
             </tr>
           </thead>
           <tbody>
-            {result.matches.map((match) => (
+            {orderMatchesByDecision(result.matches, decisions, decisionsLoading).map((match) => (
               <tr key={match.vacancy.jobId}>
                 <td>
                   <strong>{match.vacancy.title}</strong>
@@ -59,7 +61,7 @@ export function VacancyList({ result }: { result: ExplorationResult }) {
                     </a>
                   </div>
                 </td>
-                <td>{match.matchScore}</td>
+                <td>{decisionsLoading ? <span aria-label="Cargando preparación" className="readiness-skeleton" /> : (() => { const decision = decisions.find((item) => item.vacancyId === match.vacancy.jobId); return decision ? <Readiness decision={decision} /> : '—'; })()}</td>
               </tr>
             ))}
           </tbody>
@@ -77,4 +79,9 @@ export function VacancyList({ result }: { result: ExplorationResult }) {
       </p>
     </div>
   );
+}
+
+function Readiness({ decision }: { decision: MatchDecision }) {
+  const missing = decision.hardConstraints.filter((constraint) => !constraint.satisfied).slice(0, 2);
+  return <div className="readiness"><span>Preparación {decision.score}%</span><Progress value={decision.score} aria-label={`Preparación ${decision.score}%`} /><ul className="warnings">{missing.map((item) => <li key={item.id}>Te falta: {item.reason}</li>)}</ul></div>;
 }

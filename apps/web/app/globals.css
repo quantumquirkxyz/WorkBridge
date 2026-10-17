@@ -196,6 +196,10 @@
   .vacancy-company { color: var(--ink-muted); }
   .vacancy-meta { display: block; margin-top: .5rem; line-height: 1.5; }
   .vacancy-card-action { margin-top: auto; color: var(--primary); font-weight: 700; }
+  .readiness { display: grid; width: 100%; gap: .3rem; margin-top: .5rem; color: var(--ink); font-size: .82rem; }
+  .readiness .relative { height: .45rem; }
+  .readiness-skeleton { display: block; width: 100%; height: .65rem; margin-top: .6rem; border-radius: 999px; background: linear-gradient(90deg, var(--line), var(--teal-tint), var(--line)); background-size: 200% 100%; animation: readiness-pulse 1.2s ease-in-out infinite; }
+  @keyframes readiness-pulse { to { background-position: -200% 0; } }
   .vacancy-skeleton { height: 15rem; border-radius: 1rem; }
   .vacantes-empty, .near-matches { margin-top: 1.5rem; padding: 1.5rem; border: 1px solid var(--line); border-radius: 1rem; background: var(--card); }
   .vacantes-empty h2, .near-matches h2 { margin-top: 0; }
