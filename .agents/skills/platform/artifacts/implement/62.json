@@ -1,0 +1,31 @@
+{
+  "status": "completed",
+  "changes": [
+    "README Evals now records 22 named cases from existing Vitest assertions, including 15 credential cases, aptitude classifications, and profile experience classifications.",
+    "README Bitácora de IA now names OpenCode and documents the hand-made changes for intake, matching, credential verification, and web handlers."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npx vitest run apps/agent-runtime/test/ground-truth.test.ts packages/solver/src/__tests__/match.test.ts packages/profile/tests/classify.test.ts",
+      "npm run typecheck",
+      "npm test",
+      "npm run gate:ci",
+      "git diff --cached --check",
+      "npm audit --audit-level=high --omit=dev"
+    ],
+    "skipped": [
+      "No new test file or code-specific lint was required because the change is README-only."
+    ],
+    "notes": "Targeted tests pass (22 tests); full suite passes (635 tests, 8 skipped); typecheck and gate-ci pass with 92.6% line coverage. Repository-wide lint has five pre-existing errors in unrelated files. npm audit reports five pre-existing moderate vulnerabilities; no high-severity vulnerability was reported at the configured threshold."
+  },
+  "commitSha": "c851db0",
+  "branch": "feat/issue-62-record-evaluation-results-ai-log",
+  "nextConsumer": "publish-open-pr",
+  "riskRemaining": "Repository-wide lint remains blocked by unrelated existing errors; npm audit reports moderate dependency vulnerabilities outside this documentation change.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  }
+}
