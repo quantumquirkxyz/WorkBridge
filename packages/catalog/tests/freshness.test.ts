@@ -3,7 +3,7 @@ import { computeFreshness, DEFAULT_MAX_AGE_HOURS, InvalidVacancyError, toCachedV
 import type { CachedVacancy } from '../src/index';
 import catalogFixture from '../fixtures/vacancy-catalog.json';
 
-const NOW = new Date('2026-10-16T12:00:00.000Z');
+const NOW = new Date('2026-11-01T00:00:00.000Z');
 const records = catalogFixture as CachedVacancy[];
 
 function byId(jobId: string): CachedVacancy {
@@ -19,14 +19,14 @@ describe('computeFreshness', () => {
 
   it('labels a fresh vacancy in Spanish', () => {
     const freshness = computeFreshness(byId('lnk-1001'), { now: NOW });
-    expect(freshness.ageHours).toBe(3);
+    expect(freshness.ageHours).toBe(15);
     expect(freshness.stale).toBe(false);
-    expect(freshness.label).toBe('Publicada hace 3 horas');
+    expect(freshness.label).toBe('Publicada hace 15 horas');
   });
 
   it('marks a vacancy older than 72 hours as stale', () => {
     const freshness = computeFreshness(byId('lnk-1004'), { now: NOW });
-    expect(freshness.ageHours).toBe(96);
+    expect(freshness.ageHours).toBe(468);
     expect(freshness.stale).toBe(true);
     expect(freshness.label).toContain('fuera del límite de 72 h');
   });
@@ -36,8 +36,8 @@ describe('computeFreshness', () => {
       jobId: 'lnk-future',
       jobUrl: 'https://example.com/jobs/future',
       title: 'Futuro',
-      postedAt: '2026-10-16T18:00:00.000Z',
-      scrapingInfo: { provider: 'seed', query: 'future', scrapedAt: '2026-10-16T12:00:00.000Z' },
+      postedAt: '2026-11-01T06:00:00.000Z',
+      scrapingInfo: { provider: 'seed', query: 'future', scrapedAt: '2026-11-01T00:00:00.000Z' },
     });
     const freshness = computeFreshness(future, { now: NOW });
     expect(freshness.ageHours).toBe(0);

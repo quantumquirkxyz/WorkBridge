@@ -1,8 +1,8 @@
 {
   "schemaVersion": "1.0.0",
-  "catalogVersion": "panama-training-2026-10-16",
+  "catalogVersion": "panama-training-2026-10-31",
   "source": "catalogo-panama",
-  "retrievedAt": "2026-10-16T06:00:00.000Z",
+  "retrievedAt": "2026-10-31T06:00:00.000Z",
   "opportunities": [
     {
       "opportunityId": "TR-001",
@@ -22,7 +22,7 @@
       "seatsAvailable": 40,
       "credentialRelevance": 0.2,
       "source": "catalogo-panama",
-      "retrievedAt": "2026-10-16T06:00:00.000Z"
+      "retrievedAt": "2026-10-31T06:00:00.000Z"
     },
     {
       "opportunityId": "TR-002",
@@ -42,7 +42,7 @@
       "seatsAvailable": 25,
       "credentialRelevance": 0.9,
       "source": "catalogo-panama",
-      "retrievedAt": "2026-10-16T06:00:00.000Z"
+      "retrievedAt": "2026-10-31T06:00:00.000Z"
     },
     {
       "opportunityId": "TR-003",
@@ -62,7 +62,7 @@
       "seatsAvailable": 20,
       "credentialRelevance": 0.5,
       "source": "catalogo-panama",
-      "retrievedAt": "2026-10-16T06:00:00.000Z"
+      "retrievedAt": "2026-10-31T06:00:00.000Z"
     },
     {
       "opportunityId": "TR-004",
@@ -82,7 +82,7 @@
       "seatsAvailable": 100,
       "credentialRelevance": 0.85,
       "source": "catalogo-panama",
-      "retrievedAt": "2026-10-16T06:00:00.000Z"
+      "retrievedAt": "2026-10-31T06:00:00.000Z"
     },
     {
       "opportunityId": "TR-005",
@@ -105,7 +105,7 @@
       "seatsAvailable": 15,
       "credentialRelevance": 0.3,
       "source": "catalogo-panama",
-      "retrievedAt": "2026-10-16T06:00:00.000Z"
+      "retrievedAt": "2026-10-31T06:00:00.000Z"
     },
     {
       "opportunityId": "TR-006",
@@ -125,7 +125,7 @@
       "seatsAvailable": 60,
       "credentialRelevance": 0.4,
       "source": "catalogo-panama",
-      "retrievedAt": "2026-10-16T06:00:00.000Z"
+      "retrievedAt": "2026-10-31T06:00:00.000Z"
     },
     {
       "opportunityId": "TR-007",
@@ -145,7 +145,7 @@
       "seatsAvailable": 80,
       "credentialRelevance": 0.45,
       "source": "catalogo-panama",
-      "retrievedAt": "2026-10-16T06:00:00.000Z"
+      "retrievedAt": "2026-10-31T06:00:00.000Z"
     },
     {
       "opportunityId": "TR-008",
@@ -168,7 +168,7 @@
       "seatsAvailable": 18,
       "credentialRelevance": 0.4,
       "source": "catalogo-panama",
-      "retrievedAt": "2026-10-16T06:00:00.000Z"
+      "retrievedAt": "2026-10-31T06:00:00.000Z"
     },
     {
       "opportunityId": "TR-009",
@@ -191,7 +191,7 @@
       "seatsAvailable": 100,
       "credentialRelevance": 0.3,
       "source": "catalogo-panama",
-      "retrievedAt": "2026-10-16T06:00:00.000Z"
+      "retrievedAt": "2026-10-31T06:00:00.000Z"
     },
     {
       "opportunityId": "TR-010",
@@ -211,7 +211,7 @@
       "seatsAvailable": 30,
       "credentialRelevance": 0.8,
       "source": "catalogo-panama",
-      "retrievedAt": "2026-10-16T06:00:00.000Z"
+      "retrievedAt": "2026-10-31T06:00:00.000Z"
     },
     {
       "opportunityId": "TR-011",
@@ -251,7 +251,7 @@
       "seatsAvailable": 70,
       "credentialRelevance": 0.4,
       "source": "catalogo-panama",
-      "retrievedAt": "2026-10-16T06:00:00.000Z"
+      "retrievedAt": "2026-10-31T06:00:00.000Z"
     },
     {
       "opportunityId": "TR-013",
@@ -271,7 +271,7 @@
       "seatsAvailable": 40,
       "credentialRelevance": 0.6,
       "source": "catalogo-panama",
-      "retrievedAt": "2026-10-16T06:00:00.000Z"
+      "retrievedAt": "2026-10-31T06:00:00.000Z"
     },
     {
       "opportunityId": "TR-014",
@@ -291,7 +291,7 @@
       "seatsAvailable": 90,
       "credentialRelevance": 0.25,
       "source": "catalogo-panama",
-      "retrievedAt": "2026-10-16T06:00:00.000Z"
+      "retrievedAt": "2026-10-31T06:00:00.000Z"
     },
     {
       "opportunityId": "TR-015",
@@ -311,7 +311,7 @@
       "seatsAvailable": 50,
       "credentialRelevance": 0.35,
       "source": "catalogo-panama",
-      "retrievedAt": "2026-10-16T06:00:00.000Z"
+      "retrievedAt": "2026-10-31T06:00:00.000Z"
     },
     {
       "opportunityId": "TR-016",
@@ -331,7 +331,7 @@
       "seatsAvailable": 100,
       "credentialRelevance": 0.2,
       "source": "catalogo-panama",
-      "retrievedAt": "2026-10-16T06:00:00.000Z"
+      "retrievedAt": "2026-10-31T06:00:00.000Z"
     },
     {
       "opportunityId": "TR-017",
@@ -351,7 +351,7 @@
       "seatsAvailable": 100,
       "credentialRelevance": 0.15,
       "source": "catalogo-panama",
-      "retrievedAt": "2026-10-16T06:00:00.000Z"
+      "retrievedAt": "2026-10-31T06:00:00.000Z"
     },
     {
       "opportunityId": "TR-018",
@@ -394,7 +394,7 @@
       "seatsAvailable": 3,
       "credentialRelevance": 0.7,
       "source": "catalogo-panama",
-      "retrievedAt": "2026-10-16T06:00:00.000Z"
+      "retrievedAt": "2026-10-31T06:00:00.000Z"
     },
     {
       "opportunityId": "TR-020",
@@ -434,7 +434,7 @@
       "seatsAvailable": 0,
       "credentialRelevance": 0.2,
       "source": "catalogo-panama",
-      "retrievedAt": "2026-10-16T06:00:00.000Z"
+      "retrievedAt": "2026-10-31T06:00:00.000Z"
     }
   ]
 }
