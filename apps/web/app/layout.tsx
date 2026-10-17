@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Plus_Jakarta_Sans } from 'next/font/google';
+import { CandidateShell } from '../components/CandidateShell';
 import { QueryProvider } from '../components/query-provider';
 import { ThemeProvider } from '../components/theme-provider';
 import { rootViewport } from './viewport-config';
@@ -25,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={plusJakartaSans.variable}>
         <QueryProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            {children}
+            <CandidateShell>{children}</CandidateShell>
           </ThemeProvider>
         </QueryProvider>
       </body>
