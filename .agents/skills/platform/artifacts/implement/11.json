@@ -1,0 +1,37 @@
+{
+  "status": "completed",
+  "changes": [
+    "Added packages/training (@puente/training), the deterministic specialization-aware roadmap seam from spec #2 / ticket #11.",
+    "Defined TrainingCatalog and Roadmap as JSON Schema 2020-12 contracts validated with the shared Ajv instance from @puente/domain; each recommendation embeds the exact catalog entry it came from so no opportunity can be invented.",
+    "Added a 21-entry cached catalog fixture (courses, certifications, projects, and internships) across it_support, customer_service, and administration, within the required 15-30 range.",
+    "Implemented deriveGaps to turn the ticket #8 SolverCandidate/SolverVacancy output into ordered technical, soft, and language gaps with required/current levels and a mandatory flag.",
+    "Implemented rankOpportunities across the nine confirmed criteria: gap coverage (30%), specialization (15%), cost (12%), duration (8%), modality (8%), geography (7%), schedule (8%), availability (5%), and credential relevance (7%).",
+    "Made ranking a pure function of the catalog and an injected clock; ties break by opportunity id in UTF-16 code-unit order, never by locale, input order, or randomness.",
+    "Implemented selectRoadmap as a deterministic greedy set cover that honors the cost, duration, availability (schedule), seat, freshness, and prerequisite constraints; prerequisite chains unlock across rounds.",
+    "Implemented buildRoadmap: Spanish explanations that carry the source and freshness of every recommendation, unresolved gaps, excluded opportunities, and cost/duration totals.",
+    "Classified catalog freshness as fresh (<24 h), stale (24-72 h), and expired (>72 h); expired entries are excluded from recommendations.",
+    "Added roadmap fixtures for missing technical skills, soft-skill gaps, cost limits, schedule conflicts, and no available catalog option, plus 52 Vitest tests."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npm run lint",
+      "npm run typecheck",
+      "npm test",
+      "npm run test:coverage",
+      "npm audit"
+    ],
+    "skipped": [],
+    "notes": "208/208 tests pass (52 new training tests). Coverage 95.63% lines / 82.18% branches (gate-ci threshold is 80% lines / 70% branches); the training package is 98.03% lines / 87.03% branches. npm audit reports 0 vulnerabilities. Roadmap output is validated against the Roadmap JSON Schema before it leaves buildRoadmap."
+  },
+  "commitSha": "855d2b7",
+  "branch": "feat/issue-11-build-specialization-aware-training-roadmap",
+  "nextConsumer": "publish-open-pr",
+  "blockedBy": [],
+  "riskRemaining": "Ticket #4 (CandidateProfile) is still unmerged, so a CandidateProfile -> RoadmapRequest adapter is not implemented; the request contract and deriveGaps (which consumes the ticket #8 solver projections) are the explicit seam that adapter must satisfy. Roadmap selection uses a deterministic greedy set cover rather than the spec design note's optional y[course] MILP; greedy is deterministic and bounded, but does not guarantee optimal coverage. Geography for on-site opportunities uses an offline haversine estimate with a fixed average speed instead of the injected Google Maps router used by matching. The catalog is a fixture; the out-of-band Training Agent refresh (Coursera, Cisco, Edutin, edX, Udemy) is not implemented in this ticket.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  }
+}
