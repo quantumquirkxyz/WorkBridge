@@ -1,5 +1,9 @@
 import type { Roadmap, TrainingGap } from '@puente/training';
 
+function formatCost(costUsd: number): string {
+  return costUsd === 0 ? 'Gratis' : `USD ${costUsd}`;
+}
+
 export function RoadmapList({ roadmap, gaps }: { roadmap: Roadmap; gaps: TrainingGap[] }) {
   return (
     <div className="result" aria-labelledby="roadmap-heading">
@@ -34,7 +38,7 @@ export function RoadmapList({ roadmap, gaps }: { roadmap: Roadmap; gaps: Trainin
                 </td>
                 <td>{recommendation.opportunity.provider}</td>
                 <td>{recommendation.coveredGaps.map((gap) => gap.skillId).join(', ')}</td>
-                <td>USD {recommendation.opportunity.costUsd}</td>
+                <td>{formatCost(recommendation.opportunity.costUsd)}</td>
                 <td>{recommendation.opportunity.durationHours} h</td>
               </tr>
             ))}

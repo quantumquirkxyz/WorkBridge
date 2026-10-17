@@ -43,7 +43,7 @@ export function PreferencesForm({ state, onChange, onSubmit, loading }: Preferen
   const set = (patch: Partial<PreferencesFormState>) => onChange(patch);
 
   return (
-    <form onSubmit={onSubmit} noValidate>
+    <form id="preferencias" onSubmit={onSubmit} noValidate>
       <div className="field">
         <Label htmlFor="pref-roles">Puestos objetivo (separados por coma)</Label>
         <Input

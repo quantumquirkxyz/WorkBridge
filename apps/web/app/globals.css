@@ -213,6 +213,21 @@
   .vacancy-detail-body ul { padding-left: 1.25rem; }
   .vacancy-original { width: 100%; margin-top: auto; }
   .toast-notice { position: fixed; z-index: 100; right: 1rem; bottom: 1rem; max-width: min(22rem, calc(100% - 2rem)); padding: .85rem 1rem; border-radius: .75rem; color: var(--primary-foreground); background: var(--primary); box-shadow: 0 8px 24px #1a2b2e33; font-weight: 600; }
+  .no-match-route-link { margin: 1rem 0 0; font-weight: 700; }
+  .no-match-route-link a, .ruta-action { color: var(--primary); }
+  .no-match-actions { margin-top: 1rem; }
+  .no-match-actions p { margin-bottom: .5rem; }
+  .ruta-page { max-width: 70rem; }
+  .ruta-heading { margin-bottom: 2rem; }
+  .ruta-card, .ruta-empty { padding: 1.5rem; border: 1px solid var(--line); border-radius: 1rem; background: var(--card); }
+  .ruta-card h2, .ruta-empty h2 { margin-top: 0; }
+  .ruta-gaps { margin: 1rem 0; }
+  .ruta-steps { display: grid; gap: 1rem; margin: 1.5rem 0; padding: 0; list-style: none; }
+  .ruta-steps li { display: grid; grid-template-columns: 2.5rem 1fr; gap: 1rem; align-items: start; padding: 1rem; border: 1px solid var(--line); border-radius: .75rem; }
+  .ruta-step-number { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: 50%; color: var(--primary-foreground); background: var(--primary); font-weight: 700; }
+  .ruta-steps h3 { margin: 0; }
+  .ruta-steps p { margin: .25rem 0; }
+  .ruta-action { display: inline-block; margin-top: 1rem; font-weight: 700; }
 
   @media (max-width: 767px) {
     .candidate-header { min-height: 4rem; }

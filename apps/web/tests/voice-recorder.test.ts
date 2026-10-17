@@ -13,12 +13,14 @@ const originalWebkitSpeechRecognition = (globalThis as {
 }).webkitSpeechRecognition;
 const originalNavigator = (globalThis as { navigator?: unknown }).navigator;
 
+function setNavigator(value: unknown) { Object.defineProperty(globalThis, "navigator", { configurable: true, value }); }
+
 let lastInstance: FakeSpeechRecognition | null = null;
 
 afterEach(() => {
   (globalThis as { SpeechRecognition?: unknown }).SpeechRecognition = originalSpeechRecognition;
   (globalThis as { webkitSpeechRecognition?: unknown }).webkitSpeechRecognition = originalWebkitSpeechRecognition;
-  (globalThis as { navigator?: unknown }).navigator = originalNavigator;
+  setNavigator(originalNavigator);
   FakeSpeechRecognition.instances = [];
   lastInstance = null;
 });
@@ -211,9 +213,9 @@ describe('VoiceRecorder (fake engine)', () => {
 describe('VoiceRecorder permission', () => {
   it('reports granted permission when the Permissions API allows it', async () => {
     installFakeEngine();
-    (globalThis as { navigator?: unknown }).navigator = {
+    setNavigator({
       permissions: { query: async () => ({ state: 'granted' }) },
-    };
+    });
     const recorder = new VoiceRecorder();
     const state = await recorder.requestPermission();
     expect(state).toBe('granted');
@@ -221,9 +223,9 @@ describe('VoiceRecorder permission', () => {
 
   it('reports denied permission when the Permissions API denies it', async () => {
     installFakeEngine();
-    (globalThis as { navigator?: unknown }).navigator = {
+    setNavigator({
       permissions: { query: async () => ({ state: 'denied' }) },
-    };
+    });
     const recorder = new VoiceRecorder();
     const state = await recorder.requestPermission();
     expect(state).toBe('denied');
@@ -231,7 +233,7 @@ describe('VoiceRecorder permission', () => {
 
   it('defaults to prompt when the Permissions API is absent', async () => {
     installFakeEngine();
-    (globalThis as { navigator?: unknown }).navigator = undefined;
+    setNavigator(undefined);
     const recorder = new VoiceRecorder();
     const state = await recorder.requestPermission();
     expect(state).toBe('prompt');

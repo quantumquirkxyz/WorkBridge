@@ -7,6 +7,6 @@ describe('createOpenRouterChat', () => {
     const chat = createOpenRouterChat({ apiKey: 'k', model: 'm', fetchImpl: fetchImpl as unknown as typeof fetch });
     const controller = new AbortController();
     await chat({ messages: [{ role: 'user', content: 'hola' }], signal: controller.signal });
-    expect(fetchImpl.mock.calls[0]![1]!.signal).toBe(controller.signal);
+    expect(((fetchImpl.mock.calls[0] as unknown) as [RequestInfo, RequestInit])[1].signal).toBe(controller.signal);
   });
 });
