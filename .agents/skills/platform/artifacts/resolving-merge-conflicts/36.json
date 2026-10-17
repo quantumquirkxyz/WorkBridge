@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "2.0",
+  "artifactType": "plan",
+  "id": "resolve-conflict-36",
+  "skill": "resolving-merge-conflicts",
+  "skillVersion": "1",
+  "promptVersion": "2.0",
+  "createdAt": "2026-10-17T06:46:00Z",
+  "updatedAt": "2026-10-17T06:46:00Z",
+  "input": {
+    "branch": "issue/36-add-the-web-test-harness-jsdom-component",
+    "conflictSource": "merge",
+    "conflictingFiles": ["package-lock.json"]
+  },
+  "output": {
+    "status": "resolved",
+    "resolution": "Merged origin/main (typed API client and split ExplorationDashboard from #35 / PR #64). Regenerated package-lock.json so harness and TanStack Query dependencies coexist. Added node tests for the new client, query keys, and exploration utils plus jsdom hook smoke tests so the #36 coverage thresholds still hold.",
+    "filesResolved": ["package-lock.json"],
+    "filesRemaining": [],
+    "branchClean": true,
+    "nextConsumer": "review-pr"
+  },
+  "provenance": {
+    "sourceOfTruth": "GitHub PR #69 conflicting with origin/main after #35 merged; skill resolving-merge-conflicts",
+    "scope": [
+      "merge origin/main into issue/36",
+      "resolve package-lock.json",
+      "preserve #36 harness and #35 API client",
+      "restore function coverage threshold"
+    ],
+    "outOfScope": [
+      "apps/web/.next",
+      "apps/web/AGENTS.md",
+      ".pr-review-36.md",
+      "merging or closing PR #69 / issue #36"
+    ],
+    "nextConsumer": "review-pr",
+    "evidence": "npm run typecheck passed; npm run test 505+; npm run test:coverage 80.42% functions; npm run test:e2e 6/6; merge commit 03d3b83",
+    "riskRemaining": "GitHub mergeable may lag until checks refresh. New #35 UI files remain mostly untested beyond the threshold-recovery tests."
+  },
+  "evaluation": {
+    "qualityBarScore": 90,
+    "artifactPassedQualityBar": true,
+    "evaluators": {
+      "behavioral": {
+        "passed": true,
+        "score": 90,
+        "notes": "Inspected state, merged origin/main, preserved both intents, finished the merge, ran covering tests, did not discard unrelated changes."
+      },
+      "traceability": {
+        "passed": true,
+        "score": 90,
+        "notes": "Conflict was only package-lock.json; #35 files auto-merged; #36 harness files unchanged."
+      },
+      "quality-bar": {
+        "passed": true,
+        "score": 90,
+        "notes": "Typecheck, unit/component, coverage thresholds, and Playwright e2e passed after resolution."
+      }
+    }
+  }
+}
