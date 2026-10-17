@@ -1,14 +1,12 @@
 import type { CandidatePreferences, CandidateProfile } from '@puente/domain';
 import { createSeedCatalog, type CachedVacancy } from '@puente/catalog';
 import {
-  createMatchingService,
-  matchingConfigFromEnv,
   type MatchingService,
 } from '@puente/agent-runtime';
 import type { MatchDecision } from '@puente/solver';
 import { readCandidatePreferences, readCandidateProfile } from './neon-repository';
 import type { HandlerResult } from './handler-result';
-import { candidateContext, vacancyInput } from './matching-input';
+import { candidateContext, matchingService, vacancyInput } from './matching-input';
 
 export interface MatchHandlerDeps {
   profile?: CandidateProfile;
@@ -40,11 +38,7 @@ export async function handleMatch(payload: unknown, deps: MatchHandlerDeps = {})
   const key = `${candidateId}:${version}:${ids.join(',')}`;
   const cached = cache.get(key);
   if (cached) return { status: 200, body: cached };
-  const service = deps.service ?? createMatchingService({ ...matchingConfigFromEnv({
-    GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY,
-    GOOGLE_MAPS_ENDPOINT: process.env.GOOGLE_MAPS_ENDPOINT,
-    GOOGLE_GEOCODING_ENDPOINT: process.env.GOOGLE_GEOCODING_ENDPOINT,
-  }), warnings: [] });
+  const service = deps.service ?? matchingService();
   const decisions = await Promise.all(vacancies.map((vacancy) => service.evaluatePair(profile, candidateContext(preferences), vacancy, deps.now ? { now: deps.now } : {})));
   const response = { decisions, preferencesVersion: version };
   cache.set(key, response);

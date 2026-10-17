@@ -1,9 +1,7 @@
 import { matchSkill, resolveTargetRoles, type CandidatePreferences, type CandidateProfile } from '@puente/domain';
 import { validateExplorationResult, type ExplorationResult } from '@puente/catalog';
 import {
-  createMatchingService,
   DEFAULT_GEO_POINT,
-  matchingConfigFromEnv,
   toSolverCandidate,
   toSolverVacancy,
   type MatchingService,
@@ -21,7 +19,7 @@ import {
 import type { HandlerResult } from './handler-result';
 import { profileStore, type ProfileStore } from './profile-store';
 import { readCandidateProfile } from './neon-repository';
-import { candidateContext, vacancyInput } from './matching-input';
+import { candidateContext, matchingService, vacancyInput } from './matching-input';
 
 export interface RoadmapHandlerDeps {
   /** Injected for tests; defaults to the bundled cached training catalogue. */
@@ -55,14 +53,6 @@ function specializationsFor(preferences: CandidatePreferences): string[] {
     .map((role) => ROLE_TO_SPECIALIZATION[role.role_id])
     .filter((slug): slug is string => typeof slug === 'string');
   return [...new Set(slugs)].sort();
-}
-
-function matchingService(): MatchingService {
-  return createMatchingService({ ...matchingConfigFromEnv({
-    GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY,
-    GOOGLE_MAPS_ENDPOINT: process.env.GOOGLE_MAPS_ENDPOINT,
-    GOOGLE_GEOCODING_ENDPOINT: process.env.GOOGLE_GEOCODING_ENDPOINT,
-  }), warnings: [] });
 }
 
 /**
