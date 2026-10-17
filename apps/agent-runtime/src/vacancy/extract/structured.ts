@@ -92,6 +92,7 @@ export function extractStructured(
     vacancyId: vacancy.vacancyId ?? null,
     title: vacancy.title.trim(),
     employer: vacancy.employer ?? null,
+    employerOrgId: vacancy.employerOrgId,
     locale: vacancy.locale ?? "es-PA",
     location: normalizeLocation(vacancy.location),
     rawText,
@@ -150,6 +151,7 @@ export function extractJson(json: string | object): ExtractedVacancy {
       vacancyId: typeof record.vacancyId === "string" ? record.vacancyId : undefined,
       title: title.length > 0 ? title : "Vacante",
       employer: typeof record.employer === "string" ? record.employer : null,
+      employerOrgId: typeof record.employerOrgId === "string" ? record.employerOrgId : undefined,
       locale: typeof record.locale === "string" ? record.locale : undefined,
       location:
         record.location === undefined

@@ -59,6 +59,42 @@ async function dispatch(req: IncomingMessage, res: ServerResponse, context: Requ
   assertNoSecrets(body, context.secrets);
   const session = resolveSession(req, body);
 
+  if (req.method === "GET" && path === "/drafts") {
+    writeJson(
+      res,
+      200,
+      { drafts: context.service.listDrafts(session, {
+        candidateId: url.searchParams.get("candidateId") ?? undefined,
+        gate: url.searchParams.get("gate") ?? undefined,
+        pending: url.searchParams.get("pending") === "true",
+      }) },
+      context.secrets,
+    );
+    return;
+  }
+
+  const draftRead = /^\/drafts\/([^/]+)$/.exec(path);
+  if (req.method === "GET" && draftRead) {
+    writeJson(res, 200, context.service.readDraft(session, draftRead[1] ?? ""), context.secrets);
+    return;
+  }
+
+  if (req.method === "GET" && path === "/submissions") {
+    writeJson(
+      res,
+      200,
+      { submissions: context.service.listSubmissions(session, url.searchParams.get("interview") ?? "") },
+      context.secrets,
+    );
+    return;
+  }
+
+  const submissionRead = /^\/submissions\/([^/]+)$/.exec(path);
+  if (req.method === "GET" && submissionRead) {
+    writeJson(res, 200, context.service.readSubmission(session, submissionRead[1] ?? ""), context.secrets);
+    return;
+  }
+
   if (req.method === "POST" && path === "/drafts") {
     writeJson(res, 201, context.service.createDraft(session, body), context.secrets);
     return;

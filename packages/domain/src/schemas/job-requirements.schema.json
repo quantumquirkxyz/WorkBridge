@@ -24,6 +24,7 @@
     "vacancyId": { "type": "string", "minLength": 1 },
     "title": { "type": "string", "minLength": 1 },
     "employer": { "type": ["string", "null"] },
+    "employerOrgId": { "type": "string", "minLength": 1 },
     "source": { "enum": ["manual", "json", "pdf", "image"] },
     "capturedAt": { "type": "string", "format": "date-time" },
     "locale": { "type": "string", "minLength": 2 },
