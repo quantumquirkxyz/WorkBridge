@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "2.0",
+  "artifactType": "plan",
+  "id": "resolve-conflict-11",
+  "skill": "resolving-merge-conflicts",
+  "skillVersion": "1",
+  "promptVersion": "2.0",
+  "createdAt": "2026-10-17T00:54:39.000Z",
+  "updatedAt": "2026-10-17T00:54:39.000Z",
+  "input": {
+    "branch": "feat/issue-11-build-specialization-aware-training-roadmap",
+    "pr": "https://github.com/HackathonFISC/equipo-02/pull/22",
+    "conflictSource": "merge",
+    "conflictingFiles": [
+      "package-lock.json",
+      "tsconfig.json",
+      "vitest.config.ts"
+    ]
+  },
+  "output": {
+    "status": "resolved",
+    "resolution": "Merged origin/main (ddb908c) into the issue #11 branch. Both intents were compatible, so each file keeps main's newer shape plus the training seam. tsconfig.json adopts main's ES2022 + DOM/react-jsx options and include pattern and adds the @puente/training path mapping. vitest.config.ts adopts main's r() alias helper and test globs and adds the @puente/training alias. package-lock.json keeps the @puente/training workspace link next to the @puente/web link added on main. No code in the training package was changed by the resolution.",
+    "filesResolved": [
+      "package-lock.json",
+      "tsconfig.json",
+      "vitest.config.ts"
+    ],
+    "filesRemaining": [],
+    "branchClean": true,
+    "mergeCommit": "a28828e",
+    "nextConsumer": "ship-subissue"
+  },
+  "provenance": {
+    "sourceOfTruth": "origin/main at ddb908c and the issue #11 branch at 2555215, resolved in a28828e",
+    "scope": [
+      "Conflict markers in the shared TypeScript and Vitest configs and the workspace lockfile",
+      "Preserve main's added packages (ingestion, profile, web, agent-runtime) and this branch's @puente/training package"
+    ],
+    "outOfScope": [
+      "Reworking the merged issue #4/#6/#9/#12/#19 behavior",
+      "Adding a per-package tsconfig.json for packages/training (the root config already type-checks it)",
+      "npm audit fix --force for the transitive advisories inherited from main"
+    ],
+    "nextConsumer": "ship-subissue",
+    "blockedBy": [],
+    "evidence": "No conflict markers remain. npm ci installed from the resolved lock. npm run lint pass. npm run typecheck pass. npm test 364/364 pass. npm run test:coverage 94.76% lines / 81.09% branches (thresholds 80/70); training package 98.68% lines. Merge commit a28828e; PR #22 mergeStateStatus CLEAN, mergeable MERGEABLE.",
+    "riskRemaining": "npm audit reports 5 moderate transitive advisories via @mastra/core -> gray-matter -> js-yaml, inherited from main and unrelated to this resolution. The two pre-existing working-tree side effects (benchmark-history.jsonl modification and traces/2026-10-17.jsonl) were preserved, not committed."
+  },
+  "evaluation": {
+    "qualityBarScore": 90,
+    "artifactPassedQualityBar": true,
+    "evaluators": {
+      "behavioral": {
+        "passed": true,
+        "score": 90,
+        "notes": "Inspected both sides with git show before editing, unioned compatible intents, finished the merge, and re-ran install, lint, typecheck, tests, and coverage."
+      },
+      "traceability": {
+        "passed": true,
+        "score": 90,
+        "notes": "Conflicts map to PR #22 and issue #11. Source origin/main ddb908c, resolution commit a28828e."
+      },
+      "quality-bar": {
+        "passed": true,
+        "score": 90,
+        "notes": "364 tests pass and coverage stays above the 80% lines / 70% branches gate."
+      }
+    }
+  }
+}

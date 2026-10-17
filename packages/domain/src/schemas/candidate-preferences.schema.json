@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://puente-laboral.pa/schemas/candidate-preferences/1.0.0",
+  "title": "CandidatePreferences",
+  "description": "Work preferences captured explicitly from the candidate (ticket #7). Preferences are declared, never inferred by the LLM, and are persisted as a validated JSON document. They are deliberately separate from CandidateProfile version 1.0.0, which owns the extracted profile only.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "preferences_id",
+    "candidate_id",
+    "locale",
+    "origin",
+    "created_at",
+    "updated_at",
+    "target_roles",
+    "modality",
+    "max_location",
+    "max_travel_minutes",
+    "monthly_transport_budget_usd",
+    "minimum_salary_usd",
+    "availability",
+    "contract_types",
+    "transport_modes",
+    "willing_to_train",
+    "willing_to_intern"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "preferences_id": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" },
+    "candidate_id": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" },
+    "locale": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/language_tag" },
+    "origin": {
+      "const": "candidate_explicit",
+      "description": "Guard against inference: preferences may only enter the system from an explicit candidate action, never from an LLM."
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "target_roles": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1, "maxLength": 120 },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "modality": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/work_modality" },
+    "max_location": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/location" },
+    "max_travel_minutes": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 600,
+      "description": "Maximum acceptable one-way commute in minutes."
+    },
+    "monthly_transport_budget_usd": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Monthly transport budget in USD; 0 means no explicit budget."
+    },
+    "minimum_salary_usd": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Monthly salary floor in USD; 0 means the candidate has no explicit floor."
+    },
+    "availability": { "$ref": "#/$defs/availability" },
+    "contract_types": {
+      "type": "array",
+      "items": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/contract_type" },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "transport_modes": {
+      "type": "array",
+      "items": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/transport_mode" },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "willing_to_train": {
+      "type": "boolean",
+      "description": "Candidate is willing to take training courses."
+    },
+    "willing_to_intern": {
+      "type": "boolean",
+      "description": "Candidate is willing to accept an internship."
+    }
+  },
+  "$defs": {
+    "availability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["days", "start_minute", "end_minute", "weekly_hours"],
+      "properties": {
+        "days": {
+          "description": "ISO weekdays the candidate can work, 0 = Sunday … 6 = Saturday.",
+          "type": "array",
+          "items": { "type": "integer", "minimum": 0, "maximum": 6 },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "start_minute": { "type": "integer", "minimum": 0, "maximum": 1439 },
+        "end_minute": { "type": "integer", "minimum": 1, "maximum": 1440 },
+        "weekly_hours": { "type": "integer", "minimum": 0, "maximum": 168 }
+      }
+    }
+  }
+}

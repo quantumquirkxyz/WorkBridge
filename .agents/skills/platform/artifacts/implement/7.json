@@ -1,0 +1,42 @@
+{
+  "status": "completed",
+  "changes": [
+    "Added a CandidatePreferences contract (JSON Schema 2020-12, packages/domain) covering target roles, modality, maximum location, max travel time, monthly transport budget, minimum salary, availability, contract types, transport modes, and course/internship willingness.",
+    "Guarded against inference: the contract requires origin = candidate_explicit, and buildPreferences maps the form payload straight onto the contract with no model call, so preferences can never be inferred by the LLM.",
+    "Added packages/catalog, the cached-vacancy seam: CachedVacancy and ExplorationResult contracts validated by the shared Ajv 2020-12 instance from @puente/domain.",
+    "Added toCachedVacancy/loadCatalogFromScraped, which preserve jobId, jobUrl, queriedAt (query date), and scrapingInfo verbatim beside the normalized view.",
+    "Added computeFreshness (default 72 h), which measures age from postedAt and returns a dashboard-ready Spanish label; exploreVacancies excludes stale vacancies before any compatibility check.",
+    "Implemented deterministic preference exploration (stale > modality > location > internship/contract > schedule > salary filters) with provenance and freshness on every match and a Spanish reason on every exclusion.",
+    "Added the deterministic ExplorationAgent in apps/agent-runtime, which validates preferences and queries the catalogue.",
+    "Added the Spanish candidate dashboard (apps/web): an explicit-preferences form plus match/exclusion tables showing freshness labels and provenance links.",
+    "Added /api/preferences (persist) and /api/explore (persist + query) routes backed by a pure exploration handler and an in-memory preferences store.",
+    "Fixed two pre-existing lint blockers so the gate is meaningful: eslint now ignores .next build output, and the tesseract dynamic import in packages/ingestion uses a typed module shape instead of any.",
+    "Added 22 tests (5 domain preferences, 23 catalog, 3 agent, 7 web minus overlap); suite is 268 tests."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npm run lint",
+      "npm run typecheck",
+      "npm test",
+      "npm run test:coverage",
+      "npm audit",
+      "npm run build --workspace @puente/web",
+      "curl POST /api/explore (live next start smoke test)"
+    ],
+    "skipped": [
+      "Playwright browser test (see notes)"
+    ],
+    "notes": "268/268 Vitest tests pass. Coverage 94.09% lines / 78.57% branches (gate-ci threshold is 80% lines / 70% branches). npm audit reports 0 vulnerabilities. The Next.js production build compiles with routes /, /api/explore, /api/preferences. A live `next start` smoke test returned the expected result: summary {considered:6, matched:1, excluded:5, stale:1}, match lnk-1001 with Spanish freshness label and apify_linkedin_jobs provenance, and Spanish exclusion reasons (stale/modalidad/contrato/ubicación). Playwright is not installed in this workspace (no @playwright/test dependency or browser), so per the agreed approach the validation seam was exercised with deterministic Vitest handler tests plus the live HTTP smoke test instead of a browser run."
+  },
+  "commitSha": "1fa7e6f",
+  "branch": "feat/issue-7-build-candidate-preferences-and-vacancy-exploration",
+  "nextConsumer": "publish-open-pr",
+  "blockedBy": [],
+  "riskRemaining": "Preferences are persisted in an in-process store; a durable PostgreSQL/Prisma store should replace it behind the same PreferencesStore interface. The catalogue is served from the bundled fixture until the Apify LinkedIn Jobs refresh is wired, so freshness reflects fixture postedAt values. Skill affinity in exploration is a pre-match heuristic over target-role taxonomy ids; the solver still owns hard skill constraints. Playwright was not run (not installed), so no real-browser E2E coverage exists yet.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  }
+}

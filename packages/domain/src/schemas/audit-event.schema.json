@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://puentelaboral.pa/schemas/audit-event.schema.json",
+  "title": "AuditEvent",
+  "description": "Assumed signature of the issue #9 append-only audit record. Issue #12 writes one event for every approval, correction, rejection, and submission.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "eventId",
+    "traceId",
+    "idempotencyKey",
+    "actor",
+    "role",
+    "action",
+    "reason",
+    "timestamp"
+  ],
+  "properties": {
+    "eventId": { "type": "string", "minLength": 1 },
+    "traceId": { "type": "string", "minLength": 1 },
+    "idempotencyKey": { "type": "string", "minLength": 1 },
+    "actor": { "type": "string", "minLength": 1 },
+    "role": { "enum": ["candidate", "employer", "counselor", "system"] },
+    "action": { "enum": ["approval", "correction", "rejection", "submission"] },
+    "reason": { "type": "string", "minLength": 1 },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "agent": {
+      "type": ["string", "null"],
+      "enum": ["exploration", "profile_and_evidence", "market_and_matching", "training", null]
+    }
+  }
+}

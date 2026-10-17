@@ -1,0 +1,12 @@
+{
+  "key": "close-issue-9",
+  "payload": {
+    "issue": 9,
+    "pr": 19
+  },
+  "recordedAt": "2026-10-17T00:42:34.174Z",
+  "outcome": {
+    "state": "closed",
+    "issue": 9
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://puente-laboral.pa/schemas/intake-request/1.0.0",
+  "title": "IntakeRequest",
+  "description": "One candidate intake submission accepted by the apps/web intake API. PDF and image sources carry base64 content; text and pre-transcribed audio carry inline text.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["kind"],
+  "properties": {
+    "kind": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/intake_source_kind" },
+    "text": {
+      "type": "string",
+      "maxLength": 200000,
+      "description": "Pasted CV text or a pre-transcribed audio description."
+    },
+    "fileName": { "type": "string", "maxLength": 300 },
+    "mimeType": { "type": "string", "maxLength": 150 },
+    "contentBase64": {
+      "type": "string",
+      "maxLength": 35000000,
+      "description": "Base64-encoded bytes for a PDF or image source."
+    },
+    "altText": {
+      "type": "string",
+      "maxLength": 20000,
+      "description": "Optional human-provided transcription/description for an image when no vision provider is configured."
+    },
+    "candidateId": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" },
+    "targetRoles": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "locale": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/language_tag" },
+    "traceId": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "kind": { "enum": ["text", "audio_transcript"] } }, "required": ["kind"] },
+      "then": { "required": ["text"] }
+    },
+    {
+      "if": { "properties": { "kind": { "enum": ["pdf", "image"] } }, "required": ["kind"] },
+      "then": { "required": ["contentBase64"] }
+    }
+  ]
+}

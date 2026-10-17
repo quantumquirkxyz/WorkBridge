@@ -1,0 +1,23 @@
+{
+  "status": "implemented",
+  "completed": [
+    "F1 — Extracted the shared Spanish modality/contract label maps into packages/catalog/src/labels.ts and exported them from @puente/catalog; explore.ts lower-cases them inline so reason strings are unchanged, and the dashboard consumes them.",
+    "F2 — Removed the dead transportModes?: TransportMode[] field from RawScrapedVacancy and its now-unused import.",
+    "F4 — Renamed pct -> clampRatio in packages/catalog/src/explore.ts (definition plus four call sites).",
+    "F5 — exploration-result.schema.json now $refs the shared common#/$defs/identifier for jobId, matching cached-vacancy.schema.json.",
+    "F6 — Added apps/web/lib/request-body.ts (readJsonBody) and both API routes now use it.",
+    "F7 — Added .agents/adr/0004-vacancy-catalog-seam.md documenting the catalog seam, the 72 h freshness rule, per-package contracts (solver precedent), and the deliberate CandidatePreferences vs CandidateProfile split; also records resolutions for ST1 and Spec S3.",
+    "Pass-2 NEW-1 — Dashboard MODALITY_OPTIONS/CONTRACT_OPTIONS now derive their labels from the shared maps (no residual duplication).",
+    "Pass-2 NEW-2 — Dashboard renders DEFAULT_MAX_AGE_HOURS instead of the literal 72 for the stale count.",
+    "Pass-2 NEW-3 — Dropped the now-unused TransportMode re-export from packages/catalog (types.ts, index.ts)."
+  ],
+  "validation": [
+    "npm run lint — pass",
+    "npm run typecheck — pass",
+    "npm test — 268/268 pass",
+    "npm run gate:ci (typecheck + coverage) — pass; 94.09% lines / 78.84% branches",
+    "grep verification after the pass-2 cleanup — no hard-coded modality/contract labels or '72 h' literal remain in ExplorationDashboard.tsx; no TransportMode reference remains under packages/catalog/src"
+  ],
+  "remaining": "Not implemented: F3/ST5 is not a defect (assertCandidatePreferences is a TS type-narrowing assertion needed at both the agent's unknown boundary and exploreVacancies' public guard). Open Spec items carried to the loop: S1 Playwright validation is an accepted deviation; S2 (travel/budget/modes/availability not used for matching) deferred to #20; S4 (durable persistence) deferred but has no follow-up ticket, which keeps the review-fix loop blocked.",
+  "scopeNotes": "Only the plan's scoped files changed (7 modified, 3 added on the first commit; 5 modified on the cleanup commit). No opportunistic refactors. Commits: cf177a9 (F1-F7), aec26cd (pass-2 cleanup). This note does not mark the PR clean; only a fresh review-pr pass can."
+}

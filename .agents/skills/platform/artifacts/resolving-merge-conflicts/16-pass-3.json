@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "2.0",
+  "artifactType": "plan",
+  "id": "resolve-conflict-16-pass-3",
+  "skill": "resolving-merge-conflicts",
+  "skillVersion": "1",
+  "promptVersion": "2.0",
+  "createdAt": "2026-10-17T00:48:00.000Z",
+  "updatedAt": "2026-10-17T00:48:00.000Z",
+  "input": {
+    "branch": "feat/issue-6-build-normalized-credential-verification",
+    "conflictSource": "merge",
+    "conflictingFiles": [
+      "apps/agent-runtime/package.json",
+      "apps/agent-runtime/src/index.ts",
+      "package-lock.json"
+    ]
+  },
+  "output": {
+    "status": "resolved",
+    "resolution": "Merged origin/main at e481da2, which brings the Mastra workflow from pull request #19. The package description and dependencies keep credential verification and Ajv together with the workflow dependencies. The runtime entry exports both verifyCredential and the workflow API. The lockfile was regenerated with npm install. Root typecheck passed and the suite passed 34 files and 309 tests.",
+    "filesResolved": [
+      "apps/agent-runtime/package.json",
+      "apps/agent-runtime/src/index.ts",
+      "package-lock.json"
+    ],
+    "filesRemaining": [],
+    "branchClean": true,
+    "nextConsumer": "ship-subissue"
+  },
+  "provenance": {
+    "sourceOfTruth": "origin/main e481da2 and the clean review https://github.com/HackathonFISC/equipo-02/pull/16#pullrequestreview-5555137025 on a08829c",
+    "scope": [
+      "three merge conflicts created when pull request #19 landed on main"
+    ],
+    "outOfScope": [
+      "changing verification status rules",
+      "deleting the feature branch"
+    ],
+    "nextConsumer": "ship-subissue",
+    "evidence": "Merge commit b0f7724. npx tsc --noEmit passed. npm test passed 34 files and 309 tests.",
+    "riskRemaining": "Main can move again before the pull request merge completes."
+  },
+  "evaluation": {
+    "qualityBarScore": 90,
+    "artifactPassedQualityBar": true,
+    "evaluators": {
+      "behavioral": {
+        "passed": true,
+        "score": 90,
+        "notes": "Both sides kept: credential exports and the workflow exports."
+      },
+      "traceability": {
+        "passed": true,
+        "score": 90,
+        "notes": "Conflicts map to pull request #19 landing on main."
+      },
+      "quality-bar": {
+        "passed": true,
+        "score": 90,
+        "notes": "Typecheck and the full test suite passed after the resolution."
+      }
+    }
+  }
+}

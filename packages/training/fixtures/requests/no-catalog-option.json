@@ -1,0 +1,25 @@
+{
+  "candidateId": "cand-no-catalog-option",
+  "targetVacancyId": null,
+  "aptitude": "not_currently_apt",
+  "gaps": [
+    {
+      "skillId": "PA-CS-0007",
+      "label": "Punto de venta (POS)",
+      "kind": "technical",
+      "requiredLevel": 2,
+      "currentLevel": 0,
+      "mandatory": true
+    },
+    {
+      "skillId": "PA-LANG-0002",
+      "label": "Idioma inglés",
+      "kind": "language",
+      "requiredLevel": 1,
+      "currentLevel": 0,
+      "mandatory": false
+    }
+  ],
+  "heldSkills": [],
+  "preferences": { "specializations": ["customer_service"] }
+}

@@ -43,8 +43,9 @@ training or internships, and prepares applications for human approval.
 
 | Concern | Value |
 |---|---|
-| Language / runtime | _to confirm with project brief_ |
-| Package manager | _to confirm_ |
+| Language / runtime | TypeScript; Node.js ≥ 22 |
+| Package manager | npm workspaces (monorepo: `packages/*`, `apps/*`) |
+| Contracts | JSON Schema 2020-12 + Ajv (`packages/domain`) |
 | Issue tracker | GitHub Issues in `HackathonFISC/equipo-02` |
 | Docs surface | `docs/reference/agents/`, `docs/how-to/`, `docs/explanation/` |
 | ADRs | `.agents/adr/` |

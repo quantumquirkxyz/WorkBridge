@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "1.0",
+  "artifactType": "review-fix-loop",
+  "id": "review-fix-loop-5",
+  "skill": "review-fix-loop",
+  "createdAt": "2026-10-16T22:36:56.000Z",
+  "updatedAt": "2026-10-16T22:36:56.000Z",
+  "pr": "https://github.com/HackathonFISC/equipo-02/pull/13",
+  "branch": "feat/issue-5-build-vacancy-normalization-and-fairness-checks",
+  "fixedPoint": "main",
+  "specSource": "GitHub issue #5 (parent spec #2)",
+  "reviewPassCount": 2,
+  "passes": [
+    {
+      "pass": 1,
+      "headReviewed": "66dc752",
+      "reviewUrl": "https://github.com/HackathonFISC/equipo-02/pull/13#pullrequestreview-5554342199",
+      "standardsFindings": 9,
+      "specFindings": 6,
+      "blockerOrRequiredFindings": 6,
+      "planComment": "https://github.com/HackathonFISC/equipo-02/pull/13#issuecomment-6225917869",
+      "planStatus": "planned",
+      "implementationComment": "https://github.com/HackathonFISC/equipo-02/pull/13#issuecomment-6225974440",
+      "implementationCommit": "2595e96",
+      "implementationStatus": "implemented",
+      "note": "Plan comment carried 5 executable items (1 Spec blocker + 2 Spec required + 3 Standards required); everything else was advisory."
+    },
+    {
+      "pass": 2,
+      "headReviewed": "7432f71",
+      "reviewUrl": "https://github.com/HackathonFISC/equipo-02/pull/13#issuecomment-6226012851",
+      "standardsFindings": 0,
+      "specFindings": 2,
+      "blockerOrRequiredFindings": 0,
+      "implementationCommit": "7432f71",
+      "implementationStatus": "implemented",
+      "note": "All planned pass-1 findings resolved. The only new findings were two documentation-drift nits (stale fairness.ts comment, README test count), both fixed in 7432f71."
+    }
+  ],
+  "loopState": {
+    "lastPlanPosted": true,
+    "lastImplementationCompleted": true,
+    "validation": [
+      "npm run lint - pass",
+      "npm run typecheck - pass",
+      "npm test - 72/72 pass (was 64)",
+      "npm run test:coverage - exit 0; 94.57% lines / 83.52% branches (thresholds 80% / 70%)"
+    ],
+    "metadataAligned": {
+      "issue": 5,
+      "labels": ["ready-for-agent"],
+      "milestone": null,
+      "note": "No new tracker metadata invented on the PR; the linked issue label set is unchanged."
+    }
+  },
+  "exitCondition": "clean",
+  "deferred": [
+    {
+      "finding": "ESCO concept URIs in the Panamanian skills taxonomy seed are unverified (all 23 escoUri: null); the ESCO linkage is nominal.",
+      "owner": "KerubeDev",
+      "followUpTicket": "https://github.com/HackathonFISC/equipo-02/issues/17",
+      "reason": "Out of scope for a deterministic, offline code PR: needs the live ESCO API / a pinned ESCO export and a taxonomy data refresh."
+    }
+  ],
+  "residualAdvisory": [
+    "Standards (judgement): Data Clumps (blockingReasons/reviewQueue already grouped as AppliedFairness), shape Duplicated Code, Repeated Switches, Primitive Obsession (ad-hoc id strings, errors.ts inputKind: string).",
+    "Standards (judgement): justified:boolean flag added to FairnessClassification - carries real meaning, kept.",
+    "Spec (judgement): one prohibited requirement blocks the whole vacancy (ranking.ts:28-30) - defensible reading of 'Block clearly prohibited requirements'.",
+    "Spec (judgement): prohibited requirements never enter reviewQueue (normalize.ts:107-120) - intentional for clearly prohibited wording; the block is recorded in blockingReasons."
+  ],
+  "nextConsumer": "ship-subissue"
+}

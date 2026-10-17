@@ -1,6 +1,26 @@
 .agents/skills/platform/runs/
 node_modules/
+.env
+coverage/
+test-results/
+playwright-report/
+blob-report/
 .skill-sandbox/
 .opencode/goals/
 .DS_Store
 Thumbs.db
+
+# Node / build output for the application monorepo (ticket #4)
+dist/
+.next/
+out/
+coverage/
+*.tsbuildinfo
+
+# Next.js generated type references (recreated on build/dev)
+next-env.d.ts
+
+# Local environment and generated artifacts
+.env
+.env.local
+.env.*.local

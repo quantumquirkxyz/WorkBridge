@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "2.0",
+  "artifactType": "plan",
+  "id": "resolve-conflict-16",
+  "skill": "resolving-merge-conflicts",
+  "skillVersion": "1",
+  "promptVersion": "2.0",
+  "createdAt": "2026-10-16T23:21:00.000Z",
+  "updatedAt": "2026-10-16T23:21:00.000Z",
+  "input": {
+    "branch": "feat/issue-6-build-normalized-credential-verification",
+    "conflictSource": "merge",
+    "conflictingFiles": ["apps/agent-runtime/package.json"]
+  },
+  "output": {
+    "status": "resolved",
+    "resolution": "Merged origin/main at eb2cad73b1e4647e590f24c6489f9e329e66c034. The add/add conflict kept the workspace name @puente/agent-runtime, the vacancy entrypoint, and the vacancy dependencies, and kept Ajv plus the credential test scripts. The package TypeScript project now covers credential verification only, so vacancy sources stay on the root bundler project. The root Vitest include now also runs apps/*/test so the credential suite stays in the workspace test command.",
+    "filesResolved": [
+      "apps/agent-runtime/package.json",
+      "apps/agent-runtime/package-lock.json",
+      "apps/agent-runtime/tsconfig.json",
+      "package-lock.json",
+      "vitest.config.ts"
+    ],
+    "filesRemaining": [],
+    "branchClean": false,
+    "nextConsumer": "review-pr"
+  },
+  "provenance": {
+    "sourceOfTruth": "origin/main eb2cad73b1e4647e590f24c6489f9e329e66c034 and PR 16 head before the merge",
+    "scope": [
+      "apps/agent-runtime/package.json add/add conflict",
+      "workspace install and typecheck integration required by that resolution"
+    ],
+    "outOfScope": [
+      "rewriting vacancy imports to NodeNext",
+      "upgrading the credential Vitest dev dependency",
+      "committing the local execution trace",
+      "merging the pull request"
+    ],
+    "nextConsumer": "review-pr",
+    "blockedBy": [],
+    "evidence": "Merge commit 9c05911b982e4ae25d36c856b4a479fcfa73d9ae. Root tsc, package tsc, eslint, and npm test passed: 11 files, 99 tests.",
+    "riskRemaining": "The local trace file .agents/skills/platform/traces/2026-10-16.jsonl stays uncommitted. It was stashed during the merge and restored afterward. A later review-pr pass should inspect the merged tree before ship-subissue."
+  },
+  "evaluation": {
+    "qualityBarScore": 85,
+    "artifactPassedQualityBar": true,
+    "evaluators": {
+      "behavioral": {
+        "passed": true,
+        "score": 85,
+        "notes": "Both package intents were kept. The merge was completed and the local trace was not discarded."
+      },
+      "traceability": {
+        "passed": true,
+        "score": 85,
+        "notes": "The conflict file, resolution, and merge commit are recorded."
+      },
+      "quality-bar": {
+        "passed": true,
+        "score": 85,
+        "notes": "Typecheck, lint, and the workspace test suite passed after the resolution."
+      }
+    }
+  }
+}

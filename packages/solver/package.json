@@ -1,0 +1,17 @@
+{
+  "name": "@puente/solver",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Deterministic geographic matching. Scores candidate/vacancy pairs, enforces hard constraints, and nominates candidates with a HiGHS MILP plus a deterministic greedy fallback.",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./schemas/*": "./src/schemas/*"
+  },
+  "dependencies": {
+    "@puente/domain": "*",
+    "highs": "^1.15.4"
+  }
+}

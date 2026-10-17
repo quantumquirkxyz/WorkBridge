@@ -1,0 +1,42 @@
+/** Closed set. A new failure needs a named code, not an open string. */
+export const APPLICATION_ERROR_CODES = [
+  "already_submitted",
+  "candidate_approval_required",
+  "counselor_approval_required",
+  "draft_closed",
+  "draft_rejected",
+  "employer_approval_required",
+  "expired_session",
+  "forbidden",
+  "guardrail_blocked",
+  "idempotency_conflict",
+  "inconsistent_match",
+  "invalid_envelope",
+  "invalid_input",
+  "invalid_json",
+  "invalid_session",
+  "invented_evidence",
+  "interview_decided",
+  "not_found",
+  "payload_too_large",
+  "secret_rejected",
+  "trace_mismatch",
+  "unknown_evidence",
+  "unknown_role",
+] as const;
+
+export type ApplicationErrorCode = (typeof APPLICATION_ERROR_CODES)[number];
+
+export type ApplicationErrorStatus = 400 | 401 | 403 | 404 | 409 | 413 | 422;
+
+export class ApplicationError extends Error {
+  readonly status: ApplicationErrorStatus;
+  readonly code: ApplicationErrorCode;
+
+  constructor(message: string, status: ApplicationErrorStatus, code: ApplicationErrorCode) {
+    super(message);
+    this.name = "ApplicationError";
+    this.status = status;
+    this.code = code;
+  }
+}
