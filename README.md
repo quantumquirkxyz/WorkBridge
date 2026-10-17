@@ -55,11 +55,59 @@ commits de credenciales reales.
 
 ## Evals
 
-Al menos 15 casos de prueba, métrica y resultados.
+Los resultados siguientes salen de aserciones existentes en Vitest; no son una
+evaluación nueva ni datos generados manualmente. En verificación, la métrica es
+el estado predicho (y el proveedor cuando aplica). En matching y perfil, es la
+clasificación determinista comprobada por el test.
+
+| Caso nombrado | Métrica | Resultado | Test fuente |
+|---|---|---|---|
+| Credencial válida, firma e issuer confiables | Estado / proveedor | `verified` / Certo | `apps/agent-runtime/test/ground-truth.test.ts` — `valid signature and trusted issuer` |
+| Certificado revocado | Estado / proveedor | `rejected` / Certo | `apps/agent-runtime/test/ground-truth.test.ts` — `valid signature with revoked certificate` |
+| Certificado expirado | Estado / proveedor | `rejected` / Certo | `apps/agent-runtime/test/ground-truth.test.ts` — `expired certificate` |
+| Documento alterado | Estado / proveedor | `rejected` / Certo | `apps/agent-runtime/test/ground-truth.test.ts` — `altered document` |
+| Firma inválida | Estado / proveedor | `rejected` / Certo | `apps/agent-runtime/test/ground-truth.test.ts` — `invalid signature` |
+| Firmante desconocido | Estado / proveedor | `unverified` / Certo | `apps/agent-runtime/test/ground-truth.test.ts` — `unknown signer` |
+| Identidad del issuer inconsistente | Estado / proveedor | `rejected` / Certo | `apps/agent-runtime/test/ground-truth.test.ts` — `inconsistent issuer identity` |
+| Datos del certificado inconsistentes | Estado / proveedor | `rejected` / Certo | `apps/agent-runtime/test/ground-truth.test.ts` — `inconsistent certificate data` |
+| Falta la clave pública | Estado / proveedor | `unverified` / Certo | `apps/agent-runtime/test/ground-truth.test.ts` — `missing public key` |
+| Formato no soportado | Estado / proveedor | `unverified` / Certo | `apps/agent-runtime/test/ground-truth.test.ts` — `unsupported format` |
+| Certo no disponible, fallback Accredible | Estado / proveedor | `verified` / Accredible | `apps/agent-runtime/test/ground-truth.test.ts` — `Certo unavailable with Accredible fallback` |
+| Accredible no disponible, fallback Credly | Estado / proveedor | `verified` / Credly | `apps/agent-runtime/test/ground-truth.test.ts` — `Accredible unavailable with Credly fallback` |
+| Todos los proveedores no disponibles | Estado / proveedor | `rejected` / mock | `apps/agent-runtime/test/ground-truth.test.ts` — `all providers unavailable` |
+| Credencial declarada sin evidencia | Estado / proveedor | `declared` / mock | `apps/agent-runtime/test/ground-truth.test.ts` — `declared credential without evidence` |
+| Credencial duplicada o reutilizada | Estado / proveedor | `rejected` / Certo | `apps/agent-runtime/test/ground-truth.test.ts` — `duplicate or reused credential` |
+| Candidato fuerte elegible | Aptitud / score | `apt` / 87 | `packages/solver/src/__tests__/match.test.ts` — `produces apt for a strong eligible candidate` |
+| Candidato parcialmente coincidente | Aptitud / score | `apt_with_gaps` / 50–74 | `packages/solver/src/__tests__/match.test.ts` — `produces apt_with_gaps for a partially matching candidate` |
+| Candidato débil sin fallo duro | Aptitud / score | `not_currently_apt` / <50 | `packages/solver/src/__tests__/match.test.ts` — `produces not_currently_apt from the score band without a hard failure` |
+| Experiencia demasiado breve | Relevancia | `requires_additional_evidence` | `packages/profile/tests/classify.test.ts` — `asks for more evidence when the description is too short` |
+| Experiencia sin solapamiento | Relevancia | `not_relevant` | `packages/profile/tests/classify.test.ts` — `is not relevant when no skills overlap the target role` |
+| Experiencia con solapamiento fuerte | Relevancia / score | `relevant` / ≥0.5 | `packages/profile/tests/classify.test.ts` — `is relevant for a strong overlap with the target role` |
+| Experiencia con solapamiento débil | Relevancia | `partially_relevant` | `packages/profile/tests/classify.test.ts` — `is partially relevant for a weak overlap` |
+
+El caso de ground truth de credenciales también comprueba los 15 estados contra
+la matriz de confusión: `tp=3`, `tn=12`, `fp=0`, `fn=0`, precisión `1`, recall
+`1`, false-positive rate `0`, false-negative rate `0` y fallback rate `3/15`.
 
 ## Bitácora de IA
 
-Qué partes se hicieron con IA, con qué herramienta y qué se modificó a mano.
+Se utilizó **OpenCode (GPT-5.6 Luna)** para explorar el repositorio, localizar
+fixtures y aserciones existentes, proponer la estructura de esta tabla y revisar
+la consistencia de las referencias. Las decisiones y cambios hechos a mano por
+el equipo fueron:
+
+- **Intake:** definir los campos de perfil, sus contratos y el límite entre
+  extracción heurística y extracción con OpenRouter.
+- **Matching:** escoger las dimensiones, pesos, restricciones duras, estados de
+  aptitud y fixtures deterministas usados por el solver.
+- **Verificación de credenciales:** definir la semántica de evidencia declarada,
+  binding del holder, estados de verificación y fallback Certo → Accredible →
+  Credly → mock.
+- **Web handlers:** conectar las rutas con los servicios, validar entradas,
+  aplicar autorización y decidir los códigos/respuestas de error.
+
+La tabla y este registro documentan resultados ya comprobados por la suite; este
+ticket no añade casos de prueba ni cambia `npm test`.
 
 ---
 
