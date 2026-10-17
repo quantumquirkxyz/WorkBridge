@@ -21,15 +21,19 @@ export const CONTRACT_LABELS: Record<ContractType, string> = {
 };
 
 /**
- * Spanish display labels for exclusion reasons, shared by the returned detail
- * strings and the dashboard's near-match warnings so both name a constraint the
- * same way.
+ * Spanish display labels for exclusion reasons, in the canonical priority order
+ * (staleness first). This map is the single source of truth for *both* the
+ * labels and the order: adding a reason means adding one entry here, and the
+ * `Record<ExclusionReason, string>` type forces it to be exhaustive.
  */
 export const EXCLUSION_LABELS: Record<ExclusionReason, string> = {
   stale: 'Desactualizada',
   modality: 'Modalidad',
   location: 'Ubicación',
-  salary: 'Salario',
   contract: 'Contrato',
   schedule: 'Horario',
+  salary: 'Salario',
 };
+
+/** Canonical exclusion priority, derived from `EXCLUSION_LABELS` (one source, not two). */
+export const EXCLUSION_ORDER = Object.keys(EXCLUSION_LABELS) as ExclusionReason[];

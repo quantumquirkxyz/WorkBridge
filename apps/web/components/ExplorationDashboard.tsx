@@ -13,6 +13,7 @@ import {
 } from '@puente/catalog';
 import type { Roadmap, TrainingGap } from '@puente/training';
 import type { SavedSearchView } from '../lib/saved-searches-store';
+import type { PreferencesDraft } from '../lib/preferences';
 
 const DAY_LABELS: Array<{ value: number; label: string }> = [
   { value: 1, label: 'Lun' },
@@ -60,20 +61,8 @@ interface FormStatus {
   error?: string;
 }
 
-interface PreferencesPayload {
-  locale: string;
-  target_roles: string[];
-  modality: WorkModality;
-  max_location: { country: string; province: string | null; district: string | null; raw: string | null };
-  max_travel_minutes: number;
-  monthly_transport_budget_usd: number;
-  minimum_salary_usd: number;
-  availability: { days: number[]; start_minute: number; end_minute: number; weekly_hours: number };
-  contract_types: ContractType[];
-  transport_modes: TransportMode[];
-  willing_to_train: boolean;
-  willing_to_intern: boolean;
-}
+/** The exact preference-draft shape the API validates; no local re-declaration. */
+type PreferencesPayload = PreferencesDraft;
 
 export function ExplorationDashboard() {
   const [targetRoles, setTargetRoles] = useState('Atención al cliente');

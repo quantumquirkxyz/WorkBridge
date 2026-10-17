@@ -132,7 +132,9 @@ describe('exploreVacancies — no match, causes and near matches', () => {
     // lnk-1005 is an internship below the salary floor: two constraints, not near.
     const blocked = result.excluded.find((entry) => entry.jobId === 'lnk-1005')!;
     expect(blocked.reason).toBe('contract');
-    expect([...blocked.failedConstraints].sort()).toEqual(['contract', 'salary']);
+    expect(blocked.failedConstraints.map((failure) => failure.reason).sort()).toEqual(['contract', 'salary']);
+    // Each failed constraint carries its own explanation, not the primary one.
+    expect(new Set(blocked.failedConstraints.map((failure) => failure.detail)).size).toBe(2);
   });
 
   it('names each cause and lists only single-constraint near matches, with warnings', () => {
@@ -146,18 +148,23 @@ describe('exploreVacancies — no match, causes and near matches', () => {
 
     const noMatch = result.noMatch!;
     expect(noMatch.causes.length).toBeGreaterThan(0);
-    // Causes account for every exclusion, once each.
-    const total = noMatch.causes.reduce((sum, cause) => sum + cause.count, 0);
-    expect(total).toBe(result.excluded.length);
+    // Every failed constraint is surfaced as a cause, with the exact count.
     for (const cause of noMatch.causes) {
-      expect(result.excluded.some((entry) => entry.reason === cause.reason)).toBe(true);
+      const failing = result.excluded.filter((entry) =>
+        entry.failedConstraints.some((failure) => failure.reason === cause.reason),
+      );
+      expect(cause.count).toBe(failing.length);
+      expect(cause.count).toBeGreaterThan(0);
     }
+    // Causes name constraints that are *not* any vacancy's primary reason
+    // (lnk-1002's contract failure), proving secondary causes are not hidden.
+    expect(noMatch.causes.map((cause) => cause.reason)).toContain('contract');
 
     // Every near match is blocked by exactly one constraint and warns about it.
     for (const near of noMatch.nearMatches) {
       const entry = result.excluded.find((excluded) => excluded.jobId === near.vacancy.jobId)!;
       expect(entry.failedConstraints).toHaveLength(1);
-      expect(near.blockedBy).toBe(entry.failedConstraints[0]);
+      expect(near.blockedBy).toBe(entry.failedConstraints[0]!.reason);
       expect(near.warnings[0]).toContain('Bloqueada por');
     }
     expect(noMatch.nearMatches.length).toBeLessThanOrEqual(5);

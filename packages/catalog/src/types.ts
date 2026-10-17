@@ -87,10 +87,25 @@ export type ExclusionReason =
   | 'contract'
   | 'schedule';
 
-export interface VacancyMatch {
+/** A declared constraint a vacancy failed, with the exact reason it failed. */
+export interface FailedConstraint {
+  reason: ExclusionReason;
+  /** Spanish, dashboard-ready explanation of this specific failure. */
+  detail: string;
+}
+
+/**
+ * The carrier shared by a match and a near match: the vacancy plus the two facts
+ * every rendered result needs (how fresh it is, and where it came from). Keeping
+ * one carrier means the two shapes cannot drift apart.
+ */
+export interface FreshnessAnnotated {
   vacancy: CachedVacancy;
   freshness: Freshness;
   provenance: VacancyProvenance;
+}
+
+export interface VacancyMatch extends FreshnessAnnotated {
   /** Deterministic 0–100 compatibility score. */
   matchScore: number;
   /** Spanish, dashboard-ready reasons. */
@@ -99,16 +114,18 @@ export interface VacancyMatch {
 
 export interface ExcludedVacancy {
   jobId: string;
+  /** The highest-priority failed constraint; always `failedConstraints[0].reason`. */
   reason: ExclusionReason;
-  /** Spanish, dashboard-ready explanation. */
+  /** Spanish, dashboard-ready explanation of `reason`. */
   detail: string;
   /**
-   * Every declared constraint the vacancy failed, in priority order. `reason`
-   * is always `failedConstraints[0]`; the full list lets a caller distinguish a
-   * vacancy blocked by a single constraint (a *near* match, S-C in the fix plan)
-   * from one that fails several at once.
+   * Every declared constraint the vacancy failed, in priority order, each with
+   * its own explanation. The full list lets a caller distinguish a vacancy
+   * blocked by a single constraint (a *near* match) from one that fails several
+   * at once, and lets the no-match breakdown name *every* blocking cause rather
+   * than only the primary one.
    */
-  failedConstraints: ExclusionReason[];
+  failedConstraints: FailedConstraint[];
   freshness: Freshness;
 }
 
@@ -118,10 +135,7 @@ export interface ExcludedVacancy {
  * with an explicit warning so the candidate can decide whether to widen the one
  * constraint that blocked it.
  */
-export interface NearMatch {
-  vacancy: CachedVacancy;
-  freshness: Freshness;
-  provenance: VacancyProvenance;
+export interface NearMatch extends FreshnessAnnotated {
   /** The single declared constraint that blocked this vacancy. */
   blockedBy: ExclusionReason;
   /** Spanish warning naming the constraint and why it blocked the vacancy. */
@@ -140,7 +154,12 @@ export interface NoMatchCause {
 
 export interface NoMatch {
   explanation: string;
-  /** One entry per exclusion reason present, with an explicit count. */
+  /**
+   * One entry per declared constraint that blocked at least one vacancy, with an
+   * explicit count of the vacancies that failed it. A vacancy that failed several
+   * constraints contributes to several causes, so every stated cause is surfaced
+   * instead of only each vacancy's primary reason.
+   */
   causes: NoMatchCause[];
   /** Vacancies blocked by exactly one constraint, closest first. */
   nearMatches: NearMatch[];

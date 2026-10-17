@@ -7,7 +7,9 @@ export type {
   ExplorationQueryOptions,
   ExplorationResult,
   ExplorationSummary,
+  FailedConstraint,
   Freshness,
+  FreshnessAnnotated,
   NearMatch,
   NoMatch,
   NoMatchCause,
@@ -40,4 +42,4 @@ export { createSeedCatalog, seedVacancies } from './seed';
 
 export { exploreVacancies, DEFAULT_NEAR_MATCH_LIMIT } from './explore';
 
-export { CONTRACT_LABELS, EXCLUSION_LABELS, MODALITY_LABELS } from './labels';
+export { CONTRACT_LABELS, EXCLUSION_LABELS, EXCLUSION_ORDER, MODALITY_LABELS } from './labels';

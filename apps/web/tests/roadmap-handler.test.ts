@@ -5,7 +5,7 @@ import {
   exploreVacancies,
   type ExplorationResult,
 } from '@puente/catalog';
-import { handleRoadmap, deriveGaps } from '../lib/roadmap-handler';
+import { handleRoadmap, deriveAdvisoryGaps } from '../lib/roadmap-handler';
 import preferencesFixture from '../../../packages/catalog/fixtures/preferences.json';
 
 const NOW = () => new Date('2026-10-16T12:00:00.000Z');
@@ -35,7 +35,25 @@ describe('handleRoadmap', () => {
     expect(matched.matches.length).toBeGreaterThan(0);
     const { status, body } = handleRoadmap(matched, { now: NOW });
     expect(status).toBe(200);
-    expect((body as { roadmap: null }).roadmap).toBeNull();
+    expect(body).toMatchObject({ roadmap: null, reason: 'viable_match_exists' });
+  });
+
+  it('keys off noMatch, not the match array, and honours the training opt-in', () => {
+    // A result truncated by `limit: 0` has no `noMatch` and must build nothing.
+    const truncated = exploreVacancies(preferences, createSeedCatalog(), { now: NOW, limit: 0 });
+    expect(truncated.matches).toHaveLength(0);
+    expect(truncated.noMatch).toBeUndefined();
+    expect(handleRoadmap(truncated, { now: NOW }).body).toMatchObject({
+      roadmap: null,
+      reason: 'viable_match_exists',
+    });
+
+    // A candidate who declined training gets no roadmap either.
+    const declined = { ...noMatchResult, noMatch: { ...noMatchResult.noMatch!, roadmapRequested: false } };
+    expect(handleRoadmap(declined, { now: NOW }).body).toMatchObject({
+      roadmap: null,
+      reason: 'candidate_declined_training',
+    });
   });
 
   it('rejects a payload that is not an exploration result', () => {
@@ -44,9 +62,9 @@ describe('handleRoadmap', () => {
   });
 });
 
-describe('deriveGaps', () => {
+describe('deriveAdvisoryGaps', () => {
   it('maps the required skills of near matches onto taxonomy ids, deduplicated', () => {
-    const gaps = deriveGaps(noMatchResult);
+    const gaps = deriveAdvisoryGaps(noMatchResult);
     const ids = gaps.map((gap) => gap.skillId);
     expect(ids.length).toBeGreaterThan(0);
     expect(new Set(ids).size).toBe(ids.length);
@@ -58,7 +76,7 @@ describe('deriveGaps', () => {
 
   it('returns no gaps when there is no noMatch block', () => {
     const empty = { ...noMatchResult, noMatch: undefined } as ExplorationResult;
-    expect(deriveGaps(empty)).toEqual([]);
+    expect(deriveAdvisoryGaps(empty)).toEqual([]);
   });
 });
 

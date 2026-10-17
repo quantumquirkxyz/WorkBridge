@@ -76,7 +76,7 @@ describe('handleExploration', () => {
     expect(result.status).toBe(200);
     const body = result.body as {
       matches: unknown[];
-      excluded: Array<{ jobId: string; reason: string; failedConstraints: string[] }>;
+      excluded: Array<{ jobId: string; reason: string; failedConstraints: Array<{ reason: string; detail: string }> }>;
       noMatch?: {
         explanation: string;
         causes: Array<{ reason: string; count: number; detail: string }>;
@@ -88,14 +88,22 @@ describe('handleExploration', () => {
     expect(body.noMatch?.explanation).toContain('restricciones');
     expect(body.noMatch?.roadmapRequested).toBe(true);
 
-    // Every stated cause is present with an explicit count, and names the reason.
+    // Every stated cause is present with an explicit count, and names a declared
+    // constraint that actually blocked at least one vacancy.
     const causes = body.noMatch?.causes ?? [];
     expect(causes.length).toBeGreaterThan(0);
     for (const cause of causes) {
       expect(cause.count).toBeGreaterThan(0);
       expect(cause.detail.length).toBeGreaterThan(0);
-      expect(body.excluded.some((entry) => entry.reason === cause.reason)).toBe(true);
+      expect(
+        body.excluded.some((entry) =>
+          entry.failedConstraints.some((failure) => failure.reason === cause.reason),
+        ),
+      ).toBe(true);
     }
+    // Secondary failures surface too: contract blocks a vacancy whose primary
+    // reason is location.
+    expect(causes.map((cause) => cause.reason)).toContain('contract');
 
     // Near matches are blocked by exactly one declared constraint and carry a warning.
     expect(body.noMatch?.nearMatches.length).toBeGreaterThan(0);

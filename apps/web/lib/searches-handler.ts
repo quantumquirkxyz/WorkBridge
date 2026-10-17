@@ -1,8 +1,10 @@
 import { makeId, validateCandidatePreferences } from '@puente/domain';
-import { createSeedCatalog, type ExplorationResult, type VacancyCatalog } from '@puente/catalog';
-import { createExplorationAgent, type ExplorationAgent } from '@puente/agent-runtime';
+import type { ExplorationResult } from '@puente/catalog';
 import { buildPreferences, type PreferencesDraft } from './preferences';
+import { MAX_CANDIDATE_ID_LENGTH } from './exploration-handler';
 import { preferencesStore, type PreferencesStore } from './preferences-store';
+import { resolveExplorationAgent, type ExplorationSeamDeps } from './exploration-seam';
+import type { HandlerResult } from './handler-result';
 import {
   savedSearchesStore,
   type SavedSearch,
@@ -10,28 +12,14 @@ import {
   type SavedSearchView,
 } from './saved-searches-store';
 
-export interface SearchesHandlerDeps {
-  agent?: ExplorationAgent;
-  catalog?: VacancyCatalog;
+export interface SearchesHandlerDeps extends ExplorationSeamDeps {
   preferencesStore?: PreferencesStore;
   searchesStore?: SavedSearchesStore;
-  now?: () => Date;
-}
-
-export interface HandlerResult {
-  status: number;
-  body: unknown;
 }
 
 export interface SaveSearchPayload {
   label?: unknown;
   preferences?: unknown;
-}
-
-function explorationAgent(deps: SearchesHandlerDeps): ExplorationAgent {
-  return (
-    deps.agent ?? createExplorationAgent({ catalog: deps.catalog ?? createSeedCatalog(), now: deps.now })
-  );
 }
 
 /**
@@ -58,7 +46,7 @@ export async function handleSaveSearch(
   }
 
   (deps.preferencesStore ?? preferencesStore).save(preferences);
-  const result = await explorationAgent(deps).run(preferences);
+  const result = await resolveExplorationAgent(deps).run(preferences);
 
   const timestamp = (deps.now ?? (() => new Date()))().toISOString();
   const saved: SavedSearch = {
@@ -78,11 +66,11 @@ export async function handleListSearches(
   candidateId: string,
   deps: SearchesHandlerDeps = {},
 ): Promise<HandlerResult> {
-  if (!candidateId || candidateId.length > 128) {
+  if (!candidateId || candidateId.length > MAX_CANDIDATE_ID_LENGTH) {
     return { status: 400, body: { error: 'invalid_candidate_id' } };
   }
   const searches = (deps.searchesStore ?? savedSearchesStore).list(candidateId);
-  const agent = explorationAgent(deps);
+  const agent = resolveExplorationAgent(deps);
   const views: SavedSearchView[] = [];
   for (const search of searches) {
     const result: ExplorationResult = await agent.run(search.preferences);
