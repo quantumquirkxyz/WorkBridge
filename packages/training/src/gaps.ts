@@ -1,15 +1,10 @@
 import { PANAMA_SKILL_TAXONOMY } from "@puente/domain";
 import { bestSkillSignal } from "@puente/solver";
 import type { SkillLevel } from "@puente/solver";
-import type { DeriveGapsInput, GapKind, TrainingGap } from "./types";
+import type { DeriveGapsInput, GapKind, HeldSkill, TrainingGap } from "./types";
+import { compareCodeUnits } from "./order";
 
 const TAXONOMY_BY_ID = new Map(PANAMA_SKILL_TAXONOMY.skills.map((skill) => [skill.id, skill]));
-
-function compareCodeUnits(a: string, b: string): number {
-  if (a < b) return -1;
-  if (a > b) return 1;
-  return 0;
-}
 
 /** Classify a canonical skill id into a gap kind. */
 export function gapKindForSkill(skillId: string): GapKind {
@@ -32,6 +27,15 @@ export function effectiveRequiredLevel(requiredLevel: number): SkillLevel {
 /** Unaddressed levels for a gap; at least 1 so a gap always carries weight. */
 export function gapDeficit(gap: TrainingGap): number {
   return Math.max(1, gap.requiredLevel - gap.currentLevel);
+}
+
+/** Highest level the candidate already holds for a skill; 0 when unknown. */
+export function heldSkillLevel(heldSkills: readonly HeldSkill[], skillId: string): number {
+  let best = 0;
+  for (const held of heldSkills) {
+    if (held.skillId === skillId && held.level > best) best = held.level;
+  }
+  return best;
 }
 
 /**
