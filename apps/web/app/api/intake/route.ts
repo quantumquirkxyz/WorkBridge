@@ -3,6 +3,7 @@ import { createAgentFromEnv } from '@puente/agent-runtime';
 import { handleIntake } from '../../../lib/intake-handler';
 import { persistCandidateProfile, readCandidateProfile } from '../../../lib/neon-repository';
 import { profileStore } from '../../../lib/profile-store';
+import { MAX_CANDIDATE_ID_LENGTH } from '../../../lib/exploration-handler';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -10,6 +11,7 @@ export const dynamic = 'force-dynamic';
 export async function GET(request: Request): Promise<Response> {
   const candidateId = new URL(request.url).searchParams.get('candidateId');
   if (!candidateId) return NextResponse.json({ error: 'missing_candidate_id' }, { status: 400 });
+  if (candidateId.length > MAX_CANDIDATE_ID_LENGTH) return NextResponse.json({ error: 'invalid_candidate_id' }, { status: 400 });
   try {
     const profile = await readCandidateProfile(candidateId);
     return profile ? NextResponse.json(profile) : NextResponse.json({ error: 'not_found' }, { status: 404 });
@@ -43,7 +45,7 @@ export async function POST(request: Request): Promise<Response> {
     } catch (error) {
       if (previous) profileStore.save(previous);
       else profileStore.delete(profile.candidate_id);
-      return NextResponse.json({ error: 'persistence_unavailable', message: error instanceof Error ? error.message : String(error) }, { status: 503 });
+      return NextResponse.json({ error: 'persistence_unavailable' }, { status: 503 });
     }
   }
   return NextResponse.json(body, { status });

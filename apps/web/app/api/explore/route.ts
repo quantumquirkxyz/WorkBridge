@@ -20,7 +20,7 @@ export async function POST(request: Request): Promise<Response> {
     } catch (error) {
       if (previous) preferencesStore.save(previous);
       else preferencesStore.delete(preferences.candidate_id);
-      return NextResponse.json({ error: 'persistence_unavailable', message: error instanceof Error ? error.message : String(error) }, { status: 503 });
+      return NextResponse.json({ error: 'persistence_unavailable' }, { status: 503 });
     }
   }
   return NextResponse.json(body, { status });

@@ -3,6 +3,7 @@ import { handleDeleteCandidate, handleSavePreferences, MAX_CANDIDATE_ID_LENGTH }
 import { readJsonBody } from '../../../lib/request-body';
 import { persistCandidatePreferences, deleteCandidateData, readCandidatePreferences, readCandidateProfile } from '../../../lib/neon-repository';
 import { preferencesStore } from '../../../lib/preferences-store';
+import { profileStore } from '../../../lib/profile-store';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -15,7 +16,7 @@ export async function GET(request: Request): Promise<Response> {
     const preferences = await readCandidatePreferences(candidateId);
     return preferences ? NextResponse.json(preferences) : NextResponse.json({ error: 'not_found' }, { status: 404 });
   } catch (error) {
-    return NextResponse.json({ error: 'persistence_unavailable', message: error instanceof Error ? error.message : String(error) }, { status: 503 });
+    return NextResponse.json({ error: 'persistence_unavailable' }, { status: 503 });
   }
 }
 
@@ -32,7 +33,7 @@ export async function POST(request: Request): Promise<Response> {
     } catch (error) {
       if (previous) preferencesStore.save(previous);
       else preferencesStore.delete(candidateId);
-      return NextResponse.json({ error: 'persistence_unavailable', message: error instanceof Error ? error.message : String(error) }, { status: 503 });
+      return NextResponse.json({ error: 'persistence_unavailable' }, { status: 503 });
     }
   }
   return NextResponse.json(body, { status });
@@ -52,7 +53,7 @@ export async function DELETE(request: Request): Promise<Response> {
   try {
     durableExists = Boolean(await readCandidatePreferences(candidateId) ?? await readCandidateProfile(candidateId));
   } catch (error) {
-    return NextResponse.json({ error: 'persistence_unavailable', message: error instanceof Error ? error.message : String(error) }, { status: 503 });
+    return NextResponse.json({ error: 'persistence_unavailable' }, { status: 503 });
   }
   if (durableExists) {
     try {
@@ -62,6 +63,7 @@ export async function DELETE(request: Request): Promise<Response> {
     }
   }
   const { status, body } = handleDeleteCandidate(candidateId);
+  if (durableExists) profileStore.delete(candidateId);
   if (durableExists && status === 404) return NextResponse.json({ deleted: true, candidateId, preferencesDeleted: true, searchesDeleted: 0 }, { status: 200 });
   return NextResponse.json(body, { status });
 }
