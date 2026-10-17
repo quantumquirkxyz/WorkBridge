@@ -1,0 +1,72 @@
+/* Auth, account, chrome and fallback screens: neo-brutal tokens only (no soft shadows, transform/opacity motion). */
+
+.theme-toggle { position: relative; display: inline-grid; place-items: center; width: 2.75rem; height: 2.75rem; padding: 0; border: 2.5px solid #111; border-radius: .4rem; color: #111; background: var(--mint); box-shadow: 3px 3px 0 #111; cursor: pointer; transition: transform .12s; transform: rotate(-3deg); }
+.theme-toggle:hover { transform: translate(-2px, -2px) rotate(-3deg); }
+.theme-toggle:active { transform: translate(2px, 2px); }
+.theme-toggle:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; }
+.theme-toggle svg { width: 1.3rem; height: 1.3rem; }
+.dark .theme-toggle { background: var(--yellow); }
+
+.header-tools { display: flex; align-items: center; gap: .6rem; }
+
+.role-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; padding: .75rem max(1rem, calc((100% - 70rem) / 2)); border-bottom: 3px solid var(--line); background: var(--yellow); }
+.role-header-start { display: flex; flex-wrap: wrap; align-items: center; gap: .9rem; }
+.role-badge { display: inline-flex; align-items: center; min-height: 2rem; padding: .15rem .7rem; border: 2.5px solid #111; border-radius: .3rem; color: #111; background: var(--pink); box-shadow: 3px 3px 0 #111; font-family: var(--font-display); font-size: .75rem; letter-spacing: .05em; text-transform: uppercase; transform: rotate(-2deg); }
+.role-badge-employer { background: var(--sky, #8fb4ff); }
+.role-badge-counselor { background: var(--mint); }
+
+.auth-stack { display: flex; flex-direction: column; gap: 1rem; }
+.auth-divider { display: flex; align-items: center; gap: .75rem; margin: 0; font-family: var(--font-display); font-size: .8rem; text-transform: uppercase; }
+.auth-divider::before, .auth-divider::after { content: ''; flex: 1; border-top: 3px dashed var(--line); }
+.auth-field { display: grid; gap: .35rem; }
+.auth-field label { font-family: var(--font-display); font-size: .8rem; letter-spacing: .05em; text-transform: uppercase; }
+.field-error { margin: 0; padding: .25rem .6rem; border: 2px solid var(--danger); border-radius: .3rem; color: var(--foreground); background: var(--coral-tint); font-size: .85rem; font-weight: 700; }
+.dark .field-error { color: #111; }
+.auth-field input[aria-invalid='true'] { border-color: var(--danger); }
+.auth-disclosure { border: 3px solid var(--line); border-radius: .4rem; background: var(--card); box-shadow: 3px 3px 0 var(--shadow-color); }
+.auth-disclosure > summary { display: flex; min-height: 2.75rem; align-items: center; padding: .5rem .9rem; font-family: var(--font-display); font-size: .8rem; letter-spacing: .04em; text-transform: uppercase; cursor: pointer; }
+.auth-disclosure > summary:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; }
+.auth-disclosure[open] > summary { border-bottom: 3px dashed var(--line); }
+.auth-disclosure form { padding: .9rem; }
+.link-button { display: inline; min-height: 2.75rem; padding: 0; border: 0; color: var(--primary); background: none; font: inherit; font-weight: 800; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.link-button:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; }
+.link-button:disabled { color: var(--ink-muted); cursor: not-allowed; text-decoration: none; }
+
+.link-sent { display: grid; gap: .9rem; padding: 1.1rem; border: 3px solid var(--line); border-radius: .4rem; color: #111; background: var(--mint); box-shadow: 5px 5px 0 var(--shadow-color); }
+.link-sent h2 { margin: 0; font-family: var(--font-display); font-size: 1.4rem; line-height: 1; text-transform: uppercase; }
+.link-sent p { margin: 0; font-weight: 600; }
+.link-sent-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; }
+.link-sent .link-button { color: #111; }
+.link-sent .link-button:disabled { color: #333; }
+
+.account-page { display: grid; width: min(100% - 2rem, 40rem); gap: 1.5rem; margin-inline: auto; padding-block: 2rem 3rem; }
+.account-card { display: flex; flex-direction: column; gap: 1.1rem; padding: 1.25rem; border: 3px solid var(--line); border-radius: .5rem; background: var(--card); box-shadow: 5px 5px 0 var(--shadow-color); }
+.account-list { display: grid; gap: .6rem; margin: 0; }
+.account-list div { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem; padding: .6rem .8rem; border: 2px solid var(--line); border-radius: .3rem; background: var(--card); box-shadow: 2px 2px 0 var(--shadow-color); }
+.account-list dt { font-family: var(--font-display); font-size: .75rem; letter-spacing: .05em; text-transform: uppercase; }
+.account-list dd { margin: 0; font-weight: 700; overflow-wrap: anywhere; }
+.account-actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+
+.fallback-page { display: grid; min-height: 70svh; place-items: center; padding: 2rem 1rem; }
+.fallback-card { position: relative; display: grid; width: min(100%, 36rem); gap: 1rem; padding: 2rem 1.5rem; border: 3px solid var(--line); border-radius: .5rem; color: #111; background: var(--yellow); box-shadow: 8px 8px 0 var(--shadow-color); transform: rotate(-.8deg); }
+.fallback-card h1 { margin: 0; font-family: var(--font-display); font-size: clamp(2rem, 7vw, 3.2rem); line-height: .95; text-transform: uppercase; }
+.fallback-card p { margin: 0; font-weight: 600; }
+.fallback-code { justify-self: start; padding: .1rem .6rem; border: 3px solid #111; border-radius: .3rem; background: var(--pink); box-shadow: 3px 3px 0 #111; font-family: var(--font-display); font-size: 1.25rem; transform: rotate(-3deg); }
+.fallback-actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle, .theme-toggle:hover, .theme-toggle:active { transition: none; }
+}
+
+/* Error screen: hide the route chrome that the root layout keeps mounted (display:none also drops it from tab order). */
+html[data-system-screen] :is(.candidate-header, .candidate-bottom-nav, .role-header) { display: none; }
+html[data-system-screen] .candidate-content { padding-bottom: 0; }
+
+/* Role header on phones: one row. Brand text collapses to the mark, badge + tools stay inline. */
+@media (max-width: 767px) {
+  .role-header { flex-wrap: nowrap; gap: .5rem; padding-inline: 1rem; }
+  .role-header-start { min-width: 0; flex-wrap: nowrap; gap: .5rem; }
+  .role-header .candidate-brand > span:last-child { display: none; }
+  .role-badge { min-height: 1.75rem; padding: .1rem .5rem; font-size: .72rem; white-space: nowrap; }
+  .role-header .header-tools { flex: none; gap: .4rem; }
+}

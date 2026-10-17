@@ -68,8 +68,8 @@ describe('employer submission decision', () => {
     render(<SubmissionDecision submissionId="sub-1" />, { wrapper });
 
     expect(await screen.findByText('Esta postulación ya fue decidida.')).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'No avanza' })).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Pasar a entrevista' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'No avanzar' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Aprobar entrevista' })).not.toBeInTheDocument();
   });
 
   it('requires a reason before deciding', async () => {
@@ -82,9 +82,9 @@ describe('employer submission decision', () => {
       }),
     );
     render(<SubmissionDecision submissionId="sub-1" />, { wrapper });
-    await screen.findByRole('button', { name: 'No avanza' });
+    await screen.findByRole('button', { name: 'No avanzar' });
 
-    await userEvent.click(screen.getByRole('button', { name: 'No avanza' }));
+    await userEvent.click(screen.getByRole('button', { name: 'No avanzar' }));
 
     expect(await screen.findByText('Escribe un motivo para continuar.')).toBeInTheDocument();
     expect(posted).toBe(false);
@@ -100,10 +100,10 @@ describe('employer submission decision', () => {
       }),
     );
     render(<SubmissionDecision submissionId="sub-1" />, { wrapper });
-    await screen.findByRole('button', { name: 'No avanza' });
+    await screen.findByRole('button', { name: 'No avanzar' });
 
     await userEvent.type(screen.getByLabelText(/Motivo de tu decisión/), 'Falta experiencia');
-    await userEvent.click(screen.getByRole('button', { name: 'No avanza' }));
+    await userEvent.click(screen.getByRole('button', { name: 'No avanzar' }));
 
     expect(await screen.findByText('Registramos que la postulación no avanza.')).toBeInTheDocument();
     expect(body).toMatchObject({ decision: 'rejected', reason: 'Falta experiencia', traceId: 'trace-1' });
@@ -120,6 +120,6 @@ describe('employer submission decision', () => {
     await waitFor(() =>
       expect(screen.getByRole('alert')).toHaveTextContent('Esta postulación no está disponible para tu organización.'),
     );
-    expect(screen.queryByRole('button', { name: 'Pasar a entrevista' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Aprobar entrevista' })).not.toBeInTheDocument();
   });
 });

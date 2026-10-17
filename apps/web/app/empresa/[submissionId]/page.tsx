@@ -3,8 +3,10 @@ import { SubmissionDecision } from '../../../components/employer/SubmissionDecis
 export default async function EmployerSubmissionPage({ params }: { params: Promise<{ submissionId: string }> }) {
   const { submissionId } = await params;
   return (
-    <main className="space-y-4 px-4 py-6 md:px-8">
-      <h1 className="text-xl font-semibold">Postulación</h1>
+    <main className="space-y-4">
+      <header className="page-head page-head-mint">
+        <h1>Postulación</h1>
+      </header>
       <SubmissionDecision submissionId={submissionId} />
     </main>
   );

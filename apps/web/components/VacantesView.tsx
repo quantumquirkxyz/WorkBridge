@@ -1,176 +1,326 @@
 'use client';
 
-import { forwardRef, useEffect, useRef, useState } from 'react';
-import type { ExplorationResult, NearMatch, VacancyMatch } from '@workbridge/catalog';
-import type { MatchDecision } from '@workbridge/solver';
-import { MODALITY_LABELS } from '@workbridge/catalog';
-import { Button } from './ui/button';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from './ui/sheet';
-import { Skeleton } from './ui/skeleton';
-import { Progress } from './ui/progress';
-import { orderMatchesByDecision } from './exploration/utils';
+import Link from 'next/link';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { VacancyMatch } from '@workbridge/catalog';
+import { ApiClientError } from '../lib/api/errors';
+import { saveSearch } from '../lib/api/client';
+import { useSession } from '../lib/auth-client';
+import {
+  decisionFor,
+  freshnessSummary,
+  greeting,
+  readSavedVacancyIds,
+  savedVacanciesStorageKey,
+  toggleSavedVacancyId,
+  vacanciesHeadline,
+} from '../lib/exploration-view';
 import { readStoredPreferences, saveStoredPreferences } from '../lib/preferences-storage';
+import type { PreferencesDraft } from '../lib/preferences';
+import { DiscardSummary } from './exploration/DiscardSummary';
+import { NearMatchList } from './exploration/NearMatchList';
+import { NoMatchPanel } from './exploration/NoMatchPanel';
+import { SaveSearchDialog } from './exploration/SaveSearchDialog';
+import { VacancyCard } from './exploration/VacancyCard';
+import { VacancyDetailSheet } from './exploration/VacancyDetailSheet';
+import { useExploration } from './exploration/useExploration';
+import { Button } from './ui/button';
+import { Skeleton } from './ui/skeleton';
+import '../app/styles/explore.css';
 
-export interface VacantesViewProps {
-  result?: ExplorationResult | null;
-  loading?: boolean;
-  decisions?: MatchDecision[];
-  decisionsLoading?: boolean;
+const PENDING_SAVE_KEY = 'workbridge:pending-save';
+const TOAST_MS = 5000;
+
+function setVacancyParam(jobId: string | null, mode: 'push' | 'replace') {
+  const url = new URL(window.location.href);
+  if (jobId) url.searchParams.set('v', jobId);
+  else url.searchParams.delete('v');
+  if (mode === 'push') window.history.pushState({ xpSheet: true }, '', url);
+  else window.history.replaceState({}, '', url);
 }
 
-const money = (min: number | null, max: number | null) => {
-  if (min === null && max === null) return 'Salario no publicado';
-  if (min === null) return `Hasta USD ${max}`;
-  if (max === null) return `Desde USD ${min}`;
-  return `USD ${min} – ${max}`;
-};
-
-export function VacantesView({ result = null, loading = false, decisions = [], decisionsLoading = false }: VacantesViewProps) {
-  const [storedResult, setStoredResult] = useState<ExplorationResult | null>(null);
+export function VacantesView() {
+  const { status, result, candidateId, decisions, decisionsLoading, offline, reload, rerun } = useExploration();
+  const session = useSession();
   const [newMatches, setNewMatches] = useState<VacancyMatch[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [saveOpen, setSaveOpen] = useState(false);
   const [saveLabel, setSaveLabel] = useState('');
-  const [saveMessage, setSaveMessage] = useState<string | null>(null);
-  const [pendingSave, setPendingSave] = useState(false);
-  const [notice, setNotice] = useState<string | null>(null);
+  const [saveBusy, setSaveBusy] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [savedVacancies, setSavedVacancies] = useState<string[]>([]);
+  const [toast, setToast] = useState<string | null>(null);
+  const [enabling, setEnabling] = useState(false);
+  const [enableError, setEnableError] = useState<string | null>(null);
   const cardRefs = useRef(new Map<string, HTMLButtonElement>());
-  const candidateIdRef = useRef<string | null>(null);
-  const activeResult = result ?? storedResult;
-  const matches = activeResult?.matches ?? [];
-  const orderedMatches = orderMatchesByDecision(matches, decisions, decisionsLoading);
-  const selected = orderedMatches.find((match) => match.vacancy.jobId === selectedId) ?? null;
+  const lastOpened = useRef<string | null>(null);
+  const toastTimer = useRef<number | undefined>(undefined);
+  const pendingHandled = useRef(false);
 
-  useEffect(() => {
-    const pending = new URLSearchParams(window.location.search).get('save') === '1'
-      ? window.sessionStorage.getItem('workbridge:pending-save')
-      : null;
-    if (pending) window.sessionStorage.removeItem('workbridge:pending-save');
-    fetch('/api/candidate')
-      .then((response) => response.ok ? response.json() : null)
-      .then(async (candidate: { candidateId?: string } | null) => {
-        if (!candidate?.candidateId) return null;
-        candidateIdRef.current = candidate.candidateId;
-        if (pending) {
-          try {
-            const saved = JSON.parse(pending) as { label?: unknown; preferences?: unknown };
-            if (typeof saved.label === 'string' && saved.preferences) {
-              saveStoredPreferences(candidate.candidateId, saved.preferences);
-              setSaveLabel(saved.label);
-              setPendingSave(true);
-              setSaveOpen(true);
-            }
-          } catch { /* discard malformed pending state */ }
-        }
-        const stored = window.localStorage.getItem(`workbridge:exploration:${candidate.candidateId}`);
-        if (stored) {
-          try { setStoredResult(JSON.parse(stored) as ExplorationResult); } catch { window.localStorage.removeItem(`workbridge:exploration:${candidate.candidateId}`); }
-        }
-        const response = await fetch(`/api/searches?candidateId=${encodeURIComponent(candidate.candidateId)}`);
-        return response.ok ? { candidateId: candidate.candidateId, body: await response.json() } : null;
-      })
-      .then(async (result: { candidateId: string; body: { searches?: Array<{ newSinceLastVisit?: VacancyMatch[] }> } } | null) => {
-        setNewMatches(result?.body.searches?.flatMap((view) => view.newSinceLastVisit ?? []) ?? []);
-        if (result) await fetch(`/api/searches?candidateId=${encodeURIComponent(result.candidateId)}`, { method: 'PUT' });
-      })
-      .catch(() => undefined);
+  const showToast = useCallback((message: string) => {
+    setToast(message);
+    window.clearTimeout(toastTimer.current);
+    toastTimer.current = window.setTimeout(() => setToast(null), TOAST_MS);
   }, []);
+  useEffect(() => () => window.clearTimeout(toastTimer.current), []);
 
+  const matches = useMemo(() => {
+    const list = result?.matches ?? [];
+    if (decisionsLoading || decisions.length === 0) return list;
+    return [...list].sort((a, b) => (decisionFor(decisions, b.vacancy.jobId)?.score ?? -1) - (decisionFor(decisions, a.vacancy.jobId)?.score ?? -1));
+  }, [result, decisions, decisionsLoading]);
+  const newIds = useMemo(() => new Set(newMatches.map((match) => match.vacancy.jobId)), [newMatches]);
+  const knownMatches = useMemo(() => [...matches, ...newMatches], [matches, newMatches]);
+  const selected = knownMatches.find((match) => match.vacancy.jobId === selectedId) ?? null;
+
+  // Saved vacancies (local-only convenience) and "new since last visit".
   useEffect(() => {
-    if (pendingSave && saveOpen) void saveSearch();
-  }, [pendingSave, saveOpen]);
-
-  async function saveSearch() {
-    const candidateId = candidateIdRef.current;
     if (!candidateId) return;
-    const preferences = readStoredPreferences(candidateId);
-    if (!preferences) return;
-    const response = await fetch('/api/searches', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ label: saveLabel, preferences }) });
-    if (response.status === 401) {
-      window.sessionStorage.setItem('workbridge:pending-save', JSON.stringify({ label: saveLabel, preferences }));
-      window.location.href = `/ingresar?next=${encodeURIComponent('/vacantes?save=1')}`;
-      return;
-    }
-    setSaveMessage(response.ok ? 'Búsqueda guardada.' : 'No se pudo guardar la búsqueda.');
-    if (response.ok) { setSaveOpen(false); setPendingSave(false); }
-  }
+    setSavedVacancies(readSavedVacancyIds(candidateId));
+    let current = true;
+    (async () => {
+      try {
+        const response = await fetch(`/api/searches?candidateId=${encodeURIComponent(candidateId)}`);
+        if (!response.ok || !current) return;
+        const body = (await response.json()) as { searches?: Array<{ newSinceLastVisit?: VacancyMatch[] }> };
+        setNewMatches(body.searches?.flatMap((view) => view.newSinceLastVisit ?? []) ?? []);
+        await fetch(`/api/searches?candidateId=${encodeURIComponent(candidateId)}`, { method: 'PUT' });
+      } catch {
+        // New-vacancy highlights are an enhancement.
+      }
+    })();
+    return () => {
+      current = false;
+    };
+  }, [candidateId]);
 
+  // ?v= deep link and browser back/forward.
   useEffect(() => {
-    const fromUrl = new URLSearchParams(window.location.search).get('v');
-    if (fromUrl) setSelectedId(fromUrl);
-    const onPopState = () => setSelectedId(new URLSearchParams(window.location.search).get('v'));
-    window.addEventListener('popstate', onPopState);
-    return () => window.removeEventListener('popstate', onPopState);
+    const sync = () => setSelectedId(new URLSearchParams(window.location.search).get('v'));
+    sync();
+    window.addEventListener('popstate', sync);
+    return () => window.removeEventListener('popstate', sync);
   }, []);
 
+  // An unknown ?v= is dropped with a notice, but only once we actually know the list.
   useEffect(() => {
-    if (!selectedId || selected) return;
-    const url = new URL(window.location.href);
-    if (url.searchParams.has('v')) {
-      url.searchParams.delete('v');
-      window.history.replaceState({}, '', url);
-      setSelectedId(null);
-      setNotice('Esa vacante ya no está disponible');
-      window.setTimeout(() => setNotice(null), 5000);
-    }
-  }, [selectedId, selected]);
+    if (!selectedId || status === 'loading' || selected) return;
+    if (status !== 'ready') return;
+    setVacancyParam(null, 'replace');
+    setSelectedId(null);
+    showToast('Esa vacante ya no está disponible');
+  }, [selectedId, selected, status, showToast]);
 
   function open(match: VacancyMatch) {
+    lastOpened.current = match.vacancy.jobId;
     setSelectedId(match.vacancy.jobId);
-    const url = new URL(window.location.href);
-    url.searchParams.set('v', match.vacancy.jobId);
-    window.history.pushState({}, '', url);
+    setVacancyParam(match.vacancy.jobId, 'push');
   }
 
   function close() {
-    const previous = selectedId;
-    const url = new URL(window.location.href);
-    url.searchParams.delete('v');
-    window.history.pushState({}, '', url);
     setSelectedId(null);
-    if (previous) requestAnimationFrame(() => cardRefs.current.get(previous)?.focus());
+    if (window.history.state?.xpSheet) window.history.back();
+    else setVacancyParam(null, 'replace');
   }
 
-  return <main className="vacantes-page">
-    {notice ? <div className="toast-notice" role="status">{notice}</div> : null}
-    <div className="vacantes-heading">
-      <div><p className="eyebrow">Explora oportunidades</p><h1>Vacantes para ti</h1><p className="lead">Encontramos oportunidades que se ajustan a lo que buscas.</p></div>
-       <span className="vacantes-count">{activeResult?.summary.matched ?? 0} compatibles</span>
-    </div>
-    <button type="button" onClick={() => setSaveOpen(true)}>Guardar esta búsqueda</button>
-    {saveOpen ? <div role="presentation" className="save-dialog-backdrop"><section role="dialog" aria-modal="true" aria-labelledby="save-search-title" className="save-dialog"><h2 id="save-search-title">Guardar esta búsqueda</h2><label htmlFor="vacantes-save-label">Nombre de la búsqueda</label><input id="vacantes-save-label" value={saveLabel} onChange={(event) => setSaveLabel(event.target.value)} /><button type="button" onClick={saveSearch} disabled={!saveLabel.trim()}>Guardar</button><button type="button" onClick={() => setSaveOpen(false)}>Cancelar</button></section></div> : null}
-    {saveMessage ? <p role="status">{saveMessage}</p> : null}
-    {newMatches.length > 0 ? <section className="new-vacancies" aria-labelledby="new-vacancies-heading"><h2 id="new-vacancies-heading">Nuevas desde tu última visita</h2><div className="vacancy-grid">{newMatches.map((match) => <VacancyCard key={match.vacancy.jobId} match={match} decisionsLoading={false} onOpen={open} />)}</div></section> : null}
-    {loading ? <div className="vacancy-grid" aria-label="Cargando vacantes">{[1, 2, 3].map((id) => <Skeleton key={id} className="vacancy-skeleton" />)}</div> : <>
-       {matches.length ? <div className="vacancy-grid" aria-label="Vacantes compatibles">{orderedMatches.map((match) => <VacancyCard key={match.vacancy.jobId} match={match} decision={decisions.find((d) => d.vacancyId === match.vacancy.jobId)} decisionsLoading={decisionsLoading} onOpen={open} ref={(node) => { if (node) cardRefs.current.set(match.vacancy.jobId, node); }} />)}</div> : <div className="vacantes-empty" role="status"><h2>Aún no hay vacantes compatibles</h2><p>Completa tus preferencias para descubrir oportunidades hechas para ti.</p></div>}
-     {activeResult?.noMatch?.nearMatches.length ? <NearMatches matches={activeResult.noMatch.nearMatches} /> : null}
-     {activeResult?.excluded.length ? <p className="excluded-summary"><strong>{activeResult.excluded.length} vacantes excluidas</strong> · {topCauses(activeResult.excluded)}</p> : null}
-    </>}
-     <VacancyDetail match={selected} decision={selected ? decisions.find((d) => d.vacancyId === selected.vacancy.jobId) : undefined} open={Boolean(selected)} onClose={close} />
-  </main>;
+  function restoreFocus(event: Event) {
+    event.preventDefault();
+    const id = lastOpened.current;
+    if (id) cardRefs.current.get(id)?.focus();
+  }
+
+  const registerRef = (jobId: string) => (node: HTMLButtonElement | null) => {
+    if (node) cardRefs.current.set(jobId, node);
+    else cardRefs.current.delete(jobId);
+  };
+
+  function toggleSaved(jobId: string) {
+    if (!candidateId) return;
+    const next = toggleSavedVacancyId(savedVacancies, jobId);
+    setSavedVacancies(next);
+    try {
+      window.localStorage.setItem(savedVacanciesStorageKey(candidateId), JSON.stringify(next));
+    } catch {
+      // Not persisted; the toggle still reflects this visit.
+    }
+    showToast(next.includes(jobId) ? 'Vacante guardada' : 'Quitamos la vacante de tus guardadas');
+  }
+
+  async function share(match: VacancyMatch) {
+    const url = `${window.location.origin}/vacantes?v=${encodeURIComponent(match.vacancy.jobId)}`;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: match.vacancy.title, url });
+        return;
+      }
+      await navigator.clipboard.writeText(url);
+      showToast('Enlace copiado');
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') return;
+      showToast('No pudimos compartir. Copia el enlace desde la barra de direcciones.');
+    }
+  }
+
+  const submitSearch = useCallback(
+    async (label: string) => {
+      if (!candidateId || !result) return;
+      const preferences = readStoredPreferences(candidateId) ?? result.preferences;
+      setSaveBusy(true);
+      setSaveError(null);
+      try {
+        await saveSearch({ label: label.trim(), preferences: preferences as PreferencesDraft });
+        saveStoredPreferences(candidateId, preferences);
+        setSaveOpen(false);
+        showToast('Búsqueda guardada. La verás en Mi perfil.');
+      } catch (error) {
+        if (error instanceof ApiClientError && error.apiError.status === 401) {
+          window.sessionStorage.setItem(PENDING_SAVE_KEY, JSON.stringify({ label, preferences }));
+          window.location.href = `/ingresar?next=${encodeURIComponent('/vacantes?save=1')}`;
+          return;
+        }
+        setSaveError('No pudimos guardar tu búsqueda. Intenta de nuevo.');
+      } finally {
+        setSaveBusy(false);
+      }
+    },
+    [candidateId, result, showToast],
+  );
+
+  // Resume a save that was interrupted by signing in.
+  useEffect(() => {
+    if (pendingHandled.current || !candidateId || !result) return;
+    if (new URLSearchParams(window.location.search).get('save') !== '1') return;
+    pendingHandled.current = true;
+    const raw = window.sessionStorage.getItem(PENDING_SAVE_KEY);
+    window.sessionStorage.removeItem(PENDING_SAVE_KEY);
+    if (!raw) return;
+    try {
+      const pending = JSON.parse(raw) as { label?: unknown; preferences?: unknown };
+      if (typeof pending.label === 'string' && pending.preferences) {
+        saveStoredPreferences(candidateId, pending.preferences);
+        setSaveLabel(pending.label);
+        void submitSearch(pending.label);
+      }
+    } catch {
+      // Discard malformed pending state.
+    }
+  }, [candidateId, result, submitSearch]);
+
+  async function enableTraining() {
+    if (!result) return;
+    setEnabling(true);
+    setEnableError(null);
+    try {
+      await rerun({ ...result.preferences, willing_to_train: true } as PreferencesDraft);
+    } catch {
+      setEnableError('No pudimos actualizar tu búsqueda. Intenta de nuevo.');
+    } finally {
+      setEnabling(false);
+    }
+  }
+
+  const name = session.data?.user?.name;
+
+  if (status === 'loading') return <VacantesSkeleton />;
+
+  if (status === 'signed-out' || status === 'no-preferences') {
+    return (
+      <main className="vacantes-page xp-page">
+        <section className="xp-panel xp-empty" aria-labelledby="start-heading">
+          <span className="xp-empty-icon" aria-hidden="true">💼</span>
+          <h1 id="start-heading" style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', margin: 0 }}>Cuéntanos qué buscas</h1>
+          <p>En unos minutos armamos tu perfil y te mostramos las vacantes que encajan contigo.</p>
+          <Button asChild size="lg"><Link href="/chat">Empezar</Link></Button>
+        </section>
+      </main>
+    );
+  }
+
+  if (status === 'error' || !result) {
+    return (
+      <main className="vacantes-page xp-page">
+        <section className="xp-panel xp-panel-warn xp-empty" role="alert">
+          <h1 style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', margin: 0, fontSize: '1.5rem' }}>No pudimos cargar tus vacantes</h1>
+          <p>Parece que no hay conexión o hubo un problema de nuestro lado. Revisa tu internet y vuelve a intentar.</p>
+          <Button type="button" onClick={reload}>Reintentar</Button>
+        </section>
+      </main>
+    );
+  }
+
+  const mainMatches = matches.filter((match) => !newIds.has(match.vacancy.jobId));
+  const hasMatches = matches.length > 0;
+
+  return (
+    <main className="vacantes-page xp-page">
+      {toast ? <div className="xp-toast" role="status">{toast}</div> : null}
+      <header className="page-head">
+        <p className="eyebrow">{greeting(name)}</p>
+        <h1>{vacanciesHeadline(matches.length)}</h1>
+        <p className="lead">{freshnessSummary(result)}</p>
+        {hasMatches ? (
+          <div className="xp-head-actions">
+            <Button type="button" variant="outline" onClick={() => { setSaveError(null); setSaveOpen(true); }}>Guardar esta búsqueda</Button>
+          </div>
+        ) : null}
+      </header>
+
+      {offline ? <p className="xp-banner" role="status">No pudimos actualizar. Te mostramos lo último que guardamos. <button type="button" className="xp-course-link" onClick={reload}>Reintentar</button></p> : null}
+
+      {newMatches.length > 0 ? (
+        <section aria-labelledby="new-heading">
+          <h2 id="new-heading" className="xp-section-title">Nuevas desde tu última visita</h2>
+          <ul className="xp-grid">
+            {newMatches.map((match) => (
+              <li key={match.vacancy.jobId}>
+                <VacancyCard ref={registerRef(match.vacancy.jobId)} match={match} isNew decision={decisionFor(decisions, match.vacancy.jobId)} decisionsLoading={decisionsLoading} onOpen={open} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      {hasMatches ? (
+        <section aria-labelledby="matches-heading">
+          <h2 id="matches-heading" className="xp-section-title">{newMatches.length > 0 ? 'Todas tus vacantes' : 'Tus vacantes'}</h2>
+          <ul className="xp-grid">
+            {mainMatches.map((match) => (
+              <li key={match.vacancy.jobId}>
+                <VacancyCard ref={registerRef(match.vacancy.jobId)} match={match} decision={decisionFor(decisions, match.vacancy.jobId)} decisionsLoading={decisionsLoading} onOpen={open} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : (
+        <NoMatchPanel result={result} onEnableTraining={enableTraining} enabling={enabling} enableError={enableError} />
+      )}
+
+      {result.noMatch ? <NearMatchList nearMatches={result.noMatch.nearMatches} /> : null}
+      <DiscardSummary result={result} />
+
+      <VacancyDetailSheet
+        match={selected}
+        decision={selected ? decisionFor(decisions, selected.vacancy.jobId) : undefined}
+        decisionsLoading={decisionsLoading}
+        saved={selected ? savedVacancies.includes(selected.vacancy.jobId) : false}
+        onClose={close}
+        onToggleSave={toggleSaved}
+        onShare={(match) => void share(match)}
+        onCloseAutoFocus={restoreFocus}
+      />
+      <SaveSearchDialog open={saveOpen} label={saveLabel} saving={saveBusy} error={saveError} onLabelChange={setSaveLabel} onOpenChange={setSaveOpen} onSave={() => void submitSearch(saveLabel)} />
+    </main>
+  );
 }
 
-const VacancyCard = forwardRef<HTMLButtonElement, { match: VacancyMatch; decision?: MatchDecision; decisionsLoading: boolean; onOpen: (match: VacancyMatch) => void }>(function VacancyCard({ match, decision, decisionsLoading, onOpen }, ref) {
-  const { vacancy, freshness } = match;
-  return <button ref={ref} className="vacancy-card" onClick={() => onOpen(match)} aria-label={`Ver detalles de ${vacancy.title}`}>
-    <span className="vacancy-card-top"><span className="vacancy-modality">{MODALITY_LABELS[vacancy.modality]}</span><span>{freshness.label}</span></span>
-    <strong className="vacancy-title">{vacancy.title}</strong><span className="vacancy-company">{vacancy.company ?? 'Empresa no indicada'}</span>
-    <span className="vacancy-meta">{vacancy.location?.raw ?? vacancy.location?.district ?? 'Ubicación no indicada'} · {money(vacancy.salary?.minUsd ?? null, vacancy.salary?.maxUsd ?? null)}</span>
-      {decisionsLoading ? <span className="readiness-skeleton" aria-label="Cargando preparación" /> : decision ? <Readiness decision={decision} /> : null}
-    <span className="vacancy-card-action">Ver detalles <span aria-hidden="true">→</span></span>
-  </button>;
-});
-VacancyCard.displayName = 'VacancyCard';
-
-function NearMatches({ matches }: { matches: NearMatch[] }) { return <section className="near-matches" aria-labelledby="near-heading"><h2 id="near-heading">Casi listas para ti</h2><div className="near-list">{matches.map(({ vacancy, warnings }) => <article key={vacancy.jobId}><strong>{vacancy.title}</strong><p>{warnings[0] ?? 'Hay un requisito que todavía bloquea esta vacante.'}</p></article>)}</div></section>; }
-function topCauses(excluded: NonNullable<ExplorationResult['excluded']>) { return excluded.flatMap((item) => item.failedConstraints.map((cause) => cause.detail)).slice(0, 3).join(' · '); }
-
-function Readiness({ decision }: { decision: MatchDecision }) { return <span className="readiness"><strong>Preparación {decision.score}%</strong><Progress value={decision.score} aria-label={`Preparación ${decision.score}%`} /></span>; }
-
-function VacancyDetail({ match, decision, open, onClose }: { match: VacancyMatch | null; decision?: MatchDecision; open: boolean; onClose: () => void }) {
-   if (!match) return null;
-  const { vacancy, freshness } = match;
-   const missing = decision?.hardConstraints.filter((item) => !item.satisfied) ?? [];
-   const have = decision?.scoreBreakdown.filter((item) => item.rawScore > 0) ?? [];
-   return <Sheet open={open} onOpenChange={(next) => { if (!next) onClose(); }}><SheetContent side="right" className="vacancy-detail"><SheetHeader><SheetTitle>{vacancy.title}</SheetTitle><SheetDescription>{vacancy.company ?? 'Empresa no indicada'} · {freshness.label}</SheetDescription></SheetHeader><div className="vacancy-detail-body"><p><strong>Modalidad</strong><br />{MODALITY_LABELS[vacancy.modality]}</p><p><strong>Ubicación</strong><br />{vacancy.location.raw ?? vacancy.location.district ?? 'No indicada'}</p><p><strong>Salario</strong><br />{money(vacancy.salary.minUsd, vacancy.salary.maxUsd)}</p>{decision ? <><h3>Preparación {decision.score}%</h3><Progress value={decision.score} aria-label={`Preparación ${decision.score}%`} /><h3>Lo que ya tienes</h3><ul>{have.map((item) => <li key={item.dimension}>{item.reasons.join(' ')}</li>)}</ul><h3>Lo que te falta</h3><ul>{missing.length ? missing.map((item) => <li key={item.id}>{item.reason}</li>) : <li>No se detectaron brechas.</li>}</ul></> : <p>Calculando preparación…</p>}</div><Button asChild size="lg" className="vacancy-original"><a href={vacancy.provenance.sourceUrl} target="_blank" rel="noreferrer">Ver vacante original <span className="sr-only">(se abre en otra pestaña)</span> ↗</a></Button></SheetContent></Sheet>;
+function VacantesSkeleton() {
+  return (
+    <main className="vacantes-page xp-page" aria-busy="true">
+      <p className="sr-only" role="status">Cargando tus vacantes…</p>
+      <Skeleton className="xp-skel" style={{ minHeight: '8rem' }} />
+      <ul className="xp-grid" aria-hidden="true">
+        {[1, 2, 3].map((id) => <li key={id}><Skeleton className="xp-skel" /></li>)}
+      </ul>
+    </main>
+  );
 }

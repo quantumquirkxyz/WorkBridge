@@ -1,59 +1,46 @@
 import type { Roadmap, TrainingGap } from '@workbridge/training';
+import { formatCost } from '../../lib/exploration-view';
+import '../../app/styles/explore.css';
 
-function formatCost(costUsd: number): string {
-  return costUsd === 0 ? 'Gratis' : `USD ${costUsd}`;
-}
+const gapName = (gap: TrainingGap) => gap.label ?? 'Otra habilidad';
 
-export function RoadmapList({ roadmap, gaps }: { roadmap: Roadmap; gaps: TrainingGap[] }) {
+/** S6 steps: numbered, vertical connector, never a table. */
+export function RoadmapList({ roadmap }: { roadmap: Roadmap }) {
+  const labelFor = new Map<string, string>();
+  for (const gap of [...roadmap.gaps, ...roadmap.unresolvedGaps]) labelFor.set(gap.skillId, gapName(gap));
   return (
-    <div className="result" aria-labelledby="roadmap-heading">
-      <h4 id="roadmap-heading">Ruta de capacitación</h4>
-      <p className="hint">
-        No hay una vacante viable ahora. Esta ruta se construyó con el catálogo de capacitación en caché para cerrar
-        las brechas detectadas.
-      </p>
-      {gaps.length > 0 ? (
-        <p className="hint">Brechas consideradas: {gaps.map((gap) => gap.label ?? gap.skillId).join(', ')}.</p>
-      ) : null}
-      {roadmap.recommendations.length > 0 ? (
-        <table>
-          <caption className="hint">Oportunidades recomendadas, con la brecha que cubren y su fuente.</caption>
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Oportunidad</th>
-              <th scope="col">Proveedor</th>
-              <th scope="col">Cubre</th>
-              <th scope="col">Costo</th>
-              <th scope="col">Duración</th>
-            </tr>
-          </thead>
-          <tbody>
-            {roadmap.recommendations.map((recommendation) => (
-              <tr key={recommendation.rank}>
-                <td>{recommendation.rank}</td>
-                <td>
-                  <strong>{recommendation.opportunity.title}</strong>
-                  <div className="hint">{recommendation.explanationEs}</div>
-                </td>
-                <td>{recommendation.opportunity.provider}</td>
-                <td>{recommendation.coveredGaps.map((gap) => gap.skillId).join(', ')}</td>
-                <td>{formatCost(recommendation.opportunity.costUsd)}</td>
-                <td>{recommendation.opportunity.durationHours} h</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <p className="hint">
-          El catálogo no ofrece una oportunidad elegible para las brechas detectadas todavía.
-        </p>
-      )}
+    <>
+      <ol className="xp-steps" aria-label="Pasos de tu ruta">
+        {roadmap.recommendations.map((step) => (
+          <li key={step.rank} className="xp-step">
+            <span className="xp-step-num" aria-hidden="true">{step.rank}</span>
+            <div className="xp-step-body">
+              <h3><span className="sr-only">Paso {step.rank}: </span>{step.opportunity.title}</h3>
+              <div className="xp-step-meta">
+                <span className="xp-chip xp-chip-plain">{step.opportunity.provider}</span>
+                <span className="xp-chip xp-chip-yellow">{step.opportunity.durationHours} h</span>
+                <span className="xp-chip xp-chip-mint">{formatCost(step.opportunity.costUsd)}</span>
+              </div>
+              {step.coveredGaps.length > 0 ? (
+                <p className="xp-step-covers">
+                  <strong>Cubre:</strong>
+                  {step.coveredGaps.map((gap) => <span key={gap.skillId} className="xp-chip xp-chip-plain">{labelFor.get(gap.skillId) ?? 'Otra habilidad'}</span>)}
+                </p>
+              ) : null}
+              <p className="xp-step-why">{step.explanationEs}</p>
+              <p className="xp-step-why"><a className="xp-course-link" href={step.opportunity.url} target="_blank" rel="noreferrer">Ver curso <span className="sr-only">(se abre en otra pestaña)</span>↗</a></p>
+            </div>
+          </li>
+        ))}
+      </ol>
       {roadmap.unresolvedGaps.length > 0 ? (
-        <p className="hint">
-          Brechas sin cubrir en el catálogo: {roadmap.unresolvedGaps.map((gap) => gap.label ?? gap.skillId).join(', ')}.
-        </p>
+        <div className="xp-panel">
+          <h3 className="xp-section-title" style={{ fontSize: '1rem' }}>Todavía sin curso</h3>
+          <ul className="xp-skill-list">
+            {roadmap.unresolvedGaps.map((gap) => <li key={gap.skillId} className="xp-chip xp-chip-plain">{gapName(gap)}</li>)}
+          </ul>
+        </div>
       ) : null}
-    </div>
+    </>
   );
 }

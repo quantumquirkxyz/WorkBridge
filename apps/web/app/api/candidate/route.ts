@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { candidateIdFromRequest, unauthorized } from '../../../lib/candidate-session';
+import { candidateIdFromRequestOrSession, unauthorized } from '../../../lib/candidate-session';
 import { deleteCandidateData } from '../../../lib/neon-repository';
 import { handleDeleteCandidate } from '../../../lib/exploration-handler';
 import { profileStore } from '../../../lib/profile-store';
@@ -16,7 +16,7 @@ export async function GET(): Promise<Response> {
 }
 
 export async function DELETE(request: Request): Promise<Response> {
-  const candidateId = candidateIdFromRequest(request);
+  const candidateId = await candidateIdFromRequestOrSession(request);
   if (!candidateId) return unauthorized();
   try {
     await deleteCandidateData(candidateId);

@@ -37,19 +37,29 @@ describe('role guards', () => {
     ).toEqual({ action: 'allow' });
   });
 
-  it('redirects a candidate away from the counselor route to the candidate home', () => {
+  it('sends a candidate on the counselor route to the friendly no-access screen', () => {
     expect(
       decideRoleGuard({ session: session('candidate'), requiredRole: 'counselor', currentPath: '/orientador' }),
-    ).toEqual({ action: 'redirect', location: '/' });
+    ).toEqual({ action: 'redirect', location: '/cuenta/sin-acceso?rol=counselor' });
   });
 
-  it('redirects a wrong signed-in role to its own home', () => {
+  it('sends a wrong signed-in role to no-access', () => {
     expect(
       decideRoleGuard({ session: session('counselor'), requiredRole: 'employer', currentPath: '/empresa' }),
-    ).toEqual({ action: 'redirect', location: '/orientador' });
+    ).toEqual({ action: 'redirect', location: '/cuenta/sin-acceso?rol=employer' });
   });
 
   it('encodes the next path for sign-in redirects', () => {
     expect(signInRedirect('/empresa?tab=vacantes')).toBe('/ingresar?next=%2Fempresa%3Ftab%3Dvacantes');
+  });
+
+  it('asks anonymous sessions on a protected route to sign in', () => {
+    expect(
+      decideRoleGuard({
+        session: { user: { id: 'a', email: '', role: 'candidate', isAnonymous: true } },
+        requiredRole: 'employer',
+        currentPath: '/empresa',
+      }),
+    ).toEqual({ action: 'redirect', location: '/ingresar?next=%2Fempresa' });
   });
 });

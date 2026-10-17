@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { MatchDecision } from "@workbridge/domain";
+import { makeCandidateId, type MatchDecision } from "@workbridge/domain";
 import { assertDocumentsGrounded, gapLine, vacancyIntro } from "../draft";
 import type { EvidenceItem } from "../evidence";
 import { sampleMatchDecision, sampleWorkflowEnvelope } from "../fixtures";
@@ -410,6 +410,7 @@ describe("application approval and submission", () => {
     expect(view.vacancyTitle).toBe("Auxiliar administrativo");
     expect(view.candidateDisplayName).toBe("Ana Pérez");
     expect(view.evidence.map((item) => item.id)).toEqual(["ev-1"]);
+    expect(view.availableEvidence.map((item) => item.id)).toEqual(["ev-1"]);
   });
 
   it("computes the counselor gate over the selected evidence only", () => {
@@ -430,6 +431,7 @@ describe("application approval and submission", () => {
       includeEvidenceIds: ["ev-1"],
     });
     expect(corrected.evidence.map((item) => item.id)).toEqual(["ev-1"]);
+    expect(corrected.availableEvidence.map((item) => item.id)).toEqual(["ev-1", "cert-g"]);
     expect(corrected.counselorGate).toEqual([]);
   });
 
@@ -442,6 +444,58 @@ describe("application approval and submission", () => {
     app.approveDraft(session("candidate"), another.draftId, action("apruebo", "idem-clean-2"));
     const submitted = await app.submit(session("candidate"), another.draftId, action("envío", "idem-clean-3"));
     expect(submitted.interview).toBe("pending_employer_approval");
+  });
+
+  it("accepts the canonical candidate id and still refuses someone else's", () => {
+    const app = service();
+    const userId = "user-uuid-1";
+    const candidateId = makeCandidateId(userId);
+    const created = app.createDraft(
+      session("candidate", userId),
+      draftInput({ candidateId, match: { ...match(), candidateId } }),
+    );
+    expect(created.candidateId).toBe(candidateId);
+    expect(app.listDrafts(session("candidate", userId), { candidateId }).map((draft) => draft.draftId)).toEqual([
+      created.draftId,
+    ]);
+    expect(() =>
+      app.createDraft(
+        session("candidate", userId),
+        draftInput({
+          idempotencyKey: "idem-other-person",
+          candidateId: "candidate_other",
+          match: { ...match(), candidateId: "candidate_other" },
+        }),
+      ),
+    ).toThrow(/own application/);
+  });
+
+  it("lets the owning candidate read the interview decision", async () => {
+    const app = service();
+    const created = app.createDraft(session("candidate"), draftInput());
+    expect(() => app.readOwnSubmission(session("candidate"), created.draftId)).toThrow(/not been submitted/);
+    expect(() => app.readOwnSubmission(session("employer"), created.draftId)).toThrow(/Only the candidate/);
+    app.approveDraft(session("candidate"), created.draftId, action("apruebo", "idem-own-1"));
+    const submitted = await app.submit(session("candidate"), created.draftId, action("envío", "idem-own-2"));
+    expect(app.readOwnSubmission(session("candidate"), created.draftId)).toEqual({
+      submissionId: submitted.submissionId,
+      draftId: created.draftId,
+      interview: "pending_employer_approval",
+      submittedAt: NOW,
+    });
+    expect(() => app.readOwnSubmission(session("candidate", "other"), created.draftId)).toThrow(/own submission/);
+    const open = app.readDraft(session("candidate"), created.draftId);
+    expect(open.interview).toBe("pending_employer_approval");
+    expect(open.submissionId).toBe(submitted.submissionId);
+    expect(open.history.some((entry) => entry.action === "submission")).toBe(true);
+
+    app.decideInterview(session("employer"), submitted.submissionId, {
+      ...action("no avanzamos", "idem-own-3"),
+      decision: "rejected",
+    });
+    expect(app.readOwnSubmission(session("candidate"), created.draftId).interview).toBe("rejected");
+    expect(app.readDraft(session("candidate"), created.draftId).interview).toBe("rejected");
+    expect(app.listDrafts(session("candidate"), { candidateId: "candidate" })[0]?.interview).toBe("rejected");
   });
 
   it("rejects a short Certo token", () => {

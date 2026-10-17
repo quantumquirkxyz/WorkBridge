@@ -1,0 +1,59 @@
+/* Counselor + employer dashboards (J8/J9). Neo-brutal tokens come from globals.css. */
+
+.rl-count { display: inline-flex; align-items: center; min-height: 2rem; padding: .1rem .7rem; border: 2px solid var(--line); border-radius: .3rem; color: #111; background: #fff; box-shadow: var(--hard-sm); font-family: var(--font-display); font-size: .9rem; transform: rotate(1.5deg); }
+
+.rl-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: 1rem; }
+.rl-filters { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0; padding: 0; list-style: none; }
+.rl-chip { display: inline-flex; align-items: center; gap: .4rem; min-height: 2.75rem; padding: .3rem .8rem; border: 2px solid var(--line); border-radius: .3rem; color: var(--foreground); background: var(--card); box-shadow: 2px 2px 0 var(--shadow-color); font-size: .85rem; font-weight: 700; cursor: pointer; transition: transform .1s, box-shadow .1s; }
+.rl-chip:hover { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--shadow-color); }
+.rl-chip[aria-pressed='true'] { color: #111; background: var(--yellow); box-shadow: 0 0 0 var(--shadow-color); transform: translate(2px, 2px); }
+.rl-chip-n { min-width: 1.5rem; padding: 0 .35rem; border: 2px solid var(--line); border-radius: .25rem; color: #111; background: #fff; text-align: center; font-size: .75rem; }
+.rl-sort { display: inline-flex; align-items: center; gap: .5rem; font-size: .85rem; font-weight: 700; }
+.rl-sort select, .rl-search { min-height: 2.75rem; padding: .3rem .6rem; border: 2px solid var(--line); border-radius: .3rem; color: var(--foreground); background: var(--card); font: inherit; }
+.rl-search { min-width: min(100%, 14rem); }
+
+.rl-row-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .9rem; font-size: .8rem; color: var(--muted-foreground); font-weight: 600; }
+.rl-row-detail { font-size: .85rem; }
+.queue-row:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; }
+
+.rl-state { color: #111; }
+.rl-state-approved { background: var(--mint); }
+.rl-state-rejected { background: var(--pink); }
+.rl-state-pending { background: var(--yellow); }
+
+.rl-layout { display: grid; gap: 1.5rem; align-items: start; }
+@media (min-width: 64rem) {
+  .rl-layout { grid-template-columns: minmax(0, 1.6fr) minmax(20rem, 1fr); }
+  .rl-aside { position: sticky; top: 1rem; }
+}
+.rl-aside, .rl-main { display: grid; gap: 1.25rem; min-width: 0; }
+
+.rl-gate-list { display: grid; gap: .6rem; margin: 0; padding: 0; list-style: none; }
+.rl-gate { display: grid; gap: .25rem; padding: .7rem .9rem; border: var(--bw) solid var(--line); border-left-width: 12px; border-radius: .3rem; color: var(--foreground); background: color-mix(in srgb, var(--yellow) 35%, var(--card)); box-shadow: var(--hard-sm); }
+.rl-gate strong { font-family: var(--font-display); text-transform: uppercase; font-size: .95rem; }
+.rl-gate p { margin: 0; font-size: .9rem; }
+.rl-gate-hint { color: var(--muted-foreground); font-size: .8rem !important; }
+
+.rl-fragment { display: grid; gap: .4rem; }
+.rl-fragment-meta { display: flex; flex-wrap: wrap; gap: .4rem; }
+
+.rl-section-title { margin: 0; font-family: var(--font-display); font-size: 1.1rem; text-transform: uppercase; }
+.rl-panel { display: grid; gap: .75rem; padding: 1rem 1.1rem; border: var(--bw) solid var(--line); border-radius: .5rem; background: var(--card); box-shadow: var(--hard-sm); }
+.rl-doc-head { padding: .5rem 1rem; border-bottom: var(--bw) solid var(--line); color: #111; font-family: var(--font-display); text-transform: uppercase; font-size: .95rem; }
+.rl-doc { overflow: hidden; border: var(--bw) solid var(--line); border-radius: .4rem; background: var(--card); box-shadow: var(--hard-sm); }
+.rl-doc-body { display: grid; gap: .6rem; padding: .9rem 1rem; font-size: .9rem; }
+.rl-doc-body p { margin: 0; }
+
+.rl-actions { display: flex; flex-direction: column-reverse; gap: .75rem; }
+@media (min-width: 40rem) { .rl-actions { flex-direction: row; justify-content: space-between; } }
+.rl-reason-meta { display: flex; justify-content: space-between; font-size: .8rem; color: var(--muted-foreground); }
+.rl-saving { animation: rl-pulse 1s ease-in-out infinite alternate; }
+@keyframes rl-pulse { from { opacity: 1; } to { opacity: .55; } }
+.rl-history-reason { display: block; margin-top: .25rem; font-style: italic; }
+
+.rl-failure { display: grid; gap: .75rem; }
+.rl-failure-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rl-chip, .rl-saving { transition: none !important; animation: none !important; }
+}

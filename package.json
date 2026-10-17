@@ -27,6 +27,7 @@
     "gate:ci": "npm run typecheck && npm run test:coverage",
     "db:migrate": "NODE_OPTIONS=--no-network-family-autoselection neon psql production -- -f migrations/001_initial.sql -f migrations/002_better_auth.sql -f migrations/003_chat_sessions.sql",
     "seed:roles": "tsx scripts/seed-roles.ts",
+    "seed:demo": "tsx scripts/seed-demo.ts",
     "verify": "npm run lint && npm run typecheck && npm run test"
   },
   "devDependencies": {

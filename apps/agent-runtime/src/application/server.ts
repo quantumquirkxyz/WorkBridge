@@ -73,6 +73,12 @@ async function dispatch(req: IncomingMessage, res: ServerResponse, context: Requ
     return;
   }
 
+  const ownSubmission = /^\/drafts\/([^/]+)\/submission$/.exec(path);
+  if (req.method === "GET" && ownSubmission) {
+    writeJson(res, 200, context.service.readOwnSubmission(session, ownSubmission[1] ?? ""), context.secrets);
+    return;
+  }
+
   const draftRead = /^\/drafts\/([^/]+)$/.exec(path);
   if (req.method === "GET" && draftRead) {
     writeJson(res, 200, context.service.readDraft(session, draftRead[1] ?? ""), context.secrets);

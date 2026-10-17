@@ -14,7 +14,7 @@ const PRESENTATION = {
 export function VerificationBadge({ status }: { status: CredentialStatus }) {
   const { tone, Icon } = PRESENTATION[status];
   return (
-    <Badge tone={tone}>
+    <Badge tone={tone} className="sticker-tag">
       <Icon className="mr-1 size-3" aria-hidden="true" />
       {VERIFICATION_LABELS[status]}
     </Badge>

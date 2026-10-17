@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import { createAgentFromEnv } from '@workbridge/agent-runtime';
-import { type CandidateProfile } from '@workbridge/domain';
+import { makeCandidateId, type CandidateProfile } from '@workbridge/domain';
 import { handleIntake } from '../../../lib/intake-handler';
 import { persistCandidateProfile, readCandidateProfile } from '../../../lib/neon-repository';
 import { profileStore } from '../../../lib/profile-store';
 import { MAX_CANDIDATE_ID_LENGTH } from '../../../lib/exploration-handler';
-import { candidateIdFromRequestOrSession, unauthorized } from '../../../lib/candidate-session';
+import { candidateIdFromRequestOrSession, candidateUserIdFromRequestOrSession, unauthorized } from '../../../lib/candidate-session';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -23,8 +23,9 @@ export async function GET(request: Request): Promise<Response> {
 }
 
 export async function POST(request: Request): Promise<Response> {
-  const candidateId = await candidateIdFromRequestOrSession(request);
-  if (!candidateId) return unauthorized();
+  const userId = await candidateUserIdFromRequestOrSession(request);
+  if (!userId) return unauthorized();
+  const candidateId = makeCandidateId(userId);
   let payload: unknown;
   try {
     payload = await request.json();
@@ -32,7 +33,9 @@ export async function POST(request: Request): Promise<Response> {
     return NextResponse.json({ error: 'invalid_json' }, { status: 400 });
   }
 
-  payload = { ...(payload as Record<string, unknown>), candidateId };
+  // The raw user id is the seed. normalizeProfileDraft hashes it once, so the stored
+  // candidate_id matches the id used to read the profile and to authorize a draft.
+  payload = { ...(payload as Record<string, unknown>), candidateId: userId };
   const candidateKey = candidateId;
   if (candidateKey && !profileStore.get(candidateKey)) {
     try {

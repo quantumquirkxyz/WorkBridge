@@ -30,11 +30,11 @@ test.describe("employer interview decision", () => {
     await expectNoHorizontalScroll(page);
     await expectNoSeriousAxeViolations(page);
 
-    await page.getByRole("button", { name: "No avanza" }).click();
+    await page.getByRole("button", { name: "No avanzar" }).click();
     await expect(page.getByText("Escribe un motivo para continuar.")).toBeVisible();
 
     await page.getByLabel(/Motivo de tu decisión/).fill("Falta experiencia requerida");
-    await page.getByRole("button", { name: "No avanza" }).click();
+    await page.getByRole("button", { name: "No avanzar" }).click();
     await expect(page.getByRole("status")).toContainText("Registramos que la postulación no avanza.");
   });
 
@@ -45,11 +45,11 @@ test.describe("employer interview decision", () => {
 
     await cards.first().click();
     await expect(page.getByRole("heading", { name: "Documentos enviados" })).toBeVisible();
-    await page.getByRole("button", { name: "Pasar a entrevista" }).click();
+    await page.getByRole("button", { name: "Aprobar entrevista" }).click();
     await expect(page.getByText("Escribe un motivo para continuar.")).toBeVisible();
 
     await page.getByLabel(/Motivo de tu decisión/).fill("Cumple el perfil");
-    await page.getByRole("button", { name: "Pasar a entrevista" }).click();
+    await page.getByRole("button", { name: "Aprobar entrevista" }).click();
     await expect(page.getByRole("status")).toContainText("La postulación pasó a entrevista.");
   });
 
@@ -58,7 +58,7 @@ test.describe("employer interview decision", () => {
 
     await page.goto(`/empresa/${encodeURIComponent(otherOrgSubmission ?? "")}`);
     await expect(page.getByRole("alert")).toContainText("Esta postulación no está disponible para tu organización.");
-    await expect(page.getByRole("button", { name: "Pasar a entrevista" })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Aprobar entrevista" })).toHaveCount(0);
   });
 
   test("empty state reads 'No hay postulaciones pendientes' when the queue is empty", async ({ page }) => {
