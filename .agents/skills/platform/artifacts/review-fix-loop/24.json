@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "1.0",
+  "artifactType": "review-fix-loop",
+  "id": "review-fix-loop-24",
+  "skill": "review-fix-loop",
+  "createdAt": "2026-10-17T00:05:00.000Z",
+  "updatedAt": "2026-10-17T00:05:00.000Z",
+  "pr": "https://github.com/HackathonFISC/equipo-02/pull/24",
+  "branch": "feat/issue-7-build-candidate-preferences-and-vacancy-exploration",
+  "fixedPoint": "main",
+  "specSource": "GitHub issue #7 (parent spec #1)",
+  "reviewPassCount": 2,
+  "passes": [
+    {
+      "pass": 1,
+      "headReviewed": "9230da9",
+      "reviewUrl": "https://github.com/HackathonFISC/equipo-02/pull/24#pullrequestreview-5555144113",
+      "standardsFindings": 8,
+      "specFindings": 6,
+      "blockerOrRequiredFindings": 1,
+      "planComment": "https://github.com/HackathonFISC/equipo-02/pull/24#issuecomment-6227584552",
+      "planStatus": "planned",
+      "implementationComment": "https://github.com/HackathonFISC/equipo-02/pull/24#issuecomment-6227607565",
+      "implementationCommit": "cf177a9",
+      "implementationStatus": "implemented",
+      "note": "Standards were 8 judgement calls (0 documented-standard breaches); Spec had 1 missing (Playwright), 3 partial, 2 scope-creep. Plan carried 6 executable code items (F1,F2,F4,F5,F6,F7); F3 was reclassified as not-a-defect (type-narrowing)."
+    },
+    {
+      "pass": 2,
+      "headReviewed": "cf177a9",
+      "reviewUrl": "inline two-axis re-review (parallel Standards/Spec sub-agents; not published as a GitHub review)",
+      "standardsFindings": 3,
+      "specFindings": 5,
+      "blockerOrRequiredFindings": 1,
+      "implementationCommit": "aec26cd",
+      "implementationStatus": "implemented",
+      "note": "Standards 1-4,6-8 RESOLVED; ST5 ACCEPTED (type-narrowing boundary). Three NEW findings introduced by the F1/F2 edits: residual label duplication in the dashboard option arrays (NEW-1), hard-coded '72 h' (NEW-2), unused TransportMode re-export (NEW-3) — all fixed in aec26cd. Spec: S3 resolved by ADR-0004; S1/S2/S4/S5/S6 stand."
+    }
+  ],
+  "postCleanupVerification": {
+    "head": "aec26cd",
+    "method": "targeted grep + full local validation (lint, typecheck, 268 tests, coverage gate); no full re-spawn",
+    "result": "NEW-1, NEW-2, NEW-3 resolved",
+    "openStandardsFindings": 0
+  },
+  "loopState": {
+    "lastPlanPosted": true,
+    "lastImplementationCompleted": true,
+    "validation": [
+      "npm run lint - pass",
+      "npm run typecheck - pass",
+      "npm test - 268/268 pass",
+      "npm run gate:ci - pass; 94.09% lines / 78.84% branches",
+      "npm audit - 0 vulnerabilities (unchanged)"
+    ],
+    "metadataAligned": {
+      "issue": 7,
+      "labels": [],
+      "milestone": null,
+      "note": "No tracker metadata invented on the PR; issue #7's triage label was intentionally not carried onto the PR."
+    }
+  },
+  "exitCondition": "blocked",
+  "blockedBy": [
+    "Spec S4: durable preference persistence is deferred but has no follow-up ticket, so the loop cannot report clean.",
+    "Spec S1: ticket #7's Playwright validation is unmet; the Vitest + live-HTTP substitution is an accepted deviation that still needs a human confirmation."
+  ],
+  "deferred": [
+    {
+      "finding": "S2: max_travel_minutes, monthly_transport_budget_usd, transport_modes, and the availability window (start/end minute, weekly hours) never influence exploration matching.",
+      "owner": "MateoDG2006",
+      "followUpTicket": "https://github.com/HackathonFISC/equipo-02/issues/20",
+      "reason": "Needs routing/geocoding data owned by the matching slice; exploration is deliberately a pre-match filter."
+    },
+    {
+      "finding": "S4: preferences are persisted in-process only (apps/web/lib/preferences-store.ts), not in a durable store.",
+      "owner": "MateoDG2006",
+      "followUpTicket": "none",
+      "reason": "No PostgreSQL/Prisma store exists in the repo; the PreferencesStore interface is the seam. Blocked until a follow-up ticket exists."
+    }
+  ],
+  "accepted": [
+    "Spec S1: Playwright validation replaced by deterministic Vitest handler tests + a live next start HTTP smoke test.",
+    "Spec S3: CandidatePreferences kept as a separate validated document from CandidateProfile (recorded in ADR-0004).",
+    "Spec S5: unrelated lint fixes kept (reverting reopens the lint gate).",
+    "Spec S6: weighted matchScore kept (orders results).",
+    "Standards ST1: per-package JSON Schema contracts accepted via the packages/solver precedent (ADR-0004).",
+    "Standards ST5/F3: assertCandidatePreferences is a TS type-narrowing assertion needed at both the agent's unknown boundary and exploreVacancies' public guard."
+  ],
+  "nextConsumer": "user decision — create a follow-up ticket for S4 (or accept in-process persistence as the MVP scope) and confirm the Playwright deviation; then rerun review-pr for a clean pass and hand off to ship-subissue."
+}
