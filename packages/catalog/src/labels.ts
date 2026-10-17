@@ -1,4 +1,4 @@
-import type { ContractType, WorkModality } from './types';
+import type { ContractType, ExclusionReason, WorkModality } from './types';
 
 /**
  * Single source of truth for the Spanish display labels of the shared enums.
@@ -18,4 +18,18 @@ export const CONTRACT_LABELS: Record<ContractType, string> = {
   internship: 'Pasantía',
   temporary: 'Temporal',
   freelance: 'Independiente',
+};
+
+/**
+ * Spanish display labels for exclusion reasons, shared by the returned detail
+ * strings and the dashboard's near-match warnings so both name a constraint the
+ * same way.
+ */
+export const EXCLUSION_LABELS: Record<ExclusionReason, string> = {
+  stale: 'Desactualizada',
+  modality: 'Modalidad',
+  location: 'Ubicación',
+  salary: 'Salario',
+  contract: 'Contrato',
+  schedule: 'Horario',
 };

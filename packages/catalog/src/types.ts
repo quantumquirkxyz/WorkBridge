@@ -102,7 +102,50 @@ export interface ExcludedVacancy {
   reason: ExclusionReason;
   /** Spanish, dashboard-ready explanation. */
   detail: string;
+  /**
+   * Every declared constraint the vacancy failed, in priority order. `reason`
+   * is always `failedConstraints[0]`; the full list lets a caller distinguish a
+   * vacancy blocked by a single constraint (a *near* match, S-C in the fix plan)
+   * from one that fails several at once.
+   */
+  failedConstraints: ExclusionReason[];
   freshness: Freshness;
+}
+
+/**
+ * A vacancy that satisfies every declared constraint except one. It is still a
+ * hard exclusion — hard constraints are never relaxed — but it is worth showing
+ * with an explicit warning so the candidate can decide whether to widen the one
+ * constraint that blocked it.
+ */
+export interface NearMatch {
+  vacancy: CachedVacancy;
+  freshness: Freshness;
+  provenance: VacancyProvenance;
+  /** The single declared constraint that blocked this vacancy. */
+  blockedBy: ExclusionReason;
+  /** Spanish warning naming the constraint and why it blocked the vacancy. */
+  warnings: string[];
+  /** Deterministic 0–100 closeness score; higher means closer to compatible. */
+  proximity: number;
+}
+
+/** Per-cause breakdown of a no-match result. */
+export interface NoMatchCause {
+  reason: ExclusionReason;
+  count: number;
+  /** Spanish, dashboard-ready explanation for this cause. */
+  detail: string;
+}
+
+export interface NoMatch {
+  explanation: string;
+  /** One entry per exclusion reason present, with an explicit count. */
+  causes: NoMatchCause[];
+  /** Vacancies blocked by exactly one constraint, closest first. */
+  nearMatches: NearMatch[];
+  /** True when the candidate declared willingness to train (a roadmap may be built). */
+  roadmapRequested: boolean;
 }
 
 export interface ExplorationSummary {
@@ -120,7 +163,8 @@ export interface ExplorationResult {
   matches: VacancyMatch[];
   excluded: ExcludedVacancy[];
   summary: ExplorationSummary;
-  noMatch?: { explanation: string; nearMatches: ExcludedVacancy[]; roadmapRequested: boolean };
+  /** Present only when the exploration found no viable match (T-E: not when `limit` truncates). */
+  noMatch?: NoMatch;
 }
 
 export interface CatalogOptions {
@@ -132,6 +176,11 @@ export interface CatalogOptions {
 export interface ExplorationQueryOptions extends CatalogOptions {
   /** Maximum number of matches to return, newest and best first. */
   limit?: number;
+  /**
+   * Maximum number of near matches (vacancies blocked by exactly one declared
+   * constraint) to return. Defaults to `DEFAULT_NEAR_MATCH_LIMIT`.
+   */
+  nearMatchLimit?: number;
 }
 
 export type { CandidatePreferences, ContractType, PreferenceLocation, WorkModality };

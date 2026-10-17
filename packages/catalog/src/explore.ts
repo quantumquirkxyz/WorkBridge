@@ -7,7 +7,7 @@ import {
 import type { VacancyCatalog } from './catalog';
 import { assertExplorationResult } from './ajv';
 import { DEFAULT_MAX_AGE_HOURS, computeFreshness } from './freshness';
-import { CONTRACT_LABELS, MODALITY_LABELS } from './labels';
+import { CONTRACT_LABELS, EXCLUSION_LABELS, MODALITY_LABELS } from './labels';
 import type {
   CachedVacancy,
   ExcludedVacancy,
@@ -15,8 +15,23 @@ import type {
   ExplorationQueryOptions,
   ExplorationResult,
   Freshness,
+  NearMatch,
+  NoMatchCause,
   VacancyMatch,
 } from './types';
+
+/** Default cap on the number of near matches returned. Named, not magic (ADR-0004 spirit). */
+export const DEFAULT_NEAR_MATCH_LIMIT = 5;
+
+/** Deterministic priority order for exclusion reasons, reused by the cause breakdown. */
+const EXCLUSION_ORDER: readonly ExclusionReason[] = [
+  'stale',
+  'modality',
+  'location',
+  'contract',
+  'schedule',
+  'salary',
+];
 
 /** Lower-case a shared display label for use inside a Spanish sentence. */
 function lower(labels: Record<string, string>, key: string): string {
@@ -51,76 +66,87 @@ function skillOverlap(preferences: CandidatePreferences, vacancy: CachedVacancy)
   return { covered, missing };
 }
 
+interface FailedConstraint {
+  reason: ExclusionReason;
+  detail: string;
+}
+
 interface FilterOutcome {
+  /** The highest-priority failed constraint, when the vacancy is excluded. */
   reason?: ExclusionReason;
   detail?: string;
+  /**
+   * Every declared constraint the vacancy failed, in priority order. An empty
+   * array means the vacancy is compatible. A single entry means it is a *near*
+   * match; two or more mean it is a plain exclusion.
+   */
+  failed: ExclusionReason[];
   score: number;
   reasons: string[];
 }
 
 function evaluate(vacancy: CachedVacancy, preferences: CandidatePreferences, freshness: Freshness): FilterOutcome {
   const reasons: string[] = [];
+  const failures: FailedConstraint[] = [];
 
+  // Constraints are collected rather than short-circuited so the caller can tell
+  // a single-constraint near match from a vacancy that fails several at once.
+  // The first failure remains the primary `reason`, preserving the established
+  // priority order.
   if (vacancy.modality !== preferences.modality) {
-    return {
+    failures.push({
       reason: 'modality',
       detail: `Modalidad ${lower(MODALITY_LABELS, vacancy.modality)}; buscas ${lower(MODALITY_LABELS, preferences.modality)}.`,
-      score: 0,
-      reasons,
-    };
+    });
   }
 
   const max = preferences.max_location;
   if (max.province && vacancy.location.province && max.province !== vacancy.location.province) {
-    return {
+    failures.push({
       reason: 'location',
       detail: `Ubicada en ${vacancy.location.province}; tu ubicación máxima es ${max.province}.`,
-      score: 0,
-      reasons,
-    };
-  }
-  if (max.district && vacancy.location.district && max.district !== vacancy.location.district) {
-    return {
+    });
+  } else if (max.district && vacancy.location.district && max.district !== vacancy.location.district) {
+    failures.push({
       reason: 'location',
       detail: `Ubicada en ${vacancy.location.district}; tu ubicación máxima es ${max.district}.`,
-      score: 0,
-      reasons,
-    };
+    });
   }
-
-  const floor = preferences.minimum_salary_usd;
 
   if (vacancy.contractType === 'internship' && !preferences.willing_to_intern) {
-    return {
+    failures.push({
       reason: 'contract',
       detail: 'Es una pasantía y no indicaste disposición a hacer pasantías.',
-      score: 0,
-      reasons,
-    };
-  }
-  if (preferences.contract_types.length > 0 && !preferences.contract_types.includes(vacancy.contractType)) {
-    return {
+    });
+  } else if (preferences.contract_types.length > 0 && !preferences.contract_types.includes(vacancy.contractType)) {
+    failures.push({
       reason: 'contract',
       detail: `Tipo de contrato ${lower(CONTRACT_LABELS, vacancy.contractType)}, que no está en tu lista.`,
-      score: 0,
-      reasons,
-    };
+    });
   }
 
   const overlapDays = dayOverlap(preferences.availability.days, vacancy.schedule.days);
   if (overlapDays.length === 0) {
-    return {
+    failures.push({
       reason: 'schedule',
       detail: 'Los días de la vacante no coinciden con tu disponibilidad.',
-      score: 0,
-      reasons,
-    };
+    });
   }
 
+  const floor = preferences.minimum_salary_usd;
   if (floor > 0 && vacancy.salary.maxUsd !== null && vacancy.salary.maxUsd < floor) {
-    return {
+    failures.push({
       reason: 'salary',
       detail: `Salario máximo USD ${vacancy.salary.maxUsd}; tu mínimo es USD ${floor}.`,
+    });
+  }
+
+  if (failures.length > 0) {
+    const primary = failures[0]!;
+    return {
+      reason: primary.reason,
+      detail: primary.detail,
+      failed: failures.map((failure) => failure.reason),
       score: 0,
       reasons,
     };
@@ -153,7 +179,60 @@ function evaluate(vacancy: CachedVacancy, preferences: CandidatePreferences, fre
     (skillFit * 0.4 + salaryFit * 0.2 + scheduleFit * 0.2 + freshnessFit * 0.2) * 100,
   );
 
-  return { score, reasons };
+  return { failed: [], score, reasons };
+}
+
+/**
+ * Closeness of a near match, independent of the constraint it failed. It reuses
+ * the same signals the scoring path uses (skill overlap, schedule overlap,
+ * freshness) so "closest first" is deterministic and explainable.
+ */
+function proximityScore(vacancy: CachedVacancy, preferences: CandidatePreferences, freshness: Freshness): number {
+  const required = vacancy.skills.filter((skill) => skill.required);
+  const { covered } = skillOverlap(preferences, vacancy);
+  const skillFit = required.length === 0 ? 0.5 : clampRatio(covered.length / required.length);
+  const overlapDays = dayOverlap(preferences.availability.days, vacancy.schedule.days);
+  const scheduleFit = preferences.availability.days.length === 0
+    ? 0
+    : clampRatio(overlapDays.length / preferences.availability.days.length);
+  const freshnessFit = clampRatio(1 - freshness.ageHours / freshness.maxAgeHours);
+  return Math.round((skillFit * 0.5 + scheduleFit * 0.3 + freshnessFit * 0.2) * 100);
+}
+
+function buildNearMatch(
+  vacancy: CachedVacancy,
+  preferences: CandidatePreferences,
+  freshness: Freshness,
+  blockedBy: ExclusionReason,
+  detail: string,
+): NearMatch {
+  return {
+    vacancy,
+    freshness,
+    provenance: vacancy.provenance,
+    blockedBy,
+    warnings: [`Bloqueada por ${EXCLUSION_LABELS[blockedBy]}: ${detail}`],
+    proximity: proximityScore(vacancy, preferences, freshness),
+  };
+}
+
+/** One cause entry per exclusion reason present, in the canonical priority order. */
+function causesOf(excluded: readonly ExcludedVacancy[]): NoMatchCause[] {
+  const byReason = new Map<ExclusionReason, NoMatchCause>();
+  for (const entry of excluded) {
+    const existing = byReason.get(entry.reason);
+    if (existing) existing.count += 1;
+    else byReason.set(entry.reason, { reason: entry.reason, count: 1, detail: entry.detail });
+  }
+  return EXCLUSION_ORDER.filter((reason) => byReason.has(reason)).map((reason) => byReason.get(reason)!);
+}
+
+function explainNoMatch(causes: readonly NoMatchCause[]): string {
+  if (causes.length === 0) {
+    return 'No hay vacantes en el catálogo para evaluar.';
+  }
+  const named = causes.map((cause) => `${EXCLUSION_LABELS[cause.reason]} (${cause.count})`).join(', ');
+  return `Ninguna vacante resultó viable. Causas: ${named}. Las restricciones declaradas no se relajan automáticamente.`;
 }
 
 /**
@@ -162,7 +241,10 @@ function evaluate(vacancy: CachedVacancy, preferences: CandidatePreferences, fre
  * Vacancies older than `maxAgeHours` (72 by default) are excluded before any
  * compatibility check, so they can never be recommended automatically. Every
  * returned match carries its provenance and freshness; every exclusion carries
- * a Spanish reason. The result is Ajv-validated before it leaves the seam.
+ * a Spanish reason and the full list of constraints it failed. When nothing is
+ * viable, the result explains each cause and lists near matches (vacancies
+ * blocked by exactly one declared constraint). The result is Ajv-validated
+ * before it leaves the seam.
  */
 export function exploreVacancies(
   preferences: CandidatePreferences,
@@ -173,16 +255,18 @@ export function exploreVacancies(
   const nowFn = options.now ?? (() => new Date());
   const now = nowFn();
   const maxAgeHours = options.maxAgeHours ?? DEFAULT_MAX_AGE_HOURS;
+  const nearMatchLimit = options.nearMatchLimit ?? DEFAULT_NEAR_MATCH_LIMIT;
 
   const matches: VacancyMatch[] = [];
   const excluded: ExcludedVacancy[] = [];
+  const nearMatchCandidates: NearMatch[] = [];
   let stale = 0;
 
   for (const vacancy of catalog.all()) {
     const freshness = computeFreshness(vacancy, { now, maxAgeHours });
     if (freshness.stale) {
       stale += 1;
-      excluded.push({ jobId: vacancy.jobId, reason: 'stale', detail: freshness.label, freshness });
+      excluded.push({ jobId: vacancy.jobId, reason: 'stale', detail: freshness.label, failedConstraints: ['stale'], freshness });
       continue;
     }
 
@@ -192,8 +276,14 @@ export function exploreVacancies(
         jobId: vacancy.jobId,
         reason: outcome.reason,
         detail: outcome.detail ?? 'No compatible.',
+        failedConstraints: outcome.failed,
         freshness,
       });
+      if (outcome.failed.length === 1) {
+        nearMatchCandidates.push(
+          buildNearMatch(vacancy, preferences, freshness, outcome.reason, outcome.detail ?? 'No compatible.'),
+        );
+      }
       continue;
     }
 
@@ -213,6 +303,11 @@ export function exploreVacancies(
   });
   excluded.sort((a, b) => (a.jobId < b.jobId ? -1 : a.jobId > b.jobId ? 1 : 0));
 
+  nearMatchCandidates.sort((a, b) => {
+    if (a.proximity !== b.proximity) return b.proximity - a.proximity;
+    return a.vacancy.jobId < b.vacancy.jobId ? -1 : a.vacancy.jobId > b.vacancy.jobId ? 1 : 0;
+  });
+
   const limited = options.limit !== undefined ? matches.slice(0, options.limit) : matches;
 
   const result: ExplorationResult = {
@@ -230,13 +325,13 @@ export function exploreVacancies(
     },
   };
 
-  if (limited.length === 0) {
-    const nearMatches = excluded.filter((entry) => entry.reason !== 'stale').slice(0, 5);
+  // T-E: gate on the *unsliced* match count so `limit: 0` cannot fabricate a no-match.
+  if (matches.length === 0) {
+    const causes = causesOf(excluded);
     result.noMatch = {
-      explanation: excluded.length === 0
-        ? 'No hay vacantes vigentes en el catálogo para evaluar.'
-        : 'No hay una vacante viable porque las restricciones declaradas excluyen las opciones disponibles. Ninguna restricción fue relajada.',
-      nearMatches,
+      explanation: explainNoMatch(causes),
+      causes,
+      nearMatches: nearMatchCandidates.slice(0, nearMatchLimit),
       roadmapRequested: preferences.willing_to_train,
     };
   }

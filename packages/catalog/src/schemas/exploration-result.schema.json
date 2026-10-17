@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://puente-laboral.pa/schemas/exploration-result/1.0.0",
   "title": "ExplorationResult",
-  "description": "The Exploration Agent response: compatible cached vacancies, each with provenance and a freshness label, plus the vacancies that were excluded and why. Stale vacancies (older than 72 hours by default) never appear as matches.",
+  "description": "The Exploration Agent response: compatible cached vacancies, each with provenance and a freshness label, plus the vacancies that were excluded and why. Stale vacancies (older than 72 hours by default) never appear as matches. When nothing is viable the result also carries a per-cause explanation and near matches (vacancies blocked by exactly one declared constraint).",
   "type": "object",
   "additionalProperties": false,
   "required": ["schemaVersion", "candidateId", "generatedAt", "preferences", "matches", "excluded", "summary"],
@@ -14,15 +14,7 @@
     "matches": { "type": "array", "items": { "$ref": "#/$defs/match" } },
     "excluded": { "type": "array", "items": { "$ref": "#/$defs/excluded" } },
     "summary": { "$ref": "#/$defs/summary" },
-    "noMatch": {
-      "type": "object", "additionalProperties": false,
-      "required": ["explanation", "nearMatches", "roadmapRequested"],
-      "properties": {
-        "explanation": { "type": "string", "minLength": 1 },
-        "nearMatches": { "type": "array", "items": { "$ref": "#/$defs/excluded" } },
-        "roadmapRequested": { "type": "boolean" }
-      }
-    }
+    "noMatch": { "$ref": "#/$defs/noMatch" }
   },
   "$defs": {
     "freshness": {
@@ -35,6 +27,9 @@
         "stale": { "type": "boolean" },
         "label": { "type": "string", "minLength": 1 }
       }
+    },
+    "exclusionReason": {
+      "enum": ["stale", "modality", "location", "salary", "contract", "schedule"]
     },
     "match": {
       "type": "object",
@@ -51,12 +46,51 @@
     "excluded": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["jobId", "reason", "detail", "freshness"],
+      "required": ["jobId", "reason", "detail", "failedConstraints", "freshness"],
       "properties": {
         "jobId": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" },
-        "reason": { "enum": ["stale", "modality", "location", "salary", "contract", "schedule"] },
+        "reason": { "$ref": "#/$defs/exclusionReason" },
         "detail": { "type": "string", "minLength": 1 },
+        "failedConstraints": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/exclusionReason" }
+        },
         "freshness": { "$ref": "#/$defs/freshness" }
+      }
+    },
+    "nearMatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["vacancy", "freshness", "provenance", "blockedBy", "warnings", "proximity"],
+      "properties": {
+        "vacancy": { "$ref": "https://puente-laboral.pa/schemas/cached-vacancy/1.0.0" },
+        "freshness": { "$ref": "#/$defs/freshness" },
+        "provenance": { "$ref": "https://puente-laboral.pa/schemas/cached-vacancy/1.0.0#/$defs/provenance" },
+        "blockedBy": { "$ref": "#/$defs/exclusionReason" },
+        "warnings": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "proximity": { "type": "number", "minimum": 0, "maximum": 100 }
+      }
+    },
+    "noMatchCause": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reason", "count", "detail"],
+      "properties": {
+        "reason": { "$ref": "#/$defs/exclusionReason" },
+        "count": { "type": "integer", "minimum": 1 },
+        "detail": { "type": "string", "minLength": 1 }
+      }
+    },
+    "noMatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["explanation", "causes", "nearMatches", "roadmapRequested"],
+      "properties": {
+        "explanation": { "type": "string", "minLength": 1 },
+        "causes": { "type": "array", "items": { "$ref": "#/$defs/noMatchCause" } },
+        "nearMatches": { "type": "array", "items": { "$ref": "#/$defs/nearMatch" } },
+        "roadmapRequested": { "type": "boolean" }
       }
     },
     "summary": {

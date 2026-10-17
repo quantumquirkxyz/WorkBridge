@@ -14,7 +14,12 @@ export async function POST(request: Request): Promise<Response> {
 }
 
 export async function DELETE(request: Request): Promise<Response> {
-  const candidateId = new URL(request.url).searchParams.get('candidateId') ?? '';
+  const params = new URL(request.url).searchParams;
+  // Distinguish a missing parameter from an empty one (T-D).
+  if (!params.has('candidateId')) {
+    return NextResponse.json({ error: 'missing_candidate_id' }, { status: 400 });
+  }
+  const candidateId = params.get('candidateId') ?? '';
   const { status, body } = handleDeleteCandidate(candidateId);
   return NextResponse.json(body, { status });
 }

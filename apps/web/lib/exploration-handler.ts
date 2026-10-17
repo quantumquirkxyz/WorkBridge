@@ -3,6 +3,7 @@ import { createSeedCatalog, type VacancyCatalog } from '@puente/catalog';
 import { createExplorationAgent, type ExplorationAgent } from '@puente/agent-runtime';
 import { buildPreferences, type PreferencesDraft } from './preferences';
 import { preferencesStore, type PreferencesStore } from './preferences-store';
+import { savedSearchesStore } from './saved-searches-store';
 
 export interface ExplorationHandlerDeps {
   agent?: ExplorationAgent;
@@ -52,10 +53,21 @@ export function handleSavePreferences(
   return { status: 200, body: parsed.preferences };
 }
 
+/** Upper bound on a candidate id accepted by the deletion seam. Named, not magic. */
+export const MAX_CANDIDATE_ID_LENGTH = 128;
+
+/**
+ * Delete every piece of candidate data this slice stores: the validated
+ * preferences document and any saved searches for the same candidate. This is
+ * the data-deletion seam for issue #10; it never touches a submission path.
+ */
 export function handleDeleteCandidate(candidateId: string, deps: ExplorationHandlerDeps = {}): HandlerResult {
-  if (!candidateId || candidateId.length > 128) return { status: 400, body: { error: 'invalid_candidate_id' } };
-  const deleted = (deps.store ?? preferencesStore).delete(candidateId);
-  return { status: deleted ? 200 : 404, body: { deleted, candidateId } };
+  if (!candidateId || candidateId.length > MAX_CANDIDATE_ID_LENGTH) {
+    return { status: 400, body: { error: 'invalid_candidate_id' } };
+  }
+  const preferencesDeleted = (deps.store ?? preferencesStore).delete(candidateId);
+  const searchesDeleted = savedSearchesStore.deleteByCandidate(candidateId);
+  return { status: preferencesDeleted || searchesDeleted > 0 ? 200 : 404, body: { deleted: preferencesDeleted || searchesDeleted > 0, candidateId, preferencesDeleted, searchesDeleted } };
 }
 
 /**

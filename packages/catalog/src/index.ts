@@ -8,6 +8,9 @@ export type {
   ExplorationResult,
   ExplorationSummary,
   Freshness,
+  NearMatch,
+  NoMatch,
+  NoMatchCause,
   ScrapingInfo,
   VacancyMatch,
   VacancyProvenance,
@@ -35,6 +38,6 @@ export { createVacancyCatalog, loadCatalogFromScraped, toCachedVacancy } from '.
 
 export { createSeedCatalog, seedVacancies } from './seed';
 
-export { exploreVacancies } from './explore';
+export { exploreVacancies, DEFAULT_NEAR_MATCH_LIMIT } from './explore';
 
-export { CONTRACT_LABELS, MODALITY_LABELS } from './labels';
+export { CONTRACT_LABELS, EXCLUSION_LABELS, MODALITY_LABELS } from './labels';
