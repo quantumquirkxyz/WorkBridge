@@ -3,6 +3,7 @@
   "changes": [
     "Replaced the legacy IntakeForm home with an accessible welcome screen and profile-aware redirect to /vacantes.",
     "Implemented ChatScreen with persisted transcript restoration, role=log/aria-live, quick replies, confirmation/change chips, typing states, keyboard composer behavior, intake summary, retry handling, and one-time exploration navigation.",
+    "Persisted the exploration response for /vacantes so the destination view renders the first search results after chat navigation.",
     "Seeded known profile and preference slots, exposed browser Better Auth session resolution for candidate API routes, moved fileToBase64 to lib/files.ts, and removed IntakeForm.tsx.",
     "Added ChatScreen and WelcomeScreen component coverage and replaced the obsolete form e2e with the fallback J1 journey across the three web device profiles."
   ],
@@ -19,9 +20,9 @@
       "npx playwright test apps/web/e2e/intake-explore.spec.ts --project='Desktop Chrome' — Chromium could not start because the environment lacks libnspr4.so.",
       "npm audit --audit-level=high — existing moderate sprintf-js advisories require a breaking dependency upgrade; no force fix applied."
     ],
-    "notes": "The full unit suite passed: 77 files, 635 tests, 8 skipped. gate-ci passed with 92.21% line coverage. Changed-file lint and typecheck passed."
+    "notes": "The full unit suite passed: 77 files, 636 tests, 8 skipped. gate-ci passed with 92.21% line coverage. Changed-file lint and typecheck passed."
   },
-  "commitSha": "895f869",
+  "commitSha": "614e3fc",
   "branch": "feat/issue-49-build-welcome-chat-ui",
   "nextConsumer": "publish-open-pr",
   "blockedBy": [],
