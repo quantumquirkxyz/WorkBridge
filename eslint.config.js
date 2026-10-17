@@ -29,6 +29,33 @@ export default tseslint.config(
     },
   },
   {
+    files: ["apps/web/components/**/*.tsx", "apps/web/app/**/*.tsx"],
+    ignores: ["apps/web/app/api/**"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["**/lib/*-handler", "**/lib/*-handler.ts", "*-handler"],
+              message:
+                "Client components must call the typed API client and TanStack Query hooks instead of server handlers.",
+            },
+            {
+              group: ["**/lib/*-store", "**/lib/*-store.ts", "*-store"],
+              message:
+                "Client components must not import in-process stores; use lib/api/client and lib/queries instead.",
+            },
+            {
+              group: ["@puente/agent-runtime", "@puente/agent-runtime/*"],
+              message: "Agent runtime is server-only; use /api routes from the typed client.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: ["scripts/**/*.mjs"],
     languageOptions: {
       globals: {
