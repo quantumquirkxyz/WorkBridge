@@ -1,5 +1,5 @@
 {
-  "name": "@puente/ingestion",
+  "name": "@workbridge/ingestion",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -12,7 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@puente/domain": "*",
+    "@workbridge/domain": "*",
     "unpdf": "^1.9.0"
   }
 }

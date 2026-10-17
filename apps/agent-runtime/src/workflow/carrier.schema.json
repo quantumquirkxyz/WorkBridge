@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://puentelaboral.pa/schemas/workflow-carrier.schema.json",
+  "$id": "https://workbridge.pa/schemas/workflow-carrier.schema.json",
   "title": "WorkflowCarrier",
   "description": "State carried between Mastra agent steps, validated with Ajv against JSON Schema 2020-12.",
   "type": "object",
@@ -35,7 +35,7 @@
       "type": "array",
       "items": { "type": "string" }
     },
-    "preferences": { "$ref": "https://puente-laboral.pa/schemas/candidate-preferences/1.0.0" },
+    "preferences": { "$ref": "https://workbridge.pa/schemas/candidate-preferences/1.0.0" },
     "halted": { "type": "boolean" },
     "status": { "enum": ["running", "success", "rejected", "dead_letter"] },
     "findings": {

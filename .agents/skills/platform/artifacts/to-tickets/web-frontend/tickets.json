@@ -1,0 +1,661 @@
+{
+  "artifactType": "TicketArtifact",
+  "schemaVersion": "1.0",
+  "identifier": "puente-laboral-web-frontend",
+  "traceId": "to-tickets:puente-laboral-web-frontend:2026-10-16",
+  "source": "docs/reference/frontend/spec.md",
+  "specIssue": 32,
+  "repository": "HackathonFISC/equipo-02",
+  "output": [
+    {
+      "id": "T01",
+      "issue": 33,
+      "title": "Adopt Tailwind v4, shadcn/ui, and the design tokens in apps/web",
+      "blockedBy": [],
+      "blockedByIssues": [],
+      "metadata": {
+        "project": null,
+        "fields": {
+          "work_type": "Ticket",
+          "repo_scope": "web",
+          "phase": "build",
+          "priority": "high",
+          "risk": "medium",
+          "sprint": "hackathon",
+          "release_train": null
+        },
+        "todo": [],
+        "milestone": null
+      },
+      "labels": [
+        "ready-for-agent"
+      ],
+      "schemaVersion": "1.0"
+    },
+    {
+      "id": "T07",
+      "issue": 34,
+      "title": "Merge multiple intake sources into one candidate profile on the server",
+      "blockedBy": [],
+      "blockedByIssues": [],
+      "metadata": {
+        "project": null,
+        "fields": {
+          "work_type": "Ticket",
+          "repo_scope": "profile",
+          "phase": "build",
+          "priority": "high",
+          "risk": "medium",
+          "sprint": "hackathon",
+          "release_train": null
+        },
+        "todo": [],
+        "milestone": null
+      },
+      "labels": [
+        "ready-for-agent"
+      ],
+      "schemaVersion": "1.0"
+    },
+    {
+      "id": "T02",
+      "issue": 35,
+      "title": "Add the typed API client and TanStack Query, and split ExplorationDashboard into feature components",
+      "blockedBy": [
+        "T01"
+      ],
+      "blockedByIssues": [
+        33
+      ],
+      "metadata": {
+        "project": null,
+        "fields": {
+          "work_type": "Ticket",
+          "repo_scope": "web",
+          "phase": "build",
+          "priority": "high",
+          "risk": "medium",
+          "sprint": "hackathon",
+          "release_train": null
+        },
+        "todo": [],
+        "milestone": null
+      },
+      "labels": [
+        "ready-for-agent"
+      ],
+      "schemaVersion": "1.0"
+    },
+    {
+      "id": "T03",
+      "issue": 36,
+      "title": "Add the web test harness: jsdom component tests, Playwright web project with device profiles, axe and visual checks",
+      "blockedBy": [
+        "T01"
+      ],
+      "blockedByIssues": [
+        33
+      ],
+      "metadata": {
+        "project": null,
+        "fields": {
+          "work_type": "Ticket",
+          "repo_scope": "web",
+          "phase": "build",
+          "priority": "high",
+          "risk": "low",
+          "sprint": "hackathon",
+          "release_train": null
+        },
+        "todo": [],
+        "milestone": null
+      },
+      "labels": [
+        "ready-for-agent"
+      ],
+      "schemaVersion": "1.0"
+    },
+    {
+      "id": "T04",
+      "issue": 37,
+      "title": "Add Better Auth sessions, roles, anonymous start, sign-in page, and role route groups",
+      "blockedBy": [
+        "T01"
+      ],
+      "blockedByIssues": [
+        33
+      ],
+      "metadata": {
+        "project": null,
+        "fields": {
+          "work_type": "Ticket",
+          "repo_scope": "web",
+          "phase": "build",
+          "priority": "high",
+          "risk": "high",
+          "sprint": "hackathon",
+          "release_train": null
+        },
+        "todo": [],
+        "milestone": null
+      },
+      "labels": [
+        "ready-for-agent"
+      ],
+      "schemaVersion": "1.0"
+    },
+    {
+      "id": "T19",
+      "issue": 38,
+      "title": "Make the mobile web installable with a web app manifest",
+      "blockedBy": [
+        "T01"
+      ],
+      "blockedByIssues": [
+        33
+      ],
+      "metadata": {
+        "project": null,
+        "fields": {
+          "work_type": "Ticket",
+          "repo_scope": "web",
+          "phase": "build",
+          "priority": "low",
+          "risk": "low",
+          "sprint": "hackathon",
+          "release_train": null
+        },
+        "todo": [],
+        "milestone": null
+      },
+      "labels": [
+        "ready-for-agent"
+      ],
+      "schemaVersion": "1.0"
+    },
+    {
+      "id": "T05",
+      "issue": 39,
+      "title": "Derive the candidate id from the session and persist profile, preferences, and saved searches with read and delete endpoints",
+      "blockedBy": [
+        "T04"
+      ],
+      "blockedByIssues": [
+        37
+      ],
+      "metadata": {
+        "project": null,
+        "fields": {
+          "work_type": "Ticket",
+          "repo_scope": "web",
+          "phase": "build",
+          "priority": "high",
+          "risk": "high",
+          "sprint": "hackathon",
+          "release_train": null
+        },
+        "todo": [],
+        "milestone": null
+      },
+      "labels": [
+        "ready-for-agent"
+      ],
+      "schemaVersion": "1.0"
+    },
+    {
+      "id": "T15",
+      "issue": 40,
+      "title": "Add application read endpoints, employer organizations, and the web BFF to the application runtime",
+      "blockedBy": [
+        "T04"
+      ],
+      "blockedByIssues": [
+        37
+      ],
+      "metadata": {
+        "project": null,
+        "fields": {
+          "work_type": "Ticket",
+          "repo_scope": "application",
+          "phase": "build",
+          "priority": "high",
+          "risk": "critical",
+          "sprint": "hackathon",
+          "release_train": null
+        },
+        "todo": [],
+        "milestone": null
+      },
+      "labels": [
+        "ready-for-agent"
+      ],
+      "schemaVersion": "1.0"
+    },
+    {
+      "id": "T06",
+      "issue": 41,
+      "title": "Build the candidate shell and the Vacantes view with vacancy cards and the detail sheet",
+      "blockedBy": [
+        "T02",
+        "T05"
+      ],
+      "blockedByIssues": [
+        35,
+        39
+      ],
+      "metadata": {
+        "project": null,
+        "fields": {
+          "work_type": "Ticket",
+          "repo_scope": "web",
+          "phase": "build",
+          "priority": "high",
+          "risk": "medium",
+          "sprint": "hackathon",
+          "release_train": null
+        },
+        "todo": [],
+        "milestone": null
+      },
+      "labels": [
+        "ready-for-agent"
+      ],
+      "schemaVersion": "1.0"
+    },
+    {
+      "id": "T12",
+      "issue": 42,
+      "title": "Add the LLM-guided chat endpoint with the slot agenda, fallback, and turn cap",
+      "blockedBy": [
+        "T05"
+      ],
+      "blockedByIssues": [
+        39
+      ],
+      "metadata": {
+        "project": null,
+        "fields": {
+          "work_type": "Ticket",
+          "repo_scope": "web",
+          "phase": "build",
+          "priority": "high",
+          "risk": "high",
+          "sprint": "hackathon",
+          "release_train": null
+        },
+        "todo": [],
+        "milestone": null
+      },
+      "labels": [
+        "ready-for-agent"
+      ],
+      "schemaVersion": "1.0"
+    },
+    {
+      "id": "T17",
+      "issue": 43,
+      "title": "Build the counselor review surface",
+      "blockedBy": [
+        "T15"
+      ],
+      "blockedByIssues": [
+        40
+      ],
+      "metadata": {
+        "project": null,
+        "fields": {
+          "work_type": "Ticket",
+          "repo_scope": "web",
+          "phase": "build",
+          "priority": "medium",
+          "risk": "high",
+          "sprint": "hackathon",
+          "release_train": null
+        },
+        "todo": [],
+        "milestone": null
+      },
+      "labels": [
+        "ready-for-agent"
+      ],
+      "schemaVersion": "1.0"
+    },
+    {
+      "id": "T18",
+      "issue": 44,
+      "title": "Build the employer interview-decision surface",
+      "blockedBy": [
+        "T15"
+      ],
+      "blockedByIssues": [
+        40
+      ],
+      "metadata": {
+        "project": null,
+        "fields": {
+          "work_type": "Ticket",
+          "repo_scope": "web",
+          "phase": "build",
+          "priority": "medium",
+          "risk": "high",
+          "sprint": "hackathon",
+          "release_train": null
+        },
+        "todo": [],
+        "milestone": null
+      },
+      "labels": [
+        "ready-for-agent"
+      ],
+      "schemaVersion": "1.0"
+    },
+    {
+      "id": "T08",
+      "issue": 45,
+      "title": "Expose solver match decisions and show the readiness bar on vacancy cards and detail",
+      "blockedBy": [
+        "T06"
+      ],
+      "blockedByIssues": [
+        41
+      ],
+      "metadata": {
+        "project": null,
+        "fields": {
+          "work_type": "Ticket",
+          "repo_scope": "web",
+          "phase": "build",
+          "priority": "high",
+          "risk": "high",
+          "sprint": "hackathon",
+          "release_train": null
+        },
+        "todo": [],
+        "milestone": null
+      },
+      "labels": [
+        "ready-for-agent"
+      ],
+      "schemaVersion": "1.0"
+    },
+    {
+      "id": "T09",
+      "issue": 46,
+      "title": "Build the Mi ruta view and the no-match path from Vacantes",
+      "blockedBy": [
+        "T06"
+      ],
+      "blockedByIssues": [
+        41
+      ],
+      "metadata": {
+        "project": null,
+        "fields": {
+          "work_type": "Ticket",
+          "repo_scope": "web",
+          "phase": "build",
+          "priority": "medium",
+          "risk": "low",
+          "sprint": "hackathon",
+          "release_train": null
+        },
+        "todo": [],
+        "milestone": null
+      },
+      "labels": [
+        "ready-for-agent"
+      ],
+      "schemaVersion": "1.0"
+    },
+    {
+      "id": "T10",
+      "issue": 47,
+      "title": "Build the Mi perfil view with editable preferences and data deletion",
+      "blockedBy": [
+        "T06"
+      ],
+      "blockedByIssues": [
+        41
+      ],
+      "metadata": {
+        "project": null,
+        "fields": {
+          "work_type": "Ticket",
+          "repo_scope": "web",
+          "phase": "build",
+          "priority": "medium",
+          "risk": "medium",
+          "sprint": "hackathon",
+          "release_train": null
+        },
+        "todo": [],
+        "milestone": null
+      },
+      "labels": [
+        "ready-for-agent"
+      ],
+      "schemaVersion": "1.0"
+    },
+    {
+      "id": "T11",
+      "issue": 48,
+      "title": "Surface new saved-search matches with a nav badge and a section in Vacantes",
+      "blockedBy": [
+        "T06"
+      ],
+      "blockedByIssues": [
+        41
+      ],
+      "metadata": {
+        "project": null,
+        "fields": {
+          "work_type": "Ticket",
+          "repo_scope": "web",
+          "phase": "build",
+          "priority": "low",
+          "risk": "low",
+          "sprint": "hackathon",
+          "release_train": null
+        },
+        "todo": [],
+        "milestone": null
+      },
+      "labels": [
+        "ready-for-agent"
+      ],
+      "schemaVersion": "1.0"
+    },
+    {
+      "id": "T13",
+      "issue": 49,
+      "title": "Build the welcome screen and the chat UI from profile capture to first exploration",
+      "blockedBy": [
+        "T12",
+        "T06"
+      ],
+      "blockedByIssues": [
+        42,
+        41
+      ],
+      "metadata": {
+        "project": null,
+        "fields": {
+          "work_type": "Ticket",
+          "repo_scope": "web",
+          "phase": "build",
+          "priority": "high",
+          "risk": "high",
+          "sprint": "hackathon",
+          "release_train": null
+        },
+        "todo": [],
+        "milestone": null
+      },
+      "labels": [
+        "ready-for-agent"
+      ],
+      "schemaVersion": "1.0"
+    },
+    {
+      "id": "T14",
+      "issue": 50,
+      "title": "Add CV attachments and voice input to the chat",
+      "blockedBy": [
+        "T13",
+        "T07"
+      ],
+      "blockedByIssues": [
+        49,
+        34
+      ],
+      "metadata": {
+        "project": null,
+        "fields": {
+          "work_type": "Ticket",
+          "repo_scope": "web",
+          "phase": "build",
+          "priority": "medium",
+          "risk": "medium",
+          "sprint": "hackathon",
+          "release_train": null
+        },
+        "todo": [],
+        "milestone": null
+      },
+      "labels": [
+        "ready-for-agent"
+      ],
+      "schemaVersion": "1.0"
+    },
+    {
+      "id": "T16",
+      "issue": 51,
+      "title": "Build the candidate application flow: prepare, correct, approve, and submit",
+      "blockedBy": [
+        "T15",
+        "T08"
+      ],
+      "blockedByIssues": [
+        40,
+        45
+      ],
+      "metadata": {
+        "project": null,
+        "fields": {
+          "work_type": "Ticket",
+          "repo_scope": "web",
+          "phase": "build",
+          "priority": "high",
+          "risk": "critical",
+          "sprint": "hackathon",
+          "release_train": null
+        },
+        "todo": [],
+        "milestone": null
+      },
+      "labels": [
+        "ready-for-agent"
+      ],
+      "schemaVersion": "1.0"
+    }
+  ],
+  "waves": [
+    [
+      {
+        "id": "T01",
+        "issue": 33
+      },
+      {
+        "id": "T07",
+        "issue": 34
+      }
+    ],
+    [
+      {
+        "id": "T02",
+        "issue": 35
+      },
+      {
+        "id": "T03",
+        "issue": 36
+      },
+      {
+        "id": "T04",
+        "issue": 37
+      },
+      {
+        "id": "T19",
+        "issue": 38
+      }
+    ],
+    [
+      {
+        "id": "T05",
+        "issue": 39
+      },
+      {
+        "id": "T15",
+        "issue": 40
+      }
+    ],
+    [
+      {
+        "id": "T06",
+        "issue": 41
+      },
+      {
+        "id": "T12",
+        "issue": 42
+      },
+      {
+        "id": "T17",
+        "issue": 43
+      },
+      {
+        "id": "T18",
+        "issue": 44
+      }
+    ],
+    [
+      {
+        "id": "T08",
+        "issue": 45
+      },
+      {
+        "id": "T09",
+        "issue": 46
+      },
+      {
+        "id": "T10",
+        "issue": 47
+      },
+      {
+        "id": "T11",
+        "issue": 48
+      },
+      {
+        "id": "T13",
+        "issue": 49
+      }
+    ],
+    [
+      {
+        "id": "T14",
+        "issue": 50
+      },
+      {
+        "id": "T16",
+        "issue": 51
+      }
+    ]
+  ],
+  "dag": {
+    "tickets": 19,
+    "edges": 21,
+    "waves": 6,
+    "parallelismScore": 0.7368,
+    "dependencyComplexity": 1.1053,
+    "overCoupling": "clean"
+  },
+  "completionCriteriaMet": true
+}

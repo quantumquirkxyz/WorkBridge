@@ -1,5 +1,5 @@
 {
-  "name": "@puente/training",
+  "name": "@workbridge/training",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -11,7 +11,7 @@
     "./schemas/*": "./src/schemas/*"
   },
   "dependencies": {
-    "@puente/domain": "*",
-    "@puente/solver": "*"
+    "@workbridge/domain": "*",
+    "@workbridge/solver": "*"
   }
 }

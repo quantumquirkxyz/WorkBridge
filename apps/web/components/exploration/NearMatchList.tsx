@@ -1,4 +1,4 @@
-import { EXCLUSION_LABELS, type NearMatch } from '@puente/catalog';
+import { EXCLUSION_LABELS, type NearMatch } from '@workbridge/catalog';
 
 export function NearMatchList({ nearMatches }: { nearMatches: NearMatch[] }) {
   if (nearMatches.length === 0) return null;

@@ -1,4 +1,4 @@
-import { compareCodeUnits, type RoutingPort } from "@puente/solver";
+import { compareCodeUnits, type RoutingPort } from "@workbridge/solver";
 import { opportunityFreshness } from "./freshness";
 import {
   availabilityScore,

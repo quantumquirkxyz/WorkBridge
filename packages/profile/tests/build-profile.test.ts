@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { validateIntakeResult, type IntakeSource, type ProfileDraft } from '@puente/domain';
+import { validateIntakeResult, type IntakeSource, type ProfileDraft } from '@workbridge/domain';
 import { buildProfile, provenanceForIntakeKind, type ProfileExtractor } from '../src/index';
 
 const fixture = readFileSync(fileURLToPath(new URL('./fixtures/cv-family-business.txt', import.meta.url)), 'utf8');

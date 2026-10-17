@@ -1,5 +1,5 @@
-import { normalizeText } from "@puente/domain";
-import type { Location } from "@puente/domain";
+import { normalizeText } from "@workbridge/domain";
+import type { Location } from "@workbridge/domain";
 import { VacancyInputError } from "../errors";
 import { inferKind, parseLevel, parseVacancyText } from "../text";
 import type {

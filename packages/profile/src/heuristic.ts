@@ -8,7 +8,7 @@ import {
   type ExtractorKind,
   type Provenance,
   type ProfileDraft,
-} from '@puente/domain';
+} from '@workbridge/domain';
 import { ACADEMIC_WORK_TERMS, inferExperienceType } from './experience-type';
 
 export interface ExtractionInput {

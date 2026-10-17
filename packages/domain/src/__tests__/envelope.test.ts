@@ -6,7 +6,7 @@ import {
   validateWorkflowRun,
   type AgentEnvelope,
   type WorkflowRunRequest,
-} from "@puente/domain";
+} from "@workbridge/domain";
 
 function envelope(): AgentEnvelope {
   return {

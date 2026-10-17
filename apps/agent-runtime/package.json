@@ -1,5 +1,5 @@
 {
-  "name": "@puente/agent-runtime",
+  "name": "@workbridge/agent-runtime",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -16,12 +16,12 @@
   },
   "dependencies": {
     "@mastra/core": "^1.78.0",
-    "@puente/catalog": "*",
-    "@puente/domain": "*",
-    "@puente/ingestion": "*",
-    "@puente/profile": "*",
-    "@puente/solver": "*",
-    "@puente/training": "*",
+    "@workbridge/catalog": "*",
+    "@workbridge/domain": "*",
+    "@workbridge/ingestion": "*",
+    "@workbridge/profile": "*",
+    "@workbridge/solver": "*",
+    "@workbridge/training": "*",
     "ajv": "^8.17.1",
     "tesseract.js": "^5.1.1",
     "unpdf": "^1.9.0"

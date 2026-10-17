@@ -5,7 +5,7 @@ import {
   type ActorRole,
   type AgentId,
   type DeclaredCredentialClaim,
-} from "@puente/domain";
+} from "@workbridge/domain";
 
 export type GuardrailStage = "input" | "tool_result" | "permission" | "output" | "schema";
 

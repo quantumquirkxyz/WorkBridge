@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://puentelaboral.pa/schemas/workflow-run.schema.json",
+  "$id": "https://workbridge.pa/schemas/workflow-run.schema.json",
   "title": "WorkflowRunRequest",
   "description": "REST body for the internal workflow run. Candidate text and declared credential claims are ports; they are not the CandidateProfile or CredentialVerification documents.",
   "type": "object",
@@ -34,7 +34,7 @@
       "type": "array",
       "items": { "type": "string", "minLength": 1 }
     },
-    "preferences": { "$ref": "https://puente-laboral.pa/schemas/candidate-preferences/1.0.0" },
+    "preferences": { "$ref": "https://workbridge.pa/schemas/candidate-preferences/1.0.0" },
     "matchingInput": {
       "type": "object"
     }

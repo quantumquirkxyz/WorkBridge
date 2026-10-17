@@ -1,4 +1,4 @@
-import { AjvValidationError, assertWorkflowRun } from "@puente/domain";
+import { AjvValidationError, assertWorkflowRun } from "@workbridge/domain";
 import { createWorkflowRuntime, type WorkflowRuntime } from "./graph";
 
 export interface WorkflowHttpRequest {

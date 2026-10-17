@@ -1,22 +1,22 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://puente-laboral.pa/schemas/evidence/1.0.0",
+  "$id": "https://workbridge.pa/schemas/evidence/1.0.0",
   "title": "Evidence",
   "description": "A single provenance-bearing fact supporting a candidate claim.",
   "type": "object",
   "additionalProperties": false,
   "required": ["id", "claim", "source", "confidence"],
   "properties": {
-    "id": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" },
+    "id": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/identifier" },
     "claim": { "type": "string", "minLength": 1, "maxLength": 2000 },
-    "source": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/provenance" },
+    "source": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/provenance" },
     "source_ref": {
       "type": "string",
       "maxLength": 500,
       "description": "Pointer to where the fact came from, e.g. `intake:cv.pdf#page=1` or `candidate:statement`."
     },
     "excerpt": { "type": "string", "maxLength": 2000 },
-    "confidence": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/confidence" },
+    "confidence": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/confidence" },
     "captured_at": { "type": "string", "format": "date-time" }
   }
 }

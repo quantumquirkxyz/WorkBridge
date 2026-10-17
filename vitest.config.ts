@@ -6,13 +6,13 @@ const r = (p: string) => fileURLToPath(new URL(p, import.meta.url));
 
 const aliases = {
   "@": r("./apps/web"),
-  "@puente/domain": r("./packages/domain/src/index.ts"),
-  "@puente/ingestion": r("./packages/ingestion/src/index.ts"),
-  "@puente/profile": r("./packages/profile/src/index.ts"),
-  "@puente/training": r("./packages/training/src/index.ts"),
-  "@puente/agent-runtime": r("./apps/agent-runtime/src/index.ts"),
-  "@puente/solver": r("./packages/solver/src/index.ts"),
-  "@puente/catalog": r("./packages/catalog/src/index.ts"),
+  "@workbridge/domain": r("./packages/domain/src/index.ts"),
+  "@workbridge/ingestion": r("./packages/ingestion/src/index.ts"),
+  "@workbridge/profile": r("./packages/profile/src/index.ts"),
+  "@workbridge/training": r("./packages/training/src/index.ts"),
+  "@workbridge/agent-runtime": r("./apps/agent-runtime/src/index.ts"),
+  "@workbridge/solver": r("./packages/solver/src/index.ts"),
+  "@workbridge/catalog": r("./packages/catalog/src/index.ts"),
 };
 
 export default defineConfig({

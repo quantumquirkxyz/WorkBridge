@@ -4,7 +4,7 @@ import {
   assertJobRequirements,
   validateJobRequirements,
   type JobRequirements,
-} from "@puente/domain";
+} from "@workbridge/domain";
 
 function minimalDocument(): JobRequirements {
   return {

@@ -3,7 +3,7 @@ import {
   type JobRequirements,
   type Requirement,
   type ReviewItem,
-} from "@puente/domain";
+} from "@workbridge/domain";
 import { InvalidJobRequirementsError, ReviewNotFoundError } from "./errors";
 import { resolveStatus } from "./status";
 import type { ReviewDecision } from "./types";

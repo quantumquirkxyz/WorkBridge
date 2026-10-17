@@ -4,12 +4,12 @@ const nextConfig = {
   // Playwright opens the suite at 127.0.0.1. Next otherwise blocks that dev origin.
   allowedDevOrigins: ['127.0.0.1'],
   transpilePackages: [
-    '@puente/domain',
-    '@puente/ingestion',
-    '@puente/profile',
-    '@puente/agent-runtime',
-    '@puente/catalog',
-    '@puente/training',
+    '@workbridge/domain',
+    '@workbridge/ingestion',
+    '@workbridge/profile',
+    '@workbridge/agent-runtime',
+    '@workbridge/catalog',
+    '@workbridge/training',
   ],
   serverExternalPackages: ['unpdf'],
   turbopack: {

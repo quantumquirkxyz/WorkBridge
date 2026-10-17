@@ -1,5 +1,5 @@
-import type { ContractType, TransportMode, WorkModality } from '@puente/domain';
-import { CONTRACT_LABELS, MODALITY_LABELS } from '@puente/catalog';
+import type { ContractType, TransportMode, WorkModality } from '@workbridge/domain';
+import { CONTRACT_LABELS, MODALITY_LABELS } from '@workbridge/catalog';
 
 export const DAY_LABELS: Array<{ value: number; label: string }> = [
   { value: 1, label: 'Lun' },

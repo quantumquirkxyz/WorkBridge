@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import type { CandidatePreferences, CandidateProfile } from '@puente/domain';
-import type { MatchDecision } from '@puente/solver';
-import { createSeedCatalog } from '@puente/catalog';
+import type { CandidatePreferences, CandidateProfile } from '@workbridge/domain';
+import type { MatchDecision } from '@workbridge/solver';
+import { createSeedCatalog } from '@workbridge/catalog';
 import { clearMatchCache, handleMatch } from '../lib/match-handler';
 
 const candidateId = 'candidate_match_handler';

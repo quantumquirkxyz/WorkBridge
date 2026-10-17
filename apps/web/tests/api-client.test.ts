@@ -48,7 +48,7 @@ describe('typed API client', () => {
         return jsonResponse(200, { searchId: 's1' });
       }
       if (url.includes('/api/searches')) return jsonResponse(200, { searches: [{ search: { searchId: 's1' } }] });
-      if (url.includes('/api/health/db')) return jsonResponse(200, { ok: true, database: 'puente' });
+      if (url.includes('/api/health/db')) return jsonResponse(200, { ok: true, database: 'workbridge' });
       return jsonResponse(404, { error: 'not_found' });
     });
     vi.stubGlobal('fetch', fetchMock);
@@ -64,7 +64,7 @@ describe('typed API client', () => {
     await expect(requestRoadmap({} as never)).resolves.toEqual({ roadmap: null, gaps: [], reason: 'none' });
     await expect(listSavedSearches('c1')).resolves.toEqual([{ search: { searchId: 's1' } }]);
     await expect(saveSearch({ label: 'Hoy', preferences: {} as never })).resolves.toEqual({ searchId: 's1' });
-    await expect(checkDbHealth()).resolves.toEqual({ ok: true, database: 'puente' });
+    await expect(checkDbHealth()).resolves.toEqual({ ok: true, database: 'workbridge' });
   });
 
   it('throws ApiClientError when a resource returns an error body', async () => {

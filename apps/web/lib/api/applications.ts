@@ -75,7 +75,7 @@ export async function decideDraft(
         traceId: draft.traceId,
         idempotencyKey,
         agent: 'market_and_matching',
-        schemaId: 'https://puentelaboral.pa/schemas/assumed-match-decision.schema.json',
+        schemaId: 'https://workbridge.pa/schemas/assumed-match-decision.schema.json',
         guardrails: [{ stage: 'output', allowed: true, code: 'ok' }],
         dqlState: 'validated',
       },

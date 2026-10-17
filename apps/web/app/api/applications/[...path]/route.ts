@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { NextResponse } from 'next/server';
-import { signBetterAuthSession, type BetterAuthSession } from '@puente/agent-runtime';
+import { signBetterAuthSession, type BetterAuthSession } from '@workbridge/agent-runtime';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';

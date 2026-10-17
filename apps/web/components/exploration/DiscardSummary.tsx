@@ -1,4 +1,4 @@
-import { EXCLUSION_LABELS, type ExplorationResult } from '@puente/catalog';
+import { EXCLUSION_LABELS, type ExplorationResult } from '@workbridge/catalog';
 
 export function DiscardSummary({ result }: { result: ExplorationResult }) {
   if (result.excluded.length === 0) return null;

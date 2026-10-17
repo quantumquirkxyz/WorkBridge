@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { validateCandidateProfile, type IntakeSource, type ProfileDraft } from '@puente/domain';
+import { validateCandidateProfile, type IntakeSource, type ProfileDraft } from '@workbridge/domain';
 import { normalizeProfileDraft } from '../src/normalize';
 
 const fixedNow = () => new Date('2026-10-16T12:00:00.000Z');

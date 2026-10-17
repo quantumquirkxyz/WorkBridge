@@ -1,5 +1,5 @@
 {
-  "name": "@puente/solver",
+  "name": "@workbridge/solver",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -11,7 +11,7 @@
     "./schemas/*": "./src/schemas/*"
   },
   "dependencies": {
-    "@puente/domain": "*",
+    "@workbridge/domain": "*",
     "highs": "^1.15.4"
   }
 }

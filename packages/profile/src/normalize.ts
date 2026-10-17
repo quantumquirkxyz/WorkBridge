@@ -28,7 +28,7 @@ import {
   type Provenance,
   type SkillDefinition,
   type SkillLevel,
-} from '@puente/domain';
+} from '@workbridge/domain';
 import { classifyExperience } from './classify';
 import { inferExperienceType } from './experience-type';
 import { mergeSkillLists } from './merge-profile';

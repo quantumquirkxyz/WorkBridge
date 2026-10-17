@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { signBetterAuthSession } from '@puente/agent-runtime';
-import { makeCandidateId } from '@puente/domain';
+import { signBetterAuthSession } from '@workbridge/agent-runtime';
+import { makeCandidateId } from '@workbridge/domain';
 import { POST } from '../app/api/chat/route';
 import { readChatSession, deleteCandidateData, persistChatSession } from '../lib/neon-repository';
 
@@ -18,13 +18,13 @@ function post(body: unknown, candidateId?: string): Request {
 describe('POST /api/chat identity', () => {
   let previous: string | undefined;
   beforeAll(() => {
-    previous = process.env.PUENTE_PERSISTENCE;
-    process.env.PUENTE_PERSISTENCE = 'memory';
+    previous = process.env.WORKBRIDGE_PERSISTENCE;
+    process.env.WORKBRIDGE_PERSISTENCE = 'memory';
     process.env.BETTER_AUTH_SECRET = 'test-secret';
   });
   afterAll(() => {
-    if (previous === undefined) delete process.env.PUENTE_PERSISTENCE;
-    else process.env.PUENTE_PERSISTENCE = previous;
+    if (previous === undefined) delete process.env.WORKBRIDGE_PERSISTENCE;
+    else process.env.WORKBRIDGE_PERSISTENCE = previous;
   });
 
   it('returns 401 when there is no session, even if the body names a candidate', async () => {
@@ -54,16 +54,16 @@ describe('POST /api/chat identity', () => {
 
 describe('deleteCandidateData', () => {
   it('removes chat sessions in memory mode', async () => {
-    const previous = process.env.PUENTE_PERSISTENCE;
-    process.env.PUENTE_PERSISTENCE = 'memory';
+    const previous = process.env.WORKBRIDGE_PERSISTENCE;
+    process.env.WORKBRIDGE_PERSISTENCE = 'memory';
     try {
       await persistChatSession('candidate_delete_me', { ...session, slotState: {} as never });
       expect(await readChatSession('candidate_delete_me')).toBeDefined();
       await deleteCandidateData('candidate_delete_me');
       expect(await readChatSession('candidate_delete_me')).toBeUndefined();
     } finally {
-      if (previous === undefined) delete process.env.PUENTE_PERSISTENCE;
-      else process.env.PUENTE_PERSISTENCE = previous;
+      if (previous === undefined) delete process.env.WORKBRIDGE_PERSISTENCE;
+      else process.env.WORKBRIDGE_PERSISTENCE = previous;
     }
   });
 });

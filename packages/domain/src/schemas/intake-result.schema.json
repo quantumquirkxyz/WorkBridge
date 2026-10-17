@@ -1,14 +1,14 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://puente-laboral.pa/schemas/intake-result/1.0.0",
+  "$id": "https://workbridge.pa/schemas/intake-result/1.0.0",
   "title": "IntakeResult",
   "description": "Response returned by the intake pipeline: the validated CandidateProfile plus extraction provenance and review flags.",
   "type": "object",
   "additionalProperties": false,
   "required": ["trace_id", "profile", "extraction"],
   "properties": {
-    "trace_id": { "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/identifier" },
-    "profile": { "$ref": "https://puente-laboral.pa/schemas/candidate-profile/1.0.0" },
+    "trace_id": { "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/identifier" },
+    "profile": { "$ref": "https://workbridge.pa/schemas/candidate-profile/1.0.0" },
     "extraction": {
       "type": "object",
       "additionalProperties": false,

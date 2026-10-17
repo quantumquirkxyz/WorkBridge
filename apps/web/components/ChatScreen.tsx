@@ -168,7 +168,7 @@ export function ChatScreen() {
 
   async function postTurn(request: RetryRequest): Promise<void> {
     setLoading(true);
-    setActivity('Puente está escribiendo…');
+    setActivity('WorkBridge está escribiendo…');
     setRetry(null);
     const thinkingTimer = window.setTimeout(() => setActivity('Estoy pensando…'), 3000);
     try {
@@ -262,8 +262,8 @@ export function ChatScreen() {
     });
     if (!response.ok) throw new Error('explore_request_failed');
     const explored = await response.json() as { candidateId?: string; preferences?: unknown };
-    if (explored.candidateId) window.localStorage.setItem('puente:candidateId', explored.candidateId);
-    if (explored.candidateId) window.localStorage.setItem(`puente:exploration:${explored.candidateId}`, JSON.stringify(explored));
+    if (explored.candidateId) window.localStorage.setItem('workbridge:candidateId', explored.candidateId);
+    if (explored.candidateId) window.localStorage.setItem(`workbridge:exploration:${explored.candidateId}`, JSON.stringify(explored));
     if (explored.candidateId && explored.preferences) saveStoredPreferences(explored.candidateId, explored.preferences);
     setExplorationRetry(null);
     router.push('/vacantes');
@@ -337,7 +337,7 @@ export function ChatScreen() {
   return (
     <main className="chat-page">
       <header className="chat-header">
-        <p className="eyebrow">Puente Laboral</p>
+        <p className="eyebrow">WorkBridge</p>
         <h1>Conversemos sobre ti</h1>
         <p className="lead">No hay respuestas correctas o incorrectas. Puedes escribir o elegir una opción.</p>
         <div className="chat-progress" aria-label={`Fase ${phase === 'profile' ? 'perfil' : phase === 'preferences' ? 'preferencias' : 'completada'}`}>

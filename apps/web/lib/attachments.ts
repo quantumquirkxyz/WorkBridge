@@ -1,5 +1,5 @@
-import type { IntakeSourceKind } from '@puente/domain';
-import { MAX_SOURCE_BYTES } from '@puente/ingestion';
+import type { IntakeSourceKind } from '@workbridge/domain';
+import { MAX_SOURCE_BYTES } from '@workbridge/ingestion';
 
 /** MIME types accepted for each file-backed intake kind. */
 export const ACCEPTED_ATTACHMENT_MIME: Record<Extract<IntakeSourceKind, 'pdf' | 'image'>, readonly string[]> = {

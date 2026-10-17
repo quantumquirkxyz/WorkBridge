@@ -3,10 +3,10 @@ import {
   DEFAULT_MAX_AGE_HOURS,
   MODALITY_LABELS,
   type ExplorationResult,
-} from '@puente/catalog';
+} from '@workbridge/catalog';
 import { DiscardSummary } from './DiscardSummary';
 import { money, orderMatchesByDecision } from './utils';
-import type { MatchDecision } from '@puente/solver';
+import type { MatchDecision } from '@workbridge/solver';
 import { Progress } from '../ui/progress';
 
 export function VacancyList({ result, decisions = [], decisionsLoading = false }: { result: ExplorationResult; decisions?: MatchDecision[]; decisionsLoading?: boolean }) {

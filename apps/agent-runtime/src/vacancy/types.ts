@@ -6,7 +6,7 @@ import type {
   SkillTaxonomy,
   VacancySource,
   Location,
-} from "@puente/domain";
+} from "@workbridge/domain";
 
 export interface RawRequirementInput {
   text: string;

@@ -1,4 +1,4 @@
-import type { MatchDecision, WorkflowEnvelope } from "@puente/domain";
+import type { MatchDecision, WorkflowEnvelope } from "@workbridge/domain";
 
 /** One WorkflowEnvelope builder for unit tests and Playwright. */
 export function sampleWorkflowEnvelope(traceId: string, idempotencyKey: string): WorkflowEnvelope {
@@ -6,7 +6,7 @@ export function sampleWorkflowEnvelope(traceId: string, idempotencyKey: string):
     traceId,
     idempotencyKey,
     agent: "market_and_matching",
-    schemaId: "https://puentelaboral.pa/schemas/assumed-match-decision.schema.json",
+    schemaId: "https://workbridge.pa/schemas/assumed-match-decision.schema.json",
     guardrails: [{ stage: "output", allowed: true, code: "ok" }],
     dqlState: "validated",
   };

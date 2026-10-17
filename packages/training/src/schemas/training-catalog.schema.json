@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://puentelaboral.pa/schemas/training-catalog.schema.json",
+  "$id": "https://workbridge.pa/schemas/training-catalog.schema.json",
   "title": "TrainingCatalog",
   "description": "Last valid cached snapshot of the specialization-aware training catalog. Each entry is a course, certification, project, or internship. The Training Agent refreshes it out of band; the roadmap engine only reads it.",
   "type": "object",
@@ -89,7 +89,7 @@
         "durationHours": { "type": "number", "minimum": 0 },
         "modality": { "enum": ["online", "onsite", "hybrid"] },
         "location": {
-          "oneOf": [{ "$ref": "https://puente-laboral.pa/schemas/common/1.0.0#/$defs/geo_point" }, { "type": "null" }]
+          "oneOf": [{ "$ref": "https://workbridge.pa/schemas/common/1.0.0#/$defs/geo_point" }, { "type": "null" }]
         },
         "schedule": {
           "oneOf": [{ "$ref": "#/$defs/OpportunitySchedule" }, { "type": "null" }]

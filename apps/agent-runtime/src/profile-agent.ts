@@ -1,11 +1,11 @@
-import type { CandidateCertification, IntakeResult } from '@puente/domain';
+import type { CandidateCertification, IntakeResult } from '@workbridge/domain';
 import {
   buildProfile,
   heuristicProfileExtractor,
   provenanceForIntakeKind,
   type ProfileExtractor,
-} from '@puente/profile';
-import { extractText, type OcrAdapter, type PdfExtractor, type RawIntake } from '@puente/ingestion';
+} from '@workbridge/profile';
+import { extractText, type OcrAdapter, type PdfExtractor, type RawIntake } from '@workbridge/ingestion';
 import { verifyCredential, type CredentialInput, type VerifyDeps, type CredentialVerification } from './verification/index';
 
 export interface ProfileAgentOptions {

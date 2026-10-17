@@ -3,7 +3,7 @@ import {
   assertJobRequirements,
   type CandidateProfile,
   type JobRequirements,
-} from "@puente/domain";
+} from "@workbridge/domain";
 import {
   evaluateMatch,
   nominate,
@@ -13,7 +13,7 @@ import {
   type MatchOptions,
   type NominationResult,
   type RoutingPort,
-} from "@puente/solver";
+} from "@workbridge/solver";
 import { isVacancyRankable } from "../vacancy/ranking";
 import {
   toSolverCandidate,
@@ -28,7 +28,7 @@ import type { GeocodeResult, GeocodingPort } from "./geocode";
  * The runtime → solver seam (issue #20).
  *
  * `MatchingService` is the one place `apps/agent-runtime` calls
- * `@puente/solver`: it geocodes the candidate's home and each vacancy location
+ * `@workbridge/solver`: it geocodes the candidate's home and each vacancy location
  * to `GeoPoint`, projects the domain documents onto the solver's contracts, and
  * runs the deterministic matcher (`nominate`) or a single pair (`evaluateMatch`).
  * Blocked vacancies are skipped rather than scored.

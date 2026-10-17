@@ -23,18 +23,18 @@ import type {
 
 /** Canonical `$id` for every versioned contract, JSON Schema 2020-12. */
 export const SCHEMA_IDS = {
-  common: 'https://puente-laboral.pa/schemas/common/1.0.0',
-  evidence: 'https://puente-laboral.pa/schemas/evidence/1.0.0',
-  skill: 'https://puente-laboral.pa/schemas/skill/1.0.0',
-  experience: 'https://puente-laboral.pa/schemas/experience/1.0.0',
-  education: 'https://puente-laboral.pa/schemas/education/1.0.0',
-  certification: 'https://puente-laboral.pa/schemas/certification/1.0.0',
-  intakeSource: 'https://puente-laboral.pa/schemas/intake-source/1.0.0',
-  candidateProfile: 'https://puente-laboral.pa/schemas/candidate-profile/1.0.0',
-  candidatePreferences: 'https://puente-laboral.pa/schemas/candidate-preferences/1.0.0',
-  profileDraft: 'https://puente-laboral.pa/schemas/profile-draft/1.0.0',
-  intakeRequest: 'https://puente-laboral.pa/schemas/intake-request/1.0.0',
-  intakeResult: 'https://puente-laboral.pa/schemas/intake-result/1.0.0',
+  common: 'https://workbridge.pa/schemas/common/1.0.0',
+  evidence: 'https://workbridge.pa/schemas/evidence/1.0.0',
+  skill: 'https://workbridge.pa/schemas/skill/1.0.0',
+  experience: 'https://workbridge.pa/schemas/experience/1.0.0',
+  education: 'https://workbridge.pa/schemas/education/1.0.0',
+  certification: 'https://workbridge.pa/schemas/certification/1.0.0',
+  intakeSource: 'https://workbridge.pa/schemas/intake-source/1.0.0',
+  candidateProfile: 'https://workbridge.pa/schemas/candidate-profile/1.0.0',
+  candidatePreferences: 'https://workbridge.pa/schemas/candidate-preferences/1.0.0',
+  profileDraft: 'https://workbridge.pa/schemas/profile-draft/1.0.0',
+  intakeRequest: 'https://workbridge.pa/schemas/intake-request/1.0.0',
+  intakeResult: 'https://workbridge.pa/schemas/intake-result/1.0.0',
 } as const;
 
 export const ALL_SCHEMAS: readonly object[] = [

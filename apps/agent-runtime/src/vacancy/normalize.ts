@@ -9,7 +9,7 @@ import {
   type RequirementCategory,
   type ReviewItem,
   type SkillTaxonomy,
-} from "@puente/domain";
+} from "@workbridge/domain";
 import { InvalidJobRequirementsError, VacancyInputError } from "./errors";
 import { extractVacancy } from "./extract";
 import { classifyRequirement } from "./fairness";

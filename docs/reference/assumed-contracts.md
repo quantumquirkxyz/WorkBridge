@@ -7,7 +7,7 @@ of truth for this consumer; the TypeScript below is the signature application
 code imports.
 
 Issue #8 has since shipped its own `MatchDecision` in `packages/solver` at
-`https://puentelaboral.pa/schemas/match-decision.schema.json`. That document
+`https://workbridge.pa/schemas/match-decision.schema.json`. That document
 uses a different shape (`score` is an integer, `routing` replaces `transport`).
 The #12 consumer schema keeps a separate id so both can load on the one Ajv
 instance.
@@ -15,7 +15,7 @@ instance.
 ## Issue #8 — assumed `MatchDecision` consumed by #12
 
 Schema: `packages/domain/src/schemas/match-decision.schema.json`  
-`$id`: `https://puentelaboral.pa/schemas/assumed-match-decision.schema.json`
+`$id`: `https://workbridge.pa/schemas/assumed-match-decision.schema.json`
 
 ```ts
 export const MATCH_WEIGHTS = {
@@ -82,7 +82,7 @@ export interface MatchDecision {
 ### `WorkflowEnvelope`
 
 Schema: `packages/domain/src/schemas/workflow-envelope.schema.json`  
-`$id`: `https://puentelaboral.pa/schemas/workflow-envelope.schema.json`
+`$id`: `https://workbridge.pa/schemas/workflow-envelope.schema.json`
 
 ```ts
 export type WorkflowAgent =
@@ -120,7 +120,7 @@ A blocking `code` means the plane refused the payload; #12 does not invoke a mod
 ### `AuditEvent`
 
 Schema: `packages/domain/src/schemas/audit-event.schema.json`  
-`$id`: `https://puentelaboral.pa/schemas/audit-event.schema.json`
+`$id`: `https://workbridge.pa/schemas/audit-event.schema.json`
 
 ```ts
 export interface AuditEvent {

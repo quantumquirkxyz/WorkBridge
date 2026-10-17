@@ -10,7 +10,7 @@ import {
   type Evidence,
   type Provenance,
   type SkillLevel,
-} from '@puente/domain';
+} from '@workbridge/domain';
 
 /**
  * Combine skills that share a `skill_id`. The first occurrence keeps its

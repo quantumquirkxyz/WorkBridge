@@ -1,4 +1,4 @@
-import type { IntakeSource, IntakeSourceKind } from '@puente/domain';
+import type { IntakeSource, IntakeSourceKind } from '@workbridge/domain';
 import { MAX_SOURCE_BYTES, MAX_TEXT_CHARS } from './kinds';
 import { SourceTooLargeError, UnsupportedSourceError } from './errors';
 import { altTextOcrAdapter, chainedOcrAdapter, type OcrAdapter, tesseractOcrAdapter } from './ocr';

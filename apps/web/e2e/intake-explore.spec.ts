@@ -134,8 +134,8 @@ test('UC-05 guarda la búsqueda y la lista', async ({ page }) => {
 
 test('UC-07 muestra coincidencias nuevas y registra la visita a Vacantes', async ({ page }) => {
   let acknowledged = false;
-  await page.addInitScript(() => localStorage.setItem('puente:candidateId', 'candidate-e2e'));
-  await page.addInitScript(() => localStorage.setItem('puente:preferences:candidate-e2e', JSON.stringify({ candidate_id: 'candidate-e2e' })));
+  await page.addInitScript(() => localStorage.setItem('workbridge:candidateId', 'candidate-e2e'));
+  await page.addInitScript(() => localStorage.setItem('workbridge:preferences:candidate-e2e', JSON.stringify({ candidate_id: 'candidate-e2e' })));
   await page.route('**/api/searches**', async (route) => {
     if (route.request().method() === 'POST') {
       await route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify({ searchId: 'search-e2e' }) });
@@ -177,7 +177,7 @@ test('UC-06 elimina los datos del candidato y vacía la lista', async ({ page })
 
 test('J1 completa la captura de perfil y la primera exploración con el chat de fallback', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Puente Laboral Panamá' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'WorkBridge' })).toBeVisible();
   await page.getByRole('link', { name: /Empezar/ }).click();
   await expect(page.getByRole('heading', { name: 'Conversemos sobre ti' })).toBeVisible();
   await expectNoSeriousAxeViolations(page);

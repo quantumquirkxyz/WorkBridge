@@ -7,6 +7,7 @@ Information-oriented documentation for quirk Skills. Use these documents to look
 - [Agents](agents/index.md) — Agent protocols, guides, inventory, style guides
 - [Wiki](wiki/Home.md) — Architecture, distribution, governance, quality, and FAQ
 - [ADR](adr/README.md) — Architecture Decision Records
+- [Frontend](frontend/README.md) — `apps/web` redesign: spec, flows, screens, design system, architecture, accessibility, testing, open questions
 
 ## How to use
 

@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { makeCandidateId } from '@puente/domain';
+import { makeCandidateId } from '@workbridge/domain';
 import { WelcomeScreen } from '../../components/WelcomeScreen';
 import { getServerSession } from '../../lib/auth';
 import { readCandidateProfile } from '../../lib/neon-repository';

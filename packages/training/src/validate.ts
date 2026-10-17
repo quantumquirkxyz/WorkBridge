@@ -1,4 +1,4 @@
-import { ajv } from "@puente/domain";
+import { ajv } from "@workbridge/domain";
 import type { Roadmap, TrainingCatalog } from "./types";
 import catalogSchema from "./schemas/training-catalog.schema.json";
 import roadmapSchema from "./schemas/roadmap.schema.json";
@@ -8,7 +8,7 @@ export const TRAINING_CATALOG_SCHEMA_ID = catalogSchema.$id;
 export const ROADMAP_SCHEMA_ID = roadmapSchema.$id;
 
 /**
- * Compiled against the shared Ajv 2020-12 instance from `@puente/domain`.
+ * Compiled against the shared Ajv 2020-12 instance from `@workbridge/domain`.
  *
  * The catalog schema is compiled first so its `$id` is registered; the roadmap
  * schema then resolves its opportunity `$ref` through that registration. Ajv

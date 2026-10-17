@@ -10,7 +10,7 @@ function signed(session: BetterAuthSession) {
 function candidate(expiresAt: string): BetterAuthSession {
   return {
     session: { id: "s", userId: "candidate", expiresAt },
-    user: { id: "candidate", email: "a@puente.pa", role: "candidate" },
+    user: { id: "candidate", email: "a@workbridge.pa", role: "candidate" },
   };
 }
 

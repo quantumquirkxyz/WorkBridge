@@ -15,7 +15,7 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'Puente Laboral Panamá — Intake de candidato',
+  title: 'WorkBridge — Intake de candidato',
   description: 'Captura de CV y experiencias para construir un perfil de candidato validado.',
 };
 

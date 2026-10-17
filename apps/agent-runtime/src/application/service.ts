@@ -5,7 +5,7 @@ import {
   assertWorkflowEnvelope,
   type AuditEvent,
   type MatchDecision,
-} from "@puente/domain";
+} from "@workbridge/domain";
 import { generateDocuments, type ApplicationDocuments } from "./draft";
 import { ApplicationError } from "./errors";
 import { parseEvidence, type EvidenceItem } from "./evidence";

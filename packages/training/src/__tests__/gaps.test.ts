@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { SolverCandidate, SolverVacancy } from "@puente/solver";
+import type { SolverCandidate, SolverVacancy } from "@workbridge/solver";
 import {
   deriveGaps,
   effectiveRequiredLevel,

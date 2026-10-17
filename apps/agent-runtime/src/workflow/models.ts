@@ -1,4 +1,4 @@
-import type { AgentId } from "@puente/domain";
+import type { AgentId } from "@workbridge/domain";
 
 export type ModelCapability = "extraction" | "matching" | "planning";
 

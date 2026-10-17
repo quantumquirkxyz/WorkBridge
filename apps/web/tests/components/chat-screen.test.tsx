@@ -69,7 +69,7 @@ describe('ChatScreen', () => {
       return HttpResponse.json(turn({ reply: '¿Tienes un CV?', pendingSlot: 'cv_source' }));
     }));
     render(<ChatScreen />);
-    expect(await screen.findByText(/¡Hola! Soy Puente/)).toBeInTheDocument();
+    expect(await screen.findByText(/¡Hola! Soy WorkBridge/)).toBeInTheDocument();
     await userEvent.click(screen.getByRole('button', { name: 'Prefiero no decirlo' }));
     await waitFor(() => expect(action).toEqual({ kind: 'chip', slot: 'greeting' }));
   });
@@ -200,6 +200,6 @@ describe('ChatScreen', () => {
     await userEvent.type(input, 'hola');
     await userEvent.keyboard('{Enter}');
     await waitFor(() => expect(push).toHaveBeenCalledWith('/vacantes'));
-    expect(window.localStorage.getItem('puente:exploration:candidate-test')).toContain('candidate-test');
+    expect(window.localStorage.getItem('workbridge:exploration:candidate-test')).toContain('candidate-test');
   });
 });

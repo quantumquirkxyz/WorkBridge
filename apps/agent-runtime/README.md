@@ -21,7 +21,7 @@ VacancyInput ──► extractVacancy ──► normalizeVacancy ──► JobRe
 ```
 
 `JobRequirements` is the contract. It is defined once in
-`@puente/domain` (`packages/domain/src/schemas/job-requirements.schema.json`)
+`@workbridge/domain` (`packages/domain/src/schemas/job-requirements.schema.json`)
 and validated with Ajv before it leaves this module.
 
 ## Inputs
@@ -55,7 +55,7 @@ deterministic and offline while production uses the real adapters.
 ## Usage
 
 ```ts
-import { normalizeVacancy, getRankableRequirements } from "@puente/agent-runtime";
+import { normalizeVacancy, getRankableRequirements } from "@workbridge/agent-runtime";
 
 const document = await normalizeVacancy({ kind: "manual", vacancy });
 if (document.status === "accepted") {
@@ -65,13 +65,13 @@ if (document.status === "accepted") {
 
 ## Market matching (issue #20 solver seam)
 
-`apps/agent-runtime` calls `@puente/solver` through `MatchingService`. The service
+`apps/agent-runtime` calls `@workbridge/solver` through `MatchingService`. The service
 geocodes the candidate's home and each normalized vacancy location, projects the
 domain documents onto the solver's contracts, then runs the deterministic matcher.
 
 ```
 CandidateProfile + CandidateMatchContext ─┐
-                                          ├─ MatchingService ─► @puente/solver
+                                          ├─ MatchingService ─► @workbridge/solver
 JobRequirements + VacancyMatchContext ────┘        │
                                                    ├─ geocode Location ─► GeoPoint
                                                    ├─ canonical skill-id bridge
@@ -96,7 +96,7 @@ salary, capacity, transport, availability, home location) are supplied explicitl
 through `CandidateMatchContext` / `VacancyMatchContext`; nothing is inferred.
 
 ```ts
-import { createMatchingService, matchingConfigFromEnv } from "@puente/agent-runtime";
+import { createMatchingService, matchingConfigFromEnv } from "@workbridge/agent-runtime";
 
 const config = matchingConfigFromEnv(process.env);
 const matching = createMatchingService(config);

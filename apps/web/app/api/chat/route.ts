@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createOpenRouterChat } from '@puente/agent-runtime';
+import { createOpenRouterChat } from '@workbridge/agent-runtime';
 import { handleChatTurn, readChatSessionView } from '../../../lib/chat-handler';
 import { candidateIdFromRequestOrSession, unauthorized } from '../../../lib/candidate-session';
 import { MAX_CANDIDATE_ID_LENGTH } from '../../../lib/exploration-handler';

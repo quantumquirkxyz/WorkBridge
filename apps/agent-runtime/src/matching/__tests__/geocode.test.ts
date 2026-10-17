@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { Location } from "@puente/domain";
+import type { Location } from "@workbridge/domain";
 import {
   DEFAULT_GEO_POINT,
   GeocodingUnavailableError,

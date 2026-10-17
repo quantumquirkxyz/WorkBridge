@@ -98,7 +98,7 @@ function googleProvider() {
 }
 
 export const auth = betterAuth({
-  appName: 'Puente Laboral Panama',
+  appName: 'WorkBridge',
   baseURL: process.env.BETTER_AUTH_URL,
   trustedOrigins: ['http://localhost:3001', 'http://127.0.0.1:3001'],
   secret: process.env.BETTER_AUTH_SECRET,
