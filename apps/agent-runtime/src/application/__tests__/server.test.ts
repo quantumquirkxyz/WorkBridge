@@ -5,6 +5,7 @@ import { resolveDatabaseMode } from "../database";
 import { signBetterAuthSession } from "../roles";
 import { createApplicationServer } from "../server";
 import { sampleMatchDecision, sampleWorkflowEnvelope } from "../fixtures";
+import { ENSURE_NOTIFICATION_OUTBOX_SQL } from "../notification";
 import { createSqlIdempotencyStore, ENSURE_IDEMPOTENCY_TABLE_SQL, type SqlQuery } from "../store";
 import { startApplicationServer } from "../main";
 import handler from "../vercel";
@@ -112,6 +113,8 @@ describe("application HTTP surface", () => {
       });
       expect(submitted.status).toBe(200);
       expect(calls[0]).toBe(ENSURE_IDEMPOTENCY_TABLE_SQL);
+      expect(calls).toContain(ENSURE_NOTIFICATION_OUTBOX_SQL);
+      expect(calls.some((sql) => sql.includes("INSERT INTO notification_outbox"))).toBe(true);
       expect(calls.some((sql) => sql.includes("INSERT"))).toBe(true);
     }, query);
   });
@@ -287,7 +290,7 @@ describe("application HTTP surface", () => {
       expect(view.traceId).toBe("trace-http");
       expect(view.vacancyTitle).toBe("Cajero");
       expect(view.documents.cv[0]?.text).toBe("Atendí la caja del kiosco familiar.");
-      expect(view.evidence.map((item: { id: string }) => item.id)).toEqual(["ev-1"]);
+      expect(view.evidence.map((item) => item.id)).toEqual(["ev-1"]);
       expect(text).not.toContain("descartado");
       for (const key of ["age", "gender", "address", "photo", "Calle 1"]) expect(text).not.toContain(key);
 
@@ -417,6 +420,61 @@ describe("application HTTP surface", () => {
     await expect(store.get("k1")).resolves.toEqual({ key: "k1", fingerprint: "fp", response: { ok: true } });
     expect(calls[0]?.sql).toBe(ENSURE_IDEMPOTENCY_TABLE_SQL);
     expect(calls[1]?.sql).toContain("INSERT");
+  });
+
+  it("lets the owning candidate read the interview decision", async () => {
+    const post = (base: string, path: string, body: unknown) =>
+      fetch(`${base}${path}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+    const readAs = (base: string, path: string, who: ReturnType<typeof session>) =>
+      fetch(`${base}${path}`, { headers: { "x-better-auth-session": JSON.stringify(who) } });
+    await withServer({}, async (base) => {
+      const created = await post(base, "/drafts", payload());
+      const draft = (await created.json()) as { draftId: string; availableEvidence: Array<{ id: string }> };
+      expect(created.status).toBe(201);
+      expect(draft.availableEvidence.map((item) => item.id)).toEqual(["ev-1"]);
+
+      const before = await readAs(base, `/drafts/${draft.draftId}/submission`, session("candidate"));
+      expect(before.status).toBe(404);
+
+      await post(base, `/drafts/${draft.draftId}/approvals`, {
+        session: session("candidate"),
+        traceId: "trace-http",
+        idempotencyKey: "idem-own-a",
+        reason: "apruebo",
+        envelope: sampleWorkflowEnvelope("trace-http", "idem-own-a"),
+      });
+      const submitted = await post(base, `/drafts/${draft.draftId}/submissions`, {
+        session: session("candidate"),
+        traceId: "trace-http",
+        idempotencyKey: "idem-own-s",
+        reason: "envío",
+        envelope: sampleWorkflowEnvelope("trace-http", "idem-own-s"),
+      });
+      const submissionId = ((await submitted.json()) as { submissionId: string }).submissionId;
+
+      const pending = await readAs(base, `/drafts/${draft.draftId}/submission`, session("candidate"));
+      expect(pending.status).toBe(200);
+      expect(await pending.json()).toMatchObject({
+        submissionId,
+        draftId: draft.draftId,
+        interview: "pending_employer_approval",
+      });
+      expect((await readAs(base, `/drafts/${draft.draftId}/submission`, session("candidate", "other"))).status).toBe(403);
+
+      const declined = await post(base, `/submissions/${submissionId}/interview`, {
+        session: session("employer"),
+        traceId: "trace-http",
+        idempotencyKey: "idem-own-d",
+        reason: "no avanzamos",
+        decision: "rejected",
+        envelope: sampleWorkflowEnvelope("trace-http", "idem-own-d"),
+      });
+      expect(declined.status).toBe(200);
+      const decision = await readAs(base, `/drafts/${draft.draftId}/submission`, session("candidate"));
+      expect(await decision.json()).toMatchObject({ interview: "rejected" });
+      const listed = await readAs(base, `/drafts/${draft.draftId}`, session("candidate"));
+      expect(await listed.json()).toMatchObject({ interview: "rejected", submissionId });
+    });
   });
 
   it("starts the local server entry and the Vercel handler", async () => {

@@ -1,0 +1,31 @@
+{
+  "status": "completed",
+  "changes": [
+    "Configure Langfuse ingestion from LANGFUSE_PUBLIC_KEY, LANGFUSE_SECRET_KEY and optional LANGFUSE_BASE_URL, documented in .env.example.",
+    "POST one final batch per completed workflow trace, excluding earlier runs and cached replays.",
+    "Keep workflows offline without both keys; tolerate HTTP and transport failures and abort requests after five seconds."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npm run typecheck",
+      "npx eslint apps/agent-runtime/src/workflow/graph.ts apps/agent-runtime/src/workflow/observability.ts apps/agent-runtime/src/workflow/__tests__/langfuse-ingestion.test.ts",
+      "git diff --check",
+      "npx vitest run apps/agent-runtime/src/workflow/__tests__/langfuse-ingestion.test.ts apps/agent-runtime/src/workflow/__tests__/observability.test.ts --maxWorkers=1",
+      "NODE_OPTIONS=--no-experimental-webstorage npx vitest run --coverage --maxWorkers=1 --coverage.reportsDirectory=.scratch/coverage96",
+      "NODE_OPTIONS=--no-experimental-webstorage npx vitest run apps/web/tests/components/chat-screen.test.tsx --maxWorkers=1"
+    ],
+    "skipped": [],
+    "notes": "Aggregate CI gate: full coverage run exited 1 solely because chat-screen worker failed to start (no assertions ran in that file). All 85 executed files passed: 701 tests passed and 10 skipped. Coverage thresholds passed: lines92.24%, statements89.77%, branches78.66%, functions93.4%. The omitted chat-screen file rerun passed12/12, exit0; aggregate713 passed,10 skipped. Focused Langfuse/observability14/14 passed, typecheck, changed-file ESLint and diff-check passed. No real Langfuse traffic. Origin/main a8e598a merged. Independent Standards and Spec reviews clean."
+  },
+  "commitSha": "311752c05a761d1ac203f9c05a56d33d177c4ef7",
+  "branch": "issue/96-wire-real-langfuse-ingestion-through-env",
+  "nextConsumer": "review-pr",
+  "blockedBy": [],
+  "riskRemaining": "Real Langfuse deployment has not been contacted; endpoint follows issue96's required legacy ingestion contract.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "status": "clean",
+  "pr": 110,
+  "branch": "docs/issue-103-methodology",
+  "fixedPoint": "main",
+  "reviewPasses": 3,
+  "standardsFindings": 0,
+  "specFindings": 0,
+  "validation": [
+    "npm run typecheck",
+    "npm run lint",
+    "npm run gate:ci",
+    "git diff --check"
+  ],
+  "nextConsumer": "ship-subissue",
+  "deferred": []
+}

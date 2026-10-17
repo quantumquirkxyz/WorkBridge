@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WorkBridge — Propuestas UX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,800;1,9..144,500&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;700&family=Archivo+Black&family=Inter:wght@400;600&display=swap">
+<style>
+:root{--bg:#111;--fg:#eee;--mut:#9a9a9a;--line:#2a2a2a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 Inter,system-ui,sans-serif}
+a{color:inherit}
+.wrap{width:min(100% - 2rem,1180px);margin-inline:auto}
+header.top{padding:4rem 0 2rem}
+header.top h1{font:800 clamp(2rem,5vw,3.4rem)/1.05 "Space Grotesk";margin:0 0 .75rem;letter-spacing:-.03em}
+header.top p{color:var(--mut);max-width:62ch;margin:0}
+nav.idx{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.5rem 0 0}
+nav.idx a{padding:.4rem .8rem;border:1px solid var(--line);border-radius:99px;text-decoration:none;font-size:.85rem;color:var(--mut)}
+nav.idx a:hover{color:#fff;border-color:#777}
+section.prop{padding:3rem 0;border-top:1px solid var(--line)}
+.meta{display:grid;grid-template-columns:1fr;gap:1rem;margin-bottom:1.25rem}
+@media(min-width:900px){.meta{grid-template-columns:1.1fr 1fr}}
+.meta h2{font:700 1.6rem "Space Grotesk";margin:0 0 .3rem}
+.meta .tag{font:700 .72rem "JetBrains Mono";letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.meta ul{margin:0;padding-left:1.1rem;color:#bbb;font-size:.92rem}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.6rem}
+.chips span{font:400 .75rem "JetBrains Mono";padding:.2rem .55rem;border:1px solid var(--line);border-radius:6px;color:#bbb}
+.frame{position:relative;overflow:hidden;border-radius:14px;border:1px solid var(--line);min-height:560px}
+.frame .bar{position:absolute;z-index:5;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:1rem 1.5rem;font-size:.9rem}
+.frame .bar b{font-weight:700}
+.frame .bar nav{display:flex;gap:1.25rem;opacity:.8}
+@media(max-width:700px){.frame .bar nav{display:none}}
+.hero{display:grid;gap:2rem;padding:5.5rem 1.5rem 3rem;align-items:center}
+@media(min-width:900px){.hero{grid-template-columns:1.15fr .85fr;padding:6rem 3rem 3.5rem}}
+
+/* ---------- A. Editorial cálido ---------- */
+.A{background:#f5eee1;color:#1f1a14;font-family:"Space Grotesk"}
+.A:before{content:"";position:absolute;inset:0;opacity:.35;mix-blend-mode:multiply;pointer-events:none;
+ background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/><feColorMatrix values='0 0 0 0 .4  0 0 0 0 .3  0 0 0 0 .2  0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.A h1{font:800 clamp(2.4rem,5.4vw,4.6rem)/.98 Fraunces,serif;letter-spacing:-.03em;margin:0 0 1.2rem}
+.A h1 em{font-style:italic;font-weight:500;position:relative;white-space:nowrap}
+.A h1 em svg{position:absolute;left:-2%;bottom:-.18em;width:104%;height:.4em;overflow:visible}
+.A h1 em path{fill:none;stroke:#e8553d;stroke-width:5;stroke-linecap:round;stroke-dasharray:420;stroke-dashoffset:420;animation:draw 1.1s .6s cubic-bezier(.65,0,.35,1) forwards}
+.A p.lead{max-width:44ch;font-size:1.15rem;color:#4a4036}
+.A .btn{display:inline-block;margin-top:1.4rem;padding:.9rem 1.5rem;background:#1f1a14;color:#f5eee1;border-radius:99px;text-decoration:none;font-weight:600;transition:transform .25s cubic-bezier(.2,.8,.2,1),background .25s}
+.A .btn:hover{background:#e8553d;transform:translateY(-3px) rotate(-1.5deg)}
+.tickets{position:relative;height:380px}
+.ticket{position:absolute;width:250px;padding:1rem 1.1rem;background:#fffaf0;border:1.5px solid #1f1a14;border-radius:6px;box-shadow:5px 6px 0 #1f1a14;font-size:.92rem;opacity:0;transform:translateY(40px) rotate(var(--r));animation:land .8s var(--d) cubic-bezier(.2,.9,.25,1.15) forwards}
+.ticket small{display:block;font:400 .68rem "JetBrains Mono";letter-spacing:.08em;text-transform:uppercase;color:#8a7c6b;margin-bottom:.25rem}
+.ticket:nth-child(1){--r:-4deg;--d:.3s;left:0;top:10px}
+.ticket:nth-child(2){--r:3deg;--d:.5s;left:70px;top:130px;background:#ffe3dc}
+.ticket:nth-child(3){--r:-2deg;--d:.7s;left:10px;top:250px;background:#e2efe6}
+.stamp{position:absolute;right:-6px;top:20px;width:130px;height:130px;border-radius:50%;border:3px solid #e8553d;color:#e8553d;display:grid;place-items:center;text-align:center;font:800 .9rem/1.1 Fraunces;text-transform:uppercase;transform:rotate(14deg) scale(0);animation:stamp .5s 1.4s cubic-bezier(.3,1.6,.4,1) forwards;background:#f5eee1cc}
+@keyframes land{to{opacity:1;transform:translateY(0) rotate(var(--r))}}
+@keyframes stamp{to{transform:rotate(14deg) scale(1)}}
+@keyframes draw{to{stroke-dashoffset:0}}
+
+/* ---------- B. Blueprint / Puente ---------- */
+.B{background:#07171a;color:#dff6f3;font-family:"Space Grotesk"}
+.B:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#12363b55 1px,transparent 1px),linear-gradient(90deg,#12363b55 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(ellipse at 60% 50%,#000 30%,transparent 80%)}
+.B h1{font:700 clamp(2.2rem,5vw,4rem)/1.02 "Space Grotesk";letter-spacing:-.04em;margin:0 0 1rem}
+.B h1 span{color:#2dd4bf}
+.B .mono{font:400 .78rem "JetBrains Mono";letter-spacing:.12em;text-transform:uppercase;color:#2dd4bf;margin-bottom:1rem;display:block}
+.B p.lead{color:#9ec3c0;max-width:46ch;font-size:1.1rem}
+.B .btn{display:inline-block;margin-top:1.3rem;padding:.85rem 1.3rem;border:1px solid #2dd4bf;color:#2dd4bf;text-decoration:none;font:700 .85rem "JetBrains Mono";letter-spacing:.08em;position:relative;overflow:hidden;transition:color .3s}
+.B .btn:before{content:"";position:absolute;inset:0;background:#2dd4bf;transform:translateX(-101%);transition:transform .35s cubic-bezier(.7,0,.2,1);z-index:-1}
+.B .btn:hover{color:#07171a}.B .btn:hover:before{transform:none}
+.bridge{width:100%;height:auto;position:relative}
+.bridge .p{fill:none;stroke:#2dd4bf;stroke-width:2;stroke-dasharray:900;stroke-dashoffset:900;animation:draw2 2.4s .3s cubic-bezier(.65,0,.35,1) forwards}
+.bridge .h{stroke:#2dd4bf88;stroke-width:1;stroke-dasharray:4 5;opacity:0;animation:fade .6s 2s forwards}
+.bridge .n{fill:#07171a;stroke:#2dd4bf;stroke-width:2;transform-box:fill-box;transform-origin:center;transform:scale(0);animation:pop .4s var(--d) cubic-bezier(.3,1.6,.4,1) forwards}
+.bridge .ping{fill:#2dd4bf;opacity:0;transform-box:fill-box;transform-origin:center;animation:ping 2.4s 3s infinite}
+.bridge text{font:400 11px "JetBrains Mono";fill:#9ec3c0;letter-spacing:.06em;opacity:0;animation:fade .5s var(--d) forwards}
+@keyframes draw2{to{stroke-dashoffset:0}}
+@keyframes fade{to{opacity:1}}
+@keyframes pop{to{transform:scale(1)}}
+@keyframes ping{0%{opacity:.7;transform:scale(1)}100%{opacity:0;transform:scale(3.2)}}
+
+/* ---------- C. Juvenil neo-brutal ---------- */
+.C{background:#f3efe6;color:#111;font-family:"Space Grotesk"}
+.C h1{font:400 clamp(2.4rem,6vw,5.2rem)/.92 "Archivo Black";text-transform:uppercase;letter-spacing:-.02em;margin:0 0 1.2rem}
+.C h1 mark{background:#ff5ea8;padding:0 .12em;border:3px solid #111;display:inline-block;transform:rotate(-2deg);box-shadow:5px 5px 0 #111}
+.C p.lead{font-size:1.15rem;max-width:42ch;font-weight:500}
+.C .btn{display:inline-block;margin-top:1.3rem;padding:.9rem 1.6rem;background:#2f6bff;color:#fff;border:3px solid #111;box-shadow:6px 6px 0 #111;font:400 1rem "Archivo Black";text-transform:uppercase;text-decoration:none;transition:transform .12s,box-shadow .12s}
+.C .btn:hover{transform:translate(4px,4px);box-shadow:2px 2px 0 #111}
+.C .btn:active{transform:translate(6px,6px);box-shadow:0 0 0 #111}
+.stickers{position:relative;height:380px}
+.st{position:absolute;padding:.55rem .9rem;border:3px solid #111;box-shadow:4px 4px 0 #111;font:400 .95rem "Archivo Black";text-transform:uppercase;background:var(--c);animation:bob 3.2s var(--d) ease-in-out infinite;transform:rotate(var(--r))}
+.st:hover{animation-play-state:paused;transform:rotate(0) scale(1.08);cursor:grab}
+@keyframes bob{0%,100%{transform:rotate(var(--r)) translateY(0)}50%{transform:rotate(calc(var(--r) * -1)) translateY(-10px)}}
+.marq{position:absolute;left:0;right:0;bottom:0;background:#111;color:#f3efe6;overflow:hidden;white-space:nowrap;padding:.6rem 0;font:400 .9rem "Archivo Black";text-transform:uppercase}
+.marq div{display:inline-block;animation:mq 22s linear infinite}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ---------- D. Night signal ---------- */
+.D{background:#090c0d;color:#e9eeee;font-family:"Space Grotesk";--mx:70%;--my:30%}
+.D:before{content:"";position:absolute;inset:0;background:radial-gradient(420px circle at var(--mx) var(--my),#c6f43224,transparent 70%);pointer-events:none}
+.D h1{font:500 clamp(2.2rem,5vw,4.2rem)/1.02 "Space Grotesk";letter-spacing:-.045em;margin:0 0 1rem}
+.D h1 b{color:#c6f432;font-weight:500}
+.D p.lead{color:#8d9a9a;max-width:44ch;font-size:1.1rem}
+.D .btn{display:inline-block;margin-top:1.3rem;padding:.85rem 1.4rem;background:#c6f432;color:#090c0d;border-radius:8px;text-decoration:none;font-weight:700;transition:box-shadow .3s,transform .2s}
+.D .btn:hover{box-shadow:0 0 0 6px #c6f43233;transform:translateY(-2px)}
+.gauge{display:grid;place-items:center;gap:1rem}
+.ring{--v:0;width:230px;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#c6f432 calc(var(--v)*1%),#1b2224 0);animation:fill 1.8s .4s cubic-bezier(.2,.8,.2,1) forwards;position:relative}
+@property --v{syntax:"<number>";inherits:false;initial-value:0}
+.ring:after{content:"";position:absolute;inset:14px;background:#090c0d;border-radius:50%}
+.ring span{position:relative;z-index:1;font:500 3.4rem "Space Grotesk";letter-spacing:-.05em}
+.ring span:after{content:"%";font-size:1.2rem;color:#8d9a9a}
+@keyframes fill{to{--v:82}}
+.gaps{list-style:none;margin:0;padding:0;display:grid;gap:.5rem;width:100%;max-width:280px;font:400 .82rem "JetBrains Mono"}
+.gaps li{display:flex;justify-content:space-between;padding:.5rem .7rem;border:1px solid #1f2829;border-radius:6px;opacity:0;transform:translateX(16px);animation:in .5s var(--d) forwards}
+.gaps li i{font-style:normal;color:#c6f432}
+@keyframes in{to{opacity:1;transform:none}}
+.D .counter::before{content:counter(n)}
+
+/* ---------- catálogo ---------- */
+.cat{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.card{border:1px solid var(--line);border-radius:12px;padding:1.1rem;background:#161616}
+.card h3{margin:0 0 .3rem;font:700 1rem "Space Grotesk"}
+.card p{margin:0 0 .6rem;color:#aaa;font-size:.88rem}
+.demo{height:78px;border-radius:8px;background:#0d0d0d;display:grid;place-items:center;margin-bottom:.7rem;overflow:hidden;position:relative}
+.d-magnet{padding:.5rem 1rem;border-radius:99px;background:#fff;color:#111;font-weight:600;transition:transform .2s}
+.demo:hover .d-magnet{transform:translate(8px,-4px) scale(1.06)}
+.d-split span{display:inline-block;font:700 1.3rem "Space Grotesk";opacity:0;transform:translateY(100%);animation:up 3s infinite}
+.d-split span:nth-child(2){animation-delay:.08s}.d-split span:nth-child(3){animation-delay:.16s}.d-split span:nth-child(4){animation-delay:.24s}.d-split span:nth-child(5){animation-delay:.32s}
+@keyframes up{0%{opacity:0;transform:translateY(100%)}12%,70%{opacity:1;transform:none}85%,100%{opacity:0;transform:translateY(-60%)}}
+.d-count:after{content:"0";font:700 2rem "Space Grotesk";animation:cnt 3s steps(1) infinite}
+@keyframes cnt{0%{content:"0"}15%{content:"12"}30%{content:"34"}45%{content:"58"}60%{content:"79"}75%,100%{content:"82"}}
+.d-bar{width:70%;height:6px;background:#222;border-radius:9px;overflow:hidden}
+.d-bar i{display:block;height:100%;width:0;background:#2dd4bf;animation:bar 2.6s cubic-bezier(.2,.8,.2,1) infinite}
+@keyframes bar{0%{width:0}60%,100%{width:82%}}
+.d-reveal{display:flex;gap:6px}
+.d-reveal i{width:34px;height:46px;border-radius:6px;background:#2dd4bf;opacity:0;transform:translateY(16px);animation:rv 2.8s infinite}
+.d-reveal i:nth-child(2){animation-delay:.15s;background:#ff8a7d}.d-reveal i:nth-child(3){animation-delay:.3s;background:#c6f432}
+@keyframes rv{0%{opacity:0;transform:translateY(16px)}25%,75%{opacity:1;transform:none}100%{opacity:0}}
+.d-tilt{width:90px;height:50px;border-radius:8px;background:linear-gradient(135deg,#2dd4bf,#0f766e);transition:transform .3s}
+.demo:hover .d-tilt{transform:perspective(300px) rotateY(18deg) rotateX(-10deg)}
+.d-trans{width:60px;height:40px;background:#ff8a7d;border-radius:8px;animation:vt 3s ease-in-out infinite}
+@keyframes vt{0%,100%{transform:translateX(-50px);border-radius:8px}50%{transform:translateX(50px);border-radius:50%}}
+.d-marq{white-space:nowrap;font:700 1.1rem "Space Grotesk";color:#888}
+.d-marq div{display:inline-block;animation:mq 8s linear infinite}
+table{width:100%;border-collapse:collapse;font-size:.9rem;margin-top:1rem}
+th,td{text-align:left;padding:.6rem .5rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--mut);font:400 .72rem "JetBrains Mono";text-transform:uppercase;letter-spacing:.1em}
+.rule{display:grid;gap:.6rem;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-top:1rem}
+.rule div{border:1px solid var(--line);border-radius:10px;padding:.9rem;font-size:.9rem;color:#bbb}
+.rule b{display:block;color:#fff;margin-bottom:.2rem}
+.rec{border:1px solid #2dd4bf66;background:#2dd4bf0f;border-radius:12px;padding:1.2rem 1.4rem;margin-top:1.5rem}
+footer{padding:3rem 0 5rem;color:var(--mut);font-size:.9rem}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+ .ticket,.stamp,.bridge .n,.bridge text,.bridge .h,.gaps li{opacity:1!important;transform:none!important}.bridge .p,.A h1 em path{stroke-dashoffset:0!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <h1>WorkBridge — propuestas de dirección UX</h1>
+  <p>Hoy la interfaz es teal + coral sobre crema, Plus Jakarta Sans, tarjetas blancas redondeadas y un hero centrado con ilustración genérica. Es limpia, pero es exactamente la receta que delata una página hecha con plantilla/IA. Estas 4 direcciones rompen con eso. Todas las animaciones de abajo son reales: pasa el cursor y recarga la página para verlas de nuevo.</p>
+  <nav class="idx">
+    <a href="#A">A · Editorial cálido</a><a href="#B">B · Plano del puente</a><a href="#C">C · Juvenil neo-brutal</a><a href="#D">D · Señal nocturna</a><a href="#motion">Catálogo de efectos</a><a href="#anti">Reglas anti-IA</a><a href="#plan">Recomendación y plan</a>
+  </nav>
+</header>
+
+<!-- A -->
+<section class="prop" id="A">
+  <div class="meta">
+    <div><span class="tag">Dirección A</span><h2>Editorial cálido — «papel y tinta»</h2>
+    <p style="color:#bbb;margin:.2rem 0 0">Revista de empleo hecha a mano. Transmite confianza y calidez para jóvenes que dudan de su CV. Concepto del hero: la experiencia informal «aterriza» como tickets físicos y se sella con el diagnóstico.</p></div>
+    <div><ul><li>Tipografía: Fraunces (serif con carácter) + Space Grotesk; titulares enormes, asimétricos.</li><li>Paleta: papel #F5EEE1, tinta #1F1A14, coral #E8553D como único acento.</li><li>Sombras duras, bordes finos de tinta, grano de papel, subrayados dibujados a mano.</li></ul>
+    <div class="chips"><span>SVG stroke draw</span><span>stagger landing</span><span>stamp pop</span><span>grain overlay</span></div></div>
+  </div>
+  <div class="frame A">
+    <div class="bar"><b>WorkBridge</b><nav><span>Vacantes</span><span>Mi ruta</span><span>Empresas</span></nav></div>
+    <div class="hero">
+      <div>
+        <h1>Lo que ya sabes hacer, <em>ya cuenta.<svg viewBox="0 0 300 20" preserveAspectRatio="none"><path d="M3 12 C 60 2, 120 18, 180 8 S 270 6, 297 11"/></svg></em></h1>
+        <p class="lead">Contamos tu negocio familiar, tu voluntariado y tus proyectos como experiencia real. Te decimos qué te falta y cuál es el siguiente paso.</p>
+        <a class="btn" href="#A">Empezar mi perfil →</a>
+      </div>
+      <div class="tickets">
+        <div class="ticket"><small>Experiencia informal</small>Atendí la tienda de mi familia · 3 años</div>
+        <div class="ticket"><small>Proyecto</small>Armé el catálogo en Instagram · +400 clientes</div>
+        <div class="ticket"><small>Formación</small>Curso de Excel intermedio</div>
+        <div class="stamp">Apto con brechas</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- B -->
+<section class="prop" id="B">
+  <div class="meta">
+    <div><span class="tag">Dirección B</span><h2>Plano del puente — «ingeniería amable»</h2>
+    <p style="color:#bbb;margin:.2rem 0 0">Toma el nombre literal: un plano técnico donde el puente se dibuja solo desde «Tú» hasta «Empleo» y cada nodo es una brecha o paso real de la ruta. Distintivo, explica el producto sin texto.</p></div>
+    <div><ul><li>Tipografía: Space Grotesk + JetBrains Mono para etiquetas técnicas.</li><li>Paleta: noche #07171A, teal #2DD4BF; retícula de plano, líneas punteadas, cotas.</li><li>La misma ilustración se reutiliza como el mapa de «Mi ruta» (nodos clicables).</li></ul>
+    <div class="chips"><span>stroke-dashoffset</span><span>nodos con pop</span><span>ping pulsante</span><span>botón con wipe</span></div></div>
+  </div>
+  <div class="frame B">
+    <div class="bar"><b>WorkBridge</b><nav><span>Vacantes</span><span>Mi ruta</span><span>Empresas</span></nav></div>
+    <div class="hero">
+      <div>
+        <span class="mono">// del perfil al primer empleo</span>
+        <h1>Construye el <span>puente</span> hacia tu primer trabajo.</h1>
+        <p class="lead">Un plan claro: dónde estás, qué brecha cerrar y qué formación te acerca más rápido.</p>
+        <a class="btn" href="#B">INICIAR DIAGNÓSTICO</a>
+      </div>
+      <svg class="bridge" viewBox="0 0 440 280" role="img" aria-label="Puente desde Tú hasta Empleo con pasos intermedios">
+        <line class="h" x1="20" y1="190" x2="420" y2="190"/>
+        <path class="p" d="M20 190 C 90 190, 110 90, 170 90 S 270 190, 320 120 S 400 190, 420 190"/>
+        <circle class="n" style="--d:.4s" cx="20" cy="190" r="8"/><text style="--d:.5s" x="8" y="214">TÚ</text>
+        <circle class="n" style="--d:1.2s" cx="170" cy="90" r="8"/><text style="--d:1.3s" x="120" y="72">BRECHA: SQL</text>
+        <circle class="n" style="--d:1.8s" cx="320" cy="120" r="8"/><text style="--d:1.9s" x="268" y="102">CURSO · 6 SEM</text>
+        <circle class="n" style="--d:2.4s" cx="420" cy="190" r="8"/><text style="--d:2.5s" x="364" y="214">EMPLEO</text>
+        <circle class="ping" cx="420" cy="190" r="8"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- C -->
+<section class="prop" id="C">
+  <div class="meta">
+    <div><span class="tag">Dirección C</span><h2>Juvenil neo-brutal — «sticker wall»</h2>
+    <p style="color:#bbb;margin:.2rem 0 0">La más atrevida y la menos «corporativa»: bordes gruesos, sombras duras, color plano, tipografía gigante. Habla como lo haría un joven, no un portal de empleo. Habilidades como stickers movibles.</p></div>
+    <div><ul><li>Tipografía: Archivo Black (titulares) + Space Grotesk.</li><li>Paleta: crema #F3EFE6, negro, azul #2F6BFF, rosa #FF5EA8, amarillo, verde.</li><li>Botones que se «hunden» al presionar; marquesina de skills; stickers arrastrables.</li></ul>
+    <div class="chips"><span>hard-shadow press</span><span>marquee CSS</span><span>float idle</span><span>drag stickers</span></div></div>
+  </div>
+  <div class="frame C">
+    <div class="bar"><b style="font-family:'Archivo Black';text-transform:uppercase">WorkBridge</b><nav><span>Vacantes</span><span>Mi ruta</span><span>Empresas</span></nav></div>
+    <div class="hero">
+      <div>
+        <h1>Tu primer <mark>chamba</mark>, sin rodeos.</h1>
+        <p class="lead">Cuéntanos qué has hecho —aunque no estuviera en un contrato— y te mostramos vacantes reales y qué te falta.</p>
+        <a class="btn" href="#C">Armar mi perfil</a>
+      </div>
+      <div class="stickers">
+        <div class="st" style="--c:#ffe14d;--r:-6deg;--d:0s;left:0;top:10px">Atención al cliente</div>
+        <div class="st" style="--c:#7be495;--r:4deg;--d:.4s;left:130px;top:70px">Excel</div>
+        <div class="st" style="--c:#ff5ea8;--r:-3deg;--d:.8s;left:10px;top:150px">Ventas</div>
+        <div class="st" style="--c:#8fb4ff;--r:5deg;--d:1.1s;left:150px;top:210px">Voluntariado</div>
+        <div class="st" style="--c:#fff;--r:-5deg;--d:1.5s;left:20px;top:290px">Inglés B1</div>
+      </div>
+    </div>
+    <div class="marq"><div>Sin experiencia ✦ Con experiencia que no sabías ✦ Prácticas ✦ Primer empleo ✦ Medio tiempo ✦ Sin experiencia ✦ Con experiencia que no sabías ✦ Prácticas ✦ Primer empleo ✦ Medio tiempo ✦&nbsp;</div></div>
+  </div>
+</section>
+
+<!-- D -->
+<section class="prop" id="D">
+  <div class="meta">
+    <div><span class="tag">Dirección D</span><h2>Señal nocturna — «panel de control»</h2>
+    <p style="color:#bbb;margin:.2rem 0 0">Oscura, precisa, con un único acento ácido (sin degradados morados ni glassmorphism genérico). El producto es el héroe: el medidor de preparación y las brechas. Ideal para los paneles de empresa y orientador.</p></div>
+    <div><ul><li>Tipografía: Space Grotesk con tracking apretado + mono para datos.</li><li>Paleta: #090C0D y un solo acento lima #C6F432; el color solo significa estado.</li><li>Foco que sigue el cursor, anillo de preparación animado con <code>@property</code>, filas que entran en cascada.</li></ul>
+    <div class="chips"><span>cursor spotlight</span><span>@property conic</span><span>counter</span><span>stagger list</span></div></div>
+  </div>
+  <div class="frame D" id="Dframe">
+    <div class="bar"><b>WorkBridge</b><nav><span>Vacantes</span><span>Mi ruta</span><span>Empresas</span></nav></div>
+    <div class="hero">
+      <div>
+        <h1>Sabe qué te falta. <b>Antes de postular.</b></h1>
+        <p class="lead">Un diagnóstico honesto de tu preparación para cada vacante, con la ruta más corta para cerrar la brecha.</p>
+        <a class="btn" href="#D">Ver mi preparación</a>
+      </div>
+      <div class="gauge">
+        <div class="ring"><span>82</span></div>
+        <ul class="gaps"><li style="--d:1s">SQL básico <i>−</i></li><li style="--d:1.2s">Inglés técnico <i>−</i></li><li style="--d:1.4s">Atención al cliente <i>✓</i></li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Motion -->
+<section class="prop" id="motion">
+  <div class="meta"><div><span class="tag">Transversal</span><h2>Catálogo de animaciones y efectos</h2><p style="color:#bbb;margin:.2rem 0 0">Aplicable a cualquiera de las 4 direcciones. Cada efecto tiene un propósito (feedback, orientación o personalidad), no es decoración.</p></div></div>
+  <div class="cat">
+    <div class="card"><div class="demo"><div class="d-split"><span>H</span><span>o</span><span>l</span><span>a</span><span>!</span></div></div><h3>Titulares por letra/palabra</h3><p>Entrada con máscara y escalonado de 40–80 ms. Solo en el hero.</p></div>
+    <div class="card"><div class="demo"><div class="d-count"></div></div><h3>Contadores y medidor</h3><p>Número y anillo suben a su valor real al entrar en viewport (dato verdadero, nunca inventado).</p></div>
+    <div class="card"><div class="demo"><div class="d-bar"><i></i></div></div><h3>Barras de preparación</h3><p>Reemplaza el <code>readiness</code> actual: relleno con ease-out 600–900 ms.</p></div>
+    <div class="card"><div class="demo"><div class="d-reveal"><i></i><i></i><i></i></div></div><h3>Scroll reveal escalonado</h3><p>Tarjetas de vacantes entran en cascada; <code>animation-timeline: view()</code> sin JS.</p></div>
+    <div class="card"><div class="demo"><div class="d-tilt"></div></div><h3>Tilt 3D en tarjetas</h3><p>Inclinación suave siguiendo el cursor en el detalle de vacante; desactivado en táctil.</p></div>
+    <div class="card"><div class="demo"><div class="d-magnet">Postular</div></div><h3>Botón magnético</h3><p>El CTA principal «atrae» el cursor 6–10 px. Un solo botón por pantalla.</p></div>
+    <div class="card"><div class="demo"><div class="d-trans"></div></div><h3>Transiciones de página</h3><p>View Transitions API: la tarjeta de vacante se expande al detalle (morph compartido).</p></div>
+    <div class="card"><div class="demo"><div class="d-marq"><div>Excel · Ventas · Inglés · SQL · Excel · Ventas · Inglés · SQL ·&nbsp;</div></div></div><h3>Marquesina</h3><p>Habilidades o empresas aliadas en movimiento lento; pausa al pasar el cursor.</p></div>
+  </div>
+  <table>
+    <tr><th>Efecto</th><th>Duración / easing</th><th>Herramienta</th><th>Dónde</th></tr>
+    <tr><td>Entrada de hero</td><td>600–900 ms · cubic-bezier(.2,.9,.25,1)</td><td>CSS + Motion (React)</td><td>Landing, bienvenida</td></tr>
+    <tr><td>Microinteracciones</td><td>120–200 ms · ease-out</td><td>CSS</td><td>Botones, chips, nav</td></tr>
+    <tr><td>Reveal al scroll</td><td>500 ms · stagger 60 ms</td><td>CSS scroll-driven</td><td>Vacantes, ruta</td></tr>
+    <tr><td>Morph de vista</td><td>300–400 ms · ease-in-out</td><td>View Transitions API</td><td>Lista → detalle</td></tr>
+    <tr><td>Mapa de ruta</td><td>1.5–2.5 s · una sola vez</td><td>SVG stroke / GSAP opcional</td><td>Mi ruta</td></tr>
+  </table>
+  <p style="color:#aaa;font-size:.88rem">Accesibilidad: todo respeta <code>prefers-reduced-motion</code> (el sitio ya lo hace en globals.css); ninguna animación bloquea la lectura ni dura más de 3 s en bucle; 60 fps, solo <code>transform</code>/<code>opacity</code>.</p>
+</section>
+
+<!-- Anti IA -->
+<section class="prop" id="anti">
+  <div class="meta"><div><span class="tag">Criterio</span><h2>Cómo evitar que parezca hecho con IA</h2></div></div>
+  <div class="rule">
+    <div><b>Una idea visual propia</b>El puente, el papel, los stickers o el panel: un concepto que solo pertenezca a WorkBridge, no un hero centrado + 3 tarjetas.</div>
+    <div><b>Tipografía con carácter</b>Fuera Plus Jakarta/Inter por defecto. Un display distintivo, tamaños extremos y tracking trabajado.</div>
+    <div><b>Asimetría y ritmo</b>Rompe la rejilla uniforme: tarjetas de distinto peso, desbordes, rotaciones leves, espacios en blanco deliberados.</div>
+    <div><b>Un solo acento</b>Sin degradados morado→azul, sin glassmorphism por defecto, sin sombras difusas genéricas.</div>
+    <div><b>Contenido real</b>Nada de «Potencia tu futuro». Copy concreto en español: «Tu tienda familiar cuenta como experiencia».</div>
+    <div><b>Textura y detalle</b>Grano, bordes, cotas, microcopys y estados vacíos con personalidad en lugar de iconos Lucide en círculos de color.</div>
+  </div>
+</section>
+
+<!-- Plan -->
+<section class="prop" id="plan">
+  <div class="meta"><div><span class="tag">Alcance</span><h2>Qué se refactoriza y cómo</h2></div></div>
+  <table>
+    <tr><th>Interfaz</th><th>Tecnología</th><th>Qué cambia</th></tr>
+    <tr><td><code>apps/web</code> candidato (bienvenida, chat, vacantes, ruta, perfil)</td><td>Next.js 16 + Tailwind 4</td><td>Tokens nuevos en <code>globals.css</code>, hero, shell/nav, tarjetas de vacante, chat, mapa de ruta animado</td></tr>
+    <tr><td><code>apps/web</code> empresa y orientador</td><td>Next.js</td><td>Colas y revisión con la variante densa (D recomendable aquí)</td></tr>
+    <tr><td><code>apps/certo</code> frontend</td><td>Nuxt 4 + Una UI</td><td>Landing, dashboard, verificación de credenciales con los mismos tokens</td></tr>
+    <tr><td><code>apps/certo/cli</code> y OG image</td><td>Ink / Netlify function</td><td>Tema y tarjeta social coherentes con la marca elegida</td></tr>
+  </table>
+  <div class="rec">
+    <b>Mi recomendación:</b> <b>B + A</b>. Usar <b>B (Plano del puente)</b> como identidad y hero —es el más ligado al producto y el menos plantilla— con la calidez tipográfica de <b>A</b> en titulares y estados vacíos para no sentirse frío con jóvenes. Para empresa/orientador, la densidad de <b>D</b>. Si buscas un público muy joven y una marca arriesgada, <b>C</b>.
+  </div>
+</section>
+<footer>Propuesta de dirección — nada del código de la app ha sido modificado todavía. Elige una dirección y empiezo la refactorización.</footer>
+</div>
+<script>
+(function(){var f=document.getElementById('Dframe');if(!f)return;f.addEventListener('pointermove',function(e){var r=f.getBoundingClientRect();f.style.setProperty('--mx',(e.clientX-r.left)+'px');f.style.setProperty('--my',(e.clientY-r.top)+'px')})})();
+</script>
+</body>
+</html>

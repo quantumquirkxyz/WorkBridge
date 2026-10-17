@@ -30,6 +30,7 @@ export const AGENT_CAPABILITIES: Record<AgentId, ModelCapability> = {
   exploration: "planning",
   profile_and_evidence: "extraction",
   market_and_matching: "matching",
+  bias_auditor: "matching",
   training: "planning",
 };
 

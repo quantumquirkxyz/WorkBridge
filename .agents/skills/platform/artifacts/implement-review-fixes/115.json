@@ -1,0 +1,11 @@
+{
+  "status": "implemented",
+  "pr": 115,
+  "branch": "feat/issue-97-migrate-web-chat-async-turns",
+  "fixedPoint": "main",
+  "commit": "827a307",
+  "completed": ["server session version propagation", "retryable async E2E coverage", "retained intake E2E coverage"],
+  "validation": {"lint": "pass", "chatScreenTests": "12 passed", "typecheck": "blocked: missing better-auth dependencies", "playwright": "skipped: missing browser/system dependencies"},
+  "remainingFindings": ["required API and component state coverage"],
+  "nextConsumer": "review-pr"
+}

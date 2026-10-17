@@ -1,43 +1,21 @@
 import { EXCLUSION_LABELS, type NearMatch } from '@workbridge/catalog';
+import '../../app/styles/explore.css';
 
+/** "Casi listas para ti": one blocking constraint each, no readiness bar, no table. */
 export function NearMatchList({ nearMatches }: { nearMatches: NearMatch[] }) {
   if (nearMatches.length === 0) return null;
   return (
-    <>
-      <h5>Opciones cercanas (bloqueadas por una sola restricción)</h5>
-      <p className="hint">
-        No son compatibles: cada una incumple exactamente una restricción declarada, que se muestra como advertencia.
-      </p>
-      <table>
-        <caption className="hint">Vacantes cercanas con la restricción que las bloqueó.</caption>
-        <thead>
-          <tr>
-            <th scope="col">Vacante</th>
-            <th scope="col">Restricción</th>
-            <th scope="col">Advertencia</th>
-            <th scope="col">Cercanía</th>
-          </tr>
-        </thead>
-        <tbody>
-          {nearMatches.map((near) => (
-            <tr key={near.vacancy.jobId}>
-              <td>
-                <strong>{near.vacancy.title}</strong>
-                <div className="hint">{near.vacancy.company ?? 'Empresa no indicada'}</div>
-              </td>
-              <td>{EXCLUSION_LABELS[near.blockedBy] ?? near.blockedBy}</td>
-              <td>
-                <ul className="warnings">
-                  {near.warnings.map((warning) => (
-                    <li key={warning}>{warning}</li>
-                  ))}
-                </ul>
-              </td>
-              <td>{near.proximity}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </>
+    <section aria-labelledby="near-heading">
+      <h2 id="near-heading" className="xp-section-title">Casi listas para ti</h2>
+      <p className="xp-muted" style={{ marginBottom: '.75rem' }}>Les falta una sola cosa. Si ajustas eso en tus preferencias, podrían encajar.</p>
+      <ul className="xp-near-list">
+        {nearMatches.map((near) => (
+          <li key={near.vacancy.jobId} className="xp-near">
+            <h3>{near.vacancy.title}{near.vacancy.company ? ` · ${near.vacancy.company}` : ''}</h3>
+            <p><strong aria-hidden="true">⚠ </strong>Te bloquea: {near.warnings[0] ?? EXCLUSION_LABELS[near.blockedBy]}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }

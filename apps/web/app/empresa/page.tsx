@@ -1,9 +1,13 @@
-import { SubmissionQueue } from '../../components/employer/SubmissionQueue';
+import { SubmissionQueue, SubmissionQueueCount } from '../../components/employer/SubmissionQueue';
+import '../styles/roles.css';
 
 export default function EmployerHomePage() {
   return (
-    <main className="space-y-4 px-4 py-6 md:px-8">
-      <h1 className="text-xl font-semibold">Postulaciones</h1>
+    <main className="space-y-4">
+      <header className="page-head page-head-mint page-head-row">
+        <h1>Postulaciones</h1>
+        <SubmissionQueueCount />
+      </header>
       <SubmissionQueue />
     </main>
   );

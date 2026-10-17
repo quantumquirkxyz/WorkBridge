@@ -1,14 +1,30 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { AttachmentChip } from '@/components/AttachmentChip';
 import type { ChatTurn } from '@/lib/chat/schema';
 import { SLOTS, type SlotChip, type SlotId } from '@/lib/chat/slots';
 import { applyTurn, initialSlotState, pendingSlot, type SlotState, type UserAction } from '@/lib/chat/tracker';
+import { validateAttachment } from '@/lib/attachments';
 import type { PreferencesDraft } from '@/lib/preferences';
 import { saveStoredPreferences } from '@/lib/preferences-storage';
-import { Button } from './ui/button';
-import { Textarea } from './ui/textarea';
+import { Paperclip, SendHorizontal } from 'lucide-react';
+import { ChatHeader } from '@/components/chat/ChatHeader';
+import { VoiceButton, VoiceStatus } from '@/components/chat/VoiceButton';
+import { useVoiceRecorder } from '@/lib/voice-recorder';
+
+interface ChatAttachment {
+  file: File;
+  kind: 'pdf' | 'image';
+}
+
+function skillLabelsFrom(skills: Array<{ canonical_name?: unknown; original_term?: unknown }> | undefined): string[] {
+  return (skills ?? [])
+    .map((skill) => (typeof skill.original_term === 'string' && skill.original_term.trim()) || (typeof skill.canonical_name === 'string' ? skill.canonical_name : ''))
+    .filter((label) => label.length > 0)
+    .slice(0, 4);
+}
 
 interface ChatMessage {
   id: number;
@@ -16,6 +32,7 @@ interface ChatMessage {
   content: string;
   chips?: Array<SlotChip & { slot?: SlotId }>;
   skillLabels?: string[];
+  attachment?: ChatAttachment;
 }
 
 type RenderedChip = SlotChip & { slot?: SlotId };
@@ -25,6 +42,8 @@ interface ChatSnapshot {
   slotState?: SlotState;
   pendingSlot?: SlotId | null;
   phase?: ChatTurn['phase'];
+  sessionVersion?: number;
+  version?: number;
 }
 
 interface RetryRequest {
@@ -33,15 +52,55 @@ interface RetryRequest {
 }
 
 const WELCOME_MESSAGE = SLOTS[0]!.question;
+function resultMessage(name: string | null, skills: number, experiences: number, review: string): string {
+  const counts = `Encontré ${skills} ${skills === 1 ? 'habilidad' : 'habilidades'} y ${experiences} ${experiences === 1 ? 'experiencia' : 'experiencias'}`;
+  const informal = experiences > 0 ? ', ¡incluida tu experiencia informal! 💪' : '.';
+  return `Listo${name ? `, ${name}` : ''}. ${counts}${informal}${review}`;
+}
+
+const MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024;
+
+function attachmentKind(file: File): ChatAttachment['kind'] | null {
+  if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) return 'pdf';
+  if (file.type.startsWith('image/')) return 'image';
+  return null;
+}
+
+function attachmentError(file: File, kind: ChatAttachment['kind'] | null): string | null {
+  if (!kind) return 'Solo puedo leer PDF o fotos.';
+  if (file.size > MAX_ATTACHMENT_BYTES) return 'Ese archivo pesa más de 10 MB. Prueba con otro.';
+  const result = validateAttachment(file, kind);
+  if (result.ok) return null;
+  if (result.error.includes('MB')) return 'Ese archivo pesa más de 10 MB. Prueba con otro.';
+  if (result.error.includes('vacío')) return result.error;
+  return 'Solo puedo leer PDF o fotos.';
+}
+
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = String(reader.result ?? '');
+      const comma = result.indexOf(',');
+      resolve(comma >= 0 ? result.slice(comma + 1) : result);
+    };
+    reader.onerror = () => reject(reader.error ?? new Error('file_read_failed'));
+    reader.readAsDataURL(file);
+  });
+}
 
 export function ChatScreen() {
   const router = useRouter();
   const composerRef = useRef<HTMLTextAreaElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const cvRetry = useRef<File | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messageId = useRef(0);
   const profileText = useRef<string[]>([]);
   const intakeStarted = useRef(false);
   const explorationStarted = useRef(false);
+  const sessionVersion = useRef(0);
+  const activeRequest = useRef(0);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [slotState, setSlotState] = useState<SlotState>(initialSlotState);
   const [phase, setPhase] = useState<ChatTurn['phase']>('profile');
@@ -52,6 +111,20 @@ export function ChatScreen() {
   const [intakeRetryText, setIntakeRetryText] = useState<string | null>(null);
   const [intakeExplorationRetry, setIntakeExplorationRetry] = useState<PreferencesDraft | null>(null);
   const [explorationRetry, setExplorationRetry] = useState<PreferencesDraft | null>(null);
+  const [pendingAttachment, setPendingAttachment] = useState<ChatAttachment | null>(null);
+  const voice = useVoiceRecorder({ locale: 'es-PA' });
+  const nameRef = useRef<string | null>(null);
+  const greetingValue = slotState.greeting.value;
+  nameRef.current = typeof greetingValue === 'string' && greetingValue.trim() ? greetingValue.trim() : null;
+
+  const voiceTranscript = voice.transcript;
+  useEffect(() => {
+    if (voiceTranscript) setDraft(voiceTranscript);
+  }, [voiceTranscript]);
+  const toggleVoice = useCallback(() => {
+    if (voice.listening) voice.stop();
+    else void Promise.resolve(voice.start('es-PA')).catch(() => undefined);
+  }, [voice]);
 
   function nextId() {
     messageId.current += 1;
@@ -110,6 +183,8 @@ export function ChatScreen() {
         }
         if (snapshot?.slotState) setSlotState(snapshot.slotState);
         if (snapshot?.phase) setPhase(snapshot.phase);
+        if (typeof snapshot?.sessionVersion === 'number') sessionVersion.current = snapshot.sessionVersion;
+        else if (typeof snapshot?.version === 'number') sessionVersion.current = snapshot.version;
       })
       .catch(() => {
         if (active) setMessages([{ id: nextId(), role: 'assistant', content: WELCOME_MESSAGE }]);
@@ -122,8 +197,8 @@ export function ChatScreen() {
     messagesEndRef.current?.scrollIntoView?.({ block: 'nearest' });
   }, [messages, activity]);
 
-  function addMessage(role: ChatMessage['role'], content: string, chips?: ChatMessage['chips'], skillLabels?: string[]) {
-    setMessages((current) => [...current, { id: nextId(), role, content, ...(chips ? { chips } : {}), ...(skillLabels ? { skillLabels } : {}) }]);
+  function addMessage(role: ChatMessage['role'], content: string, chips?: ChatMessage['chips'], skillLabels?: string[], attachment?: ChatAttachment) {
+    setMessages((current) => [...current, { id: nextId(), role, content, ...(chips ? { chips } : {}), ...(skillLabels ? { skillLabels } : {}), ...(attachment ? { attachment } : {}) }]);
   }
 
   function preferencesFromState(state: SlotState): PreferencesDraft {
@@ -171,30 +246,86 @@ export function ChatScreen() {
     setActivity('WorkBridge está escribiendo…');
     setRetry(null);
     const thinkingTimer = window.setTimeout(() => setActivity('Estoy pensando…'), 3000);
+    const requestId = activeRequest.current + 1;
+    activeRequest.current = requestId;
     try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(request),
-      });
-      if (!response.ok) throw new Error('chat_request_failed');
-      const turn = await response.json() as ChatTurn;
+      let response: Response;
+      try {
+        response = await fetch('/api/v1/chat/turns', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', 'Idempotency-Key': crypto.randomUUID(), 'x-request-id': crypto.randomUUID() },
+          body: JSON.stringify({ ...request, sessionVersion: sessionVersion.current }),
+        });
+      } catch {
+        // Keep the synchronous adapter usable while deployments roll out the
+        // versioned queue endpoints (and for older embedded clients).
+        response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(request),
+        });
+      }
+      if (response.status === 404 || response.status === 500) {
+        response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(request),
+        });
+      }
+      if (!response.ok) {
+        const error = await response.json().catch(() => null) as { error?: { retryable?: boolean; message?: string } } | null;
+        const retryable = error?.error?.retryable === true;
+        if (!retryable) throw new Error(error?.error?.message ?? 'chat_request_failed');
+        throw new Error('chat_request_retryable');
+      }
+      const handle = await response.json() as { jobId?: string; status?: string; statusUrl?: string; pollAfterMs?: number; result?: ChatTurn; reply?: string };
+      let turn = handle.result;
+      let observedServerVersion = false;
+      // The compatibility adapter returns a ChatTurn directly.
+      if (handle.reply && !handle.jobId) {
+        sessionVersion.current += 1;
+        turn = handle as unknown as ChatTurn;
+      }
+      while (!turn && handle.jobId && activeRequest.current === requestId) {
+        setActivity(handle.status === 'running' ? 'Estoy procesando tu respuesta…' : 'Tu respuesta está en cola…');
+        await new Promise((resolve) => window.setTimeout(resolve, Math.max(250, handle.pollAfterMs ?? 1000)));
+        const statusResponse = await fetch(handle.statusUrl ?? `/api/v1/chat/turns/${encodeURIComponent(handle.jobId)}`, { headers: { 'x-request-id': crypto.randomUUID() } });
+        const statusBody = await statusResponse.json() as { status?: string; sessionVersion?: number; version?: number; result?: ChatTurn; error?: { retryable?: boolean; message?: string }; pollAfterMs?: number };
+        if (!statusResponse.ok || statusBody.status === 'failed') {
+          if (statusBody.error?.retryable) throw new Error('chat_request_retryable');
+          throw new Error(statusBody.error?.message ?? 'chat_request_failed');
+        }
+        if (typeof statusBody.sessionVersion === 'number') { sessionVersion.current = statusBody.sessionVersion; observedServerVersion = true; }
+        else if (typeof statusBody.version === 'number') { sessionVersion.current = statusBody.version; observedServerVersion = true; }
+        if (statusBody.result) turn = statusBody.result;
+        handle.status = statusBody.status;
+        handle.pollAfterMs = statusBody.pollAfterMs ?? handle.pollAfterMs;
+      }
+      if (!turn) throw new Error('chat_request_failed');
+      if (!observedServerVersion && typeof (handle as { sessionVersion?: number; version?: number }).sessionVersion !== 'number' && typeof (handle as { sessionVersion?: number; version?: number }).version !== 'number') sessionVersion.current += 1;
       const nextState = applyTurn(slotState, turn.slotUpdates, request.action);
       setSlotState(nextState);
       setPhase(turn.phase);
       const proposalSlot = turn.slotUpdates.find((update) => update.state === 'proposed')?.slot;
-      const chips = turn.chips.map((chip) => ({ ...chip, slot: proposalSlot ?? turn.pendingSlot ?? undefined }));
-      if (proposalSlot && chips.length > 0) {
+      const tagged = turn.chips.map((chip) => ({ ...chip, slot: proposalSlot ?? turn.pendingSlot ?? undefined }));
+      const confirmChips = tagged.filter((chip) => chip.kind === 'confirm' || chip.kind === 'change');
+      const pendingDefinition = turn.pendingSlot && proposalSlot && proposalSlot !== turn.pendingSlot
+        ? SLOTS.find((slot) => slot.id === turn.pendingSlot)
+        : undefined;
+      const agendaChips = pendingDefinition?.chips.map((chip) => ({ ...chip, slot: turn.pendingSlot ?? undefined })) ?? [];
+      const assistantChips = [
+        ...(confirmChips.length > 0 ? [] : tagged.filter((chip) => chip.kind !== 'confirm' && chip.kind !== 'change')),
+        ...agendaChips,
+      ];
+      if (confirmChips.length > 0) {
         setMessages((current) => {
           const lastUser = [...current].map((message, index) => ({ message, index })).reverse().find(({ message }) => message.role === 'user')?.index;
-          return current.map((message, index) => index === lastUser ? { ...message, chips } : message);
+          return current.map((message, index) => index === lastUser ? { ...message, chips: confirmChips } : message);
         });
-        addMessage('assistant', turn.reply);
-      } else {
-        addMessage('assistant', turn.reply, chips.length > 0 ? chips : undefined);
       }
+      addMessage('assistant', turn.reply, assistantChips.length > 0 ? assistantChips : undefined);
       const profileComplete = SLOTS.filter((slot) => slot.phase === 'profile').every((slot) => nextState[slot.id].state === 'filled');
-      if ((profileComplete || turn.phase === 'preferences') && !intakeStarted.current) {
+      if ((profileComplete || turn.phase === 'preferences' || turn.phase === 'done') && !intakeStarted.current) {
         intakeStarted.current = true;
         const text = profileText.current.join('\n');
         try {
@@ -242,16 +373,62 @@ export function ChatScreen() {
       body: JSON.stringify({ kind: 'text', text: text || 'Experiencia declarada en conversación.' }),
     });
     if (!response.ok) throw new Error('intake_request_failed');
-    const body = await response.json() as { profile?: { skills?: Array<{ canonical_name?: unknown }>; experiences?: unknown[] }; extraction?: { needs_review?: boolean } };
+    const body = await response.json() as { profile?: { skills?: Array<{ canonical_name?: unknown; original_term?: unknown }>; experiences?: unknown[] }; extraction?: { needs_review?: boolean } };
     const skills = body.profile?.skills?.length ?? 0;
     const experiences = body.profile?.experiences?.length ?? 0;
     const review = body.extraction?.needs_review ? ' Algunos datos los vamos a confirmar contigo en Mi perfil.' : '';
-    const skillLabels = (body.profile?.skills ?? [])
-      .map((skill) => typeof skill.canonical_name === 'string' ? skill.canonical_name : '')
-      .filter((label): label is string => label.length > 0)
-      .slice(0, 4);
+    const skillLabels = skillLabelsFrom(body.profile?.skills);
     setIntakeRetryText(null);
-    addMessage('assistant', `Encontré ${skills} ${skills === 1 ? 'habilidad' : 'habilidades'} y ${experiences} ${experiences === 1 ? 'experiencia' : 'experiencias'}.${review}`, undefined, skillLabels);
+    addMessage('assistant', resultMessage(nameRef.current, skills, experiences, review), undefined, skillLabels);
+  }
+
+  async function uploadCv(file: File): Promise<void> {
+    const kind = attachmentKind(file);
+    const error = attachmentError(file, kind);
+    if (!kind || error) {
+      setPendingAttachment(null);
+      addMessage('assistant', error ?? 'Solo puedo leer PDF o fotos.');
+      return;
+    }
+    setPendingAttachment({ file, kind });
+    setLoading(true);
+    setActivity('Estoy leyendo tu CV…');
+    try {
+      const contentBase64 = await fileToBase64(file);
+      const response = await fetch('/api/intake', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          kind,
+          fileName: file.name,
+          mimeType: file.type || (kind === 'pdf' ? 'application/pdf' : 'image/jpeg'),
+          contentBase64,
+        }),
+      });
+      if (!response.ok) throw new Error('intake_request_failed');
+      const body = await response.json() as { profile?: { skills?: Array<{ canonical_name?: unknown; original_term?: unknown }>; experiences?: unknown[] }; extraction?: { needs_review?: boolean } };
+      cvRetry.current = null;
+      setPendingAttachment(null);
+      if (phase === 'profile') profileText.current.push(`Subí mi CV: ${file.name}`);
+      addMessage('user', `Subí mi CV: ${file.name}`, undefined, undefined, { file, kind });
+      const skills = body.profile?.skills?.length ?? 0;
+      const experiences = body.profile?.experiences?.length ?? 0;
+      const review = body.extraction?.needs_review ? ' Algunos datos los vamos a confirmar contigo en Mi perfil.' : '';
+      const skillLabels = skillLabelsFrom(body.profile?.skills);
+      addMessage('assistant', resultMessage(nameRef.current, skills, experiences, review), undefined, skillLabels);
+      const cvOpen = slotState.cv_source.state !== 'filled';
+      await postTurn({
+        message: `Subí mi CV: ${file.name}`,
+        action: cvOpen ? { kind: 'chip', slot: 'cv_source', value: 'uploaded' } : { kind: 'text' },
+      });
+    } catch {
+      cvRetry.current = file;
+      addMessage('assistant', 'No pude leer tu CV. Conservé el archivo; puedes intentarlo de nuevo.', [
+        { label: 'Reintentar', kind: 'retry' },
+      ]);
+      setLoading(false);
+      setActivity(null);
+    }
   }
 
   async function submitExploration(preferences: PreferencesDraft): Promise<void> {
@@ -272,6 +449,7 @@ export function ChatScreen() {
   async function send(message: string, action: UserAction, addUserBubble = true): Promise<void> {
     const trimmed = message.trim();
     if (!trimmed || loading) return;
+    if (voice.listening) voice.stop();
     if (addUserBubble) {
       addMessage('user', trimmed);
       if (phase === 'profile') profileText.current.push(trimmed);
@@ -286,7 +464,17 @@ export function ChatScreen() {
   }
 
   function chooseChip(chip: RenderedChip) {
+    if (chip.slot === 'cv_source' && chip.label.includes('subo')) {
+      fileRef.current?.click();
+      return;
+    }
     if (chip.kind === 'retry') {
+      if (cvRetry.current) {
+        const file = cvRetry.current;
+        cvRetry.current = null;
+        void uploadCv(file);
+        return;
+      }
       if (explorationRetry) {
         const preferences = explorationRetry;
         setLoading(true);
@@ -336,30 +524,34 @@ export function ChatScreen() {
 
   return (
     <main className="chat-page">
-      <header className="chat-header">
-        <p className="eyebrow">WorkBridge</p>
-        <h1>Conversemos sobre ti</h1>
-        <p className="lead">No hay respuestas correctas o incorrectas. Puedes escribir o elegir una opción.</p>
-        <div className="chat-progress" aria-label={`Fase ${phase === 'profile' ? 'perfil' : phase === 'preferences' ? 'preferencias' : 'completada'}`}>
-          {(['profile', 'preferences', 'done'] as const).map((item) => <span key={item} className={phase === item ? 'is-current' : phase === 'done' || (item === 'profile' && phase === 'preferences') ? 'is-complete' : ''} />)}
-        </div>
-      </header>
+      <ChatHeader phase={phase} slotState={slotState} />
       <section className="chat-transcript" role="log" aria-live="polite" aria-label="Conversación">
         {messages.map((message) => (
-          <article key={message.id} className={`chat-bubble chat-bubble-${message.role}`}>
-            <p>{message.content}</p>
-            {message.skillLabels ? <div className="chat-skill-chips" aria-label="Habilidades encontradas">{message.skillLabels.map((skill) => <span key={skill} className="chat-skill-chip">{skill}</span>)}</div> : null}
-            {message.chips ? <div className="chat-chips">{message.chips.map((chip, index) => <button key={`${chip.label}-${index}`} type="button" className="chat-chip" onClick={() => chooseChip(chip)} disabled={loading}>{chip.label}</button>)}</div> : null}
-          </article>
+          <div key={message.id} className="chat-turn">
+            <article className={`chat-bubble chat-bubble-${message.role}`}>
+              <p>{message.content}</p>
+              {message.skillLabels ? <div className="chat-skill-chips" aria-label="Habilidades encontradas">{message.skillLabels.map((skill) => <span key={skill} className="chat-skill-chip">{skill}</span>)}</div> : null}
+              {message.chips ? <div className="chat-chips">{message.chips.map((chip, index) => <button key={`${chip.label}-${index}`} type="button" className="chat-chip" onClick={() => chooseChip(chip)} disabled={loading}>{chip.label}</button>)}</div> : null}
+            </article>
+            {message.attachment ? <div className={`chat-attachment ${message.role === 'user' ? 'is-user' : ''}`}><AttachmentChip file={message.attachment.file} kind={message.attachment.kind} /></div> : null}
+          </div>
         ))}
         {activity ? <p className="chat-activity" role="status"><span className="typing-dots" aria-hidden="true">•••</span> {activity}</p> : null}
         <div ref={messagesEndRef} />
       </section>
       <form className="chat-composer" onSubmit={submit}>
+        {pendingAttachment ? <div className="chat-pending"><AttachmentChip file={pendingAttachment.file} kind={pendingAttachment.kind} onRemove={() => { cvRetry.current = null; setPendingAttachment(null); }} /></div> : null}
         <label className="sr-only" htmlFor="chat-message">Escribe tu respuesta</label>
-        <Textarea ref={composerRef} id="chat-message" value={draft} onChange={(event) => setDraft(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); event.currentTarget.form?.requestSubmit(); } }} placeholder="Escribe tu respuesta…" rows={2} disabled={loading} />
-        <Button type="submit" size="md" disabled={loading || !draft.trim()}>Enviar</Button>
-        <p className="chat-composer-hint">Enter envía · Shift+Enter agrega una línea</p>
+        <input ref={fileRef} className="sr-only" type="file" accept="application/pdf,image/*" aria-label="Archivo de CV" onChange={(event) => { const file = event.target.files?.[0]; event.target.value = ''; if (file) void uploadCv(file); }} />
+        {/* One compact bar: attach, input and send share a single bordered surface. */}
+        {voice.supported ? <VoiceStatus listening={voice.listening} error={voice.error} /> : null}
+        <div className="chat-bar">
+          <button type="button" className="chat-attach" aria-label="Adjuntar CV" disabled={loading} onClick={() => fileRef.current?.click()}><Paperclip aria-hidden="true" /></button>
+          <textarea className="chat-input" ref={composerRef} id="chat-message" value={draft} onChange={(event) => setDraft(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); event.currentTarget.form?.requestSubmit(); } }} placeholder="Escribe tu respuesta…" rows={1} disabled={loading} />
+          {voice.supported ? <VoiceButton listening={voice.listening} disabled={loading} onToggle={toggleVoice} /> : null}
+          <button type="submit" className="chat-send" aria-label="Enviar" disabled={loading || !draft.trim()}><SendHorizontal aria-hidden="true" /><span className="chat-send-label">Enviar</span></button>
+        </div>
+        <p className="chat-composer-hint">Enter envía · Shift+Enter agrega una línea · el clip adjunta un PDF o una foto · el micrófono dicta</p>
       </form>
     </main>
   );

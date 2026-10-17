@@ -2,24 +2,46 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BriefcaseBusiness, CircleUserRound, FileText, Map, Route } from 'lucide-react';
+import { BriefcaseBusiness, Compass, FileText, Map, UserRound } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
+import { PublicHeader } from './PublicHeader';
+import { RoleHeader } from './RoleHeader';
+import { ThemeToggle } from './theme-provider';
 
-function isBarePath(pathname: string) {
+const ACCOUNT_PATHS = ['/ingresar', '/registrarse', '/cuenta'];
+
+function roleChromeFor(pathname: string): 'counselor' | 'employer' | null {
+  if (pathname === '/orientador' || pathname.startsWith('/orientador/')) return 'counselor';
+  if (pathname === '/empresa' || pathname.startsWith('/empresa/')) return 'employer';
+  return null;
+}
+
+export function isActivePath(pathname: string, href: string) {
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+const CANDIDATE_PATHS = ['/vacantes', '/ruta', '/postulaciones', '/perfil'];
+
+// Allow-list, not a deny-list: an unknown URL (404) must not render the candidate nav.
+function isCandidatePath(pathname: string) {
+  return CANDIDATE_PATHS.some((path) => isActivePath(pathname, path));
+}
+
+function showsPublicHeader(pathname: string) {
   if (pathname === '/' || pathname === '/chat') return true;
-  return ['/ingresar', '/orientador', '/empresa'].some((path) => pathname === path || pathname.startsWith(`${path}/`));
+  return ACCOUNT_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`));
 }
 
 const navigation = [
   { href: '/vacantes', label: 'Vacantes', icon: BriefcaseBusiness },
-  { href: '/ruta', label: 'Mi ruta', icon: Route },
+  { href: '/ruta', label: 'Mi ruta', icon: Compass },
   { href: '/postulaciones', label: 'Postulaciones', icon: FileText },
-  { href: '/perfil', label: 'Mi perfil', icon: CircleUserRound },
+  { href: '/perfil', label: 'Mi perfil', icon: UserRound },
 ];
 
 export function CandidateShell({ children }: { children: ReactNode }) {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? '/';
   const [newCount, setNewCount] = useState(0);
   useEffect(() => {
     if (pathname === '/vacantes') return;
@@ -30,9 +52,27 @@ export function CandidateShell({ children }: { children: ReactNode }) {
       .then((body: { searches?: Array<{ newSinceLastVisit?: unknown[] }> } | null) => setNewCount(body?.searches?.reduce((total, view) => total + (view.newSinceLastVisit?.length ?? 0), 0) ?? 0))
       .catch(() => undefined);
   }, [pathname]);
-  const isCandidateSurface = !isBarePath(pathname);
+  const isCandidateSurface = isCandidatePath(pathname);
 
-  if (!isCandidateSurface) return <>{children}</>;
+  const roleChrome = roleChromeFor(pathname);
+  if (roleChrome) {
+    return (
+      <>
+        <RoleHeader role={roleChrome} />
+        {children}
+      </>
+    );
+  }
+
+  if (!isCandidateSurface) {
+    if (!showsPublicHeader(pathname)) return <>{children}</>;
+    return (
+      <>
+        <PublicHeader />
+        {children}
+      </>
+    );
+  }
 
   return (
     <div className="candidate-shell">
@@ -44,16 +84,17 @@ export function CandidateShell({ children }: { children: ReactNode }) {
         <nav aria-label="Navegación principal">
           <ul className="candidate-nav candidate-nav-desktop">
             {navigation.map(({ href, label, icon: Icon }) => (
-              <li key={href}><NavLink href={href} label={label} Icon={Icon} badge={href === '/vacantes' ? newCount : 0} active={pathname === href || pathname.startsWith(`${href}/`)} /></li>
+              <li key={href}><NavLink href={href} label={label} Icon={Icon} badge={href === '/vacantes' ? newCount : 0} active={isActivePath(pathname, href)} /></li>
             ))}
           </ul>
         </nav>
+        <div className="header-tools"><ThemeToggle /></div>
       </header>
       <div className="candidate-content">{children}</div>
       <nav className="candidate-bottom-nav" aria-label="Navegación móvil">
         <ul className="candidate-nav">
           {navigation.map(({ href, label, icon: Icon }) => (
-            <li key={href}><NavLink href={href} label={label} Icon={Icon} badge={href === '/vacantes' ? newCount : 0} active={pathname === href || pathname.startsWith(`${href}/`)} /></li>
+            <li key={href}><NavLink href={href} label={label} Icon={Icon} badge={href === '/vacantes' ? newCount : 0} active={isActivePath(pathname, href)} /></li>
           ))}
         </ul>
       </nav>

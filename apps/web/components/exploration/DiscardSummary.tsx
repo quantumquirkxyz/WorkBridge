@@ -1,31 +1,10 @@
-import { EXCLUSION_LABELS, type ExplorationResult } from '@workbridge/catalog';
+import type { ExplorationResult } from '@workbridge/catalog';
+import { discardSentence } from '../../lib/exploration-view';
+import '../../app/styles/explore.css';
 
+/** One summary line, grouped by cause. Individual internal vacancy ids are never shown. */
 export function DiscardSummary({ result }: { result: ExplorationResult }) {
-  if (result.excluded.length === 0) return null;
-  return (
-    <>
-      <h4>Vacantes descartadas</h4>
-      <table>
-        <caption className="hint">Cada vacante descartada con el motivo explícito.</caption>
-        <thead>
-          <tr>
-            <th scope="col">Vacante</th>
-            <th scope="col">Motivo</th>
-            <th scope="col">Detalle</th>
-            <th scope="col">Frescura</th>
-          </tr>
-        </thead>
-        <tbody>
-          {result.excluded.map((entry) => (
-            <tr key={entry.jobId}>
-              <td>{entry.jobId}</td>
-              <td>{EXCLUSION_LABELS[entry.reason] ?? entry.reason}</td>
-              <td>{entry.detail}</td>
-              <td>{entry.freshness.label}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </>
-  );
+  const sentence = discardSentence(result.excluded);
+  if (!sentence) return null;
+  return <p className="xp-discard">{sentence}</p>;
 }

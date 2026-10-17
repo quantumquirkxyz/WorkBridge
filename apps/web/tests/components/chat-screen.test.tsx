@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { initialSlotState } from '@/lib/chat/tracker';
@@ -38,7 +38,7 @@ describe('ChatScreen', () => {
     await userEvent.keyboard('{Enter}');
     expect(await screen.findAllByRole('button', { name: 'Prefiero no decirlo' })).toHaveLength(2);
     await waitFor(() => expect(input).toHaveFocus());
-    expect(container.querySelector('.chat-progress')).toBeInTheDocument();
+    expect(container.querySelector('.chat-steps')).toBeInTheDocument();
   });
 
   it('restores the server-reported phase after reload', async () => {
@@ -160,6 +160,7 @@ describe('ChatScreen', () => {
     let exploreCalls = 0;
     server.use(
       http.post('/api/chat', () => HttpResponse.json(turn({ phase: 'done', pendingSlot: null, chips: [], reply: 'Listo.' }))),
+      http.post('/api/intake', () => HttpResponse.json({ profile: { skills: [], experiences: [] } })),
       http.post('/api/explore', () => {
         exploreCalls += 1;
         return exploreCalls === 1 ? HttpResponse.json({ error: 'failed' }, { status: 503 }) : HttpResponse.json({ preferences: {} });
@@ -190,9 +191,69 @@ describe('ChatScreen', () => {
     expect(screen.getAllByText('hola')).toHaveLength(1);
   });
 
+  it('goes to vacancies when the assistant says goodbye', async () => {
+    server.use(
+      http.post('/api/chat', () => HttpResponse.json(turn({ reply: '¡Éxito en tu búsqueda laboral!', pendingSlot: null, phase: 'done', chips: [] }))),
+      http.post('/api/intake', () => HttpResponse.json({ profile: { skills: [], experiences: [] } })),
+      http.post('/api/explore', () => HttpResponse.json({ preferences: {} })),
+    );
+    render(<ChatScreen />);
+    const input = await screen.findByRole('textbox', { name: 'Escribe tu respuesta' });
+    await userEvent.type(input, 'hola');
+    await userEvent.keyboard('{Enter}');
+    await waitFor(() => expect(push).toHaveBeenCalledWith('/vacantes'));
+    expect(screen.queryByRole('button', { name: 'Continuar' })).not.toBeInTheDocument();
+  });
+
+  it('uploads a CV instead of sending the upload chip as text', async () => {
+    const calls: string[] = [];
+    server.use(
+      http.get('/api/chat', () => {
+        const slotState = initialSlotState();
+        slotState.greeting = { state: 'filled', value: 'Mateo' };
+        return HttpResponse.json({ transcript: [{ role: 'assistant', content: '¿Tienes un CV o una hoja de vida?' }], slotState, pendingSlot: 'cv_source', phase: 'profile' });
+      }),
+      http.post('/api/intake', async ({ request }) => {
+        const body = await request.json() as { kind?: string; fileName?: string; contentBase64?: string };
+        calls.push(`${body.kind}:${body.fileName}:${body.contentBase64?.length ?? 0}`);
+        return HttpResponse.json({ profile: { skills: [{ canonical_name: 'C#' }], experiences: [{}] }, extraction: { needs_review: false } });
+      }),
+      http.post('/api/chat', async ({ request }) => {
+        const body = await request.json() as { action?: { kind?: string; slot?: string; value?: string } };
+        calls.push(`${body.action?.kind}:${body.action?.slot}:${body.action?.value ?? ''}`);
+        return HttpResponse.json(turn({ reply: '¿Has trabajado o ayudado en algún lugar?', pendingSlot: 'experiences' }));
+      }),
+    );
+    render(<ChatScreen />);
+    expect(await screen.findByRole('button', { name: 'Sí, lo subo 📎' })).toBeInTheDocument();
+    await userEvent.upload(screen.getByLabelText('Archivo de CV'), new File(['%PDF-1.4'], 'cv.pdf', { type: 'application/pdf' }));
+    expect(await screen.findByText(/Encontré 1 habilidad y 1 experiencia/)).toBeInTheDocument();
+    await waitFor(() => expect(calls).toEqual(expect.arrayContaining([expect.stringMatching(/^pdf:cv\.pdf:/), 'chip:cv_source:uploaded'])));
+    expect(calls.some((call) => call.startsWith('chip:cv_source:Sí'))).toBe(false);
+  });
+
+  it('rejects a CV that is too large or the wrong type', async () => {
+    const intake = vi.fn();
+    server.use(http.post('/api/intake', () => { intake(); return HttpResponse.json({}); }));
+    render(<ChatScreen />);
+    const input = await screen.findByLabelText('Archivo de CV') as HTMLInputElement;
+    const select = (file: File) => {
+      Object.defineProperty(input, 'files', { configurable: true, value: { 0: file, length: 1, item: () => file } });
+      fireEvent.change(input);
+    };
+    select(new File(['not a cv'], 'notas.txt', { type: 'text/plain' }));
+    expect(await screen.findByText('Solo puedo leer PDF o fotos.')).toBeInTheDocument();
+    const tooBig = new File(['x'], 'grande.pdf', { type: 'application/pdf' });
+    Object.defineProperty(tooBig, 'size', { value: 10 * 1024 * 1024 + 1 });
+    select(tooBig);
+    expect(await screen.findByText('Ese archivo pesa más de 10 MB. Prueba con otro.')).toBeInTheDocument();
+    expect(intake).not.toHaveBeenCalled();
+  });
+
   it('persists the exploration result before navigating to Vacantes', async () => {
     server.use(
       http.post('/api/chat', () => HttpResponse.json(turn({ phase: 'done', pendingSlot: null, chips: [], reply: 'Listo.' }))),
+      http.post('/api/intake', () => HttpResponse.json({ profile: { skills: [], experiences: [] } })),
       http.post('/api/explore', () => HttpResponse.json({ candidateId: 'candidate-test', preferences: { target_roles: ['Ventas'] }, matches: [] })),
     );
     render(<ChatScreen />);
@@ -201,5 +262,33 @@ describe('ChatScreen', () => {
     await userEvent.keyboard('{Enter}');
     await waitFor(() => expect(push).toHaveBeenCalledWith('/vacantes'));
     expect(window.localStorage.getItem('workbridge:exploration:candidate-test')).toContain('candidate-test');
+  });
+
+  it('shows a back link and Perfil/Preferencias/Resultados steps driven by slot state', async () => {
+    const slotState = initialSlotState();
+    for (const slot of SLOTS.filter((item) => item.phase === 'profile')) slotState[slot.id] = { state: 'filled', value: 'known' };
+    server.use(http.get('/api/chat', () => HttpResponse.json({ transcript: [{ role: 'assistant', content: '¿En qué zona?' }], slotState, pendingSlot: 'zone', phase: 'preferences' })));
+    render(<ChatScreen />);
+    await screen.findByText('¿En qué zona?');
+    expect(screen.getByRole('link', { name: 'Volver al inicio' })).toHaveAttribute('href', '/');
+    const steps = screen.getAllByRole('listitem').filter((item) => item.classList.contains('chat-step'));
+    expect(steps.map((item) => item.textContent)).toEqual(['Perfil (completado)', 'Preferencias', 'Resultados']);
+    expect(steps[1]).toHaveAttribute('aria-current', 'step');
+    expect(steps[2]).toHaveClass('is-upcoming');
+  });
+
+  it('greets by name in the result message and keeps a removable attachment chip after a failed upload', async () => {
+    const slotState = initialSlotState();
+    slotState.greeting = { state: 'filled', value: 'Ana' };
+    server.use(
+      http.get('/api/chat', () => HttpResponse.json({ transcript: [{ role: 'assistant', content: 'Hola' }], slotState })),
+      http.post('/api/intake', () => HttpResponse.json({ error: 'x' }, { status: 500 })),
+    );
+    render(<ChatScreen />);
+    await screen.findByText('Hola');
+    await userEvent.upload(screen.getByLabelText('Archivo de CV'), new File(['%PDF-1.4'], 'cv.pdf', { type: 'application/pdf' }));
+    expect(await screen.findByRole('button', { name: 'Reintentar' })).toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: 'Eliminar archivo adjunto' }));
+    expect(screen.queryByRole('button', { name: 'Eliminar archivo adjunto' })).not.toBeInTheDocument();
   });
 });

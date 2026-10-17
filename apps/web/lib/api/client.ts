@@ -1,4 +1,4 @@
-import type { IntakeRequest, IntakeResult, CandidateProfile, CandidatePreferences } from '@workbridge/domain';
+import type { IntakeRequest, IntakeResult, CandidateProfile, CandidatePreferences, MatchDecision as ApplicationMatchDecision } from '@workbridge/domain';
 import type { ExplorationResult } from '@workbridge/catalog';
 import type { Roadmap, TrainingGap } from '@workbridge/training';
 import type { MatchDecision } from '@workbridge/solver';
@@ -46,6 +46,7 @@ export interface ListSearchesResponse {
 
 export interface MatchResponse {
   decisions: MatchDecision[];
+  applicationDecisions: ApplicationMatchDecision[];
   preferencesVersion: string;
 }
 

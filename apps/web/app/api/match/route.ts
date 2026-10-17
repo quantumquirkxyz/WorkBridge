@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { candidateIdFromRequest, unauthorized } from '../../../lib/candidate-session';
+import { candidateIdFromRequestOrSession, unauthorized } from '../../../lib/candidate-session';
 import { readJsonBody } from '../../../lib/request-body';
 import { readCandidatePreferences, readCandidateProfile } from '../../../lib/neon-repository';
 import { handleMatch } from '../../../lib/match-handler';
@@ -8,7 +8,7 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request): Promise<Response> {
-  const candidateId = candidateIdFromRequest(request);
+  const candidateId = await candidateIdFromRequestOrSession(request);
   if (!candidateId) return unauthorized();
   const parsed = await readJsonBody(request);
   if (!parsed.ok) return parsed.response;

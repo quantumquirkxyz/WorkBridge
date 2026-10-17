@@ -7,7 +7,7 @@ domain vocabulary and boundaries only.
 
 ## Repository role
 
-- **Agent-Hackathon** is the working repository for an agent-focused build.
+- **WorkBridge** (`HackathonFISC/equipo-02`) is the working repository for an agent-focused build.
 - It follows the quirk method: clarify before building, preserve context, split work into
   claimable slices, review on separate Standards and Spec axes, and ship only on clean evidence.
 - The canonical skills are `.agents/skills/`; `.claude/skills/` is a symlink compatibility view.

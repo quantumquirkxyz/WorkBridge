@@ -1,8 +1,10 @@
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { createPgQuery, resolveDatabaseMode, type DatabaseMode } from "./database";
 import { ApplicationError } from "./errors";
+import { createSqlNotificationOutbox } from "./notification";
 import { assertNoSecrets, collectSecretValues } from "./secrets";
 import { ApplicationService } from "./service";
+import { createShortlistSource } from "./shortlist";
 import { createSqlIdempotencyStore, type SqlQuery } from "./store";
 
 export interface ServerOptions {
@@ -27,13 +29,16 @@ export function createApplicationServer(options: ServerOptions = {}) {
   const databaseUrl = env.DATABASE_URL || env.NEON_DATABASE_URL || "";
   const useSql = databaseMode !== "memory" && databaseUrl.length > 0;
   const persistence = useSql ? "sql" : "memory";
+  const sql = useSql ? (options.query ?? createPgQuery(databaseUrl)) : undefined;
   const service =
     options.service ??
     new ApplicationService({
       secrets,
       clock: options.clock,
       sessionSecret: env.BETTER_AUTH_SECRET ?? "",
-      idempotency: useSql ? createSqlIdempotencyStore(options.query ?? createPgQuery(databaseUrl)) : undefined,
+      idempotency: sql ? createSqlIdempotencyStore(sql) : undefined,
+      outbox: sql ? createSqlNotificationOutbox(sql) : undefined,
+      shortlist: createShortlistSource({ query: sql, env, clock: options.clock ?? (() => new Date().toISOString()) }),
     });
   const context: RequestContext = { service, secrets, databaseMode, persistence };
   return createServer((req, res) => {
@@ -59,6 +64,12 @@ async function dispatch(req: IncomingMessage, res: ServerResponse, context: Requ
   assertNoSecrets(body, context.secrets);
   const session = resolveSession(req, body);
 
+  const shortlist = /^\/vacancies\/([^/]+)\/shortlist$/.exec(path);
+  if (req.method === "GET" && shortlist) {
+    writeJson(res, 200, { shortlist: await context.service.shortlistForVacancy(session, decodeURIComponent(shortlist[1] ?? "")) }, context.secrets);
+    return;
+  }
+
   if (req.method === "GET" && path === "/drafts") {
     writeJson(
       res,
@@ -70,6 +81,12 @@ async function dispatch(req: IncomingMessage, res: ServerResponse, context: Requ
       }) },
       context.secrets,
     );
+    return;
+  }
+
+  const ownSubmission = /^\/drafts\/([^/]+)\/submission$/.exec(path);
+  if (req.method === "GET" && ownSubmission) {
+    writeJson(res, 200, context.service.readOwnSubmission(session, ownSubmission[1] ?? ""), context.secrets);
     return;
   }
 
@@ -128,7 +145,7 @@ async function dispatch(req: IncomingMessage, res: ServerResponse, context: Requ
       writeJson(res, 200, context.service.approveInterview(session, submissionId, body), context.secrets);
       return;
     }
-    writeJson(res, 200, context.service.decideInterview(session, submissionId, body), context.secrets);
+    writeJson(res, 200, await context.service.decideInterview(session, submissionId, body), context.secrets);
     return;
   }
 
@@ -164,6 +181,9 @@ function writeJson(res: ServerResponse, status: number, body: unknown, secrets: 
 
 function writeError(res: ServerResponse, error: unknown, secrets: readonly string[]): void {
   const known = error instanceof ApplicationError ? error : undefined;
+  if (!known) {
+    console.error("application request failed", error instanceof Error ? error.message : error);
+  }
   const status = known?.status ?? 500;
   const body = {
     error: known?.code ?? "internal_error",

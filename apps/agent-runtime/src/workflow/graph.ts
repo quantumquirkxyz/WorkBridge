@@ -3,10 +3,12 @@ import {
   assertWorkflowRun,
   type AgentEnvelope,
   type AgentId,
+  type JobRequirements,
   type WorkflowRunRequest,
 } from "@workbridge/domain";
 import { runAgent, type WorkflowServices, type WorkflowStreamEvent } from "./agents";
 import { assertCarrier, carrierSchema, type Carrier } from "./carrier";
+import type { BiasAlert } from "../bias/audit";
 import type { GuardrailDecision } from "./guardrails";
 import {
   createMatchingService,
@@ -28,7 +30,9 @@ import {
   AppendOnlyAuditLog,
   DqlStore,
   LangfuseRecorder,
+  langfuseClientFromEnv,
   type LangfuseClient,
+  type LangfuseEnv,
 } from "./observability";
 
 export const WORKFLOW_ID = "workbridge-employability";
@@ -37,6 +41,7 @@ const AGENT_ORDER = [
   "exploration",
   "profile_and_evidence",
   "market_and_matching",
+  "bias_auditor",
   "training",
 ] as const satisfies readonly AgentId[];
 
@@ -52,6 +57,10 @@ export interface WorkflowResult {
   mastraSteps: string[];
   /** Structured deterministic match result, populated when matching ran. */
   match?: CandidateNominationResult;
+  /** Counterfactual flips recorded by the bias auditor. Empty when nothing flipped. */
+  biasAlerts: BiasAlert[];
+  /** Vacancy documents after the bias audit. */
+  auditedVacancies: JobRequirements[];
   /** Structured training roadmap, populated when the candidate is not already apt. */
   roadmap?: Roadmap;
 }
@@ -61,6 +70,10 @@ export interface WorkflowDependencies {
   catalog?: readonly string[];
   clock?: () => string;
   langfuse?: LangfuseClient;
+  /** When `langfuse` is omitted, keys in this env (or `process.env`) enable ingestion. */
+  langfuseEnv?: LangfuseEnv;
+  /** Transport for env-configured Langfuse. Tests stub this so no network call is made. */
+  fetchImpl?: typeof fetch;
   /** Matching service used when the caller supplies validated matching input. */
   matching?: MatchingService;
   matchingEnv?: MatchingEnv;
@@ -111,7 +124,9 @@ export class WorkflowRuntime {
 
   constructor(deps: WorkflowDependencies) {
     this.clock = deps.clock ?? (() => new Date().toISOString());
-    this.langfuse = deps.langfuse;
+    this.langfuse =
+      deps.langfuse ??
+      langfuseClientFromEnv(deps.langfuseEnv ?? (process.env as LangfuseEnv), deps.fetchImpl);
     this.matching = deps.matching ?? createMatchingService(
       matchingConfigFromEnv(deps.matchingEnv ?? (process.env as MatchingEnv)),
     );
@@ -138,13 +153,13 @@ export class WorkflowRuntime {
         },
       }),
     );
-    const [exploration, profile, market, training] = steps;
-    if (!exploration || !profile || !market || !training) {
+    const [exploration, profile, market, biasAuditor, training] = steps;
+    if (!exploration || !profile || !market || !biasAuditor || !training) {
       throw new Error("Mastra workflow is missing an agent step");
     }
     return createWorkflow({
       id: WORKFLOW_ID,
-      description: "Coordinates Exploration, Profile and Evidence, Market and Matching, and Training.",
+      description: "Coordinates Exploration, Profile and Evidence, Market and Matching, the counterfactual bias auditor, and Training.",
       inputSchema: carrierSchema,
       outputSchema: carrierSchema,
       options: { shouldPersistSnapshot: () => false },
@@ -152,6 +167,7 @@ export class WorkflowRuntime {
       .then(exploration)
       .then(profile)
       .then(market)
+      .then(biasAuditor)
       .then(training)
       .commit();
   }
@@ -219,10 +235,18 @@ export class WorkflowRuntime {
         envelopes: [...services.envelopes],
         mastraSteps: AGENT_ORDER.filter((agent) => agent in started.steps),
         ...(carrier.matchResult ? { match: carrier.matchResult } : {}),
+        biasAlerts: carrier.biasAlerts ?? [],
+        auditedVacancies: carrier.auditedVacancies ?? [],
         ...(carrier.roadmapResult ? { roadmap: carrier.roadmapResult } : {}),
       };
-      this.lastIngestion = this.traces.flush();
-      if (this.langfuse) await this.langfuse.ingest(this.lastIngestion);
+      this.lastIngestion = this.traces.flush(input.trace_id);
+      if (this.langfuse) {
+        try {
+          await this.langfuse.ingest(this.lastIngestion);
+        } catch {
+          // Best-effort: a Langfuse failure must not fail a completed run.
+        }
+      }
       this.cache.set(input.idempotency_key, result);
       return result;
     } finally {

@@ -9,7 +9,7 @@ import { formatFileSize, type AttachmentValidation } from '@/lib/attachments';
 interface AttachmentChipProps {
   file: File;
   kind: 'pdf' | 'image';
-  onRemove: () => void;
+  onRemove?: () => void;
   validation?: AttachmentValidation;
 }
 
@@ -28,10 +28,10 @@ export function AttachmentChip({ file, kind, onRemove, validation }: AttachmentC
   return (
     <div
       className={cn(
-        'flex items-center gap-3 rounded-xl border px-3 py-2 text-sm',
+        'flex items-center gap-3 rounded-md border-[3px] px-3 py-2 text-sm font-semibold shadow-[3px_3px_0_var(--shadow-color)]',
         invalid
-          ? 'border-danger bg-danger text-danger-foreground'
-          : 'border-input bg-muted text-foreground',
+          ? 'border-danger bg-coral-tint text-foreground'
+          : 'border-ink bg-card text-foreground',
       )}
       role="listitem"
       aria-label={invalid ? `Archivo no válido: ${file.name}` : `Archivo adjunto: ${file.name}`}
@@ -47,13 +47,11 @@ export function AttachmentChip({ file, kind, onRemove, validation }: AttachmentC
       </div>
       <span className="shrink-0 text-muted-foreground">{formatFileSize(file.size)}</span>
       {invalid && errorMessage && (
-        <span className="shrink-0 text-xs font-medium" title={errorMessage}>
+        <span className="shrink-0 text-xs font-bold" title={errorMessage}>
           {errorMessage}
         </span>
       )}
-      <Button variant="destructive" size="sm" onClick={onRemove} aria-label="Eliminar archivo adjunto">
-        ×
-      </Button>
+      {onRemove ? <Button variant="destructive" size="sm" className="min-h-11 min-w-11 px-0" onClick={onRemove} aria-label="Eliminar archivo adjunto">×</Button> : null}
     </div>
   );
 }

@@ -104,6 +104,11 @@ export const auth = betterAuth({
   secret: process.env.BETTER_AUTH_SECRET,
   database: authDatabase(),
   socialProviders: googleProvider(),
+  emailAndPassword: {
+    enabled: true,
+    autoSignIn: true,
+    requireEmailVerification: false,
+  },
   user: {
     additionalFields: {
       role: {
@@ -131,6 +136,59 @@ export const auth = betterAuth({
     nextCookies(),
   ],
 });
+
+export async function assignRegisteredAccount(
+  userId: string,
+  accountType: 'student' | 'employer',
+  name: string,
+): Promise<void> {
+  const client = await getPool().connect();
+  try {
+    await client.query('begin');
+    if (accountType === 'student') {
+      const updated = await client.query(
+        `update "user"
+            set role = 'candidate',
+                "employerOrgId" = null,
+                name = $2,
+                "updatedAt" = now()
+          where id = $1`,
+        [userId, name],
+      );
+      if (updated.rowCount !== 1) throw new Error('No se encontró la cuenta recién creada.');
+    } else {
+      const existing = await client.query<{ id: string }>(
+        `select id from employer_organizations order by "createdAt" asc limit 1`,
+      );
+      let orgId = existing.rows[0]?.id;
+      if (!orgId) {
+        orgId = 'employer_org_development';
+        await client.query(
+          `insert into employer_organizations (id, name, environment)
+           values ($1, $2, 'development')
+           on conflict (id) do nothing`,
+          [orgId, 'WorkBridge Employer development'],
+        );
+      }
+      const updated = await client.query(
+        `update "user"
+            set role = 'employer',
+                "employerOrgId" = $2,
+                name = $3,
+                "updatedAt" = now()
+          where id = $1`,
+        [userId, orgId, name],
+      );
+      if (updated.rowCount !== 1) throw new Error('No se encontró la cuenta recién creada.');
+    }
+    await client.query('commit');
+  } catch (error) {
+    await client.query('rollback');
+    throw error;
+  } finally {
+    client.release();
+  }
+}
 
 export async function getServerSession(): Promise<AppSession | null> {
   const session = await auth.api.getSession({ headers: await headers() });

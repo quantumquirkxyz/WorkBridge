@@ -25,6 +25,8 @@ handles routing; Certo is a separately deployed credential verifier with Accredi
 transparent mock fallbacks. Human approval is required before application submission.
 See the complete [agent architecture diagram](docs/reference/agents/architecture.md) for each
 agent's tools, the data and execution planes, and all human approval points.
+Read the [methodology](docs/reference/metodologia.md) for architecture,
+deployment, and runtime operation.
 
 ## Tecnologías y fuentes de datos
 
@@ -45,7 +47,7 @@ npm start
 npm run dev
 ```
 
-`npm run dev` abre el intake en http://localhost:3000. `npm start` levanta el servicio de
+`npm run dev` abre el intake en http://localhost:3001. `npm start` levanta el servicio de
 postulación. Los borradores y envíos con roles están en `docs/how-to/application-runtime.md`.
 Las firmas asumidas de matching (#8) y del plano de workflow (#9) están en
 `docs/reference/assumed-contracts.md`.

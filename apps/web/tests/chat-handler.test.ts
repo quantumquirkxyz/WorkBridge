@@ -225,6 +225,52 @@ describe('handleChatTurn', () => {
     expect(saved.transcript.at(-2)!.content).toBe(`m${MAX_TRANSCRIPT_MESSAGES - 1}`);
   });
 
+  it('closes the interview when the model says goodbye', async () => {
+    const { turn, store } = setup(ok(validReply({
+      reply: '¡Éxito en tu búsqueda laboral! Ya tenemos toda la información.',
+      slotUpdates: [{ slot: 'minimum_salary_usd', value: 1000, state: 'proposed' }],
+    })));
+    const res = bodyOf(await turn('hola'));
+    expect(res.reply).toMatch(/éxito en tu búsqueda/i);
+    expect(res.reply).not.toContain('¿Cómo te llamo?');
+    expect(res).toMatchObject({ phase: 'done', pendingSlot: null, intent: 'complete_phase', chips: [] });
+    const state = store.get('candidate_a')!.slotState;
+    expect(Object.values(state).every((entry) => entry.state === 'filled')).toBe(true);
+    expect(state.zone).toEqual({ state: 'filled', value: 'Panamá (ciudad)' });
+    expect(state.modality).toEqual({ state: 'filled', value: 'onsite' });
+    expect(state.minimum_salary_usd).toEqual({ state: 'filled', value: 1000 });
+  });
+
+  it('accepts a schedule chip sent back as a new object', async () => {
+    const schedule = SLOTS.find((slot) => slot.id === 'schedule')!;
+    const value = JSON.parse(JSON.stringify(schedule.chips[0]!.value)) as unknown;
+    const { turn, store } = setup();
+    expect((await turn('Lunes a viernes, de día', { kind: 'chip', slot: 'schedule', value })).status).toBe(200);
+    expect(store.get('candidate_a')!.slotState.schedule).toEqual({ state: 'filled', value });
+  });
+
+  it('skips profile questions already answered by an uploaded CV', async () => {
+    const { turn, store } = setup(ok(validReply()), {
+      context: {
+        profile: {
+          sources: [{ kind: 'pdf' }],
+          experiences: [{ title: 'Desarrollador', organization: 'Software', description: 'Programar APIs en C#', started_at: '2022-01-01', ended_at: '2024-01-01' }],
+          education: [{ program: 'Bachiller en informática' }],
+          target_roles: ['Análisis de datos'],
+        },
+      },
+    });
+    await turn('hola');
+    const state = store.get('candidate_a')!.slotState;
+    expect(state.cv_source).toEqual({ state: 'filled', value: 'uploaded' });
+    expect(state.experiences).toEqual({ state: 'filled', value: 'Desarrollador en Software' });
+    expect(state.experience_tasks).toEqual({ state: 'filled', value: 'Programar APIs en C#' });
+    expect(state.experience_duration).toEqual({ state: 'filled', value: 'Más de un año' });
+    expect(state.education).toEqual({ state: 'filled', value: 'Bachiller en informática' });
+    expect(state.target_roles).toEqual({ state: 'filled', value: 'Análisis de datos' });
+    expect(state.experiences_more.state).toBe('missing');
+  });
+
   it('returns 503 when persistence fails', async () => {
     const store = { get: () => undefined, save: () => Promise.reject(new Error('db')) };
     expect((await handleChatTurn('c', { message: 'hola' }, { store, log: () => undefined })).status).toBe(503);

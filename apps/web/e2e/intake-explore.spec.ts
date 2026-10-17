@@ -177,7 +177,7 @@ test('UC-06 elimina los datos del candidato y vacía la lista', async ({ page })
 
 test('J1 completa la captura de perfil y la primera exploración con el chat de fallback', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'WorkBridge' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Tu experiencia cuenta. Aunque sea informal.' })).toBeVisible();
   await page.getByRole('link', { name: /Empezar/ }).click();
   await expect(page.getByRole('heading', { name: 'Conversemos sobre ti' })).toBeVisible();
   await expectNoSeriousAxeViolations(page);

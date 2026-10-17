@@ -1,8 +1,9 @@
 import type { AppSession, AuthRole } from './auth-types';
 import { isAuthRole } from './auth-types';
+import { noAccessHref, sanitizeNext } from './auth-navigation';
 
 export const ROLE_HOME: Record<AuthRole, string> = {
-  candidate: '/',
+  candidate: '/vacantes',
   counselor: '/orientador',
   employer: '/empresa',
 };
@@ -19,7 +20,7 @@ export interface RoleGuardInput {
 }
 
 export function signInRedirect(currentPath: string): string {
-  const next = currentPath.startsWith('/') ? currentPath : '/';
+  const next = sanitizeNext(currentPath, '/');
   return `/ingresar?next=${encodeURIComponent(next)}`;
 }
 
@@ -35,6 +36,9 @@ export function decideRoleGuard({
 
   const role = session.user.role;
   if (!isAuthRole(role)) return { action: 'redirect', location: '/' };
-  if (role !== requiredRole) return { action: 'redirect', location: ROLE_HOME[role] };
+  if (session.user.isAnonymous === true && !allowAnonymous) {
+    return { action: 'redirect', location: signInRedirect(currentPath) };
+  }
+  if (role !== requiredRole) return { action: 'redirect', location: noAccessHref(requiredRole) };
   return { action: 'allow' };
 }

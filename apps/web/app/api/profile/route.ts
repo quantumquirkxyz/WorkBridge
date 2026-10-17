@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
-import { candidateIdFromRequest, unauthorized } from '../../../lib/candidate-session';
+import { candidateIdFromRequestOrSession, unauthorized } from '../../../lib/candidate-session';
 import { readCandidateProfile } from '../../../lib/neon-repository';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request): Promise<Response> {
-  const candidateId = candidateIdFromRequest(request);
+  const candidateId = await candidateIdFromRequestOrSession(request);
   if (!candidateId) return unauthorized();
   try {
     const profile = await readCandidateProfile(candidateId);

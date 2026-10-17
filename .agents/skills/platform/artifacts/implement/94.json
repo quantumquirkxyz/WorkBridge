@@ -1,0 +1,41 @@
+{
+  "status": "completed",
+  "changes": [
+    "apps/agent-runtime/src/bias/audit.ts",
+    "apps/agent-runtime/src/workflow/agents.ts",
+    "apps/agent-runtime/src/workflow/graph.ts",
+    "apps/agent-runtime/src/workflow/carrier.ts",
+    "apps/agent-runtime/src/workflow/carrier.schema.json",
+    "apps/agent-runtime/src/workflow/models.ts",
+    "apps/agent-runtime/src/workflow/guardrails.ts",
+    "apps/agent-runtime/src/workflow/__tests__/bias-auditor.test.ts",
+    "apps/agent-runtime/src/workflow/__tests__/graph.test.ts",
+    "apps/agent-runtime/src/matching/service.ts",
+    "apps/agent-runtime/README.md",
+    "packages/domain/src/types.ts",
+    "packages/domain/src/schemas/agent-envelope.schema.json"
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npx eslint on the changed TypeScript files",
+      "npx tsc --noEmit",
+      "npx vitest run apps/agent-runtime/src/workflow/__tests__/bias-auditor.test.ts",
+      "npx vitest run"
+    ],
+    "skipped": [
+      "npm run test:coverage was not re-run. The full unit suite and typecheck passed."
+    ],
+    "notes": "The flip fixture (10 minute commute) blocks vac-objective-001 when the corregimiento counterfactual moves the candidate from Panamá to San Miguelito. biasAlerts names that counterfactual, the vacancy is removed from decisions and assignments, and one bias_finding span plus one bias_finding audit event are recorded. The no-flip fixture (60 minute commute) keeps the vacancy rankable and records no findings. Full vitest: 659 passed, 8 skipped. On Node 26 the jsdom suite needs NODE_OPTIONS=--localstorage-file so window.localStorage exists; that flag is environmental."
+  },
+  "commitSha": "b6374b00ea012a0eeec3a14812cb9d9800fdce0f",
+  "branch": "issue/94-add-the-counterfactual-bias-auditor-agen",
+  "nextConsumer": "publish-open-pr",
+  "blockedBy": [],
+  "riskRemaining": "Holder name and gender marker counterfactuals rewrite free text the solver does not score, so they flip only if scoring starts reading that text. The corregimiento counterfactual changes the home district to San Miguelito, or to Panamá when the subject is already San Miguelito.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  }
+}

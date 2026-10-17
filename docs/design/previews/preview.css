@@ -1,0 +1,43 @@
+/* Preview-only chrome. Not part of the app. Uses its own fixed colours so it is stable in light and dark. */
+:root { --font-space-grotesk: 'Space Grotesk'; --font-archivo-black: 'Archivo Black'; }
+.pv-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem .5rem; padding: .5rem .75rem; background: #111; color: #f3efe6; font: 600 12px/1.2 system-ui, sans-serif; position: relative; z-index: 60; }
+.pv-bar a { color: #f3efe6; text-decoration: none; padding: .25rem .5rem; border: 1px solid #555; border-radius: 4px; white-space: nowrap; }
+.pv-bar a:hover { background: #333; }
+.pv-bar a[aria-current="page"] { background: #ffe14d; color: #111; border-color: #ffe14d; }
+.pv-bar .pv-sp { flex: 1; }
+.pv-bar button { font: inherit; color: #111; background: #7be495; border: 1px solid #111; border-radius: 4px; padding: .25rem .6rem; cursor: pointer; }
+.pv-bar strong { margin-right: .25rem; color: #ffe14d; }
+.pv-device { display: none; justify-content: center; padding: 1.5rem; background: repeating-linear-gradient(45deg, #ddd 0 10px, #e8e8e8 10px 20px); min-height: calc(100vh - 3rem); }
+.pv-device iframe { width: 390px; height: 800px; border: 10px solid #111; border-radius: 28px; background: #fff; }
+body.pv-mobile .pv-device { display: flex; }
+body.pv-mobile #pv-root { display: none; }
+html.pv-embed .pv-bar { display: none; }
+.pv-note { margin: 0; padding: .5rem 1rem; background: #fff3b0; color: #111; font: 500 12px/1.4 system-ui, sans-serif; border-bottom: 1px solid #111; }
+/* components page helpers */
+.pv-sec { margin-block: 2.5rem 1rem; }
+.pv-row { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; }
+.pv-stage { position: relative; padding: 1.5rem; border: 2px dashed var(--line); border-radius: .5rem; background: var(--muted); }
+/* fixed overlays in demo pages start below the preview bar */
+.pv-below { top: var(--pv-top, 0px) !important; }
+html.pv-embed #pv-root ~ .x{}
+html.pv-embed .pv-note { display: none; }
+/* grouped nav: one dropdown per journey so ~40 pages stay usable */
+.pv-menu { position: relative; }
+.pv-menu > summary { list-style: none; cursor: pointer; padding: .25rem .5rem; border: 1px solid #555; border-radius: 4px; white-space: nowrap; user-select: none; }
+.pv-menu > summary::-webkit-details-marker { display: none; }
+.pv-menu > summary::after { content: ' ▾'; }
+.pv-menu > summary:hover, .pv-menu[open] > summary { background: #333; }
+.pv-menu[data-current] > summary { border-color: #ffe14d; color: #ffe14d; }
+.pv-menu-list { position: absolute; top: calc(100% + 4px); left: 0; z-index: 70; display: grid; gap: 2px; min-width: 14rem; padding: .35rem; background: #111; border: 1px solid #555; border-radius: 6px; box-shadow: 0 6px 0 rgba(0,0,0,.35); }
+.pv-menu-list a { border: 0; border-radius: 3px; }
+.pv-bar > a[aria-current="page"], .pv-menu-list a[aria-current="page"] { background: #ffe14d; color: #111; }
+html.pv-embed .pv-menu-list { display: none; }
+.pv-menu:not([open]) .pv-menu-list { display: none; }
+@media (max-width: 700px) {
+  .pv-bar { font-size: 11px; gap: .25rem; padding: .35rem .5rem; }
+  .pv-bar .pv-sp { display: none; }
+  .pv-menu { position: static; }
+  .pv-menu-list { left: .5rem; right: .5rem; min-width: 0; }
+}
+/* the bottom sheet is anchored to the viewport bottom on phones; do not let the bar offset break it */
+@media (max-width: 47.99rem) { .xp-sheet.pv-below { top: auto !important; } }

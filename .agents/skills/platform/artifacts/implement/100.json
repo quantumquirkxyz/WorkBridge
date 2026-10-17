@@ -1,0 +1,24 @@
+{
+  "status": "completed",
+  "changes": [
+    "Add GET /vacancies/:vacancyId/shortlist: ApplicationService.shortlistForVacancy ranks received submissions for an employer-owned vacancy by the deterministic score (desc, then candidate id, then submission id) and returns rank, submissionId, score, aptitude, gapSummary and biasAlerts.",
+    "Authorize server-side: employer role, vacancy organization equals actor organization (403 otherwise), 401 unauthenticated, 404 unknown vacancy; candidate identifiers are not exposed.",
+    "Score via a trusted ShortlistSource (seed catalog ownership, persisted profile/preferences, existing matcher and counterfactual bias auditor); a bias-blocked vacancy yields an empty shortlist.",
+    "BFF route authenticates shortlist calls with the real cookie session and rejects dot-segment path aliases; shared catalog-input moved into agent-runtime."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "NODE_OPTIONS=--no-experimental-webstorage npx vitest run apps/agent-runtime apps/web/tests --maxWorkers=1",
+      "npx eslint <changed files>",
+      "git diff --check",
+      "npx tsc --noEmit"
+    ],
+    "skipped": ["No employer UI: the existing /empresa queue has no per-vacancy view to host the ranking cheaply."],
+    "notes": "Focused shortlist tests, service tests and BFF tests pass. Remaining failures are outside #100: apps/web/tests/chat-worker.test.ts (chat turns, PR #115 area) and the known pre-existing tsc errors."
+  },
+  "branch": "issue/100-expose-the-employer-ranked-shortlist",
+  "nextConsumer": "review-pr",
+  "blockedBy": [],
+  "riskRemaining": "Ranking covers the seeded demo catalog only; ownership maps to the seeded employer organization."
+}

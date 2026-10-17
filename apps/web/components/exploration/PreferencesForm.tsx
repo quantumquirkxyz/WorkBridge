@@ -91,6 +91,19 @@ export function PreferencesForm({ state, onChange, onSubmit, loading }: Preferen
         </div>
       </div>
 
+      <div className="field-row">
+        <div className="field">
+          <Label htmlFor="pref-salary">Salario mínimo (USD/mes)</Label>
+          <Input
+            id="pref-salary"
+            type="number"
+            min={0}
+            value={state.minSalary}
+            onChange={(event) => set({ minSalary: Number(event.target.value) })}
+          />
+        </div>
+      </div>
+
       <details>
         <summary>Más opciones</summary>
       <div className="field-row">
@@ -113,16 +126,6 @@ export function PreferencesForm({ state, onChange, onSubmit, loading }: Preferen
             min={0}
             value={state.budget}
             onChange={(event) => set({ budget: Number(event.target.value) })}
-          />
-        </div>
-        <div className="field">
-          <Label htmlFor="pref-salary">Salario mínimo (USD/mes)</Label>
-          <Input
-            id="pref-salary"
-            type="number"
-            min={0}
-            value={state.minSalary}
-            onChange={(event) => set({ minSalary: Number(event.target.value) })}
           />
         </div>
       </div>

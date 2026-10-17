@@ -1,9 +1,21 @@
 {
-  "/(candidate)/page": "app/(candidate)/page.js",
+  "/(candidate)/perfil/page": "app/(candidate)/perfil/page.js",
+  "/(candidate)/ruta/page": "app/(candidate)/ruta/page.js",
+  "/api/applications/[...path]/route": "app/api/applications/[...path]/route.js",
+  "/api/auth/[...all]/route": "app/api/auth/[...all]/route.js",
   "/api/candidate/route": "app/api/candidate/route.js",
   "/api/chat/route": "app/api/chat/route.js",
+  "/api/explore/route": "app/api/explore/route.js",
   "/api/intake/route": "app/api/intake/route.js",
+  "/api/match/route": "app/api/match/route.js",
+  "/api/preferences/route": "app/api/preferences/route.js",
   "/api/searches/route": "app/api/searches/route.js",
+  "/api/vacancies/[jobId]/route": "app/api/vacancies/[jobId]/route.js",
   "/chat/page": "app/chat/page.js",
-  "/manifest.webmanifest/route": "app/manifest.webmanifest/route.js"
+  "/cuenta/inicio/page": "app/cuenta/inicio/page.js",
+  "/ingresar/page": "app/ingresar/page.js",
+  "/manifest.webmanifest/route": "app/manifest.webmanifest/route.js",
+  "/postulaciones/nueva/page": "app/postulaciones/nueva/page.js",
+  "/postulaciones/page": "app/postulaciones/page.js",
+  "/vacantes/page": "app/vacantes/page.js"
 }

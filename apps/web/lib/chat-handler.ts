@@ -3,6 +3,7 @@ import type { HandlerResult } from './handler-result';
 import { ChatSessionConflictError, chatSessionStore, type ChatSession } from './chat-store';
 import { buildMessages, buildSystemPrompt, type CandidateContext } from './chat/prompt';
 import { modelOutputJsonSchema, validateChatTurn, validateModelOutput, type ChatTurn } from './chat/schema';
+import { closeAgenda, coverKnownProfileSlots, isFarewell, keepAgendaOpen } from './chat/agenda';
 import { SKIP_DEFAULTS, isSlotId, slotDefinition, type SlotId } from './chat/slots';
 import {
   applyTurn,
@@ -80,7 +81,13 @@ function seededSlotState(context?: CandidateContext): SlotState {
 }
 
 function freshSession(context?: CandidateContext): ChatSession {
-  return { transcript: [], slotState: seededSlotState(context), llmTurns: 0, capNoticeSent: false, version: 0 };
+  return { transcript: [], slotState: coverKnownProfileSlots(seededSlotState(context), context?.profile), llmTurns: 0, capNoticeSent: false, version: 0 };
+}
+
+function sameSlotValue(left: unknown, right: unknown): boolean {
+  if (Object.is(left, right)) return true;
+  if (typeof left !== 'object' || typeof right !== 'object' || left === null || right === null) return false;
+  return JSON.stringify(left) === JSON.stringify(right);
 }
 
 /**
@@ -90,7 +97,7 @@ function freshSession(context?: CandidateContext): ChatSession {
 export function isAllowedSlotValue(slot: SlotId, value: unknown): boolean {
   if (value === undefined) return true;
   const chipValues = slotDefinition(slot).chips.filter((c) => c.value !== undefined).map((c) => c.value);
-  if (chipValues.length > 0) return chipValues.includes(value);
+  if (chipValues.length > 0) return chipValues.some((chip) => sameSlotValue(chip, value));
   if (typeof value === 'string') return value.trim().length > 0 && value.length <= MAX_FREE_VALUE_LENGTH;
   return (typeof value === 'number' && Number.isFinite(value)) || typeof value === 'boolean';
 }
@@ -212,6 +219,7 @@ export async function handleChatTurn(
   } catch {
     return { status: 503, body: { error: 'persistence_unavailable' } };
   }
+  session.slotState = coverKnownProfileSlots(session.slotState, deps.context?.profile);
 
   const previousState = session.slotState;
   const previousPhase = currentPhase(previousState);
@@ -226,6 +234,7 @@ export async function handleChatTurn(
   let outcome: LlmOutcome | undefined;
   let source: ChatTurn['source'] = 'fallback';
   let updates: SlotUpdate[] = [];
+  let closing = false;
 
   if (deps.chat && !capped) {
     session.llmTurns += 1;
@@ -234,21 +243,28 @@ export async function handleChatTurn(
     outcome = await callModel(deps.chat, buildMessages(system, redacted), deps.timeoutMs ?? LLM_TIMEOUT_MS);
     if (outcome.output) {
       updates = outcome.output.slotUpdates.filter((u) => afterAction[u.slot]?.state !== 'filled');
-      const proposed = updates.find((update) => update.state === 'proposed');
-      const candidate: ChatTurn = {
-        intent: phaseChanged || phase === 'done' ? 'complete_phase' : outcome.output.intent,
-        reply: outcome.output.reply.trim(),
-        pendingSlot: pending,
-        slotUpdates: updates,
-        chips: proposed
+      const rawReply = outcome.output.reply.trim();
+      closing = pending !== null && isFarewell(rawReply);
+      const proposed = updates.find((update) => update.state === 'proposed' && update.slot === pending)
+        ?? updates.find((update) => update.state === 'proposed');
+      const reply = closing ? rawReply.slice(0, 600) : keepAgendaOpen(rawReply, pending);
+      const chips: ChatTurn['chips'] = closing
+        ? []
+        : proposed
           ? [
               { label: 'Sí', value: proposed.value, kind: 'confirm' },
               { label: 'Cambiar', kind: 'change' },
             ]
           : pending
-            ? slotDefinition(pending).chips
-            : [],
-        phase,
+            ? [...slotDefinition(pending).chips]
+            : [];
+      const candidate: ChatTurn = {
+        intent: closing || phaseChanged || phase === 'done' ? 'complete_phase' : outcome.output.intent,
+        reply,
+        pendingSlot: closing ? null : pending,
+        slotUpdates: updates,
+        chips,
+        phase: closing ? 'done' : phase,
         source: 'llm',
       };
       if (validateChatTurn(candidate)) {
@@ -256,6 +272,7 @@ export async function handleChatTurn(
         source = 'llm';
       } else {
         updates = [];
+        closing = false;
         outcome.error = 'invalid_turn';
       }
     }
@@ -278,7 +295,7 @@ export async function handleChatTurn(
     };
   }
 
-  const nextState = applyTurn(afterAction, updates, { kind: 'text' });
+  const nextState = closing ? closeAgenda(applyTurn(afterAction, updates, { kind: 'text' })) : applyTurn(afterAction, updates, { kind: 'text' });
   session.slotState = nextState;
   session.transcript.push({ role: 'assistant', content: turn.reply });
   session.transcript = session.transcript.slice(-MAX_TRANSCRIPT_MESSAGES);
@@ -316,7 +333,8 @@ export async function readChatSessionView(
 ): Promise<HandlerResult> {
   try {
     const session = await (deps.store ?? chatSessionStore).get(candidateId);
-    const view = session ?? freshSession(deps.context);
+    const source = session ?? freshSession(deps.context);
+    const view = { ...source, slotState: coverKnownProfileSlots(source.slotState, deps.context?.profile) };
     return {
       status: 200,
       body: { transcript: view.transcript, slotState: view.slotState, pendingSlot: pendingSlot(view.slotState), phase: currentPhase(view.slotState) },
