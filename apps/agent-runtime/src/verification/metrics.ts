@@ -1,4 +1,4 @@
-import type { VerificationStatus } from "./status.js";
+import type { VerificationStatus } from "./status";
 
 export interface ConfusionRow {
   groundTruth: VerificationStatus;

@@ -2,8 +2,8 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Ajv2020 } from "ajv/dist/2020.js";
-import { holderBindingFor } from "./holder.js";
-import type { EvidenceItem, VerificationSignals } from "./status.js";
+import { holderBindingFor } from "./holder";
+import type { EvidenceItem, VerificationSignals } from "./status";
 
 const schema = JSON.parse(
   readFileSync(

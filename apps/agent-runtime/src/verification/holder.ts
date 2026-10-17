@@ -1,4 +1,4 @@
-import type { HolderBinding } from "./status.js";
+import type { HolderBinding } from "./status";
 
 export function normalizeHolderId(value: string): string {
   return value.trim().toLowerCase().replace(/^mailto:/, "");

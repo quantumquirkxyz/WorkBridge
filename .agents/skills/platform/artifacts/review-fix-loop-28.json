@@ -1,0 +1,22 @@
+{
+  "status": "blocked",
+  "pr": 28,
+  "branch": "feat/issue-1-candidate-exploration-and-evidence",
+  "fixedPoint": "main",
+  "passes": 2,
+  "standardsFindings": 0,
+  "specFindings": 4,
+  "completedFixes": [
+    "Corrected the implementation artifacts to report partial acceptance.",
+    "Added real ProfileAgent seam coverage for audio, image, and PDF inputs."
+  ],
+  "blocker": "Issue #1 still requires durable validated CandidateProfile preference persistence and broader provenance, experience, skill, and exploration evidence that are outside the current narrow PR diff.",
+  "validation": [
+    "npx vitest run apps/web/tests/intake-handler.test.ts",
+    "npm run lint",
+    "npm run typecheck",
+    "npm test",
+    "npm run gate:ci"
+  ],
+  "nextConsumer": "implement-review-fixes"
+}

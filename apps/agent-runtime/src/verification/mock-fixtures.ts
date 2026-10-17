@@ -1,5 +1,5 @@
-import { holderBindingFor } from "./holder.js";
-import type { VerificationSignals } from "./status.js";
+import { holderBindingFor } from "./holder";
+import type { VerificationSignals } from "./status";
 
 interface MockFixture {
   subjectId?: string;

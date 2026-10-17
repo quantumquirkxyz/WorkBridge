@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { handleDeleteCandidate, handleSavePreferences } from '../../../lib/exploration-handler';
 import { readJsonBody } from '../../../lib/request-body';
+import { persistCandidatePreferences, deleteCandidateData } from '../../../lib/neon-repository';
+import { profileStore } from '../../../lib/profile-store';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -10,6 +12,7 @@ export async function POST(request: Request): Promise<Response> {
   if (!parsed.ok) return parsed.response;
 
   const { status, body } = handleSavePreferences(parsed.payload);
+  if (status === 200) await persistCandidatePreferences(body as import('@puente/domain').CandidatePreferences);
   return NextResponse.json(body, { status });
 }
 
@@ -21,5 +24,7 @@ export async function DELETE(request: Request): Promise<Response> {
   }
   const candidateId = params.get('candidateId') ?? '';
   const { status, body } = handleDeleteCandidate(candidateId);
+  if (status === 200) await deleteCandidateData(candidateId);
+  if (status === 200) profileStore.delete(candidateId);
   return NextResponse.json(body, { status });
 }
