@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { handleDeleteCandidate, handleSavePreferences } from '../../../lib/exploration-handler';
+import { handleDeleteCandidate, handleSavePreferences, MAX_CANDIDATE_ID_LENGTH } from '../../../lib/exploration-handler';
 import { readJsonBody } from '../../../lib/request-body';
 import { persistCandidatePreferences, deleteCandidateData, readCandidatePreferences, readCandidateProfile } from '../../../lib/neon-repository';
 import { preferencesStore } from '../../../lib/preferences-store';
@@ -10,6 +10,7 @@ export const dynamic = 'force-dynamic';
 export async function GET(request: Request): Promise<Response> {
   const candidateId = new URL(request.url).searchParams.get('candidateId');
   if (!candidateId) return NextResponse.json({ error: 'missing_candidate_id' }, { status: 400 });
+  if (candidateId.length > MAX_CANDIDATE_ID_LENGTH) return NextResponse.json({ error: 'invalid_candidate_id' }, { status: 400 });
   try {
     const preferences = await readCandidatePreferences(candidateId);
     return preferences ? NextResponse.json(preferences) : NextResponse.json({ error: 'not_found' }, { status: 404 });
@@ -44,6 +45,9 @@ export async function DELETE(request: Request): Promise<Response> {
     return NextResponse.json({ error: 'missing_candidate_id' }, { status: 400 });
   }
   const candidateId = params.get('candidateId') ?? '';
+  if (!candidateId || candidateId.length > MAX_CANDIDATE_ID_LENGTH) {
+    return NextResponse.json({ error: 'invalid_candidate_id' }, { status: 400 });
+  }
   let durableExists = false;
   try {
     durableExists = Boolean(await readCandidatePreferences(candidateId) ?? await readCandidateProfile(candidateId));
