@@ -1,0 +1,15 @@
+{
+  "skill": "resolving-merge-conflicts",
+  "identifier": "15",
+  "source": "https://github.com/HackathonFISC/equipo-02/pull/15",
+  "base": "origin/main",
+  "head": "feat/issue-4-build-candidate-intake-and-profile",
+  "status": "resolved",
+  "resolution": "Merged origin/main and preserved compatible candidate-intake/profile and vacancy/solver changes.",
+  "commit": "2b69e93",
+  "validation": {
+    "conflicts_remaining": false,
+    "tests": "failed: 2 solver suites require missing highs dependency; 1 PDF test fails because unpdf cannot resolve Iterator in the current runtime; 11 suites and 135 tests passed"
+  },
+  "next_consumer": "PR #15 reviewer/CI"
+}
