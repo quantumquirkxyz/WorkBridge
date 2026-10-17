@@ -19,7 +19,7 @@ export async function POST(request: Request): Promise<Response> {
     const previousSearches = savedSearchesStore.list(preferences.candidate_id);
     try {
       await persistCandidatePreferences(preferences);
-    } catch (error) {
+    } catch {
       savedSearchesStore.deleteByCandidate(preferences.candidate_id);
       for (const search of previousSearches) savedSearchesStore.save(search);
       if (previousPreferences) preferencesStore.save(previousPreferences);

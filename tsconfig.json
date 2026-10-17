@@ -22,6 +22,9 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
+      "@/*": [
+        "apps/web/*"
+      ],
       "@puente/domain": [
         "packages/domain/src/index.ts"
       ],

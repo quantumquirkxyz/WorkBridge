@@ -14,6 +14,12 @@ import {
 import type { Roadmap, TrainingGap } from '@puente/training';
 import type { SavedSearchView } from '../lib/saved-searches-store';
 import type { PreferencesDraft } from '../lib/preferences';
+import { Button } from './ui/button';
+import { Card } from './ui/card';
+import { Checkbox } from './ui/checkbox';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 
 const DAY_LABELS: Array<{ value: number; label: string }> = [
   { value: 1, label: 'Lun' },
@@ -226,7 +232,7 @@ export function ExplorationDashboard() {
   }
 
   return (
-    <section className="card" aria-labelledby="exploration-heading">
+    <Card className="mb-5 p-5" role="region" aria-labelledby="exploration-heading">
       <h2 id="exploration-heading">Preferencias y exploración de vacantes</h2>
       <p className="hint">
         Estas preferencias las declaras tú: el sistema no las infiere con un modelo. Se guardan como un
@@ -234,8 +240,8 @@ export function ExplorationDashboard() {
       </p>
       <form onSubmit={onSubmit} noValidate>
         <div className="field">
-          <label htmlFor="pref-roles">Puestos objetivo (separados por coma)</label>
-          <input
+          <Label htmlFor="pref-roles">Puestos objetivo (separados por coma)</Label>
+          <Input
             id="pref-roles"
             type="text"
             value={targetRoles}
@@ -246,33 +252,34 @@ export function ExplorationDashboard() {
 
         <div className="field-row">
           <div className="field">
-            <label htmlFor="pref-modality">Modalidad</label>
-            <select
-              id="pref-modality"
-              value={modality}
-              onChange={(event) => setModality(event.target.value as WorkModality)}
-            >
-              {MODALITY_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+            <Label htmlFor="pref-modality">Modalidad</Label>
+            <Select value={modality} onValueChange={(value) => setModality(value as WorkModality)}>
+              <SelectTrigger id="pref-modality">
+                <SelectValue placeholder="Selecciona una modalidad" />
+              </SelectTrigger>
+              <SelectContent>
+                {MODALITY_OPTIONS.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <div className="field">
-            <label htmlFor="pref-province">Provincia</label>
-            <input id="pref-province" type="text" value={province} onChange={(event) => setProvince(event.target.value)} />
+            <Label htmlFor="pref-province">Provincia</Label>
+            <Input id="pref-province" type="text" value={province} onChange={(event) => setProvince(event.target.value)} />
           </div>
           <div className="field">
-            <label htmlFor="pref-district">Distrito</label>
-            <input id="pref-district" type="text" value={district} onChange={(event) => setDistrict(event.target.value)} />
+            <Label htmlFor="pref-district">Distrito</Label>
+            <Input id="pref-district" type="text" value={district} onChange={(event) => setDistrict(event.target.value)} />
           </div>
         </div>
 
         <div className="field-row">
           <div className="field">
-            <label htmlFor="pref-travel">Traslado máximo (minutos)</label>
-            <input
+            <Label htmlFor="pref-travel">Traslado máximo (minutos)</Label>
+            <Input
               id="pref-travel"
               type="number"
               min={0}
@@ -282,8 +289,8 @@ export function ExplorationDashboard() {
             />
           </div>
           <div className="field">
-            <label htmlFor="pref-budget">Presupuesto de transporte (USD/mes)</label>
-            <input
+            <Label htmlFor="pref-budget">Presupuesto de transporte (USD/mes)</Label>
+            <Input
               id="pref-budget"
               type="number"
               min={0}
@@ -292,8 +299,8 @@ export function ExplorationDashboard() {
             />
           </div>
           <div className="field">
-            <label htmlFor="pref-salary">Salario mínimo (USD/mes)</label>
-            <input
+            <Label htmlFor="pref-salary">Salario mínimo (USD/mes)</Label>
+            <Input
               id="pref-salary"
               type="number"
               min={0}
@@ -307,30 +314,29 @@ export function ExplorationDashboard() {
           <legend>Días disponibles</legend>
           <div className="checkbox-group">
             {DAY_LABELS.map((day) => (
-              <label key={day.value}>
-                <input
-                  type="checkbox"
+              <Label key={day.value}>
+                <Checkbox
                   checked={days.includes(day.value)}
-                  onChange={() => toggle(days, day.value, setDays)}
+                  onCheckedChange={() => toggle(days, day.value, setDays)}
                 />
                 {day.label}
-              </label>
+              </Label>
             ))}
           </div>
         </fieldset>
 
         <div className="field-row">
           <div className="field">
-            <label htmlFor="pref-start">Hora de inicio</label>
-            <input id="pref-start" type="time" value={start} onChange={(event) => setStart(event.target.value)} />
+            <Label htmlFor="pref-start">Hora de inicio</Label>
+            <Input id="pref-start" type="time" value={start} onChange={(event) => setStart(event.target.value)} />
           </div>
           <div className="field">
-            <label htmlFor="pref-end">Hora de fin</label>
-            <input id="pref-end" type="time" value={end} onChange={(event) => setEnd(event.target.value)} />
+            <Label htmlFor="pref-end">Hora de fin</Label>
+            <Input id="pref-end" type="time" value={end} onChange={(event) => setEnd(event.target.value)} />
           </div>
           <div className="field">
-            <label htmlFor="pref-weekly">Horas semanales</label>
-            <input
+            <Label htmlFor="pref-weekly">Horas semanales</Label>
+            <Input
               id="pref-weekly"
               type="number"
               min={0}
@@ -345,14 +351,13 @@ export function ExplorationDashboard() {
           <legend>Tipo de contrato</legend>
           <div className="checkbox-group">
             {CONTRACT_OPTIONS.map((option) => (
-              <label key={option.value}>
-                <input
-                  type="checkbox"
+              <Label key={option.value}>
+                <Checkbox
                   checked={contracts.includes(option.value)}
-                  onChange={() => toggle(contracts, option.value, setContracts)}
+                  onCheckedChange={() => toggle(contracts, option.value, setContracts)}
                 />
                 {option.label}
-              </label>
+              </Label>
             ))}
           </div>
         </fieldset>
@@ -361,14 +366,13 @@ export function ExplorationDashboard() {
           <legend>Modos de transporte</legend>
           <div className="checkbox-group">
             {TRANSPORT_OPTIONS.map((option) => (
-              <label key={option.value}>
-                <input
-                  type="checkbox"
+              <Label key={option.value}>
+                <Checkbox
                   checked={modes.includes(option.value)}
-                  onChange={() => toggle(modes, option.value, setModes)}
+                  onCheckedChange={() => toggle(modes, option.value, setModes)}
                 />
                 {option.label}
-              </label>
+              </Label>
             ))}
           </div>
         </fieldset>
@@ -376,20 +380,20 @@ export function ExplorationDashboard() {
         <fieldset className="field">
           <legend>Disposición</legend>
           <div className="checkbox-group">
-            <label>
-              <input type="checkbox" checked={willingTrain} onChange={(event) => setWillingTrain(event.target.checked)} />
+            <Label>
+              <Checkbox checked={willingTrain} onCheckedChange={(checked) => setWillingTrain(checked === true)} />
               Dispuesto a tomar cursos
-            </label>
-            <label>
-              <input type="checkbox" checked={willingIntern} onChange={(event) => setWillingIntern(event.target.checked)} />
+            </Label>
+            <Label>
+              <Checkbox checked={willingIntern} onCheckedChange={(checked) => setWillingIntern(checked === true)} />
               Dispuesto a hacer pasantías
-            </label>
+            </Label>
           </div>
         </fieldset>
 
-        <button type="submit" disabled={status.loading}>
+        <Button type="submit" disabled={status.loading}>
           {status.loading ? 'Buscando…' : 'Guardar y buscar vacantes'}
-        </button>
+        </Button>
       </form>
 
       <div aria-live="polite" role="status">
@@ -414,7 +418,7 @@ export function ExplorationDashboard() {
           message={savedMessage}
         />
       ) : null}
-    </section>
+      </Card>
   );
 }
 
@@ -660,8 +664,8 @@ function SavedSearchesPanel({
       </p>
       <div className="field-row">
         <div className="field">
-          <label htmlFor="search-label">Nombre de la búsqueda</label>
-          <input
+          <Label htmlFor="search-label">Nombre de la búsqueda</Label>
+          <Input
             id="search-label"
             type="text"
             value={searchLabel}
@@ -669,12 +673,12 @@ function SavedSearchesPanel({
             placeholder="Atención al cliente en Panamá"
           />
         </div>
-        <button type="button" onClick={onSave} disabled={searchLabel.trim().length === 0}>
-          Guardar búsqueda
-        </button>
-        <button type="button" onClick={onDelete} className="danger">
-          Eliminar mis datos
-        </button>
+          <Button type="button" onClick={onSave} disabled={searchLabel.trim().length === 0}>
+            Guardar búsqueda
+          </Button>
+          <Button type="button" onClick={onDelete} variant="destructive">
+            Eliminar mis datos
+          </Button>
       </div>
       <div aria-live="polite" role="status">
         {message ? <p className="hint">{message}</p> : null}

@@ -1,0 +1,27 @@
+{
+  "status": "implemented",
+  "pr": 54,
+  "fixedPoint": "main",
+  "branch": "feat/issue-33-adopt-tailwind-v4-shadcn-design-tokens",
+  "commitSha": "ec52e76",
+  "completedItems": [
+    "Migrated the remaining IntakeForm and ExplorationDashboard controls and checkbox captions to the generated Input, Select, Checkbox, and Label primitives while preserving controlled state and payload behavior.",
+    "Replaced undocumented translucent/composited status backgrounds with documented token pairs.",
+    "Removed brightness-based hover color transformations and documented the neutral badge ink/line contrast pair."
+  ],
+  "validation": {
+    "commands": [
+      "npm run lint",
+      "npm run typecheck",
+      "npm test",
+      "npm run build --workspace @puente/web",
+      "npm run gate:ci",
+      "git diff --check",
+      "Playwright smoke at 360px and 1280px in light and dark system themes"
+    ],
+    "result": "491 full-suite tests passed; web build, lint, typecheck, coverage gate, diff check, and light/dark 360px/1280px Playwright smoke passed.",
+    "skipped": []
+  },
+  "remainingBlockers": [],
+  "nextConsumer": "review-pr"
+}

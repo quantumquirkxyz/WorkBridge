@@ -2,6 +2,12 @@
 
 import { useMemo, useState } from 'react';
 import type { IntakeResult, IntakeSourceKind } from '@puente/domain';
+import { Button } from './ui/button';
+import { Card } from './ui/card';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { Textarea } from './ui/textarea';
 
 type IntakeKind = IntakeSourceKind;
 
@@ -122,30 +128,31 @@ export function IntakeForm() {
   }
 
   return (
-    <section className="card" aria-labelledby="intake-heading">
+    <Card className="mb-5 p-5" role="region" aria-labelledby="intake-heading">
       <h2 id="intake-heading">Captura de tu perfil</h2>
       <form onSubmit={onSubmit} noValidate>
         <div className="field">
-          <label htmlFor="intake-kind">Tipo de fuente</label>
-          <select
-            id="intake-kind"
-            value={kind}
-            onChange={(event) => setKind(event.target.value as IntakeKind)}
-          >
-            {KIND_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+          <Label htmlFor="intake-kind">Tipo de fuente</Label>
+          <Select value={kind} onValueChange={(value) => setKind(value as IntakeKind)}>
+            <SelectTrigger id="intake-kind">
+              <SelectValue placeholder="Selecciona un tipo de fuente" />
+            </SelectTrigger>
+            <SelectContent>
+              {KIND_OPTIONS.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           {activeKind ? <p className="hint">{activeKind.hint}</p> : null}
         </div>
 
         {fileKind ? (
           <>
             <div className="field">
-              <label htmlFor="intake-file">Archivo</label>
-              <input
+              <Label htmlFor="intake-file">Archivo</Label>
+              <Input
                 id="intake-file"
                 type="file"
                 accept={kind === 'pdf' ? 'application/pdf' : 'image/*'}
@@ -154,8 +161,8 @@ export function IntakeForm() {
             </div>
             {kind === 'image' ? (
               <div className="field">
-                <label htmlFor="intake-alt">Descripción de la imagen (opcional)</label>
-                <textarea
+                <Label htmlFor="intake-alt">Descripción de la imagen (opcional)</Label>
+                <Textarea
                   id="intake-alt"
                   value={altText}
                   onChange={(event) => setAltText(event.target.value)}
@@ -166,10 +173,10 @@ export function IntakeForm() {
           </>
         ) : (
           <div className="field">
-            <label htmlFor="intake-text">
+            <Label htmlFor="intake-text">
               {kind === 'audio_transcript' ? 'Transcripción' : 'Texto del CV o experiencia'}
-            </label>
-            <textarea
+            </Label>
+            <Textarea
               id="intake-text"
               value={text}
               onChange={(event) => setText(event.target.value)}
@@ -179,8 +186,8 @@ export function IntakeForm() {
         )}
 
         <div className="field">
-          <label htmlFor="intake-roles">Puestos objetivo (opcional, separados por coma)</label>
-          <input
+          <Label htmlFor="intake-roles">Puestos objetivo (opcional, separados por coma)</Label>
+          <Input
             id="intake-roles"
             type="text"
             value={targetRoles}
@@ -189,9 +196,9 @@ export function IntakeForm() {
           />
         </div>
 
-        <button type="submit" disabled={status.loading}>
+        <Button type="submit" disabled={status.loading}>
           {status.loading ? 'Procesando…' : 'Analizar mi perfil'}
-        </button>
+        </Button>
       </form>
 
       <div aria-live="polite" role="status">
@@ -203,7 +210,7 @@ export function IntakeForm() {
       </div>
 
       {result ? <IntakeResultView result={result} /> : null}
-    </section>
+    </Card>
   );
 }
 

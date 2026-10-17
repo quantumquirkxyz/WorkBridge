@@ -23,7 +23,7 @@ export async function GET(request: Request): Promise<Response> {
   try {
     const profile = await readCandidateProfile(candidateId);
     return profile ? NextResponse.json(profile) : NextResponse.json({ error: 'not_found' }, { status: 404 });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'persistence_unavailable' }, { status: 503 });
   }
 }

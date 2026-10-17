@@ -17,7 +17,7 @@ export async function POST(request: Request): Promise<Response> {
     const previous = preferencesStore.get(preferences.candidate_id);
     try {
       await persistCandidatePreferences(preferences);
-    } catch (error) {
+    } catch {
       if (previous) preferencesStore.save(previous);
       else preferencesStore.delete(preferences.candidate_id);
       return NextResponse.json({ error: 'persistence_unavailable' }, { status: 503 });

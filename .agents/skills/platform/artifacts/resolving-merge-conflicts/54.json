@@ -1,0 +1,17 @@
+{
+  "pr": 54,
+  "branch": "feat/issue-33-adopt-tailwind-v4-shadcn-design-tokens",
+  "conflictSource": "origin/main",
+  "status": "resolved",
+  "resolution": "Merged origin/main, preserved the profile-merge intake behavior from main, and retained the compatible catch-binding cleanup. Completed the merge commit.",
+  "mergeCommit": "ffd3d68",
+  "validation": {
+    "build": "not-run",
+    "gateCi": "passed",
+    "tests": 500,
+    "lineCoverage": 94.63,
+    "diffCheck": "passed"
+  },
+  "preservedLocalChanges": true,
+  "nextConsumer": "review-pr"
+}

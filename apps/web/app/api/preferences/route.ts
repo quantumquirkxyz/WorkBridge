@@ -15,7 +15,7 @@ export async function GET(request: Request): Promise<Response> {
   try {
     const preferences = await readCandidatePreferences(candidateId);
     return preferences ? NextResponse.json(preferences) : NextResponse.json({ error: 'not_found' }, { status: 404 });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'persistence_unavailable' }, { status: 503 });
   }
 }
@@ -30,7 +30,7 @@ export async function POST(request: Request): Promise<Response> {
     const previous = preferencesStore.get(candidateId);
     try {
       await persistCandidatePreferences(body as import('@puente/domain').CandidatePreferences);
-    } catch (error) {
+    } catch {
       if (previous) preferencesStore.save(previous);
       else preferencesStore.delete(candidateId);
       return NextResponse.json({ error: 'persistence_unavailable' }, { status: 503 });
@@ -52,13 +52,13 @@ export async function DELETE(request: Request): Promise<Response> {
   let durableExists = false;
   try {
     durableExists = Boolean(await readCandidatePreferences(candidateId) ?? await readCandidateProfile(candidateId));
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'persistence_unavailable' }, { status: 503 });
   }
   if (durableExists) {
     try {
       await deleteCandidateData(candidateId);
-    } catch (error) {
+    } catch {
       return NextResponse.json({ error: 'persistence_unavailable' }, { status: 503 });
     }
   }
