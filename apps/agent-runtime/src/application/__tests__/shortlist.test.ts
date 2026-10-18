@@ -32,7 +32,11 @@ function setup() {
       biasAlerts: [{ id: "advisory", reason: "Revisar requisito de la vacante" }],
     }),
   }));
-  const source: ShortlistSource = { ownerOf: (id) => id === "vac-1" ? "org-owner" : id === "foreign-vacancy" ? "org-other" : undefined, match };
+  const source: ShortlistSource = {
+    isKnownVacancy: (id) => id === "vac-1" || id === "foreign-vacancy",
+    ownerOf: (id) => id === "vac-1" ? "org-owner" : id === "foreign-vacancy" ? "org-other" : undefined,
+    match,
+  };
   const app = new ApplicationService({ clock: () => NOW, sessionSecret: SECRET, shortlist: source });
   return { app, match };
 }
