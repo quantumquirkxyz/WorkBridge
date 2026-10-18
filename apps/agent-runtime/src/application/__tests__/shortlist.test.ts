@@ -5,7 +5,7 @@ import { createApplicationServer } from "../server";
 import { sampleMatchDecision, sampleWorkflowEnvelope } from "../fixtures";
 import { signBetterAuthSession } from "../roles";
 import { ApplicationService } from "../service";
-import { createShortlistSource, type ShortlistSource } from "../shortlist";
+import { createApplicationDecisionSource, type ApplicationDecisionSource } from "../shortlist";
 import preferencesFixture from "../../../../../packages/catalog/fixtures/preferences.json";
 import { candidateProfile } from "../../matching/__tests__/helpers";
 import { makeCandidateId } from "@workbridge/domain";
@@ -21,7 +21,8 @@ function session(role: "candidate" | "employer" | "counselor", id = role as stri
 }
 
 function setup() {
-  const match = vi.fn<ShortlistSource["match"]>().mockImplementation(async (candidateId, vacancyId) => ({
+  const match = vi.fn<ApplicationDecisionSource["decisionFor"]>().mockImplementation(async (candidateId, vacancyId) => ({
+    kind: "decision" as const,
     biasBlocked: false,
     decision: sampleMatchDecision({
       traceId: "trusted-ranking",
@@ -32,11 +33,7 @@ function setup() {
       biasAlerts: [{ id: "advisory", reason: "Revisar requisito de la vacante" }],
     }),
   }));
-  const source: ShortlistSource = {
-    isKnownVacancy: (id) => id === "vac-1" || id === "foreign-vacancy",
-    ownerOf: (id) => id === "vac-1" ? "org-owner" : id === "foreign-vacancy" ? "org-other" : undefined,
-    match,
-  };
+  const source: ApplicationDecisionSource = { ownerOf: (id) => id === "vac-1" ? "org-owner" : id === "foreign-vacancy" ? "org-other" : undefined, decisionFor: match };
   const app = new ApplicationService({ clock: () => NOW, sessionSecret: SECRET, shortlist: source });
   return { app, match };
 }
@@ -84,14 +81,15 @@ describe("employer vacancy shortlist", () => {
     const { app, match } = setup();
     await submit(app, "strong");
     await submit(app, "weak");
-    match.mockResolvedValueOnce({ biasBlocked: false, decision: sampleMatchDecision({ traceId: "trusted", candidateId: "strong", total: 90 }) });
-    match.mockResolvedValueOnce({ biasBlocked: true });
+    match.mockResolvedValueOnce({ kind: "decision" as const, biasBlocked: false, decision: sampleMatchDecision({ traceId: "trusted", candidateId: "strong", total: 90 }) });
+    match.mockResolvedValueOnce({ kind: "blocked" as const });
     expect(await app.shortlistForVacancy(session("employer"), "vac-1")).toEqual([]);
   });
 
   it("breaks score ties by candidate id, independent of submission order", async () => {
     const { app, match } = setup();
     match.mockImplementation(async (candidateId, vacancyId) => ({
+      kind: "decision" as const,
       biasBlocked: false,
       decision: sampleMatchDecision({ traceId: "tie", candidateId, vacancyId, total: 70 }),
     }));
@@ -139,24 +137,49 @@ describe("server shortlist source", () => {
     profile.candidate_id = makeCandidateId("user");
     const preferences = { ...preferencesFixture, candidate_id: profile.candidate_id };
     const query = vi.fn().mockResolvedValue({ rows: [{ profile, preferences }] });
-    const source = createShortlistSource({ query, env: { AUTH_SEED_ENV: "Staging Demo" }, clock: () => NOW });
+    const source = createApplicationDecisionSource({ query, env: { AUTH_SEED_ENV: "Staging Demo" }, clock: () => NOW });
     expect(source.ownerOf("lnk-1001")).toBe("employer_org_staging-demo");
     expect(source.ownerOf("unknown")).toBeUndefined();
-    const result = await source.match("user", "lnk-1001");
+    const result = await source.decisionFor("user", "lnk-1001");
     expect(query).toHaveBeenCalledWith(expect.stringContaining("candidate_profiles"), [profile.candidate_id]);
-    expect(result.biasBlocked).toBe(false);
+    expect(result).toMatchObject({ kind: "decision", biasBlocked: false });
+    if (result.kind !== "decision") throw new Error("expected a trusted decision");
     expect(result.decision).toMatchObject({ candidateId: "user", vacancyId: "lnk-1001" });
-    expect(await source.match("user", "lnk-1001")).toEqual(result);
+    expect(await source.decisionFor("user", "lnk-1001")).toEqual(result);
   });
 
-  it("fails closed without persisted data and excludes missing or inconsistent candidate records", async () => {
-    const source = createShortlistSource({ env: {}, clock: () => NOW });
-    await expect(source.match("candidate", "lnk-1001")).rejects.toMatchObject({ status: 503 });
+  it("reports why it cannot resolve a trusted decision instead of conflating the causes", async () => {
+    const unconfigured = createApplicationDecisionSource({ env: {}, clock: () => NOW });
+    expect(await unconfigured.decisionFor("candidate", "lnk-1001")).toEqual({ kind: "unavailable", reason: "not_configured" });
+    expect(await unconfigured.decisionFor("candidate", "unknown")).toEqual({ kind: "unavailable", reason: "not_applicable" });
     const query = vi.fn().mockResolvedValueOnce({ rows: [] }).mockResolvedValueOnce({ rows: [{
       profile: candidateProfile(), preferences: preferencesFixture,
     }] });
-    const stored = createShortlistSource({ query, env: {}, clock: () => NOW });
-    expect(await stored.match("candidate", "lnk-1001")).toEqual({ biasBlocked: false });
-    await expect(stored.match("candidate", "lnk-1001")).rejects.toMatchObject({ status: 422 });
+    const stored = createApplicationDecisionSource({ query, env: {}, clock: () => NOW });
+    expect(await stored.decisionFor("candidate", "lnk-1001")).toEqual({ kind: "unavailable", reason: "no_profile" });
+    await expect(stored.decisionFor("candidate", "lnk-1001")).rejects.toMatchObject({ status: 422 });
+  });
+});
+
+describe("consumer policy for an unresolvable decision", () => {
+  function withSource(source: ApplicationDecisionSource, candidateId: string) {
+    const app = new ApplicationService({ clock: () => NOW, sessionSecret: SECRET, shortlist: source });
+    return submit(app, candidateId).then(() => app);
+  }
+
+  it("still returns 503 for the shortlist when no persistence is configured", async () => {
+    const app = await withSource({
+      ownerOf: (id) => id === "vac-1" ? "org-owner" : undefined,
+      decisionFor: async () => ({ kind: "unavailable", reason: "not_configured" }),
+    }, "weak");
+    await expect(app.shortlistForVacancy(session("employer"), "vac-1")).rejects.toMatchObject({ status: 503 });
+  });
+
+  it("keeps skipping a candidate without a persisted profile rather than failing the ranking", async () => {
+    const app = await withSource({
+      ownerOf: (id) => id === "vac-1" ? "org-owner" : undefined,
+      decisionFor: async () => ({ kind: "unavailable", reason: "no_profile" }),
+    }, "weak");
+    expect(await app.shortlistForVacancy(session("employer"), "vac-1")).toEqual([]);
   });
 });
