@@ -1,0 +1,54 @@
+# ImplementArtifact — draft employer organization from the trusted seam
+
+- **Status:** completed
+- **Branch:** `fix/issue-12-draft-employer-org`
+- **Commit:** `93c722d` (plus `2d7c5c7`, the typecheck unblock)
+- **Next consumer:** `publish-open-pr`
+- **Linked issue:** #12 — role-based approval and safe application submission (scoped slice; does not close it)
+- **Source of truth:** viability finding P0 from `.reports/20261018-viability.md` (ADR-0002 core flow unproven) and `docs/arquitectura.md:207`
+
+## Acceptance criteria
+
+| # | Criterion | Verified by |
+|---|---|---|
+| 1 | A draft for a catalog vacancy carries the catalog owner's org even when the body omits `employerOrgId` | `draft-employer-org.test.ts` — "stamps the catalog owner on a draft that omits employerOrgId" |
+| 2 | A body-claimed org is overridden by the trusted owner | same file — "overrides an employerOrgId claimed in the body for a catalog vacancy" |
+| 3 | Non-catalog vacancies and no-shortlist deployments keep the declared value | same file — 2 fallback cases |
+| 4 | A UI-shaped submission is visible to the owning employer and 403 for a foreign one | same file — "makes a UI-shaped submission visible to the owning employer and invisible to a foreign one" |
+| 5 | Existing behaviour unchanged | full `gate:ci` run |
+
+## Changes
+
+- `apps/agent-runtime/src/application/service.ts` — `createDraft` now passes through `withTrustedEmployerOrg`, which resolves the owner via the existing `ShortlistSource.ownerOf` seam. Trusted owner wins; declared value is the fallback. `employerOwns` still fails closed for an unresolvable owner.
+- `apps/agent-runtime/src/application/__tests__/draft-employer-org.test.ts` — new 5-case suite.
+- `apps/web/lib/applications-client.ts` — removed the dead `tieBreakKey` fallback (required `traceId` per `packages/domain/src/assumed.ts:51`); this is what left `npm run typecheck` and therefore `gate:ci` red.
+
+## Validation
+
+```
+npx vitest run apps/agent-runtime/src/application/__tests__/draft-employer-org.test.ts  → 5 passed
+npm run typecheck                                                                      → exit 0
+npm run gate:ci                                                                        → exit 0
+```
+
+`gate:ci`: 108 test files passed / 2 skipped; 853 tests passed / 10 skipped; coverage 88.77% statements, 78.44% branches, 93.66% functions, 91.72% lines (thresholds 80/70/80/80).
+
+### Skipped
+
+- `npm run lint` — pre-existing failure, unrelated: 26 `no-undef` errors in `docs/old/design/previews/*` (superseded material). `lint` is not part of `gate:ci`.
+- `npm run test:e2e` — Playwright needs a live web + runtime; the behaviour is covered at the `ApplicationService` seam instead.
+
+## Quality gates
+
+| Gate | Result |
+|---|---|
+| gate-ide | pass |
+| gate-pre-commit | pass |
+| gate-ci | pass |
+
+## Risk remaining
+
+- No issue reference exists for this work: the repo has no root `AGENTS.md` issue workflow and no tracker issue was created, so the branch is descriptive rather than issue-derived.
+- The web client still sends `employerOrgId: undefined` — harmless now that the server is authoritative, but the field is now redundant in the request body and could be removed in a follow-up.
+- No Playwright spec covers candidate → employer submission yet.
+- `publish-open-pr` was not run: pushing the branch and opening the PR needs explicit confirmation.

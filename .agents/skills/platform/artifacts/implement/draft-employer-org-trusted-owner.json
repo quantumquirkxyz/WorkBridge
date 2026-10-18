@@ -1,0 +1,31 @@
+{
+  "status": "completed",
+  "changes": [
+    "apps/agent-runtime/src/application/service.ts — createDraft now resolves the employer organization through the trusted ShortlistSource.ownerOf seam (new private withTrustedEmployerOrg), so a draft for a catalog vacancy is stamped with the catalog owner even when the request body omits employerOrgId, and a body-supplied organization can no longer claim a vacancy owned by another organization.",
+    "apps/agent-runtime/src/application/__tests__/draft-employer-org.test.ts — new focused suite (5 cases) covering UI-shaped drafts, body-override refusal, non-catalog fallback, no-shortlist fallback and the end-to-end owning/foreign employer shortlist visibility.",
+    "apps/web/lib/applications-client.ts — removed the dead tieBreakKey ternary fallback; MatchDecision.traceId is required by the contract (packages/domain/src/assumed.ts:51) and the fallback broke npm run typecheck, which left gate:ci red on every branch."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npx vitest run apps/agent-runtime/src/application/__tests__/draft-employer-org.test.ts",
+      "npm run typecheck",
+      "npm run gate:ci"
+    ],
+    "skipped": [
+      "npm run lint — pre-existing failure outside this change: 26 no-undef errors in docs/old/design/previews/{build,build-css}.mjs and preview.js (superseded material). Not part of gate:ci (typecheck + test:coverage), left untouched to keep the branch scoped.",
+      "npm run test:e2e — Playwright needs a running web + runtime; the equivalent behaviour is covered by the new integration test at the ApplicationService seam."
+    ],
+    "notes": "Acceptance criteria: (1) a draft for a catalog vacancy carries the catalog owner's org even when the body omits employerOrgId; (2) a body-claimed org is overridden by the trusted owner; (3) non-catalog vacancies and deployments without a shortlist seam keep the declared value; (4) a UI-shaped submission is visible to the owning employer and rejected with 403 for a foreign employer (fail-closed preserved); (5) the existing suite is unchanged. gate:ci exited 0: 108 test files passed / 2 skipped, 853 tests passed, coverage 88.77% statements / 78.44% branches / 93.66% functions / 91.72% lines, above the configured 80/70/80/80 thresholds."
+  },
+  "commitSha": "93c722d",
+  "branch": "fix/issue-12-draft-employer-org",
+  "nextConsumer": "publish-open-pr",
+  "blockedBy": [],
+  "riskRemaining": "This is a scoped slice toward GitHub issue #12 (role-based approval and safe application submission), not the whole ticket: #12's remaining acceptance criteria (Playwright paths for all three roles, Docker/Vercel validation) are untouched, so the PR references but does not close it. The web client still sends employerOrgId: undefined (harmless now that the server is authoritative) and no Playwright end-to-end spec exercises the candidate -> employer submission path yet, so the browser-level flow is verified only at the service seam.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  }
+}
