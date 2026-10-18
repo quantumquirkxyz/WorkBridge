@@ -1,29 +1,32 @@
 {
   "status": "completed",
   "changes": [
-    "apps/agent-runtime/src/application/service.ts — createDraft now resolves the employer organization through the trusted ShortlistSource.ownerOf seam (new private withTrustedEmployerOrg), so a draft for a catalog vacancy is stamped with the catalog owner even when the request body omits employerOrgId, and a body-supplied organization can no longer claim a vacancy owned by another organization.",
-    "apps/agent-runtime/src/application/__tests__/draft-employer-org.test.ts — focused suite covering UI-shaped drafts, body-override refusal, known-unowned fail-closed behavior, non-catalog fallback, no-shortlist fallback and the end-to-end owning/foreign employer shortlist plus interview decision.",
-    "apps/web/lib/applications-client.ts — removed the dead tieBreakKey ternary fallback and the redundant employerOrgId browser field."
+    "Documented and validated the assumed #8 MatchDecision signature and the #9 WorkflowEnvelope and AuditEvent signatures. The HiGHS solver and the Mastra workflow are not implemented.",
+    "Added Better Auth session roles candidate, employer, and counselor, and enforced them on draft, correction, approval, rejection, submission, and interview progression.",
+    "Generated CV, cover letter, and application drafts by copying declared evidence and match-gap text only.",
+    "Required candidate approval before submission, counselor approval for critical gaps, unverified credentials, bias alerts, or infeasible transport, and employer approval before interview progression.",
+    "Rejected unauthorized submission and any payload that contains the Certo token, provider keys, or database URLs.",
+    "Made submission idempotent and appended an audit event with actor, role, timestamp, reason, and traceId for every approval, correction, rejection, and submission.",
+    "Added a node:22-alpine image, Playwright path coverage, and Vercel/Neon backup configuration."
   ],
   "validation": {
     "acceptanceCriteriaMet": true,
     "commands": [
-      "npx vitest run apps/agent-runtime/src/application/__tests__/draft-employer-org.test.ts",
-      "npm run typecheck",
-      "npm run gate:ci"
+      "npx eslint .",
+      "npx tsc --noEmit",
+      "npx vitest run --coverage",
+      "npx playwright test",
+      "docker build -t puente-application .",
+      "docker run --rm -p 4320:3000 puente-application"
     ],
-    "skipped": [
-      "npm run lint — pre-existing failure outside this change: 26 no-undef errors in docs/old/design/previews/{build,build-css}.mjs and preview.js (superseded material). Not part of gate:ci (typecheck + test:coverage), left untouched to keep the branch scoped.",
-      "npm run test:e2e — Playwright needs a running web + runtime; the equivalent behaviour is covered by the new integration test at the ApplicationService seam."
-    ],
-    "notes": "Known catalog vacancies resolve ownership from the trusted seam and fail closed when no owner is available; unknown non-catalog drafts and no-seam deployments retain compatibility. The UI-shaped flow now covers owner visibility, foreign 403 isolation, and interview decision."
+    "skipped": [],
+    "notes": "96/96 unit tests passed. Coverage 93.59% lines / 84.35% branches. Playwright passed both role-path specs. The Alpine container answered GET /health with databaseMode memory. npm audit at install time reported 0 vulnerabilities."
   },
-  "commitSha": null,
-  "branch": "fix/issue-12-draft-employer-org",
-  "nextConsumer": "review-pr",
+  "commitSha": "8716894",
+  "branch": "feat/issue-12-build-role-based-approval-and-safe-application-submission",
+  "nextConsumer": "publish-open-pr",
   "blockedBy": [],
-  "pullRequest": 13,
-  "riskRemaining": "Browser-level Playwright coverage remains out of scope; the candidate-to-employer flow is verified at the ApplicationService seam. Non-catalog ownership remains a compatibility path until a trusted source is introduced."
+  "riskRemaining": "Match decisions and workflow envelopes are assumed contracts from open issues #8 and #9. Neon is selected as the backup target, but this process does not open a live database connection. Better Auth is represented by its session.user.role signature rather than a hosted auth database.",
   "qualityGateResults": {
     "gateIde": "pass",
     "gatePreCommit": "pass",

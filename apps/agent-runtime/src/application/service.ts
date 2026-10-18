@@ -691,7 +691,6 @@ export class ApplicationService {
     const owner = this.shortlist?.ownerOf(input.vacancyId);
     if (owner !== undefined) return { ...input, employerOrgId: owner };
     if (this.shortlist?.isKnownVacancy?.(input.vacancyId)) return { ...input, employerOrgId: undefined };
-    if (this.shortlist === undefined) return input;
     return input;
   }
 

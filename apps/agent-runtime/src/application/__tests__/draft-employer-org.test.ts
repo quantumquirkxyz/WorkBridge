@@ -67,10 +67,16 @@ describe("draft employer organization comes from the trusted seam", () => {
     expect(draft.employerOrgId).toBe("org-owner");
   });
 
-  it("keeps a body employerOrgId for an unknown non-catalog vacancy", () => {
+  it("discards a body employerOrgId for a known vacancy without an owner", () => {
     const app = service(shortlist(() => undefined, (id) => id === "vac-1"));
     const draft = app.createDraft(session("candidate"), draftBody({ employerOrgId: "org-manual" }));
     expect(draft.employerOrgId).toBeUndefined();
+  });
+
+  it("keeps a body employerOrgId for an unknown non-catalog vacancy", () => {
+    const app = service(shortlist(() => undefined, () => false));
+    const draft = app.createDraft(session("candidate"), draftBody({ employerOrgId: "org-manual" }));
+    expect(draft.employerOrgId).toBe("org-manual");
   });
 
   it("keeps a body employerOrgId when no shortlist seam is configured", () => {
