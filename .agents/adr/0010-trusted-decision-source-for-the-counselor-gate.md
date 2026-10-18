@@ -47,20 +47,38 @@ bodies."
   `ApplicationDecisionSource`, still with a single adapter
   (`createApplicationDecisionSource`). No second seam is introduced; the existing
   one already varies across consumers.
-- **The seam reports three distinct outcomes, not a nullable decision.** Reading
-  the adapter showed that "no decision" currently conflates two unrelated causes
-  (a vacancy outside the catalog, and a candidate with no persisted profile), and
-  they must not share a policy:
+- **The seam reports facts; consumers apply policy.** Reading the adapter showed
+  that "no decision" currently conflates several unrelated causes — a vacancy
+  outside the catalog, a candidate with no persisted profile, a deployment with no
+  persistence, and an audit that blocked the vacancy — behind a single `undefined`.
+  They must not share a policy, so the outcome is explicit:
 
   ```
   ownerOf(vacancyId: string): string | undefined
 
   decisionFor(candidateId, vacancyId): Promise<
     | { kind: "decision"; decision: MatchDecision; biasBlocked: boolean }
-    | { kind: "not_applicable" }   // vacancy is not in our catalog
-    | { kind: "unavailable" }      // catalog vacancy, but no persisted profile/preferences
+    | { kind: "blocked" }          // the counterfactual audit blocked this candidate from this vacancy
+    | { kind: "unavailable"; reason: "not_applicable" | "no_profile" | "not_configured" | "no_decision" }
   >
   ```
+
+  `not_applicable` is a vacancy outside our catalog, `no_profile` is a catalog
+  vacancy with no persisted profile or preferences for this candidate,
+  `not_configured` is a deployment with no persistence at all, and `no_decision` is
+  a candidate the solver produced no decision for (for example one excluded by hard
+  constraints even though the audit did not block the vacancy).
+- **Each consumer maps the outcome to its own policy**, which is what keeps the
+  interface from smuggling a policy into the seam:
+
+  | Outcome | Employer shortlist (today, unchanged) | Draft creation (new) |
+  |---|---|---|
+  | `decision` | rank it (`biasBlocked` yields an empty list) | gate from the decision |
+  | `blocked` | empty list | gate with `bias_alert` |
+  | `unavailable` / `not_applicable` | skip the submission | no owner, no gate (invisible) |
+  | `unavailable` / `no_profile` | skip the submission | **refuse 503 `decision_unavailable`** |
+  | `unavailable` / `no_decision` | skip the submission | **refuse 503 `decision_unavailable`** |
+  | `unavailable` / `not_configured` | **throw 503 `shortlist_unavailable`** | **refuse 503 `decision_unavailable`** |
 
 - **The counselor gate consumes the seam, never the body.** `createDraft` resolves
   the decision through `decisionFor` and computes the gate from it. A `match` in
@@ -69,14 +87,13 @@ bodies."
 - **Ownership is unchanged.** `ownerOf` stays the only source of vacancy
   ownership, as already implemented; a body value is used only when the seam has
   no owner, which keeps non-catalog drafts invisible rather than rejected.
-- **`unavailable` fails closed by refusing.** When a catalog vacancy cannot be
-  resolved to a trusted decision, `createDraft` returns **503**
-  `decision_unavailable` rather than creating a draft with an empty gate. This
-  mirrors the existing `shortlist_unavailable` policy and keeps memory mode without
-  persistence from silently degrading the boundary.
-- **`not_applicable` keeps today's behaviour.** A vacancy outside the catalog still
-  produces a draft with no owner and no gate, because ownership already makes it
-  invisible; refusing would be an unrelated behaviour change.
+- **Fail-closed is an explicit choice, not a default.** When a catalog vacancy
+  cannot be resolved to a trusted decision (`no_profile` or `not_configured`),
+  `createDraft` refuses with **503** `decision_unavailable` rather than creating a
+  draft with an empty gate. Forcing the counselor gate instead was considered and
+  rejected (see Alternatives). `not_applicable` keeps today's behaviour: a vacancy
+  outside the catalog still produces a draft with no owner and no gate, because
+  ownership already makes it invisible.
 
 ## Consequences
 

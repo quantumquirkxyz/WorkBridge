@@ -73,19 +73,28 @@ existing seam rather than add a new one**, and to rename it to what it actually 
 ```
 ApplicationDecisionSource            (renamed from ShortlistSource)
   ownerOf(vacancyId: string): string | undefined
-  decisionFor(candidateId, vacancyId): Promise<{ decision?: MatchDecision; biasBlocked: boolean }>
+  decisionFor(candidateId, vacancyId): Promise<
+    | { kind: "decision"; decision: MatchDecision; biasBlocked: boolean }
+    | { kind: "blocked" }
+    | { kind: "unavailable"; reason: "not_applicable" | "no_profile" | "not_configured" }
+  >
 ```
+
+ADR-0010 settles this shape. The outcome is a fact, not a policy, and each consumer maps
+it: the employer shortlist keeps today's behaviour exactly (including that a candidate
+without a persisted profile is skipped rather than an error), while draft creation refuses
+with `503 decision_unavailable` when a catalog vacancy has no trusted decision.
 
 Callers must know exactly three things:
 
 - **Ownership is authoritative.** `ownerOf` is the only source of vacancy ownership; a
   value from a request body is never consulted.
-- **`decisionFor` is authoritative and may be absent.** It returns `undefined` when the
-  server cannot resolve a trusted decision (no persistence, unknown candidate, missing
-  profile). Absence is not success.
-- **Absence fails closed.** If the trusted decision is unavailable, the draft cannot be
-  created with an empty gate; the runtime must refuse or force the counselor gate rather
-  than trust the body.
+- **`decisionFor` is authoritative and its absence is explicit.** There is no nullable
+  decision: `blocked` and the three `unavailable` reasons are distinguished, because they
+  do not share a policy. Absence is not success.
+- **Absence fails closed for draft creation.** A draft is never created with an empty gate
+  when the trusted decision could not be resolved; the runtime refuses instead of trusting
+  the body.
 
 ### What stays hidden behind the interface
 
