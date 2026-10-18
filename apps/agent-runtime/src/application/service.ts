@@ -176,7 +176,7 @@ export class ApplicationService {
   createDraft(session: unknown, raw: unknown): DraftView {
     const actor = this.actor(session);
     this.requireRole(actor, "candidate", "Only a candidate can draft an application.");
-    const input = this.parseDraftInput(raw);
+    const input = this.withTrustedEmployerOrg(this.parseDraftInput(raw));
     if (!this.ownsCandidate(actor, input.candidateId)) {
       throw new ApplicationError("A candidate can only draft their own application.", 403, "forbidden");
     }
@@ -678,6 +678,19 @@ export class ApplicationService {
 
   private hasCounselorGate(draft: StoredDraft): boolean {
     return this.counselorGate(draft).length > 0;
+  }
+
+  /**
+   * Ownership is a trusted server fact, not an application-body claim. When the
+   * catalog seam knows who owns the vacancy, that owner wins over whatever the
+   * body sent; otherwise the declared value is kept so non-catalog drafts keep
+   * working. A draft whose owner cannot be resolved stays invisible to every
+   * employer because employerOwns fails closed.
+   */
+  private withTrustedEmployerOrg(input: DraftInput): DraftInput {
+    const owner = this.shortlist?.ownerOf(input.vacancyId);
+    if (owner === undefined || owner === input.employerOrgId) return input;
+    return { ...input, employerOrgId: owner };
   }
 
   /** Fail closed: a draft without an organization is never visible to an employer. */
