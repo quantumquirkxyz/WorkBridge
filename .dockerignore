@@ -2,5 +2,6 @@ node_modules
 coverage
 .git
 .skill-sandbox
+apps/certo
 *.md
 !README.md

@@ -50,6 +50,8 @@ export {
   type WorkflowResult,
 } from "./graph";
 
+export { loadWorkflowDefinition, type WorkflowDefinition } from "./definition";
+
 export {
   encodeSseEvent,
   handleWorkflowRequest,

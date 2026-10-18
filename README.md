@@ -13,155 +13,209 @@ Reto: 3
 
 ## Problema
 
-La transición de los estudios al primer empleo es difícil para jóvenes panameños. WorkBridge
-conecta perfiles, vacantes y rutas de formación considerando habilidades técnicas y blandas,
-experiencia informal, certificaciones, transporte, horario, salario y equidad.
+La transición de los estudios al primer empleo es difícil para los jóvenes panameños, y el
+problema es de información en tres lados. Los jóvenes no saben traducir su experiencia
+informal (ayudar en el negocio familiar, un voluntariado) al lenguaje de una empresa ni qué
+curso cierra su brecha. Las empresas reciben postulaciones que no encajan y publican ofertas
+con requisitos vagos o discriminatorios. Los centros de formación ofrecen cursos que no
+siempre llegan a quien más los necesita. A esto se suma la geografía: una oferta en Tocumen
+puede ser inviable para alguien de La Chorrera por traslado y costo de transporte.
+
+WorkBridge conecta perfiles, vacantes y rutas de formación considerando habilidades técnicas
+y blandas, experiencia informal, certificaciones, transporte, horario, salario y equidad, con
+una persona orientadora que aprueba las decisiones sensibles.
+
+## Qué hace
+
+1. **Intake conversacional**: la persona joven cuenta lo que sabe hacer (o sube un CV en PDF o
+   foto) y el sistema arma un perfil con evidencia, incluida la experiencia informal.
+2. **Matching explicable**: un solver determinista decide *apta*, *apta con brechas* o *no apta
+   por ahora* para cada vacante, con las brechas, el traslado y las restricciones duras.
+3. **Ruta de formación**: convierte las brechas en un plan ordenado de cursos.
+4. **Postulación asistida**: genera el borrador (CV, carta y evidencia) que la persona revisa,
+   corrige y aprueba.
+5. **Aprobaciones humanas**: orientador y empresa deciden con la explicación a la vista.
 
 ## Arquitectura de agentes
 
-The system uses four agents: Exploration, Profile and Evidence, Market and Matching, and Training.
-Mastra coordinates them through a workflow graph. Deterministic matching uses HiGHS; Google Maps
-handles routing; Certo is a separately deployed credential verifier with Accredible, Credly, and
-transparent mock fallbacks. Human approval is required before application submission.
-See the complete [agent architecture diagram](docs/reference/agents/architecture.md) for each
-agent's tools, the data and execution planes, and all human approval points.
-Read the [methodology](docs/reference/metodologia.md) for architecture,
-deployment, and runtime operation.
+Cinco agentes con roles distintos, coordinados por un grafo de Mastra, más un coach de
+entrevista simulada fuera del grafo. El detalle, con diagrama, herramientas y puntos de
+aprobación humana, está en **[docs/arquitectura.md](docs/arquitectura.md)**.
 
-## Tecnologías y fuentes de datos
+| Agente | Rol |
+|---|---|
+| Exploration | Valida preferencias y explora el catálogo de vacantes |
+| Profile and Evidence | Convierte CV y experiencia en un perfil con evidencia |
+| Market and Matching | Normaliza la vacante y decide aptitud (HiGHS, restricciones duras) |
+| Bias Auditor | Repite el matching cambiando nombre, género o corregimiento y bloquea ofertas discriminatorias |
+| Training | Convierte brechas en una ruta de formación |
 
-TypeScript, Next.js, Mastra, OpenRouter, PostgreSQL, Prisma, Better Auth, JSON Schema 2020-12,
-Ajv, HiGHS, Google Maps, Apify LinkedIn Jobs scraper, Langfuse, Vitest, and Playwright.
+- **Herramientas que actúan**: escritura en base de datos, solver de asignación, verificación
+  de credenciales y registro de notificaciones salientes en un outbox SQL.
+- **Componente determinista**: matching, restricciones, puntaje, rutas y verificaciones son
+  código; el modelo de lenguaje no decide restricciones duras.
+- **Humano en el ciclo**: la persona candidata aprueba su postulación, el orientador revisa
+  los casos con brechas críticas, credenciales sin verificar, alertas de sesgo o traslado
+  inviable, y la empresa decide el avance a entrevista. Ningún agente envía postulaciones.
+- **Trazabilidad**: envelopes por decisión, ingesta opcional a Langfuse y un registro de
+  auditoría append-only.
+
+## Tecnologías
+
+TypeScript (Node.js ≥ 22), Next.js 16 y React 19, Mastra, OpenRouter (modelos de lenguaje),
+PostgreSQL con Neon, Better Auth, JSON Schema 2020-12 con Ajv, HiGHS (solver MILP), Google
+Maps (geocodificación y traslados), Langfuse (trazas), Tesseract y unpdf (OCR y PDF), Vitest y
+Playwright. Certo es un verificador de credenciales que se despliega por separado; con
+Accredible, Credly y un mock transparente como respaldo.
+
+## Fuentes de datos
+
+- **Vacantes**: catálogo propio cargado desde ofertas de portales (extracción con el scraper de
+  LinkedIn Jobs de Apify) y *fixtures* documentados en el repositorio (`packages/catalog`).
+- **Formación**: catálogo de cursos del repositorio (`packages/training`).
+- **Traslados**: Google Maps cuando hay clave; si no, datos deterministas de demostración.
+- **Credenciales**: Certo, Accredible y Credly, con fallbacks documentados.
+
+Fuentes externas que sustentan el problema: **pendientes de completar** (no se inventan cifras).
+
+| Dato | Fuente | Fecha de consulta | Uso |
+|---|---|---|---|
+| Desempleo juvenil | Pendiente: fuente oficial panameña | — | Justificación del problema |
+| Transporte y tiempos de traslado | Pendiente | — | Restricción de matching |
+| Cursos y cupos | Pendiente: INADEH u otra fuente verificable | — | Ruta de formación |
+| Vacantes | Catálogo y *fixtures* del repositorio (`packages/catalog`) | — | Demo y evals |
 
 ## Instalación y ejecución
 
-Requiere Node.js ≥ 22. El proyecto es un monorepo de npm workspaces (`packages/*`, `apps/*`).
+Requiere Node.js ≥ 22. Es un monorepo de npm workspaces (`packages/*`, `apps/*`).
 
 ```bash
 npm ci
-npm test
-npm run typecheck
-npm run gate:ci
-npm run test:e2e
-npm start
-npm run dev
+cp .env.example .env                       # servicio de postulación y semillas
+cp apps/web/.env.example apps/web/.env.local   # aplicación web
+npm run db:migrate                         # esquema en Postgres (requiere el CLI de Neon)
+npm run seed:roles                         # cuentas de orientador y empresa
+npm run seed:demo                          # datos de demostración
+npm run dev                                # web en http://localhost:3001
+npm start                                  # servicio de postulación (agent-runtime)
+npm run start:worker                       # worker del chat asíncrono
 ```
 
-`npm run dev` abre el intake en http://localhost:3001. `npm start` levanta el servicio de
-postulación. Los borradores y envíos con roles están en `docs/how-to/application-runtime.md`.
-Las firmas asumidas de matching (#8) y del plano de workflow (#9) están en
-`docs/reference/assumed-contracts.md`.
+Sin `OPENROUTER_API_KEY` el sistema usa el extractor heurístico y los *fallbacks*
+deterministas: sigue produciendo perfiles y decisiones válidos. Sin `DATABASE_URL` no hay
+sesiones, chat ni persistencia. Los detalles de despliegue (Docker, Vercel, variables) están
+en **[docs/metodologia.md](docs/metodologia.md)**.
 
-Copia `apps/web/.env.example` a `apps/web/.env.local` para configurar OpenRouter. Sin
-`OPENROUTER_API_KEY` el intake usa el extractor heurístico determinista y aun así produce un
-`CandidateProfile` válido. Copia `.env.example` a `.env` para la postulación local. No
-commits de credenciales reales.
+### Credenciales de demo
+
+No hay claves reales en el repositorio: copia siempre los `.env.example`. Las cuentas de
+demostración (personas jóvenes, orientadores y empresas) y su contraseña compartida se crean
+con `npm run seed:demo` a partir de `scripts/seed/demo-data.ts`; son datos de demostración, no
+credenciales de ningún servicio real. Las claves de OpenRouter, Google Maps, Langfuse y Certo
+son opcionales y se configuran solo por variables de entorno.
+
+Todas las cuentas de `seed:demo` usan la contraseña `Semilla2026!`. Las postulaciones no
+quedan guardadas en la base: se arman al usar la cuenta.
+
+Empresas con vacante publicada en el catálogo (`packages/catalog/fixtures/vacancy-catalog.json`):
+
+| Usuario | Empresa |
+|---|---|
+| rosa.mendez@seed.workbridge.test | Banco Delta |
+| carlos.vidal@seed.workbridge.test | Supermercado Central |
+| laura.quiel@seed.workbridge.test | Consultora Istmo |
+| helena.ponce@seed.workbridge.test | Farmacias Del Istmo |
+| andres.cedeno@seed.workbridge.test | Grupo Mar |
+| miriam.batista@seed.workbridge.test | Ferretería El Tornillo |
+
+El resto de empresas del seed no tiene vacante en el catálogo.
+
+Estudiantes con perfil completo (experiencia y estudios) y una vacante del catálogo con la que coinciden:
+
+| Usuario | Vacante |
+|---|---|
+| camila.ortega@seed.workbridge.test | Atención al cliente en la ciudad |
+| diego.sanchez@seed.workbridge.test | Caja de fin de semana |
+| valeria.perez@seed.workbridge.test | Asistencia administrativa remota |
+| kevin.batista@seed.workbridge.test | Ventas en Arraiján |
+| sofia.herrera@seed.workbridge.test | Pasantía de ventas |
+| elena.castillo@seed.workbridge.test | Atención al cliente, con búsquedas guardadas |
+
+### Pruebas
+
+```bash
+npm test               # Vitest: unitarias y de componentes
+npm run typecheck
+npm run gate:ci        # typecheck + cobertura
+npm run test:e2e       # Playwright
+```
 
 ## Evals
 
-Los resultados siguientes salen de aserciones existentes en Vitest; no son una
-evaluación nueva ni datos generados manualmente. En verificación, la métrica es
-el estado predicho (y el proveedor cuando aplica). En matching y perfil, es la
-clasificación determinista comprobada por el test.
-
-| Caso nombrado | Métrica | Resultado | Test fuente |
-|---|---|---|---|
-| Credencial válida, firma e issuer confiables | Estado / proveedor | `verified` / Certo | `apps/agent-runtime/test/ground-truth.test.ts` — `valid signature and trusted issuer` |
-| Certificado revocado | Estado / proveedor | `rejected` / Certo | `apps/agent-runtime/test/ground-truth.test.ts` — `valid signature with revoked certificate` |
-| Certificado expirado | Estado / proveedor | `rejected` / Certo | `apps/agent-runtime/test/ground-truth.test.ts` — `expired certificate` |
-| Documento alterado | Estado / proveedor | `rejected` / Certo | `apps/agent-runtime/test/ground-truth.test.ts` — `altered document` |
-| Firma inválida | Estado / proveedor | `rejected` / Certo | `apps/agent-runtime/test/ground-truth.test.ts` — `invalid signature` |
-| Firmante desconocido | Estado / proveedor | `unverified` / Certo | `apps/agent-runtime/test/ground-truth.test.ts` — `unknown signer` |
-| Identidad del issuer inconsistente | Estado / proveedor | `rejected` / Certo | `apps/agent-runtime/test/ground-truth.test.ts` — `inconsistent issuer identity` |
-| Datos del certificado inconsistentes | Estado / proveedor | `rejected` / Certo | `apps/agent-runtime/test/ground-truth.test.ts` — `inconsistent certificate data` |
-| Falta la clave pública | Estado / proveedor | `unverified` / Certo | `apps/agent-runtime/test/ground-truth.test.ts` — `missing public key` |
-| Formato no soportado | Estado / proveedor | `unverified` / Certo | `apps/agent-runtime/test/ground-truth.test.ts` — `unsupported format` |
-| Certo no disponible, fallback Accredible | Estado / proveedor | `verified` / Accredible | `apps/agent-runtime/test/ground-truth.test.ts` — `Certo unavailable with Accredible fallback` |
-| Accredible no disponible, fallback Credly | Estado / proveedor | `verified` / Credly | `apps/agent-runtime/test/ground-truth.test.ts` — `Accredible unavailable with Credly fallback` |
-| Todos los proveedores no disponibles | Estado / proveedor | `rejected` / mock | `apps/agent-runtime/test/ground-truth.test.ts` — `all providers unavailable` |
-| Credencial declarada sin evidencia | Estado / proveedor | `declared` / mock | `apps/agent-runtime/test/ground-truth.test.ts` — `declared credential without evidence` |
-| Credencial duplicada o reutilizada | Estado / proveedor | `rejected` / Certo | `apps/agent-runtime/test/ground-truth.test.ts` — `duplicate or reused credential` |
-| Candidato fuerte elegible | Aptitud / score | `apt` / 87 | `packages/solver/src/__tests__/match.test.ts` — `produces apt for a strong eligible candidate` |
-| Candidato parcialmente coincidente | Aptitud / score | `apt_with_gaps` / 50–74 | `packages/solver/src/__tests__/match.test.ts` — `produces apt_with_gaps for a partially matching candidate` |
-| Candidato débil sin fallo duro | Aptitud / score | `not_currently_apt` / <50 | `packages/solver/src/__tests__/match.test.ts` — `produces not_currently_apt from the score band without a hard failure` |
-| Experiencia demasiado breve | Relevancia | `requires_additional_evidence` | `packages/profile/tests/classify.test.ts` — `asks for more evidence when the description is too short` |
-| Experiencia sin solapamiento | Relevancia | `not_relevant` | `packages/profile/tests/classify.test.ts` — `is not relevant when no skills overlap the target role` |
-| Experiencia con solapamiento fuerte | Relevancia / score | `relevant` / ≥0.5 | `packages/profile/tests/classify.test.ts` — `is relevant for a strong overlap with the target role` |
-| Experiencia con solapamiento débil | Relevancia | `partially_relevant` | `packages/profile/tests/classify.test.ts` — `is partially relevant for a weak overlap` |
-
-El caso de ground truth de credenciales también comprueba los 15 estados contra
-la matriz de confusión: `tp=3`, `tn=12`, `fp=0`, `fn=0`, precisión `1`, recall
-`1`, false-positive rate `0`, false-negative rate `0` y fallback rate `3/15`.
+Catálogo de **99 casos** en 7 temas (verificación de credenciales, matching, perfil y
+experiencia informal, equidad y sesgo, guardrails de entrada, autorización y aprobación
+humana, robustez), cada uno enlazado a un test existente. Ejecución del 2026-10-17: **855
+pruebas, 844 aprobadas, 1 fallida y 10 omitidas**. La fallida es
+`apps/web/tests/chat-worker.test.ts` y también falla en `main`. Las 8 evals con LLM en vivo
+están omitidas por defecto, así que los comportamientos que solo ellas cubren (rechazo de
+"postúlame a esa", entradas abusivas, no inventar salarios) no están verificados en esa
+corrida. En credenciales, la matriz de confusión de 15 estados da precisión y recall 1.
+Detalle, métricas, comandos y límites en **[docs/evals.md](docs/evals.md)**.
 
 ## Bitácora de IA
 
-### Herramientas usadas
+Se usó IA a lo largo de todo el proyecto: Cursor (49 commits con coautoría en `main`), Claude (8
+commits con coautoría en `main`, 9 contando el de archivo de documentación de esta rama, y la
+sesión de refactorización visual y cierre), OpenCode, Codex y otros modelos, con
+revisión y decisiones del equipo. Qué se hizo con IA, con qué herramienta, qué no se puede
+determinar y qué incidentes hubo: **[docs/bitacora-ia.md](docs/bitacora-ia.md)**.
 
-La única herramienta generativa usada para este registro y para la asistencia de
-implementación fue **OpenCode (GPT-5.6 Luna)**. OpenCode se usó para explorar el
-repositorio, localizar fixtures y aserciones, proponer documentación y revisar
-la consistencia de las referencias. Esta asistencia y la revisión final de la
-trazabilidad quedan registradas en `.agents/skills/platform/artifacts/implement/102.md`
-y en el commit `6d48081`. Las decisiones de producto, contratos, revisión de
-cambios y escritura final fueron del equipo.
+## Demo
 
-### Asistencia por área
+Guion de **menos de 3 minutos** (intake, matching, ruta, postulación y aprobaciones humanas),
+preparación, plan B y checklist de entrega: **[docs/runbook-demo.md](docs/runbook-demo.md)**.
+Estado: es un guion; el video aún **no está grabado ni enlazado** y el ensayo cronometrado
+de punta a punta **no se ha hecho** (el tiempo del guion, 2:52, es un presupuesto).
+Enlace al video: _pendiente_.
 
-| Área | AI-asistido | Hecho a mano por el equipo | Evidencia verificable |
-|---|---|---|---|
-| Intake | Explorar el código y localizar los puntos de extracción y persistencia. | Definir campos de perfil, contratos y el límite entre extracción heurística y OpenRouter. | `ef1ff1f` (persistencia de perfiles), `41a92b2` (fusión de fuentes), `.agents/skills/platform/artifacts/implement/4.md` |
-| Matching | Explorar fixtures y revisar la documentación de resultados. | Escoger dimensiones, pesos, restricciones duras, estados de aptitud y fixtures deterministas. | `73e232a` (seam del solver), `cf35082` (decisiones para borradores), `.agents/skills/platform/artifacts/implement/2.md` |
-| Verificación de credenciales | Revisar la matriz de casos y ubicar sus aserciones. | Definir evidencia declarada, binding del holder, estados y fallback Certo → Accredible → Credly → mock. | `8eea3e0` (credential verification), `.agents/skills/platform/artifacts/implement/56.md` |
-| Web | Proponer la organización del registro y comprobar referencias de rutas y handlers. | Conectar rutas con servicios, validar entradas, aplicar autorización y decidir códigos/respuestas de error. | `493129a` (integración web), `7acb1e3` (ruta de intake), `.agents/skills/platform/artifacts/implement/32.md` |
-| Docs | Localizar documentación existente y revisar enlaces y commits citados. | Redactar y mantener este registro, la tabla de evaluaciones y el diagrama de arquitectura. | `6d48081`, `.agents/skills/platform/artifacts/implement/102.md`, `bb86ef4`, `.agents/skills/platform/artifacts/implement/101.md` |
+## Estado y límites conocidos
 
-La tabla y este registro documentan resultados ya comprobados por la suite; este
-ticket solo añade trazabilidad documental y no añade casos de prueba ni cambia
-`npm test`; this scope statement is recorded in commit `45d8cac`.
+- La aplicación web no se ha ejecutado de punta a punta en un entorno limpio desde la
+  refactorización visual; la verificación se apoya en tests y en lectura de código.
+- La web no pasa por el grafo de cinco agentes (`WorkflowRuntime`): llama a los agentes de
+  perfil y exploración, al servicio de matching y a la ruta de formación por separado, y el
+  auditor de sesgo contrafactual no corre en ese flujo. Detalle en
+  [docs/arquitectura.md](docs/arquitectura.md#7-limitaciones-conocidas).
+- Un borrador creado desde la interfaz no lleva la organización de la empresa, así que la
+  empresa podría no verlo; no se ha ensayado (ver el runbook, sección 6.3).
+- Borradores y envíos de postulación viven en memoria en `agent-runtime`; solo la
+  idempotencia y el outbox usan SQL.
+- Hay pruebas y chequeos rojos en `main` que no son de la entrega: `chat-worker.test.ts`, errores de
+  tipos en `service.ts` y `server.test.ts`, y `check-all.mjs` falla por un archivo de política
+  ausente (`policy/tool-risk-budget.json`).
+- Las credenciales que estuvieron versionadas en `apps/web/.env.local` siguen expuestas en el
+  historial: **hay que rotarlas** y purgar el historial (`scripts/purge-leaked-env.sh`).
+  Quitar el archivo del repositorio (PR #106) solo evita nuevas filtraciones.
+- Sin integraciones reales de WhatsApp ni notas de voz de salida.
 
----
+## Congelamiento
 
-Entrega: tag de git `final-24h` sobre el último commit válido, al cumplirse la hora 24.
-
-# Agent-Hackathon
-
-Working repository for an agent-focused build, developed with the
-[quirk Skills](https://github.com/quantumquirkxyz/skills-quirk) workflow.
-
-## How this repo is organized
-
-| Path | Purpose |
-|---|---|
-| `.agents/skills/` | Canonical quirk Skills bundle (repository-local workflow) |
-| `.claude/skills/` | Compatibility symlink view of the canonical skills |
-| `skills-lock.json` | SHA-256 integrity hashes for the canonical skills |
-| `CONTEXT.md` | This project's domain vocabulary and boundaries |
-| `.agents/adr/` | Architecture Decision Records |
-| `docs/reference/agents/` | Work-item, routing, and tracker governance |
-| `docs/how-to/` | Adoption, installation, and workflow guides |
-| `docs/explanation/` | The quirk method and its provenance |
-
-## Workflow
-
-Work moves through the quirk flow: **clarify → plan → build → review → deliver**.
-
-1. `ask-to` — route an ambiguous request.
-2. `grill-with-docs` — sharpen the idea, record `CONTEXT.md` and ADRs.
-3. `to-spec` → `to-tickets` — publish the spec and claimable tickets.
-4. `implement` → `publish-open-pr` — build and open the pull request.
-5. `review-pr` → `ship-subissue` — review, repair, then ship.
-
-## Validation
+**Estado: el tag `final-24h` está creado y publicado.** Es un tag anotado sobre el último
+commit válido de la entrega: el commit que incluye esta sección. Lo que se commitee después
+del tag no cuenta para la evaluación. Para comprobarlo:
 
 ```bash
-node .agents/skills/platform/check-all.mjs   # expected: status: "pass"
+git tag -l final-24h
+git rev-parse final-24h^{commit}    # hash del commit congelado
+git show --stat final-24h
 ```
 
-## Status
+## Documentación
 
-Bootstrapped: the skills bundle is installed and validated. The project brief and domain
-vocabulary are **not yet defined** — see `CONTEXT.md`.
+Todo el material de la entrega está en [`docs/`](docs/README.md). La documentación anterior
+(método quirk Skills, gobernanza de issues, guías, referencias de frontend y la galería de
+previews) se conserva en [`docs/old/`](docs/old/README.md).
 
-## License
+## Licencia
 
-MIT — see [LICENSE](LICENSE).
+MIT. Ver [LICENSE](LICENSE).

@@ -1,6 +1,6 @@
 @import "tailwindcss";
-@source "../../../apps/web/components";
-@source "../../../apps/web/app";
+@source "../../../../apps/web/components";
+@source "../../../../apps/web/app";
 @source "./";
 @source not "./app.css";
 @source not "./app.src.css";

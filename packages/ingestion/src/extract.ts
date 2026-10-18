@@ -2,7 +2,7 @@ import type { IntakeSource, IntakeSourceKind } from '@workbridge/domain';
 import { MAX_SOURCE_BYTES, MAX_TEXT_CHARS } from './kinds';
 import { SourceTooLargeError, UnsupportedSourceError } from './errors';
 import { altTextOcrAdapter, chainedOcrAdapter, type OcrAdapter, tesseractOcrAdapter } from './ocr';
-import { unpdfExtractor, type PdfExtractor } from './pdf';
+import { extractEmbeddedPngs, unpdfExtractor, type PdfExtractor, type PdfPageImage } from './pdf';
 
 export interface RawIntake {
   kind: IntakeSourceKind;
@@ -22,6 +22,8 @@ export interface ExtractedText {
 
 export interface ExtractionDeps {
   pdf?: PdfExtractor;
+  /** Embedded page images used when a PDF has no text layer. */
+  pdfImages?: (bytes: Uint8Array) => Promise<PdfPageImage[]>;
   ocr?: OcrAdapter;
   now?: () => Date;
   maxBytes?: number;
@@ -75,6 +77,22 @@ export async function extractText(raw: RawIntake, deps: ExtractionDeps = {}): Pr
       pageCount = result.pageCount;
       method = deps.pdf ? 'pdf-adapter' : 'unpdf';
       confidence = 0.8;
+      if (text.length < 200 && deps.ocr) {
+        const images = await readPdfImages(bytes, deps.pdfImages);
+        for (const image of images) {
+          try {
+            const transcribed = await deps.ocr.extract({ bytes: image.bytes, mimeType: image.mimeType });
+            if (!transcribed.text.trim()) continue;
+            text = transcribed.text.trim();
+            method = transcribed.method;
+            confidence = transcribed.confidence;
+            warnings.push('PDF had no text layer; the page image was transcribed.');
+            break;
+          } catch {
+            // Try the next embedded image. The warning below covers a total miss.
+          }
+        }
+      }
       if (!text) warnings.push('PDF contained no extractable text; it may require OCR.');
       else if (text.length < 200) warnings.push('Very little text was extracted from the PDF; OCR quality may be an issue.');
       break;
@@ -121,4 +139,15 @@ export async function extractText(raw: RawIntake, deps: ExtractionDeps = {}): Pr
   if (warnings.length) source.warnings = [...warnings];
 
   return { text, source, warnings, confidence };
+}
+
+async function readPdfImages(
+  bytes: Uint8Array,
+  pdfImages: ExtractionDeps['pdfImages'],
+): Promise<PdfPageImage[]> {
+  try {
+    return await (pdfImages ?? extractEmbeddedPngs)(bytes);
+  } catch {
+    return [];
+  }
 }

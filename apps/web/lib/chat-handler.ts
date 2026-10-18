@@ -337,7 +337,7 @@ export async function readChatSessionView(
     const view = { ...source, slotState: coverKnownProfileSlots(source.slotState, deps.context?.profile) };
     return {
       status: 200,
-      body: { transcript: view.transcript, slotState: view.slotState, pendingSlot: pendingSlot(view.slotState), phase: currentPhase(view.slotState) },
+      body: { transcript: view.transcript, slotState: view.slotState, pendingSlot: pendingSlot(view.slotState), phase: currentPhase(view.slotState), version: source.version },
     };
   } catch {
     return { status: 503, body: { error: 'persistence_unavailable' } };

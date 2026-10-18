@@ -215,6 +215,8 @@ describe('handleChatTurn', () => {
     expect(second.body).toEqual({ error: 'chat_conflict' });
     expect(store.get('candidate_a')!.version).toBe(1);
     expect(store.get('candidate_a')!.transcript).toHaveLength(2);
+    const view = await readChatSessionView('candidate_a', { store });
+    expect(view.body).toMatchObject({ version: 1 });
   });
 
   it('keeps only the last MAX_TRANSCRIPT_MESSAGES stored messages', async () => {

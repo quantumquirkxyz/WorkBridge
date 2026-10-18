@@ -4,6 +4,7 @@ import { ApplicationError } from "./errors";
 import { createSqlNotificationOutbox } from "./notification";
 import { assertNoSecrets, collectSecretValues } from "./secrets";
 import { ApplicationService } from "./service";
+import { createShortlistSource } from "./shortlist";
 import { createSqlIdempotencyStore, type SqlQuery } from "./store";
 
 export interface ServerOptions {
@@ -37,6 +38,7 @@ export function createApplicationServer(options: ServerOptions = {}) {
       sessionSecret: env.BETTER_AUTH_SECRET ?? "",
       idempotency: sql ? createSqlIdempotencyStore(sql) : undefined,
       outbox: sql ? createSqlNotificationOutbox(sql) : undefined,
+      shortlist: createShortlistSource({ query: sql, env, clock: options.clock ?? (() => new Date().toISOString()) }),
     });
   const context: RequestContext = { service, secrets, databaseMode, persistence };
   return createServer((req, res) => {
@@ -61,6 +63,12 @@ async function dispatch(req: IncomingMessage, res: ServerResponse, context: Requ
   const body = req.method === "GET" ? {} : await readBody(req);
   assertNoSecrets(body, context.secrets);
   const session = resolveSession(req, body);
+
+  const shortlist = /^\/vacancies\/([^/]+)\/shortlist$/.exec(path);
+  if (req.method === "GET" && shortlist) {
+    writeJson(res, 200, { shortlist: await context.service.shortlistForVacancy(session, decodeURIComponent(shortlist[1] ?? "")) }, context.secrets);
+    return;
+  }
 
   if (req.method === "GET" && path === "/drafts") {
     writeJson(
@@ -173,6 +181,9 @@ function writeJson(res: ServerResponse, status: number, body: unknown, secrets: 
 
 function writeError(res: ServerResponse, error: unknown, secrets: readonly string[]): void {
   const known = error instanceof ApplicationError ? error : undefined;
+  if (!known) {
+    console.error("application request failed", error instanceof Error ? error.message : error);
+  }
   const status = known?.status ?? 500;
   const body = {
     error: known?.code ?? "internal_error",

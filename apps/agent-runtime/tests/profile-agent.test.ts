@@ -67,6 +67,28 @@ describe('createLlmProfileExtractor', () => {
     expect(userMessage).toContain('[EMAIL]');
   });
 
+  it('drops claims that are not in the CV and keeps written soft skills', async () => {
+    const chat: ChatFn = async () => ({
+      content: JSON.stringify({
+        skills: [{ original_term: 'Scrum', evidence: [{ claim: 'inventado', source: 'extracted' }] }],
+        experiences: [{ experience_type: 'formal_employment', title: 'Gerente en Google', description: 'Lideré un equipo global.' }],
+      }),
+      model: 'test-model',
+    });
+    const extractor = createLlmProfileExtractor({ chat });
+    const outcome = await extractor.extract({
+      text: 'Habilidades: Excel, trabajo en equipo, comunicación y trabajo bajo presión.',
+      sourceRef: 'x',
+      provenance: 'extracted',
+    });
+    const terms = outcome.draft.skills?.map((skill) => skill.original_term) ?? [];
+    expect(terms).not.toContain('Scrum');
+    expect(terms.join(' ')).toMatch(/trabajo en equipo/i);
+    expect(terms.join(' ')).toMatch(/comunicación/i);
+    expect(terms.join(' ')).toMatch(/trabajo bajo presión/i);
+    expect(outcome.draft.experiences).toEqual([]);
+  });
+
   it('throws when the model returns invalid JSON', async () => {
     const chat: ChatFn = async () => ({ content: 'not json', model: 'test-model' });
     const extractor = createLlmProfileExtractor({ chat });

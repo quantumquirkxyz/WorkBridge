@@ -9,7 +9,7 @@ Accepted — 2026-10-17. Review if the product name or the repository owner chan
 The employability system was first named Puente Laboral Panamá, and ADR-0001 pointed governance
 at the issue tracker `quantumquirkxyz/Agent-Hackathon`. The product in code, packages, and
 `CONTEXT.md` is now WorkBridge, and the active remote is `HackathonFISC/equipo-02`. ADR-0002
-and `docs/reference/agents/issue-tracker.md` still used the retired names, so an agent could
+and `docs/old/reference/agents/issue-tracker.md` still used the retired names, so an agent could
 follow the wrong product identity or open work on a tracker this team does not use.
 
 Issue #99 (part of #93) requires those documents to use the current name and tracker, and
@@ -19,7 +19,7 @@ requires this record of why.
 
 - The product name is **WorkBridge**. ADR-0002 describes the system under that name.
 - The issue tracker is GitHub Issues in **`HackathonFISC/equipo-02`**. `CONTEXT.md` and
-  `docs/reference/agents/issue-tracker.md` name that repository.
+  `docs/old/reference/agents/issue-tracker.md` name that repository.
 - This decision supersedes the tracker pointer in ADR-0001. ADR-0001 stays as the record of
   the original quirk Skills adoption; day-to-day routing follows this ADR.
 
@@ -48,4 +48,4 @@ requires this record of why.
 - Supersedes the tracker pointer in ADR-0001
 - Updates the product name stated in ADR-0002
 - `CONTEXT.md`
-- `docs/reference/agents/issue-tracker.md`
+- `docs/old/reference/agents/issue-tracker.md`

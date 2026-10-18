@@ -248,7 +248,7 @@ function ProfileDetails({ profile }: { profile: CandidateProfile }) {
     <>
       {profile.skills.length > 0 ? (
         <ul className="xp-skill-list" aria-label="Tus habilidades">
-          {profile.skills.map((skill, index) => <li key={`${skill.canonical_name}-${index}`} className="xp-chip xp-chip-yellow">{skill.canonical_name}</li>)}
+          {profile.skills.map((skill, index) => <li key={`${skill.original_term}-${index}`} className="xp-chip xp-chip-yellow">{skill.original_term || skill.canonical_name}</li>)}
         </ul>
       ) : <p className="xp-muted">Todavía no registramos habilidades.</p>}
       {profile.experiences.length > 0 ? (

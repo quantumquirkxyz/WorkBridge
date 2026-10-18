@@ -1,5 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
 import {
+  AjvValidationError,
   assertAuditEvent,
   assertMatchDecision,
   assertWorkflowEnvelope,
@@ -21,6 +22,7 @@ import {
   type OutboundNotification,
 } from "./notification";
 import { createMemoryIdempotencyStore, type IdempotencyStore } from "./store";
+import type { ShortlistSource } from "./shortlist";
 
 export interface DraftInput {
   traceId: string;
@@ -89,6 +91,16 @@ export interface SubmissionSummary {
   traceId: string;
 }
 
+/** Employer-safe row: no candidate identifiers beyond the existing submission view's submissionId. */
+export interface ShortlistEntry {
+  rank: number;
+  submissionId: string;
+  score: number;
+  aptitude: MatchDecision["aptitude"];
+  gapSummary: string[];
+  biasAlerts: MatchDecision["biasAlerts"];
+}
+
 export interface HistoryEntry {
   action: string;
   actorRole: AuthRole;
@@ -131,6 +143,7 @@ export interface ApplicationServiceOptions {
   secrets?: readonly string[];
   sessionSecret?: string;
   idempotency?: IdempotencyStore<SubmitView>;
+  shortlist?: ShortlistSource;
   outbox?: NotificationOutbox;
   notifications?: NotificationPort;
 }
@@ -141,6 +154,7 @@ export class ApplicationService {
   private readonly secrets: readonly string[];
   private readonly sessionSecret: string;
   private readonly idempotency: IdempotencyStore<SubmitView>;
+  private readonly shortlist: ShortlistSource | undefined;
   private readonly outbox: NotificationOutbox;
   private readonly notifications: NotificationPort;
   private readonly notificationActions = new Map<string, Promise<void>>();
@@ -154,6 +168,7 @@ export class ApplicationService {
     this.secrets = options.secrets ?? [];
     this.sessionSecret = options.sessionSecret ?? "";
     this.idempotency = options.idempotency ?? createMemoryIdempotencyStore<SubmitView>();
+    this.shortlist = options.shortlist;
     this.outbox = options.outbox ?? createMemoryNotificationOutbox();
     this.notifications = options.notifications ?? createMockNotificationPort();
   }
@@ -432,6 +447,46 @@ export class ApplicationService {
     return this.submitView(submission, false);
   }
 
+  async shortlistForVacancy(session: unknown, vacancyId: string): Promise<ShortlistEntry[]> {
+    const actor = this.actor(session);
+    this.requireRole(actor, "employer", "Only an employer can rank submissions.");
+    if (!this.shortlist) throw new ApplicationError("Shortlist is not configured.", 503, "shortlist_unavailable");
+    const owner = this.shortlist.ownerOf(vacancyId);
+    if (!owner) throw new ApplicationError("Vacancy not found.", 404, "not_found");
+    if (owner !== actor.employerOrgId) {
+      throw new ApplicationError("This vacancy belongs to another employer organization.", 403, "forbidden");
+    }
+    const entries: Array<{ candidateId: string; entry: Omit<ShortlistEntry, "rank"> }> = [];
+    for (const submission of this.submissions.values()) {
+      const draft = this.draftById(submission.draftId);
+      if (draft.input.vacancyId !== vacancyId || !this.employerOwns(actor, draft)) continue;
+      const result = await this.shortlist.match(draft.ownerId, vacancyId);
+      if (result.biasBlocked) return [];
+      const match = result.decision;
+      if (!match) continue;
+      if (match.candidateId !== draft.ownerId || match.vacancyId !== vacancyId) {
+        throw new ApplicationError("Ranking decision does not match the submission.", 422, "inconsistent_match");
+      }
+      entries.push({
+        candidateId: draft.ownerId,
+        entry: {
+          submissionId: submission.id,
+          score: match.score.weightedTotal,
+          aptitude: match.aptitude,
+          gapSummary: match.gaps.map((gap) => gap.description),
+          biasAlerts: match.biasAlerts.map((alert) => ({ ...alert })),
+        },
+      });
+    }
+    // Code-point ordering keeps ties stable without depending on the host locale.
+    const compare = (left: string, right: string) => left < right ? -1 : left > right ? 1 : 0;
+    // Order: score desc, then candidate id, then submission id (all ascending). candidateId stays server-side.
+    return entries
+      .sort((left, right) => right.entry.score - left.entry.score ||
+        compare(left.candidateId, right.candidateId) || compare(left.entry.submissionId, right.entry.submissionId))
+      .map(({ entry }, index) => ({ rank: index + 1, ...entry }));
+  }
+
   private actor(session: unknown): Actor {
     return actorFromBetterAuthSession(session, this.clock(), this.sessionSecret);
   }
@@ -510,7 +565,14 @@ export class ApplicationService {
     const vacancyTitle = this.requiredString(body.vacancyTitle, "vacancyTitle");
     const employerOrgId = body.employerOrgId === undefined ? undefined : this.requiredString(body.employerOrgId, "employerOrgId");
     const evidence = parseEvidence(body.evidence);
-    assertMatchDecision(body.match);
+    try {
+      assertMatchDecision(body.match);
+    } catch (error) {
+      if (error instanceof AjvValidationError) {
+        throw new ApplicationError(error.message, 422, "invalid_match");
+      }
+      throw error;
+    }
     if (body.match.candidateId !== candidateId || body.match.vacancyId !== vacancyId) {
       throw new ApplicationError("Match decision does not belong to this candidate and vacancy.", 422, "inconsistent_match");
     }

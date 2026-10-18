@@ -71,6 +71,26 @@ describe('extractText', () => {
     expect(result.warnings.join(' ')).toContain('OCR');
   });
 
+  it('transcribes an image-only PDF through the OCR adapter', async () => {
+    const ocr: OcrAdapter = {
+      name: 'fake',
+      async extract() {
+        return { text: 'Habilidades: trabajo en equipo, comunicación y trabajo bajo presión.', confidence: 0.8, method: 'fake-ocr' };
+      },
+    };
+    const result = await extractText(
+      { kind: 'pdf', ref: 'intake:scan.pdf', bytes: new Uint8Array([1]) },
+      {
+        pdf: async () => ({ text: '', pageCount: 1 }),
+        pdfImages: async () => [{ bytes: new Uint8Array([1, 2]), mimeType: 'image/png' }],
+        ocr,
+        now: fixedNow,
+      },
+    );
+    expect(result.text).toContain('trabajo bajo presión');
+    expect(result.source.extraction_method).toBe('fake-ocr');
+  });
+
   it('uses the injected OCR adapter for images', async () => {
     const ocr: OcrAdapter = {
       name: 'fake',

@@ -1,7 +1,7 @@
 # WorkBridge agent architecture
 
 This diagram is the source of truth for the shipped agent workflow. It shows
-the four agents registered in `apps/agent-runtime/src/workflow/graph.ts`, their
+the five agents registered in `apps/agent-runtime/src/workflow/graph.ts`, their
 runtime tools, the data and execution planes, and every human approval boundary.
 Application submission is deliberately outside the agent workflow.
 
@@ -19,6 +19,7 @@ flowchart LR
     exploration["Exploration Agent\ncapability: planning\ntool: read_goals"]
     profile["Profile and Evidence Agent\ncapability: extraction\ntools: read_cv, list_declared_credentials"]
     market["Market and Matching Agent\ncapability: matching\ntools: read_vacancy, match_skills"]
+    bias["Bias Auditor\ncapability: fairness\ntool: audit_counterfactual"]
     training["Training Agent\ncapability: planning\ntool: suggest_course"]
     trace[(Langfuse traces)]
     audit[(Append-only audit log)]
@@ -31,7 +32,7 @@ flowchart LR
   goals --> exploration
   cv --> profile
   vacancies --> market
-  exploration --> profile --> market --> training
+  exploration --> profile --> market --> bias --> training
   profile -->|normalized profile + evidence| match
   market -->|nomination and aptitude| match
   match --> training
@@ -41,6 +42,7 @@ flowchart LR
   market -. envelope / span .-> trace
   training -. envelope / span .-> trace
   market -. audit event .-> audit
+  bias -. audit event .-> audit
   training -. audit event .-> audit
   match -->|draft input| drafts
   drafts --> candidate
@@ -53,9 +55,9 @@ flowchart LR
 ## Runtime contract
 
 The execution plane runs in this order: `exploration` →
-`profile_and_evidence` → `market_and_matching` → `training`. Every step emits
+`profile_and_evidence` → `market_and_matching` → `bias_auditor` → `training`. Every step emits
 an agent envelope, lifecycle record, and trace span. Audit events are emitted
-for the matching and training paths shown above, and for model-completion and
+for the matching, bias-audit, and training paths shown above, and for model-completion and
 guardrail outcomes where applicable; the deterministic Exploration and Profile
 paths publish their result without an audit event. Guardrails screen requested
 tools, permissions, inputs, model output, and tool results;
@@ -76,6 +78,6 @@ not additional workflow agents.
 3. An employer must approve interview progression after an application is
    submitted.
 
-No agent can bypass these boundaries. The bias auditor and simulated-interview
-agent issues (#94 and #98) are not shipped yet, so they are intentionally not
-shown as active agents in this diagram.
+No agent can bypass these boundaries. The bias auditor is shipped in the workflow;
+the simulated interview module is not part of the primary workflow demo unless its
+end-to-end evidence is included in the final delivery.

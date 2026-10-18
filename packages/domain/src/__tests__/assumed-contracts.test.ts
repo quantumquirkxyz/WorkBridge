@@ -134,7 +134,7 @@ describe("assumed #8 and #9 signatures", () => {
   });
 
   it("reads the reference page and checks it against the schema required fields", () => {
-    const pagePath = fileURLToPath(new URL("../../../../docs/reference/assumed-contracts.md", import.meta.url));
+    const pagePath = fileURLToPath(new URL("../../../../docs/old/reference/assumed-contracts.md", import.meta.url));
     const page = readFileSync(pagePath, "utf8");
     const required = [
       ...matchDecisionSchema.required,

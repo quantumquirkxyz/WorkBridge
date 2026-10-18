@@ -1,6 +1,8 @@
-import type { CandidatePreferences, CandidateProfile } from '@workbridge/domain';
+import { randomUUID } from 'node:crypto';
+import type { CandidatePreferences, CandidateProfile, MatchDecision as ApplicationMatchDecision } from '@workbridge/domain';
 import { createSeedCatalog, type CachedVacancy } from '@workbridge/catalog';
 import {
+  toApplicationMatchDecision,
   type MatchingService,
 } from '@workbridge/agent-runtime';
 import type { MatchDecision } from '@workbridge/solver';
@@ -18,6 +20,8 @@ export interface MatchHandlerDeps {
 
 export interface MatchResponse {
   decisions: MatchDecision[];
+  /** Solver decisions projected onto the application-draft contract. */
+  applicationDecisions: ApplicationMatchDecision[];
   /** Version used by clients to invalidate their decision cache. */
   preferencesVersion: string;
 }
@@ -39,8 +43,22 @@ export async function handleMatch(payload: unknown, deps: MatchHandlerDeps = {})
   const cached = cache.get(key);
   if (cached) return { status: 200, body: cached };
   const service = deps.service ?? matchingService();
-  const decisions = await Promise.all(vacancies.map((vacancy) => service.evaluatePair(profile, candidateContext(preferences), vacancy, deps.now ? { now: deps.now } : {})));
-  const response = { decisions, preferencesVersion: version };
+  const evaluated = await Promise.all(vacancies.map(async (vacancy) => {
+    const decision = await service.evaluatePair(profile, candidateContext(preferences), vacancy, deps.now ? { now: deps.now } : {});
+    const traceId = randomUUID();
+    return {
+      decision,
+      applicationDecision: toApplicationMatchDecision(decision, vacancy.document, {
+        traceId,
+        decisionId: `decision-${traceId}`,
+      }),
+    };
+  }));
+  const response = {
+    decisions: evaluated.map((item) => item.decision),
+    applicationDecisions: evaluated.map((item) => item.applicationDecision),
+    preferencesVersion: version,
+  };
   cache.set(key, response);
   return { status: 200, body: response };
 }
