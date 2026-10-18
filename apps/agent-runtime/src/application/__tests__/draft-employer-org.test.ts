@@ -67,10 +67,11 @@ describe("draft employer organization comes from the trusted seam", () => {
     expect(draft.employerOrgId).toBe("org-owner");
   });
 
-  it("discards a body employerOrgId for a known vacancy without an owner", () => {
+  it("refuses a known vacancy without a resolvable owner", () => {
     const app = service(shortlist(() => undefined, (id) => id === "vac-1"));
-    const draft = app.createDraft(session("candidate"), draftBody({ employerOrgId: "org-manual" }));
-    expect(draft.employerOrgId).toBeUndefined();
+    expect(() => app.createDraft(session("candidate"), draftBody({ employerOrgId: "org-manual" }))).toThrowError(
+      expect.objectContaining({ status: 503, code: "ownership_unavailable" }),
+    );
   });
 
   it("keeps a body employerOrgId for an unknown non-catalog vacancy", () => {

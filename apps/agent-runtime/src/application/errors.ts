@@ -25,6 +25,7 @@ export const APPLICATION_ERROR_CODES = [
   "shortlist_unavailable",
   "trace_mismatch",
   "unknown_evidence",
+  "ownership_unavailable",
   "unknown_role",
   "internal_error",
 ] as const;

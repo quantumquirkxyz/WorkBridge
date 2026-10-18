@@ -684,13 +684,19 @@ export class ApplicationService {
    * Ownership is a trusted server fact, not an application-body claim. When the
    * catalog seam knows who owns the vacancy, that owner wins over whatever the
    * body sent. If the seam knows the vacancy but cannot resolve an owner,
-   * discard the body claim. Unknown/non-catalog drafts retain the legacy
+   * reject draft creation. Unknown/non-catalog drafts retain the legacy
    * compatibility path until their ownership source is migrated.
    */
   private withTrustedEmployerOrg(input: DraftInput): DraftInput {
     const owner = this.shortlist?.ownerOf(input.vacancyId);
     if (owner !== undefined) return { ...input, employerOrgId: owner };
-    if (this.shortlist?.isKnownVacancy?.(input.vacancyId)) return { ...input, employerOrgId: undefined };
+    if (this.shortlist?.isKnownVacancy(input.vacancyId)) {
+      throw new ApplicationError(
+        "The vacancy has no resolvable employer owner.",
+        503,
+        "ownership_unavailable",
+      );
+    }
     return input;
   }
 
