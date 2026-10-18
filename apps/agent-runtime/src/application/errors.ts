@@ -11,15 +11,18 @@ export const APPLICATION_ERROR_CODES = [
   "guardrail_blocked",
   "idempotency_conflict",
   "inconsistent_match",
+  "internal_error",
   "invalid_envelope",
   "invalid_input",
   "invalid_json",
+  "invalid_match",
   "invalid_session",
   "invented_evidence",
   "interview_decided",
   "not_found",
   "payload_too_large",
   "secret_rejected",
+  "shortlist_unavailable",
   "trace_mismatch",
   "unknown_evidence",
   "unknown_role",
@@ -28,7 +31,7 @@ export const APPLICATION_ERROR_CODES = [
 
 export type ApplicationErrorCode = (typeof APPLICATION_ERROR_CODES)[number];
 
-export type ApplicationErrorStatus = 400 | 401 | 403 | 404 | 409 | 413 | 422 | 500;
+export type ApplicationErrorStatus = 400 | 401 | 403 | 404 | 409 | 413 | 422 | 500 | 503;
 
 export class ApplicationError extends Error {
   readonly status: ApplicationErrorStatus;

@@ -80,7 +80,7 @@ test('a fragment-suffixed grounding path resolves against the repo', async () =>
 test('a trailing-annotation grounding path without a fragment resolves', async () => {
   const fixture = baseFixture([
     '.agents/skills/routing/ask-to/references/routing-rules.md (selection criteria and fallback policy)',
-    'docs/reference/agents/work-item-format.md',
+    'docs/old/reference/agents/work-item-format.md',
   ]);
 
   const errors = await validateFixture(fixture, 'synthetic.json', BUNDLE_SKILLS);

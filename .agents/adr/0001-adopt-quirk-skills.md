@@ -23,7 +23,7 @@ checkout was used as the install source (`greenfield` adoption prompt).
   - `.agents/skills/**` (canonical skill definitions)
   - `.claude/skills/**` (relative-symlink compatibility view)
   - `skills-lock.json`, `skills.json`, `.env.template`
-  - `docs/reference/agents/**`, `docs/how-to/**`, `docs/explanation/**`, `docs/tutorial/**`
+  - `docs/old/reference/agents/**`, `docs/old/how-to/**`, `docs/old/explanation/**`, `docs/old/tutorial/**`
   - `.agents/adr/README.md` (mandatory ADR entry point)
 - Keep the repository's own `README.md`; do not overwrite it with the bundle README.
 - Add a repository-local `CONTEXT.md` that names only this project's domain.
@@ -39,7 +39,7 @@ checkout was used as the install source (`greenfield` adoption prompt).
   first `grill-with-docs` session before any spec is written.
 - Bundle updates are synchronized later with the *existing-repository* prompt, which
   protects `CONTEXT.md`, `README.md`, and ADRs.
-- Validation depends on the `docs/tutorial/**` and `docs/README.md` files that wiki links
+- Validation depends on the `docs/old/tutorial/**` and `docs/old/README.md` files that wiki links
   reference; do not delete them without fixing those links.
 
 ## Alternatives

@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Map } from 'lucide-react';
 import { needsAccount, panelForRole } from '../lib/account-access';
 import { useSession } from '../lib/auth-client';
+import { BrandMark } from './BrandMark';
 import { SignOutButton } from './SignOutButton';
 import { ThemeToggle } from './theme-provider';
 import { Button } from './ui/button';
@@ -18,7 +18,7 @@ export function PublicHeader() {
   return (
     <header className="candidate-header public-header">
       <Link className="candidate-brand" href="/" aria-label="WorkBridge, ir al inicio">
-        <span className="candidate-brand-mark" aria-hidden="true"><Map /></span>
+        <BrandMark className="candidate-brand-mark" />
         <span>WorkBridge</span>
       </Link>
       <nav className="public-header-actions" aria-label="Cuenta">

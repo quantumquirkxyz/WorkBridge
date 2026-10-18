@@ -48,15 +48,14 @@ export function createAgentFromEnv(env: AgentRuntimeEnv = {}): CreateAgentFromEn
     },
   });
 
-  const ocr = env.OPENROUTER_VISION_MODEL
-    ? visionOcrAdapter({
-        describe: createOpenRouterVision({
-          apiKey: env.OPENROUTER_API_KEY,
-          model: env.OPENROUTER_VISION_MODEL,
-          baseUrl: env.OPENROUTER_BASE_URL,
-        }),
-      })
-    : undefined;
+  const visionModel = env.OPENROUTER_VISION_MODEL?.trim() || model;
+  const ocr = visionOcrAdapter({
+    describe: createOpenRouterVision({
+      apiKey: env.OPENROUTER_API_KEY,
+      model: visionModel,
+      baseUrl: env.OPENROUTER_BASE_URL,
+    }),
+  });
 
   return { agent: new ProfileAgent({ extractor, ocr }), mode: 'llm', extractor, warnings };
 }
@@ -149,6 +148,7 @@ export {
 } from "./matching";
 
 export { ApplicationService } from "./application/service";
+export { candidateContext, vacancyInput } from "./matching/catalog-input";
 export {
   createMemoryNotificationOutbox,
   createMockNotificationPort,

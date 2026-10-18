@@ -188,8 +188,7 @@
   .candidate-shell { min-height: 100svh; }
   .candidate-header { display: flex; align-items: center; justify-content: space-between; min-height: 4.5rem; padding: .75rem max(1rem, calc((100% - 70rem) / 2)); border-bottom: 1px solid var(--line); background: var(--card); }
   .candidate-brand { display: inline-flex; align-items: center; gap: .6rem; color: var(--ink); font-weight: 700; text-decoration: none; }
-  .candidate-brand-mark { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: .75rem; color: var(--primary-foreground); background: var(--primary); }
-  .candidate-brand-mark svg { width: 1.2rem; }
+  .candidate-brand-mark { display: block; flex: none; width: 2.5rem; height: 2.5rem; }
   .candidate-nav { display: flex; align-items: center; gap: .25rem; list-style: none; margin: 0; padding: 0; }
   .candidate-nav-link { position: relative; display: inline-flex; min-height: 2.75rem; align-items: center; gap: .45rem; padding: .5rem .75rem; border-radius: .75rem; color: var(--ink-muted); text-decoration: none; font-size: .875rem; font-weight: 600; }
   .candidate-nav-link svg { width: 1.1rem; }
@@ -511,7 +510,7 @@
 
   .candidate-header { border-bottom: var(--bw) solid var(--line); background: var(--yellow); }
   .candidate-brand { font-family: var(--font-display); text-transform: uppercase; color: #111; letter-spacing: -.01em; }
-  .candidate-brand-mark { border: 2px solid #111; border-radius: .4rem; background: var(--primary); color: var(--primary-foreground); box-shadow: 3px 3px 0 #111; transition: transform .2s; }
+  .candidate-brand-mark { transition: transform .2s; }
   .candidate-brand:hover .candidate-brand-mark { transform: rotate(-8deg) scale(1.06); }
   .candidate-nav-link { border: 2px solid transparent; border-radius: .4rem; color: #111; font-weight: 700; transition: transform .12s, box-shadow .12s, background .12s; }
   .candidate-nav-link:hover { border-color: #111; background: #fff; }

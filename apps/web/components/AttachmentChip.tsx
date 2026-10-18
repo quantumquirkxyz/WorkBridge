@@ -51,7 +51,7 @@ export function AttachmentChip({ file, kind, onRemove, validation }: AttachmentC
           {errorMessage}
         </span>
       )}
-      {onRemove ? <Button variant="destructive" size="sm" className="min-h-11 min-w-11 px-0" onClick={onRemove} aria-label="Eliminar archivo adjunto">×</Button> : null}
+      {onRemove ? <Button type="button" variant="destructive" size="sm" className="min-h-11 min-w-11 px-0" onClick={onRemove} aria-label="Eliminar archivo adjunto">×</Button> : null}
     </div>
   );
 }

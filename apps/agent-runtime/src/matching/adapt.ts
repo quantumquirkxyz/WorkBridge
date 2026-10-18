@@ -1,4 +1,5 @@
 import {
+  aptitudeForWeightedTotal,
   matchVacancySkill,
   PANAMA_SKILL_TAXONOMY,
   type CandidateProfile,
@@ -74,6 +75,7 @@ export function toApplicationMatchDecision(
     geographic: failed.has("geographic_commute") || failed.has("geographic_accessibility") ? "fail" : "pass",
   };
   const byDimension = Object.fromEntries(decision.scoreBreakdown.map((item) => [item.dimension, item.rawScore]));
+  const weightedTotal = decision.score;
   return {
     schemaVersion: "1.0.0",
     decisionId: options.decisionId ?? `decision-${decision.tieBreakKey}`,
@@ -81,14 +83,16 @@ export function toApplicationMatchDecision(
     candidateId: decision.candidateId,
     vacancyId: decision.vacancyId,
     strategy: options.strategy ?? "deterministic_greedy",
-    aptitude: decision.aptitude,
+    // The application contract derives aptitude from the weighted total. A hard-constraint
+    // failure stays in `hardConstraints` and `gaps`; it must not contradict that band.
+    aptitude: aptitudeForWeightedTotal(weightedTotal),
     score: {
       technicalRequirements: byDimension.technical ?? 0,
       experienceEvidence: byDimension.experience ?? 0,
       availability: byDimension.availability ?? 0,
       transportAccessibility: byDimension.transport ?? 0,
       salaryConditions: byDimension.salary ?? 0,
-      weightedTotal: decision.score,
+      weightedTotal,
     },
     hardConstraints,
     transport: {
@@ -98,12 +102,14 @@ export function toApplicationMatchDecision(
     gaps: decision.hardConstraints.filter((item) => !item.satisfied).map((item) => ({
       id: item.id,
       severity: "critical" as const,
-      description: item.reason,
+      description: item.reason.trim() || item.id,
     })),
     biasAlerts: vacancy.alerts.map((alert) => ({ id: alert.id, reason: alert.reason })),
     promotion: { applied: decision.promotion.applied, humanApproved: decision.promotion.applied },
     tieBreak: { deterministic: true, usedProtectedAttributes: false, usedRandomness: false },
-    reasons: decision.reasons.map((message, index) => ({ code: `solver_reason_${index + 1}`, message })),
+    reasons: decision.reasons
+      .filter((message) => message.trim() !== "")
+      .map((message, index) => ({ code: `solver_reason_${index + 1}`, message })),
   };
 }
 

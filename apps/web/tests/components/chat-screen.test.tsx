@@ -29,6 +29,33 @@ describe('ChatScreen', () => {
     server.use(http.get('/api/chat', () => HttpResponse.json({ transcript: [], slotState: initialSlotState() })));
   });
 
+  it('sends the next chat turn with the version after a committed job', async () => {
+    const versions: number[] = [];
+    server.use(
+      http.post('/api/v1/chat/turns', async ({ request }) => {
+        const body = await request.json() as { sessionVersion?: number };
+        versions.push(body.sessionVersion ?? -1);
+        const jobId = `chatjob-${versions.length}`;
+        return HttpResponse.json({ jobId, status: 'queued', statusUrl: `/api/v1/chat/turns/${jobId}`, sessionVersion: body.sessionVersion, pollAfterMs: 1 }, { status: 202 });
+      }),
+      http.get('/api/v1/chat/turns/:jobId', ({ params }) => HttpResponse.json({
+        jobId: params.jobId,
+        status: 'succeeded',
+        sessionVersion: versions.at(-1) ?? 0,
+        result: turn({ reply: `respuesta ${versions.length}` }),
+      })),
+    );
+    render(<ChatScreen />);
+    const input = await screen.findByRole('textbox', { name: 'Escribe tu respuesta' });
+    await userEvent.type(input, 'hola');
+    await userEvent.keyboard('{Enter}');
+    expect(await screen.findByText('respuesta 1')).toBeInTheDocument();
+    await userEvent.type(input, 'sigo');
+    await userEvent.keyboard('{Enter}');
+    expect(await screen.findByText('respuesta 2')).toBeInTheDocument();
+    expect(versions).toEqual([0, 1]);
+  });
+
   it('renders an accessible transcript, quick replies, and keeps focus in the composer', async () => {
     server.use(http.post('/api/chat', () => HttpResponse.json(turn())));
     const { container } = render(<ChatScreen />);
@@ -227,9 +254,32 @@ describe('ChatScreen', () => {
     render(<ChatScreen />);
     expect(await screen.findByRole('button', { name: 'Sí, lo subo 📎' })).toBeInTheDocument();
     await userEvent.upload(screen.getByLabelText('Archivo de CV'), new File(['%PDF-1.4'], 'cv.pdf', { type: 'application/pdf' }));
+    expect(await screen.findByRole('progressbar', { name: 'Archivo listo para enviar' })).toBeInTheDocument();
+    expect(calls).toEqual([]);
+    await userEvent.click(screen.getByRole('button', { name: 'Enviar' }));
     expect(await screen.findByText(/Encontré 1 habilidad y 1 experiencia/)).toBeInTheDocument();
     await waitFor(() => expect(calls).toEqual(expect.arrayContaining([expect.stringMatching(/^pdf:cv\.pdf:/), 'chip:cv_source:uploaded'])));
     expect(calls.some((call) => call.startsWith('chip:cv_source:Sí'))).toBe(false);
+  });
+
+  it('sends the typed comment together with the preloaded file', async () => {
+    const intake: Array<{ text?: string; fileName?: string }> = [];
+    server.use(
+      http.post('/api/intake', async ({ request }) => {
+        intake.push(await request.json() as { text?: string; fileName?: string });
+        return HttpResponse.json({ profile: { skills: [], experiences: [] } });
+      }),
+      http.post('/api/chat', () => HttpResponse.json(turn({ reply: 'Recibí tu CV.', pendingSlot: 'experiences' }))),
+    );
+    render(<ChatScreen />);
+    const input = await screen.findByRole('textbox', { name: 'Escribe tu respuesta' });
+    await userEvent.upload(screen.getByLabelText('Archivo de CV'), new File(['%PDF-1.4'], 'cv.pdf', { type: 'application/pdf' }));
+    expect(await screen.findByRole('progressbar', { name: 'Archivo listo para enviar' })).toBeInTheDocument();
+    expect(intake).toEqual([]);
+    await userEvent.type(input, 'Este CV es de ventas');
+    await userEvent.click(screen.getByRole('button', { name: 'Enviar' }));
+    await waitFor(() => expect(intake).toEqual([expect.objectContaining({ fileName: 'cv.pdf', text: 'Este CV es de ventas' })]));
+    expect(screen.getByText('Este CV es de ventas')).toBeInTheDocument();
   });
 
   it('rejects a CV that is too large or the wrong type', async () => {
@@ -287,6 +337,8 @@ describe('ChatScreen', () => {
     render(<ChatScreen />);
     await screen.findByText('Hola');
     await userEvent.upload(screen.getByLabelText('Archivo de CV'), new File(['%PDF-1.4'], 'cv.pdf', { type: 'application/pdf' }));
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Enviar' })).toBeEnabled());
+    await userEvent.click(screen.getByRole('button', { name: 'Enviar' }));
     expect(await screen.findByRole('button', { name: 'Reintentar' })).toBeInTheDocument();
     await userEvent.click(screen.getByRole('button', { name: 'Eliminar archivo adjunto' }));
     expect(screen.queryByRole('button', { name: 'Eliminar archivo adjunto' })).not.toBeInTheDocument();

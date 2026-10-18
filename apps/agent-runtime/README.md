@@ -133,6 +133,31 @@ invented credentials, unauthorized tools, and a clean input. A forced primary
 model failure promotes the next model in the capability chain. Exhausting the
 chain records `pending → failed → retrying → dead_letter`.
 
+### Employer shortlist (#100)
+
+`GET /vacancies/:vacancyId/shortlist` ranks applications already received for
+that vacancy by a freshly computed deterministic score, descending, with stable
+candidate id, then submission id ties (candidate ids are not returned).
+Each entry contains `rank`, `submissionId`,
+`score`, `aptitude`, `gapSummary`, and `biasAlerts`. The browser endpoint is
+`GET /api/applications/vacancies/:vacancyId/shortlist`.
+
+The BFF uses the authenticated Better Auth cookie session. The runtime checks the
+employer role and trusted vacancy ownership before reading applicant records;
+another organization receives 403, and an unknown vacancy receives 404. For this
+demo, the seeded catalog belongs to the seeded organization
+`employer_org_<environment>`, using the same `AUTH_SEED_ENV` / `NODE_ENV` / default
+`development` resolution as `scripts/seed-roles.ts`. Candidate-authored
+`employerOrgId` and match scores cannot establish ownership or influence ranking.
+
+Ranking loads the applicant's profile and preferences from the existing Postgres
+tables, using the same `makeCandidateId` mapping as intake, and invokes the existing
+matcher and counterfactual auditor. A finding that blocks the vacancy empties its
+shortlist. Missing profile/preferences exclude that applicant; absent SQL storage
+returns 503 when scoring is needed. Applications continue to use the existing
+runtime submission registry. Tests can inject a trusted `ShortlistSource` in
+`ApplicationServiceOptions`; it is never exposed as a request body.
+
 ## Validation
 
 ```bash

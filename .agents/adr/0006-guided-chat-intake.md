@@ -51,7 +51,7 @@ new seam, `POST /api/chat` (`handleChatTurn`):
 - Negative: an extra endpoint, a JSON Schema, a prompt, and an eval set to maintain; token cost
   grows with free conversation (OQ-8).
 - Risk: hallucinated vacancies, salaries, or promises (mitigated by grounding rules, OQ-7, and the
-  adversarial eval set in `docs/reference/frontend/testing.md`).
+  adversarial eval set in `docs/old/reference/frontend/testing.md`).
 - Risk: no streaming means multi-second turns; mitigated with typing feedback and timeouts.
 
 ## Alternatives considered
@@ -67,6 +67,6 @@ new seam, `POST /api/chat` (`handleChatTurn`):
 
 ## Links
 
-- Spec: `docs/reference/frontend/spec.md` (G1, D1, AC-02, AC-46–AC-50)
-- Flows: `docs/reference/frontend/ux-flows.md` (§ Chat model, § Slot agenda)
+- Spec: `docs/old/reference/frontend/spec.md` (G1, D1, AC-02, AC-46–AC-50)
+- Flows: `docs/old/reference/frontend/ux-flows.md` (§ Chat model, § Slot agenda)
 - Related: ADR-0002, ADR-0003, ADR-0005

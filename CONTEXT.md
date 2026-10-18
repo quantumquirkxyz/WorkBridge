@@ -2,7 +2,7 @@
 
 This repository (`equipo-02`) uses the repository-local quirk Skills bundle
 installed under `.agents/skills/`. Durability rules and vocabulary for the workflow
-itself live in `docs/explanation/quirk-method.md`; this file records the *project's own*
+itself live in `docs/old/explanation/quirk-method.md`; this file records the *project's own*
 domain vocabulary and boundaries only.
 
 ## Repository role
@@ -18,6 +18,10 @@ domain vocabulary and boundaries only.
 **WorkBridge** is a multi-agent employability system for young people. It evaluates
 readiness for a job, recognizes formal and informal experience, identifies skill gaps, recommends
 training or internships, and prepares applications for human approval.
+
+The competition scope is challenge 3, Empleabilidad. Official delivery requirements, evidence,
+known limits, and the hour-24 checklist live in `docs/README.md`; the technical
+methodology lives in `docs/metodologia.md`.
 
 ## Project vocabulary
 
@@ -47,7 +51,7 @@ training or internships, and prepares applications for human approval.
 | Package manager | npm workspaces (monorepo: `packages/*`, `apps/*`) |
 | Contracts | JSON Schema 2020-12 + Ajv (`packages/domain`) |
 | Issue tracker | GitHub Issues in `HackathonFISC/equipo-02` |
-| Docs surface | `docs/reference/agents/`, `docs/how-to/`, `docs/explanation/` |
+| Docs surface | `docs/old/reference/agents/`, `docs/old/how-to/`, `docs/old/explanation/` |
 | ADRs | `.agents/adr/` |
 
 ## Maintenance rule

@@ -2,9 +2,10 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BriefcaseBusiness, Compass, FileText, Map, UserRound } from 'lucide-react';
+import { BriefcaseBusiness, Compass, FileText, UserRound, type LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
+import { BrandMark } from './BrandMark';
 import { PublicHeader } from './PublicHeader';
 import { RoleHeader } from './RoleHeader';
 import { ThemeToggle } from './theme-provider';
@@ -78,7 +79,7 @@ export function CandidateShell({ children }: { children: ReactNode }) {
     <div className="candidate-shell">
       <header className="candidate-header">
         <Link className="candidate-brand" href="/vacantes" aria-label="WorkBridge, ir a Vacantes">
-          <span className="candidate-brand-mark" aria-hidden="true"><Map /></span>
+          <BrandMark className="candidate-brand-mark" />
           <span>WorkBridge</span>
         </Link>
         <nav aria-label="Navegación principal">
@@ -102,7 +103,7 @@ export function CandidateShell({ children }: { children: ReactNode }) {
   );
 }
 
-function NavLink({ href, label, Icon, badge, active }: { href: string; label: string; Icon: typeof Map; badge: number; active: boolean }) {
+function NavLink({ href, label, Icon, badge, active }: { href: string; label: string; Icon: LucideIcon; badge: number; active: boolean }) {
   return <Link href={href} className={`candidate-nav-link${active ? ' is-active' : ''}`} aria-current={active ? 'page' : undefined}>
     <Icon aria-hidden="true" />
     <span>{label}{badge > 0 ? <span className="nav-badge" aria-label={`${badge} vacantes nuevas`}>{badge}</span> : null}</span>

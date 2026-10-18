@@ -1,19 +1,33 @@
-# Documentation
+# Documentación de la entrega — WorkBridge
 
-This repository follows the [Diátaxis](https://diataxis.fr/) framework for technical documentation. All documentation lives under `docs/` and is organized into four quadrants.
+Reto 3 · Empleabilidad · Hackathon FISC AI Agents 2026 (evaluación final en CONTECS 2026).
 
-## Quadrants
+Esta carpeta contiene **solo** los documentos de la entrega. La documentación anterior del
+repositorio (método quirk Skills, gobernanza de issues, guías, tutoriales, referencia de
+frontend, galería de previews y la primera versión de la entrega) se conserva en
+[`old/`](old/README.md) (los movimientos son renombres; solo cambian un banner de archivo en `old/README.md` y las rutas de los scripts de `old/design/previews`).
 
-| Quadrant | Purpose | Location |
-|----------|---------|----------|
-| **Tutorials** | Learning-oriented, step-by-step guidance | [tutorial/](tutorial/) |
-| **How-to Guides** | Problem-oriented, practical task steps | [how-to/](how-to/) |
-| **Reference** | Information-oriented, factual descriptions | [reference/](reference/) |
-| **Explanation** | Understanding-oriented, concepts and principles | [explanation/](explanation/) |
+## Entregables oficiales
 
-## Navigation
+| Entregable | Documento | Qué responde |
+|---|---|---|
+| README | [`../README.md`](../README.md) | Problema, arquitectura de agentes, tecnologías, fuentes de datos, instalación, ejecución y credenciales de demo |
+| Diagrama de arquitectura | [`arquitectura.md`](arquitectura.md) | Agentes, herramientas, flujos y puntos de intervención humana |
+| Evals | [`evals.md`](evals.md) | Casos de prueba, métrica y resultados |
+| Bitácora de IA | [`bitacora-ia.md`](bitacora-ia.md) | Qué se hizo con IA, con qué herramienta y qué se modificó a mano |
+| Documento de metodología | [`metodologia.md`](metodologia.md) | Despliegue, funcionamiento y arquitectura |
+| Video demo (≤ 3 min) | [`runbook-demo.md`](runbook-demo.md) | Guion minuto a minuto y checklist del congelamiento |
+| Tag de congelamiento | `final-24h` | Creado y publicado; marca el último commit válido (ver README) |
 
-- **New to quirk Skills?** Start with [tutorial/fundamentals/01-fundamentals.md](tutorial/fundamentals/01-fundamentals.md).
-- **Ready to install?** See [how-to/adoption.md](how-to/adoption.md) or [how-to/installation.md](how-to/installation.md).
-- **Looking up a skill?** Browse [reference/agents/skills-map.md](reference/agents/skills-map.md).
-- **Understanding the method?** Read [explanation/quirk-method.md](explanation/quirk-method.md).
+## Lectura recomendada (10 minutos)
+
+1. [`../README.md`](../README.md): qué problema resuelve y cómo ejecutarlo.
+2. [`arquitectura.md`](arquitectura.md): cómo se reparten los roles los agentes y dónde interviene una persona.
+3. [`evals.md`](evals.md): cómo sabemos que funciona y dónde falla.
+4. [`bitacora-ia.md`](bitacora-ia.md): cómo se usó la IA para construirlo.
+
+## Archivo
+
+Todo lo anterior vive en [`old/`](old/README.md): `old/competition`, `old/explanation`,
+`old/how-to`, `old/reference`, `old/tutorial` y `old/design`. Sus enlaces internos entre sí
+siguen funcionando porque el árbol se movió completo.

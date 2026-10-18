@@ -1,5 +1,5 @@
 // Generates the static preview HTML pages. Hand-translation of the JSX in apps/web (same class names).
-// Usage (from repo root): node docs/design/previews/build.mjs && node docs/design/previews/build-css.mjs
+// Usage (from repo root): node docs/old/design/previews/build.mjs && node docs/old/design/previews/build-css.mjs
 import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';

@@ -22,7 +22,7 @@ and sheets, keyboard support) are needed out of the box.
 - Theme follows the system preference through `next-themes` (`attribute="class"`).
 - Fonts through `next/font` (Plus Jakarta Sans); icons from `lucide-react`.
 - Token values, contrast table, and component variants live in
-  `docs/reference/frontend/design-system.md`; changes to tokens update that table in the same PR.
+  `docs/old/reference/frontend/design-system.md`; changes to tokens update that table in the same PR.
 
 ## Consequences
 
@@ -45,5 +45,5 @@ and sheets, keyboard support) are needed out of the box.
 
 ## Links
 
-- Spec: `docs/reference/frontend/spec.md` (D2, G6)
-- Design system: `docs/reference/frontend/design-system.md`
+- Spec: `docs/old/reference/frontend/spec.md` (D2, G6)
+- Design system: `docs/old/reference/frontend/design-system.md`

@@ -75,7 +75,7 @@ export interface CreatedDraft { draft: DraftView; evidence: EvidenceItem[] }
 export async function createDraftFromMatch(input: CreateDraftInput): Promise<CreatedDraft> {
   const candidateId = await getMyCandidateId();
   const [profile, matches] = await Promise.all([getCandidateProfile(candidateId), matchVacancies([input.vacancyId])]);
-  const match = matches.decisions.find((decision) => decision.vacancyId === input.vacancyId);
+  const match = matches.applicationDecisions.find((decision) => decision.vacancyId === input.vacancyId);
   if (!match) throw new ApiClientError({ status: 404, code: 'not_found', message: 'No match decision for this vacancy.' });
   const evidence = evidenceFromProfile(profile);
   const idempotencyKey = crypto.randomUUID();

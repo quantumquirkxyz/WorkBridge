@@ -1,0 +1,96 @@
+# Local WorkBridge stack.
+#
+# Web UI:            http://localhost:3001
+# Agent runtime:     http://localhost:3000
+# Certo API:         http://localhost:1337
+# Certo admin:       http://localhost:1337/admin
+# Certo mail UI:     http://localhost:8025
+#
+# WorkBridge keeps using the Neon DATABASE_URL from .env.
+# Certo brings its own Postgres on host port 5433.
+# The Certo Nuxt frontend is not started: it would take port 3000.
+# From Agent-Hackathon: npm run local:up
+
+name: workbridge
+
+include:
+  - path: apps/certo/docker-compose.yml
+  - path: deploy/certo/compose.local.yml
+
+services:
+  frontend:
+    profiles: ["certo-ui"]
+
+  runtime:
+    build:
+      context: .
+      target: runtime
+    env_file:
+      - .env
+    environment:
+      PORT: "3000"
+      CERTO_BASE_URL: http://backend:1337
+      NODE_OPTIONS: "--dns-result-order=ipv4first --no-network-family-autoselection"
+    ports:
+      - "3000:3000"
+    networks:
+      - default
+      - certo-network
+    depends_on:
+      backend:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/health').then((response)=>process.exit(response.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 25s
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: .
+      target: runtime
+    command: ["npx", "tsx", "apps/web/scripts/chat-worker.ts"]
+    env_file:
+      - .env
+    environment:
+      CERTO_BASE_URL: http://backend:1337
+      NODE_OPTIONS: "--dns-result-order=ipv4first --no-network-family-autoselection"
+    networks:
+      - default
+      - certo-network
+    depends_on:
+      runtime:
+        condition: service_healthy
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      target: web
+    env_file:
+      - .env
+      - apps/web/.env.local
+    environment:
+      PORT: "3001"
+      HOSTNAME: "0.0.0.0"
+      AGENT_RUNTIME_URL: http://runtime:3000
+      BETTER_AUTH_URL: http://localhost:3001
+      CERTO_BASE_URL: http://backend:1337
+      NODE_OPTIONS: "--dns-result-order=ipv4first --no-network-family-autoselection"
+    ports:
+      - "3001:3001"
+    networks:
+      - default
+      - certo-network
+    depends_on:
+      runtime:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3001/').then((response)=>process.exit(response.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 8
+      start_period: 40s
+    restart: unless-stopped
