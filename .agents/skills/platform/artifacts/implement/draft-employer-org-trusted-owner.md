@@ -4,7 +4,7 @@
 - **Branch:** `fix/issue-12-draft-employer-org`
 - **Commit:** `93c722d` (plus `2d7c5c7`, the typecheck unblock)
 - **Next consumer:** `publish-open-pr`
-- **Linked issue:** #12 — role-based approval and safe application submission (scoped slice; does not close it)
+- **Linked issue:** none — the tracker's #3–#12 were deleted while this work was in flight. Described by spec #18 and ticket #19.
 - **Source of truth:** viability finding P0 from `.reports/20261018-viability.md` (ADR-0002 core flow unproven) and `docs/arquitectura.md:207`
 
 ## Acceptance criteria
