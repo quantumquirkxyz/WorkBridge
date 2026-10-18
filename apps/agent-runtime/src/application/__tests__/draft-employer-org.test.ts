@@ -18,8 +18,12 @@ function session(role: "candidate" | "employer", id = role as string, org?: stri
 }
 
 /** The trusted ownership seam: only the catalog knows which organization owns a vacancy. */
-function shortlist(owner: (vacancyId: string) => string | undefined): ShortlistSource {
+function shortlist(
+  owner: (vacancyId: string) => string | undefined,
+  known: (vacancyId: string) => boolean = (vacancyId) => owner(vacancyId) !== undefined,
+): ShortlistSource {
   return {
+    isKnownVacancy: known,
     ownerOf: owner,
     match: vi.fn(async (candidateId, vacancyId) => ({
       biasBlocked: false,
@@ -63,13 +67,13 @@ describe("draft employer organization comes from the trusted seam", () => {
     expect(draft.employerOrgId).toBe("org-owner");
   });
 
-  it("keeps the body employerOrgId when the trusted source does not own the vacancy", () => {
-    const app = service(shortlist(() => undefined));
+  it("keeps a body employerOrgId for an unknown non-catalog vacancy", () => {
+    const app = service(shortlist(() => undefined, (id) => id === "vac-1"));
     const draft = app.createDraft(session("candidate"), draftBody({ employerOrgId: "org-manual" }));
-    expect(draft.employerOrgId).toBe("org-manual");
+    expect(draft.employerOrgId).toBeUndefined();
   });
 
-  it("keeps the body employerOrgId when no shortlist seam is configured", () => {
+  it("keeps a body employerOrgId when no shortlist seam is configured", () => {
     const app = service();
     const draft = app.createDraft(session("candidate"), draftBody({ employerOrgId: "org-manual" }));
     expect(draft.employerOrgId).toBe("org-manual");
@@ -86,7 +90,7 @@ describe("draft employer organization comes from the trusted seam", () => {
     });
     const draft = app.createDraft(candidate, draftBody(uiShapedDraft));
     app.approveDraft(candidate, draft.draftId, action("idem-approve"));
-    await app.submit(candidate, draft.draftId, action("idem-submit"));
+    const submitted = await app.submit(candidate, draft.draftId, action("idem-submit"));
 
     const owning = await app.shortlistForVacancy(session("employer", "owner", "org-owner"), "vac-1");
     expect(owning).toHaveLength(1);
@@ -94,5 +98,17 @@ describe("draft employer organization comes from the trusted seam", () => {
     await expect(
       app.shortlistForVacancy(session("employer", "foreign", "org-other"), "vac-1"),
     ).rejects.toMatchObject({ status: 403 });
+
+    const employerAction = (key: string) => ({
+      ...action(key),
+      decision: "approved" as const,
+    });
+    app.approveInterview(session("employer", "owner", "org-owner"), submitted.submissionId, action("idem-employer-approval"));
+    const decided = await app.decideInterview(
+      session("employer", "owner", "org-owner"),
+      submitted.submissionId,
+      employerAction("idem-interview-decision"),
+    );
+    expect(decided.interview).toBe("approved");
   });
 });

@@ -9,6 +9,7 @@ import type { SqlQuery } from "./store";
 /** Trusted server seam. Neither ownership nor match scores come from application bodies. */
 export interface ShortlistSource {
   ownerOf(vacancyId: string): string | undefined;
+  isKnownVacancy?(vacancyId: string): boolean;
   match(candidateId: string, vacancyId: string): Promise<{ decision?: MatchDecision; biasBlocked: boolean }>;
 }
 
@@ -24,6 +25,9 @@ export function createShortlistSource(options: {
   const organization = `employer_org_${roleEnv}`;
   const matching = createMatchingService(matchingConfigFromEnv(options.env));
   return {
+    isKnownVacancy(vacancyId) {
+      return catalog.get(vacancyId) !== undefined;
+    },
     ownerOf(vacancyId) {
       return catalog.get(vacancyId) ? organization : undefined;
     },

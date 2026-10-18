@@ -62,7 +62,6 @@ export async function getDraft(draftId: string): Promise<DraftView> {
 export interface CreateDraftInput {
   vacancyId: string;
   vacancyTitle: string;
-  employerOrgId?: string;
 }
 
 export interface CreatedDraft { draft: DraftView; evidence: EvidenceItem[] }
@@ -90,7 +89,6 @@ export async function createDraftFromMatch(input: CreateDraftInput): Promise<Cre
       candidateId: match.candidateId,
       vacancyId: input.vacancyId,
       vacancyTitle: input.vacancyTitle,
-      employerOrgId: input.employerOrgId,
       evidence,
       match,
       envelope: envelope(traceId, idempotencyKey),
