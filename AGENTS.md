@@ -159,8 +159,11 @@ trade-off:
 Snapshot of things an agent should know before touching the repo. Re-check rather
 than trust; fix the list when you fix the cause.
 
-- **No CI workflow.** `.github/workflows/` does not exist, so `gate:ci` is only a
-  local/human convention. Wiring it into GitHub Actions is an open gap.
+- **CI runs `gate:ci`.** `.github/workflows/ci.yml` runs `npm ci` + `npm run
+  gate:ci` on every pull request and on `main`, with least-privilege
+  `permissions: contents: read` and a cancelling concurrency group. Lint is
+  deliberately not a gated job yet while `docs/old/design/previews/*` is red.
+  If you are reading this before that workflow branch merged, delete this bullet.
 - **`npm run lint` is red** with 26 `no-undef` errors in
   `docs/old/design/previews/*` (superseded material). `lint` is not part of
   `gate:ci`.
