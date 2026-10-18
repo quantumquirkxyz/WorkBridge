@@ -13,7 +13,7 @@ import handler from "../vercel";
 const TOKEN = "certo-token-value-123456";
 const SESSION_SECRET = "better-auth-test-secret";
 
-function session(role: "candidate" | "employer" | "counselor", id = role) {
+function session(role: "candidate" | "employer" | "counselor", id: string = role) {
   return signBetterAuthSession(
     {
       session: { id: `sess-${id}`, userId: id, expiresAt: "2027-01-01T00:00:00.000Z" },

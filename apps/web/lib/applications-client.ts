@@ -83,7 +83,7 @@ export async function createDraftFromMatch(input: CreateDraftInput): Promise<Cre
     method: 'POST',
     headers: { ...JSON_HEADERS, 'idempotency-key': idempotencyKey },
     body: JSON.stringify({
-      traceId: match.traceId,
+      traceId: ('traceId' in match && typeof match.traceId === 'string' ? match.traceId : match.tieBreakKey),
       idempotencyKey,
       candidateId: match.candidateId,
       vacancyId: input.vacancyId,
@@ -91,7 +91,7 @@ export async function createDraftFromMatch(input: CreateDraftInput): Promise<Cre
       employerOrgId: input.employerOrgId,
       evidence,
       match,
-      envelope: envelope(match.traceId, idempotencyKey),
+      envelope: envelope('traceId' in match && typeof match.traceId === 'string' ? match.traceId : match.tieBreakKey, idempotencyKey),
     }),
   });
   return { draft: await readJson<DraftView>(response), evidence };

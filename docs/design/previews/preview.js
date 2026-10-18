@@ -2,7 +2,7 @@
   var root = document.documentElement;
   var q = new URLSearchParams(location.search);
   var dark = q.get('dark') === '1';
-  try { if (!q.has('dark')) dark = localStorage.getItem('pv-dark') === '1'; } catch (e) {}
+  try { if (!q.has('dark')) dark = localStorage.getItem('pv-dark') === '1'; } catch { /* localStorage may be unavailable in embedded previews. */ }
   if (q.get('embed') === '1') root.classList.add('pv-embed');
   function apply(d) { root.classList.toggle('dark', d); var b = document.getElementById('pv-dark'); if (b) b.textContent = d ? 'Modo claro' : 'Modo oscuro'; }
   apply(dark);
@@ -21,7 +21,7 @@
     apply(root.classList.contains('dark'));
     if (bd) bd.onclick = function () {
       var d = !root.classList.contains('dark'); apply(d);
-      try { localStorage.setItem('pv-dark', d ? '1' : '0'); } catch (e) {}
+      try { localStorage.setItem('pv-dark', d ? '1' : '0'); } catch { /* localStorage may be unavailable in embedded previews. */ }
       var f = document.querySelector('.pv-device iframe'); if (f) f.contentWindow.postMessage({ pvDark: d }, '*');
     };
     if (bm) bm.onclick = function () {

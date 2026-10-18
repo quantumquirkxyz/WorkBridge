@@ -66,4 +66,12 @@ export default tseslint.config(
       },
     },
   },
+  {
+    files: ["docs/design/previews/**/*.mjs"],
+    languageOptions: { globals: { console: "readonly", process: "readonly", Buffer: "readonly", URL: "readonly" } },
+  },
+  {
+    files: ["docs/design/previews/preview.js"],
+    languageOptions: { globals: { document: "readonly", URLSearchParams: "readonly", location: "readonly", localStorage: "readonly", window: "readonly" } },
+  },
 );

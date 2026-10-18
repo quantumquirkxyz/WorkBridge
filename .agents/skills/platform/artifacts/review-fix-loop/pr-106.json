@@ -1,0 +1,18 @@
+{
+  "pr": 106,
+  "branch": "sec/untrack-env-local",
+  "fixedPoint": "7acb1e36825e9d2ef56bd2401c447e58ade5d38b",
+  "pass": 2,
+  "status": "clean",
+  "lastPlanPosted": true,
+  "lastImplementationCompleted": true,
+  "implementationCommit": "db147e02a8760b503a0f494f2dd4d65e835d47bb",
+  "validation": [
+    "bash -n scripts/purge-leaked-env.sh",
+    "git diff --check"
+  ],
+  "standardsFindings": 0,
+  "specFindings": 0,
+  "deferred": [],
+  "nextConsumer": "ship-subissue"
+}

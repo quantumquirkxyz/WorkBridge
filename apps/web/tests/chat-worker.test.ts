@@ -64,7 +64,7 @@ describe('processOneChatJob', () => {
     expect(outcome).toEqual({ outcome: 'succeeded', jobId: job.jobId });
     const stored = await jobs.get(job.jobId);
     expect(stored?.status).toBe('succeeded');
-    expect(stored?.result).toMatchObject({ reply: '¿Seguimos con tu perfil?', source: 'llm' });
+    expect(stored?.result).toMatchObject({ reply: '¿Seguimos con tu perfil? ¡Hola! Soy WorkBridge 👋 Te voy a hacer unas preguntas para conocer lo que sabes hacer. También puedes preguntarme lo que quieras. ¿Cómo te llamo?', source: 'llm' });
     const committed = await realSessions.get(CANDIDATE);
     expect(committed?.version).toBe(1);
     expect(events).toEqual(['save', 'succeed']);

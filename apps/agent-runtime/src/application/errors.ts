@@ -23,11 +23,12 @@ export const APPLICATION_ERROR_CODES = [
   "trace_mismatch",
   "unknown_evidence",
   "unknown_role",
+  "internal_error",
 ] as const;
 
 export type ApplicationErrorCode = (typeof APPLICATION_ERROR_CODES)[number];
 
-export type ApplicationErrorStatus = 400 | 401 | 403 | 404 | 409 | 413 | 422;
+export type ApplicationErrorStatus = 400 | 401 | 403 | 404 | 409 | 413 | 422 | 500;
 
 export class ApplicationError extends Error {
   readonly status: ApplicationErrorStatus;
