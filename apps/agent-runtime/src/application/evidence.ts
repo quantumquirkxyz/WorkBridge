@@ -91,12 +91,12 @@ export function toApplicationEvidence(
 }
 
 export function applicationEvidenceFromCertifications(
-  certifications: readonly { id: string; name: string; status: string }[],
+  certifications: readonly { id: string; name: string; status: ProfileCredentialStatus }[],
 ): EvidenceItem[] {
-  return certifications.map((certification) => ({
+  return toApplicationEvidence(certifications.map((certification) => ({
     id: certification.id,
     kind: "certification" as const,
     text: certification.name,
-    credentialStatus: certification.status === "verified" ? "verified" as const : "unverified" as const,
-  }));
+    credentialStatus: certification.status,
+  })));
 }
