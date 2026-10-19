@@ -21,7 +21,7 @@ function session(role: "candidate" | "employer" | "counselor", id = role as stri
 }
 
 function setup() {
-  const match = vi.fn<ApplicationDecisionSource["decisionFor"]>().mockImplementation(async (candidateId, vacancyId) => ({
+  const decisionFor = vi.fn<ApplicationDecisionSource["decisionFor"]>().mockImplementation(async (candidateId, vacancyId) => ({
     kind: "decision" as const,
     biasBlocked: false,
     decision: sampleMatchDecision({
@@ -33,9 +33,9 @@ function setup() {
       biasAlerts: [{ id: "advisory", reason: "Revisar requisito de la vacante" }],
     }),
   }));
-  const source: ApplicationDecisionSource = { ownerOf: (id) => id === "vac-1" ? "org-owner" : id === "foreign-vacancy" ? "org-other" : undefined, decisionFor: match };
+  const source: ApplicationDecisionSource = { ownerOf: (id) => id === "vac-1" ? "org-owner" : id === "foreign-vacancy" ? "org-other" : undefined, decisionFor: decisionFor };
   const app = new ApplicationService({ clock: () => NOW, sessionSecret: SECRET, shortlist: source });
-  return { app, match };
+  return { app, decisionFor };
 }
 
 async function submit(app: ApplicationService, candidateId: string, org = "org-owner", vacancyId = "vac-1") {
@@ -69,7 +69,7 @@ describe("employer vacancy shortlist", () => {
   });
 
   it("fails closed on foreign ownership even when a candidate claims the caller's organization", async () => {
-    const { app, match } = setup();
+    const { app, decisionFor } = setup();
     await submit(app, "weak", "org-owner", "foreign-vacancy");
     await expect(app.shortlistForVacancy(session("employer"), "foreign-vacancy")).rejects.toMatchObject({ status: 403 });
     await expect(app.shortlistForVacancy(session("candidate"), "vac-1")).rejects.toMatchObject({ status: 403 });
@@ -78,17 +78,17 @@ describe("employer vacancy shortlist", () => {
   });
 
   it("excludes a bias-blocked vacancy from the entire shortlist", async () => {
-    const { app, match } = setup();
+    const { app, decisionFor } = setup();
     await submit(app, "strong");
     await submit(app, "weak");
-    match.mockResolvedValueOnce({ kind: "decision" as const, biasBlocked: false, decision: sampleMatchDecision({ traceId: "trusted", candidateId: "strong", total: 90 }) });
-    match.mockResolvedValueOnce({ kind: "blocked" as const });
+    decisionFor.mockResolvedValueOnce({ kind: "decision" as const, biasBlocked: false, decision: sampleMatchDecision({ traceId: "trusted", candidateId: "strong", total: 90 }) });
+    decisionFor.mockResolvedValueOnce({ kind: "blocked" as const });
     expect(await app.shortlistForVacancy(session("employer"), "vac-1")).toEqual([]);
   });
 
   it("breaks score ties by candidate id, independent of submission order", async () => {
-    const { app, match } = setup();
-    match.mockImplementation(async (candidateId, vacancyId) => ({
+    const { app, decisionFor } = setup();
+    decisionFor.mockImplementation(async (candidateId, vacancyId) => ({
       kind: "decision" as const,
       biasBlocked: false,
       decision: sampleMatchDecision({ traceId: "tie", candidateId, vacancyId, total: 70 }),

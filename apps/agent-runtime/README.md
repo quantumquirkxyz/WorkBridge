@@ -155,7 +155,7 @@ tables, using the same `makeCandidateId` mapping as intake, and invokes the exis
 matcher and counterfactual auditor. A finding that blocks the vacancy empties its
 shortlist. Missing profile/preferences exclude that applicant; absent SQL storage
 returns 503 when scoring is needed. Applications continue to use the existing
-runtime submission registry. Tests can inject a trusted `ShortlistSource` in
+runtime submission registry. Tests can inject a trusted `ApplicationDecisionSource` in
 `ApplicationServiceOptions`; it is never exposed as a request body.
 
 ## Validation

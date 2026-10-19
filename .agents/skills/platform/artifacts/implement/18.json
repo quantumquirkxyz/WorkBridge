@@ -1,0 +1,33 @@
+{
+  "status": "completed",
+  "changes": [
+    "apps/agent-runtime/src/application/shortlist.ts \u2014 ShortlistSource becomes ApplicationDecisionSource and match() becomes decisionFor(), returning a discriminated DecisionOutcome (decision | blocked | unavailable with reason not_applicable | no_profile | not_configured | no_decision) instead of a nullable decision. The adapter no longer throws for a missing query; it reports not_configured.",
+    "apps/agent-runtime/src/application/service.ts \u2014 shortlistForVacancy maps the outcome to the shortlist policy (blocked -> empty list, not_configured -> 503 shortlist_unavailable, other unavailable reasons -> skip the submission, decision -> rank it), and the option, field and import are renamed.",
+    "apps/agent-runtime/src/application/server.ts \u2014 imports and calls createApplicationDecisionSource.",
+    "apps/agent-runtime/src/application/__tests__/shortlist.test.ts \u2014 the seam-level assertion for a missing profile row now expects { kind: unavailable, reason: no_profile }; two consumer-policy tests were added (not_configured still yields 503; no_profile still yields an empty list), and the mock type and payloads follow the new interface.",
+    "apps/agent-runtime/src/application/__tests__/shortlist-auditor.test.ts and __tests__/draft-employer-org.test.ts \u2014 follow the rename and the discriminated union."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npm run typecheck",
+      "npx vitest run apps/agent-runtime/src/application/__tests__/shortlist.test.ts apps/agent-runtime/src/application/__tests__/shortlist-auditor.test.ts apps/agent-runtime/src/application/__tests__/draft-employer-org.test.ts",
+      "npm run gate:ci"
+    ],
+    "skipped": [
+      "npm run lint \u2014 pre-existing failure outside this change: 26 no-undef errors in docs/old/design/previews/*. Not part of gate:ci.",
+      "npm run test:e2e \u2014 Playwright needs a running web + runtime; the behaviour here is at the application seam."
+    ],
+    "notes": "Behaviour-preserving check: shortlist.test.ts pinned that a candidate without a persisted profile returned { biasBlocked: false } and was skipped, and that a deployment without persistence threw 503. Both are preserved, the first now expressed as the seam reporting reason no_profile and the consumer skipping, the second still thrown by shortlistForVacancy. gate:ci exited 0 with 855 tests passed (2 added) and coverage 88.8% statements / 78.49% branches / 93.66% functions / 91.73% lines."
+  },
+  "commitSha": "2498c43",
+  "branch": "feat/trusted-decision-source-slice-1",
+  "nextConsumer": "ticket #19",
+  "blockedBy": [],
+  "riskRemaining": "Deliberately not the behaviour change: the counselor gate still reads the request body, so the vulnerability proved in the design document (a clean body clears the gate and submits without counselor approval) is still present after this slice. Slice 2 makes createDraft async and consumes decisionFor, which is where the 503 decision_unavailable refusal lands. The seam itself is untested at the HTTP layer for the new reasons, and the local mock variable in shortlist.test.ts is still named match. The browser-level and HTTP-layer paths remain outside this slice; implementation behavior changes are deferred to ticket #19.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  }
+}
