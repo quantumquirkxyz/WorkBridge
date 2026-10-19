@@ -1,10 +1,16 @@
 {
   "artifactType": "codebase-design",
   "slug": "counselor-gate-trust-seam",
-  "status": "proposed",
+  "status": "accepted",
   "date": "2026-10-18",
-  "source": "project-viability P0 from .reports/20261018-viability.md",
-  "relatedAdrs": ["0002", "0003", "0006"],
+  "source": "PR #17 and issue #18; ADR-0010",
+  "relatedAdrs": [
+    "0002",
+    "0003",
+    "0006",
+    "0008",
+    "0010"
+  ],
   "problem": "The counselor gate is documented as a human trust boundary but is computed from client-supplied draft body fields (match.gaps, match.biasAlerts, match.transport.feasible, evidence[].credentialStatus). It is both bypassable by a crafted body and, for honest callers, blind because the counterfactual auditor never runs on the UI match path.",
   "evidence": {
     "seam": "apps/agent-runtime/src/application/service.ts createDraft -> counselorGate -> gates.ts counselorGateReasons",
@@ -26,7 +32,7 @@
     "recommendation": "Widen and rename the existing trusted seam ShortlistSource -> ApplicationDecisionSource, and make the counselor gate consume it instead of the request body.",
     "interface": {
       "ownerOf": "ownerOf(vacancyId: string): string | undefined",
-      "decisionFor": "decisionFor(candidateId: string, vacancyId: string): Promise<{ decision?: MatchDecision; biasBlocked: boolean }>"
+      "decisionFor": "decisionFor(candidateId: string, vacancyId: string): Promise<{ kind: \"decision\"; decision: MatchDecision; biasBlocked: boolean } | { kind: \"blocked\" } | { kind: \"unavailable\"; reason: \"not_applicable\" | \"no_profile\" | \"not_configured\" | \"no_decision\" }>"
     },
     "callerObligations": [
       "ownership comes only from ownerOf; a body value is never authoritative",
@@ -48,25 +54,45 @@
     "mainCost": "createDraft must become asynchronous because the trusted decision requires I/O."
   },
   "alternatives": [
-    { "id": "A", "summary": "Run the auditor on the UI match path, keep the body as the gate source", "verdict": "rejected", "why": "fixes honest blindness but leaves the gate client-controlled; pays counterfactual cost per page view" },
-    { "id": "B", "summary": "Sign the decision in the BFF and verify it in the runtime", "verdict": "rejected for now", "why": "adds key management and a trust token without settling who may decide" },
-    { "id": "C", "summary": "Widen the existing trusted seam and consume it in the gate", "verdict": "recommended", "why": "reuses the seam whose contract already forbids body-sourced truth" },
-    { "id": "D", "summary": "Evaluate the gate only at submit time", "verdict": "rejected", "why": "the draft view and counselor queue would show an untrusted gate while claiming otherwise" }
+    {
+      "id": "A",
+      "summary": "Run the auditor on the UI match path, keep the body as the gate source",
+      "verdict": "rejected",
+      "why": "fixes honest blindness but leaves the gate client-controlled; pays counterfactual cost per page view"
+    },
+    {
+      "id": "B",
+      "summary": "Sign the decision in the BFF and verify it in the runtime",
+      "verdict": "rejected for now",
+      "why": "adds key management and a trust token without settling who may decide"
+    },
+    {
+      "id": "C",
+      "summary": "Widen the existing trusted seam and consume it in the gate",
+      "verdict": "recommended",
+      "why": "reuses the seam whose contract already forbids body-sourced truth"
+    },
+    {
+      "id": "D",
+      "summary": "Evaluate the gate only at submit time",
+      "verdict": "rejected",
+      "why": "the draft view and counselor queue would show an untrusted gate while claiming otherwise"
+    }
   ],
   "acceptanceCriteria": [
     "A trusted critical gap, unverified credential, bias alert or infeasible transport always produces the matching counselorGate code, whatever the body claims",
     "A body claiming a clean match cannot clear a trusted gate",
-    "An unresolvable trusted decision either blocks draft creation or forces the gate; never an empty gate",
+    "A trusted decision that is unavailable for no_profile, not_configured or no_decision refuses draft creation with 503 decision_unavailable; not_applicable preserves the existing invisible draft behavior; never an empty gate",
     "submit still refuses without counselor approval when a trusted gate exists, and the counselor queue lists exactly the gated drafts",
     "Ownership resolution is unchanged from the current behaviour"
   ],
   "migrationSlices": [
     "Widen and rename the seam with no observable behaviour change",
-    "Make createDraft async, resolve ownership plus decision through the seam, force the gate on unresolved decisions; update server.ts:116 dispatch and direct callers",
+    "Make createDraft async, resolve ownership plus decision through the seam, refuse with 503 decision_unavailable for unavailable trusted decisions; update server.ts and direct callers",
     "Remove or demote the body-sourced match to an advisory echo that cannot influence the gate",
     "Add the regression tests for the acceptance criteria"
   ],
-  "openQuestion": "In memory mode there is no persisted profile and therefore no trusted decision: either refuse draft creation (503, matching shortlist_unavailable) or force the counselor gate for every draft. The ADR must settle this.",
-  "nextConsumer": "to-spec",
+  "openQuestion": "Resolved by ADR-0010: refuse with 503 decision_unavailable for no_profile, not_configured or no_decision; preserve not_applicable behavior.",
+  "nextConsumer": "tickets #19, #20 and #21",
   "sideEffects": "none (design only)"
 }

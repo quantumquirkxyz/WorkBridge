@@ -1,9 +1,9 @@
 # Design — counselor gate trust seam
 
-**Status:** proposal (not yet decided)
+**Status:** accepted — ADR-0010
 **Date:** 2026-10-18
 **Author:** agent, from the project-viability assessment (`.reports/20261018-viability.md`)
-**Related:** ADR-0002 (employability system boundaries), ADR-0003 (verification and human approval), ADR-0006 (guided chat intake)
+**Related:** ADR-0002 (employability system boundaries), ADR-0003 (verification and human approval), ADR-0006 (guided chat intake), ADR-0008 (role-organization authorization), ADR-0010 (trusted decision source)
 **Scope of this document:** the shape of the module and where the seam goes. It does not implement the change.
 
 ## Problem
@@ -18,8 +18,8 @@ computed from that body:
 
 ```
 createDraft(session, body)                       apps/agent-runtime/src/application/service.ts:176
-  └─ parseDraftInput(body)                       service.ts:557   ← match, evidence, employerOrgId from the body
-  └─ counselorGate(draft)                        service.ts:673
+  └─ parseDraftInput(body)                       service.ts:559   ← match, evidence, employerOrgId from the body
+  └─ counselorGate(draft)                        service.ts:674
        └─ counselorGateReasons(draft.input.match, selectedEvidence)   gates.ts:9
             ├─ match.gaps[].severity              gates.ts:14-18   ← critical_gap
             ├─ evidence[].credentialStatus        gates.ts:19-23   ← unverified_credential
@@ -55,8 +55,8 @@ employer shortlist:
 
 ```
 ShortlistSource                                   apps/agent-runtime/src/application/shortlist.ts:10-13
-  ownerOf(vacancyId) -> string | undefined        shortlist.ts:27-29
-  match(candidateId, vacancyId) -> { decision?, biasBlocked }   shortlist.ts:30-71
+  ownerOf(vacancyId) -> string | undefined        shortlist.ts:32-34
+  match(candidateId, vacancyId) -> { decision?, biasBlocked }   shortlist.ts:35-76
 ```
 
 `match` already loads the profile and preferences from SQL, re-runs the solver, **runs
@@ -76,11 +76,11 @@ ApplicationDecisionSource            (renamed from ShortlistSource)
   decisionFor(candidateId, vacancyId): Promise<
     | { kind: "decision"; decision: MatchDecision; biasBlocked: boolean }
     | { kind: "blocked" }
-    | { kind: "unavailable"; reason: "not_applicable" | "no_profile" | "not_configured" }
+    | { kind: "unavailable"; reason: "not_applicable" | "no_profile" | "not_configured" | "no_decision" }
   >
 ```
 
-ADR-0010 settles this shape. The outcome is a fact, not a policy, and each consumer maps
+ADR-0010 settles this shape; the design is accepted and implementation is delegated to tickets #19–#21. The outcome is a fact, not a policy, and each consumer maps
 it: the employer shortlist keeps today's behaviour exactly (including that a candidate
 without a persisted profile is skipped rather than an error), while draft creation refuses
 with `503 decision_unavailable` when a catalog vacancy has no trusted decision.
@@ -90,7 +90,7 @@ Callers must know exactly three things:
 - **Ownership is authoritative.** `ownerOf` is the only source of vacancy ownership; a
   value from a request body is never consulted.
 - **`decisionFor` is authoritative and its absence is explicit.** There is no nullable
-  decision: `blocked` and the three `unavailable` reasons are distinguished, because they
+  decision: `blocked` and the four `unavailable` reasons are distinguished, because they
   do not share a policy. Absence is not success.
 - **Absence fails closed for draft creation.** A draft is never created with an empty gate
   when the trusted decision could not be resolved; the runtime refuses instead of trusting
@@ -110,7 +110,7 @@ get "is this application safe to move forward" without learning any of it.
 
 ### Adapter role
 
-`createShortlistSource` (`shortlist.ts:16`) becomes `createApplicationDecisionSource`:
+`createShortlistSource` (`shortlist.ts:17`) becomes `createApplicationDecisionSource`:
 the single adapter, SQL-plus-solver-plus-auditor backed, and the only place a decision
 is ever recomputed. The `.reports` seam note: in memory mode (`query === undefined`) the
 adapter cannot answer — this is the case that must fail closed rather than degrade.
@@ -167,8 +167,9 @@ Testable, at the seam:
    alert or infeasible transport **always** carries the corresponding `counselorGate`
    code, regardless of what the body claims.
 2. A body claiming a clean match cannot clear a gate the trusted decision raises.
-3. When the trusted decision cannot be resolved, the draft either fails to be created or
-   is created with the gate forced — never with an empty gate.
+3. When the trusted decision is unavailable for `no_profile`, `not_configured` or
+   `no_decision`, draft creation refuses with `503 decision_unavailable`; `not_applicable`
+   preserves the existing invisible-draft behavior. No empty gate is created from an unavailable trusted decision.
 4. `submit` still refuses without counselor approval when a trusted gate exists
    (`service.ts` `submit` path), and the counselor queue still lists exactly the gated
    drafts.
@@ -179,19 +180,19 @@ Testable, at the seam:
 
 1. Widen and rename the seam; keep `shortlistForVacancy` behaviour identical (no
    observable change).
-2. Make `createDraft` async and resolve ownership plus decision through the seam; force
-   the gate on unresolved decisions. Update the HTTP dispatch (`server.ts:116`) and the
-   tests that call `createDraft` directly.
+2. Make `createDraft` async and resolve ownership plus decision through the seam; refuse
+   with `503 decision_unavailable` for unavailable trusted decisions. Update the HTTP
+   dispatch (`server.ts:116`) and the tests that call `createDraft` directly.
 3. Delete the now-dead body-sourced path for `match` on draft creation, or mark it
    explicitly as an advisory echo that cannot influence the gate.
 4. Add the regression tests for points 1-3 above.
 
 Slice 1 is a no-op by design, which makes it safe to review on its own.
 
-## Open question for the decision record
+## Decision record
 
 In memory mode there is no persisted profile, so no trusted decision exists. The two
 candidate policies are: **refuse** draft creation (`503`, matching the existing
-`shortlist_unavailable` code at `shortlist.ts:34`) or **force** the counselor gate for
+`decision_unavailable` for the draft consumer or **force** the counselor gate for
 every draft. Refusing is simpler to reason about; forcing keeps the demo path working
-without persistence. This is the decision the ADR must settle.
+without persistence. ADR-0010 settles this: refuse with `503 decision_unavailable` for `no_profile`, `not_configured` or `no_decision`; preserve `not_applicable`.
