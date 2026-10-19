@@ -76,9 +76,9 @@ Scripts reales del `package.json` raíz:
 Se ejecutaron las comprobaciones en este árbol de trabajo. Resultado honesto:
 
 - **Una ejecución histórica de `apps/web/tests/chat-worker.test.ts`** reportó 1 de 10 pruebas fallida por una expectativa de saludo desactualizada tras la migración a chat asíncrono (#115). El workflow actual `gate:ci` pasa; si la prueba vuelve a fallar de forma aislada, actualizar la expectativa en un issue separado.
-- **`gate:ci` pasa** con typecheck y cobertura en el workflow de GitHub Actions. `npm run lint` permanece fuera del gate por los 26 errores legacy de `docs/old/design/previews/*`; la cobertura e2e requiere levantar web y runtime.
+- **`gate:ci` pasa** con lint, typecheck y cobertura en el workflow de GitHub Actions; la cobertura e2e requiere levantar web y runtime.
 - **`node .agents/skills/platform/check-all.mjs` se interrumpe** con `ENOENT` al leer `policy/tool-risk-budget.json`: el directorio `policy/` no existe en el repositorio. Es una validación del bundle de método, no del producto.
-- No se verificó `npm run lint` ni Playwright en esta pasada; no se afirma que pasen.
+- La validación actual incluye `npm run lint` y Playwright runtime; el flujo ownership requiere `DATABASE_URL` y estados sembrados documentados en el README.
 
 La evidencia de evaluación del producto está en [evals.md](evals.md).
 

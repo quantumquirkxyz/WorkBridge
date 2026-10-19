@@ -1,4 +1,4 @@
-import { defineConfig, devices, type PlaywrightTestConfig, type Project } from "@playwright/test";
+import { defineConfig, devices, type Project } from "@playwright/test";
 
 const runtimePort = 4371;
 const webPort = 4372;
@@ -27,9 +27,9 @@ const runtimeWebServer = {
 const trustedRuntimeWebServer = {
   name: "trusted-runtime",
   command: "npx tsx apps/agent-runtime/src/application/main.ts",
-  url: `http://127.0.0.1:${runtimePort}/health`,
+  url: "http://127.0.0.1:4373/health",
   reuseExistingServer: false,
-  env: { PORT: String(runtimePort), BETTER_AUTH_SECRET: "better-auth-test-secret" },
+  env: { PORT: "4373", BETTER_AUTH_SECRET: "better-auth-test-secret" },
 };
 
 const webWebServer = {
@@ -39,7 +39,7 @@ const webWebServer = {
   url: `http://127.0.0.1:${webPort}`,
   reuseExistingServer: false,
   timeout: 180_000,
-  env: isolatedWebEnv(),
+   env: { ...isolatedWebEnv(), AGENT_RUNTIME_URL: "http://127.0.0.1:4373" },
 };
 
 const webCapture = {
@@ -47,16 +47,11 @@ const webCapture = {
   video: "retain-on-failure" as const,
 };
 
-type ProjectWithWebServer = Project & {
-  webServer?: PlaywrightTestConfig["webServer"];
-};
-
-const projects: ProjectWithWebServer[] = [
+const projects: Project[] = [
   {
     name: "runtime",
     testDir: "./apps/agent-runtime/e2e",
     use: { baseURL: `http://127.0.0.1:${runtimePort}` },
-    webServer: [runtimeWebServer],
   },
   {
     name: "Pixel 7",
@@ -64,7 +59,6 @@ const projects: ProjectWithWebServer[] = [
     testMatch: /(?:home\.smoke|intake-explore)\.spec\.ts/,
     timeout: 60_000,
     use: { ...devices["Pixel 7"], baseURL: `http://127.0.0.1:${webPort}`, ...webCapture },
-    webServer: [webWebServer],
   },
   {
     name: "iPhone 14",
@@ -72,7 +66,6 @@ const projects: ProjectWithWebServer[] = [
     testMatch: /(?:home\.smoke|intake-explore)\.spec\.ts/,
     timeout: 60_000,
     use: { ...devices["iPhone 14"], baseURL: `http://127.0.0.1:${webPort}`, ...webCapture },
-    webServer: [webWebServer],
   },
   {
     name: "Desktop Chrome",
@@ -80,7 +73,6 @@ const projects: ProjectWithWebServer[] = [
     testMatch: /(?:home\.smoke|intake-explore)\.spec\.ts/,
     timeout: 60_000,
     use: { ...devices["Desktop Chrome"], baseURL: `http://127.0.0.1:${webPort}`, ...webCapture },
-    webServer: [webWebServer],
   },
   {
     name: "ownership",
@@ -88,7 +80,6 @@ const projects: ProjectWithWebServer[] = [
     testMatch: /ui-to-employer-ownership\.spec\.ts/,
     timeout: 60_000,
     use: { ...devices["Desktop Chrome"], baseURL: `http://127.0.0.1:${webPort}`, ...webCapture },
-    webServer: [trustedRuntimeWebServer, webWebServer],
   },
   {
     name: "web",
@@ -96,14 +87,11 @@ const projects: ProjectWithWebServer[] = [
     testMatch: /(?:intake-explore|async-chat)\.spec\.ts/,
     timeout: 60_000,
     use: { ...devices["Desktop Chrome"], baseURL: `http://127.0.0.1:${webPort}`, ...webCapture },
-    webServer: [webWebServer],
   },
 ];
 
 export default defineConfig({
   timeout: 30_000,
-  // Playwright 1.64.1 launches the top-level array. Projects still declare
-  // their own webServer arrays so each suite documents the server it needs.
-  webServer: [runtimeWebServer, webWebServer],
+  webServer: [runtimeWebServer, trustedRuntimeWebServer, webWebServer],
   projects,
 });

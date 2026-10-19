@@ -33,7 +33,7 @@ export interface DraftInput {
   employerOrgId?: string;
   candidateDisplayName?: string;
   evidence: EvidenceItem[];
-  /** Advisory client echo only; trusted catalog decisions control gates, documents, ownership, ranking and submission. */
+  /** Advisory client echo only in trusted runtime; memory-only legacy fixtures may use it for local preview generation. */
   match: MatchDecision;
 }
 

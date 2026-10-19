@@ -163,12 +163,8 @@ than trust; fix the list when you fix the cause.
 
 - **CI runs `gate:ci`.** `.github/workflows/ci.yml` runs `npm ci` + `npm run
   gate:ci` on every pull request and on `main`, with least-privilege
-  `permissions: contents: read` and a cancelling concurrency group. Lint is
-  deliberately not a gated job yet while `docs/old/design/previews/*` is red.
-  This workflow is now part of the repository; update this bullet only when the gate changes.
-- **`npm run lint` is red** with 26 `no-undef` errors in
-  `docs/old/design/previews/*` (superseded material). `lint` is not part of
-  `gate:ci`.
+  `permissions: contents: read` and a cancelling concurrency group. The gate
+  includes lint, typecheck and coverage.
 - **`docs/old/` is superseded.** Do not cite it as current; current docs are the
   ones under `docs/` listed above. Some ADRs still reference the old
   `@puente/*` package namespace — the packages are `@workbridge/*`.
