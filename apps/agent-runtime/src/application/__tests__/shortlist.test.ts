@@ -243,7 +243,10 @@ describe("consumer policy for an unresolvable decision", () => {
     });
     const draft = await app.createDraft(session("candidate"), draftPayload());
     expect(draft.employerOrgId).toBeUndefined();
+    app.approveDraft(session("candidate"), draft.draftId, { traceId: draft.traceId, idempotencyKey: "notapp-approve", reason: "Confirmo", envelope: sampleWorkflowEnvelope(draft.traceId, "notapp-approve") });
+    await app.submit(session("candidate"), draft.draftId, { traceId: draft.traceId, idempotencyKey: "notapp-submit", reason: "Envío", envelope: sampleWorkflowEnvelope(draft.traceId, "notapp-submit") });
     expect(await app.listSubmissions(session("employer"), "pending_employer_approval")).toEqual([]);
+    expect(await app.listSubmissions(session("employer", "other", "org-other"), "pending_employer_approval")).toEqual([]);
   });
 
   it("lists exactly the gated drafts after a refused creation", async () => {

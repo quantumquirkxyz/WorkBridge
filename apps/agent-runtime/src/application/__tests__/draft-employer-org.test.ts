@@ -114,6 +114,22 @@ describe("draft employer organization comes from the trusted seam", () => {
     expect(draft.documents.application.map((fragment) => fragment.text)).toContain("Brecha señalada por el matching: Trusted gap");
   });
 
+  it("requires counselor approval before submitting a trusted gated draft", async () => {
+    const source = shortlist((id) => (id === "vac-1" ? "org-owner" : undefined));
+    source.decisionFor = vi.fn(async (candidateId, vacancyId) => ({
+      kind: "decision" as const,
+      biasBlocked: false,
+      evidence: [],
+      decision: sampleMatchDecision({ traceId: "trace-ownership", candidateId, vacancyId, gaps: [{ id: "critical", severity: "critical", description: "Trusted gap" }] }),
+    }));
+    const app = service(source);
+    const candidate = session("candidate");
+    const draft = await app.createDraft(candidate, draftBody());
+    const action = (idempotencyKey: string) => ({ traceId: draft.traceId, idempotencyKey, reason: "Confirmo", envelope: sampleWorkflowEnvelope(draft.traceId, idempotencyKey) });
+    app.approveDraft(candidate, draft.draftId, action("idem-candidate"));
+    await expect(app.submit(candidate, draft.draftId, action("idem-submit"))).rejects.toMatchObject({ code: "counselor_approval_required" });
+  });
+
   it("stamps the catalog owner on a draft that omits employerOrgId (UI-shaped request)", async () => {
     const app = service(shortlist((id) => (id === "vac-1" ? "org-owner" : undefined)));
     const draft = await app.createDraft(session("candidate"), draftBody(uiShapedDraft));

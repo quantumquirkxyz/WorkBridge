@@ -38,7 +38,9 @@ export function createApplicationServer(options: ServerOptions = {}) {
       sessionSecret: env.BETTER_AUTH_SECRET ?? "",
       idempotency: sql ? createSqlIdempotencyStore(sql) : undefined,
       outbox: sql ? createSqlNotificationOutbox(sql) : undefined,
-      shortlist: createApplicationDecisionSource({ query: sql, env, clock: options.clock ?? (() => new Date().toISOString()) }),
+       shortlist: env.WORKBRIDGE_TEST_LEGACY_APPLICATION === "true"
+         ? undefined
+         : createApplicationDecisionSource({ query: sql, env, clock: options.clock ?? (() => new Date().toISOString()) }),
     });
   const context: RequestContext = { service, secrets, databaseMode, persistence };
   return createServer((req, res) => {

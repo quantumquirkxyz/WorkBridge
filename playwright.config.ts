@@ -21,7 +21,11 @@ const runtimeWebServer = {
   command: "npx tsx apps/agent-runtime/src/application/main.ts",
   url: `http://127.0.0.1:${runtimePort}/health`,
   reuseExistingServer: false,
-  env: { PORT: String(runtimePort), BETTER_AUTH_SECRET: "better-auth-test-secret" },
+  env: {
+    PORT: String(runtimePort),
+    BETTER_AUTH_SECRET: "better-auth-test-secret",
+    WORKBRIDGE_TEST_LEGACY_APPLICATION: "true",
+  },
 };
 
 const webWebServer = {

@@ -90,7 +90,7 @@ export async function createDraftFromMatch(input: CreateDraftInput): Promise<Cre
       vacancyId: input.vacancyId,
       vacancyTitle: input.vacancyTitle,
       evidence,
-      // The runtime recomputes this decision and ignores this echo for gate, ownership and ranking.
+      // The runtime recomputes this decision and ignores this echo for gate, documents, ownership, ranking and submission.
       match,
       envelope: envelope(traceId, idempotencyKey),
     }),
