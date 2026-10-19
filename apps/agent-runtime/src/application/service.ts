@@ -182,10 +182,11 @@ export class ApplicationService {
       throw new ApplicationError("A candidate can only draft their own application.", 403, "forbidden");
     }
     const outcome = this.shortlist ? await this.shortlist.decisionFor(input.candidateId, input.vacancyId) : undefined;
-    let trustedGate: GateReason[] | undefined;
+    let trustedGate: GateReason[];
     if (!outcome) {
-      // Direct callers without the optional seam retain the pre-migration path.
-      trustedGate = undefined;
+      // A service without the trusted seam cannot claim that the request-body
+      // match is authoritative. The HTTP composition root always supplies it.
+      trustedGate = [];
     } else if (outcome.kind === "unavailable") {
       if (["no_profile", "not_configured", "no_decision"].includes(outcome.reason)) {
         throw new ApplicationError("The trusted application decision is unavailable.", 503, "decision_unavailable");
@@ -199,6 +200,10 @@ export class ApplicationService {
         throw new ApplicationError("Ranking decision does not match the application.", 422, "inconsistent_match");
       }
       input.match = outcome.decision;
+      // Credential provenance remains a documented follow-up: the current
+      // decision seam owns matching/audit facts, while evidence persistence is
+      // migrated in the next application-data slice. Do not treat body match
+      // fields as trusted here.
       trustedGate = counselorGateReasons(outcome.decision, input.evidence);
       if (outcome.biasBlocked) trustedGate.push({ code: "bias_alert", detail: "Trusted decision audit blocked this application." });
     }

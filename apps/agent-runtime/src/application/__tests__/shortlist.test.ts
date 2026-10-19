@@ -178,7 +178,7 @@ describe("consumer policy for an unresolvable decision", async () => {
       .rejects.toMatchObject({ status: 503, code: "decision_unavailable" });
   });
 
-  it("keeps skipping a candidate without a persisted profile rather than failing the ranking", async () => {
+  it("refuses draft creation when the candidate has no persisted profile", async () => {
     const source: ApplicationDecisionSource = {
       isKnownVacancy: (id) => id === "vac-1",
       ownerOf: (id) => id === "vac-1" ? "org-owner" : undefined,

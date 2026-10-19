@@ -73,7 +73,7 @@ function action(reason: string, idempotencyKey = "idem-action", traceId = "trace
   return { traceId, idempotencyKey, reason, envelope: sampleWorkflowEnvelope(traceId, idempotencyKey) };
 }
 
-function service(secrets: string[] = []) {
+function service(secrets: string[] = [], trustedMatch?: MatchDecision) {
   return new ApplicationService({
     clock: () => NOW,
     ids: (() => {
@@ -82,6 +82,15 @@ function service(secrets: string[] = []) {
     })(),
     secrets,
     sessionSecret: SESSION_SECRET,
+    ...(trustedMatch ? { shortlist: {
+      ownerOf: () => undefined,
+      isKnownVacancy: () => false,
+      decisionFor: async (candidateId: string, vacancyId: string) => ({
+        kind: "decision" as const,
+        biasBlocked: false,
+        decision: { ...trustedMatch, candidateId, vacancyId },
+      }),
+    } } : {}),
   });
 }
 
@@ -167,7 +176,7 @@ describe("application approval and submission", async () => {
   });
 
   it("requires counselor approval for critical gaps, unverified credentials, bias, and transport", async () => {
-    const app = service();
+    const app = service([], gatedMatch());
     const unverified: EvidenceItem = {
       id: "cert-1",
       kind: "certification",
@@ -372,7 +381,7 @@ describe("application approval and submission", async () => {
   });
 
   it("removes rejected and approved drafts from the counselor pending queue", async () => {
-    const app = service();
+    const app = service([], gatedMatch());
     const unverified: EvidenceItem = {
       id: "cert-q",
       kind: "certification",
@@ -408,8 +417,8 @@ describe("application approval and submission", async () => {
     expect(view.availableEvidence.map((item) => item.id)).toEqual(["ev-1"]);
   });
 
-  it("computes the counselor gate over the selected evidence only", async () => {
-    const app = service();
+  it("keeps the trusted counselor gate independent of request-body correction", async () => {
+    const app = service([], match());
     const unverified: EvidenceItem = {
       id: "cert-g",
       kind: "certification",
@@ -427,7 +436,7 @@ describe("application approval and submission", async () => {
     });
     expect(corrected.evidence.map((item) => item.id)).toEqual(["ev-1"]);
     expect(corrected.availableEvidence.map((item) => item.id)).toEqual(["ev-1", "cert-g"]);
-    expect(corrected.counselorGate).toEqual([]);
+    expect(corrected.counselorGate.map((reason) => reason.code)).toEqual(["unverified_credential"]);
   });
 
   it("lets a counselor review a clean draft without making that approval mandatory", async () => {
