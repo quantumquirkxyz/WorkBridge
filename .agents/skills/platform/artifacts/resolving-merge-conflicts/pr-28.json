@@ -1,0 +1,22 @@
+{
+  "artifactType": "ResolvingMergeConflictsArtifact",
+  "identifier": "pr-28",
+  "status": "resolved",
+  "branch": "implement-all-open-issues",
+  "source": "origin/main",
+  "mergeCommit": "2041a1e",
+  "conflictedFiles": [
+    "apps/agent-runtime/src/application/service.ts",
+    "apps/agent-runtime/src/application/__tests__/draft-employer-org.test.ts",
+    "apps/agent-runtime/src/application/__tests__/notification.test.ts",
+    "apps/agent-runtime/src/application/__tests__/service.test.ts",
+    "apps/agent-runtime/src/application/__tests__/shortlist.test.ts"
+  ],
+  "resolution": "Preserved the branch's final trusted-gate implementation and tests; accepted origin/main's current repository guidance and implementation artifacts. Overlapping pre-existing untracked files were backed up and not discarded.",
+  "validation": [
+    "npm run gate:ci",
+    "git diff --check",
+    "git diff --name-only --diff-filter=U is empty"
+  ],
+  "nextConsumer": "review-fix-loop"
+}
