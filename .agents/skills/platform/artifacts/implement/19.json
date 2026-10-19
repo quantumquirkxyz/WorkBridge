@@ -24,7 +24,7 @@
   "branch": "feat/trusted-decision-source-slice-1",
   "nextConsumer": "ticket #19",
   "blockedBy": [],
-  "riskRemaining": "Deliberately not the behaviour change: the counselor gate still reads the request body, so the vulnerability proved in the design document (a clean body clears the gate and submits without counselor approval) is still present after this slice. Slice 2 makes createDraft async and consumes decisionFor, which is where the 503 decision_unavailable refusal lands. The seam itself is untested at the HTTP layer for the new reasons, and the local mock variable in shortlist.test.ts is still named match. The browser-level and HTTP-layer paths remain outside this slice; implementation behavior changes are deferred to ticket #19.",
+  "riskRemaining": "Deliberately not the behaviour change: the counselor gate still reads the request body, so the vulnerability proved in the design document (a clean body clears the gate and submits without counselor approval) is still present after this slice. Slice 2 makes createDraft async and consumes decisionFor, which is where the 503 decision_unavailable refusal lands. The seam itself is untested at the HTTP layer for the new reasons, and the browser-level and HTTP-layer paths remain outside this slice. The browser-level and HTTP-layer paths remain outside this slice; implementation behavior changes are deferred to ticket #19.",
   "qualityGateResults": {
     "gateIde": "pass",
     "gatePreCommit": "pass",

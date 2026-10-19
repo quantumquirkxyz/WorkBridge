@@ -18,9 +18,12 @@ function session(role: "candidate" | "employer", id = role as string, org?: stri
 }
 
 /** The trusted ownership seam: only the catalog knows which organization owns a vacancy. */
-function shortlist(owner: (vacancyId: string) => string | undefined): ApplicationDecisionSource {
+function shortlist(
+  owner: (vacancyId: string) => string | undefined,
+  known: (vacancyId: string) => boolean = (vacancyId) => owner(vacancyId) !== undefined,
+): ApplicationDecisionSource {
   return {
-    isKnownVacancy: (vacancyId) => owner(vacancyId) !== undefined,
+    isKnownVacancy: known,
     ownerOf: owner,
     decisionFor: vi.fn(async (candidateId, vacancyId) => ({
       kind: "decision" as const,
@@ -63,6 +66,13 @@ describe("draft employer organization comes from the trusted seam", () => {
     const app = service(shortlist((id) => (id === "vac-1" ? "org-owner" : undefined)));
     const draft = app.createDraft(session("candidate"), draftBody({ employerOrgId: "org-attacker" }));
     expect(draft.employerOrgId).toBe("org-owner");
+  });
+
+  it("refuses a known vacancy without a resolvable owner", () => {
+    const app = service(shortlist(() => undefined, (id) => id === "vac-1"));
+    expect(() => app.createDraft(session("candidate"), draftBody({ employerOrgId: "org-manual" }))).toThrowError(
+      expect.objectContaining({ status: 503, code: "ownership_unavailable" }),
+    );
   });
 
   it("keeps the body employerOrgId when the trusted source does not own the vacancy", () => {
