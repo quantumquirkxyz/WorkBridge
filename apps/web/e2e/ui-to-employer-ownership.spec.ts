@@ -2,8 +2,9 @@ import { expect, test } from "@playwright/test";
 
 /**
  * Seeded browser regression for issue #23. Set E2E_CANDIDATE_STORAGE_STATE,
- * E2E_EMPLOYER_STORAGE_STATE and E2E_CATALOG_VACANCY_ID after running the demo
- * seed; E2E_OTHER_ORG_SUBMISSION_ID is optional for the isolation assertion.
+ * E2E_EMPLOYER_STORAGE_STATE, E2E_FOREIGN_EMPLOYER_STORAGE_STATE and
+ * E2E_CATALOG_VACANCY_ID after running the demo seed; E2E_OTHER_ORG_SUBMISSION_ID
+ * identifies the seeded submission used for the isolation assertion.
  */
 const candidateState = process.env.E2E_CANDIDATE_STORAGE_STATE;
 const employerState = process.env.E2E_EMPLOYER_STORAGE_STATE;
