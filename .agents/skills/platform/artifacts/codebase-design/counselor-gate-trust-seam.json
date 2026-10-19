@@ -4,13 +4,7 @@
   "status": "accepted",
   "date": "2026-10-18",
   "source": "PR #17 and issue #18; ADR-0010",
-  "relatedAdrs": [
-    "0002",
-    "0003",
-    "0006",
-    "0008",
-    "0010"
-  ],
+  "relatedAdrs": ["0002", "0003", "0008", "0010"],
   "problem": "The counselor gate is documented as a human trust boundary but is computed from client-supplied draft body fields (match.gaps, match.biasAlerts, match.transport.feasible, evidence[].credentialStatus). It is both bypassable by a crafted body and, for honest callers, blind because the counterfactual auditor never runs on the UI match path.",
   "evidence": {
     "seam": "apps/agent-runtime/src/application/service.ts createDraft -> counselorGate -> gates.ts counselorGateReasons",
@@ -92,7 +86,7 @@
     "Remove or demote the body-sourced match to an advisory echo that cannot influence the gate",
     "Add the regression tests for the acceptance criteria"
   ],
-  "openQuestion": "Resolved by ADR-0010: refuse with 503 decision_unavailable for no_profile, not_configured or no_decision; preserve not_applicable behavior.",
+  "decisionRecord": "ADR-0010 resolves this: refuse with 503 decision_unavailable for no_profile, not_configured or no_decision; preserve not_applicable behavior.",
   "nextConsumer": "tickets #19, #20 and #21",
   "sideEffects": "none (design only)"
 }

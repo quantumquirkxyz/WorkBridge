@@ -130,8 +130,8 @@ bodies."
 ## Links
 
 - Design document: `.agents/skills/platform/artifacts/codebase-design/counselor-gate-trust-seam.md`
-- Assessment that surfaced it: `.reports/20261018-viability.md` (P0)
-- Tracker: ticket under the role-based approval and safe submission work (issue #12)
+- Assessment that surfaced it: issue #18 and its accepted design record
+- Tracker: issue #18, implemented through tickets #19, #20 and #21
 - Related: ADR-0002 (employability system boundaries), ADR-0003 (verification and
   human approval), ADR-0008 (ownership bound to the seeded organization)
 - Code: `apps/agent-runtime/src/application/gates.ts`,

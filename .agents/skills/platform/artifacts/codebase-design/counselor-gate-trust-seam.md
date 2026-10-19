@@ -3,7 +3,7 @@
 **Status:** accepted — ADR-0010
 **Date:** 2026-10-18
 **Author:** agent, from the project-viability assessment (`.reports/20261018-viability.md`)
-**Related:** ADR-0002 (employability system boundaries), ADR-0003 (verification and human approval), ADR-0006 (guided chat intake), ADR-0008 (role-organization authorization), ADR-0010 (trusted decision source)
+**Related:** ADR-0002 (employability system boundaries), ADR-0003 (verification and human approval), ADR-0008 (role-organization authorization), ADR-0010 (trusted decision source)
 **Scope of this document:** the shape of the module and where the seam goes. It does not implement the change.
 
 ## Problem
