@@ -23,3 +23,4 @@ Rules:
 | [ADR-0007](0007-web-styling-tailwind-shadcn.md) | Style `apps/web` with Tailwind CSS v4 and shadcn/ui |
 | [ADR-0008](0008-role-organization-authorization.md) | Bind employer access to the seeded organization |
 | [ADR-0009](0009-name-workbridge-and-equipo-02-tracker.md) | Name the product WorkBridge and track work in `HackathonFISC/equipo-02` |
+| [ADR-0010](0010-trusted-decision-source-for-the-counselor-gate.md) | Resolve the counselor gate from a trusted decision source |

@@ -1,0 +1,92 @@
+{
+  "artifactType": "codebase-design",
+  "slug": "counselor-gate-trust-seam",
+  "status": "accepted",
+  "date": "2026-10-18",
+  "source": "PR #17 and issue #18; ADR-0010",
+  "relatedAdrs": ["0002", "0003", "0008", "0010"],
+  "problem": "The counselor gate is documented as a human trust boundary but is computed from client-supplied draft body fields (match.gaps, match.biasAlerts, match.transport.feasible, evidence[].credentialStatus). It is both bypassable by a crafted body and, for honest callers, blind because the counterfactual auditor never runs on the UI match path.",
+  "evidence": {
+    "seam": "apps/agent-runtime/src/application/service.ts createDraft -> counselorGate -> gates.ts counselorGateReasons",
+    "caseA_bypass": {
+      "assertion": "clean body yields counselorGate == [] and submit reaches pending_employer_approval with no counselor approval",
+      "result": "passes today (vulnerability confirmed)"
+    },
+    "caseB_missing": {
+      "assertion": "trusted decision with a critical gap forces counselorGate to contain critical_gap",
+      "result": "fails today: expected [] to include 'critical_gap'"
+    },
+    "honestBlindness": [
+      "apps/agent-runtime/src/matching/adapt.ts:107 projects biasAlerts from the vacancy document",
+      "apps/agent-runtime/src/matching/catalog-input.ts:46 hard-codes alerts: []"
+    ],
+    "existingTrustedSeam": "apps/agent-runtime/src/application/shortlist.ts ShortlistSource (ownerOf, match) already recomputes via SQL + solver + counterfactual auditor"
+  },
+  "decision": {
+    "recommendation": "Widen and rename the existing trusted seam ShortlistSource -> ApplicationDecisionSource, and make the counselor gate consume it instead of the request body.",
+    "interface": {
+      "ownerOf": "ownerOf(vacancyId: string): string | undefined",
+      "decisionFor": "decisionFor(candidateId: string, vacancyId: string): Promise<{ kind: \"decision\"; decision: MatchDecision; biasBlocked: boolean } | { kind: \"blocked\" } | { kind: \"unavailable\"; reason: \"not_applicable\" | \"no_profile\" | \"not_configured\" | \"no_decision\" }>"
+    },
+    "callerObligations": [
+      "ownership comes only from ownerOf; a body value is never authoritative",
+      "decisionFor is authoritative and may return no decision; absence is not success",
+      "absence fails closed: never create a draft with an empty gate when the trusted decision is unavailable"
+    ],
+    "hiddenBehindSeam": [
+      "Postgres-backed profile and preference reads via SqlQuery",
+      "solver re-run and matching configuration",
+      "counterfactual auditor passes over protected attributes",
+      "bias alert derivation from the auditor rather than the vacancy document",
+      "biasBlocked short-circuit and catalog/geocoding fallbacks"
+    ]
+  },
+  "depthAnalysis": {
+    "deletionTest": "Deleting the seam scatters profile loading, solver re-run, counterfactual audit, alert derivation, ownership resolution and the fail-closed rule across every caller.",
+    "locality": "Concentrates the trust rule for aptitude, gaps, alerts and transport in one module; ownership trust already lives there after the draft-employer-org fix.",
+    "leverage": "One adapter serves createDraft, the counselor queue, the employer shortlist and the bias audit trail.",
+    "mainCost": "createDraft must become asynchronous because the trusted decision requires I/O."
+  },
+  "alternatives": [
+    {
+      "id": "A",
+      "summary": "Run the auditor on the UI match path, keep the body as the gate source",
+      "verdict": "rejected",
+      "why": "fixes honest blindness but leaves the gate client-controlled; pays counterfactual cost per page view"
+    },
+    {
+      "id": "B",
+      "summary": "Sign the decision in the BFF and verify it in the runtime",
+      "verdict": "rejected for now",
+      "why": "adds key management and a trust token without settling who may decide"
+    },
+    {
+      "id": "C",
+      "summary": "Widen the existing trusted seam and consume it in the gate",
+      "verdict": "recommended",
+      "why": "reuses the seam whose contract already forbids body-sourced truth"
+    },
+    {
+      "id": "D",
+      "summary": "Evaluate the gate only at submit time",
+      "verdict": "rejected",
+      "why": "the draft view and counselor queue would show an untrusted gate while claiming otherwise"
+    }
+  ],
+  "acceptanceCriteria": [
+    "A trusted critical gap, unverified credential, bias alert or infeasible transport always produces the matching counselorGate code, whatever the body claims",
+    "A body claiming a clean match cannot clear a trusted gate",
+    "A trusted decision that is unavailable for no_profile, not_configured or no_decision refuses draft creation with 503 decision_unavailable; not_applicable preserves the existing invisible draft behavior; never an empty gate",
+    "submit still refuses without counselor approval when a trusted gate exists, and the counselor queue lists exactly the gated drafts",
+    "Ownership resolution is unchanged from the current behaviour"
+  ],
+  "migrationSlices": [
+    "Widen and rename the seam with no observable behaviour change",
+    "Make createDraft async, resolve ownership plus decision through the seam, refuse with 503 decision_unavailable for unavailable trusted decisions; update server.ts and direct callers",
+    "Remove or demote the body-sourced match to an advisory echo that cannot influence the gate",
+    "Add the regression tests for the acceptance criteria"
+  ],
+  "decisionRecord": "ADR-0010 resolves this: refuse with 503 decision_unavailable for no_profile, not_configured or no_decision; preserve not_applicable behavior.",
+  "nextConsumer": "tickets #19, #20 and #21",
+  "sideEffects": "none (design only)"
+}
