@@ -46,7 +46,7 @@ async function submit(app: ApplicationService, candidateId: string, org = "org-o
     traceId, idempotencyKey: `${key}-${traceId}`, reason: "Confirmo",
     envelope: sampleWorkflowEnvelope(traceId, `${key}-${traceId}`),
   });
-  const draft = await app.createDraftAsync(candidate, {
+  const draft = await app.createDraft(candidate, {
     ...action("draft"), candidateId, vacancyId, vacancyTitle: "Auxiliar", employerOrgId: org,
     evidence: [{ id: "ev-1", kind: "experience", text: "Trabajé con Excel", credentialStatus: "not_applicable" }],
     // Deliberately inverted client scores must have no effect on the trusted shortlist.
@@ -185,9 +185,10 @@ describe("consumer policy for an unresolvable decision", () => {
       ownerOf: (id) => id === "vac-1" ? "org-owner" : undefined,
       decisionFor: async () => ({ kind: "unavailable", reason: "not_configured" }),
     } });
-    await expect(app.createDraftAsync(session("candidate"), {
+    await expect(app.createDraft(session("candidate"), {
       ...draftPayload(),
     })).rejects.toMatchObject({ status: 503, code: "decision_unavailable" });
+    expect(app.listDrafts(session("candidate"), { candidateId: "candidate" })).toEqual([]);
   });
 
   it("keeps skipping a candidate without a persisted profile rather than failing the ranking", async () => {
@@ -196,9 +197,10 @@ describe("consumer policy for an unresolvable decision", () => {
       ownerOf: (id) => id === "vac-1" ? "org-owner" : undefined,
       decisionFor: async () => ({ kind: "unavailable", reason: "no_profile" }),
     } });
-    await expect(app.createDraftAsync(session("candidate"), {
+    await expect(app.createDraft(session("candidate"), {
       ...draftPayload(),
     })).rejects.toMatchObject({ status: 503, code: "decision_unavailable" });
+    expect(app.listDrafts(session("candidate"), { candidateId: "candidate" })).toEqual([]);
   });
 
   it("returns the decision-unavailable contract over HTTP", async () => {
@@ -239,8 +241,34 @@ describe("consumer policy for an unresolvable decision", () => {
         decisionFor: async () => ({ kind: "unavailable" as const, reason: "not_applicable" as const }),
       },
     });
-    const draft = await app.createDraftAsync(session("candidate"), draftPayload());
+    const draft = await app.createDraft(session("candidate"), draftPayload());
     expect(draft.employerOrgId).toBeUndefined();
     expect(await app.listSubmissions(session("employer"), "pending_employer_approval")).toEqual([]);
+  });
+
+  it("lists exactly the gated drafts after a refused creation", async () => {
+    const decisionFor = vi.fn()
+      .mockResolvedValueOnce({
+        kind: "decision" as const,
+        biasBlocked: false,
+        evidence: [],
+        decision: sampleMatchDecision({ traceId: "trace-unavailable", candidateId: "candidate", vacancyId: "vac-1", gaps: [{ id: "critical", severity: "critical", description: "Brecha" }] }),
+      })
+      .mockResolvedValueOnce({ kind: "unavailable" as const, reason: "no_decision" as const });
+    const app = new ApplicationService({
+      clock: () => NOW,
+      sessionSecret: SECRET,
+      shortlist: { isKnownVacancy: (id) => id === "vac-1", ownerOf: () => "org-owner", decisionFor },
+    });
+    const gated = await app.createDraft(session("candidate"), draftPayload());
+    expect((app.listDrafts(session("counselor"), { gate: "counselor", pending: true }))).toHaveLength(1);
+    await expect(app.createDraft(session("candidate"), {
+      ...draftPayload(),
+      traceId: "trace-refused",
+      idempotencyKey: "refused-draft",
+      match: sampleMatchDecision({ traceId: "trace-refused", candidateId: "candidate", vacancyId: "vac-1" }),
+      envelope: sampleWorkflowEnvelope("trace-refused", "refused-draft"),
+    })).rejects.toMatchObject({ code: "decision_unavailable" });
+    expect(app.listDrafts(session("counselor"), { gate: "counselor", pending: true }).map((draft) => draft.draftId)).toEqual([gated.draftId]);
   });
 });

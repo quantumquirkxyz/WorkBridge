@@ -128,6 +128,7 @@ interface StoredDraft {
   history: HistoryEntry[];
   trustedDecision?: MatchDecision;
   trustedEvidence?: EvidenceItem[];
+  trustedGate?: GateReason[];
 }
 
 interface StoredSubmission {
@@ -176,12 +177,8 @@ export class ApplicationService {
     this.notifications = options.notifications ?? createMockNotificationPort();
   }
 
-  createDraft(session: unknown, raw: unknown): DraftView {
-    if (this.shortlist) {
-      // Preserve the historical synchronous type for memory-only callers while
-      // making the trusted path awaitable for all production callers.
-      return this.createDraftAsync(session, raw) as unknown as DraftView;
-    }
+  createDraftSync(session: unknown, raw: unknown): DraftView {
+    if (this.shortlist) throw new ApplicationError("Synchronous draft creation is unavailable with a decision source.", 500, "internal_error");
     const actor = this.actor(session);
     this.requireRole(actor, "candidate", "Only a candidate can draft an application.");
     const input = this.parseDraftInput(raw);
@@ -191,7 +188,7 @@ export class ApplicationService {
     return this.storeDraft(actor, input);
   }
 
-  async createDraftAsync(session: unknown, raw: unknown): Promise<DraftView> {
+  async createDraft(session: unknown, raw: unknown): Promise<DraftView> {
     const actor = this.actor(session);
     this.requireRole(actor, "candidate", "Only a candidate can draft an application.");
     const parsed = this.parseDraftInput(raw);
@@ -200,10 +197,10 @@ export class ApplicationService {
     }
     const trusted = await this.trustedDecisionFor(actor, parsed);
     const input = trusted?.input ?? parsed;
-    return this.storeDraft(actor, input, trusted?.decision, trusted?.evidence);
+    return this.storeDraft(actor, input, trusted?.decision, trusted?.evidence, trusted?.gate);
   }
 
-  private storeDraft(actor: Actor, input: DraftInput, trustedDecision?: MatchDecision, trustedEvidence?: EvidenceItem[]): DraftView {
+  private storeDraft(actor: Actor, input: DraftInput, trustedDecision?: MatchDecision, trustedEvidence?: EvidenceItem[], trustedGate?: GateReason[]): DraftView {
     const draft: StoredDraft = {
       id: this.ids(),
       ownerId: actor.id,
@@ -212,6 +209,7 @@ export class ApplicationService {
       status: "open",
       history: [],
       ...(trustedDecision ? { trustedDecision, trustedEvidence: trustedEvidence ?? [] } : {}),
+      ...(trustedGate !== undefined ? { trustedGate } : {}),
     };
     this.drafts.set(draft.id, draft);
     return this.draftView(draft);
@@ -707,10 +705,10 @@ export class ApplicationService {
   }
 
   private counselorGate(draft: StoredDraft): GateReason[] {
+    if (draft.trustedGate !== undefined) return draft.trustedGate;
     const match = draft.trustedDecision ?? draft.input.match;
-    const evidence = draft.trustedEvidence ?? draft.input.evidence.filter((item) => draft.selectedEvidenceIds.includes(item.id));
-    const selected = evidence;
-    return counselorGateReasons(match, selected);
+    const gateEvidence = draft.trustedEvidence ?? draft.input.evidence.filter((item) => draft.selectedEvidenceIds.includes(item.id));
+    return counselorGateReasons(match, gateEvidence);
   }
 
   private hasCounselorGate(draft: StoredDraft): boolean {
@@ -724,20 +722,23 @@ export class ApplicationService {
    * reject draft creation. Unknown/non-catalog drafts retain the legacy
    * compatibility path until their ownership source is migrated.
    */
-  private async trustedDecisionFor(actor: Actor, input: DraftInput): Promise<{ input: DraftInput; decision?: MatchDecision; evidence?: EvidenceItem[] } | undefined> {
+  private async trustedDecisionFor(actor: Actor, input: DraftInput): Promise<{ input: DraftInput; decision?: MatchDecision; evidence?: EvidenceItem[]; gate?: GateReason[] } | undefined> {
+    if (!this.shortlist) return undefined;
     const owner = this.shortlist?.ownerOf(input.vacancyId);
     const known = this.shortlist?.isKnownVacancy(input.vacancyId) ?? false;
-    if (owner !== undefined || known) {
-      const outcome = await this.shortlist!.decisionFor(actor.id, input.vacancyId);
-      if (outcome.kind === "decision") {
-        if (owner === undefined) throw new ApplicationError("The vacancy has no resolvable employer owner.", 503, "ownership_unavailable");
-        return { input: { ...input, employerOrgId: owner }, decision: outcome.decision, evidence: outcome.evidence };
-      }
-      if (outcome.kind === "unavailable" && outcome.reason === "not_applicable") return { input: { ...input, employerOrgId: undefined } };
-      throw new ApplicationError("The trusted application decision is unavailable.", 503, "decision_unavailable");
+    const outcome = await this.shortlist.decisionFor(actor.id, input.vacancyId);
+    if (outcome.kind === "unavailable" && outcome.reason === "not_applicable") {
+      return { input: { ...input, employerOrgId: undefined }, gate: [] };
     }
-    if (this.shortlist?.isKnownVacancy(input.vacancyId)) return { input };
-    return undefined;
+    if (outcome.kind === "blocked") {
+      if (known && owner === undefined) throw new ApplicationError("The vacancy has no resolvable employer owner.", 503, "ownership_unavailable");
+      return { input: { ...input, employerOrgId: owner }, gate: [{ code: "bias_alert", detail: "Counterfactual audit blocked this vacancy." }] };
+    }
+    if (outcome.kind === "decision") {
+      if (known && owner === undefined) throw new ApplicationError("The vacancy has no resolvable employer owner.", 503, "ownership_unavailable");
+      return { input: { ...input, employerOrgId: owner }, decision: outcome.decision, evidence: outcome.evidence };
+    }
+    throw new ApplicationError("The trusted application decision is unavailable.", 503, "decision_unavailable");
   }
 
   /** Fail closed: a draft without an organization is never visible to an employer. */
@@ -760,7 +761,7 @@ export class ApplicationService {
       vacancyTitle: draft.input.vacancyTitle,
       evidence: draft.input.evidence,
       selectedIds: draft.selectedEvidenceIds,
-      match: draft.input.match,
+      match: draft.trustedDecision ?? draft.input.match,
     });
     const submission = this.submissionForDraft(draft.id);
     const history = submission?.history ?? draft.history;

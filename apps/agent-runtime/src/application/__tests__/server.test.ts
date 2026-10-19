@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { resolveDatabaseMode } from "../database";
 import { signBetterAuthSession } from "../roles";
 import { createApplicationServer } from "../server";
+import { ApplicationService } from "../service";
 import { sampleMatchDecision, sampleWorkflowEnvelope } from "../fixtures";
 import { ENSURE_NOTIFICATION_OUTBOX_SQL } from "../notification";
 import { createSqlIdempotencyStore, ENSURE_IDEMPOTENCY_TABLE_SQL, type SqlQuery } from "../store";
@@ -55,6 +56,9 @@ async function withServer(
     env: { BETTER_AUTH_SECRET: SESSION_SECRET, ...env },
     clock: () => "2026-10-16T18:00:00.000Z",
     query,
+    service: env.TEST_LEGACY_APPLICATION === "true"
+      ? new ApplicationService({ sessionSecret: SESSION_SECRET, clock: () => "2026-10-16T18:00:00.000Z" })
+      : undefined,
   });
   server.listen(0, "127.0.0.1");
   await once(server, "listening");
@@ -120,7 +124,7 @@ describe("application HTTP surface", () => {
   });
 
   it("runs draft, correction, approval, rejection, retry, and submission", async () => {
-    await withServer({ CERTO_TOKEN: TOKEN }, async (base) => {
+    await withServer({ CERTO_TOKEN: TOKEN, TEST_LEGACY_APPLICATION: "true" }, async (base) => {
       const created = await fetch(`${base}/drafts`, {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -259,7 +263,7 @@ describe("application HTTP surface", () => {
       reason: "ok",
       ...extra,
     });
-    await withServer({}, async (base) => {
+    await withServer({ TEST_LEGACY_APPLICATION: "true" }, async (base) => {
       const evidence = [
         { id: "ev-1", kind: "experience", text: "Atendí la caja del kiosco familiar.", credentialStatus: "not_applicable" },
         { id: "ev-2", kind: "skill", text: "Dato descartado por la candidata.", credentialStatus: "not_applicable" },
@@ -335,7 +339,7 @@ describe("application HTTP surface", () => {
       reason: "ok",
       ...extra,
     });
-    await withServer({}, async (base) => {
+    await withServer({ TEST_LEGACY_APPLICATION: "true" }, async (base) => {
       const submit = async (tag: string, extra: Record<string, unknown>) => {
         const created = await post(base, "/drafts", payload({ idempotencyKey: `idem-${tag}`, envelope: sampleWorkflowEnvelope("trace-http", `idem-${tag}`), ...extra }));
         const { draftId } = (await created.json()) as { draftId: string };
@@ -380,7 +384,7 @@ describe("application HTTP surface", () => {
   });
 
   it("rejects invalid JSON, unknown routes, and a bad session header", async () => {
-    await withServer({}, async (base) => {
+    await withServer({ TEST_LEGACY_APPLICATION: "true" }, async (base) => {
       const invalid = await fetch(`${base}/drafts`, {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -427,7 +431,7 @@ describe("application HTTP surface", () => {
       fetch(`${base}${path}`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
     const readAs = (base: string, path: string, who: ReturnType<typeof session>) =>
       fetch(`${base}${path}`, { headers: { "x-better-auth-session": JSON.stringify(who) } });
-    await withServer({}, async (base) => {
+    await withServer({ TEST_LEGACY_APPLICATION: "true" }, async (base) => {
       const created = await post(base, "/drafts", payload());
       const draft = (await created.json()) as { draftId: string; availableEvidence: Array<{ id: string }> };
       expect(created.status).toBe(201);

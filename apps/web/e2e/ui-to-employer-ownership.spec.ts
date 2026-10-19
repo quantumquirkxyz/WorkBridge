@@ -7,6 +7,7 @@ import { expect, test } from "@playwright/test";
  */
 const candidateState = process.env.E2E_CANDIDATE_STORAGE_STATE;
 const employerState = process.env.E2E_EMPLOYER_STORAGE_STATE;
+const foreignEmployerState = process.env.E2E_FOREIGN_EMPLOYER_STORAGE_STATE;
 const vacancyId = process.env.E2E_CATALOG_VACANCY_ID ?? "lnk-1001";
 const otherOrgSubmission = process.env.E2E_OTHER_ORG_SUBMISSION_ID;
 
@@ -35,13 +36,22 @@ test.describe("UI to employer ownership", () => {
     const employerPage = await employer.newPage();
     await employerPage.goto("/empresa");
     await expect(employerPage.getByRole("heading", { name: "Postulaciones" })).toBeVisible();
-    await expect(employerPage.getByRole("list", { name: "Postulaciones pendientes" })).toContainText("Auxiliar");
+    const submission = employerPage.getByRole("list", { name: "Postulaciones pendientes" }).getByRole("link").filter({ hasText: "Auxiliar" }).first();
+    await expect(submission).toBeVisible();
+    await submission.click();
+    await employerPage.getByRole("button", { name: "Aprobar entrevista" }).click();
+    await employerPage.getByLabel(/Motivo de tu decisión/).fill("Perfil acorde");
+    await employerPage.getByRole("button", { name: "Aprobar entrevista" }).click();
+    await expect(employerPage.getByRole("status")).toContainText("La postulación pasó a entrevista.");
     await employer.close();
   });
 
-  test("keeps a foreign employer out of the submission", async ({ page }) => {
-    test.skip(!otherOrgSubmission, "E2E_OTHER_ORG_SUBMISSION_ID is required for this assertion.");
+  test("keeps a foreign employer out of the submission", async ({ browser }) => {
+    test.skip(!foreignEmployerState || !otherOrgSubmission, "Foreign employer storage state and submission id are required.");
+    const foreign = await browser.newContext({ storageState: foreignEmployerState });
+    const page = await foreign.newPage();
     await page.goto(`/empresa/${encodeURIComponent(otherOrgSubmission ?? "")}`);
     await expect(page.getByRole("alert")).toContainText("Esta postulación no está disponible para tu organización.");
+    await foreign.close();
   });
 });
