@@ -68,7 +68,7 @@ export interface CreatedDraft { draft: DraftView; evidence: EvidenceItem[] }
 
 /**
  * Create the draft from a match: fetches the candidate's own profile (evidence) and the
- * deterministic match decision for the vacancy, then POSTs them to ApplicationService.
+ * deterministic match decision for the vacancy, then POSTs the advisory echo to ApplicationService.
  * Nothing is sent to an employer here; the draft is private to the candidate (ADR-0003).
  */
 export async function createDraftFromMatch(input: CreateDraftInput): Promise<CreatedDraft> {
@@ -90,6 +90,7 @@ export async function createDraftFromMatch(input: CreateDraftInput): Promise<Cre
       vacancyId: input.vacancyId,
       vacancyTitle: input.vacancyTitle,
       evidence,
+      // The runtime recomputes this decision and ignores this echo for gate, ownership and ranking.
       match,
       envelope: envelope(traceId, idempotencyKey),
     }),

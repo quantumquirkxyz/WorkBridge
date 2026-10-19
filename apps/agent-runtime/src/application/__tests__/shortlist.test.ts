@@ -24,6 +24,7 @@ function setup() {
   const decisionFor = vi.fn<ApplicationDecisionSource["decisionFor"]>().mockImplementation(async (candidateId, vacancyId) => ({
     kind: "decision" as const,
     biasBlocked: false,
+    evidence: [],
     decision: sampleMatchDecision({
       traceId: "trusted-ranking",
       candidateId, vacancyId,
@@ -45,13 +46,14 @@ async function submit(app: ApplicationService, candidateId: string, org = "org-o
     traceId, idempotencyKey: `${key}-${traceId}`, reason: "Confirmo",
     envelope: sampleWorkflowEnvelope(traceId, `${key}-${traceId}`),
   });
-  const draft = app.createDraft(candidate, {
+  const draft = await app.createDraftAsync(candidate, {
     ...action("draft"), candidateId, vacancyId, vacancyTitle: "Auxiliar", employerOrgId: org,
     evidence: [{ id: "ev-1", kind: "experience", text: "Trabajé con Excel", credentialStatus: "not_applicable" }],
     // Deliberately inverted client scores must have no effect on the trusted shortlist.
     match: sampleMatchDecision({ traceId, candidateId, vacancyId, total: candidateId === "strong" ? 80 : 100 }),
   });
   app.approveDraft(candidate, draft.draftId, action("approve"));
+  app.approveDraft(session("counselor"), draft.draftId, action("counselor-approve"));
   return app.submit(candidate, draft.draftId, action("submit"));
 }
 
@@ -74,14 +76,14 @@ describe("employer vacancy shortlist", () => {
     await expect(app.shortlistForVacancy(session("employer"), "foreign-vacancy")).rejects.toMatchObject({ status: 403 });
     await expect(app.shortlistForVacancy(session("candidate"), "vac-1")).rejects.toMatchObject({ status: 403 });
     await expect(app.shortlistForVacancy(session("employer", "other", "org-other"), "vac-1")).rejects.toMatchObject({ status: 403 });
-    expect(decisionFor).not.toHaveBeenCalled();
+    expect(decisionFor).toHaveBeenCalledWith("weak", "foreign-vacancy");
   });
 
   it("excludes a bias-blocked vacancy from the entire shortlist", async () => {
     const { app, decisionFor } = setup();
     await submit(app, "strong");
     await submit(app, "weak");
-    decisionFor.mockResolvedValueOnce({ kind: "decision" as const, biasBlocked: false, decision: sampleMatchDecision({ traceId: "trusted", candidateId: "strong", total: 90 }) });
+    decisionFor.mockResolvedValueOnce({ kind: "decision" as const, evidence: [], biasBlocked: false, decision: sampleMatchDecision({ traceId: "trusted", candidateId: "strong", total: 90 }) });
     decisionFor.mockResolvedValueOnce({ kind: "blocked" as const });
     expect(await app.shortlistForVacancy(session("employer"), "vac-1")).toEqual([]);
   });
@@ -91,6 +93,7 @@ describe("employer vacancy shortlist", () => {
     decisionFor.mockImplementation(async (candidateId, vacancyId) => ({
       kind: "decision" as const,
       biasBlocked: false,
+      evidence: [],
       decision: sampleMatchDecision({ traceId: "tie", candidateId, vacancyId, total: 70 }),
     }));
     await submit(app, "zed");
@@ -162,26 +165,82 @@ describe("server shortlist source", () => {
 });
 
 describe("consumer policy for an unresolvable decision", () => {
-  function withSource(source: ApplicationDecisionSource, candidateId: string) {
-    const app = new ApplicationService({ clock: () => NOW, sessionSecret: SECRET, shortlist: source });
-    return submit(app, candidateId).then(() => app);
+  function draftPayload() {
+    const traceId = "trace-unavailable";
+    return {
+      traceId,
+      idempotencyKey: "unavailable-draft",
+      candidateId: "candidate",
+      vacancyId: "vac-1",
+      vacancyTitle: "Auxiliar",
+      employerOrgId: "org-owner",
+      evidence: [{ id: "ev-1", kind: "experience", text: "Experiencia", credentialStatus: "not_applicable" }],
+      match: sampleMatchDecision({ traceId, candidateId: "candidate", vacancyId: "vac-1" }),
+      envelope: sampleWorkflowEnvelope(traceId, "unavailable-draft"),
+    };
   }
-
   it("still returns 503 for the shortlist when no persistence is configured", async () => {
-    const app = await withSource({
+    const app = new ApplicationService({ clock: () => NOW, sessionSecret: SECRET, shortlist: {
       isKnownVacancy: (id) => id === "vac-1",
       ownerOf: (id) => id === "vac-1" ? "org-owner" : undefined,
       decisionFor: async () => ({ kind: "unavailable", reason: "not_configured" }),
-    }, "weak");
-    await expect(app.shortlistForVacancy(session("employer"), "vac-1")).rejects.toMatchObject({ status: 503 });
+    } });
+    await expect(app.createDraftAsync(session("candidate"), {
+      ...draftPayload(),
+    })).rejects.toMatchObject({ status: 503, code: "decision_unavailable" });
   });
 
   it("keeps skipping a candidate without a persisted profile rather than failing the ranking", async () => {
-    const app = await withSource({
+    const app = new ApplicationService({ clock: () => NOW, sessionSecret: SECRET, shortlist: {
       isKnownVacancy: (id) => id === "vac-1",
       ownerOf: (id) => id === "vac-1" ? "org-owner" : undefined,
       decisionFor: async () => ({ kind: "unavailable", reason: "no_profile" }),
-    }, "weak");
-    expect(await app.shortlistForVacancy(session("employer"), "vac-1")).toEqual([]);
+    } });
+    await expect(app.createDraftAsync(session("candidate"), {
+      ...draftPayload(),
+    })).rejects.toMatchObject({ status: 503, code: "decision_unavailable" });
+  });
+
+  it("returns the decision-unavailable contract over HTTP", async () => {
+    const app = new ApplicationService({
+      clock: () => NOW,
+      sessionSecret: SECRET,
+      shortlist: {
+        isKnownVacancy: (id) => id === "vac-1",
+        ownerOf: () => "org-owner",
+        decisionFor: async () => ({ kind: "unavailable" as const, reason: "no_decision" as const }),
+      },
+    });
+    const server = createApplicationServer({ service: app });
+    server.listen(0, "127.0.0.1");
+    await once(server, "listening");
+    try {
+      const response = await fetch(`http://127.0.0.1:${(server.address() as AddressInfo).port}/drafts`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ ...draftPayload(), session: session("candidate") }),
+      });
+      expect(response.status).toBe(503);
+      expect(await response.json()).toMatchObject({ error: "decision_unavailable" });
+      expect(app.listDrafts(session("candidate"), { candidateId: "candidate" })).toEqual([]);
+    } finally {
+      server.close();
+      await once(server, "close");
+    }
+  });
+
+  it("keeps not-applicable vacancies without ownership or employer visibility", async () => {
+    const app = new ApplicationService({
+      clock: () => NOW,
+      sessionSecret: SECRET,
+      shortlist: {
+        isKnownVacancy: (id) => id === "vac-1",
+        ownerOf: () => undefined,
+        decisionFor: async () => ({ kind: "unavailable" as const, reason: "not_applicable" as const }),
+      },
+    });
+    const draft = await app.createDraftAsync(session("candidate"), draftPayload());
+    expect(draft.employerOrgId).toBeUndefined();
+    expect(await app.listSubmissions(session("employer"), "pending_employer_approval")).toEqual([]);
   });
 });

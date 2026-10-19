@@ -33,6 +33,7 @@ export interface DraftInput {
   employerOrgId?: string;
   candidateDisplayName?: string;
   evidence: EvidenceItem[];
+  /** Advisory client echo. Catalog decisions are recomputed by ApplicationDecisionSource. */
   match: MatchDecision;
 }
 
@@ -125,6 +126,8 @@ interface StoredDraft {
   candidateApproval?: Decision;
   counselorApproval?: Decision;
   history: HistoryEntry[];
+  trustedDecision?: MatchDecision;
+  trustedEvidence?: EvidenceItem[];
 }
 
 interface StoredSubmission {
@@ -174,12 +177,33 @@ export class ApplicationService {
   }
 
   createDraft(session: unknown, raw: unknown): DraftView {
+    if (this.shortlist) {
+      // Preserve the historical synchronous type for memory-only callers while
+      // making the trusted path awaitable for all production callers.
+      return this.createDraftAsync(session, raw) as unknown as DraftView;
+    }
     const actor = this.actor(session);
     this.requireRole(actor, "candidate", "Only a candidate can draft an application.");
-    const input = this.withTrustedEmployerOrg(this.parseDraftInput(raw));
+    const input = this.parseDraftInput(raw);
     if (!this.ownsCandidate(actor, input.candidateId)) {
       throw new ApplicationError("A candidate can only draft their own application.", 403, "forbidden");
     }
+    return this.storeDraft(actor, input);
+  }
+
+  async createDraftAsync(session: unknown, raw: unknown): Promise<DraftView> {
+    const actor = this.actor(session);
+    this.requireRole(actor, "candidate", "Only a candidate can draft an application.");
+    const parsed = this.parseDraftInput(raw);
+    if (!this.ownsCandidate(actor, parsed.candidateId)) {
+      throw new ApplicationError("A candidate can only draft their own application.", 403, "forbidden");
+    }
+    const trusted = await this.trustedDecisionFor(actor, parsed);
+    const input = trusted?.input ?? parsed;
+    return this.storeDraft(actor, input, trusted?.decision, trusted?.evidence);
+  }
+
+  private storeDraft(actor: Actor, input: DraftInput, trustedDecision?: MatchDecision, trustedEvidence?: EvidenceItem[]): DraftView {
     const draft: StoredDraft = {
       id: this.ids(),
       ownerId: actor.id,
@@ -187,6 +211,7 @@ export class ApplicationService {
       selectedEvidenceIds: input.evidence.map((item) => item.id),
       status: "open",
       history: [],
+      ...(trustedDecision ? { trustedDecision, trustedEvidence: trustedEvidence ?? [] } : {}),
     };
     this.drafts.set(draft.id, draft);
     return this.draftView(draft);
@@ -682,8 +707,10 @@ export class ApplicationService {
   }
 
   private counselorGate(draft: StoredDraft): GateReason[] {
-    const selected = draft.input.evidence.filter((item) => draft.selectedEvidenceIds.includes(item.id));
-    return counselorGateReasons(draft.input.match, selected);
+    const match = draft.trustedDecision ?? draft.input.match;
+    const evidence = draft.trustedEvidence ?? draft.input.evidence.filter((item) => draft.selectedEvidenceIds.includes(item.id));
+    const selected = evidence;
+    return counselorGateReasons(match, selected);
   }
 
   private hasCounselorGate(draft: StoredDraft): boolean {
@@ -697,17 +724,20 @@ export class ApplicationService {
    * reject draft creation. Unknown/non-catalog drafts retain the legacy
    * compatibility path until their ownership source is migrated.
    */
-  private withTrustedEmployerOrg(input: DraftInput): DraftInput {
+  private async trustedDecisionFor(actor: Actor, input: DraftInput): Promise<{ input: DraftInput; decision?: MatchDecision; evidence?: EvidenceItem[] } | undefined> {
     const owner = this.shortlist?.ownerOf(input.vacancyId);
-    if (owner !== undefined) return { ...input, employerOrgId: owner };
-    if (this.shortlist?.isKnownVacancy(input.vacancyId)) {
-      throw new ApplicationError(
-        "The vacancy has no resolvable employer owner.",
-        503,
-        "ownership_unavailable",
-      );
+    const known = this.shortlist?.isKnownVacancy(input.vacancyId) ?? false;
+    if (owner !== undefined || known) {
+      const outcome = await this.shortlist!.decisionFor(actor.id, input.vacancyId);
+      if (outcome.kind === "decision") {
+        if (owner === undefined) throw new ApplicationError("The vacancy has no resolvable employer owner.", 503, "ownership_unavailable");
+        return { input: { ...input, employerOrgId: owner }, decision: outcome.decision, evidence: outcome.evidence };
+      }
+      if (outcome.kind === "unavailable" && outcome.reason === "not_applicable") return { input: { ...input, employerOrgId: undefined } };
+      throw new ApplicationError("The trusted application decision is unavailable.", 503, "decision_unavailable");
     }
-    return input;
+    if (this.shortlist?.isKnownVacancy(input.vacancyId)) return { input };
+    return undefined;
   }
 
   /** Fail closed: a draft without an organization is never visible to an employer. */

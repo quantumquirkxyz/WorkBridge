@@ -4,12 +4,19 @@ import { sampleMatchDecision, sampleWorkflowEnvelope } from "../src/application/
 import { signBetterAuthSession } from "../src/application/roles";
 
 const SESSION_SECRET = "better-auth-test-secret";
+const ROLE_ENV = (process.env.AUTH_SEED_ENV ?? process.env.NODE_ENV ?? "development")
+  .toLowerCase().replace(/[^a-z0-9_-]/g, "-");
 
 function session(role: "candidate" | "employer" | "counselor", id = role) {
   return signBetterAuthSession(
     {
       session: { id: `sess-${id}`, userId: id, expiresAt: "2027-01-01T00:00:00.000Z" },
-      user: { id, email: `${id}@workbridge.pa`, role },
+      user: {
+        id,
+        email: `${id}@workbridge.pa`,
+        role,
+        ...(role === "employer" ? { employerOrgId: `employer_org_${ROLE_ENV}` } : {}),
+      },
     },
     SESSION_SECRET,
   );
@@ -34,6 +41,7 @@ function draftBody(traceId: string, extras: Record<string, unknown> = {}) {
     candidateId: "candidate",
     vacancyId: "vac-1",
     vacancyTitle: "Auxiliar de bodega",
+    employerOrgId: `employer_org_${ROLE_ENV}`,
     evidence: [
       {
         id: "ev-1",

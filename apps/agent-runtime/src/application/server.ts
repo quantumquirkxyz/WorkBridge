@@ -113,7 +113,7 @@ async function dispatch(req: IncomingMessage, res: ServerResponse, context: Requ
   }
 
   if (req.method === "POST" && path === "/drafts") {
-    writeJson(res, 201, context.service.createDraft(session, body), context.secrets);
+    writeJson(res, 201, await context.service.createDraftAsync(session, body), context.secrets);
     return;
   }
 
