@@ -72,12 +72,14 @@ describe("draft employer organization comes from the trusted seam", () => {
     expect(draft.counselorGate).toEqual([{ code: "unverified_credential", detail: "cert-1" }]);
   });
 
-  it.each(["critical_gap", "bias_alert", "infeasible_transport"])("derives the trusted %s gate reason", async (code) => {
+  it.each(["critical_gap", "unverified_credential", "bias_alert", "infeasible_transport"])("derives the trusted %s gate reason", async (code) => {
     const source = shortlist((id) => (id === "vac-1" ? "org-owner" : undefined));
     source.decisionFor = vi.fn(async (candidateId, vacancyId) => ({
       kind: "decision" as const,
       biasBlocked: false,
-      evidence: [],
+      evidence: code === "unverified_credential"
+        ? [{ id: "cert-1", kind: "certification" as const, text: "Persisted", credentialStatus: "unverified" as const }]
+        : [],
       decision: sampleMatchDecision({
         traceId: "trace-ownership", candidateId, vacancyId,
         gaps: code === "critical_gap" ? [{ id: "critical", severity: "critical", description: "Falta un requisito" }] : [],

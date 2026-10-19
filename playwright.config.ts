@@ -18,14 +18,18 @@ function isolatedWebEnv(): Record<string, string> {
 
 const runtimeWebServer = {
   name: "runtime",
+  command: "npx tsx apps/agent-runtime/e2e/legacy-server.ts",
+  url: `http://127.0.0.1:${runtimePort}/health`,
+  reuseExistingServer: false,
+  env: { PORT: String(runtimePort), BETTER_AUTH_SECRET: "better-auth-test-secret" },
+};
+
+const trustedRuntimeWebServer = {
+  name: "trusted-runtime",
   command: "npx tsx apps/agent-runtime/src/application/main.ts",
   url: `http://127.0.0.1:${runtimePort}/health`,
   reuseExistingServer: false,
-  env: {
-    PORT: String(runtimePort),
-    BETTER_AUTH_SECRET: "better-auth-test-secret",
-    WORKBRIDGE_TEST_LEGACY_APPLICATION: "true",
-  },
+  env: { PORT: String(runtimePort), BETTER_AUTH_SECRET: "better-auth-test-secret" },
 };
 
 const webWebServer = {
@@ -57,7 +61,7 @@ const projects: ProjectWithWebServer[] = [
   {
     name: "Pixel 7",
     testDir: "./apps/web/e2e",
-    testMatch: /(?:home\.smoke|intake-explore|ui-to-employer-ownership)\.spec\.ts/,
+    testMatch: /(?:home\.smoke|intake-explore)\.spec\.ts/,
     timeout: 60_000,
     use: { ...devices["Pixel 7"], baseURL: `http://127.0.0.1:${webPort}`, ...webCapture },
     webServer: [webWebServer],
@@ -65,7 +69,7 @@ const projects: ProjectWithWebServer[] = [
   {
     name: "iPhone 14",
     testDir: "./apps/web/e2e",
-    testMatch: /(?:home\.smoke|intake-explore|ui-to-employer-ownership)\.spec\.ts/,
+    testMatch: /(?:home\.smoke|intake-explore)\.spec\.ts/,
     timeout: 60_000,
     use: { ...devices["iPhone 14"], baseURL: `http://127.0.0.1:${webPort}`, ...webCapture },
     webServer: [webWebServer],
@@ -73,10 +77,18 @@ const projects: ProjectWithWebServer[] = [
   {
     name: "Desktop Chrome",
     testDir: "./apps/web/e2e",
-    testMatch: /(?:home\.smoke|intake-explore|ui-to-employer-ownership)\.spec\.ts/,
+    testMatch: /(?:home\.smoke|intake-explore)\.spec\.ts/,
     timeout: 60_000,
     use: { ...devices["Desktop Chrome"], baseURL: `http://127.0.0.1:${webPort}`, ...webCapture },
     webServer: [webWebServer],
+  },
+  {
+    name: "ownership",
+    testDir: "./apps/web/e2e",
+    testMatch: /ui-to-employer-ownership\.spec\.ts/,
+    timeout: 60_000,
+    use: { ...devices["Desktop Chrome"], baseURL: `http://127.0.0.1:${webPort}`, ...webCapture },
+    webServer: [trustedRuntimeWebServer, webWebServer],
   },
   {
     name: "web",
