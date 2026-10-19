@@ -719,8 +719,8 @@ export class ApplicationService {
    * Ownership is a trusted server fact, not an application-body claim. When the
    * catalog seam knows who owns the vacancy, that owner wins over whatever the
    * body sent. If the seam knows the vacancy but cannot resolve an owner,
-   * reject draft creation. Unknown/non-catalog drafts retain the legacy
-   * compatibility path until their ownership source is migrated.
+   * reject draft creation. Unknown/non-catalog drafts are explicitly resolved
+   * as not applicable and lose any body-supplied employer owner.
    */
   private async trustedDecisionFor(actor: Actor, input: DraftInput): Promise<{ input: DraftInput; decision?: MatchDecision; evidence?: EvidenceItem[]; gate?: GateReason[] } | undefined> {
     if (!this.shortlist) return undefined;
@@ -757,11 +757,13 @@ export class ApplicationService {
   }
 
   private draftView(draft: StoredDraft): DraftView {
+    const documentMatch = draft.trustedDecision
+      ?? (draft.trustedGate !== undefined ? { ...draft.input.match, gaps: [] } : draft.input.match);
     const documents = generateDocuments({
       vacancyTitle: draft.input.vacancyTitle,
       evidence: draft.input.evidence,
       selectedIds: draft.selectedEvidenceIds,
-      match: draft.trustedDecision ?? draft.input.match,
+      match: documentMatch,
     });
     const submission = this.submissionForDraft(draft.id);
     const history = submission?.history ?? draft.history;
