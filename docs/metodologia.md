@@ -15,7 +15,7 @@ Alcance entregado:
 - `apps/agent-runtime`: workflow Mastra de agentes y servidor HTTP de postulaciones (borradores, aprobaciones, envíos, auditoría).
 - `packages/*`: dominio y contratos (`domain`), ingesta de vacantes (`ingestion`), perfil (`profile`), catálogo de vacantes y cursos (`catalog`), solver de asignación con HiGHS (`solver`) y rutas de formación (`training`).
 
-Fuera de alcance: integración de producción con Certo (se usa un adaptador con mock transparente cuando no está disponible), canales de notificación externos (solo bandeja `in_app`), y un pipeline de CI en la nube verificado (ver sección 7).
+Fuera de alcance: integración de producción con Certo (se usa un adaptador con mock transparente cuando no está disponible) y canales de notificación externos (solo bandeja `in_app`). El pipeline de CI en la nube ejecuta `gate:ci`; lint y e2e permanecen como trabajo separado (ver sección 7).
 
 ## 2. Metodología de trabajo del equipo
 
@@ -213,7 +213,7 @@ Degradación elegante, en resumen: sin OpenRouter hay extractor heurístico; sin
 
 Limitaciones conocidas:
 
-- Compuertas de calidad no verdes hoy (sección 2.6): una prueba del worker de chat, errores de `tsc` y el fallo de `check-all.mjs` por `policy/tool-risk-budget.json` ausente. `gate:ci` no pasa.
+- Compuertas de calidad: `gate:ci` pasa en local y en el workflow de GitHub Actions (`.github/workflows/ci.yml`) con typecheck y cobertura. Lint permanece fuera del gate por los errores legacy de `docs/old/design/previews/`; e2e requiere un entorno web/runtime levantado.
 - Credenciales filtradas: rotación y purga de historial **pendientes** (sección 6).
 - Certo no está integrado contra un despliegue real; la verificación recae en proveedores de respaldo o en el mock declarado ([ADR-0003](../.agents/adr/0003-verification-and-human-approval.md), "integración técnica pendiente").
 - Notificaciones solo en bandeja interna (`in_app`); sin correo, SMS ni WhatsApp.
@@ -221,4 +221,4 @@ Limitaciones conocidas:
 - El runtime en modo memoria pierde datos al reiniciar; los puertos de Playwright y datos de vacantes son de demostración.
 - Cobertura de evaluación acotada al conjunto de casos etiquetados ([evals.md](evals.md)).
 
-Trabajo futuro: arreglar las compuertas en rojo y activarlas en CI, completar rotación y purga, integrar Certo en producción, añadir canales de notificación reales, reproducir y validar `compose.yaml` y un despliegue único de web, runtime y worker, y ampliar el catálogo de vacantes y centros de formación.
+Trabajo futuro: limpiar los errores legacy de lint y activar lint en CI (issue #24), completar la cobertura e2e browser-level (issue #23), completar rotación y purga, integrar Certo en producción, añadir canales de notificación reales, reproducir y validar `compose.yaml` y un despliegue único de web, runtime y worker, y ampliar el catálogo de vacantes y centros de formación.

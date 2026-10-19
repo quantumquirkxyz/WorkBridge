@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Least privilege: the gate only needs to read the repository.
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gate-ci:
+    name: gate-ci
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      # The current gate does not run Playwright, so skip the browser download.
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      # Blocking gate: same command humans run locally (typecheck && test:coverage).
+      - run: npm run gate:ci
+
+  # NOTE: `npm run lint` is deliberately not gated yet. It is currently red with
+  # 26 no-undef errors in docs/old/design/previews/* (superseded material), which
+  # predates this workflow. Make lint blocking once that is cleaned up.
