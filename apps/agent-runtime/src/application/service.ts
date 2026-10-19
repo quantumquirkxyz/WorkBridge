@@ -125,6 +125,7 @@ interface StoredDraft {
   candidateApproval?: Decision;
   counselorApproval?: Decision;
   history: HistoryEntry[];
+  trustedGate?: GateReason[];
 }
 
 interface StoredSubmission {
@@ -173,12 +174,36 @@ export class ApplicationService {
     this.notifications = options.notifications ?? createMockNotificationPort();
   }
 
-  createDraft(session: unknown, raw: unknown): DraftView {
+  async createDraft(session: unknown, raw: unknown): Promise<DraftView> {
     const actor = this.actor(session);
     this.requireRole(actor, "candidate", "Only a candidate can draft an application.");
     const input = this.withTrustedEmployerOrg(this.parseDraftInput(raw));
     if (!this.ownsCandidate(actor, input.candidateId)) {
       throw new ApplicationError("A candidate can only draft their own application.", 403, "forbidden");
+    }
+    const outcome = this.shortlist
+      ? await this.shortlist.decisionFor(input.candidateId, input.vacancyId)
+      : { kind: "unavailable" as const, reason: "not_applicable" as const };
+    let trustedGate: GateReason[];
+    if (outcome.kind === "unavailable") {
+      if (["no_profile", "not_configured", "no_decision"].includes(outcome.reason)) {
+        throw new ApplicationError("The trusted application decision is unavailable.", 503, "decision_unavailable");
+      }
+      // Unknown vacancies retain the legacy compatibility path until migrated.
+      trustedGate = [];
+    } else if (outcome.kind === "blocked") {
+      trustedGate = [{ code: "bias_alert", detail: "Trusted decision audit blocked this application." }];
+    } else {
+      if (outcome.decision.candidateId !== input.candidateId || outcome.decision.vacancyId !== input.vacancyId) {
+        throw new ApplicationError("Ranking decision does not match the application.", 422, "inconsistent_match");
+      }
+      input.match = outcome.decision;
+      // Credential provenance remains a documented follow-up: the current
+      // decision seam owns matching/audit facts, while evidence persistence is
+      // migrated in the next application-data slice. Do not treat body match
+      // fields as trusted here.
+      trustedGate = counselorGateReasons(outcome.decision, input.evidence);
+      if (outcome.biasBlocked) trustedGate.push({ code: "bias_alert", detail: "Trusted decision audit blocked this application." });
     }
     const draft: StoredDraft = {
       id: this.ids(),
@@ -187,6 +212,7 @@ export class ApplicationService {
       selectedEvidenceIds: input.evidence.map((item) => item.id),
       status: "open",
       history: [],
+      trustedGate,
     };
     this.drafts.set(draft.id, draft);
     return this.draftView(draft);
@@ -682,6 +708,7 @@ export class ApplicationService {
   }
 
   private counselorGate(draft: StoredDraft): GateReason[] {
+    if (draft.trustedGate) return draft.trustedGate;
     const selected = draft.input.evidence.filter((item) => draft.selectedEvidenceIds.includes(item.id));
     return counselorGateReasons(draft.input.match, selected);
   }
