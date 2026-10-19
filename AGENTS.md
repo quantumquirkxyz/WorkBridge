@@ -33,7 +33,7 @@ learning roadmap, and prepares a job application for human approval.
 | Database | Neon Postgres; SQL migrations in `migrations/001..004` |
 | Styling | Tailwind CSS v4 + shadcn/ui (ADR-0007) |
 | Tests | Vitest (node + jsdom projects), Playwright for e2e |
-| Issue tracker | GitHub Issues in `quantumquirkxyz/Agent-Hackathon` |
+| Issue tracker | GitHub Issues in `quantumquirkxyz/WorkBridge` (historical clone name: `Agent-Hackathon`) |
 | ADRs | `.agents/adr/` — note: **not** `docs/adr/` |
 | Assessments | `.reports/` (e.g. a project-viability report) |
 
@@ -86,7 +86,7 @@ not add to them.
 ## Issue workflow
 
 1. **Pick the issue.** Work is tracked as GitHub issues in
-   `quantumquirkxyz/Agent-Hackathon` (`gh issue list`). One issue (or spec slice)
+   `quantumquirkxyz/WorkBridge` (`gh issue list`). One issue (or spec slice)
    per branch.
 2. **Branch.** Create a short-lived branch from `main`, named from the issue
    reference, e.g. `feat/issue-12-role-based-approval` or
@@ -112,23 +112,25 @@ See `.agents/AGENTS.md` for the bundle and `ask-to` for routing.
 
 ### Issue tracker
 
-GitHub Issues in `quantumquirkxyz/Agent-Hackathon`, driven with the `gh` CLI
+GitHub Issues in `quantumquirkxyz/WorkBridge` (historical clone name: `Agent-Hackathon`), driven with the `gh` CLI
 (`gh issue list`, `gh issue create`, `gh pr`). Specs are published by `to-spec`,
 tracer-bullet tickets by `to-tickets`, PRs by `publish-open-pr`.
 
 ### Triage labels
 
 Incoming work uses the canonical triage roles: `needs-triage`, `needs-info`,
-`ready-for-agent`, `ready-for-human`, `wontfix`. Only `triage` applies them, and
-only to issues that arrived from outside the agent workflow — tickets produced by
-`to-tickets` are already agent-ready. `spec` marks a published specification.
+`ready-for-agent`, `ready-for-human`, `wontfix`. `triage` applies labels to
+incoming work; `to-spec` and `to-tickets` may also assign workflow labels to
+published artifacts. Tickets produced by `to-tickets` are already agent-ready.
+`spec` marks a published specification.
 
 ### Domain docs
 
-Single-context layout: `CONTEXT.md` at the root holds the project's domain
-vocabulary and boundaries, and durable design decisions are ADRs under
-`.agents/adr/`. Add or change terminology only through `grill-with-docs` /
-`domain-modeling`, recording an ADR when the decision is hard to reverse.
+Multi-context layout: read `CONTEXT-MAP.md` first, then the relevant context's
+`CONTEXT.md`; the root `CONTEXT.md` holds system-wide vocabulary and boundaries.
+Durable design decisions are ADRs under `.agents/adr/`. Add or change terminology
+only through `grill-with-docs` / `domain-modeling`, recording an ADR when the
+decision is hard to reverse.
 
 ## Domain rules that must not be broken
 
@@ -163,16 +165,16 @@ than trust; fix the list when you fix the cause.
   gate:ci` on every pull request and on `main`, with least-privilege
   `permissions: contents: read` and a cancelling concurrency group. Lint is
   deliberately not a gated job yet while `docs/old/design/previews/*` is red.
-  If you are reading this before that workflow branch merged, delete this bullet.
+  This workflow is now part of the repository; update this bullet only when the gate changes.
 - **`npm run lint` is red** with 26 `no-undef` errors in
   `docs/old/design/previews/*` (superseded material). `lint` is not part of
   `gate:ci`.
 - **`docs/old/` is superseded.** Do not cite it as current; current docs are the
   ones under `docs/` listed above. Some ADRs still reference the old
   `@puente/*` package namespace — the packages are `@workbridge/*`.
-- **`CONTEXT.md` stack table is stale** (it still says "to confirm" and points at a
-  `docs/reference/agents/` layout that no longer exists). Correcting it is a
-  `docs-management` change.
+- **`CONTEXT.md` stack table is stale** (it still says "to confirm"). The current
+  tracker and domain defaults live under `docs/reference/agents/`; correcting the
+  stack table is a separate `docs-management` change.
 - **The five-agent orchestrator is not on the web path.** It is exercised by tests;
   the web reuses the deterministic pieces through `intake`/`explore`/`match`/`roadmap`
   handlers. See `docs/arquitectura.md` §7.
