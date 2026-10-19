@@ -1,0 +1,15 @@
+{
+  "status": "clean",
+  "pr": 26,
+  "branch": "feat/issue-19-trusted-counselor-gate",
+  "fixedPoint": "main",
+  "reviewPasses": 3,
+  "lastPlanPosted": true,
+  "lastImplementationCompleted": true,
+  "validation": ["npm run typecheck", "npm run gate:ci"],
+  "deferredFindings": [
+    {"finding": "Trusted evidence provenance for unverified credentials", "owner": "quantumquirkxyz", "followUpTicket": 27},
+    {"finding": "Focused regression coverage for decision outcomes and queue/idempotency behavior", "owner": "quantumquirkxyz", "followUpTicket": 21}
+  ],
+  "nextConsumer": "ship-subissue"
+}
