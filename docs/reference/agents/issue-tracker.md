@@ -2,7 +2,7 @@
 
 Issues and PRDs for this repository live in GitHub Issues. Use the `gh` CLI for all tracker operations.
 
-Repository: `quantumquirkxyz/Agent-Hackathon`
+Repository: `quantumquirkxyz/WorkBridge` (historical clone name: `Agent-Hackathon`)
 
 ## Conventions
 
