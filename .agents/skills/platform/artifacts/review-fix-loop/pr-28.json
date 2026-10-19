@@ -1,0 +1,22 @@
+{
+  "artifactType": "ReviewFixLoopArtifact",
+  "identifier": "pr-28",
+  "pr": 28,
+  "branch": "implement-all-open-issues",
+  "fixedPoint": "main@4aab96ff33bc00b58021e97a6f9afd6eeb007cfe",
+  "pass": 2,
+  "status": "clean",
+  "review": {
+    "standardsFindings": 0,
+    "specFindings": 0,
+    "traceId": "review-pr-28-main-2026-10-19-final"
+  },
+  "validation": {
+    "gateCi": "passed",
+    "applicationTests": "71 passed",
+    "runtimePlaywright": "3 passed",
+    "ownershipPlaywright": "2 skipped without documented seeded prerequisites"
+  },
+  "lastImplementationCommit": "d3be974",
+  "nextConsumer": "ship-subissue"
+}
