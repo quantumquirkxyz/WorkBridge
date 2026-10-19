@@ -146,7 +146,7 @@ Estudiantes con perfil completo (experiencia y estudios) y una vacante del catá
 ```bash
 npm test               # Vitest: unitarias y de componentes
 npm run typecheck
-npm run gate:ci        # typecheck + cobertura
+npm run gate:ci        # lint + typecheck + cobertura
 npm run test:e2e       # Playwright
 ```
 

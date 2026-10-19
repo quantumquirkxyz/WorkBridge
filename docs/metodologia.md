@@ -15,7 +15,7 @@ Alcance entregado:
 - `apps/agent-runtime`: workflow Mastra de agentes y servidor HTTP de postulaciones (borradores, aprobaciones, envíos, auditoría).
 - `packages/*`: dominio y contratos (`domain`), ingesta de vacantes (`ingestion`), perfil (`profile`), catálogo de vacantes y cursos (`catalog`), solver de asignación con HiGHS (`solver`) y rutas de formación (`training`).
 
-Fuera de alcance: integración de producción con Certo (se usa un adaptador con mock transparente cuando no está disponible) y canales de notificación externos (solo bandeja `in_app`). El pipeline de CI en la nube ejecuta `gate:ci`; lint y e2e permanecen como trabajo separado (ver sección 7).
+Fuera de alcance: integración de producción con Certo (se usa un adaptador con mock transparente cuando no está disponible) y canales de notificación externos (solo bandeja `in_app`). El pipeline de CI en la nube ejecuta `gate:ci`, que incluye lint, typecheck y cobertura; las pruebas e2e requieren un entorno sembrado.
 
 ## 2. Metodología de trabajo del equipo
 
@@ -66,7 +66,7 @@ Scripts reales del `package.json` raíz:
 | `npm run lint` | `eslint .` |
 | `npm test` | `vitest run` (unitarias e integración) |
 | `npm run test:coverage` | `vitest run --coverage` |
-| `npm run gate:ci` | `typecheck` + `test:coverage` |
+| `npm run gate:ci` | `lint` + `typecheck` + `test:coverage` |
 | `npm run verify` | `lint` + `typecheck` + `test` |
 | `npm run test:e2e` / `test:e2e:web` | Playwright (proyectos `runtime` y `web`; usan puertos 4371/4372, memoria, sin LLM ni base real, y axe para accesibilidad) |
 | `node .agents/skills/platform/check-all.mjs` | Validación del bundle de skills (estructura, semántica, escenarios) |
@@ -213,7 +213,7 @@ Degradación elegante, en resumen: sin OpenRouter hay extractor heurístico; sin
 
 Limitaciones conocidas:
 
-- Compuertas de calidad: `gate:ci` pasa en local y en el workflow de GitHub Actions (`.github/workflows/ci.yml`) con typecheck y cobertura. Lint permanece fuera del gate por los errores legacy de `docs/old/design/previews/`; e2e requiere un entorno web/runtime levantado.
+- Compuertas de calidad: `gate:ci` ejecuta lint, typecheck y cobertura en el workflow de GitHub Actions (`.github/workflows/ci.yml`). E2E requiere un entorno web/runtime levantado y datos sembrados.
 - Credenciales filtradas: rotación y purga de historial **pendientes** (sección 6).
 - Certo no está integrado contra un despliegue real; la verificación recae en proveedores de respaldo o en el mock declarado ([ADR-0003](../.agents/adr/0003-verification-and-human-approval.md), "integración técnica pendiente").
 - Notificaciones solo en bandeja interna (`in_app`); sin correo, SMS ni WhatsApp.
@@ -221,4 +221,4 @@ Limitaciones conocidas:
 - El runtime en modo memoria pierde datos al reiniciar; los puertos de Playwright y datos de vacantes son de demostración.
 - Cobertura de evaluación acotada al conjunto de casos etiquetados ([evals.md](evals.md)).
 
-Trabajo futuro: limpiar los errores legacy de lint y activar lint en CI (issue #24), completar la cobertura e2e browser-level (issue #23), completar rotación y purga, integrar Certo en producción, añadir canales de notificación reales, reproducir y validar `compose.yaml` y un despliegue único de web, runtime y worker, y ampliar el catálogo de vacantes y centros de formación.
+Trabajo futuro: ampliar la cobertura e2e browser-level con datos sembrados, completar rotación y purga, integrar Certo en producción, añadir canales de notificación reales, reproducir y validar `compose.yaml` y un despliegue único de web, runtime y worker, y ampliar el catálogo de vacantes y centros de formación.
