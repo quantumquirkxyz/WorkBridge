@@ -15,12 +15,11 @@ concurrency:
 
 jobs:
   gate-ci:
-    name: gate-ci (typecheck + coverage)
+    name: gate-ci
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      # The gate does not run Playwright; skip the browser download so CI stays fast.
-      # A dedicated e2e job can install browsers when it lands.
+      # The current gate does not run Playwright, so skip the browser download.
       PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
     steps:
       - uses: actions/checkout@v4
