@@ -55,35 +55,35 @@ function draftBody(overrides: Record<string, unknown> = {}) {
 /** The shape the web UI sends today: no employerOrgId, because the browser never knows it. */
 const uiShapedDraft = { employerOrgId: undefined };
 
-describe("draft employer organization comes from the trusted seam", () => {
-  it("stamps the catalog owner on a draft that omits employerOrgId (UI-shaped request)", () => {
+describe("draft employer organization comes from the trusted seam", async () => {
+  it("stamps the catalog owner on a draft that omits employerOrgId (UI-shaped request)", async () => {
     const app = service(shortlist((id) => (id === "vac-1" ? "org-owner" : undefined)));
-    const draft = app.createDraft(session("candidate"), draftBody(uiShapedDraft));
+    const draft = await app.createDraft(session("candidate"), draftBody(uiShapedDraft));
     expect(draft.employerOrgId).toBe("org-owner");
   });
 
-  it("overrides an employerOrgId claimed in the body for a catalog vacancy", () => {
+  it("overrides an employerOrgId claimed in the body for a catalog vacancy", async () => {
     const app = service(shortlist((id) => (id === "vac-1" ? "org-owner" : undefined)));
-    const draft = app.createDraft(session("candidate"), draftBody({ employerOrgId: "org-attacker" }));
+    const draft = await app.createDraft(session("candidate"), draftBody({ employerOrgId: "org-attacker" }));
     expect(draft.employerOrgId).toBe("org-owner");
   });
 
-  it("refuses a known vacancy without a resolvable owner", () => {
+  it("refuses a known vacancy without a resolvable owner", async () => {
     const app = service(shortlist(() => undefined, (id) => id === "vac-1"));
-    expect(() => app.createDraft(session("candidate"), draftBody({ employerOrgId: "org-manual" }))).toThrowError(
+    await expect(app.createDraft(session("candidate"), draftBody({ employerOrgId: "org-manual" }))).rejects.toThrow(
       expect.objectContaining({ status: 503, code: "ownership_unavailable" }),
     );
   });
 
-  it("keeps the body employerOrgId when the trusted source does not own the vacancy", () => {
+  it("keeps the body employerOrgId when the trusted source does not own the vacancy", async () => {
     const app = service(shortlist(() => undefined));
-    const draft = app.createDraft(session("candidate"), draftBody({ employerOrgId: "org-manual" }));
+    const draft = await app.createDraft(session("candidate"), draftBody({ employerOrgId: "org-manual" }));
     expect(draft.employerOrgId).toBe("org-manual");
   });
 
-  it("keeps the body employerOrgId when no shortlist seam is configured", () => {
+  it("keeps the body employerOrgId when no shortlist seam is configured", async () => {
     const app = service();
-    const draft = app.createDraft(session("candidate"), draftBody({ employerOrgId: "org-manual" }));
+    const draft = await app.createDraft(session("candidate"), draftBody({ employerOrgId: "org-manual" }));
     expect(draft.employerOrgId).toBe("org-manual");
   });
 
@@ -96,7 +96,7 @@ describe("draft employer organization comes from the trusted seam", () => {
       reason: "Confirmo",
       envelope: sampleWorkflowEnvelope("trace-ownership", key),
     });
-    const draft = app.createDraft(candidate, draftBody(uiShapedDraft));
+    const draft = await app.createDraft(candidate, draftBody(uiShapedDraft));
     app.approveDraft(candidate, draft.draftId, action("idem-approve"));
     await app.submit(candidate, draft.draftId, action("idem-submit"));
 

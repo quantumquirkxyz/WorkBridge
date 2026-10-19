@@ -1,0 +1,22 @@
+{
+  "status": "completed",
+  "changes": [
+    "Made createDraft asynchronous and resolved trusted decisions before persistence.",
+    "Added fail-closed decision_unavailable handling and trusted counselor gates.",
+    "Updated HTTP dispatch to await createDraft."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": ["npm run typecheck", "npm run gate:ci"],
+    "skipped": [],
+    "notes": "All direct callers and tests were migrated to the asynchronous createDraft contract."
+  },
+  "branch": "feat/issue-19-trusted-counselor-gate",
+  "nextConsumer": "publish-open-pr",
+  "riskRemaining": "Reviewer validation remains.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "skipped",
+    "gateCi": "pass"
+  }
+}
