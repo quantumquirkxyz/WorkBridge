@@ -191,8 +191,7 @@ Slice 1 is a no-op by design, which makes it safe to review on its own.
 
 ## Decision record
 
-In memory mode there is no persisted profile, so no trusted decision exists. The two
-candidate policies are: **refuse** draft creation (`503`, matching the existing
-`decision_unavailable` for the draft consumer or **force** the counselor gate for
-every draft. Refusing is simpler to reason about; forcing keeps the demo path working
-without persistence. ADR-0010 settles this: refuse with `503 decision_unavailable` for `no_profile`, `not_configured` or `no_decision`; preserve `not_applicable`.
+In memory mode there is no persisted profile, so no trusted decision exists. The
+accepted policy is to refuse draft creation with `503 decision_unavailable` for
+`no_profile`, `not_configured` or `no_decision`; `not_applicable` preserves the
+existing invisible-draft behavior. Forcing the gate was rejected in ADR-0010.
