@@ -179,25 +179,25 @@ export class ApplicationService {
 
   createDraftSync(session: unknown, raw: unknown): DraftView {
     if (this.shortlist) throw new ApplicationError("Synchronous draft creation is unavailable with a decision source.", 500, "internal_error");
+    const { actor, input } = this.draftActorAndInput(session, raw);
+    return this.storeDraft(actor, input);
+  }
+
+  async createDraft(session: unknown, raw: unknown): Promise<DraftView> {
+    const { actor, input: parsed } = this.draftActorAndInput(session, raw);
+    const trusted = await this.trustedDecisionFor(actor, parsed);
+    const input = trusted?.input ?? parsed;
+    return this.storeDraft(actor, input, trusted?.decision, trusted?.evidence, trusted?.gate);
+  }
+
+  private draftActorAndInput(session: unknown, raw: unknown): { actor: Actor; input: DraftInput } {
     const actor = this.actor(session);
     this.requireRole(actor, "candidate", "Only a candidate can draft an application.");
     const input = this.parseDraftInput(raw);
     if (!this.ownsCandidate(actor, input.candidateId)) {
       throw new ApplicationError("A candidate can only draft their own application.", 403, "forbidden");
     }
-    return this.storeDraft(actor, input);
-  }
-
-  async createDraft(session: unknown, raw: unknown): Promise<DraftView> {
-    const actor = this.actor(session);
-    this.requireRole(actor, "candidate", "Only a candidate can draft an application.");
-    const parsed = this.parseDraftInput(raw);
-    if (!this.ownsCandidate(actor, parsed.candidateId)) {
-      throw new ApplicationError("A candidate can only draft their own application.", 403, "forbidden");
-    }
-    const trusted = await this.trustedDecisionFor(actor, parsed);
-    const input = trusted?.input ?? parsed;
-    return this.storeDraft(actor, input, trusted?.decision, trusted?.evidence, trusted?.gate);
+    return { actor, input };
   }
 
   private storeDraft(actor: Actor, input: DraftInput, trustedDecision?: MatchDecision, trustedEvidence?: EvidenceItem[], trustedGate?: GateReason[]): DraftView {
@@ -724,21 +724,24 @@ export class ApplicationService {
    */
   private async trustedDecisionFor(actor: Actor, input: DraftInput): Promise<{ input: DraftInput; decision?: MatchDecision; evidence?: EvidenceItem[]; gate?: GateReason[] } | undefined> {
     if (!this.shortlist) return undefined;
-    const owner = this.shortlist?.ownerOf(input.vacancyId);
-    const known = this.shortlist?.isKnownVacancy(input.vacancyId) ?? false;
+    const owner = this.shortlist.ownerOf(input.vacancyId);
+    const known = this.shortlist.isKnownVacancy(input.vacancyId);
     const outcome = await this.shortlist.decisionFor(actor.id, input.vacancyId);
     if (outcome.kind === "unavailable" && outcome.reason === "not_applicable") {
       return { input: { ...input, employerOrgId: undefined }, gate: [] };
     }
     if (outcome.kind === "blocked") {
-      if (known && owner === undefined) throw new ApplicationError("The vacancy has no resolvable employer owner.", 503, "ownership_unavailable");
-      return { input: { ...input, employerOrgId: owner }, gate: [{ code: "bias_alert", detail: "Counterfactual audit blocked this vacancy." }] };
+      return { input: this.withTrustedOwner(input, owner, known), gate: [{ code: "bias_alert", detail: "Counterfactual audit blocked this vacancy." }] };
     }
     if (outcome.kind === "decision") {
-      if (known && owner === undefined) throw new ApplicationError("The vacancy has no resolvable employer owner.", 503, "ownership_unavailable");
-      return { input: { ...input, employerOrgId: owner }, decision: outcome.decision, evidence: outcome.evidence };
+      return { input: this.withTrustedOwner(input, owner, known), decision: outcome.decision, evidence: outcome.evidence };
     }
     throw new ApplicationError("The trusted application decision is unavailable.", 503, "decision_unavailable");
+  }
+
+  private withTrustedOwner(input: DraftInput, owner: string | undefined, known: boolean): DraftInput {
+    if (known && owner === undefined) throw new ApplicationError("The vacancy has no resolvable employer owner.", 503, "ownership_unavailable");
+    return { ...input, employerOrgId: owner };
   }
 
   /** Fail closed: a draft without an organization is never visible to an employer. */
@@ -757,13 +760,11 @@ export class ApplicationService {
   }
 
   private draftView(draft: StoredDraft): DraftView {
-    const documentMatch = draft.trustedDecision
-      ?? (draft.trustedGate !== undefined ? { ...draft.input.match, gaps: [] } : draft.input.match);
     const documents = generateDocuments({
       vacancyTitle: draft.input.vacancyTitle,
       evidence: draft.input.evidence,
       selectedIds: draft.selectedEvidenceIds,
-      match: documentMatch,
+      match: draft.trustedGate !== undefined ? undefined : (draft.trustedDecision ?? draft.input.match),
     });
     const submission = this.submissionForDraft(draft.id);
     const history = submission?.history ?? draft.history;
@@ -815,7 +816,8 @@ export class ApplicationService {
           draftId: draft.id,
           candidateId: draft.ownerId,
           evidenceIds: draft.selectedEvidenceIds,
-          decisionId: draft.input.match.decisionId,
+          decisionId: draft.trustedDecision?.decisionId
+            ?? (draft.trustedGate !== undefined ? undefined : draft.input.match.decisionId),
         }),
       )
       .digest("hex");

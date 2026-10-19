@@ -150,7 +150,9 @@ npm run gate:ci        # lint + typecheck + cobertura
 npm run test:e2e       # Playwright
 ```
 
-The seeded UI-to-employer ownership regression uses `E2E_CANDIDATE_STORAGE_STATE`,
+The seeded UI-to-employer ownership regression uses a trusted runtime with
+`DATABASE_URL` configured for persisted profile/preferences, plus
+`E2E_CANDIDATE_STORAGE_STATE`,
 `E2E_EMPLOYER_STORAGE_STATE`, `E2E_FOREIGN_EMPLOYER_STORAGE_STATE`,
 `E2E_CATALOG_VACANCY_ID`, and `E2E_OTHER_ORG_SUBMISSION_ID` after `npm run seed:demo`; run it with
 `npx playwright test --project="Desktop Chrome" ui-to-employer-ownership.spec.ts`.

@@ -4,7 +4,7 @@ import { auditCounterfactuals, biasSubjectFor } from "../bias/audit";
 import { candidateContext, vacancyInput } from "../matching/catalog-input";
 import { createMatchingService, matchingConfigFromEnv, toApplicationMatchDecision } from "../matching";
 import { ApplicationError } from "./errors";
-import type { EvidenceItem } from "./evidence";
+import { applicationEvidenceFromCertifications, type EvidenceItem } from "./evidence";
 import type { SqlQuery } from "./store";
 
 /**
@@ -93,12 +93,7 @@ export function createApplicationDecisionSource(options: {
       return {
         kind: "decision",
         biasBlocked,
-        evidence: row.profile.certifications.map((certification) => ({
-          id: certification.id,
-          kind: "certification" as const,
-          text: certification.name,
-          credentialStatus: certification.status === "verified" ? "verified" as const : "unverified" as const,
-        })),
+        evidence: applicationEvidenceFromCertifications(row.profile.certifications),
         decision: { ...toApplicationMatchDecision(decision, input.vacancies[0]!.document), candidateId, biasAlerts },
       };
     },

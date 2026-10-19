@@ -68,7 +68,7 @@ Scripts reales del `package.json` raíz:
 | `npm run test:coverage` | `vitest run --coverage` |
 | `npm run gate:ci` | `lint` + `typecheck` + `test:coverage` |
 | `npm run verify` | `lint` + `typecheck` + `test` |
-| `npm run test:e2e` / `test:e2e:web` | Playwright (proyectos `runtime` y `web`; usan puertos 4371/4372, memoria, sin LLM ni base real, y axe para accesibilidad) |
+| `npm run test:e2e` / `test:e2e:web` | Playwright (proyectos `runtime`, `ownership` y `web`; ownership requiere `DATABASE_URL` y estados sembrados, los demás usan memoria, sin LLM ni base real, y axe para accesibilidad) |
 | `node .agents/skills/platform/check-all.mjs` | Validación del bundle de skills (estructura, semántica, escenarios) |
 
 ### 2.6 Estado actual: lo que NO está en verde (verificado el 2026-10-17)
