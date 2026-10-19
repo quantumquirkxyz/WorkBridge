@@ -84,16 +84,17 @@ bodies."
   the decision through `decisionFor` and computes the gate from it. A `match` in
   the request body may remain as an advisory echo for display, but it must not be
   able to influence the gate.
-- **Ownership is unchanged.** `ownerOf` stays the only source of vacancy
-  ownership, as already implemented; a body value is used only when the seam has
-  no owner, which keeps non-catalog drafts invisible rather than rejected.
+- **Ownership is fail-closed for applications.** `ownerOf` stays the only source
+  of catalog vacancy ownership; catalog owners always override the body, and a
+  vacancy reported as `not_applicable` has no owner regardless of body content,
+  keeping it invisible to employers.
 - **Fail-closed is an explicit choice, not a default.** When a catalog vacancy
   cannot be resolved to a trusted decision (`no_profile` or `not_configured`),
   `createDraft` refuses with **503** `decision_unavailable` rather than creating a
   draft with an empty gate. Forcing the counselor gate instead was considered and
-  rejected (see Alternatives). `not_applicable` keeps today's behaviour: a vacancy
-  outside the catalog still produces a draft with no owner and no gate, because
-  ownership already makes it invisible.
+  rejected (see Alternatives). `not_applicable` produces a draft with no owner
+  and no gate, and any body-supplied owner is discarded so the draft remains
+  invisible to employers.
 
 ## Consequences
 

@@ -15,7 +15,7 @@ Alcance entregado:
 - `apps/agent-runtime`: workflow Mastra de agentes y servidor HTTP de postulaciones (borradores, aprobaciones, envíos, auditoría).
 - `packages/*`: dominio y contratos (`domain`), ingesta de vacantes (`ingestion`), perfil (`profile`), catálogo de vacantes y cursos (`catalog`), solver de asignación con HiGHS (`solver`) y rutas de formación (`training`).
 
-Fuera de alcance: integración de producción con Certo (se usa un adaptador con mock transparente cuando no está disponible) y canales de notificación externos (solo bandeja `in_app`). El pipeline de CI en la nube ejecuta `gate:ci`; lint y e2e permanecen como trabajo separado (ver sección 7).
+Fuera de alcance: integración de producción con Certo (se usa un adaptador con mock transparente cuando no está disponible) y canales de notificación externos (solo bandeja `in_app`). El pipeline de CI en la nube ejecuta `gate:ci`, que incluye lint, typecheck y cobertura; las pruebas e2e requieren un entorno sembrado.
 
 ## 2. Metodología de trabajo del equipo
 
@@ -66,9 +66,9 @@ Scripts reales del `package.json` raíz:
 | `npm run lint` | `eslint .` |
 | `npm test` | `vitest run` (unitarias e integración) |
 | `npm run test:coverage` | `vitest run --coverage` |
-| `npm run gate:ci` | `typecheck` + `test:coverage` |
+| `npm run gate:ci` | `lint` + `typecheck` + `test:coverage` |
 | `npm run verify` | `lint` + `typecheck` + `test` |
-| `npm run test:e2e` / `test:e2e:web` | Playwright (proyectos `runtime` y `web`; usan puertos 4371/4372, memoria, sin LLM ni base real, y axe para accesibilidad) |
+| `npm run test:e2e` / `test:e2e:web` | Playwright (proyectos `runtime`, `ownership` y `web`; ownership requiere `DATABASE_URL` y estados sembrados, los demás usan memoria, sin LLM ni base real, y axe para accesibilidad) |
 | `node .agents/skills/platform/check-all.mjs` | Validación del bundle de skills (estructura, semántica, escenarios) |
 
 ### 2.6 Estado actual: lo que NO está en verde (verificado el 2026-10-17)
@@ -76,9 +76,9 @@ Scripts reales del `package.json` raíz:
 Se ejecutaron las comprobaciones en este árbol de trabajo. Resultado honesto:
 
 - **Una ejecución histórica de `apps/web/tests/chat-worker.test.ts`** reportó 1 de 10 pruebas fallida por una expectativa de saludo desactualizada tras la migración a chat asíncrono (#115). El workflow actual `gate:ci` pasa; si la prueba vuelve a fallar de forma aislada, actualizar la expectativa en un issue separado.
-- **`gate:ci` pasa** con typecheck y cobertura en el workflow de GitHub Actions. `npm run lint` permanece fuera del gate por los 26 errores legacy de `docs/old/design/previews/*`; la cobertura e2e requiere levantar web y runtime.
+- **`gate:ci` pasa** con lint, typecheck y cobertura en el workflow de GitHub Actions; la cobertura e2e requiere levantar web y runtime.
 - **`node .agents/skills/platform/check-all.mjs` se interrumpe** con `ENOENT` al leer `policy/tool-risk-budget.json`: el directorio `policy/` no existe en el repositorio. Es una validación del bundle de método, no del producto.
-- No se verificó `npm run lint` ni Playwright en esta pasada; no se afirma que pasen.
+- La validación actual incluye `npm run lint` y Playwright runtime; el flujo ownership requiere `DATABASE_URL` y estados sembrados documentados en el README.
 
 La evidencia de evaluación del producto está en [evals.md](evals.md).
 
@@ -213,7 +213,7 @@ Degradación elegante, en resumen: sin OpenRouter hay extractor heurístico; sin
 
 Limitaciones conocidas:
 
-- Compuertas de calidad: `gate:ci` pasa en local y en el workflow de GitHub Actions (`.github/workflows/ci.yml`) con typecheck y cobertura. Lint permanece fuera del gate por los errores legacy de `docs/old/design/previews/`; e2e requiere un entorno web/runtime levantado.
+- Compuertas de calidad: `gate:ci` ejecuta lint, typecheck y cobertura en el workflow de GitHub Actions (`.github/workflows/ci.yml`). E2E requiere un entorno web/runtime levantado y datos sembrados.
 - Credenciales filtradas: rotación y purga de historial **pendientes** (sección 6).
 - Certo no está integrado contra un despliegue real; la verificación recae en proveedores de respaldo o en el mock declarado ([ADR-0003](../.agents/adr/0003-verification-and-human-approval.md), "integración técnica pendiente").
 - Notificaciones solo en bandeja interna (`in_app`); sin correo, SMS ni WhatsApp.
@@ -221,4 +221,4 @@ Limitaciones conocidas:
 - El runtime en modo memoria pierde datos al reiniciar; los puertos de Playwright y datos de vacantes son de demostración.
 - Cobertura de evaluación acotada al conjunto de casos etiquetados ([evals.md](evals.md)).
 
-Trabajo futuro: limpiar los errores legacy de lint y activar lint en CI (issue #24), completar la cobertura e2e browser-level (issue #23), completar rotación y purga, integrar Certo en producción, añadir canales de notificación reales, reproducir y validar `compose.yaml` y un despliegue único de web, runtime y worker, y ampliar el catálogo de vacantes y centros de formación.
+Trabajo futuro: ampliar la cobertura e2e browser-level con datos sembrados, completar rotación y purga, integrar Certo en producción, añadir canales de notificación reales, reproducir y validar `compose.yaml` y un despliegue único de web, runtime y worker, y ampliar el catálogo de vacantes y centros de formación.

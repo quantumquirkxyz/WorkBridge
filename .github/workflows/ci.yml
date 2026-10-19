@@ -28,9 +28,5 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci --no-audit --no-fund
-      # Blocking gate: same command humans run locally (typecheck && test:coverage).
+      # Blocking gate: lint, typecheck and coverage.
       - run: npm run gate:ci
-
-  # NOTE: `npm run lint` is deliberately not gated yet. It is currently red with
-  # 26 no-undef errors in docs/old/design/previews/* (superseded material), which
-  # predates this workflow. Make lint blocking once that is cleaned up.

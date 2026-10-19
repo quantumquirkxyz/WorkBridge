@@ -27,6 +27,7 @@ function shortlist(
     ownerOf: owner,
     decisionFor: vi.fn(async (candidateId, vacancyId) => ({
       kind: "decision" as const,
+      evidence: [],
       biasBlocked: false,
       decision: sampleMatchDecision({ traceId: "trusted", candidateId, vacancyId, total: 80 }),
     })),
@@ -55,7 +56,82 @@ function draftBody(overrides: Record<string, unknown> = {}) {
 /** The shape the web UI sends today: no employerOrgId, because the browser never knows it. */
 const uiShapedDraft = { employerOrgId: undefined };
 
-describe("draft employer organization comes from the trusted seam", async () => {
+describe("draft employer organization comes from the trusted seam", () => {
+  it("uses persisted credential status instead of a forged request-body status", async () => {
+    const source = shortlist((id) => (id === "vac-1" ? "org-owner" : undefined));
+    source.decisionFor = vi.fn(async (candidateId, vacancyId) => ({
+      kind: "decision" as const,
+      biasBlocked: false,
+      evidence: [{ id: "cert-1", kind: "certification" as const, text: "Certificación persistida", credentialStatus: "unverified" as const }],
+      decision: sampleMatchDecision({ traceId: "trusted", candidateId, vacancyId, gaps: [], biasAlerts: [], transport: { feasible: true, source: "google_maps" } }),
+    }));
+    const app = service(source);
+    const draft = await app.createDraft(session("candidate"), draftBody({
+      evidence: [{ id: "cert-1", kind: "certification", text: "Certificación falsa", credentialStatus: "verified" }],
+    }));
+    expect(draft.counselorGate).toEqual([{ code: "unverified_credential", detail: "cert-1" }]);
+  });
+
+  it.each(["critical_gap", "unverified_credential", "bias_alert", "infeasible_transport"])("derives the trusted %s gate reason", async (code) => {
+    const source = shortlist((id) => (id === "vac-1" ? "org-owner" : undefined));
+    source.decisionFor = vi.fn(async (candidateId, vacancyId) => ({
+      kind: "decision" as const,
+      biasBlocked: false,
+      evidence: code === "unverified_credential"
+        ? [{ id: "cert-1", kind: "certification" as const, text: "Persisted", credentialStatus: "unverified" as const }]
+        : [],
+      decision: sampleMatchDecision({
+        traceId: "trace-ownership", candidateId, vacancyId,
+        gaps: code === "critical_gap" ? [{ id: "critical", severity: "critical", description: "Falta un requisito" }] : [],
+        biasAlerts: code === "bias_alert" ? [{ id: "bias", reason: "Alerta de sesgo" }] : [],
+        transport: { feasible: code !== "infeasible_transport", source: "google_maps" },
+      }),
+    }));
+    const draft = await service(source).createDraft(session("candidate"), draftBody());
+    expect(draft.counselorGate.map((reason) => reason.code)).toContain(code);
+  });
+
+  it("turns a trusted counterfactual block into a bias gate", async () => {
+    const source = shortlist((id) => (id === "vac-1" ? "org-owner" : undefined));
+    source.decisionFor = vi.fn(async () => ({ kind: "blocked" as const }));
+    const draft = await service(source).createDraft(session("candidate"), draftBody());
+    expect(draft.counselorGate).toEqual([{ code: "bias_alert", detail: "Counterfactual audit blocked this vacancy." }]);
+  });
+
+  it("uses the trusted match for generated documents when the body match is clean", async () => {
+    const source = shortlist((id) => (id === "vac-1" ? "org-owner" : undefined));
+    source.decisionFor = vi.fn(async (candidateId, vacancyId) => ({
+      kind: "decision" as const,
+      biasBlocked: false,
+      evidence: [],
+      decision: sampleMatchDecision({
+        traceId: "trusted", candidateId, vacancyId,
+        gaps: [{ id: "critical", severity: "critical", description: "Trusted gap" }],
+        biasAlerts: [],
+      }),
+    }));
+    const draft = await service(source).createDraft(session("candidate"), draftBody({
+      match: sampleMatchDecision({ traceId: "trace-ownership", candidateId: "candidate", vacancyId: "vac-1", gaps: [], biasAlerts: [] }),
+    }));
+    expect(draft.documents.application.map((fragment) => fragment.text)).toContain("Brecha señalada por el matching: Trusted gap");
+  });
+
+  it("requires counselor approval before submitting a trusted gated draft", async () => {
+    const source = shortlist((id) => (id === "vac-1" ? "org-owner" : undefined));
+    source.decisionFor = vi.fn(async (candidateId, vacancyId) => ({
+      kind: "decision" as const,
+      biasBlocked: false,
+      evidence: [],
+      decision: sampleMatchDecision({ traceId: "trace-ownership", candidateId, vacancyId, gaps: [{ id: "critical", severity: "critical", description: "Trusted gap" }] }),
+    }));
+    const app = service(source);
+    const candidate = session("candidate");
+    const draft = await app.createDraft(candidate, draftBody());
+    const action = (idempotencyKey: string) => ({ traceId: draft.traceId, idempotencyKey, reason: "Confirmo", envelope: sampleWorkflowEnvelope(draft.traceId, idempotencyKey) });
+    app.approveDraft(candidate, draft.draftId, action("idem-candidate"));
+    await expect(app.submit(candidate, draft.draftId, action("idem-submit"))).rejects.toMatchObject({ code: "counselor_approval_required" });
+  });
+
   it("stamps the catalog owner on a draft that omits employerOrgId (UI-shaped request)", async () => {
     const app = service(shortlist((id) => (id === "vac-1" ? "org-owner" : undefined)));
     const draft = await app.createDraft(session("candidate"), draftBody(uiShapedDraft));
@@ -70,20 +146,20 @@ describe("draft employer organization comes from the trusted seam", async () => 
 
   it("refuses a known vacancy without a resolvable owner", async () => {
     const app = service(shortlist(() => undefined, (id) => id === "vac-1"));
-    await expect(app.createDraft(session("candidate"), draftBody({ employerOrgId: "org-manual" }))).rejects.toThrow(
+    await expect(app.createDraft(session("candidate"), draftBody({ employerOrgId: "org-manual" }))).rejects.toThrowError(
       expect.objectContaining({ status: 503, code: "ownership_unavailable" }),
     );
   });
 
-  it("keeps the body employerOrgId when the trusted source does not own the vacancy", async () => {
+  it("drops the body employerOrgId when the trusted source marks the vacancy not applicable", async () => {
     const app = service(shortlist(() => undefined));
     const draft = await app.createDraft(session("candidate"), draftBody({ employerOrgId: "org-manual" }));
-    expect(draft.employerOrgId).toBe("org-manual");
+    expect(draft.employerOrgId).toBeUndefined();
   });
 
-  it("keeps the body employerOrgId when no shortlist seam is configured", async () => {
+  it("keeps the body employerOrgId when no shortlist seam is configured", () => {
     const app = service();
-    const draft = await app.createDraft(session("candidate"), draftBody({ employerOrgId: "org-manual" }));
+    const draft = app.createDraftSync(session("candidate"), draftBody({ employerOrgId: "org-manual" }));
     expect(draft.employerOrgId).toBe("org-manual");
   });
 

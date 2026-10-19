@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { resolveDatabaseMode } from "../database";
 import { signBetterAuthSession } from "../roles";
 import { createApplicationServer } from "../server";
+import { ApplicationService } from "../service";
 import { sampleMatchDecision, sampleWorkflowEnvelope } from "../fixtures";
 import { ENSURE_NOTIFICATION_OUTBOX_SQL } from "../notification";
 import { createSqlIdempotencyStore, ENSURE_IDEMPOTENCY_TABLE_SQL, type SqlQuery } from "../store";
@@ -55,6 +56,7 @@ async function withServer(
     env: { BETTER_AUTH_SECRET: SESSION_SECRET, ...env },
     clock: () => "2026-10-16T18:00:00.000Z",
     query,
+    service: query ? undefined : new ApplicationService({ sessionSecret: SESSION_SECRET, clock: () => "2026-10-16T18:00:00.000Z" }),
   });
   server.listen(0, "127.0.0.1");
   await once(server, "listening");

@@ -26,7 +26,7 @@ export function generateDocuments(input: {
   vacancyTitle: string;
   evidence: readonly EvidenceItem[];
   selectedIds: readonly string[];
-  match: MatchDecision;
+  match?: MatchDecision;
 }): ApplicationDocuments {
   const evidenceFragments: DraftFragment[] = input.selectedIds.map((id) => {
     const item = input.evidence.find((entry) => entry.id === id);
@@ -40,7 +40,7 @@ export function generateDocuments(input: {
     evidenceIds: [],
     text: vacancyIntro(input.vacancyTitle),
   };
-  const gaps: DraftFragment[] = input.match.gaps.map((gap) => ({
+  const gaps: DraftFragment[] = (input.match?.gaps ?? []).map((gap) => ({
     source: "match",
     evidenceIds: [],
     text: gapLine(gap.description),
@@ -59,11 +59,11 @@ export function assertDocumentsGrounded(
   input: {
     vacancyTitle: string;
     evidence: readonly EvidenceItem[];
-    match: MatchDecision;
+    match?: MatchDecision;
   },
 ): void {
   const evidenceText = new Set(input.evidence.map((item) => item.text));
-  const gapText = new Set(input.match.gaps.map((gap) => gapLine(gap.description)));
+  const gapText = new Set((input.match?.gaps ?? []).map((gap) => gapLine(gap.description)));
   const intro = vacancyIntro(input.vacancyTitle);
   const fragments = [...documents.cv, ...documents.coverLetter, ...documents.application];
   for (const fragment of fragments) {

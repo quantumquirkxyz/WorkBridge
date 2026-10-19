@@ -89,12 +89,12 @@ function service() {
   });
 }
 
-describe("outbound notification outbox", async () => {
+describe("outbound notification outbox", () => {
   it("allows a failed outbox write to be retried without losing or duplicating notifications", async () => {
     const outbox = createMemoryNotificationOutbox();
     const append = vi.spyOn(outbox, "append").mockRejectedValueOnce(new Error("database unavailable"));
     const app = new ApplicationService({ clock: () => NOW, sessionSecret: SESSION_SECRET, outbox });
-    const created = await app.createDraft(session("candidate"), draftInput());
+    const created = app.createDraftSync(session("candidate"), draftInput());
     app.approveDraft(session("candidate"), created.draftId, action("confirmo", "approve-retry"));
     const submit = () => app.submit(session("candidate"), created.draftId, action("envío", "submit-retry"));
     await expect(submit()).rejects.toThrow("database unavailable");
@@ -116,7 +116,7 @@ describe("outbound notification outbox", async () => {
   it("keeps committed outbox actions replayable when the sender is unavailable", async () => {
     const send = vi.fn().mockRejectedValue(new Error("sender unavailable"));
     const app = new ApplicationService({ clock: () => NOW, sessionSecret: SESSION_SECRET, notifications: { send } });
-    const created = await app.createDraft(session("candidate"), draftInput());
+    const created = app.createDraftSync(session("candidate"), draftInput());
     app.approveDraft(session("candidate"), created.draftId, action("confirmo", "approve-sender"));
     const submit = () => app.submit(session("candidate"), created.draftId, action("envío", "submit-sender"));
     const [submitted, replay] = await Promise.all([submit(), submit()]);
@@ -135,7 +135,7 @@ describe("outbound notification outbox", async () => {
   it("writes one employer notification and one submission audit event when a draft is submitted", async () => {
     const fetchSpy = vi.spyOn(globalThis, "fetch");
     const app = service();
-    const created = await app.createDraft(session("candidate"), draftInput());
+    const created = app.createDraftSync(session("candidate"), draftInput());
     app.approveDraft(session("candidate"), created.draftId, action("confirmo el borrador", "idem-approve-notify"));
     const auditBefore = app.auditTrail(session("candidate"), "trace-notify");
 
@@ -167,7 +167,7 @@ describe("outbound notification outbox", async () => {
 
   it("writes one candidate notification and one audit event when an interview is decided", async () => {
     const app = service();
-    const rejectedDraft = await app.createDraft(session("candidate"), draftInput());
+    const rejectedDraft = app.createDraftSync(session("candidate"), draftInput());
     app.approveDraft(session("candidate"), rejectedDraft.draftId, action("confirmo el borrador", "idem-approve-reject"));
     const rejectedSubmission = await app.submit(
       session("candidate"),
@@ -204,7 +204,7 @@ describe("outbound notification outbox", async () => {
     expect(JSON.stringify(afterReject)).not.toContain("6000-1234");
     expect(JSON.stringify(afterReject)).not.toContain("8-123-456");
 
-    const approvedDraft = await app.createDraft(session("candidate"), {
+    const approvedDraft = app.createDraftSync(session("candidate"), {
       ...draftInput(),
       idempotencyKey: "idem-draft-approve",
       envelope: sampleWorkflowEnvelope("trace-notify", "idem-draft-approve"),
@@ -264,7 +264,7 @@ describe("outbound notification outbox", async () => {
         },
       },
     });
-    const created = await app.createDraft(session("candidate"), draftInput());
+    const created = app.createDraftSync(session("candidate"), draftInput());
     app.approveDraft(session("candidate"), created.draftId, action("confirmo el borrador", "idem-port"));
     await app.submit(session("candidate"), created.draftId, action("envío la postulación", "idem-port-submit"));
     const expected: OutboundNotification = {

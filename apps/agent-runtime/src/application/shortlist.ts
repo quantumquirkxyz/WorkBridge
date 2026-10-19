@@ -4,6 +4,7 @@ import { auditCounterfactuals, biasSubjectFor } from "../bias/audit";
 import { candidateContext, vacancyInput } from "../matching/catalog-input";
 import { createMatchingService, matchingConfigFromEnv, toApplicationMatchDecision } from "../matching";
 import { ApplicationError } from "./errors";
+import { applicationEvidenceFromCertifications, type EvidenceItem } from "./evidence";
 import type { SqlQuery } from "./store";
 
 /**
@@ -11,7 +12,7 @@ import type { SqlQuery } from "./store";
  * policy: each consumer decides what an absent decision means (ADR-0010).
  */
 export type DecisionOutcome =
-  | { kind: "decision"; decision: MatchDecision; biasBlocked: boolean }
+  | { kind: "decision"; decision: MatchDecision; evidence: EvidenceItem[]; biasBlocked: boolean }
   /** The counterfactual audit blocked this candidate from this vacancy. */
   | { kind: "blocked" }
   | {
@@ -27,7 +28,7 @@ export type DecisionOutcome =
         | "no_decision";
     };
 
-/** Trusted server seam. Neither ownership nor match scores come from application bodies. */
+/** Trusted server seam. Neither ownership, match scores nor credential status come from application bodies. */
 export interface ApplicationDecisionSource {
   ownerOf(vacancyId: string): string | undefined;
   isKnownVacancy(vacancyId: string): boolean;
@@ -92,6 +93,7 @@ export function createApplicationDecisionSource(options: {
       return {
         kind: "decision",
         biasBlocked,
+        evidence: applicationEvidenceFromCertifications(row.profile.certifications),
         decision: { ...toApplicationMatchDecision(decision, input.vacancies[0]!.document), candidateId, biasAlerts },
       };
     },

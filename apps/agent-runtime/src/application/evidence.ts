@@ -89,3 +89,14 @@ export function toApplicationEvidence(
   });
   return result;
 }
+
+export function applicationEvidenceFromCertifications(
+  certifications: readonly { id: string; name: string; status: ProfileCredentialStatus }[],
+): EvidenceItem[] {
+  return toApplicationEvidence(certifications.map((certification) => ({
+    id: certification.id,
+    kind: "certification" as const,
+    text: certification.name,
+    credentialStatus: certification.status,
+  })));
+}

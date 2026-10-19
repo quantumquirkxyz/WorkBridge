@@ -33,6 +33,7 @@ export interface DraftInput {
   employerOrgId?: string;
   candidateDisplayName?: string;
   evidence: EvidenceItem[];
+  /** Advisory client echo only in trusted runtime; memory-only legacy fixtures may use it for local preview generation. */
   match: MatchDecision;
 }
 
@@ -125,6 +126,8 @@ interface StoredDraft {
   candidateApproval?: Decision;
   counselorApproval?: Decision;
   history: HistoryEntry[];
+  trustedDecision?: MatchDecision;
+  trustedEvidence?: EvidenceItem[];
   trustedGate?: GateReason[];
 }
 
@@ -174,37 +177,30 @@ export class ApplicationService {
     this.notifications = options.notifications ?? createMockNotificationPort();
   }
 
+  createDraftSync(session: unknown, raw: unknown): DraftView {
+    if (this.shortlist) throw new ApplicationError("Synchronous draft creation is unavailable with a decision source.", 500, "internal_error");
+    const { actor, input } = this.draftActorAndInput(session, raw);
+    return this.storeDraft(actor, input);
+  }
+
   async createDraft(session: unknown, raw: unknown): Promise<DraftView> {
+    const { actor, input: parsed } = this.draftActorAndInput(session, raw);
+    const trusted = await this.trustedDecisionFor(actor, parsed);
+    const input = trusted?.input ?? parsed;
+    return this.storeDraft(actor, input, trusted?.decision, trusted?.evidence, trusted?.gate);
+  }
+
+  private draftActorAndInput(session: unknown, raw: unknown): { actor: Actor; input: DraftInput } {
     const actor = this.actor(session);
     this.requireRole(actor, "candidate", "Only a candidate can draft an application.");
-    const input = this.withTrustedEmployerOrg(this.parseDraftInput(raw));
+    const input = this.parseDraftInput(raw);
     if (!this.ownsCandidate(actor, input.candidateId)) {
       throw new ApplicationError("A candidate can only draft their own application.", 403, "forbidden");
     }
-    const outcome = this.shortlist
-      ? await this.shortlist.decisionFor(input.candidateId, input.vacancyId)
-      : { kind: "unavailable" as const, reason: "not_applicable" as const };
-    let trustedGate: GateReason[];
-    if (outcome.kind === "unavailable") {
-      if (["no_profile", "not_configured", "no_decision"].includes(outcome.reason)) {
-        throw new ApplicationError("The trusted application decision is unavailable.", 503, "decision_unavailable");
-      }
-      // Unknown vacancies retain the legacy compatibility path until migrated.
-      trustedGate = [];
-    } else if (outcome.kind === "blocked") {
-      trustedGate = [{ code: "bias_alert", detail: "Trusted decision audit blocked this application." }];
-    } else {
-      if (outcome.decision.candidateId !== input.candidateId || outcome.decision.vacancyId !== input.vacancyId) {
-        throw new ApplicationError("Ranking decision does not match the application.", 422, "inconsistent_match");
-      }
-      input.match = outcome.decision;
-      // Credential provenance remains a documented follow-up: the current
-      // decision seam owns matching/audit facts, while evidence persistence is
-      // migrated in the next application-data slice. Do not treat body match
-      // fields as trusted here.
-      trustedGate = counselorGateReasons(outcome.decision, input.evidence);
-      if (outcome.biasBlocked) trustedGate.push({ code: "bias_alert", detail: "Trusted decision audit blocked this application." });
-    }
+    return { actor, input };
+  }
+
+  private storeDraft(actor: Actor, input: DraftInput, trustedDecision?: MatchDecision, trustedEvidence?: EvidenceItem[], trustedGate?: GateReason[]): DraftView {
     const draft: StoredDraft = {
       id: this.ids(),
       ownerId: actor.id,
@@ -212,7 +208,8 @@ export class ApplicationService {
       selectedEvidenceIds: input.evidence.map((item) => item.id),
       status: "open",
       history: [],
-      trustedGate,
+      ...(trustedDecision ? { trustedDecision, trustedEvidence: trustedEvidence ?? [] } : {}),
+      ...(trustedGate !== undefined ? { trustedGate } : {}),
     };
     this.drafts.set(draft.id, draft);
     return this.draftView(draft);
@@ -708,9 +705,10 @@ export class ApplicationService {
   }
 
   private counselorGate(draft: StoredDraft): GateReason[] {
-    if (draft.trustedGate) return draft.trustedGate;
-    const selected = draft.input.evidence.filter((item) => draft.selectedEvidenceIds.includes(item.id));
-    return counselorGateReasons(draft.input.match, selected);
+    if (draft.trustedGate !== undefined) return draft.trustedGate;
+    const match = draft.trustedDecision ?? draft.input.match;
+    const gateEvidence = draft.trustedEvidence ?? draft.input.evidence.filter((item) => draft.selectedEvidenceIds.includes(item.id));
+    return counselorGateReasons(match, gateEvidence);
   }
 
   private hasCounselorGate(draft: StoredDraft): boolean {
@@ -721,20 +719,29 @@ export class ApplicationService {
    * Ownership is a trusted server fact, not an application-body claim. When the
    * catalog seam knows who owns the vacancy, that owner wins over whatever the
    * body sent. If the seam knows the vacancy but cannot resolve an owner,
-   * reject draft creation. Unknown/non-catalog drafts retain the legacy
-   * compatibility path until their ownership source is migrated.
+   * reject draft creation. Unknown/non-catalog drafts are explicitly resolved
+   * as not applicable and lose any body-supplied employer owner.
    */
-  private withTrustedEmployerOrg(input: DraftInput): DraftInput {
-    const owner = this.shortlist?.ownerOf(input.vacancyId);
-    if (owner !== undefined) return { ...input, employerOrgId: owner };
-    if (this.shortlist?.isKnownVacancy(input.vacancyId)) {
-      throw new ApplicationError(
-        "The vacancy has no resolvable employer owner.",
-        503,
-        "ownership_unavailable",
-      );
+  private async trustedDecisionFor(actor: Actor, input: DraftInput): Promise<{ input: DraftInput; decision?: MatchDecision; evidence?: EvidenceItem[]; gate?: GateReason[] } | undefined> {
+    if (!this.shortlist) return undefined;
+    const owner = this.shortlist.ownerOf(input.vacancyId);
+    const known = this.shortlist.isKnownVacancy(input.vacancyId);
+    const outcome = await this.shortlist.decisionFor(actor.id, input.vacancyId);
+    if (outcome.kind === "unavailable" && outcome.reason === "not_applicable") {
+      return { input: { ...input, employerOrgId: undefined }, gate: [] };
     }
-    return input;
+    if (outcome.kind === "blocked") {
+      return { input: this.withTrustedOwner(input, owner, known), gate: [{ code: "bias_alert", detail: "Counterfactual audit blocked this vacancy." }] };
+    }
+    if (outcome.kind === "decision") {
+      return { input: this.withTrustedOwner(input, owner, known), decision: outcome.decision, evidence: outcome.evidence };
+    }
+    throw new ApplicationError("The trusted application decision is unavailable.", 503, "decision_unavailable");
+  }
+
+  private withTrustedOwner(input: DraftInput, owner: string | undefined, known: boolean): DraftInput {
+    if (known && owner === undefined) throw new ApplicationError("The vacancy has no resolvable employer owner.", 503, "ownership_unavailable");
+    return { ...input, employerOrgId: owner };
   }
 
   /** Fail closed: a draft without an organization is never visible to an employer. */
@@ -757,7 +764,7 @@ export class ApplicationService {
       vacancyTitle: draft.input.vacancyTitle,
       evidence: draft.input.evidence,
       selectedIds: draft.selectedEvidenceIds,
-      match: draft.input.match,
+      match: draft.trustedGate !== undefined ? undefined : (draft.trustedDecision ?? draft.input.match),
     });
     const submission = this.submissionForDraft(draft.id);
     const history = submission?.history ?? draft.history;
@@ -809,7 +816,8 @@ export class ApplicationService {
           draftId: draft.id,
           candidateId: draft.ownerId,
           evidenceIds: draft.selectedEvidenceIds,
-          decisionId: draft.input.match.decisionId,
+          decisionId: draft.trustedDecision?.decisionId
+            ?? (draft.trustedGate !== undefined ? undefined : draft.input.match.decisionId),
         }),
       )
       .digest("hex");

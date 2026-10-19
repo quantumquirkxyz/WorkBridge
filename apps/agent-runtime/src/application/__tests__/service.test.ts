@@ -73,7 +73,7 @@ function action(reason: string, idempotencyKey = "idem-action", traceId = "trace
   return { traceId, idempotencyKey, reason, envelope: sampleWorkflowEnvelope(traceId, idempotencyKey) };
 }
 
-function service(secrets: string[] = [], trustedMatch?: MatchDecision) {
+function service(secrets: string[] = []) {
   return new ApplicationService({
     clock: () => NOW,
     ids: (() => {
@@ -82,22 +82,13 @@ function service(secrets: string[] = [], trustedMatch?: MatchDecision) {
     })(),
     secrets,
     sessionSecret: SESSION_SECRET,
-    ...(trustedMatch ? { shortlist: {
-      ownerOf: () => undefined,
-      isKnownVacancy: () => false,
-      decisionFor: async (candidateId: string, vacancyId: string) => ({
-        kind: "decision" as const,
-        biasBlocked: false,
-        decision: { ...trustedMatch, candidateId, vacancyId },
-      }),
-    } } : {}),
   });
 }
 
-describe("application approval and submission", async () => {
-  it("drafts only the evidence the candidate declared", async () => {
+describe("application approval and submission", () => {
+  it("drafts only the evidence the candidate declared", () => {
     const app = service();
-    const draft = await app.createDraft(session("candidate"), draftInput());
+    const draft = app.createDraftSync(session("candidate"), draftInput());
     expect(draft.documents.cv).toEqual([
       {
         source: "evidence",
@@ -109,9 +100,9 @@ describe("application approval and submission", async () => {
     expect(draft.counselorGate).toEqual([]);
   });
 
-  it("lets the candidate correct a draft down to a declared subset", async () => {
+  it("lets the candidate correct a draft down to a declared subset", () => {
     const app = service();
-    const created = await app.createDraft(session("candidate"), draftInput());
+    const created = app.createDraftSync(session("candidate"), draftInput());
     const corrected = app.correctDraft(session("candidate"), created.draftId, {
       ...action("quito una línea no seleccionada"),
       includeEvidenceIds: [],
@@ -120,10 +111,11 @@ describe("application approval and submission", async () => {
     expect(corrected.documents.coverLetter[0]?.text).toBe(vacancyIntro("Auxiliar administrativo"));
   });
 
-  it("refuses corrections that introduce undeclared evidence", async () => {
+  it("refuses corrections that introduce undeclared evidence", () => {
     const app = service();
-    const created = await app.createDraft(session("candidate"), draftInput());
-    expect(() => app.correctDraft(session("candidate"), created.draftId, {
+    const created = app.createDraftSync(session("candidate"), draftInput());
+    expect(() =>
+      app.correctDraft(session("candidate"), created.draftId, {
         ...action("intento agregar un curso"),
         includeEvidenceIds: ["no-existe"],
       }),
@@ -132,7 +124,7 @@ describe("application approval and submission", async () => {
 
   it("requires candidate approval and blocks other roles from submitting", async () => {
     const app = service();
-    const created = await app.createDraft(session("candidate"), draftInput());
+    const created = app.createDraftSync(session("candidate"), draftInput());
     await expect(app.submit(session("candidate"), created.draftId, action("envío"))).rejects.toThrow(
       /Candidate approval/,
     );
@@ -146,7 +138,7 @@ describe("application approval and submission", async () => {
 
   it("submits once and replays the same idempotency key", async () => {
     const app = service();
-    const created = await app.createDraft(session("candidate"), draftInput());
+    const created = app.createDraftSync(session("candidate"), draftInput());
     app.approveDraft(session("candidate"), created.draftId, action("confirmo el borrador", "idem-approve"));
     const first = await app.submit(session("candidate"), created.draftId, action("envío la postulación", "idem-submit"));
     const retry = await app.submit(session("candidate"), created.draftId, action("envío la postulación", "idem-submit"));
@@ -165,8 +157,8 @@ describe("application approval and submission", async () => {
 
   it("conflicts when the same idempotency key is reused for another draft", async () => {
     const app = service();
-    const first = await app.createDraft(session("candidate"), draftInput());
-    const second = await app.createDraft(session("candidate"), draftInput({ idempotencyKey: "idem-draft-2" }));
+    const first = app.createDraftSync(session("candidate"), draftInput());
+    const second = app.createDraftSync(session("candidate"), draftInput({ idempotencyKey: "idem-draft-2" }));
     app.approveDraft(session("candidate"), first.draftId, action("apruebo", "idem-a"));
     app.approveDraft(session("candidate"), second.draftId, action("apruebo", "idem-b"));
     await app.submit(session("candidate"), first.draftId, action("envío", "shared-key"));
@@ -176,17 +168,14 @@ describe("application approval and submission", async () => {
   });
 
   it("requires counselor approval for critical gaps, unverified credentials, bias, and transport", async () => {
-    const app = service([], gatedMatch());
+    const app = service();
     const unverified: EvidenceItem = {
       id: "cert-1",
       kind: "certification",
       text: "Curso de ofimática declarado por el candidato.",
       credentialStatus: "unverified",
     };
-    const created = await app.createDraft(
-      session("candidate"),
-      draftInput({ evidence: [unverified], match: gatedMatch() }),
-    );
+    const created = app.createDraftSync(session("candidate"), draftInput({ evidence: [unverified], match: gatedMatch() }));
     expect(created.counselorGate.map((reason) => reason.code)).toEqual([
       "critical_gap",
       "unverified_credential",
@@ -207,30 +196,27 @@ describe("application approval and submission", async () => {
 
   it("records candidate, counselor, and employer rejections", async () => {
     const app = service();
-    const withdrawn = await app.createDraft(session("candidate"), draftInput());
+    const withdrawn = app.createDraftSync(session("candidate"), draftInput());
     const rejected = app.rejectDraft(session("candidate"), withdrawn.draftId, action("me arrepiento", "idem-r1"));
     expect(rejected.status).toBe("rejected");
     await expect(app.submit(session("candidate"), withdrawn.draftId, action("envío", "idem-no"))).rejects.toThrow(
       /rejected/,
     );
 
-    const gated = await app.createDraft(
-      session("candidate"),
-      draftInput({
-        evidence: [
-          {
-            id: "cert-2",
-            kind: "certification",
-            text: "Certificado declarado, aún sin verificar.",
-            credentialStatus: "unverified",
-          },
-        ],
-        match: { ...match(70, "apt_with_gaps"), decisionId: "dec-2" },
-      }),
-    );
+    const gated = app.createDraftSync(session("candidate"), draftInput({
+      evidence: [
+        {
+          id: "cert-2",
+          kind: "certification",
+          text: "Certificado declarado, aún sin verificar.",
+          credentialStatus: "unverified",
+        },
+      ],
+      match: { ...match(70, "apt_with_gaps"), decisionId: "dec-2" },
+    }));
     app.rejectDraft(session("counselor"), gated.draftId, action("credencial no verificada", "idem-r2"));
 
-    const ready = await app.createDraft(session("candidate"), draftInput({ idempotencyKey: "idem-draft-3" }));
+    const ready = app.createDraftSync(session("candidate"), draftInput({ idempotencyKey: "idem-draft-3" }));
     app.approveDraft(session("candidate"), ready.draftId, action("apruebo", "idem-r3"));
     const submitted = await app.submit(session("candidate"), ready.draftId, action("envío", "idem-r4"));
     const interview = await app.decideInterview(session("employer"), submitted.submissionId, {
@@ -246,7 +232,7 @@ describe("application approval and submission", async () => {
 
   it("requires employer approval before interview progression", async () => {
     const app = service();
-    const created = await app.createDraft(session("candidate"), draftInput());
+    const created = app.createDraftSync(session("candidate"), draftInput());
     app.approveDraft(session("candidate"), created.draftId, action("apruebo", "idem-e1"));
     const submitted = await app.submit(session("candidate"), created.draftId, action("envío", "idem-e2"));
     await expect(
@@ -267,33 +253,34 @@ describe("application approval and submission", async () => {
       decision: "approved",
     });
     expect(progressed.interview).toBe("approved");
-    expect(() => app.approveInterview(session("candidate"), submitted.submissionId, action("no", "idem-e7")))
-      .toThrow(/Only an employer/);
+    expect(() =>
+      app.approveInterview(session("candidate"), submitted.submissionId, action("no", "idem-e7")),
+    ).toThrow(/Only an employer/);
   });
 
-  it("rejects expired sessions, unknown roles, and secret material", async () => {
+  it("rejects expired sessions, unknown roles, and secret material", () => {
     const app = service([TOKEN]);
     const expired = {
       session: { id: "s", userId: "candidate", expiresAt: "2020-01-01T00:00:00.000Z" },
       user: { id: "candidate", email: "a@workbridge.pa", role: "candidate" as const },
     };
-    await expect(
-      app.createDraft({ ...expired, signature: sessionSignature(expired, SESSION_SECRET) }, draftInput()),
-    ).rejects.toThrow(/expired/);
+    expect(() =>
+      app.createDraftSync({ ...expired, signature: sessionSignature(expired, SESSION_SECRET) }, draftInput()),
+    ).toThrow(/expired/);
     const unknownRole = {
       session: { id: "s", userId: "candidate", expiresAt: "2027-01-01T00:00:00.000Z" },
       user: { id: "candidate", email: "a@workbridge.pa", role: "admin" },
     };
-    await expect(
-      app.createDraft({ ...unknownRole, signature: sessionSignature(unknownRole, SESSION_SECRET) }, draftInput()),
-    ).rejects.toThrow(/candidate, employer, or counselor/);
+    expect(() =>
+      app.createDraftSync({ ...unknownRole, signature: sessionSignature(unknownRole, SESSION_SECRET) }, draftInput()),
+    ).toThrow(/candidate, employer, or counselor/);
     const forged = session("employer");
     forged.user.role = "candidate";
-    await expect(app.createDraft(forged, draftInput())).rejects.toThrow(/signature/);
-    await expect(
-      app.createDraft(session("candidate"), draftInput({ vacancyTitle: `Puesto ${TOKEN}` })),
-    ).rejects.toThrow(/secret/i);
-    const created = await app.createDraft(session("candidate"), draftInput());
+    expect(() => app.createDraftSync(forged, draftInput())).toThrow(/signature/);
+    expect(() =>
+      app.createDraftSync(session("candidate"), draftInput({ vacancyTitle: `Puesto ${TOKEN}` })),
+    ).toThrow(/secret/i);
+    const created = app.createDraftSync(session("candidate"), draftInput());
     expect(() => app.approveDraft(session("candidate"), created.draftId, action(`porque ${TOKEN}`))).toThrow(
       /secret/i,
     );
@@ -302,19 +289,20 @@ describe("application approval and submission", async () => {
 
   it("rejects inconsistent match decisions and closed drafts", async () => {
     const app = service();
-    await expect(app.createDraft(session("employer"), draftInput())).rejects.toThrow(/Only a candidate/);
-    await expect(app.createDraft(session("candidate", "other"), draftInput())).rejects.toThrow(/own application/);
-    await expect(
-      app.createDraft(session("candidate"), draftInput({ match: { ...match(), traceId: "other-trace" } })),
-    ).rejects.toThrow(/traceId/);
-    await expect(
-      app.createDraft(session("candidate"), draftInput({ match: { ...match(), vacancyId: "other-vacancy" } })),
-    ).rejects.toThrow(/does not belong/);
-    const created = await app.createDraft(session("candidate"), draftInput());
+    expect(() => app.createDraftSync(session("employer"), draftInput())).toThrow(/Only a candidate/);
+    expect(() => app.createDraftSync(session("candidate", "other"), draftInput())).toThrow(/own application/);
+    expect(() =>
+      app.createDraftSync(session("candidate"), draftInput({ match: { ...match(), traceId: "other-trace" } })),
+    ).toThrow(/traceId/);
+    expect(() =>
+      app.createDraftSync(session("candidate"), draftInput({ match: { ...match(), vacancyId: "other-vacancy" } })),
+    ).toThrow(/does not belong/);
+    const created = app.createDraftSync(session("candidate"), draftInput());
     expect(() => app.correctDraft(session("employer"), created.draftId, { ...action("no"), includeEvidenceIds: [] })).toThrow(
       /Only the candidate/,
     );
-    expect(() => app.correctDraft(session("candidate", "other"), created.draftId, { ...action("no"), includeEvidenceIds: [] }),
+    expect(() =>
+      app.correctDraft(session("candidate", "other"), created.draftId, { ...action("no"), includeEvidenceIds: [] }),
     ).toThrow(/own draft/);
     expect(() => app.approveDraft(session("employer"), created.draftId, action("no"))).toThrow(/cannot approve/);
     expect(() => app.rejectDraft(session("employer"), created.draftId, action("no"))).toThrow(/cannot reject/);
@@ -330,13 +318,14 @@ describe("application approval and submission", async () => {
     ).rejects.toThrow(/not found/);
   });
 
-  it("flags invented draft text", async () => {
+  it("flags invented draft text", () => {
     const documents = {
       cv: [{ source: "evidence" as const, evidenceIds: ["ev-1"], text: "Inventé un empleo en un banco." }],
       coverLetter: [],
       application: [],
     };
-    expect(() => assertDocumentsGrounded(documents, {
+    expect(() =>
+      assertDocumentsGrounded(documents, {
         vacancyTitle: "Auxiliar administrativo",
         evidence: evidence(),
         match: match(),
@@ -346,7 +335,7 @@ describe("application approval and submission", async () => {
 
   it("drops approvals when a correction changes the evidence subset", async () => {
     const app = service();
-    const created = await app.createDraft(session("candidate"), draftInput());
+    const created = app.createDraftSync(session("candidate"), draftInput());
     app.approveDraft(session("candidate"), created.draftId, action("apruebo", "idem-keep"));
     app.correctDraft(session("candidate"), created.draftId, {
       ...action("quito la evidencia", "idem-clear"),
@@ -360,17 +349,18 @@ describe("application approval and submission", async () => {
     expect(submitted.replayed).toBe(false);
   });
 
-  it("rejects an action whose trace does not match the draft and a blocked guardrail", async () => {
+  it("rejects an action whose trace does not match the draft and a blocked guardrail", () => {
     const app = service();
-    const created = await app.createDraft(session("candidate"), draftInput());
+    const created = app.createDraftSync(session("candidate"), draftInput());
     expect(() => app.approveDraft(session("candidate"), created.draftId, action("otra traza", "idem-x", "trace-other"))).toThrow(
       /draft traceId/,
     );
     expect(app.auditTrail(session("candidate"), "trace-other")).toEqual([]);
-    await expect(
-      app.createDraft(session("candidate"), draftInput({ envelope: { traceId: "trace-1" } })),
-    ).rejects.toThrow(/envelope|traceId|idempotencyKey/i);
-    expect(() => app.approveDraft(session("candidate"), created.draftId, {
+    expect(() =>
+      app.createDraftSync(session("candidate"), draftInput({ envelope: { traceId: "trace-1" } })),
+    ).toThrow(/envelope|traceId|idempotencyKey/i);
+    expect(() =>
+      app.approveDraft(session("candidate"), created.draftId, {
         ...action("bloqueado", "idem-block"),
         envelope: {
           ...sampleWorkflowEnvelope("trace-1", "idem-block"),
@@ -380,8 +370,8 @@ describe("application approval and submission", async () => {
     ).toThrow(/guardrail/);
   });
 
-  it("removes rejected and approved drafts from the counselor pending queue", async () => {
-    const app = service([], gatedMatch());
+  it("removes rejected and approved drafts from the counselor pending queue", () => {
+    const app = service();
     const unverified: EvidenceItem = {
       id: "cert-q",
       kind: "certification",
@@ -390,14 +380,8 @@ describe("application approval and submission", async () => {
     };
     const pending = (): string[] =>
       app.listDrafts(session("counselor"), { gate: "counselor", pending: true }).map((draft) => draft.draftId);
-    const rejectedDraft = await app.createDraft(
-      session("candidate"),
-      draftInput({ idempotencyKey: "idem-q1", evidence: [unverified], match: gatedMatch() }),
-    );
-    const approvedDraft = await app.createDraft(
-      session("candidate"),
-      draftInput({ idempotencyKey: "idem-q2", evidence: [unverified], match: gatedMatch() }),
-    );
+    const rejectedDraft = app.createDraftSync(session("candidate"), draftInput({ idempotencyKey: "idem-q1", evidence: [unverified], match: gatedMatch() }));
+    const approvedDraft = app.createDraftSync(session("candidate"), draftInput({ idempotencyKey: "idem-q2", evidence: [unverified], match: gatedMatch() }));
     expect(pending()).toEqual([rejectedDraft.draftId, approvedDraft.draftId]);
 
     app.rejectDraft(session("counselor"), rejectedDraft.draftId, action("no cumple", "idem-q3"));
@@ -407,9 +391,9 @@ describe("application approval and submission", async () => {
     expect(pending()).toEqual([]);
   });
 
-  it("exposes trace, vacancy, candidate, and selected evidence in the draft view", async () => {
+  it("exposes trace, vacancy, candidate, and selected evidence in the draft view", () => {
     const app = service();
-    const view = await app.createDraft(session("candidate"), draftInput({ candidateDisplayName: "Ana Pérez" }));
+    const view = app.createDraftSync(session("candidate"), draftInput({ candidateDisplayName: "Ana Pérez" }));
     expect(view.traceId).toBe("trace-1");
     expect(view.vacancyTitle).toBe("Auxiliar administrativo");
     expect(view.candidateDisplayName).toBe("Ana Pérez");
@@ -417,18 +401,15 @@ describe("application approval and submission", async () => {
     expect(view.availableEvidence.map((item) => item.id)).toEqual(["ev-1"]);
   });
 
-  it("keeps the trusted counselor gate independent of request-body correction", async () => {
-    const app = service([], match());
+  it("computes the counselor gate over the selected evidence only", () => {
+    const app = service();
     const unverified: EvidenceItem = {
       id: "cert-g",
       kind: "certification",
       text: "Certificado declarado, aún sin verificar.",
       credentialStatus: "unverified",
     };
-    const created = await app.createDraft(
-      session("candidate"),
-      draftInput({ evidence: [...evidence(), unverified], match: match() }),
-    );
+    const created = app.createDraftSync(session("candidate"), draftInput({ evidence: [...evidence(), unverified], match: match() }));
     expect(created.counselorGate.map((reason) => reason.code)).toEqual(["unverified_credential"]);
     const corrected = app.correctDraft(session("candidate"), created.draftId, {
       ...action("quito el certificado no verificado", "idem-g"),
@@ -436,47 +417,41 @@ describe("application approval and submission", async () => {
     });
     expect(corrected.evidence.map((item) => item.id)).toEqual(["ev-1"]);
     expect(corrected.availableEvidence.map((item) => item.id)).toEqual(["ev-1", "cert-g"]);
-    expect(corrected.counselorGate.map((reason) => reason.code)).toEqual(["unverified_credential"]);
+    expect(corrected.counselorGate).toEqual([]);
   });
 
   it("lets a counselor review a clean draft without making that approval mandatory", async () => {
     const app = service();
-    const created = await app.createDraft(session("candidate"), draftInput());
+    const created = app.createDraftSync(session("candidate"), draftInput());
     const reviewed = app.approveDraft(session("counselor"), created.draftId, action("sin brecha crítica", "idem-clean"));
     expect(reviewed.counselorApproved).toBe(true);
-    const another = await app.createDraft(session("candidate"), draftInput({ idempotencyKey: "idem-draft-clean" }));
+    const another = app.createDraftSync(session("candidate"), draftInput({ idempotencyKey: "idem-draft-clean" }));
     app.approveDraft(session("candidate"), another.draftId, action("apruebo", "idem-clean-2"));
     const submitted = await app.submit(session("candidate"), another.draftId, action("envío", "idem-clean-3"));
     expect(submitted.interview).toBe("pending_employer_approval");
   });
 
-  it("accepts the canonical candidate id and still refuses someone else's", async () => {
+  it("accepts the canonical candidate id and still refuses someone else's", () => {
     const app = service();
     const userId = "user-uuid-1";
     const candidateId = makeCandidateId(userId);
-    const created = await app.createDraft(
-      session("candidate", userId),
-      draftInput({ candidateId, match: { ...match(), candidateId } }),
-    );
+    const created = app.createDraftSync(session("candidate", userId), draftInput({ candidateId, match: { ...match(), candidateId } }));
     expect(created.candidateId).toBe(candidateId);
     expect(app.listDrafts(session("candidate", userId), { candidateId }).map((draft) => draft.draftId)).toEqual([
       created.draftId,
     ]);
-    await expect(
-      app.createDraft(
-        session("candidate", userId),
-        draftInput({
-          idempotencyKey: "idem-other-person",
-          candidateId: "candidate_other",
-          match: { ...match(), candidateId: "candidate_other" },
-        }),
-      ),
-    ).rejects.toThrow(/own application/);
+    expect(() =>
+      app.createDraftSync(session("candidate", userId), draftInput({
+        idempotencyKey: "idem-other-person",
+        candidateId: "candidate_other",
+        match: { ...match(), candidateId: "candidate_other" },
+      })),
+    ).toThrow(/own application/);
   });
 
   it("lets the owning candidate read the interview decision", async () => {
     const app = service();
-    const created = await app.createDraft(session("candidate"), draftInput());
+    const created = app.createDraftSync(session("candidate"), draftInput());
     expect(() => app.readOwnSubmission(session("candidate"), created.draftId)).toThrow(/not been submitted/);
     expect(() => app.readOwnSubmission(session("employer"), created.draftId)).toThrow(/Only the candidate/);
     app.approveDraft(session("candidate"), created.draftId, action("apruebo", "idem-own-1"));
@@ -502,8 +477,8 @@ describe("application approval and submission", async () => {
     expect(app.listDrafts(session("candidate"), { candidateId: "candidate" })[0]?.interview).toBe("rejected");
   });
 
-  it("rejects a short Certo token", async () => {
+  it("rejects a short Certo token", () => {
     const app = service(["xy"]);
-    await expect(app.createDraft(session("candidate"), draftInput({ vacancyTitle: "Puesto xy" }))).rejects.toThrow(/secret/i);
+    expect(() => app.createDraftSync(session("candidate"), draftInput({ vacancyTitle: "Puesto xy" }))).toThrow(/secret/i);
   });
 });
