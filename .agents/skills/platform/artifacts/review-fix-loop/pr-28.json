@@ -3,8 +3,8 @@
   "identifier": "pr-28",
   "pr": 28,
   "branch": "implement-all-open-issues",
-  "fixedPoint": "main@4aab96ff33bc00b58021e97a6f9afd6eeb007cfe",
-  "pass": 2,
+  "fixedPoint": "origin/main@afd714d",
+  "pass": 3,
   "status": "clean",
   "review": {
     "standardsFindings": 0,
@@ -17,6 +17,6 @@
     "runtimePlaywright": "3 passed",
     "ownershipPlaywright": "2 skipped without documented seeded prerequisites"
   },
-  "lastImplementationCommit": "d3be974",
+  "lastImplementationCommit": "53165b2",
   "nextConsumer": "ship-subissue"
 }
