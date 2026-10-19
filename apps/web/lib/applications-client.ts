@@ -62,7 +62,6 @@ export async function getDraft(draftId: string): Promise<DraftView> {
 export interface CreateDraftInput {
   vacancyId: string;
   vacancyTitle: string;
-  employerOrgId?: string;
 }
 
 export interface CreatedDraft { draft: DraftView; evidence: EvidenceItem[] }
@@ -79,19 +78,20 @@ export async function createDraftFromMatch(input: CreateDraftInput): Promise<Cre
   if (!match) throw new ApiClientError({ status: 404, code: 'not_found', message: 'No match decision for this vacancy.' });
   const evidence = evidenceFromProfile(profile);
   const idempotencyKey = crypto.randomUUID();
+  // traceId is required by the match-decision contract, so the draft reuses it verbatim.
+  const traceId = match.traceId;
   const response = await fetch(`${BASE}/drafts`, {
     method: 'POST',
     headers: { ...JSON_HEADERS, 'idempotency-key': idempotencyKey },
     body: JSON.stringify({
-      traceId: ('traceId' in match && typeof match.traceId === 'string' ? match.traceId : match.tieBreakKey),
+      traceId,
       idempotencyKey,
       candidateId: match.candidateId,
       vacancyId: input.vacancyId,
       vacancyTitle: input.vacancyTitle,
-      employerOrgId: input.employerOrgId,
       evidence,
       match,
-      envelope: envelope('traceId' in match && typeof match.traceId === 'string' ? match.traceId : match.tieBreakKey, idempotencyKey),
+      envelope: envelope(traceId, idempotencyKey),
     }),
   });
   return { draft: await readJson<DraftView>(response), evidence };

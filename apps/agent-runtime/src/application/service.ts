@@ -176,7 +176,7 @@ export class ApplicationService {
   createDraft(session: unknown, raw: unknown): DraftView {
     const actor = this.actor(session);
     this.requireRole(actor, "candidate", "Only a candidate can draft an application.");
-    const input = this.parseDraftInput(raw);
+    const input = this.withTrustedEmployerOrg(this.parseDraftInput(raw));
     if (!this.ownsCandidate(actor, input.candidateId)) {
       throw new ApplicationError("A candidate can only draft their own application.", 403, "forbidden");
     }
@@ -678,6 +678,26 @@ export class ApplicationService {
 
   private hasCounselorGate(draft: StoredDraft): boolean {
     return this.counselorGate(draft).length > 0;
+  }
+
+  /**
+   * Ownership is a trusted server fact, not an application-body claim. When the
+   * catalog seam knows who owns the vacancy, that owner wins over whatever the
+   * body sent. If the seam knows the vacancy but cannot resolve an owner,
+   * reject draft creation. Unknown/non-catalog drafts retain the legacy
+   * compatibility path until their ownership source is migrated.
+   */
+  private withTrustedEmployerOrg(input: DraftInput): DraftInput {
+    const owner = this.shortlist?.ownerOf(input.vacancyId);
+    if (owner !== undefined) return { ...input, employerOrgId: owner };
+    if (this.shortlist?.isKnownVacancy(input.vacancyId)) {
+      throw new ApplicationError(
+        "The vacancy has no resolvable employer owner.",
+        503,
+        "ownership_unavailable",
+      );
+    }
+    return input;
   }
 
   /** Fail closed: a draft without an organization is never visible to an employer. */

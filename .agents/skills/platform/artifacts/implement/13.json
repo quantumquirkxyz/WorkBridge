@@ -1,0 +1,33 @@
+{
+  "status": "completed",
+  "changes": [
+    "apps/agent-runtime/src/application/service.ts \u2014 createDraft resolves ownership through ShortlistSource.ownerOf; known vacancies without an owner are rejected with ownership_unavailable before persistence, and a body-supplied organization cannot claim a known vacancy.",
+    "apps/agent-runtime/src/application/__tests__/draft-employer-org.test.ts \u2014 focused suite covering UI-shaped drafts, body-override refusal, known-unowned fail-closed behavior, non-catalog fallback, no-shortlist fallback and the end-to-end owning/foreign employer shortlist plus interview decision.",
+    "apps/web/lib/applications-client.ts \u2014 removed the dead tieBreakKey ternary fallback and the redundant employerOrgId browser field."
+  ],
+  "validation": {
+    "acceptanceCriteriaMet": true,
+    "commands": [
+      "npx vitest run apps/agent-runtime/src/application/__tests__/draft-employer-org.test.ts",
+      "npm run typecheck",
+      "npm run gate:ci"
+    ],
+    "skipped": [
+      "npm run lint \u2014 pre-existing failure outside this change: 26 no-undef errors in docs/old/design/previews/{build,build-css}.mjs and preview.js (superseded material). Not part of gate:ci (typecheck + test:coverage), left untouched to keep the branch scoped.",
+      "npm run test:e2e \u2014 Playwright needs a running web + runtime; the equivalent behaviour is covered by the new integration test at the ApplicationService seam."
+    ],
+    "notes": "Known catalog vacancies resolve ownership from the trusted seam and reject with 503 ownership_unavailable when no owner is available; unknown non-catalog drafts and no-seam deployments retain compatibility. The UI-shaped flow covers owner visibility, foreign 403 isolation, and interview decision."
+  },
+  "commitSha": "132d446",
+  "branch": "fix/issue-12-draft-employer-org",
+  "nextConsumer": "review-pr",
+  "blockedBy": [],
+  "pullRequest": 13,
+  "riskRemaining": "Browser-level Playwright coverage remains out of scope and is tracked by issue #23. Non-catalog ownership remains a compatibility path until a trusted source is introduced.",
+  "qualityGateResults": {
+    "gateIde": "pass",
+    "gatePreCommit": "pass",
+    "gateCi": "pass"
+  },
+  "id": "13"
+}
