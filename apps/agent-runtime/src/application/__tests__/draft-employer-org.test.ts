@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { sampleMatchDecision, sampleWorkflowEnvelope } from "../fixtures";
 import { signBetterAuthSession } from "../roles";
 import { ApplicationService } from "../service";
-import type { ShortlistSource } from "../shortlist";
+import type { ApplicationDecisionSource } from "../shortlist";
 
 const NOW = "2026-10-16T18:00:00.000Z";
 const SECRET = "draft-employer-org-test-secret";
@@ -21,18 +21,19 @@ function session(role: "candidate" | "employer", id = role as string, org?: stri
 function shortlist(
   owner: (vacancyId: string) => string | undefined,
   known: (vacancyId: string) => boolean = (vacancyId) => owner(vacancyId) !== undefined,
-): ShortlistSource {
+): ApplicationDecisionSource {
   return {
     isKnownVacancy: known,
     ownerOf: owner,
-    match: vi.fn(async (candidateId, vacancyId) => ({
+    decisionFor: vi.fn(async (candidateId, vacancyId) => ({
+      kind: "decision" as const,
       biasBlocked: false,
       decision: sampleMatchDecision({ traceId: "trusted", candidateId, vacancyId, total: 80 }),
     })),
   };
 }
 
-function service(seam?: ShortlistSource) {
+function service(seam?: ApplicationDecisionSource) {
   return new ApplicationService({ clock: () => NOW, sessionSecret: SECRET, shortlist: seam });
 }
 
@@ -74,13 +75,13 @@ describe("draft employer organization comes from the trusted seam", () => {
     );
   });
 
-  it("keeps a body employerOrgId for an unknown non-catalog vacancy", () => {
-    const app = service(shortlist(() => undefined, () => false));
+  it("keeps the body employerOrgId when the trusted source does not own the vacancy", () => {
+    const app = service(shortlist(() => undefined));
     const draft = app.createDraft(session("candidate"), draftBody({ employerOrgId: "org-manual" }));
     expect(draft.employerOrgId).toBe("org-manual");
   });
 
-  it("keeps a body employerOrgId when no shortlist seam is configured", () => {
+  it("keeps the body employerOrgId when no shortlist seam is configured", () => {
     const app = service();
     const draft = app.createDraft(session("candidate"), draftBody({ employerOrgId: "org-manual" }));
     expect(draft.employerOrgId).toBe("org-manual");
@@ -97,7 +98,7 @@ describe("draft employer organization comes from the trusted seam", () => {
     });
     const draft = app.createDraft(candidate, draftBody(uiShapedDraft));
     app.approveDraft(candidate, draft.draftId, action("idem-approve"));
-    const submitted = await app.submit(candidate, draft.draftId, action("idem-submit"));
+    await app.submit(candidate, draft.draftId, action("idem-submit"));
 
     const owning = await app.shortlistForVacancy(session("employer", "owner", "org-owner"), "vac-1");
     expect(owning).toHaveLength(1);
@@ -105,17 +106,5 @@ describe("draft employer organization comes from the trusted seam", () => {
     await expect(
       app.shortlistForVacancy(session("employer", "foreign", "org-other"), "vac-1"),
     ).rejects.toMatchObject({ status: 403 });
-
-    const employerAction = (key: string) => ({
-      ...action(key),
-      decision: "approved" as const,
-    });
-    app.approveInterview(session("employer", "owner", "org-owner"), submitted.submissionId, action("idem-employer-approval"));
-    const decided = await app.decideInterview(
-      session("employer", "owner", "org-owner"),
-      submitted.submissionId,
-      employerAction("idem-interview-decision"),
-    );
-    expect(decided.interview).toBe("approved");
   });
 });

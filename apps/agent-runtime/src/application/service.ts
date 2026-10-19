@@ -22,7 +22,7 @@ import {
   type OutboundNotification,
 } from "./notification";
 import { createMemoryIdempotencyStore, type IdempotencyStore } from "./store";
-import type { ShortlistSource } from "./shortlist";
+import type { ApplicationDecisionSource } from "./shortlist";
 
 export interface DraftInput {
   traceId: string;
@@ -143,7 +143,7 @@ export interface ApplicationServiceOptions {
   secrets?: readonly string[];
   sessionSecret?: string;
   idempotency?: IdempotencyStore<SubmitView>;
-  shortlist?: ShortlistSource;
+  shortlist?: ApplicationDecisionSource;
   outbox?: NotificationOutbox;
   notifications?: NotificationPort;
 }
@@ -154,7 +154,7 @@ export class ApplicationService {
   private readonly secrets: readonly string[];
   private readonly sessionSecret: string;
   private readonly idempotency: IdempotencyStore<SubmitView>;
-  private readonly shortlist: ShortlistSource | undefined;
+  private readonly shortlist: ApplicationDecisionSource | undefined;
   private readonly outbox: NotificationOutbox;
   private readonly notifications: NotificationPort;
   private readonly notificationActions = new Map<string, Promise<void>>();
@@ -460,10 +460,20 @@ export class ApplicationService {
     for (const submission of this.submissions.values()) {
       const draft = this.draftById(submission.draftId);
       if (draft.input.vacancyId !== vacancyId || !this.employerOwns(actor, draft)) continue;
-      const result = await this.shortlist.match(draft.ownerId, vacancyId);
-      if (result.biasBlocked) return [];
-      const match = result.decision;
-      if (!match) continue;
+      const outcome = await this.shortlist.decisionFor(draft.ownerId, vacancyId);
+      // An audit block voids the whole shortlist for this vacancy.
+      if (outcome.kind === "blocked") return [];
+      if (outcome.kind === "unavailable") {
+        // Only a deployment without persistence is an error here. The other reasons
+        // (vacancy outside the catalog, candidate without a profile, solver produced no
+        // decision) have always been skipped rather than refused, and still are.
+        if (outcome.reason === "not_configured") {
+          throw new ApplicationError("Shortlist requires persisted candidate profiles and preferences.", 503, "shortlist_unavailable");
+        }
+        continue;
+      }
+      if (outcome.biasBlocked) return [];
+      const match = outcome.decision;
       if (match.candidateId !== draft.ownerId || match.vacancyId !== vacancyId) {
         throw new ApplicationError("Ranking decision does not match the submission.", 422, "inconsistent_match");
       }

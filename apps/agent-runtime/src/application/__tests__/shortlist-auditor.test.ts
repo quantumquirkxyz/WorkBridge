@@ -9,7 +9,7 @@ vi.mock("../../bias/audit", async (importOriginal) => ({
   auditCounterfactuals: audit,
 }));
 
-import { createShortlistSource } from "../shortlist";
+import { createApplicationDecisionSource } from "../shortlist";
 
 const NOW = "2026-10-16T18:00:00.000Z";
 const VACANCY = "lnk-1001";
@@ -19,7 +19,7 @@ function source() {
   profile.candidate_id = makeCandidateId("user");
   const preferences = { ...preferencesFixture, candidate_id: profile.candidate_id };
   const query = vi.fn().mockResolvedValue({ rows: [{ profile, preferences }] });
-  return createShortlistSource({ query, env: {}, clock: () => NOW });
+  return createApplicationDecisionSource({ query, env: {}, clock: () => NOW });
 }
 
 describe("shortlist source and the counterfactual auditor", () => {
@@ -35,9 +35,10 @@ describe("shortlist source and the counterfactual auditor", () => {
       vacancies: [],
       match: baseline,
     }));
-    const result = await source().match("user", VACANCY);
-    expect(result.biasBlocked).toBe(false);
-    expect(result.decision?.biasAlerts).toEqual([
+    const result = await source().decisionFor("user", VACANCY);
+    expect(result).toMatchObject({ kind: "decision", biasBlocked: false });
+    if (result.kind !== "decision") throw new Error("expected a trusted decision");
+    expect(result.decision.biasAlerts).toEqual([
       { id: "bias-lnk-1001-corregimiento", reason: "Counterfactual corregimiento changed score band." },
     ]);
   });
@@ -49,6 +50,6 @@ describe("shortlist source and the counterfactual auditor", () => {
       vacancies: [],
       match: { ...baseline, result: { ...baseline.result, decisions: [], assignments: [] } },
     }));
-    expect(await source().match("user", VACANCY)).toEqual({ biasBlocked: true });
+    expect(await source().decisionFor("user", VACANCY)).toEqual({ kind: "blocked" });
   });
 });
