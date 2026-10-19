@@ -2,7 +2,7 @@
 
 **Status:** accepted — ADR-0010
 **Date:** 2026-10-18
-**Author:** agent, from the project-viability assessment (`.reports/20261018-viability.md`)
+**Author:** agent, from the project-viability assessment recorded in issue #18
 **Related:** ADR-0002 (employability system boundaries), ADR-0003 (verification and human approval), ADR-0008 (role-organization authorization), ADR-0010 (trusted decision source)
 **Scope of this document:** the shape of the module and where the seam goes. It does not implement the change.
 
@@ -112,7 +112,7 @@ get "is this application safe to move forward" without learning any of it.
 
 `createShortlistSource` (`shortlist.ts:17`) becomes `createApplicationDecisionSource`:
 the single adapter, SQL-plus-solver-plus-auditor backed, and the only place a decision
-is ever recomputed. The `.reports` seam note: in memory mode (`query === undefined`) the
+is ever recomputed. The issue #18 design evidence notes that in memory mode (`query === undefined`) the
 adapter cannot answer — this is the case that must fail closed rather than degrade.
 
 ## Depth analysis
