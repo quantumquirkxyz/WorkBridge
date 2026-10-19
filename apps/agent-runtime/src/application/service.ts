@@ -181,13 +181,11 @@ export class ApplicationService {
     if (!this.ownsCandidate(actor, input.candidateId)) {
       throw new ApplicationError("A candidate can only draft their own application.", 403, "forbidden");
     }
-    const outcome = this.shortlist ? await this.shortlist.decisionFor(input.candidateId, input.vacancyId) : undefined;
+    const outcome = this.shortlist
+      ? await this.shortlist.decisionFor(input.candidateId, input.vacancyId)
+      : { kind: "unavailable" as const, reason: "not_applicable" as const };
     let trustedGate: GateReason[];
-    if (!outcome) {
-      // A service without the trusted seam cannot claim that the request-body
-      // match is authoritative. The HTTP composition root always supplies it.
-      trustedGate = [];
-    } else if (outcome.kind === "unavailable") {
+    if (outcome.kind === "unavailable") {
       if (["no_profile", "not_configured", "no_decision"].includes(outcome.reason)) {
         throw new ApplicationError("The trusted application decision is unavailable.", 503, "decision_unavailable");
       }

@@ -72,10 +72,11 @@ describe("employer vacancy shortlist", async () => {
   it("fails closed on foreign ownership even when a candidate claims the caller's organization", async () => {
     const { app, decisionFor } = setup();
     await submit(app, "weak", "org-owner", "foreign-vacancy");
+    decisionFor.mockClear();
     await expect(app.shortlistForVacancy(session("employer"), "foreign-vacancy")).rejects.toMatchObject({ status: 403 });
     await expect(app.shortlistForVacancy(session("candidate"), "vac-1")).rejects.toMatchObject({ status: 403 });
     await expect(app.shortlistForVacancy(session("employer", "other", "org-other"), "vac-1")).rejects.toMatchObject({ status: 403 });
-    expect(decisionFor).toHaveBeenCalledTimes(1);
+    expect(decisionFor).not.toHaveBeenCalled();
   });
 
   it("excludes a bias-blocked vacancy from the entire shortlist", async () => {
@@ -168,7 +169,7 @@ describe("consumer policy for an unresolvable decision", async () => {
     return submit(app, candidateId).then(() => app);
   }
 
-  it("still returns 503 for the shortlist when no persistence is configured", async () => {
+  it("refuses draft creation when trusted persistence is not configured", async () => {
     const source: ApplicationDecisionSource = {
       isKnownVacancy: (id) => id === "vac-1",
       ownerOf: (id) => id === "vac-1" ? "org-owner" : undefined,
