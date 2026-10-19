@@ -33,7 +33,7 @@ function setup() {
       biasAlerts: [{ id: "advisory", reason: "Revisar requisito de la vacante" }],
     }),
   }));
-  const source: ApplicationDecisionSource = { ownerOf: (id) => id === "vac-1" ? "org-owner" : id === "foreign-vacancy" ? "org-other" : undefined, decisionFor: decisionFor };
+  const source: ApplicationDecisionSource = { isKnownVacancy: (id) => id === "vac-1" || id === "foreign-vacancy", ownerOf: (id) => id === "vac-1" ? "org-owner" : id === "foreign-vacancy" ? "org-other" : undefined, decisionFor: decisionFor };
   const app = new ApplicationService({ clock: () => NOW, sessionSecret: SECRET, shortlist: source });
   return { app, decisionFor };
 }
@@ -74,7 +74,7 @@ describe("employer vacancy shortlist", () => {
     await expect(app.shortlistForVacancy(session("employer"), "foreign-vacancy")).rejects.toMatchObject({ status: 403 });
     await expect(app.shortlistForVacancy(session("candidate"), "vac-1")).rejects.toMatchObject({ status: 403 });
     await expect(app.shortlistForVacancy(session("employer", "other", "org-other"), "vac-1")).rejects.toMatchObject({ status: 403 });
-    expect(match).not.toHaveBeenCalled();
+    expect(decisionFor).not.toHaveBeenCalled();
   });
 
   it("excludes a bias-blocked vacancy from the entire shortlist", async () => {
@@ -169,6 +169,7 @@ describe("consumer policy for an unresolvable decision", () => {
 
   it("still returns 503 for the shortlist when no persistence is configured", async () => {
     const app = await withSource({
+      isKnownVacancy: (id) => id === "vac-1",
       ownerOf: (id) => id === "vac-1" ? "org-owner" : undefined,
       decisionFor: async () => ({ kind: "unavailable", reason: "not_configured" }),
     }, "weak");
@@ -177,6 +178,7 @@ describe("consumer policy for an unresolvable decision", () => {
 
   it("keeps skipping a candidate without a persisted profile rather than failing the ranking", async () => {
     const app = await withSource({
+      isKnownVacancy: (id) => id === "vac-1",
       ownerOf: (id) => id === "vac-1" ? "org-owner" : undefined,
       decisionFor: async () => ({ kind: "unavailable", reason: "no_profile" }),
     }, "weak");

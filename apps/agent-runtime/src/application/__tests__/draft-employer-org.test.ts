@@ -20,6 +20,7 @@ function session(role: "candidate" | "employer", id = role as string, org?: stri
 /** The trusted ownership seam: only the catalog knows which organization owns a vacancy. */
 function shortlist(owner: (vacancyId: string) => string | undefined): ApplicationDecisionSource {
   return {
+    isKnownVacancy: (vacancyId) => owner(vacancyId) !== undefined,
     ownerOf: owner,
     decisionFor: vi.fn(async (candidateId, vacancyId) => ({
       kind: "decision" as const,
